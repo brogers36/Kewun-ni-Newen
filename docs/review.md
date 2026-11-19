@@ -116,3 +116,6 @@ Left unchanged: *Pun mew kintukefuy kulliñ* (habitual past in the story, "used 
 - Piedras nuevas: dual (amuyu/küpaymu/kimingu) y -fe (challwafe/ngillakafe/trutrukatufe).
 - Nombres nuevos: papay Kallfüray (tejedora), ñaña Sayen (mültrün), chachay Kintul (pescador); diweñfe, lawentuchefe, trutrukatufe, kurantufe como oficios sin nombre propio.
 - "Fotra mapu" (pantanos), "Wente degiñ" (filo de la cordillera), "Menoko", "Wapi": ¿nombres adecuados?
+
+## Ngen rediseñados (humanoides, nov 2026)
+- Los cuatro ngen ahora son figuras humanoides altas de "hebras" elementales (agua, corteza, pewen, viento), con cara, brazos y base fluida, al estilo de la referencia del usuario.

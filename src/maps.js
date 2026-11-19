@@ -76,7 +76,7 @@ ngen:{name:'Ngen-lafken',g:{es:'El corazón de la laguna',en:'The heart of the l
  stairs:{to:'d3',x:19,y:4},
  ents:[{id:'boss',kind:'enemy',x:8,y:4,party:['trelke'],fixed:1,boss:1,flag:'boss',
      pre:[N('Algo enorme se mueve bajo el agua: un cuero extendido, con garras en los bordes.','Something huge moves under the water: a spread-out hide, with claws along its edges.'),L('','Müley Trelke-wekufü!','¡Ahí está Trelke-wekufü!','There is Trelke-wekufü!')]},
-   {id:'ngen',kind:'npc',look:'ngen',x:8,y:3,req:'boss',fixed:1,talk:()=>ngenTalk()}]}
+   {id:'ngen',kind:'npc',look:'ngen',x:8,y:5,req:'boss',fixed:1,talk:()=>ngenTalk()}]}
 };
 /* ---------- NAGCHE ---------- */
 const K3={q:L('Konew','Mawida mew müley; kütral mew ñamkey. Chem am ta tatey?','Está en el monte; en el fuego desaparece. ¿Qué será?','It is in the forest; in the fire it disappears. What could it be?'),
@@ -166,7 +166,7 @@ ngen2:{region:'nagche',ngenmap:1,name:'Ngen-mawida',g:{es:'El claro del bosque',
  stairs:{to:'nd3',x:3,y:7},
  ents:[{id:'boss',kind:'enemy',x:8,y:4,party:['witranalwe'],fixed:1,boss:1,flag:'boss2',
      pre:[N('En el claro hay una figura altísima y delgada, que brilla como si estuviera hecha de luz fría: el Witranalwe.','In the clearing stands a very tall, thin figure that glows as if made of cold light: the Witranalwe.'),L('','Müley Witranalwe!','¡Ahí está el Witranalwe!','There is the Witranalwe!')]},
-   {id:'ngen',kind:'npc',look:'ngen2',x:8,y:3,req:'ngen2',fixed:1,talk:()=>say([L('Ngen-mawida','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")])}]}
+   {id:'ngen',kind:'npc',look:'ngen2',x:8,y:5,req:'ngen2',fixed:1,talk:()=>say([L('Ngen-mawida','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")])}]}
 });
 /* ---------- PEWENCHE ---------- */
 const K5={reward:'piwke',q:L('Konew','Pewen mew tripakey; pukem mew ikeiñ. Chem am ta tatey?','Sale del pewen; en invierno lo comemos. ¿Qué será?','It comes from the pewen; in winter we eat it. What could it be?'),
@@ -255,7 +255,7 @@ ngen3:{region:'pewenche',ngenmap:1,name:'Ngen-pewen',g:{es:'El cráter',en:'The 
  stairs:{to:'pd3',x:20,y:7},
  ents:[{id:'boss',kind:'enemy',x:8,y:4,party:['cherrufe'],fixed:1,boss:1,flag:'boss3',
      pre:[N('Desde la lava se levanta un gigante de roca negra, con grietas que brillan como brasas y una cabellera de fuego: el Cherrufe.','A giant of black rock rises from the lava, with cracks that glow like embers and a mane of fire: the Cherrufe.'),L('','Müley Cherrufe!','¡Ahí está el Cherrufe!','There is the Cherrufe!')]},
-   {id:'ngen',kind:'npc',look:'ngen3',x:8,y:3,req:'ngen3',fixed:1,talk:()=>say([L('Ngen-pewen','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")])}]}
+   {id:'ngen',kind:'npc',look:'ngen3',x:8,y:5,req:'ngen3',fixed:1,talk:()=>say([L('Ngen-pewen','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")])}]}
 });
 /* ---------- WILLICHE ---------- */
 const K8={reward:'piwke',q:L('Konew','Ko mew amukey, welu namun nielay. Chem am ta tatey?','Anda por el agua, pero no tiene pies. ¿Qué será?','It travels on the water, but it has no feet. What could it be?'),
@@ -325,7 +325,7 @@ ngen4:{region:'williche',ngenmap:1,name:'Ngen-kürüf',g:{es:'El muelle en la ni
  stairs:{to:'wd3',x:3,y:7},
  ents:[{id:'boss',kind:'enemy',x:8,y:4,party:['kaleuche'],fixed:1,boss:1,flag:'boss4',
      pre:[N('De la niebla sale un barco iluminado, con velas rotas que brillan pálidas y música que nadie toca: el Kaleuche.','An illuminated ship comes out of the fog, with torn sails that glow pale and music no one is playing: the Kaleuche.'),L('','Müley Kaleuche!','¡Ahí está el Kaleuche!','There is the Kaleuche!')]},
-   {id:'ngen',kind:'npc',look:'ngen4',x:8,y:4,req:'ngen4',fixed:1,talk:()=>say([L('Ngen-kürüf','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")])}]}
+   {id:'ngen',kind:'npc',look:'ngen4',x:8,y:6,req:'ngen4',fixed:1,talk:()=>say([L('Ngen-kürüf','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")])}]}
 });
 for(const k in MAPS){const m=MAPS[k];if(!m.region)m.region='lafkenche';m.rows=MAPROWS[k];m.w=MAPROWS[k][0].length;m.h=MAPROWS[k].length}
 MAPS.inaltu.edges.right={to:'n_rupu',x:1,y:7,req:'ngen',reqMsg:[N('El camino hacia el este, a las tierras nagche, está cubierto de niebla. Primero despierta a Ngen-lafken.','The road east, to the Nagche lands, is covered in fog. First wake Ngen-lafken.')]};

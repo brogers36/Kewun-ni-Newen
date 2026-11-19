@@ -37,18 +37,18 @@ function renderCut(){
     for(let k=0;k<16;k++){const bw=13+(k*13)%15,bx=k*17-5,bh=50+((k*53)%70),by=180-bh;R(c,bx,by,bw,bh+50,k%2?'#1c1a32':'#242240');R(c,bx+bw-2,by,2,bh+50,'#16142a');if(k%3===0)R(c,bx+bw/2,by-7,1,7,'#242240');
       for(let wy=by+4;wy<175;wy+=6)for(let wx=bx+2;wx<bx+bw-3;wx+=4)if(h2(wx,wy,3)<.42)R(c,wx,wy,2,3,h2(wx,wy,4)<.5?'#f8d870':'#c8a850')}
     R(c,0,180,LW,44,'#22203a');R(c,60,160,136,3,'#4a4668');for(let k=0;k<17;k++)R(c,62+k*8,163,1,17,'#3a3656');R(c,60,180,136,2,'#4a4668');
-    c.drawImage(charSprite(heroLook(),'up',0),104,90,48,72);
+    {const hs=ctCharSprite(heroLook(),'up',0);c.drawImage(hs,101,66,54,96)}
     for(let k=0;k<5;k++){const a=((frame/60+k*.2)%1);OV.push(()=>txt(['ü','ñ','ng','tr','ll'][k],113+k*8+Math.sin(a*6+k)*4,86-a*45,'rgba(255,240,200,'+(1-a)*.85+')',16,'center'))}}
   else if(i===3){bands(c,0,LH,['#123a66','#0e3058','#0a2648','#081e3a','#06162c','#040c1c']);
     for(let k=0;k<4;k++){const x=30+k*60+Math.round(Math.sin(frame/50+k)*10);c.fillStyle='rgba(120,180,255,.07)';c.beginPath();c.moveTo(x,0);c.lineTo(x+20,0);c.lineTo(x+60,LH);c.lineTo(x+20,LH);c.closePath();c.fill()}
     for(let k=0;k<24;k++){const y=LH-((frame*.3+k*31)%LH);ell(c,(k*67)%LW+Math.sin(frame/20+k)*2,y,1+(k%2),1+(k%2),'#8ac0f0')}
-    const gl=Math.max(.15,.6+.25*Math.sin(frame/30)-Math.min(.35,t/400));c.globalAlpha=gl;drawNgen(c,128,168,3.5,frame);c.globalAlpha=1;
+    const gl=Math.max(.15,.6+.25*Math.sin(frame/30)-Math.min(.35,t/400));c.globalAlpha=gl;drawNgen(c,128,200,3.5,frame);c.globalAlpha=1;
     [[30,60,'chonchon'],[200,45,'chonchon'],[55,165,'laftrache'],[210,160,'anchi']].forEach(([x,y,tp],k)=>{if(t>k*30){c.globalAlpha=.4;c.drawImage(enemyCanvas(tp,24,Math.floor(frame/12)%2),x-15,y-15);c.globalAlpha=1}});
     [[40,100],[190,85],[75,190],[230,200],[20,150]].forEach(([x,y],k)=>{if(t>k*25&&(frame+k*13)%90<75){R(c,x,y,3,2,'#ff3a2a');R(c,x+7,y,3,2,'#ff3a2a')}})}
   else{paintLand(c,frame,false);c.fillStyle='rgba(255,140,60,.12)';c.fillRect(0,0,LW,LH);
     const rk=rukaCanvas(3,2);ell(c,195,175,40,5,'rgba(0,0,0,.3)');c.drawImage(rk.cvs,150,120,rk.cvs.width*1.7,rk.cvs.height*1.7);
     for(let k=0;k<6;k++){const a=((frame+k*22)%140)/140;ell(c,150+(rk.smoke[0]+rk.ox)*1.7+Math.sin(a*6+k)*3,120+(rk.smoke[1]+rk.oy)*1.7-a*45,2+a*6,2+a*5,'rgba(210,210,220,'+(.5-a*.45)+')')}
-    ell(c,96,186,12,3,'rgba(0,0,0,.3)');c.drawImage(charSprite('kuku','down',0),72,114,48,72)}
+    ell(c,96,186,12,3,'rgba(0,0,0,.3)');{const ks=ctCharSprite('kuku','down',0);c.drawImage(ks,69,90,54,96)}}
 }
 /* ---------- map ---------- */
 const DYN=new Set(['^','Ñ','F','C','K','S','I','X','v','P','m','g','p','k','L','G','B','O','q','Q','N','J','H','E','A']);

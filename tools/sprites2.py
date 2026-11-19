@@ -370,89 +370,6 @@ def cherrufe2(fr):
     for (x,y,rx,ry,col) in [(39,48,4,5,'r'),(39,49,2.8,3.6,'O'),(39,50,1.6,2.2,'y'),(36+f,52,1.6,2,'O'),(42-f,52,1.4,1.8,'r')]:g.e(x,y,rx,ry,col)
     g.outline();return g.rows()
 
-def ngen_lafken(fr):
-    W=26;g=G(W,34);c=W/2
-    import math
-    # swirling wave base
-    g.e(c,30,11,3.6,'m');g.e(c,29,8,2.6,'l')
-    for x in range(2,24):
-        y=27+int(1.5*math.sin(x*.7+fr*2))
-        g.p(x,y,'f')
-    # body flowing upward
-    for y in range(11,29):
-        hw=3+int((y-11)*.32)+int(math.sin(y*.6+fr)*1)
-        for x in range(int(c-hw),int(c+hw)):
-            g.p(x,y,'d' if x<c-hw+2 else ('l' if x>c else 'm'))
-    # arms like waves
-    for i in range(7):
-        x=int(c-5-i);y=15+int(math.sin(i*.8+fr)*1.5)+i//2
-        g.p(x,y,'m');g.p(x,y+1,'d');g.p(W-1-x,y,'l');g.p(W-1-x,y+1,'m')
-    g.p(int(c-12),16+fr,'f');g.p(int(c+11),16+fr,'f')
-    # head
-    g.e(c,7,4.4,4.8,'l');g.e(c-1,6,2.6,2.6,'w')
-    # wave hair curls
-    for (x,y) in [(7,3),(8,2),(9,1),(10,1),(16,1),(17,1),(18,2),(19,3),(6,5),(20,5),(6,7),(20,7),(7,9),(19,9)]:g.p(x,y,'f')
-    g.p(7,2,'f');g.p(19,2,'f')
-    # face
-    g.r(11,6,1,2,'k');g.r(15,6,1,2,'k');g.p(10,8,'d');g.p(16,8,'d');g.p(12,10,'d');g.p(13,10,'d');g.p(14,10,'d');g.p(11,9,'d');g.p(15,9,'d')
-    # foam spray dots
-    for (x,y) in [(3,22),(22,21),(4,25),(21,25)]:g.p(x,y,'f')
-    g.outline();return g.rows()
-def ngen_mawida(fr):
-    W=28;g=G(W,36);c=W/2
-    import math
-    # roots
-    for (x0,dx) in [(9,-3),(12,-1),(15,1),(18,3)]:
-        for i in range(4):g.p(x0+dx*i//3,32+i,'B')
-    # trunk body
-    for y in range(13,33):
-        hw=3+int((y-13)*.18)
-        for x in range(int(c-hw),int(c+hw)):
-            g.p(x,y,'B' if x>=c+1 else ('b' if (x+y)%5 else 'h'))
-    # bark lines
-    for y in range(14,32,3):g.p(int(c)-1,y,'B')
-    # moss patches
-    for (x,y) in [(11,18),(12,18),(15,24),(16,24),(12,28),(11,29)]:g.p(x,y,'m')
-    # branch arms with leaves
-    for i in range(8):
-        x=int(c-4-i);y=16-i//2+(fr if i>5 else 0)
-        g.p(x,y,'b');g.p(W-1-x,y,'b')
-    for (x,y) in [(4,11),(5,12),(3,12),(22,11),(23,12),(24,12)]:g.e(x+.5,y+.5,1.6,1.3,'L')
-    # head (wood mask)
-    g.e(c,9,4,4.6,'h');g.r(11,11,6,3,'h')
-    g.p(12,9,'k');g.p(16,9,'k');g.p(12,8,'y');g.p(16,8,'y');g.r(13,12,3,1,'B')
-    # leafy crown with gold flowers
-    for (x,y,rx,ry,col) in [(c,3,8,3.6,'G'),(c-4,4,4,2.6,'L'),(c+4,4,4,2.6,'L'),(c,1.5,5,2.2,'L'),(c-1,0.8,2.6,1.2,'l')]:g.e(x,y,rx,ry,col)
-    for (x,y) in [(9,3),(14,1),(19,3),(11,5),(17,5)]:g.p(x,y,'y')
-    g.outline();return g.rows()
-def ngen_pewen(fr):
-    W=30;g=G(W,40);c=W/2
-    import math
-    # body: golden trunk with araucaria-scale pattern
-    for y in range(15,37):
-        hw=3+int((y-15)*.17)
-        for x in range(int(c-hw),int(c+hw)):
-            col='g' if x<c else 'G'
-            if (x+(y//2)%2)%3==0 and y%2==0:col='s'
-            g.p(x,y,col)
-    g.e(c,37,7,1.6,'G');g.r(int(c)-5,36,10,2,'G')
-    # arms as upturned pewen branches
-    for side in (-1,1):
-        for i in range(9):
-            x=int(c+side*(4+i));y=17-int(i*.5)
-            g.p(x,y,'n');g.p(x,y+1,'N')
-        tx=int(c+side*13);g.p(tx,12-fr,'n');g.p(tx,11-fr,'n');g.p(tx-side,12-fr,'n')
-    # belt of pewen nuts
-    for x in range(int(c)-4,int(c)+4,2):g.p(x,24,'u');g.p(x,25,'U')
-    # head
-    g.e(c,11,3.8,4.2,'F');g.p(13,11,'k');g.p(17,11,'k');g.p(13,10,'y');g.p(17,10,'y');g.r(14,13,3,1,'U')
-    # pewen crown: umbrella of branch tufts with upturned tips
-    for (x,y,rx,ry) in [(c,6,12,2.6),(c,3.6,9,2.4),(c,1.6,5.5,1.8)]:
-        g.e(x,y+.8,rx,ry,'N');g.e(x,y,rx-.6,ry-.6,'n')
-        g.p(int(x-rx)+1,int(y)-2,'n');g.p(int(x-rx)+1,int(y)-1,'n');g.p(int(x+rx)-2,int(y)-2,'n');g.p(int(x+rx)-2,int(y)-1,'n')
-        for k in range(int(x-rx)+3,int(x+rx)-3,3):g.p(k,int(y)-1,'v')
-    g.outline();return g.rows()
-
 def kowek(fr):
     g=G(18,18);import math
     g.e(9,11,6.5,5.5,'b');g.e(9,7,3.6,4.6,'b');g.p(9,1+fr,'b');g.p(9,2,'b');g.r(8,3,3,2,'b')
@@ -535,19 +452,121 @@ def kaleuche(fr):
         y=46+int(1.5*math.sin(x*.4+fr*1.5))
         for yy in range(y,min(54,y+3)):g.p(x,yy,'f' if (x+yy)%3 else 'F')
     g.outline();return g.rows()
+# ---------- ngen: tall humanoid elementals (flowing-strand bodies) ----------
+def ngen_body(fr,ramp,head,eye='k',glow='E',emblem=None):
+    import math
+    W,H=30,48;g=G(W,H);c=W/2
+    n=len(ramp)
+    def strand(x,y,half,ph=0):
+        t=math.sin(x*1.9+y*0.2+fr*3.14+ph+math.sin(x*0.7+y*0.05)*1.1)*0.45
+        lat=(x+0.5-c)/max(1.0,half)
+        round3d=1.0-((lat+0.28)**2)*1.25
+        v=t+round3d
+        i=int(v/1.45*n)
+        return ramp[max(0,min(n-1,i))]
+    def hw(y):
+        if y<13:return 0
+        if y<16:return 8.4-(16-y)*2.2
+        if y<27:return 5.2-(y-16)*0.11
+        if y<42:return 4.0+(y-27)*0.27
+        return 8.0+(y-42)*0.15
+    for y in range(13,H-1):
+        half=hw(y)+(math.sin(y*0.45+fr*2.2)*0.35 if y>29 else 0)
+        for x in range(int(c-half),int(c+half)+1):g.p(x,y,strand(x,y,half))
+        if y==16:
+            for x in range(int(c-half)+1,int(c+half)):
+                if (x+y)%2:g.p(x,y,ramp[0])
+    # leg seam: two flowing masses below the waist
+    for y in range(30,44):
+        sx=int(c)+ (0 if (y%2) else -1)
+        g.p(sx,y,ramp[0])
+    # arms: separated by a clear gap, rounding of their own
+    for i in range(20):
+        y=15+i;off=8.0-max(0,i-6)*0.14+(0.5 if i<3 else 0)
+        for sd in (-1,1):
+            ax=int(c+sd*off)
+            for dx in (0,1):
+                x=ax+sd*dx
+                t=math.sin(y*0.5+fr*3.14+sd)*0.4
+                g.p(x,y,ramp[max(0,min(n-1,int((t+(0.9 if dx==0 else 0.35))/1.45*n)))])
+    for sd in (-1,1):
+        hx=int(c+sd*6.3)
+        g.r(hx,35,2,3,ramp[1]);g.p(hx,36,ramp[2]);g.p(hx,38,ramp[0])
+        g.p(int(c+sd*8.3),14,ramp[1])
+    # neck + head
+    g.r(int(c)-1,11,3,2,ramp[1])
+    g.p(int(c)-2,12,ramp[0]);g.p(int(c)+1,12,ramp[0])
+    g.e(c,6.5,4.2,5.0,head)
+    g.e(c-1.9,3.9,1.9,1.7,ramp[n-1])
+    for x in range(int(c-3),int(c+4)):g.p(x,2,ramp[1])
+    for yy in range(4,10):g.p(int(c+3.8),yy,ramp[1])
+    # face
+    g.r(int(c)-4,6,3,2,eye);g.r(int(c)+2,6,3,2,eye)
+    g.p(int(c)-3,6,glow);g.p(int(c)+3,6,glow)
+    g.r(int(c)-4,4,3,1,ramp[0]);g.r(int(c)+2,4,3,1,ramp[0])
+    g.p(int(c),8,ramp[1]);g.p(int(c),9,ramp[0]);g.r(int(c)-1,10,3,1,ramp[0])
+    if emblem:
+        ex,ey=int(c),19
+        g.p(ex,ey,emblem);g.p(ex,ey-1,glow);g.p(ex-1,ey,emblem);g.p(ex+1,ey,emblem);g.p(ex,ey+1,emblem)
+    return g,c
+def ngen_lafken(fr):
+    import math
+    g,c=ngen_body(fr,['d','m','l','w'],'w',eye='k',glow='E',emblem='l')
+    for t in range(17):
+        x=int(c-2+t*0.8);y=int(2-math.sin(t*0.35+fr*.8)*1.8+t*0.18)
+        if y<3 or x>int(c+3):
+            g.p(x,y,'f');g.p(x,y+1,'w')
+            if y+2<3 or x-1>int(c+3):g.p(x-1,y+2,'l')
+    for t in range(10):
+        x=int(c+5+t*0.5);y=7+int(t*0.9)
+        g.p(x,y,'w');g.p(x+1,y,'l')
+    for (x,y) in [(6,21),(24,25),(5,34),(25,37),(8,43),(21,44)]:g.p(x,y,'f')
+    for x in range(5,26):
+        y=45+int(math.sin(x*0.8+fr)*1.1)
+        g.p(x,y,'f');g.p(x,y+1,'w')
+    g.p(3,44,'f');g.p(27,43,'f')
+    g.outline();return g.rows()
+def ngen_mawida(fr):
+    import math
+    g,c=ngen_body(fr,['B','b','h','m'],'h',eye='k',glow='E',emblem='y')
+    for (x,y,rx,ry,col) in [(c,1.5,7,2.6,'G'),(c-4.5,3,3.6,2.3,'L'),(c+4.5,3,3.6,2.3,'L'),(c,0.5,3.6,1.7,'l'),(c-7,4.5,2.1,1.7,'G'),(c+7,4.5,2.1,1.7,'G')]:
+        g.e(x,y,rx,ry,col)
+    for (x,y) in [(int(c)-5,2),(int(c),0),(int(c)+5,2),(int(c)-2,3),(int(c)+3,1)]:g.p(x,y+fr,'y')
+    for (x,y) in [(int(c)-3,23),(int(c)-2,24),(int(c)+2,30),(int(c)+3,31),(int(c)-4,38),(int(c)+1,41)]:g.p(x,y,'m')
+    for (x0,dx) in [(int(c)-8,-1),(int(c)-3,0),(int(c)+3,0),(int(c)+8,1)]:
+        for i in range(3):g.p(x0+dx*i,44+i,'B')
+    g.outline();return g.rows()
+def ngen_pewen(fr):
+    import math
+    g,c=ngen_body(fr,['U','u','F','g'],'F',eye='k',glow='E',emblem='s')
+    for k in range(10):
+        x=int(c-6.5+k*1.5);h0=3+(k%3)+(1 if (k+fr)%2 else 0)
+        for i in range(h0):g.p(x,4-i,'n' if i<h0-1 else 'N')
+    for k in range(7):g.p(int(c-6+k*2),4,'N')
+    for sd in (-1,1):
+        for k in range(4):
+            x=int(c+sd*(7+k));y=13-(k%2)
+            g.p(x,y,'n');g.p(x,y+1,'N')
+    for (x,y) in [(int(c)-2,25),(int(c)+2,28),(int(c)-1,32),(int(c)+1,36)]:
+        g.p(x,y,'g');g.p(x,y-1,'s')
+    for (x0,dx) in [(int(c)-7,-1),(int(c),0),(int(c)+7,1)]:
+        for i in range(3):g.p(x0+dx*i,44+i,'U')
+    g.outline();return g.rows()
 def ngen_kuruf(fr):
-    W=28;g=G(W,36);c=W/2;import math
-    for y in range(12,32):
-        hw=2.5+(y-12)*.2+math.sin(y*.5+fr)*.8
-        for x in range(int(c-hw),int(c+hw)+1):g.p(x,y,'b' if x<c else 'B')
-    for k in range(3):
-        for t in range(0,40):
-            a=t/40*math.pi*2+k*2.1+fr*.5;r=6+t*.12
-            x=int(c+math.cos(a)*r);y=int(20+math.sin(a)*r*.5+t*.25-6)
-            if 0<=x<W and 0<=y<36:g.p(x,y,'r' if t%3 else 'R')
-    g.e(c,8,4,4.4,'b');g.p(12,8,'k');g.p(16,8,'k');g.r(13,10,3,1,'B')
-    for i in range(7):g.p(int(c+4+i),5+i//3,'w');g.p(int(c+4+i),7+i//2,'w')
-    g.p(int(c),33,'R');g.p(int(c)-1,34,'r');g.p(int(c)+1,34,'r')
+    import math
+    g,c=ngen_body(fr,['B','b','w','R'],'w',eye='k',glow='E',emblem='r')
+    for (sy,ln,ph) in [(4,13,0),(15,15,1.2),(18,11,2.4)]:
+        for t in range(ln):
+            x=int(c-6-t*0.9);y=int(sy+math.sin(t*0.5+fr*.9+ph)*1.8+t*0.22)
+            g.p(x,y,'w' if t%3 else 'R');g.p(x,y+1,'b')
+    for t in range(20):
+        a=t/20*6.28+fr*.6;x=int(c+math.cos(a)*4.5);y=int(28+math.sin(a)*6)
+        if t%2:g.p(x,y,'r')
+    for y in range(42,48):
+        for x in range(2,28):
+            if g.get(x,y)!='.' and ((x*7+y*13+fr*5)%11)<3:g.a[y][x]='.'
+    for (x,y) in [(4,43),(26,41),(2,46),(27,46),(7,47)]:
+        g.p(x,y,'b');g.p(x+1,y,'w')
     g.outline();return g.rows()
 
 PAL={
@@ -560,15 +579,15 @@ PAL={
  'kura':{'g':'#8a8a90','G':'#5a5a64','k':'#2a2a30','e':'#ff8a20','h':'#c0c0c8','o':'#16161c'},
  'nirivilu':{'o':'#d8742a','O':'#a85018','w':'#f4e8d8','k':'#1a1010','y':'#f8e040','s':'#3a8a5a','S':'#1e5a38'},
  'cherrufe':{'b':'#3a2c2c','B':'#241a1c','h':'#6a5450','r':'#e83018','O':'#f89020','y':'#ffe880','l':'#e8401c','L':'#ffa030','o':'#0e0608'},
- 'ngen_lafken':{'d':'#2a64a8','m':'#5aa8e0','l':'#9ad8f8','w':'#e8f6ff','f':'#ffffff','k':'#081a44','o':'#0a2a5a'},
- 'ngen_mawida':{'b':'#8a6a3e','B':'#5a4226','h':'#c8a46a','m':'#5aa040','L':'#4a9a3a','l':'#8ad060','G':'#2e6a2a','y':'#f8e050','k':'#1a2a10','o':'#10200c'},
- 'ngen_pewen':{'v':'#7ac87a','g':'#e8b440','G':'#b8822a','s':'#ffd878','F':'#f0c890','k':'#3a2410','y':'#fff0a0','n':'#3a8a4a','N':'#246a36','u':'#c87a3a','U':'#7a4a20','o':'#2a1a08'},
+ 'ngen_lafken':{'d':'#1d4c84','m':'#3a7ab8','l':'#6ab4e8','w':'#d8f2ff','f':'#ffffff','k':'#06182e','E':'#aef4ff','o':'#071a30'},
+ 'ngen_mawida':{'B':'#4a3418','b':'#6e5228','h':'#9c7c46','m':'#5a8a3c','G':'#2c5424','L':'#4a8a38','l':'#7ab858','y':'#ffd84a','k':'#1c1208','E':'#ffe878','o':'#120c04'},
+ 'ngen_pewen':{'U':'#5a4020','u':'#8a6434','F':'#c49a5c','g':'#e0a83c','s':'#ffd878','n':'#245232','N':'#3e7e4e','k':'#160e04','E':'#ffe9a0','o':'#120c04'},
  'kowek':{'b':'#3a8ad8','B':'#2a5aa8','l':'#9ad8ff','w':'#ffffff','k':'#0a1a40','o':'#0a1a3a'},
  'mawek':{'c':'#8a8a9a','C':'#5a5a6a','k':'#1a1a24','y':'#f8f080','d':'#7ab8f0','o':'#14141c'},
  'kamawetu':{'b':'#b0783a','B':'#7a5226','m':'#e0a890','k':'#1a1008','e':'#ffffff','y':'#ffe050','Y':'#c8a020','f':'#e8f6ff','o':'#140c06'},
  'basilisko':{'s':'#4a7a3a','S':'#2a4a22','w':'#f0e8d8','r':'#d82828','y':'#f0c020','e':'#ffe040','k':'#000000','o':'#0e140a'},
  'kaleuche':{'h':'#3a2a22','H':'#241812','k':'#1a100c','m':'#4a3a2a','s':'#c8d8c8','S':'#8aa08a','y':'#ffe070','r':'#a82020','f':'#c8ccd8','F':'#9aa0b0','o':'#080606'},
- 'ngen_kuruf':{'b':'#e8f8ff','B':'#b8e0f0','r':'#60d0e0','R':'#ffffff','w':'#d0f0ff','k':'#1a4a6a','o':'#2a5a7a'},
+ 'ngen_kuruf':{'B':'#8fb4c8','b':'#bedcec','w':'#e4f4fc','R':'#ffffff','r':'#58c8e0','k':'#17384a','E':'#d8fbff','o':'#2a4a5e'},
  'trelke':{'h':'#6a5a34','H':'#463a20','u':'#8a7a4c','m':'#9a4a48','M':'#6a2a2e','W':'#e8c8c0','w':'#f4f0e0','r':'#a8503a','R':'#7a3424','e':'#ffd040','o':'#140e08'},
  'witranalwe':{'H':'#16161e','h':'#4a4a3a','q':'#0e0e14','F':'#c8ccc0','f':'#7a8274','k':'#0a0a0a','E':'#7aff9a','w':'#e8e8d8','P':'#24242c','p':'#34343e','A':'#3a3a46','K':'#9a9a90','c':'#d8d8c8','g':'#b8b8ac','G':'#808078','L':'#101014','o':'#040406'}}
 
@@ -591,10 +610,10 @@ def hhash(x,y,k):
     import math;v=math.sin(x*12.9898+y*78.233+k*37.7)*43758.5453;return v-math.floor(v)
 HI={
  'witranalwe':{'glow':'EwFc','tex':{'P':'streak','q':'streak','A':'streak','g':'strand','G':'strand','H':'speck'}},
- 'ngen_lafken':{'glow':'wf','tex':{'d':'streak','m':'streak','l':'speck'}},
- 'ngen_mawida':{'glow':'y','tex':{'b':'pore','B':'pore','h':'pore','m':'speck','L':'speck','G':'speck','l':'speck'}},
- 'ngen_pewen':{'glow':'ysF','tex':{'n':'speck','N':'speck','u':'pore','U':'pore','v':'speck','g':'streak','G':'streak'}},
- 'ngen_kuruf':{'glow':'Rw','tex':{'b':'streak','B':'streak','r':'speck'}},
+ 'ngen_lafken':{'glow':'fE','tex':{'d':'streak','m':'streak','l':'streak','w':'speck'}},
+ 'ngen_mawida':{'glow':'yE','tex':{'b':'strand','B':'strand','h':'strand','m':'speck','L':'speck','G':'speck','l':'speck'}},
+ 'ngen_pewen':{'glow':'sE','tex':{'u':'strand','U':'strand','F':'pore','n':'speck','N':'speck','g':'streak'}},
+ 'ngen_kuruf':{'glow':'RE','tex':{'b':'streak','B':'streak','w':'streak','r':'speck'}},
  'trelke':{'glow':'ewW','tex':{'h':'pore','H':'pore','u':'pore','m':'speck','M':'speck','r':'speck'}},
  'cherrufe':{'glow':'lLyOr','tex':{'b':'crack','B':'crack','h':'speck'}},
  'kaleuche':{'glow':'yr','tex':{'h':'streak','H':'streak','s':'speck','S':'speck','f':'speck','F':'speck'}}}
