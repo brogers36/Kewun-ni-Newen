@@ -277,6 +277,15 @@ function treeCanvas(v,style){
   for(let i=0;i<14;i++){const an=i/14*Math.PI*2;R(c,9.5+Math.cos(an)*5.6,8.5+Math.sin(an)*4.6,1,1,'#88d070')}
   ell(c,7,5.5,2,1.5,'#a8e088');R(c,12,12,3,1,'#14401c');R(c,4,11,2,1,'#14401c');
   outline(cvs,'#0c200c');return PCACHE[k]=cvs}
+function sbtCanvas(f){
+  const k='sbt'+f;if(PCACHE[k])return PCACHE[k];const [cvs,c]=mk(16,16);
+  c.globalAlpha=.30;ell(c,8,8,7.5,7,'#241a10');c.globalAlpha=.42;ell(c,8,8,6,5.5,'#322414');c.globalAlpha=1;
+  const cr=[[3,5,2,0],[5,5,0,2],[9,4,3,1],[12,7,0,3],[6,10,3,1],[9,11,2,2],[12,12,2,0],[4,12,0,2]];
+  for(const [x,y,dx,dy] of cr){c.strokeStyle='rgba(16,10,6,.75)';c.lineWidth=1;c.beginPath();c.moveTo(x+.5,y+.5);c.lineTo(x+dx+.5,y+dy+.5);c.stroke()}
+  for(const [x,y,dx,dy] of [[4,4,2,1],[10,5,2,0],[7,9,0,2],[11,11,2,1]]){c.strokeStyle='rgba(255,244,200,.35)';c.beginPath();c.moveTo(x+1.5,y+1.5);c.lineTo(x+dx+1.5,y+dy+1.5);c.stroke()}
+  for(let i=0;i<6;i++){const x=2+((i*5+f*3)%12),y=2+((i*7+f*5)%12);R(c,x,y,1,1,f?'rgba(255,240,180,.9)':'rgba(255,224,150,.65)')}
+  if(f){ell(c,8,4,2,1,'rgba(80,60,36,.5)');R(c,7,2,1,1,'rgba(60,44,26,.6)');R(c,9,1,1,1,'rgba(60,44,26,.4)')}
+  return PCACHE[k]=cvs}
 function rockCanvas(v){
   const k='rock'+v;if(PCACHE[k])return PCACHE[k];const [cvs,c]=mk(16,14);
   ell(c,8,8,7,5.5,'#686878');ell(c,7,7,5.5,4,'#9898a8');ell(c,5,5,2,1.4,'#d0d0dc');R(c,10,10,3,1,'#484858');R(c,2,9,2,1,'#484858');

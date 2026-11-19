@@ -85,6 +85,9 @@ function renderMap(){
   c.drawImage(LAYERS[wf],-cx,VY-cy);
   const x0=Math.max(0,Math.floor(cx/T)-1),y0=Math.max(0,Math.floor(cy/T)-1),x1=Math.min(M.w-1,Math.ceil((cx+LW)/T)),y1=Math.min(M.h-1,Math.ceil((cy+VH)/T)+1);
   const glows=[];
+  const sbA=M.sbt&&!S.flags[M.sbt.flag]&&(!M.sbt.req||S.flags[M.sbt.req]);
+  if(sbA)for(const k of M.sbt.t){const [tx,ty]=k.split(',');const X=tx*T-cx,Y=ty*T-cy+VY;
+    if(X>-T&&X<LW&&Y>VY-T&&Y<VY+VH)c.drawImage(sbtCanvas(Math.floor(frame/14)%2),X,Y)}
   for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const ch=grid[y][x];if(!DYN.has(ch))continue;
     const X=x*T-cx,Y=y*T-cy+VY,anim=ch==='F'||ch==='X'||ch==='v'||ch==='A';
     if((ch==='N'||ch==='J')&&M.pz){const kk=x+','+y,t=M.pz.tiles[kk];if(t){const lit=PZ.lit.has(kk);ell(c,X+8,Y+15,6,2,'rgba(0,0,0,.28)');

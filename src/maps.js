@@ -398,7 +398,7 @@ e_kura:{region:'puelmapu',name:'Kura mapu',g:{es:'El pedregal',en:'The stone bar
  ents:[{kind:'enemy',x:12,y:4,party:['kura','mewlen']},{kind:'enemy',x:22,y:9,party:['kurutrewa','kura']},{kind:'enemy',x:8,y:10,party:['mewlen','mewlen','kurutrewa']},{kind:'enemy',x:28,y:4,party:['kurutrewa','mewlen','kura']}]},
 e_salitral:{region:'puelmapu',name:'Chadi mapu',g:{es:'El salitral (zona difícil)',en:'The salt flat (hard area)'},floor:'.',bg:'pampa',song:'puel',pal:'salar',trees:'chacay',
  edges:{up:{to:'e_kura',x:24,y:11}},
- stones:{'12,3':'rke'},konew:{'26,10':K17},digs:{'20,3':{}},sbt:{t:['5,9','6,9','7,9','5,10','6,10','7,10'],boss:'chadikura',flag:'sb5',req:'ngen5'},
+ stones:{'12,3':'rke'},konew:{'26,10':K17},digs:{'20,3':{}},sbt:{t:['15,8','16,8','15,9','16,9','15,10','16,10'],boss:'chadikura',flag:'sb5',req:'ngen5'},
  ents:[{id:'chadife',kind:'npc',look:'gatherer',fem:1,x:16,y:6,dir:'down',fixed:1,talk:()=>chadifeTalk(),bub:['Chadi!']},
    {kind:'enemy',x:10,y:8,party:['fmewlen','mewlen']},{kind:'enemy',x:20,y:6,party:['kurutoro','kurutrewa']},{kind:'enemy',x:6,y:4,party:['kurutrewa','kurutrewa','mewlen']},{kind:'enemy',x:27,y:5,party:['fmewlen','kurutoro']}]},
 e_meseta:{region:'puelmapu',name:'Wingkul lelfün',g:{es:'El borde de la meseta',en:'The rim of the meseta'},floor:'.',bg:'pampa',song:'puel',pal:'puelmapu',trees:'chacay',
