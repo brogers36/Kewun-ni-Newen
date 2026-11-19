@@ -35,6 +35,5 @@ Left unchanged: *Pun mew kintukefuy kulliñ* (habitual past in the story, "used 
 
 | Form | Where | Intended meaning | Question |
 |---|---|---|---|
-| Ofisa weñimkülelu ngen. | shepherd girl, Kulliñ mapu | I am the one who looks after the sheep | Suggested by the author; confirm the form |
 | Kayu ofisa nien. / Chumten ofisa nien? | shepherd girl | I have six sheep / How many sheep do I have? | |
 | Wüle ka challwatuan. | fisherman, Lewfü | Tomorrow I will fish again | |
