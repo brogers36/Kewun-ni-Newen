@@ -468,10 +468,104 @@ PAL={
  'ngen_pewen':{'v':'#7ac87a','g':'#e8b440','G':'#b8822a','s':'#ffd878','F':'#f0c890','k':'#3a2410','y':'#fff0a0','n':'#3a8a4a','N':'#246a36','u':'#c87a3a','U':'#7a4a20','o':'#2a1a08'},
  'trelke':{'h':'#6a5a34','H':'#463a20','u':'#8a7a4c','m':'#9a4a48','M':'#6a2a2e','W':'#e8c8c0','w':'#f4f0e0','r':'#a8503a','R':'#7a3424','e':'#ffd040','o':'#140e08'},
  'witranalwe':{'H':'#16161e','h':'#4a4a3a','q':'#0e0e14','F':'#c8ccc0','f':'#7a8274','k':'#0a0a0a','E':'#7aff9a','w':'#e8e8d8','P':'#24242c','p':'#34343e','A':'#3a3a46','K':'#9a9a90','c':'#d8d8c8','g':'#b8b8ac','G':'#808078','L':'#101014','o':'#040406'}}
+
+# ---------- hi-res battle versions of the bosses ----------
+def scale2x(rows):
+    h=len(rows);w=len(rows[0]);out=[['.']*(w*2) for _ in range(h*2)]
+    g=lambda x,y:rows[y][x] if 0<=x<w and 0<=y<h else '.'
+    for y in range(h):
+        for x in range(w):
+            P=g(x,y);A=g(x,y-1);B=g(x+1,y);C=g(x-1,y);Dd=g(x,y+1)
+            e0=A if (C==A and C!=Dd and A!=B) else P
+            e1=B if (A==B and A!=C and B!=Dd) else P
+            e2=C if (Dd==C and Dd!=B and C!=A) else P
+            e3=Dd if (B==Dd and B!=A and Dd!=C) else P
+            out[2*y][2*x]=e0;out[2*y][2*x+1]=e1;out[2*y+1][2*x]=e2;out[2*y+1][2*x+1]=e3
+    return out
+def hexrgb(h):return tuple(int(h[i:i+2],16) for i in (1,3,5))
+def mix(a,b,t):return tuple(int(round(a[i]+(b[i]-a[i])*t)) for i in range(3))
+def hhash(x,y,k):
+    import math;v=math.sin(x*12.9898+y*78.233+k*37.7)*43758.5453;return v-math.floor(v)
+HI={
+ 'witranalwe':{'glow':'EwFc','tex':{'P':'streak','q':'streak','A':'streak','g':'strand','G':'strand','H':'speck'}},
+ 'trelke':{'glow':'ewW','tex':{'h':'pore','H':'pore','u':'pore','m':'speck','M':'speck','r':'speck'}},
+ 'cherrufe':{'glow':'lLyOr','tex':{'b':'crack','B':'crack','h':'speck'}}}
+def hires(name,rows,pal):
+    big=scale2x(rows);h=len(big);w=len(big[0]);cfg=HI[name]
+    px=[[None]*w for _ in range(h)]
+    solid=lambda x,y:0<=x<w and 0<=y<h and big[y][x] not in '.'
+    same=lambda x,y,ch:0<=x<w and 0<=y<h and big[y][x]==ch
+    for y in range(h):
+        for x in range(w):
+            ch=big[y][x]
+            if ch=='.':continue
+            base=hexrgb(pal[ch])
+            if ch=='o' or ch in cfg['glow']:px[y][x]=base;continue
+            dark=mix(base,(0,0,0),.42);lite=mix(base,(255,255,255),.22);hl=mix(base,(255,255,255),.42)
+            col=base
+            # bevel: light from upper-left
+            ul=sum(1 for d in (1,2) if not same(x-d,y,ch))+sum(1 for d in (1,2) if not same(x,y-d,ch))
+            dr=sum(1 for d in (1,2) if not same(x+d,y,ch))+sum(1 for d in (1,2) if not same(x,y+d,ch))
+            if ul>=2 and dr==0:col=lite
+            if not same(x-1,y,ch) and not same(x,y-1,ch):col=hl
+            if dr>=2 and ul==0:col=dark
+            elif dr>=1 and ul==0 and (x+y)%2==0:col=mix(base,dark,.5)
+            t=cfg['tex'].get(ch)
+            n=hhash(x,y,ord(ch))
+            if t=='speck' and n<.08:col=mix(col,dark,.6)
+            elif t=='speck' and n>.95:col=mix(col,hl,.6)
+            elif t=='streak' and (x*7+int(hhash(x,0,3)*5))%9==0 and n<.85:col=mix(col,lite if x%2 else dark,.55)
+            elif t=='strand' and x%2==0:col=mix(col,dark,.35)
+            elif t=='pore' and n<.06:col=mix(col,dark,.7)
+            elif t=='pore' and n>.97:col=mix(col,hl,.5)
+            elif t=='crack' and n<.05:col=mix(col,(255,90,30),.55)
+            px[y][x]=col
+    # glow halos around glowing pixels
+    for y in range(h):
+        for x in range(w):
+            ch=big[y][x]
+            if ch in cfg['glow'] and ch!='o':
+                gc=hexrgb(pal[ch])
+                for dx,dy in((1,0),(-1,0),(0,1),(0,-1)):
+                    X,Y=x+dx,y+dy
+                    if 0<=X<w and 0<=Y<h and px[Y][X] and big[Y][X] not in cfg['glow'] and big[Y][X]!='o':
+                        px[Y][X]=mix(px[Y][X],gc,.35)
+    # encode with an auto palette
+    cols={};CH='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&()*+,-/:;<=>?@[]^_{|}~'
+    out=[]
+    for y in range(h):
+        r=''
+        for x in range(w):
+            c=px[y][x]
+            if c is None:r+='.';continue
+            hx='#%02x%02x%02x'%c
+            if hx not in cols:
+                if len(cols)>=len(CH):
+                    best=min(cols,key=lambda k:sum((int(k[i:i+2],16)-int(hx[i:i+2],16))**2 for i in (1,3,5)));r+=cols[best];continue
+                cols[hx]=CH[len(cols)]
+            r+=cols[hx]
+        out.append(r)
+    return {v:k for k,v in cols.items()},out
 D={}
 BIG={'trelke':2,'witranalwe':2,'chonchon':2,'kutral':2,'pire':2,'kura':2,'nirivilu':2,'cherrufe':2}
 for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe2),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('nirivilu',nirivilu),('cherrufe',cherrufe2),('trelke',trelke),('ngen_lafken',ngen_lafken),('ngen_mawida',ngen_mawida),('ngen_pewen',ngen_pewen)]:
     D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':{'witranalwe':'150,230,170','cherrufe':'255,130,50','trelke':'150,200,120'}.get(name,0)}
+for name in ['witranalwe','trelke','cherrufe']:
+    fr=[];pal=None
+    for f in D[name]['f']:
+        p,rows=hires(name,f,PAL[name]);fr.append((p,rows))
+    merged={};
+    # unify palettes across frames
+    allc={}
+    for p,rows in fr:
+        for k,v in p.items():allc.setdefault(v,None)
+    CH='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&()*+,-/:;<=>?@[]^_{|}~'
+    keys=list(allc)[:len(CH)];cmap={c:CH[i] for i,c in enumerate(keys)}
+    def near(hx):
+        if hx in cmap:return cmap[hx]
+        best=min(cmap,key=lambda k:sum((int(k[i:i+2],16)-int(hx[i:i+2],16))**2 for i in (1,3,5)));return cmap[best]
+    frames=[[''.join('.' if ch=='.' else near(p[ch]) for ch in r) for r in rows] for p,rows in fr]
+    D[name+'@b']={'pal':{v:k for k,v in cmap.items()},'f':frames,'big':1,'aura':D[name]['aura']}
 open(OUT,'w').write('const SPR2='+json.dumps(D,ensure_ascii=False)+';\n')
 if __name__=='__main__':
     for n in D:

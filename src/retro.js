@@ -82,7 +82,7 @@ function drawNgen(c,x,y,s,t,v){
 const ECACHE={};
 function enemyCanvas(t,size,fr){
   const key=t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];
-  if(typeof SPR2!=='undefined'&&SPR2[t]){const d=SPR2[t],k=size>=40?(d.big||1):1,base=tplCanvas(t,fr,k);
+  if(typeof SPR2!=='undefined'&&SPR2[t]){const d=SPR2[t],hb=size>=40&&SPR2[t+'@b'],k=hb?1:size>=40?(d.big||1):1,base=hb?tplCanvas(t+'@b',fr,1):tplCanvas(t,fr,k);
     if(!d.aura)return ECACHE[key]=base;
     const pd=6*k,[cv,cc]=mk(base.width+pd*2,base.height+pd);
     for(const [r,al] of [[1,.10],[.8,.12],[.6,.14]]){cc.fillStyle='rgba('+d.aura+','+al+')';cc.beginPath();cc.ellipse(cv.width/2,cv.height*.45,cv.width/2*r,cv.height/2*r,0,0,6.283);cc.fill()}
