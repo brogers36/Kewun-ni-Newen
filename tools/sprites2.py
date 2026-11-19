@@ -232,6 +232,144 @@ def cherrufe(fr):
     g.r(18,16,8,2,'k');sym(18,16,1,1,'l');g.r(20,16,4,1,'L')
     g.outline();return g.rows()
 
+def thick(g,x0,y0,x1,y1,r,c):
+    n=int(max(abs(x1-x0),abs(y1-y0))*2)+1
+    for i in range(n+1):
+        x=x0+(x1-x0)*i/n;y=y0+(y1-y0)*i/n
+        for yy in range(int(y-r-1),int(y+r+2)):
+            for xx in range(int(x-r-1),int(x+r+2)):
+                if (xx+.5-x)**2+(yy+.5-y)**2<=r*r:g.p(xx,yy,c)
+def witranalwe2(fr):
+    W=28;g=G(W,62);c=W/2
+    def sym(x,y,w,h,col):g.r(x,y,w,h,col);g.r(W-x-w,y,w,h,col)
+    # coat (long, widening, tattered hem)
+    for y in range(19,58):
+        hw=4+int((y-19)*7/38)
+        for x in range(int(c-hw),int(c+hw)):
+            col='P'
+            if x<c-hw+2 or x>=c+hw-2:col='q'
+            elif abs(x-c+.5)<1.5 and y>24:col='q'
+            elif (x-int(c-hw))%5==2 and y>30:col='p'
+            g.p(x,y,col)
+    for x in range(0,W):
+        cut=int(2.5+2.5*__import__('math').sin(x*1.7+fr))
+        for y in range(58-cut,58):
+            if g.a[y][x] in 'Ppq':g.a[y][x]='.'
+    # lapels
+    for y in range(19,27):g.p(int(c)-2-(y-19)//3,y,'p');g.p(int(c)+1+(y-19)//3,y,'p')
+    # arms: long sleeves then bony hands with claws
+    sw=fr
+    for y in range(20,42):
+        ax=int(c-6-(y-20)*3/22)-1
+        g.r(ax-(sw if y>34 else 0),y,2,1,'A');g.r(W-ax-2+(sw if y>34 else 0),y,2,1,'A')
+    for side in (0,1):
+        hx=int(c-6-3)-1-sw if side==0 else W-(int(c-6-3)-1)-2+sw
+        for y in range(42,47):g.r(hx,y,2,1,'K')
+        for k,dx in enumerate((-1,0,1,2)):
+            for y in range(47,50+(k%2)):g.p(hx+dx,y,'c')
+    # hair (long grey strands)
+    for x,len_ in [(8,20),(9,15),(18,15),(19,20),(10,9),(17,9)]:
+        for y in range(8,8+len_):
+            if g.a[y][x] in '.PqpA':g.p(x,y,'g' if (x+y)%3 else 'G')
+    # head/face
+    g.e(c,12,3.6,5,'F');g.r(11,14,6,4,'F')
+    g.r(11,10,2,2,'k');g.r(15,10,2,2,'k');g.p(12,11,'E');g.p(15,11,'E')
+    g.p(13,13,'f');g.p(14,13,'f');g.r(11,13,1,3,'f');g.r(16,13,1,3,'f')
+    g.r(12,16,4,1,'k');g.p(12,17,'w');g.p(14,17,'w');g.p(13,17,'k');g.p(15,17,'k')
+    g.r(12,18,4,1,'f')
+    # hat
+    g.r(9,0,10,5,'H');g.r(9,4,10,1,'h');g.r(2,5,24,2,'H');g.r(3,7,22,1,'q')
+    # feet
+    sym(10,57,3,2,'L')
+    g.outline();return g.rows()
+def trelke(fr):
+    W=50;g=G(W,62)
+    import math
+    def rel(cx,cy,rx,ry,ang,col,only=None):
+        ca,sa=math.cos(ang),math.sin(ang)
+        for y in range(g.h):
+            for x in range(W):
+                dx,dy=x+.5-cx,y+.5-cy;u=dx*ca+dy*sa;v=-dx*sa+dy*ca
+                if (u/rx)**2+(v/ry)**2<=1 and (only is None or g.a[y][x] in only):g.p(x,y,col)
+    # hide: tall curved sheet
+    rel(28,26,13,22,.25,'h');rel(22,44,9,12,-.3,'h');rel(22,10,11,7,-.4,'h')
+    # frilled hide edge (right)
+    for y in range(6,52,3):
+        x=max([xx for xx in range(W) if g.a[y][xx]=='h'] or [0])
+        g.p(x+1,y,'h');g.p(x+1,y+1,'H')
+    for y in range(g.h):
+        for x in range(W):
+            if g.a[y][x]=='h' and x>31:g.a[y][x]='H'
+            elif g.a[y][x]=='h' and x<20 and y<16:g.a[y][x]='u'
+    # long mouth (tilted slit), flesh and palate teeth
+    rel(21,26,7.5,17,.18,'m');rel(22,27,4.5,12,.18,'M')
+    for k in range(18):
+        x=20+(k%3)*2+((k//3)%2);y=17+(k//3)*3
+        if g.get(x,y)=='M':g.p(x,y,'W')
+    # teeth along both lips (outside ring of mouth)
+    ca,sa=math.cos(.18),math.sin(.18)
+    for t in range(0,360,7):
+        r=math.radians(t);u=8.6*math.cos(r);v=18.2*math.sin(r)
+        x=int(21+u*ca-v*sa);y=int(26+u*sa+v*ca)
+        if g.get(x,y) in 'hHu':g.p(x,y,'w')
+        u2=9.6*math.cos(r);v2=19.2*math.sin(r);x2=int(21+u2*ca-v2*sa);y2=int(26+u2*sa+v2*ca)
+        if g.get(x2,y2) in 'hHu' and (t//7)%2:g.p(x2,y2,'W')
+    # eye stalks from the top lobe
+    sw=1 if fr else 0
+    for (bx,by,tx,ty) in [(16,8,8-sw,1),(19,6,15+sw,0),(23,6,24-sw,1),(13,12,5+sw,8)]:
+        thick(g,bx,by,tx,ty+2,.6,'r');g.e(tx+.5,ty+1.6,1.7,1.5,'r');g.p(tx,ty+1,'e')
+    # tendrils: from mouth and from the bottom
+    for y in range(30,46):g.p(20+int(math.sin(y*.55+fr)*2),y,'r')
+    for (bx,ph) in [(16,0),(22,1.4),(28,2.6)]:
+        for y in range(52,62):
+            x=bx+int(2.2*math.sin(y*.55+ph+fr));g.p(x,y,'r');g.p(x+1,y,'R')
+    g.outline();return g.rows()
+def cherrufe2(fr):
+    W=48;g=G(W,54);c=W/2
+    import math
+    # crown slabs (separate stone plates)
+    for (tx,ty) in [(11,3),(17,0),(24,-1),(31,0),(37,3)]:
+        thick(g,c+(tx-c)*.25,13,tx,ty+1,1.25,'b')
+        thick(g,c+(tx-c)*.25-.5,13,tx-.5,ty+1,.5,'h')
+        g.p(int(tx),max(0,ty),'h')
+        mx=c+(tx-c)*.6;my=13+(ty-13)*.6;g.p(int(mx),int(my),'l');g.p(int(mx),int(my)+1,'l')
+    # head
+    g.e(c,16,4,5.5,'b');g.r(int(c)-3,18,6,4,'b')
+    g.p(22,15,'y');g.p(25,15,'y');g.p(22,16,'O');g.p(25,16,'O')
+    g.p(23,19,'l');g.p(24,20,'l');g.p(24,18,'l')
+    # torso (crouched, broad)
+    g.e(c,30,11,9,'b');g.r(14,26,20,10,'b');g.e(c,38,8,5,'b')
+    # left arm reaching down to ground
+    thick(g,14,27,8,36,2.6,'b');thick(g,8,36,9,48,2.3,'b');g.r(6,48,6,2,'b')
+    # right arm forward with open hand
+    thick(g,34,27,39,34,2.6,'b');thick(g,39,34,38,40,2.2,'b')
+    g.e(38,42,3,2.4,'h')
+    for k in range(4):g.r(36+k,44,1,2,'h')
+    # legs crouched
+    thick(g,19,40,15,47,2.6,'B');thick(g,15,47,17,52,2.2,'B');thick(g,29,40,33,47,2.6,'B');thick(g,33,47,31,52,2.2,'B')
+    # shading
+    for y in range(54):
+        for x in range(W):
+            if g.a[y][x]=='b' and x>c+4:g.a[y][x]='B'
+    # lava veins (random walk)
+    import random
+    rnd=random.Random(7)
+    for start in [(24,24),(20,29),(28,29),(16,33),(32,32),(10,40),(37,35),(24,36),(18,45),(31,45)]:
+        x,y=start
+        for i in range(9):
+            if g.a[y][x] in 'bB':g.a[y][x]='l' if i%3 else 'L'
+            x+=rnd.choice((-1,0,1));y+=rnd.choice((0,1,1))
+            if not(0<=x<W and 0<=y<54):break
+    for y in range(22,34):g.p(24,y,'L')
+    g.e(24,28,1.6,1.6,'y')
+    # drips from left hand
+    for x in (7,9,11):
+        for y in range(50,53-(x%2)):g.p(x,y,'l')
+    # flame from right hand
+    f=fr
+    for (x,y,rx,ry,col) in [(39,48,4,5,'r'),(39,49,2.8,3.6,'O'),(39,50,1.6,2.2,'y'),(36+f,52,1.6,2,'O'),(42-f,52,1.4,1.8,'r')]:g.e(x,y,rx,ry,col)
+    g.outline();return g.rows()
+
 PAL={
  'kawellu':{'b':'#9a5a2a','B':'#6e3a18','h':'#c27c40','m':'#2a1a10','e':'#000000','w':'#f2e6d0','n':'#4a2a14','k':'#2a2020','o':'#1a1008'},
  'waka':{'w':'#f6f4ee','W':'#c8c4bc','k':'#26221e','u':'#e6a0a0','n':'#8a4a4a','e':'#000000','c':'#e8dcc0','K':'#3a3430','o':'#1a1612'},
@@ -241,12 +379,13 @@ PAL={
  'pire':{'w':'#f4faff','b':'#a8c8f0','c':'#60e0ff','k':'#1a3a7a','o':'#203060'},
  'kura':{'g':'#8a8a90','G':'#5a5a64','k':'#2a2a30','e':'#ff8a20','h':'#c0c0c8','o':'#16161c'},
  'nirivilu':{'o':'#d8742a','O':'#a85018','w':'#f4e8d8','k':'#1a1010','y':'#f8e040','s':'#3a8a5a','S':'#1e5a38'},
- 'cherrufe':{'b':'#3a3036','B':'#241c22','r':'#e83018','O':'#f89020','y':'#ffe060','w':'#ffffff','l':'#f86018','L':'#f8a028','k':'#1a0606','o':'#0e0608'},
- 'witranalwe':{'H':'#1c1c2e','h':'#7a6a9a','q':'#141428','F':'#d0e0f8','f':'#8aa0c8','E':'#40f0ff','e':'#1a6a90','P':'#2c2c50','p':'#46467a','s':'#d0dcf0','A':'#26264a','K':'#d0e0f8','L':'#121220','o':'#06060e'}}
+ 'cherrufe':{'b':'#3a2c2c','B':'#241a1c','h':'#6a5450','r':'#e83018','O':'#f89020','y':'#ffe880','l':'#e8401c','L':'#ffa030','o':'#0e0608'},
+ 'trelke':{'h':'#6a5a34','H':'#463a20','u':'#8a7a4c','m':'#9a4a48','M':'#6a2a2e','W':'#e8c8c0','w':'#f4f0e0','r':'#a8503a','R':'#7a3424','e':'#ffd040','o':'#140e08'},
+ 'witranalwe':{'H':'#16161e','h':'#4a4a3a','q':'#0e0e14','F':'#c8ccc0','f':'#7a8274','k':'#0a0a0a','E':'#7aff9a','w':'#e8e8d8','P':'#24242c','p':'#34343e','A':'#3a3a46','K':'#9a9a90','c':'#d8d8c8','g':'#b8b8ac','G':'#808078','L':'#101014','o':'#040406'}}
 D={}
-BIG={'witranalwe':2,'chonchon':2,'kutral':2,'pire':2,'kura':2,'nirivilu':2,'cherrufe':2}
-for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('nirivilu',nirivilu),('cherrufe',cherrufe)]:
-    D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':{'witranalwe':'170,220,255','cherrufe':'255,130,50'}.get(name,0)}
+BIG={'trelke':2,'witranalwe':2,'chonchon':2,'kutral':2,'pire':2,'kura':2,'nirivilu':2,'cherrufe':2}
+for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe2),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('nirivilu',nirivilu),('cherrufe',cherrufe2),('trelke',trelke)]:
+    D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':{'witranalwe':'150,230,170','cherrufe':'255,130,50','trelke':'150,200,120'}.get(name,0)}
 open(OUT,'w').write('const SPR2='+json.dumps(D,ensure_ascii=False)+';\n')
 if __name__=='__main__':
     for n in D:

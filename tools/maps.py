@@ -229,6 +229,10 @@ N['n_lof']=[
 "T"+","*32+"T",
 "T"+","*32+"T",
 "T"*34]
+def setr(rows,x,y,w,h,ch):
+    for yy in range(y,y+h):rows[yy]=rows[yy][:x]+ch*w+rows[yy][x+w:]
+for (x,y) in [(13,1),(10,11),(28,11)]:setr(N['n_lof'],x,y,3,2,'R')
+setr(N['n_lof'],7,4,1,1,'Z');setr(N['n_lof'],25,7,1,1,'U')
 N['n_kullin']=[
 "T"*32,
 "T"+","*8+"f"*8+","*14+"T",
@@ -320,6 +324,8 @@ for (x,y,w,h) in [(2,2,3,2),(9,5,3,2),(27,7,3,2)]:c.r(x,y,w,h,'R')
 for (x,y) in [(20,1),(23,1),(26,1),(21,3),(25,3),(30,4)]:c.p(x,y,'T')
 for (x,y,w,h) in [(13,1,4,2),(6,11,3,2)]:c.r(x,y,w,h,'.')
 c.p(17,7,'F');c.p(32,1,'P')
+for (x,y) in [(2,6),(13,11),(28,11),(18,2)]:c.r(x,y,3,2,'R')
+c.p(7,3,'Z');c.p(24,7,'U')
 P_['p_lof']=c.rows()
 # --- p_pewen: araucaria forest, seasons stones ---
 c=C(32,13)

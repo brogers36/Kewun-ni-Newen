@@ -56,4 +56,15 @@ Left unchanged: *Pun mew kintukefuy kulliñ* (habitual past in the story, "used 
 | Pun mew pengekey; antü mew ñamkey. | konew (wangülen) | At night it is seen; by day it disappears | |
 | Kütral ñi püñeñ; wenu püle amukey, ñamkey. | konew (fütron) | Child of the fire; it goes upward and disappears | |
 | Rayen mew llitukey; pire mew afkey. | carved stone, seasons puzzle | It begins with the flowers; it ends with the snow | |
-| Cherrufe müley pillañ mew. Kütral ka kura ngey! | kona | The Cherrufe is in the volcano. It is fire and stone! | |
+
+## New lof villagers (Nov 2026)
+
+| Form | Where | Intended meaning |
+|---|---|---|
+| Makuñ ngürekalen. | weavers, Nagche and Pewenche lof | I am weaving a makuñ |
+| Pukem mew wütrekey! | Pewenche weaver | In winter it is cold! |
+| Iyael dewmalen. Kofke ka ilo. | Nagche cook | I am making food: bread and meat |
+| Ngülliw mew kofke dewmalen. | Pewenche cook | I am making pewen-nut bread |
+| Pire müley! Ayüwün! | Pewenche child | There is snow! I am so happy! |
+| Trutruka ayüken. (Weche wentru) | Nagche lof | I love the trutruka (young man) |
+| Iñche ka kümelen. | papay, both lofs | I am well too |

@@ -530,8 +530,14 @@ function arrieroTalk(){
       if(v==='_book')return openBook(()=>ask(i));
       if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Wentru','Fey no...','Eso no...','Not that...'),N('Piensa: ¿quién lo hace, y lo hace siempre?','Think: who does it, and do they always do it?')],()=>ask(0))}},false,false)}
 }
+function papayTalk(){
+  say([L('Papay','Mari mari, '+addr(true)+'. Chumleymi?','Hola. ¿Cómo estás?','Hello. How are you?'),L(nm(),'Kümelen. Eymi kay?','Estoy bien. ¿Y tú?','I am well. And you?'),L('Papay','Iñche ka kümelen.','Yo también estoy bien.','I am well too.')]);
+}
+function trutTalk(){
+  say([L('Weche wentru','Trutruka ayüken.','Me gusta la trutruka.','I love the trutruka.'),N('La trutruka es un instrumento largo de colihue con un cuerno en la punta. Suena en las ceremonias y en las fiestas.','The trutruka is a long instrument made of colihue cane with a horn at the end. It sounds at ceremonies and celebrations.')]);
+}
 function kona3Talk(){
   if(S.flags.ngen3)return say([L('Kona','Cherrufe ngelay! Ayüwün!','¡Ya no está el Cherrufe! ¡Qué feliz estoy!','The Cherrufe is gone! I am so happy!')]);
-  say([L('Kona','Cherrufe müley pillañ mew. Kütral ka kura ngey!','El Cherrufe está en el volcán. ¡Es de fuego y de piedra!','The Cherrufe is in the volcano. It is made of fire and stone!'),
+  say([L('Kona','Cherrufe müley pillañ mew. Kütralngey ka kurangey!','El Cherrufe está en el volcán. ¡Es fuego y es piedra!','The Cherrufe is in the volcano. It is fire and it is stone!'),
     N('La entrada está entre las rocas, subiendo al este. Dicen que adentro hay piedras con números muy grandes y otra que hace preguntas.','The entrance is among the rocks, up to the east. They say inside there are stones with very big numbers and another one that asks questions.')]);
 }

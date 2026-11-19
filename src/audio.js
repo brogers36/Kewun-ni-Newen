@@ -8,6 +8,8 @@ function auInit(){
     if(!AU.c){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;AU.c=new AC();
       AU.m=AU.c.createGain();AU.m.connect(AU.c.destination);
       AU.mus=AU.c.createGain();AU.mus.gain.value=.2;AU.mus.connect(AU.m);
+      AU.dist=AU.c.createWaveShaper();{const n=1024,cv=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;cv[i]=Math.tanh(x*6)*.8}AU.dist.curve=cv}
+      AU.distG=AU.c.createGain();AU.distG.gain.value=.55;AU.dist.connect(AU.distG);AU.distG.connect(AU.mus);
       AU.sfx=AU.c.createGain();AU.sfx.gain.value=.3;AU.sfx.connect(AU.m);
       const b=AU.c.createBuffer(1,AU.c.sampleRate,AU.c.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;AU.noise=b;
       if(AU.song){AU.next=AU.c.currentTime+.08}
@@ -146,10 +148,13 @@ const SONGS={
   {w:'square',v:.05,t:'F#4 A4 D5 A4 F#4 A4 D5 A4 | E4 A4 C#5 A4 E4 A4 C#5 A4 | D4 G4 B4 G4 D4 G4 B4 G4 | E4 A4 C#5 A4 F#4 A4 D5 A4'},
   {w:'triangle',v:.4,t:'D3 - - - A2 - - - | A2 - - - E3 - - - | G2 - - - D3 - - - | A2 - - - D3 - - -'},
   {d:1,v:.3,t:'k . h . s . h . | k . h k s . h h'}]}),
- win:mkSong({bpm:150,loop:0,ch:[
-  {w:'square',v:.14,t:'C5 E5 G5 C6 - - G5 C6 - - - - . . . .'},
-  {w:'triangle',v:.5,t:'C3 - - - G2 - - - C3 - - - . . . .'},
-  {d:1,v:.5,t:'k . s . k . s . k . . . . . . .'}]})
+ win:mkSong({bpm:176,loop:0,ch:[
+  {w:'sawtooth',v:.09,dist:1,t:'E3 E3 . E3 E3 . G3 - | A3 A3 . A3 A3 . C4 - | D4 - - - C4 - - - | B3 - - - B3 B3 B3 B3 | E4 - - - - - - - | . . . .'},
+  {w:'sawtooth',v:.08,dist:1,t:'B3 B3 . B3 B3 . D4 - | E4 E4 . E4 E4 . G4 - | A4 - - - G4 - - - | F#4 - - - F#4 F#4 F#4 F#4 | B4 - - - - - - - | . . . .'},
+  {w:'sawtooth',v:.06,dist:1,t:'E4 E4 . E4 E4 . G4 - | A4 A4 . A4 A4 . C5 - | D5 - - - C5 - - - | B4 - - - B4 B4 B4 B4 | G#4 - - - - - - - | . . . .'},
+  {w:'square',v:.1,t:'. . . . . . . . | . . . . . . . . | D6 C6 B5 A5 G5 F#5 G5 A5 | B5 - D6 - F#6 - B6 - | E6 - - - - - - - | . . . .'},
+  {w:'triangle',v:.55,t:'E2 E2 E2 E2 E2 E2 G2 G2 | A2 A2 A2 A2 A2 A2 C3 C3 | D3 D3 D3 D3 C3 C3 C3 C3 | B2 B2 B2 B2 B2 B2 B2 B2 | E2 - - - - - - - | . . . .'},
+  {d:1,v:.6,t:'c k s k k k s k | k k s k k k s k | k k s k k s s s | k k k k s s s s | c . . . k . . . | . . . .'}]})
 };
 function playSong(name){
   if(AU.name===name)return;AU.name=name;AU.song=SONGS[name]||null;AU.step=0;
@@ -168,14 +173,14 @@ function playNote(ch,e,t,sd){
   const c=AU.c;
   if(ch.d){
     if(e.n==='k'){const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(40,t+.12);g.gain.setValueAtTime(ch.v,t);g.gain.exponentialRampToValueAtTime(.001,t+.14);o.connect(g);g.connect(AU.mus);o.start(t);o.stop(t+.15)}
-    else{const s=c.createBufferSource();s.buffer=AU.noise;const f=c.createBiquadFilter();f.type='highpass';f.frequency.value=e.n==='h'?7000:1600;const g=c.createGain();const dur=e.n==='h'?.04:.12;
-      g.gain.setValueAtTime(ch.v*(e.n==='h'?.35:.7),t);g.gain.exponentialRampToValueAtTime(.001,t+dur);s.connect(f);f.connect(g);g.connect(AU.mus);s.start(t,Math.random()*.5);s.stop(t+dur+.01)}
+    else{const s=c.createBufferSource();s.buffer=AU.noise;const f=c.createBiquadFilter();f.type='highpass';f.frequency.value=e.n==='h'?7000:e.n==='c'?4200:1600;const g=c.createGain();const dur=e.n==='h'?.04:e.n==='c'?.9:.12;
+      g.gain.setValueAtTime(ch.v*(e.n==='h'?.35:e.n==='c'?.6:.7),t);g.gain.exponentialRampToValueAtTime(.001,t+dur);s.connect(f);f.connect(g);g.connect(AU.mus);s.start(t,Math.random()*.5);s.stop(t+dur+.01)}
     return}
   const o=c.createOscillator(),g=c.createGain();o.type=ch.w;o.frequency.value=nf(e.n);
   const dur=e.len*sd;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(ch.v,t+.008);g.gain.linearRampToValueAtTime(ch.v*.65,t+Math.min(.12,dur*.5));
   g.gain.setValueAtTime(ch.v*.65,t+dur*.85);g.gain.linearRampToValueAtTime(0,t+dur*.98);
   if(e.len>=3&&ch.w==='square'){const l=c.createOscillator(),lg=c.createGain();l.frequency.value=5.5;lg.gain.value=nf(e.n)*.008;l.connect(lg);lg.connect(o.frequency);l.start(t+.15);l.stop(t+dur)}
-  o.connect(g);g.connect(AU.mus);o.start(t);o.stop(t+dur);
+  o.connect(g);g.connect(ch.dist&&AU.dist?AU.dist:AU.mus);o.start(t);o.stop(t+dur);
 }
 function tone(type,f0,f1,dur,vol,delay){
   if(!AU.c||AU.muted)return;const c=AU.c,t=c.currentTime+(delay||0),o=c.createOscillator(),g=c.createGain();o.type=type;
