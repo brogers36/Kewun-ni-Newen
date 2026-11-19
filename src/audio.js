@@ -148,6 +148,46 @@ const SONGS={
   {w:'square',v:.05,t:'F#4 A4 D5 A4 F#4 A4 D5 A4 | E4 A4 C#5 A4 E4 A4 C#5 A4 | D4 G4 B4 G4 D4 G4 B4 G4 | E4 A4 C#5 A4 F#4 A4 D5 A4'},
   {w:'triangle',v:.4,t:'D3 - - - A2 - - - | A2 - - - E3 - - - | G2 - - - D3 - - - | A2 - - - D3 - - -'},
   {d:1,v:.3,t:'k . h . s . h . | k . h k s . h h'}]}),
+ wil:mkSong({bpm:108,loop:1,ch:[
+  {w:'triangle',v:.5,t:'A4 - D5 - F#5 - | E5 - - - D5 - | B4 - D5 - G5 - | F#5 - - - - - | A4 - D5 - F#5 - | A5 - G5 - F#5 - | E5 - C#5 - E5 - | D5 - - - - -'},
+  {w:'square',v:.04,t:'F#4 A4 D5 F#4 A4 D5 | G4 B4 D5 G4 B4 D5 | A4 C#5 E5 A4 C#5 E5 | F#4 A4 D5 F#4 A4 D5'},
+  {w:'triangle',v:.42,t:'D3 - - A2 - - | G2 - - D3 - - | A2 - - E3 - - | D3 - - A2 - -'},
+  {d:1,v:.3,t:'k . h . h .'}]}),
+ wilG:mkSong({bpm:66,loop:1,ch:[
+  {w:'triangle',v:.5,t:'F#5 - - E5 D5 - | C#5 - - - B4 - | D5 - - C#5 B4 - | A#4 - - - - - | B4 - D5 - F#5 - | G5 - - F#5 E5 - | D5 - C#5 - A#4 - | B4 - - - - -'},
+  {w:'square',v:.04,t:'D4 F#4 B4 D4 F#4 B4 | E4 G4 B4 E4 G4 B4 | F#4 A#4 C#5 F#4 A#4 C#5 | D4 F#4 B4 D4 F#4 B4'},
+  {w:'triangle',v:.4,t:'B2 - - - - - | E2 - - - - - | F#2 - - - - - | B2 - - - - -'},
+  {d:1,v:.2,t:'k . . . . .'}]}),
+ wilLof:mkSong({bpm:112,loop:1,ch:[
+  {w:'triangle',v:.55,t:'D5 - B4 G4 - B4 | D5 - E5 D5 - - | C5 - A4 F#4 - A4 | C5 - D5 C5 - - | B4 - G4 D4 - G4 | B4 - C5 D5 - E5 | D5 - C5 B4 - A4 | G4 - - - - -'},
+  {w:'square',v:.05,t:'B3 D4 G4 B3 D4 G4 | A3 D4 F#4 A3 D4 F#4 | A3 C4 F#4 A3 C4 F#4 | B3 D4 G4 B3 D4 G4'},
+  {w:'triangle',v:.4,t:'G2 - - D3 - - | D2 - - A2 - - | D2 - - A2 - - | G2 - - D3 - -'},
+  {d:1,v:.32,t:'k . h k h .'}]}),
+ wilLofG:mkSong({bpm:76,loop:1,ch:[
+  {w:'triangle',v:.5,t:'B4 - - E5 - G5 | F#5 - - E5 - - | D5 - - C5 - B4 | A4 - - - - - | B4 - - E5 - G5 | B5 - - A5 - G5 | F#5 - D5 - E5 - | E5 - - - - -'},
+  {w:'square',v:.04,t:'E4 G4 B4 E4 G4 B4 | D4 F#4 A4 D4 F#4 A4 | C4 E4 G4 C4 E4 G4 | B3 D#4 F#4 B3 D#4 F#4'},
+  {w:'triangle',v:.4,t:'E2 - - - - - | D2 - - - - - | C2 - - - - - | B1 - - - - -'},
+  {d:1,v:.2,t:'k . . h . .'}]}),
+ wilCave:mkSong({bpm:70,loop:1,ch:[
+  {w:'triangle',v:.42,t:'A4 - - - C5 - B4 - | A4 - - - E4 - - - | F4 - - - G4 - A4 - | E4 - - - - - - - | A4 - C5 - E5 - D5 - | C5 - - - B4 - - - | G#4 - - - B4 - - - | A4 - - - - - - -'},
+  {w:'square',v:.04,t:'A3 E4 A4 E4 A3 E4 A4 E4 | F3 C4 F4 C4 F3 C4 F4 C4 | D3 A3 D4 A3 D3 A3 D4 A3 | E3 B3 E4 B3 E3 G#3 B3 E4'},
+  {w:'sawtooth',v:.04,t:'A1 - - - - - - - | F1 - - - - - - - | D2 - - - - - - - | E1 - - - - - - -'},
+  {d:1,v:.25,t:'k . . . . . h . | . . . . k . . .'}]}),
+ wilBattle:mkSong({bpm:164,loop:1,ch:[
+  {w:'square',v:.12,t:'B5 - F#5 B5 - D6 | C#6 - A5 F#5 - - | B5 - F#5 B5 - D6 | E6 - D6 C#6 - - | D6 - C#6 B5 - A5 | G5 - F#5 E5 - - | F#5 - A#5 C#6 - E6 | F#6 - - F#5 - -'},
+  {w:'triangle',v:.55,t:'B2 B3 B2 B2 B3 B2 | A2 A3 A2 A2 A3 A2 | G2 G3 G2 G2 G3 G2 | F#2 F#3 F#2 F#2 F#3 F#2'},
+  {w:'square',v:.04,t:'B4 D5 F#5 B4 D5 F#5 | A4 C#5 E5 A4 C#5 E5 | G4 B4 D5 G4 B4 D5 | F#4 A#4 C#5 F#4 A#4 C#5'},
+  {d:1,v:.55,t:'k . h k s h | k . h k s s'}]}),
+ wilBoss:mkSong({bpm:144,loop:1,ch:[
+  {w:'sawtooth',v:.06,t:'B4 - D5 - F5 - Ab5 - | G5 - - - F5 - - - | E5 - G5 - Bb5 - Db6 - | C6 - - - B5 - - - | B4 - C5 - D5 - Eb5 - | F5 - - - Eb5 - D5 - | C5 - B4 - Ab4 - G4 - | B4 - - - - - - -'},
+  {w:'triangle',v:.55,t:'B1 B1 B2 B1 B1 B1 B2 B1 | G1 G1 G2 G1 G1 G1 G2 G1 | E1 E1 E2 E1 E1 E1 E2 E1 | F1 F1 F2 F1 F#1 F#1 F#2 F#1'},
+  {w:'square',v:.05,t:'D4 . . F4 . . Ab4 . | Db4 . . E4 . . G4 .'},
+  {d:1,v:.55,t:'k h s h k k s h | k h s h k s s c'}]}),
+ wilNgen:mkSong({bpm:92,loop:1,ch:[
+  {w:'triangle',v:.5,t:'E5 - A5 - C#6 - B5 - | A5 - - - E5 - - - | F#5 - A5 - D6 - C#6 - | B5 - - - - - - - | E5 - A5 - C#6 - E6 - | D6 - - - C#6 - B5 - | A5 - B5 - C#6 - B5 - | A5 - - - - - - -'},
+  {w:'square',v:.05,t:'C#4 E4 A4 E4 C#4 E4 A4 E4 | D4 F#4 A4 F#4 D4 F#4 A4 F#4 | E4 G#4 B4 G#4 E4 G#4 B4 G#4 | C#4 E4 A4 E4 E4 G#4 B4 G#4'},
+  {w:'triangle',v:.4,t:'A2 - - - E3 - - - | D3 - - - A2 - - - | E3 - - - B2 - - - | A2 - - - E2 - - -'},
+  {d:1,v:.3,t:'k . h . s . h . | k . h k s . h h'}]}),
  win:mkSong({bpm:176,loop:0,ch:[
   {w:'sawtooth',v:.09,dist:1,t:'E3 E3 . E3 E3 . G3 - | A3 A3 . A3 A3 . C4 - | D4 - - - C4 - - - | B3 - - - B3 B3 B3 B3 | E4 - - - - - - - | . . . .'},
   {w:'sawtooth',v:.08,dist:1,t:'B3 B3 . B3 B3 . D4 - | E4 E4 . E4 E4 . G4 - | A4 - - - G4 - - - | F#4 - - - F#4 F#4 F#4 F#4 | B4 - - - - - - - | . . . .'},

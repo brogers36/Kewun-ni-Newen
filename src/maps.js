@@ -218,6 +218,68 @@ ngen3:{region:'pewenche',ngenmap:1,name:'Ngen-pewen',g:{es:'El cráter',en:'The 
      pre:[N('Desde la lava se levanta un gigante de roca negra, con grietas que brillan como brasas y una cabellera de fuego: el Cherrufe.','A giant of black rock rises from the lava, with cracks that glow like embers and a mane of fire: the Cherrufe.'),L('','Müley Cherrufe!','¡Ahí está el Cherrufe!','There is the Cherrufe!')]},
    {id:'ngen',kind:'npc',look:'ngen3',x:8,y:3,req:'ngen3',fixed:1,talk:()=>say([L('Ngen-pewen','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")])}]}
 });
+/* ---------- WILLICHE ---------- */
+const K8={reward:'piwke',q:L('Konew','Ko mew amukey, welu namun nielay. Chem am ta tatey?','Anda por el agua, pero no tiene pies. ¿Qué será?','It travels on the water, but it has no feet. What could it be?'),
+  opts:[{m:'wampo',es:'canoa',en:'canoe',ok:1},{m:'kawellu',es:'caballo',en:'horse'},{m:'ruka',es:'casa',en:'house'},{m:'trewa',es:'perro',en:'dog'}]};
+const K9={q:L('Konew','Pekelafiyiñ, welu allkükefiyiñ. Chem am ta tatey?','No lo vemos, pero lo oímos. ¿Qué será?','We do not see it, but we hear it. What could it be?'),
+  opts:[{m:'kürüf',es:'viento',en:'wind',ok:1},{m:'antü',es:'sol',en:'sun'},{m:'kura',es:'piedra',en:'stone'},{m:'ruka',es:'casa',en:'house'}]};
+const K10={reward:'piwke',q:L('Konew','Ikelafiyiñ, pütokokefiyiñ. Chem am ta tatey?','No lo comemos, lo bebemos. ¿Qué será?','We do not eat it, we drink it. What could it be?'),
+  opts:[{m:'ko',es:'agua',en:'water',ok:1},{m:'kofke',es:'pan',en:'bread'},{m:'ilo',es:'carne',en:'meat'},{m:'kütral',es:'fuego',en:'fire'}]};
+Object.assign(MAPS,{
+w_rupu:{region:'williche',name:'Williche rüpü',g:{es:'El camino al sur',en:'The road south'},floor:',',bg:'rainforest',song:'wil',pal:'williche',trees:'lawal',
+ edges:{up:{to:'n_lewfu',x:20,y:11},right:{to:'w_lof',x:1,y:9}},
+ ents:[{kind:'enemy',x:10,y:8,party:['kowek']},{kind:'enemy',x:21,y:3,party:['mawek','kowek']},{kind:'enemy',x:25,y:8,party:['kowek','kowek','mawek']},{kind:'enemy',x:13,y:10,party:['mawek','mawek']}]},
+w_lof:{region:'williche',name:'Williche lof',g:{es:'La comunidad del lago',en:'The lake community'},floor:',',bg:'rainforest',song:'lof',pal:'williche',trees:'lawal',
+ edges:{left:{to:'w_rupu',x:30,y:7},right:{to:'w_mawida',x:1,y:7,req:'wil_lonko',reqMsg:[N('Antes de seguir, habla con el lonko de este lof. Está junto al kütral.','Before you go on, speak with the lonko of this lof. He is by the fire.')]}},
+ ents:[{id:'cheche',kind:'npc',look:'elder',x:5,y:10,talk:()=>checheTalk(),bub:['Mari mari!']},
+   {id:'wlonko',kind:'npc',look:'lonko4',x:18,y:7,talk:()=>wLonkoTalk(),bub:['Mari mari!']},
+   {id:'wnutram',kind:'npc',look:'elder2',fem:1,x:16,y:8,dir:'up',fixed:1,act:'teach',talk:()=>wNutramTalk(),bub:['Kuyfi...','Kaleuche...']},
+   {id:'wk1',kind:'npc',look:'child',x:15,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichiche','Kaleuche pewmafiñ!','¡Soñé con el Kaleuche!','I dreamed about the Kaleuche!')]),bub:['Kaleuche!']},
+   {id:'wk2',kind:'npc',look:'childf',fem:1,x:17,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichi domo','Mawün ayüfiñ!','¡Me gusta la lluvia!','I love the rain!')]),bub:['Mawün!']},
+   {id:'wweav',kind:'npc',look:'weaver',fem:1,x:7,y:4,dir:'up',act:'weave',fixed:1,talk:()=>say([L('Domo','Makuñ ngürekalen. Mawünley ka wütreley!','Estoy tejiendo un makuñ. ¡Está lloviendo y hace frío!','I am weaving a makuñ. It is raining and it is cold!')]),bub:['Ngürekalen.']},
+   {id:'wcook',kind:'npc',look:'cook',fem:1,x:24,y:8,dir:'up',act:'weave',fixed:1,talk:()=>say([L('Domo','Challwa ka poñü dewmalen.','Estoy preparando pescado y papas.','I am cooking fish and potatoes.')]),bub:['Challwa!','Poñü!']},
+   {id:'wfish',kind:'npc',look:'fisher',x:15,y:11,dir:'down',fixed:1,talk:()=>wFisherTalk(),bub:['Challwatulen.']},
+   {id:'wwood',kind:'npc',look:'walker',x:2,y:10,act:'wood',path:[[2,10],[9,10]],pause:80,talk:()=>walkerTalk(),bub:['Mamüll yelen.']},
+   {id:'wrun',kind:'npc',look:'child',x:11,y:10,path:[[11,10],[13,10],[13,10],[11,10]],pause:20,spd:10,talk:()=>runnerTalk(),bub:['Ayüwün!']},
+   {id:'wdog',kind:'npc',look:'dog',x:25,y:10,path:[[25,10],[30,10]],pause:40,talk:()=>dogTalk()},
+   {id:'wpapay',kind:'npc',look:'kuku',fem:1,x:19,y:8,dir:'left',seated:1,fixed:1,talk:()=>papayTalk(),bub:['Mari mari!','Chumleymi?']},
+   {id:'wseller',kind:'npc',look:'seller',x:31,y:10,talk:()=>shop('w_lof')}]},
+w_mawida:{region:'williche',name:'Lawal mawida',g:{es:'El bosque de alerces',en:'The alerce forest'},floor:',',bg:'rainforest',song:'wil',pal:'williche',trees:'lawal',
+ edges:{left:{to:'w_lof',x:32,y:9},right:{to:'w_lafken',x:1,y:7}},stones:{'14,3':'kin'},chests:{'27,2':'piwke'},konew:{'22,10':K8},
+ ents:[{kind:'enemy',x:10,y:3,party:['kowek','mawek']},{kind:'enemy',x:18,y:8,party:['mawek','mawek','kowek']},{kind:'enemy',x:5,y:6,party:['kowek','kowek']}]},
+w_lafken:{region:'williche',name:'Willi lafken',g:{es:'La costa del sur',en:'The southern coast'},floor:'.',bg:'rainforest',song:'wil',pal:'williche',trees:'lawal',
+ edges:{left:{to:'w_mawida',x:30,y:7},right:{to:'w_inaltu',x:1,y:7}},
+ ents:[{id:'wfishw',kind:'npc',look:'fisherw',fem:1,x:15,y:9,dir:'down',fixed:1,talk:()=>timeTalk(),bub:['Wiya, fachantü, wüle...']},
+   {kind:'enemy',x:10,y:4,party:['kowek','kowek','kowek']},{kind:'enemy',x:20,y:8,party:['mawek','kowek']},{kind:'enemy',x:5,y:5,party:['mawek','mawek','mawek']}]},
+w_inaltu:{region:'williche',name:'Lafken inaltu',g:{es:'Los acantilados',en:'The cliffs'},floor:'.',bg:'rainforest',song:'wil',pal:'williche',trees:'lawal',
+ edges:{left:{to:'w_lafken',x:30,y:7}},stairs:{to:'wd1',x:20,y:4},
+ ents:[{id:'kona4',kind:'npc',look:'kona',x:21,y:7,talk:()=>kona4Talk(),bub:['Kaleuche...']},
+   {kind:'enemy',x:8,y:3,party:['kowek','mawek','kowek']},{kind:'enemy',x:15,y:9,party:['mawek','mawek']},{kind:'enemy',x:12,y:5,party:['kowek','kowek','mawek']}]},
+wd1:{region:'williche',name:'Kaleuche ñi lolo · 1',g:{es:'La cueva del Kaleuche (piso 1)',en:"The Kaleuche's sea cave (floor 1)"},floor:'_',bg:'cave4',song:'cave',dungeon:1,pal:'wilcave',
+ edges:{right:{to:'w_inaltu',x:24,y:6}},stairs:{to:'wd2',x:20,y:2},
+ chests:{'19,2':'lawen1','1,9':'piwke'},konew:{'14,7':K9},
+ pz:{kind:'J',tiles:{'7,6':{lab:'karü',col:'#30c040',i:0},'1,6':{lab:'chod',col:'#f0d020',i:1},'4,6':{lab:'kurü',col:'#303030',i:2}}},
+ signs:{'3,3':[L('Kura','Karü, chod, kurü.','Una piedra tallada: «verde, amarillo, negro». Tres braseros esperan su fuego.','A carved stone: «green, yellow, black». Three braziers wait for their fire.')]},
+ ents:[{kind:'enemy',x:18,y:8,party:['kowek','kowek']},{kind:'enemy',x:17,y:2,party:['mawek']},{kind:'enemy',x:5,y:8,party:['kowek','mawek']},{kind:'enemy',x:5,y:3,party:['kowek','kowek','kowek']},
+   {id:'wmini1',kind:'enemy',x:2,y:1,party:['kamawetu','kowek'],fixed:1,mini:1,flag:'wmini1',
+     pre:[N('Un ternero de pelaje dorado, con un solo cuerno brillante en la frente, sale del agua: el kamawetu.','A golden-haired calf with a single shining horn on its forehead comes out of the water: the kamawetu.')]}]},
+wd2:{region:'williche',name:'Kaleuche ñi lolo · 2',g:{es:'La cueva del Kaleuche (piso 2)',en:"The Kaleuche's sea cave (floor 2)"},floor:'_',bg:'cave4',song:'cave',dungeon:1,pal:'wilcave',
+ edges:{right:{to:'wd1',x:2,y:1}},stairs:{to:'wd3',x:20,y:1,req:'root_tripa',reqMsg:[N('Algo te dice que todavía falta algo en este piso.','Something tells you there is still something missing on this floor.')]},
+ chests:{'8,3':'tripa'},konew:{'4,5':K10},stones:{'9,6':'negfut'},
+ ents:[{kind:'enemy',x:18,y:3,party:['kowek','kowek','mawek']},{kind:'enemy',x:11,y:6,party:['mawek','mawek']},
+   {id:'wmini2',kind:'enemy',x:5,y:5,party:['basilisko','kowek'],fixed:1,mini:1,flag:'wmini2',
+     pre:[N('Una criatura con cabeza de gallo y cuerpo de culebra te clava los ojos: el basilisko.','A creature with a rooster\'s head and a snake\'s body fixes its eyes on you: the basilisko.')]}]},
+wd3:{region:'williche',name:'Kaleuche ñi lolo · 3',g:{es:'La cueva del Kaleuche (piso 3)',en:"The Kaleuche's sea cave (floor 3)"},floor:'_',bg:'cave4',song:'cave',dungeon:1,pal:'wilcave',
+ edges:{right:{to:'wd2',x:2,y:5}},stairs:{to:'ngen4',x:8,y:10},
+ ents:[{kind:'enemy',x:19,y:2,party:['kowek','mawek','kowek']},
+   {id:'wmini3',kind:'enemy',x:2,y:4,party:['kamawetu','mawek','kowek'],fixed:1,mini:1,flag:'wmini3',
+     pre:[N('Se oye música lejana sobre el agua. Tres wekufü cuidan la salida al muelle.','Distant music sounds over the water. Three wekufü guard the way out to the pier.')]}]},
+ngen4:{region:'williche',ngenmap:1,name:'Ngen-kürüf',g:{es:'El muelle en la niebla',en:'The pier in the fog'},floor:'b',bg:'fjord',song:'cave',pal:'williche',
+ stairs:{to:'wd3',x:3,y:4},
+ ents:[{id:'boss',kind:'enemy',x:8,y:3,party:['kaleuche'],fixed:1,boss:1,flag:'boss4',
+     pre:[N('De la niebla sale un barco iluminado, con velas rotas que brillan pálidas y música que nadie toca: el Kaleuche.','An illuminated ship comes out of the fog, with torn sails that glow pale and music no one is playing: the Kaleuche.'),L('','Müley Kaleuche!','¡Ahí está el Kaleuche!','There is the Kaleuche!')]},
+   {id:'ngen',kind:'npc',look:'ngen4',x:8,y:4,req:'ngen4',fixed:1,talk:()=>say([L('Ngen-kürüf','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")])}]}
+});
 for(const k in MAPS){const m=MAPS[k];if(!m.region)m.region='lafkenche';m.rows=MAPROWS[k];m.w=MAPROWS[k][0].length;m.h=MAPROWS[k].length}
 MAPS.inaltu.edges.right={to:'n_rupu',x:1,y:7,req:'ngen',reqMsg:[N('El camino hacia el este, a las tierras nagche, está cubierto de niebla. Primero despierta a Ngen-lafken.','The road east, to the Nagche lands, is covered in fog. First wake Ngen-lafken.')]};
 MAPS.ngen.ngenmap=1;
@@ -225,6 +287,8 @@ for(const k of ['n_rupu','n_lof','n_kullin','n_lewfu']){MAPS[k].pal='nagche';MAP
 for(const k of ['n_mawida','ngen2']){MAPS[k].pal='nagforest';MAPS[k].trees='mawida'}
 for(const k of ['nd1','nd2','nd3']){MAPS[k].pal='nagcave';MAPS[k].bg='cave2'}
 MAPS.n_mawida.edges.right={to:'p_rupu',x:1,y:7,req:'ngen2',reqMsg:[N('Hacia el este el camino sube a la cordillera, pero una niebla espesa lo cubre. Primero despierta a Ngen-mawida.','To the east the road climbs into the mountains, but a thick fog covers it. First wake Ngen-mawida.')]};
+MAPS.n_lewfu.edges.down={to:'w_rupu',x:4,y:1,req:'ngen3',reqMsg:[N('Hacia el sur el camino se pierde en una niebla espesa y húmeda. Primero despierta a Ngen-pewen.','To the south the road disappears into a thick, damp fog. First wake Ngen-pewen.')]};
+MAPS.wd1.pz.hint=N('Pista: lee la piedra tallada. Karü = verde, chod = amarillo, kurü = negro.','Hint: read the carved stone. Karü = green, chod = yellow, kurü = black.');
 MAPS.pd1.pz.hint=N('Pista: de lo menor a lo mayor. kechu mari (50), pataka (100), epu pataka (200).','Hint: from smallest to largest. kechu mari (50), pataka (100), epu pataka (200).');
 MAPS.p_pewen.pz.hint=N('Pista: pewü (primavera), walüng (verano), rimü (otoño), pukem (invierno).','Hint: pewü (spring), walüng (summer), rimü (autumn), pukem (winter).');
 MAPS.n_kullin.ents.forEach(e=>{if(e.herd&&e.look!=='ofisa')e.flag='hd_'+e.id});

@@ -2,7 +2,7 @@
    STATE
    ============================================================ */
 const HPQ=4,SPMAX=3;
-function maxHP(){return S.baseMax+(S.gear.trariwe?4:0)+Math.floor(S.piwke/4)*4+(S.flags.ngen?4:0)+(S.flags.ngen2?4:0)+(S.flags.ngen3?4:0)}
+function maxHP(){return S.baseMax+(S.gear.trariwe?4:0)+Math.floor(S.piwke/4)*4+(S.flags.ngen?4:0)+(S.flags.ngen2?4:0)+(S.flags.ngen3?4:0)+(S.flags.ngen4?4:0)}
 function atk(){return S.baseAtk+(S.gear.futrawino?3:0)-(S.curse?2:0)}
 function def(){return S.baseDef+(S.gear.makun?2:0)}
 function xpNeed(){return 10+S.lvl*10}
@@ -22,7 +22,9 @@ const ROOTS={
   'llüka':{m:'llüka-',es:'tener miedo',en:'be afraid'},
   'wiñotu':{m:'wiñotu-',es:'volver, regresar',en:'go back'},
   trafo:{m:'trafo-',es:'quebrarse, romperse',en:'break'},
-  'wütre':{m:'wütre-',es:'tener frío',en:'be cold'}};
+  'wütre':{m:'wütre-',es:'tener frío',en:'be cold'},
+  lef:{m:'lef-',es:'correr, huir',en:'run away'},
+  tripa:{m:'tripa-',es:'salir',en:'come out'}};
 const ENDS=['nge','mu','mün'];
 const endFor=n=>n<=1?0:n===2?1:2;
 const VG={
@@ -36,6 +38,10 @@ const VG={
        nes:['¡No bajes!','¡No bajen (ustedes dos)!','¡No bajen (todos)!'],nen:["Don't come down!","Don't come down, you two!","Don't come down, all of you!"]},
   'llüka':{es:['¡Ten miedo!','¡Tengan miedo (ustedes dos)!','¡Tengan miedo (todos)!'],en:['Be afraid!','Be afraid, you two!','Be afraid, all of you!'],
        nes:['¡No tengas miedo!','¡No tengan miedo (ustedes dos)!','¡No tengan miedo (todos)!'],nen:["Don't be afraid!","Don't be afraid, you two!","Don't be afraid, all of you!"]},
+  lef:{es:['¡Corre!','¡Corran (ustedes dos)!','¡Corran (todos)!'],en:['Run!','Run, you two!','Run, all of you!'],
+       nes:['¡No corras!','¡No corran (ustedes dos)!','¡No corran (todos)!'],nen:["Don't run!","Don't run, you two!","Don't run, all of you!"]},
+  tripa:{es:['¡Sal!','¡Salgan (ustedes dos)!','¡Salgan (todos)!'],en:['Come out!','Come out, you two!','Come out, all of you!'],
+       nes:['¡No salgas!','¡No salgan (ustedes dos)!','¡No salgan (todos)!'],nen:["Don't come out!","Don't come out, you two!","Don't come out, all of you!"]},
   trafo:{es:['¡Quiébrate!','¡Quiébrense (ustedes dos)!','¡Quiébrense (todos)!'],en:['Break!','Break, you two!','Break, all of you!'],
        nes:['¡No te quiebres!','¡No se quiebren (ustedes dos)!','¡No se quiebren (todos)!'],nen:["Don't break!","Don't break, you two!","Don't break, all of you!"]},
   'wütre':{es:['¡Ten frío!','¡Tengan frío (ustedes dos)!','¡Tengan frío (todos)!'],en:['Be cold!','Be cold, you two!','Be cold, all of you!'],
@@ -48,18 +54,23 @@ const ET={
   laftrache:{name:'laftrache',hp:10,atk:4,xp:4,gold:[2,4],bs:44},
   chonchon:{name:'chon chon',hp:9,atk:4,xp:5,gold:[3,5],fly:true,bs:44},
   anchi:{name:'anchimallén',hp:14,atk:5,xp:6,gold:[4,6],bs:40},
-  nidol:{name:'ñidol laftrache',hp:30,atk:6,xp:16,gold:[10,14],bs:62},
-  piwichen:{name:'piwichén',hp:32,atk:6,xp:18,gold:[12,16],fly:true,drain:true,bs:66},
+  nidol:{name:'ñidol laftrache',hp:30,atk:6,xp:16,gold:[10,14],bs:62,mini:1},
+  piwichen:{name:'piwichén',hp:32,atk:6,xp:18,gold:[12,16],fly:true,drain:true,bs:66,mini:1},
   trelke:{name:'Trelke-wekufü',hp:90,atk:7,xp:50,gold:[40,40],boss:true,bs:104},
   kolokolo:{name:'kolokolo',hp:13,atk:6,xp:7,gold:[4,7],bs:42,curse:1},
-  fkolokolo:{name:'fütra kolokolo',hp:38,atk:8,xp:20,gold:[12,16],bs:64,curse:1},
-  nguruvilu:{name:'nguruvilu',hp:40,atk:8,xp:24,gold:[14,18],bs:70,twice:1},
+  fkolokolo:{name:'fütra kolokolo',hp:38,atk:8,xp:20,gold:[12,16],bs:64,curse:1,mini:1},
+  nguruvilu:{name:'nguruvilu',hp:40,atk:8,xp:24,gold:[14,18],bs:70,twice:1,mini:1},
   kutral:{name:'kütral wekufü',hp:14,atk:6,xp:8,gold:[5,8],bs:40,fire:1},
   pire:{name:'pire wekufü',hp:12,atk:6,xp:8,gold:[5,8],bs:42,fly:true,snow:1},
   kura:{name:'kura wekufü',hp:18,atk:6,xp:9,gold:[6,9],bs:46,armor:1},
-  fkura:{name:'fütra kura wekufü',hp:46,atk:9,xp:24,gold:[16,20],bs:66,armor:1},
-  nirivilu:{name:'ñirivilu',hp:44,atk:9,xp:26,gold:[16,20],bs:72,twice:1},
+  fkura:{name:'fütra kura wekufü',hp:46,atk:9,xp:24,gold:[16,20],bs:66,armor:1,mini:1},
+  nirivilu:{name:'ñirivilu',hp:44,atk:9,xp:26,gold:[16,20],bs:72,twice:1,mini:1},
   cherrufe:{name:'Cherrufe',hp:110,atk:9,xp:90,gold:[80,80],boss:true,bs:110,armor:1,fire:1},
+  kowek:{name:'ko wekufü',hp:20,atk:7,xp:10,gold:[7,10],bs:42},
+  mawek:{name:'mawün wekufü',hp:17,atk:7,xp:10,gold:[7,10],bs:44,fly:true},
+  kamawetu:{name:'kamawetu',hp:56,atk:10,xp:30,gold:[20,24],bs:70,twice:1,mini:1},
+  basilisko:{name:'basilisko',hp:60,atk:10,xp:32,gold:[20,24],bs:70,drain:true,mini:1},
+  kaleuche:{name:'Kaleuche',hp:130,atk:10,xp:110,gold:[100,100],boss:true,bs:112,hide:1},
   witranalwe:{name:'Witranalwe',hp:100,atk:8,xp:70,gold:[60,60],boss:true,bs:110}};
 
 /* ---------- items ---------- */

@@ -453,6 +453,103 @@ def ngen_pewen(fr):
         for k in range(int(x-rx)+3,int(x+rx)-3,3):g.p(k,int(y)-1,'v')
     g.outline();return g.rows()
 
+def kowek(fr):
+    g=G(18,18);import math
+    g.e(9,11,6.5,5.5,'b');g.e(9,7,3.6,4.6,'b');g.p(9,1+fr,'b');g.p(9,2,'b');g.r(8,3,3,2,'b')
+    for y in range(18):
+        for x in range(18):
+            if g.a[y][x]=='b' and x>10:g.a[y][x]='B'
+    g.e(6.5,9,1.6,2.6,'l');g.p(6,7,'w')
+    g.r(6,11,2,2,'k');g.r(11,11,2,2,'k');g.p(6,11,'w');g.p(11,11,'w');g.r(8,14,3,1,'k')
+    for (x,y) in [(2,15-fr),(15,14+fr),(3,6+fr)]:g.p(x,y,'l')
+    g.outline();return g.rows()
+def mawek(fr):
+    g=G(24,20)
+    for (x,y,r) in [(7,8,4.5),(12,6,5.5),(17,8,4.5),(12,10,6)]:g.e(x,y,r*1.1,r*.85,'c')
+    for y in range(20):
+        for x in range(24):
+            if g.a[y][x]=='c' and y>9:g.a[y][x]='C'
+    g.r(8,8,3,1,'k');g.r(14,8,3,1,'k');g.p(9,9,'y');g.p(15,9,'y');g.r(10,12,5,1,'k')
+    for i,x in enumerate((6,10,14,18)):
+        y0=15+((i+fr)%2)*2
+        g.p(x,y0,'d');g.p(x,y0+1,'d')
+    g.outline();return g.rows()
+def kamawetu(fr):
+    g=G(28,22)
+    g.e(16,11,8,4.6,'b');g.r(9,9,14,6,'b')
+    for y in range(22):
+        for x in range(28):
+            if g.a[y][x]=='b' and y>12:g.a[y][x]='B'
+    g.e(6,9,4,3.6,'b');g.r(2,9,4,3,'b');g.r(1,10,3,2,'m');g.p(2,10,'k')
+    g.p(5,8,'k');g.p(5,7,'e')
+    for i in range(6):g.p(6+i//2,6-i,'y');g.p(7+i//2,6-i,'Y')
+    g.r(8,6,2,2,'b');g.p(8,5,'b')
+    g.r(24,9,1,5,'B');g.r(24,13,2,2,'k')
+    for x,ph in [(10,0),(13,1),(19,0),(22,1)]:
+        dy=1 if (ph+fr)%2 else 0
+        g.r(x,15,2,5-dy,'B');g.r(x,20-dy,2,1,'f')
+    for (x,y) in [(9,21),(14,21),(20,21),(24,20)]:g.p(x,y,'f')
+    g.outline();return g.rows()
+def basilisko(fr):
+    g=G(28,24);import math
+    pts=[(10,14),(13,17),(17,18),(21,17),(23,14),(22,11),(19,10),(17,12),(18,15)] if fr==0 else [(10,14),(13,18),(17,19),(21,18),(24,15),(23,12),(20,10),(17,12),(18,15)]
+    for i,(x,y) in enumerate(pts):
+        r=3.2-i*.2;g.e(x,y,r,r,'s')
+    for i,(x,y) in enumerate(pts):
+        if i%2:g.p(x,y-1,'S');g.p(x+1,y,'S')
+    # rooster head & neck
+    g.e(8,10,3.4,4.6,'s');g.e(7,6,3.6,3.4,'w')
+    g.r(5,1,1,3,'r');g.r(6,0,1,4,'r');g.r(7,1,1,3,'r');g.r(8,2,1,2,'r')
+    g.r(1,6,3,2,'y');g.p(0,7,'y');g.p(3,9,'r');g.p(4,9,'r');g.p(4,10,'r')
+    g.p(6,5,'e');g.p(6,6,'k')
+    g.outline();return g.rows()
+def kaleuche(fr):
+    W=62;g=G(W,54);import math
+    # hull
+    for y in range(32,46):
+        x0=6+int((y-32)*.9);x1=56-int((y-32)*.6)
+        for x in range(x0,x1):g.p(x,y,'h' if y<40 else 'H')
+    g.r(4,30,54,2,'H');g.r(2,28,8,4,'h');g.r(50,26,9,6,'h')
+    for x in range(10,52,6):g.r(x,35,3,2,'y')
+    for y in range(32,46,3):
+        for x in range(8,54):
+            if g.get(x,y)=='h':g.p(x,y,'k')
+    # masts
+    for mx,top in [(16,6),(30,2),(44,8)]:g.r(mx,top,2,28-top,'m')
+    # sails (tattered, glowing pale)
+    for mx,top,w,h in [(16,8,8,16),(30,4,9,20),(44,10,7,14)]:
+        for y in range(top,top+h):
+            bulge=int(1.4*math.sin((y-top)/h*math.pi))
+            for x in range(mx-w//2-bulge,mx+w//2+2+bulge):
+                if g.a[y][x]=='.':g.p(x,y,'s')
+        for y in range(top,top+h,4):g.r(mx-w//2,y,w+2,1,'S')
+        for k in range(4):
+            x=mx-w//2+k*3+fr;yy=top+h-1-(k%2)
+            for y in range(yy,top+h):g.p(x,y,'.')
+        for x in range(mx-w//2,mx+w//2+2,4):g.p(x,top+h//2,'S')
+    g.r(30,0,1,3,'m');g.r(31,0,4,2,'r')
+    # lanterns
+    for (x,y) in [(4,26),(58,22)]:g.r(x,y,2,3,'y');g.p(x,y-1,'k')
+    # fog at waterline
+    for x in range(0,W):
+        y=46+int(1.5*math.sin(x*.4+fr*1.5))
+        for yy in range(y,min(54,y+3)):g.p(x,yy,'f' if (x+yy)%3 else 'F')
+    g.outline();return g.rows()
+def ngen_kuruf(fr):
+    W=28;g=G(W,36);c=W/2;import math
+    for y in range(12,32):
+        hw=2.5+(y-12)*.2+math.sin(y*.5+fr)*.8
+        for x in range(int(c-hw),int(c+hw)+1):g.p(x,y,'b' if x<c else 'B')
+    for k in range(3):
+        for t in range(0,40):
+            a=t/40*math.pi*2+k*2.1+fr*.5;r=6+t*.12
+            x=int(c+math.cos(a)*r);y=int(20+math.sin(a)*r*.5+t*.25-6)
+            if 0<=x<W and 0<=y<36:g.p(x,y,'r' if t%3 else 'R')
+    g.e(c,8,4,4.4,'b');g.p(12,8,'k');g.p(16,8,'k');g.r(13,10,3,1,'B')
+    for i in range(7):g.p(int(c+4+i),5+i//3,'w');g.p(int(c+4+i),7+i//2,'w')
+    g.p(int(c),33,'R');g.p(int(c)-1,34,'r');g.p(int(c)+1,34,'r')
+    g.outline();return g.rows()
+
 PAL={
  'kawellu':{'b':'#9a5a2a','B':'#6e3a18','h':'#c27c40','m':'#2a1a10','e':'#000000','w':'#f2e6d0','n':'#4a2a14','k':'#2a2020','o':'#1a1008'},
  'waka':{'w':'#f6f4ee','W':'#c8c4bc','k':'#26221e','u':'#e6a0a0','n':'#8a4a4a','e':'#000000','c':'#e8dcc0','K':'#3a3430','o':'#1a1612'},
@@ -466,6 +563,12 @@ PAL={
  'ngen_lafken':{'d':'#2a64a8','m':'#5aa8e0','l':'#9ad8f8','w':'#e8f6ff','f':'#ffffff','k':'#081a44','o':'#0a2a5a'},
  'ngen_mawida':{'b':'#8a6a3e','B':'#5a4226','h':'#c8a46a','m':'#5aa040','L':'#4a9a3a','l':'#8ad060','G':'#2e6a2a','y':'#f8e050','k':'#1a2a10','o':'#10200c'},
  'ngen_pewen':{'v':'#7ac87a','g':'#e8b440','G':'#b8822a','s':'#ffd878','F':'#f0c890','k':'#3a2410','y':'#fff0a0','n':'#3a8a4a','N':'#246a36','u':'#c87a3a','U':'#7a4a20','o':'#2a1a08'},
+ 'kowek':{'b':'#3a8ad8','B':'#2a5aa8','l':'#9ad8ff','w':'#ffffff','k':'#0a1a40','o':'#0a1a3a'},
+ 'mawek':{'c':'#8a8a9a','C':'#5a5a6a','k':'#1a1a24','y':'#f8f080','d':'#7ab8f0','o':'#14141c'},
+ 'kamawetu':{'b':'#b0783a','B':'#7a5226','m':'#e0a890','k':'#1a1008','e':'#ffffff','y':'#ffe050','Y':'#c8a020','f':'#e8f6ff','o':'#140c06'},
+ 'basilisko':{'s':'#4a7a3a','S':'#2a4a22','w':'#f0e8d8','r':'#d82828','y':'#f0c020','e':'#ffe040','k':'#000000','o':'#0e140a'},
+ 'kaleuche':{'h':'#3a2a22','H':'#241812','k':'#1a100c','m':'#4a3a2a','s':'#c8d8c8','S':'#8aa08a','y':'#ffe070','r':'#a82020','f':'#c8ccd8','F':'#9aa0b0','o':'#080606'},
+ 'ngen_kuruf':{'b':'#e8f8ff','B':'#b8e0f0','r':'#60d0e0','R':'#ffffff','w':'#d0f0ff','k':'#1a4a6a','o':'#2a5a7a'},
  'trelke':{'h':'#6a5a34','H':'#463a20','u':'#8a7a4c','m':'#9a4a48','M':'#6a2a2e','W':'#e8c8c0','w':'#f4f0e0','r':'#a8503a','R':'#7a3424','e':'#ffd040','o':'#140e08'},
  'witranalwe':{'H':'#16161e','h':'#4a4a3a','q':'#0e0e14','F':'#c8ccc0','f':'#7a8274','k':'#0a0a0a','E':'#7aff9a','w':'#e8e8d8','P':'#24242c','p':'#34343e','A':'#3a3a46','K':'#9a9a90','c':'#d8d8c8','g':'#b8b8ac','G':'#808078','L':'#101014','o':'#040406'}}
 
@@ -489,7 +592,8 @@ def hhash(x,y,k):
 HI={
  'witranalwe':{'glow':'EwFc','tex':{'P':'streak','q':'streak','A':'streak','g':'strand','G':'strand','H':'speck'}},
  'trelke':{'glow':'ewW','tex':{'h':'pore','H':'pore','u':'pore','m':'speck','M':'speck','r':'speck'}},
- 'cherrufe':{'glow':'lLyOr','tex':{'b':'crack','B':'crack','h':'speck'}}}
+ 'cherrufe':{'glow':'lLyOr','tex':{'b':'crack','B':'crack','h':'speck'}},
+ 'kaleuche':{'glow':'yr','tex':{'h':'streak','H':'streak','s':'speck','S':'speck','f':'speck','F':'speck'}}}
 def hires(name,rows,pal):
     big=scale2x(rows);h=len(big);w=len(big[0]);cfg=HI[name]
     px=[[None]*w for _ in range(h)]
@@ -547,10 +651,10 @@ def hires(name,rows,pal):
         out.append(r)
     return {v:k for k,v in cols.items()},out
 D={}
-BIG={'trelke':2,'witranalwe':2,'chonchon':2,'kutral':2,'pire':2,'kura':2,'nirivilu':2,'cherrufe':2}
-for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe2),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('nirivilu',nirivilu),('cherrufe',cherrufe2),('trelke',trelke),('ngen_lafken',ngen_lafken),('ngen_mawida',ngen_mawida),('ngen_pewen',ngen_pewen)]:
-    D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':{'witranalwe':'150,230,170','cherrufe':'255,130,50','trelke':'150,200,120'}.get(name,0)}
-for name in ['witranalwe','trelke','cherrufe']:
+BIG={'kowek':2,'mawek':2,'kamawetu':2,'basilisko':2,'kaleuche':2,'trelke':2,'witranalwe':2,'chonchon':2,'kutral':2,'pire':2,'kura':2,'nirivilu':2,'cherrufe':2}
+for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe2),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('nirivilu',nirivilu),('cherrufe',cherrufe2),('trelke',trelke),('ngen_lafken',ngen_lafken),('ngen_mawida',ngen_mawida),('ngen_pewen',ngen_pewen),('kowek',kowek),('mawek',mawek),('kamawetu',kamawetu),('basilisko',basilisko),('kaleuche',kaleuche),('ngen_kuruf',ngen_kuruf)]:
+    D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':{'witranalwe':'150,230,170','cherrufe':'255,130,50','trelke':'150,200,120','kaleuche':'190,220,200'}.get(name,0)}
+for name in ['witranalwe','trelke','cherrufe','kaleuche']:
     fr=[];pal=None
     for f in D[name]['f']:
         p,rows=hires(name,f,PAL[name]);fr.append((p,rows))

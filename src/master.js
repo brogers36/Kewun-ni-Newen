@@ -17,7 +17,12 @@ const MCHK=[
   {m:'Pewenche · lof',es:'En el lof pewenche, antes de hablar con el lonko',en:'In the Pewenche lof, before talking to the lonko',lvl:12,at:['p_lof',17,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone']},
   {m:'Pewenche · morada',es:'Entrada de la morada del Cherrufe',en:"Entrance of the Cherrufe's lair",lvl:13,at:['p_pillan',28,4],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof']},
   {m:'Pewenche · jefe',es:'Frente al Cherrufe',en:'Facing the Cherrufe',lvl:15,at:['ngen3',8,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave']},
-  {m:'Pewenche · completa',es:'Tres trokiñ; listo para la próxima región',en:'Three trokiñ; ready for the next region',lvl:16,at:['p_lof',17,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone']}];
+  {m:'Pewenche · completa',es:'Tres trokiñ',en:'Three trokiñ',lvl:16,at:['p_lof',17,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone']},
+  {m:'Williche · inicio',es:'Pewenche completa; camino al sur',en:'Pewenche complete; road south',lvl:17,at:['w_rupu',4,1],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone']},
+  {m:'Williche · lof',es:'En el lof williche, antes de hablar con el lonko',en:'In the Williche lof, before talking to the lonko',lvl:17,at:['w_lof',17,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone']},
+  {m:'Williche · cueva',es:'Entrada de la cueva del Kaleuche',en:"Entrance of the Kaleuche's cave",lvl:18,at:['w_inaltu',24,6],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof']},
+  {m:'Williche · jefe',es:'Frente al Kaleuche',en:'Facing the Kaleuche',lvl:20,at:['ngen4',8,10],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave']},
+  {m:'Williche · completa',es:'Cuatro trokiñ; listo para la próxima región',en:'Four trokiñ; ready for the next region',lvl:21,at:['w_lof',17,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone']}];
 const MSET={
   intro:s=>{s.flags.intro=1;s.roots.push('küpa')},
   pentu:s=>{Object.assign(s.flags,{pentu_prac:1,pentukun:1});s.roots.push('umawtu','nag');s.items.kulon+=2},
@@ -25,6 +30,9 @@ const MSET={
   lafdone:s=>{Object.assign(s.flags,{ngen:1,dive:1,boss:1,awake_lafkenche:1});s.pieces.push('lafkenche');s.gear.trariwe=1;s.gear.makun=1},
   naglof:s=>{Object.assign(s.flags,{chuchu:1,nag_lonko:1,herd_task:1,herd:1,awar:1,'pz:n_lewfu':1});s.roots.push('llüka');s.piwke+=1},
   nagcave:s=>{Object.assign(s.flags,{root_winotu:1,nmini1:1,nmini2:1,nmini3:1,'pz:nd1':1,'pz:nd2':1});s.roots.push('wiñotu');s.items.lawen+=2},
+  willof:s=>{Object.assign(s.flags,{cheche:1,wil_lonko:1,wil_time:1,'pz:w_mawida':1});s.roots.push('lef')},
+  wilcave:s=>{Object.assign(s.flags,{root_tripa:1,wmini1:1,wmini2:1,wmini3:1,'pz:wd1':1,'pz:wd2':1});s.roots.push('tripa');s.items.lawen+=2},
+  wildone:s=>{Object.assign(s.flags,{ngen4:1,wind:1,boss4:1});s.pieces.push('williche')},
   pewlof:s=>{Object.assign(s.flags,{laku:1,pew_lonko:1,pew_ke:1,'pz:p_pewen':1});s.roots.push('trafo')},
   pewcave:s=>{Object.assign(s.flags,{root_wutre:1,pmini1:1,pmini2:1,pmini3:1,'pz:pd1':1,'pz:pd2':1});s.roots.push('wütre');s.items.lawen+=2},
   pewdone:s=>{Object.assign(s.flags,{ngen3:1,snow:1,boss3:1});s.pieces.push('pewenche')},

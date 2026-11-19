@@ -109,7 +109,7 @@ function interact(){
   if(c==='W')return say([L('','Kachilla','Un campo de kachilla (trigo) dorado, listo para cosechar.','A field of golden kachilla (wheat), ready for harvest.')]);
   if(c==='f')return say([N('Una cerca de palos.','A wooden fence.')]);
   if(c==='Y')return say([N('El paliwe, la cancha de palin. Mejor no interrumpir el partido.','The paliwe, the palin field. Better not interrupt the game.')]);
-  if(c==='X')return say([N('Un remolino de viento te empuja hacia atrás. Necesitas el newen de Ngen-kürüf (otra región).','A whirl of wind pushes you back. You need the newen of Ngen-kürüf (another region).')]);
+  if(c==='X')return say([N('Un remolino de viento te empuja hacia atrás. Necesitas el newen de Ngen-kürüf'+(M.region==='williche'?'.':' (otra región).'),'A whirl of wind pushes you back. You need the newen of Ngen-kürüf'+(M.region==='williche'?'.':' (another region).'))]);
   if(c==='v'){const what=M.dive&&M.dive[k];
     if(!S.flags.dive)return say([N('Un remolino oscuro en el agua. Es muy profundo para bajar... por ahora.','A dark whirlpool in the water. It is too deep to go down... for now.')]);
     if(S.flags['dive:'+CUR])return say([N('El agua está tranquila.','The water is calm.')]);

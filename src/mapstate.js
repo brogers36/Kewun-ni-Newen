@@ -21,9 +21,11 @@ const PALS={
   nagforest:{G0:'#10301e',G1:'#1e4e30',G2:'#2e6a3e',G3:'#5a9a5c',GY:'#3a7a46',GL:'#6aa070',GM:'#4a8a56',D1:'#5a4a30',D2:'#6e5a3a',D3:'#8a7450',FR:'#c8a0f0',FY:'#f0e890',FW:'#e8fff0'},
   pewenche:{G0:'#1e3a2a',G1:'#2e5a3e',G2:'#4a7a54',G3:'#7aa880',GY:'#5a8a62',GL:'#9ac0a0',GM:'#6a9a72',S0:'#8a98b0',S1:'#c4d0e2',S2:'#e6edf6',S3:'#ffffff',D1:'#7a6a5a',D2:'#948472',D3:'#b0a08c',FR:'#f0f0ff',FY:'#ffe0a0',FW:'#ffffff'},
   ash:{G0:'#2a2a24',G1:'#4a4a3a',G2:'#62624e',G3:'#8a8a70',GY:'#6a6a54',GL:'#9a9a80',GM:'#7a7a62',S0:'#3a3434',S1:'#5a5252',S2:'#6e6464',S3:'#8a8080',D1:'#4a3a32',D2:'#5a4a40',D3:'#74645a',FR:'#f86018',FY:'#ffb040',FW:'#d0c0b0'},
+  williche:{G0:'#123a2a',G1:'#1e5a3c',G2:'#2e7a4c',G3:'#5aa870',GY:'#3a8a58',GL:'#7ab890',GM:'#4a9a66',S0:'#7a7a6a',S1:'#a8a894',S2:'#c4c2ac',S3:'#e0dec8',D1:'#5a4a3a',D2:'#6e5c48',D3:'#8a7860',FR:'#e04880',FY:'#f0e070',FW:'#ffffff'},
+  wilcave:{C0:'#0a1214',C1:'#1e2e34',C2:'#2a3e46',C3:'#46606a',CD:'#22343a'},
   pewcave:{C0:'#140808',C1:'#3a1a14',C2:'#4a2620',C3:'#6a382c',CD:'#2c1410'},
   nagcave:{C0:'#0e1610',C1:'#26322a',C2:'#3a4a3c',C3:'#56685a',CD:'#2e3c30'}};
-const WALLS={lafken:['#5a4430','#8a7058','#78604a','#3c2c20','#201810'],pewenche:['#2e2224','#5a4448','#463438','#1a1214','#0a0606'],nagche:['#3c4c3e','#6e8a68','#5a7058','#243026','#0e160e']};
+const WALLS={williche:['#34464e','#5e7a84','#4a626a','#1c2a30','#0a1214'],lafken:['#5a4430','#8a7058','#78604a','#3c2c20','#201810'],pewenche:['#2e2224','#5a4448','#463438','#1a1214','#0a0606'],nagche:['#3c4c3e','#6e8a68','#5a7058','#243026','#0e160e']};
 function applyPal(){Object.assign(PL,PL0);const p=PALS[M.pal];if(p)for(const k in p)PL[k]=C3(p[k])}
 function gtype(ch){if(ch==='~'||ch==='v')return'~';if(ch==='.'||ch===','||ch==='='||ch==='_'||ch==='%'||ch==='"'||ch==='Y'||ch==='b')return ch;if(ch==='T'||ch==='W'||ch==='f')return',';return M.floor}
 function gAt(x,y){if(x<0||y<0||x>=M.w||y>=M.h)return null;return GT[y][x]}
@@ -114,10 +116,11 @@ function buildLayers(){
 function drawGroundStatics(c){
   for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++){const ch=grid[y][x],X=x*T,Y=y*T;
     if(ch==='%'){const below=y+1<M.h?grid[y+1][x]:'%';
-      const WC=WALLS[M.region==='nagche'?'nagche':M.region==='pewenche'?'pewenche':'lafken'];
+      const WC=WALLS[M.region==='nagche'?'nagche':M.region==='pewenche'?'pewenche':M.region==='williche'?'williche':'lafken'];
       if(below!=='%'){R(c,X,Y+5,16,11,WC[0]);R(c,X,Y+4,16,1,WC[1]);R(c,X,Y+5,16,1,WC[2]);
         for(let r=0;r<3;r++){const yy=Y+6+r*3+ (r===2?1:0),off=((r+x)%2)*4;R(c,X,yy+2,16,1,WC[3]);for(let k=0;k<3;k++)R(c,X+((off+k*7)%16),yy,1,2,WC[3])}
         R(c,X,Y+15,16,1,WC[4]);
+        if(M.region==='williche'){for(let k=0;k<3;k++){const mx=Math.floor(h2(x,y,80+k)*14);if(h2(x,y,90+k)<.6){R(c,X+mx,Y+5,2,1,'#3a8a5a');R(c,X+mx,Y+6+k*3,1,1,'#e8e0c8')}}}
         if(M.region==='pewenche'){for(let k=0;k<3;k++){const mx=Math.floor(h2(x,y,80+k)*14);if(h2(x,y,90+k)<.55){R(c,X+mx,Y+6+k*3,1,2,'#f86018');R(c,X+mx+1,Y+7+k*3,1,1,'#ffb040')}}}
         if(M.region==='nagche'){for(let k=0;k<4;k++){const mx=Math.floor(h2(x,y,80+k)*15);if(h2(x,y,90+k)<.6)R(c,X+mx,Y+5,2,1+Math.floor(h2(x,y,95+k)*3),'#4a7a3a')}
           if(h2(x,y,99)<.35){const rx=X+3+Math.floor(h2(x,y,98)*10);for(let i=0;i<6;i++)R(c,rx+(i%3===2?1:0),Y+6+i,1,1,'#5a3e22')}}}}
@@ -139,11 +142,11 @@ function placeNear(x,y,isEnt){
     if(seen.size>900)break;for(const [d,e] of [[1,0],[-1,0],[0,1],[0,-1]])if(inB(a+d,b+e))q.push([a+d,b+e])}
   return [x,y];
 }
-const RFLAG={lafkenche:'ngen',nagche:'ngen2',pewenche:'ngen3'};
+const RFLAG={lafkenche:'ngen',nagche:'ngen2',pewenche:'ngen3',williche:'ngen4'};
 const awake=r=>!!S.flags[RFLAG[r]];
-const SONGSET={pewenche:{nag:'pew',nagG:'pewG',lof:'pewLof',lofG:'pewLofG',cave:'pewCave',battle:'pewBattle',boss:'pewBoss',ngen:'pewNgen'},nagche:{lof:'nagLof',lofG:'nagLofG',cave:'nagCave',battle:'nagBattle',boss:'nagBoss',ngen:'nagNgen'}};
+const SONGSET={williche:{lof:'wilLof',lofG:'wilLofG',cave:'wilCave',battle:'wilBattle',boss:'wilBoss',ngen:'wilNgen'},pewenche:{nag:'pew',nagG:'pewG',lof:'pewLof',lofG:'pewLofG',cave:'pewCave',battle:'pewBattle',boss:'pewBoss',ngen:'pewNgen'},nagche:{lof:'nagLof',lofG:'nagLofG',cave:'nagCave',battle:'nagBattle',boss:'nagBoss',ngen:'nagNgen'}};
 const rsong=n=>{const r=M&&M.region;return (SONGSET[r]&&SONGSET[r][n])||n};
-function mapSong(){const m=MAPS[CUR];if(m.ngenmap)return rsong(awake(m.region)?'ngen':'cave');const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'||s==='pew'))return rsong(s+'G');return rsong(s)}
+function mapSong(){const m=MAPS[CUR];if(m.ngenmap)return rsong(awake(m.region)?'ngen':'cave');const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'||s==='pew'||s==='wil'))return rsong(s+'G');return rsong(s)}
 function loadMap(id,x,y,quiet){
   CUR=id;M=MAPS[id];
   grid=M.rows.map(r=>r.split(''));
@@ -153,6 +156,7 @@ function loadMap(id,x,y,quiet){
   PZ={n:0,lit:new Set()};
   if(S.flags['pz:'+id]){for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='E')grid[yy][xx]=M.floor;if(M.pz)for(const k in M.pz.tiles)PZ.lit.add(k)}
   if(!awake(M.region))for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='A')grid[yy][xx]=M.floor;
+  if(S.flags.wind)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='X')grid[yy][xx]=M.floor;
   if(S.flags.snow)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='^')grid[yy][xx]=M.floor;
   if(S.flags.bramble)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='Ñ')grid[yy][xx]=M.floor;
   buildLayers();

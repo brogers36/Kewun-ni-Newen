@@ -399,6 +399,88 @@ for k in ['p_rupu','p_lof','p_pewen','p_pire','p_pillan']:
     right=[(len(v[0])-1,y) for y in range(len(v)) if (len(v[0])-1,y) in R]
     print(k,'reach',len(R),'right edge',right)
 N.update(P_)
+
+# ================= WILLICHE =================
+W_={}
+# n_lewfu gets a south exit
+r=N['n_lewfu'];r[12]=r[12][:20]+'='+r[12][21:]
+# --- w_rupu: rainforest road ---
+c=C(32,13)
+c.r(4,0,1,8,'=');c.r(4,7,28,1,'=')
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]==',' and hh(x,y,11)<.30 and abs(x-4)>1 and abs(y-7)>1:c.g[y][x]='T'
+        elif c.g[y][x]==',' and hh(x,y,12)<.18:c.g[y][x]='"'
+c.r(7,2,3,3,',');c.p(8,3,'F')
+c.r(25,1,6,4,'T');c.r(26,1,4,3,',');c.p(27,1,'P');c.p(27,4,'X');c.p(27,5,',');c.p(27,6,',')
+c.r(12,9,5,2,',');c.r(20,2,4,3,',')
+W_['w_rupu']=c.rows()
+# --- w_lof: williche community by a lake ---
+c=C(34,14)
+c.r(0,9,34,1,'=')
+for (x,y) in [(2,2),(9,5),(27,7),(14,1),(21,2),(2,6)]:c.r(x,y,3,2,'R')
+c.r(1,11,32,2,'~');c.r(10,10,14,1,'.');c.r(14,11,3,1,'b')
+c.p(17,7,'F');c.p(32,1,'P');c.p(7,3,'Z');c.p(24,7,'U')
+for (x,y) in [(31,4),(29,2),(25,4)]:c.p(x,y,'T')
+W_['w_lof']=c.rows()
+# --- w_mawida: alerce forest, kinship stone, konew door ---
+c=C(32,13)
+c.r(0,7,32,1,'=')
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]==',' and hh(x,y,13)<.40 and y not in (6,8):c.g[y][x]='T'
+c.r(8,1,13,5,',');c.r(13,5,1,2,',')
+c.p(14,3,'H')
+c.r(24,1,7,5,'T');c.r(25,1,5,3,',');c.p(27,2,'C');c.p(27,4,'E');c.p(27,5,',');c.p(27,6,',')
+c.r(2,9,4,3,',');c.p(3,10,'F')
+c.r(22,9,7,3,'T');c.r(23,10,5,1,',');c.p(27,10,'P');c.p(22,10,'K');c.p(21,10,',')
+W_['w_mawida']=c.rows()
+# --- w_lafken: southern beach ---
+c=C(32,13,'.')
+c.r(0,7,32,1,'=')
+c.r(1,10,30,2,'~')
+for y in range(1,7):
+    for x in range(1,31):
+        if hh(x,y,14)<.25 and y<5:c.g[y][x]=','
+        elif hh(x,y,15)<.07:c.g[y][x]='#'
+for (x,y) in [(3,2),(4,2),(12,1),(20,2),(28,3)]:c.p(x,y,'T')
+c.r(24,1,7,5,'#');c.r(25,1,5,3,'.');c.p(27,1,'P');c.p(27,4,'X');c.r(27,5,1,2,'.')
+c.r(6,8,3,2,'.');c.p(7,8,'F')
+W_['w_lafken']=c.rows()
+# --- w_inaltu: cliffs and the sea cave ---
+c=C(32,13,'.')
+c.r(0,7,24,1,'=')
+c.r(26,1,5,11,'~');c.r(24,1,2,11,'#');c.r(24,6,2,1,'.');c.r(22,5,4,3,'.');c.p(25,5,'S')
+c.r(24,4,2,1,'#');c.r(22,4,2,1,'#');c.r(22,8,4,1,'#')
+for y in range(1,12):
+    for x in range(1,22):
+        if c.g[y][x]=='.' and y!=7 and hh(x,y,16)<.12:c.g[y][x]='#'
+        elif c.g[y][x]=='.' and y!=7 and hh(x,y,17)<.25:c.g[y][x]=','
+c.r(4,9,3,2,'.');c.p(5,10,'F')
+W_['w_inaltu']=c.rows()
+rot=lambda rows:[r[::-1] for r in rows[::-1]]
+W_['wd1']=rot(M['d1'])
+W_['wd2']=rot(M['d2'])
+W_['wd3']=rot(M['d3'])
+W_['ngen4']=[
+"~"*18,
+"~"*18,
+"~"*18,
+"~"*18,
+"~"*18,
+"~~~~~~~bbbb~~~~~~~",
+"~~~~~~~bbbb~~~~~~~",
+"~~~~~~~bbbb~~~~~~~",
+"~~~~~~~~bb~~~~~~~~",
+"~~~~~~~~bb~~~~~~~~",
+"~~~~~~~bbbb~~~~~~~",
+"~~~~~~~bSbb~~~~~~~",
+"~"*18]
+for k in ['w_rupu','w_lof','w_mawida','w_lafken','w_inaltu']:
+    v=W_[k];sy=7 if k!='w_lof' else 9;start=(4,0) if k=='w_rupu' else (0,sy);R=bfs(v,start)
+    right=[(len(v[0])-1,y) for y in range(len(v)) if (len(v[0])-1,y) in R]
+    print(k,'reach',len(R),'right',right)
+N.update(W_)
 for k,v in N.items():
     w=len(v[0])
     for i,r in enumerate(v): assert len(r)==w,(k,i,len(r),w,r)

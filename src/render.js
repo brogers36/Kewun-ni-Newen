@@ -90,6 +90,7 @@ function renderMap(){
       if(e.look==='ngen')drawNgen(c,sx+8,sy+15,1,frame);
       else if(e.look==='ngen2')drawNgen(c,sx+8,sy+15,1,frame,'mawida');
       else if(e.look==='ngen3')drawNgen(c,sx+8,sy+15,1,frame,'pewen');
+      else if(e.look==='ngen4')drawNgen(c,sx+8,sy+15,1,frame,'kuruf');
       else if(e.look==='dog'){ell(c,sx+8,sy+14,6,2,'rgba(0,0,0,.3)');c.drawImage(dogSprite(e.mv?Math.floor(frame/6)%2:0,e.dir),sx,sy+4)}
       else{let fr=e.mv?Math.floor(frame/7)%4:0;if(e.act==='weave'||e.act==='teach')fr=Math.floor(frame/24)%2?1:0;
         drawChar(c,e.look,sx,sy,e.dir||'down',fr,e.seated);
@@ -109,7 +110,9 @@ function renderMap(){
     if(inB(mx,my)&&grid[my][mx]==='~'&&WD[my][mx]>1){const a=(frame%8)<4;R(c,wx,wy,1,1,M.lava?'#fff0a0':'#f4faff');if(a){R(c,wx-1,wy,1,1,'rgba(220,240,255,.7)');R(c,wx+1,wy,1,1,'rgba(220,240,255,.7)')}}}
   for(const [gx,gy] of glows)for(const [r,a] of [[24,.05],[16,.07],[10,.08]])ell(c,gx,gy,r,r*.8,'rgba(255,170,80,'+a+')');
   if(M.bg==='crater'){c.fillStyle=awake(M.region)?'rgba(255,200,120,.05)':'rgba(120,20,0,.18)';c.fillRect(0,VY,LW,VH)}
-  if(M.bg==='cave'||M.bg==='cave2'||M.bg==='cave3'){const px=Math.round(P.fx*T-cx+8),py=Math.round(P.fy*T-cy+VY+8);for(let y=VY;y<LH;y+=2)for(let x=0;x<LW;x+=2){const d=Math.hypot(x-px,y-py);if(d>70){const a=Math.min(.7,(d-70)/140);if(a>.05){c.fillStyle='rgba(0,0,0,'+a.toFixed(2)+')';c.fillRect(x,y,2,2)}}}}
+  if(M.region==='williche'&&!awake('williche')&&!M.dungeon){for(let k=0;k<9;k++){const fx=((k*61+frame*(.15+(k%3)*.08))%(LW+120))-60,fy=VY+((k*47)%LH);ell(c,fx,fy,46+(k%3)*14,14+(k%2)*6,'rgba(220,228,236,.16)')}c.fillStyle='rgba(200,210,220,.10)';c.fillRect(0,VY,LW,VH)}
+  if(M.bg==='fjord'){c.fillStyle=awake(M.region)?'rgba(255,240,200,.05)':'rgba(10,20,44,.38)';c.fillRect(0,VY,LW,VH)}
+  if(M.bg==='cave'||M.bg==='cave2'||M.bg==='cave3'||M.bg==='cave4'){const px=Math.round(P.fx*T-cx+8),py=Math.round(P.fy*T-cy+VY+8);for(let y=VY;y<LH;y+=2)for(let x=0;x<LW;x+=2){const d=Math.hypot(x-px,y-py);if(d>70){const a=Math.min(.7,(d-70)/140);if(a>.05){c.fillStyle='rgba(0,0,0,'+a.toFixed(2)+')';c.fillRect(x,y,2,2)}}}}
   if(CUR==='rupu'){for(let k=0;k<7;k++){const fx=-cx+Math.round(Math.sin(frame/60+k)*6)+6,fy=k*30+((frame/3+k*17)%30)-cy+VY;for(const [rr,al] of [[26,.18],[16,.22],[9,.25]])ell(c,fx,fy,rr,rr*.7,'rgba(200,200,212,'+al+')')}}
   if(M.bg==='forest'){c.fillStyle=awake(M.region)?'rgba(255,240,160,.06)':'rgba(10,30,20,.3)';c.fillRect(0,VY,LW,VH)}
   if(M.bg==='lagoon'){c.fillStyle=S.flags.ngen?'rgba(120,200,255,.08)':'rgba(60,30,90,.22)';c.fillRect(0,VY,LW,VH)}
@@ -142,11 +145,23 @@ function drawHUD(c){
 const BG={},FG={};
 function lavify(cvs){const c=cvs.getContext('2d'),d=c.getImageData(0,0,cvs.width,cvs.height),a=d.data;
   for(let i=0;i<a.length;i+=4){const r=a[i],g=a[i+1],b=a[i+2],l=(r+g+b)/3;if(b>r+20&&b>g){a[i]=Math.min(255,l*1.9+40);a[i+1]=Math.round(l*.9);a[i+2]=Math.round(l*.3)}else{a[i]=Math.round(r*.7+l*.15);a[i+1]=Math.round(g*.45);a[i+2]=Math.round(b*.45)}}c.putImageData(d,0,0);return cvs}
+function fogify(cvs){const c=cvs.getContext('2d'),d=c.getImageData(0,0,cvs.width,cvs.height),a=d.data;
+  for(let i=0;i<a.length;i+=4){const r=a[i],g=a[i+1],b=a[i+2],l=(r+g+b)/3;if(r>g+6&&r>b){a[i]=Math.round(l*.7);a[i+1]=Math.round(l*.95+6);a[i+2]=Math.round(l*1.15+12)}}c.putImageData(d,0,0);return cvs}
 function mossify(cvs){const c=cvs.getContext('2d'),d=c.getImageData(0,0,cvs.width,cvs.height),a=d.data;
   for(let i=0;i<a.length;i+=4){const r=a[i],g=a[i+1],b=a[i+2];if(r>g+6&&r>b){a[i]=Math.round(g*.85);a[i+1]=Math.round(r*.92+4);a[i+2]=Math.round(b*.8+r*.18)}}c.putImageData(d,0,0);return cvs}
 function buildBG(area){
   if(area==='cave2')return mossify(buildBG('cave'));
   if(area==='cave3')return lavify(buildBG('cave'));
+  if(area==='cave4')return fogify(buildBG('cave'));
+  if(area==='rainforest'||area==='fjord'){const [cvs,c]=mk(LW,LH),fj=area==='fjord';
+    bands(c,0,100,fj?['#141c26','#1a2430','#222e3a','#2a3846','#344452','#3e505e']:['#5a6a78','#66788a','#728696','#8094a2','#8ea0ac','#9aaab4']);
+    ridge(c,86,22,4.2,fj?'#1a2430':'#4a5e60');ridge(c,94,14,1.7,fj?'#121a22':'#2e4a3e','#4a5e60');
+    if(fj){R(c,0,100,LW,LH-100,'#0e1620');for(let y=102;y<LH;y+=3)for(let x=(y%7);x<LW;x+=17)R(c,x,y,6,1,'#1e2c3a');ell(c,200,30,10,10,'#c8d0d8');ell(c,197,28,3,2,'#a8b0b8')}
+    else{R(c,0,100,LW,LH-100,'#2a5a3a');for(let y=102;y<LH;y+=3)for(let x=(y%5);x<LW;x+=9)if(h2(x,y,8)<.4)R(c,x,y,2,1,h2(x,y,9)<.5?'#3a7a4e':'#1c4428');
+      for(let k=0;k<5;k++){const tr=treeCanvas(k%3,'lawal');c.drawImage(tr,k<3?-4+k*16:LW-22-(k-3)*18,58)}
+      for(const [px,py] of [[60,150],[190,160],[120,196]]){for(let i=0;i<7;i++)R(c,px-6+i*2,py-8+(i%3),1,8-(i%3),'#3a8a4a')}}
+    for(let k=0;k<6;k++)ell(c,(k*53)%LW,90+(k%3)*6,40,7,fj?'rgba(160,170,180,.18)':'rgba(220,226,232,.25)');
+    return cvs}
   if(area==='mount'||area==='crater'){const [cvs,c]=mk(LW,LH),cr=area==='crater';
     bands(c,0,96,cr?['#1a0606','#2a0a08','#3a100a','#4a160c','#5a1e10','#6a2814']:['#4a78c0','#5a88cc','#6c98d6','#86acdf','#a2c0e8','#c0d6f0']);
     if(!cr){for(const [x,y,s] of [[50,20,1],[170,14,.9]]){ell(c,x,y+3,17*s,5*s,'#c8dcf0');ell(c,x,y,15*s,5*s,'#ffffff');ell(c,x-6*s,y-3*s,7*s,5*s,'#ffffff')}}
@@ -199,6 +214,8 @@ function buildBG(area){
 function buildFG(area){
   if(area==='cave2')return mossify(buildFG('cave'));
   if(area==='cave3'||area==='crater')return lavify(buildFG('cave'));
+  if(area==='cave4')return fogify(buildFG('cave'));
+  if(area==='rainforest'||area==='fjord'){const [cvs,c]=mk(LW,LH);for(const sd of [0,1])for(let k=0;k<10;k++){const bx=sd?LW-6-k*5:6+k*5,hg=12+((k*11)%16);for(let i=0;i<hg;i++)R(c,bx+(sd?-1:1)*Math.floor(i/4),LH-i,3,1,area==='fjord'?(k%2?'#1a2a30':'#22343a'):(k%2?'#1c5a32':'#2a7a40'))}return cvs}
   if(area==='mount'){const [cvs,c]=mk(LW,LH);for(const sd of [0,1])for(let k=0;k<12;k++){const bx=sd?LW-4-k*5:4+k*5,hg=8+((k*13)%10);for(let i=0;i<hg;i++)R(c,bx+(sd?-1:1)*Math.floor(i/5),LH-i,3,1,k%2?'#ffffff':'#d8e2f0')}return cvs}
   const [cvs,c]=mk(LW,LH);
   if(area==='coast'){for(const sd of [0,1])for(let k=0;k<14;k++){const bx=sd?LW-4-k*4:4+k*4,hg=10+((k*13)%14);for(let i=0;i<hg;i++)R(c,bx+(sd?-1:1)*Math.floor(i/4),LH-i,2,1,k%2?'#2f7a34':'#3e9444')}}
@@ -221,7 +238,9 @@ function animBG(area){const c=lx;
   else if(area==='mount'||area==='crater'){for(let k=0;k<5;k++){const ph=((frame*.4+k*30)%120)/120;ell(c,140+Math.sin(ph*6+k)*4*ph,36-ph*30,3+ph*6,(3+ph*6)*.7,area==='crater'?'rgba(80,40,30,'+(.5*(1-ph))+')':'rgba(200,200,210,'+(.5*(1-ph))+')')}
     if(area==='mount')for(let k=0;k<30;k++){const x=(k*37+Math.floor(frame*.3))%LW,y=Math.floor((k*53+frame*.6)%LH);R(c,x,y,1,1,'#ffffff')}
     else for(let k=0;k<20;k++){const x=(k*41+Math.floor(Math.sin(frame/30+k)*6))%LW,y=LH-Math.floor((k*29+frame*.5)%140);R(c,x,y,1,1,'#ffb040')}}
-  else if(area==='cave'||area==='cave2'||area==='cave3'){for(let k=0;k<18;k++){const x=95+((k*37+Math.floor(frame*.15))%90)+Math.round(Math.sin(frame/40+k)*5),y=Math.floor((k*29+frame*.2)%140);if((frame+k)%30<22)R(c,x,y,1,1,'#ffeec8')}
+  else if(area==='rainforest'||area==='fjord'){for(let k=0;k<40;k++){const x=(k*29+Math.floor(frame*.6))%LW,y=Math.floor((k*47+frame*3)%LH);R(c,x,y,1,3,area==='fjord'?'rgba(180,200,220,.5)':'rgba(200,220,240,.6)')}
+    for(let k=0;k<4;k++){const x=((frame*.2+k*80)%(LW+100))-50;ell(c,x,110+k*8,50,8,'rgba(220,226,232,.12)')}}
+  else if(area==='cave'||area==='cave2'||area==='cave3'||area==='cave4'){for(let k=0;k<18;k++){const x=95+((k*37+Math.floor(frame*.15))%90)+Math.round(Math.sin(frame/40+k)*5),y=Math.floor((k*29+frame*.2)%140);if((frame+k)%30<22)R(c,x,y,1,1,'#ffeec8')}
     const dy=Math.floor(frame*1.5)%130;R(c,62,dy,1,3,'#9ad0f0');R(c,201,(dy+65)%130,1,3,'#9ad0f0')}
   else{for(let k=0;k<40;k++)if((frame+k*13)%50<38)R(c,(k*61)%LW,(k*23)%70,1,1,'#ffffff');
     for(let i=0;i<10;i++){const w=30-i*2;R(c,200-w/2+Math.round(Math.sin(frame/15+i)*4),112+i*7,w,1,i%2?'#f4e8c0':'#d8c8a0')}

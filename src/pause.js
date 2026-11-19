@@ -56,6 +56,14 @@ const BOOK={
     N('Los cuatro rumbos. Con püle se dice «hacia»: pikun püle, «hacia el norte».','The four directions. With püle you say «toward»: pikun püle, «toward the north».'),
     L('','pikun · willi · puel · ngulu','norte · sur · este · oeste','north · south · east · west'),
     N('Por eso la gente del sur es williche y la tierra del este es Puelmapu.','That is why the people of the south are williche and the land of the east is Puelmapu.')]},
+  kin:{m:'Pu che',es:'La familia',en:'The family',lines:[
+    L('','chaw · ñuke','papá · mamá','father · mother'),
+    L('','kuku · laku','la mamá y el papá de tu papá','your father\'s mother and father'),
+    L('','chuchu · cheche','la mamá y el papá de tu mamá','your mother\'s mother and father'),
+    N('Con tañi y ñi se dice de quién: tañi chaw ñi ñuke, «la mamá de mi papá».','With tañi and ñi you say whose: tañi chaw ñi ñuke, «my father\'s mother».')]},
+  time:{m:'Wiya, fachantü, wüle',es:'Ayer, hoy, mañana',en:'Yesterday, today, tomorrow',lines:[
+    L('','wiya · fachantü · wüle','ayer · hoy · mañana','yesterday · today · tomorrow'),
+    N('Sin -a-, el verbo puede contar lo que pasa o lo que ya pasó; con -a-, lo que todavía no pasa.','Without -a-, the verb can tell what happens or what already happened; with -a-, what has not happened yet.')]},
   quest:{m:'Chem, iney, chew...',es:'Preguntas',en:'Questions',lines:[
     L('','chem · iney · chew · chumül · chumten','qué · quién · dónde · cuándo · cuánto','what · who · where · when · how much'),
     L('','Chem pimi? · Iney eymi? · Chew amuaymi?','¿Qué dijiste? · ¿Quién eres? · ¿A dónde irás?','What did you say? · Who are you? · Where will you go?')]},

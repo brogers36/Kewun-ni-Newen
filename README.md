@@ -11,7 +11,7 @@ The player is a young wariache, Llanka or Millaray. They travel the Mapuche land
 | Lafkenche (coast) | Playable: 5 overworld maps, a 3-floor cave, Trelke-wekufü, Ngen-lafken |
 | Nagche (lowlands) | Playable: 5 overworld maps, a 3-floor lair, the Witranalwe, Ngen-mawida |
 | Pewenche (mountains) | Playable: 5 overworld maps, a 3-floor lair inside the volcano, the Cherrufe, Ngen-pewen |
-| Williche | Planned |
+| Williche (south) | Playable: 5 overworld maps, a 3-floor sea cave, the Kaleuche, Ngen-kürüf |
 | Puelmapu | Planned |
 
 ## Play

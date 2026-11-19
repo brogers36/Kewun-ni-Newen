@@ -9,7 +9,7 @@ function engage(e){
 }
 function relabel(){const cnt={},seen={};B.en.forEach(e=>cnt[e.t]=(cnt[e.t]||0)+1);
   B.en.forEach(e=>{seen[e.t]=(seen[e.t]||0)+1;if(e.label)return;e.label=ET[e.t].name+(cnt[e.t]>1||ET[e.t].name==='laftrache'&&B.en.length>1?' '+'ABCDE'[seen[e.t]-1]:'')})}
-function mkEnemy(t){return{t,hp:ET[t].hp,max:ET[t].hp,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'?1:0,armor:ET[t].armor?1:0,burn:ET[t].fire?1:0}}
+function mkEnemy(t){return{t,hp:ET[t].hp,max:ET[t].hp,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'?1:0,armor:ET[t].armor?1:0,burn:ET[t].fire?1:0,hidden:0}}
 function startBattle(party,o){
   mode='battle';banner.style.display='none';held.up=held.down=held.left=held.right=0;
   B={en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
@@ -79,7 +79,7 @@ function doSpecial(k,tgt){
   const head=L(S.name,sp.m+'!',G(sp),G(sp));head.fx=()=>{sfx('cast');B.flash=12;B.shake=8};
   if(k==='lawen'){S.hp=Math.min(maxHP(),S.hp+8);S.curse=0;fx.push('Recuperas dos piwke.');fxe.push('You recover two hearts.');head.fx=()=>{sfx('heal');spark(60,30,'#80ff90',16)}}
   else{targets=k==='wino'?[tgt]:aliveE();
-    let burnT=0;for(const e of targets){let d=k==='wino'?atk()*3+rnd(3):Math.round(atk()*1.5)+rnd(3);if(e.tall)d=Math.max(1,Math.round(d/3));if(e.armor)d=Math.max(1,Math.round(d/2));if(e.burn)burnT+=2;if(k==='kuruf'&&ET[e.t].fly)e.gr=3;e.pend=d;e.hp-=d;
+    let burnT=0;for(const e of targets){if(e.hidden){fx.push(e.label+' está escondido en la niebla: no lo alcanzas.');fxe.push(e.label+' is hidden in the fog: you cannot reach it.');continue}let d=k==='wino'?atk()*3+rnd(3):Math.round(atk()*1.5)+rnd(3);if(e.tall)d=Math.max(1,Math.round(d/3));if(e.armor)d=Math.max(1,Math.round(d/2));if(e.burn)burnT+=2;if(k==='kuruf'&&ET[e.t].fly)e.gr=3;e.pend=d;e.hp-=d;
       fx.push(e.label+' −'+d+(e.hp<=0?' (se va)':'')+'.');fxe.push(e.label+' −'+d+(e.hp<=0?' (gone)':'')+'.')}
     if(burnT){S.hp=Math.max(1,S.hp-burnT);fx.push('¡Te quemas! (−'+burnT+')');fxe.push('You get burned! (−'+burnT+')')}}
   const eff=N(fx.join(' '),fxe.join(' '));
@@ -109,6 +109,7 @@ function resolve(r,kil,tg,ei){
   if(r==='amutu'&&!kil){
     for(const e of targets){const T=ET[e.t];
       if(T.fly&&e.gr<=0){fx.push(e.label+' vuela muy alto: no te alcanza.');fxe.push(e.label+' flies too high: it does not reach.');e.miss=1;continue}
+      if(e.hidden){fx.push(e.label+' está escondido en la niebla: tus palabras se pierden.');fxe.push(e.label+' is hidden in the fog: your words are lost.');e.miss=1;continue}
       if(e.tall){fx.push(e.label+' está erguido, altísimo: tus palabras le pasan por debajo.');fxe.push(e.label+' stands tall, towering: your words pass beneath it.');e.miss=1;continue}
       let d=coll?Math.max(1,Math.round((atk()+rnd(4))*.75)):atk()+rnd(4)+2;if(e.burn)burnT+=2;
       if(e.armor){d=Math.max(1,Math.round(d*.25));fx.push(e.label+': el golpe rebota en su coraza de piedra.');fxe.push(e.label+': the blow bounces off its stone crust.')}
@@ -123,6 +124,13 @@ function resolve(r,kil,tg,ei){
   else if(r==='nag'&&!kil){let any=0;for(const e of targets)if(ET[e.t].fly){e.gr=3;any=1;fx.push(e.label+' baja al suelo.');fxe.push(e.label+' comes down to the ground.')}
       if(!any){fx.push('No vuela: ya está abajo.');fxe.push('It does not fly: it is already down.')}}
   else if(r==='nag'){fx.push('Les dijiste que no bajaran. Siguen donde estaban.');fxe.push('You told them not to come down. They stay where they were.')}
+  else if(r==='lef'&&!kil){for(const e of targets){const T=ET[e.t];
+      if(T.boss||T.mini){fx.push(e.label+' no tiene miedo: no va a correr.');fxe.push(e.label+' is not afraid: it will not run.');continue}
+      if(e.hp<=e.max*.5){e.hp=0;e.pend=0;e.dead=true;e.fadeT=20;fx.push(e.label+' sale corriendo y no vuelve.');fxe.push(e.label+' runs off and does not come back.')}
+      else{fx.push(e.label+' todavía tiene fuerzas: no quiere correr.');fxe.push(e.label+' still has strength: it does not want to run.')}}}
+  else if(r==='lef'){fx.push('Les dijiste que no corrieran. Se quedan.');fxe.push('You told them not to run. They stay.')}
+  else if(r==='tripa'&&!kil){for(const e of targets){if(e.hidden){e.hidden=0;e.hideT=3;fx.push(e.label+' sale de la niebla: ¡ahora sí lo ves!');fxe.push(e.label+' comes out of the fog: now you can see it!')}else{fx.push(e.label+' ya está a la vista.');fxe.push(e.label+' is already in sight.')}}}
+  else if(r==='tripa'){fx.push('Les dijiste que no salieran. Nada cambia.');fxe.push('You told them not to come out. Nothing changes.')}
   else if(r==='trafo'&&!kil){for(const e of targets){if(e.armor){e.armor=0;e.armorT=ET[e.t].boss?4:0;fx.push(e.label+': ¡se le quiebra la coraza de piedra!');fxe.push(e.label+': its stone crust cracks apart!')}else{fx.push(e.label+' no tiene coraza que quebrar.');fxe.push(e.label+' has no crust to break.')}}}
   else if(r==='trafo'){fx.push('Les dijiste que no se quebraran. Nada cambia.');fxe.push('You told them not to break. Nothing changes.')}
   else if(r==='wütre'&&!kil){for(const e of targets){const T=ET[e.t];
@@ -163,6 +171,14 @@ function enemyPhase(){
   for(const e of aliveE()){const T=ET[e.t];
     if(e.sl>0){e.sl--;fx.push(e.label+' duerme.');fxe.push(e.label+' is asleep.');continue}
     if(e.stun>0){e.stun--;fx.push(e.label+' todavía retrocede.');fxe.push(e.label+' is still backing away.');continue}
+    if(e.t==='kaleuche'){
+      if(B.tele){B.tele=false;hitP(e,2.2,{es:' te embiste con su proa',en:' rams you with its prow'});continue}
+      if(!e.hidden&&e.hideT>0){e.hideT--;if(e.hideT<=0){e.hidden=1;fx.push('La niebla se cierra: el Kaleuche desaparece en ella.');fxe.push('The fog closes in: the Kaleuche disappears into it.');continue}}
+      if(!e.hidden&&!e.hideT&&B.turn===0){e.hidden=1;fx.push('El Kaleuche se esconde en la niebla.');fxe.push('The Kaleuche hides in the fog.');continue}
+      const roll=Math.random(),mc=aliveE().filter(x=>x.t==='mawek').length;
+      if(roll<.28&&B.turn>0&&B.turn-(e.lastTele||-9)>2){B.tele=true;e.lastTele=B.turn;fx.push('El Kaleuche despliega sus velas: el viento muerto lo empuja hacia ti.');fxe.push('The Kaleuche unfurls its sails: a dead wind pushes it toward you.');continue}
+      if(roll<.45&&mc<1&&B.en.length<5){const ne=mkEnemy('mawek');B.en.push(ne);relabel();fx.push('¡Del barco baja '+ne.label+'!');fxe.push(ne.label+' comes down from the ship!');continue}
+      hitP(e);continue}
     if(e.t==='cherrufe'){
       if(B.tele){B.tele=false;hitP(e,2.2,{es:' te cae encima como un río de lava',en:' falls on you like a river of lava'});continue}
       if(!e.armor&&e.armorT>0){e.armorT--;if(e.armorT<=0){e.armor=1;fx.push('La lava se endurece: la coraza del Cherrufe vuelve.');fxe.push("The lava hardens: the Cherrufe's crust comes back.");continue}}
@@ -194,6 +210,7 @@ function enemyPhase(){
   if(fx.length){const l=N(fx.join(' '),fxe.join(' '));l.fx=()=>{hitsFx.forEach(f=>f());if(dmgTotal){B.shake=12;B.red=10;sfx('hurt')}};lines.push(l)}
   const bossE=aliveE().find(x=>ET[x.t].boss),bn=bossE?ET[bossE.t].name:'';
   if(B.tele&&bossE)lines.push(L(bn,'Küpaley '+bn+'!','¡'+bn+' viene!',bn+' is coming!'));
+  if(bossE&&bossE.hidden&&!B.hideHint&&B.turn>=1&&S.roots.includes('tripa')){B.hideHint=1;lines.push(N('Pista: escondido en la niebla, nada lo alcanza. Quizás si le dices que salga...','Hint: hidden in the fog, nothing reaches it. Maybe if you tell it to come out...'))}
   if(aliveE().some(x=>x.armor)&&!B.armorHint&&B.turn>=1){B.armorHint=1;lines.push(N('Pista: los golpes rebotan en la coraza de piedra. Quizás si le dices que se quiebre...','Hint: blows bounce off the stone crust. Maybe if you tell it to break...'))}
   if(bossE&&bossE.t==='cherrufe'&&bossE.burn&&!B.fireHint&&B.turn>=2&&S.roots.includes('wütre')){B.fireHint=1;lines.push(N('Pista: su fuego te quema cada vez que lo atacas. El frío podría apagarlo.','Hint: its fire burns you every time you attack it. The cold could put it out.'))}
   if(bossE&&bossE.t==='witranalwe'&&bossE.tall&&!B.tallHint&&B.turn>=1){B.tallHint=1;lines.push(N('Pista: erguido así, nada lo alcanza. Quizás si le dices que vuelva atrás...','Hint: standing tall like that, nothing reaches it. Maybe if you tell it to go back...'))}
@@ -214,7 +231,7 @@ function victory(){
 }
 function defeat(){
   const lost=Math.floor(S.gold/4);S.gold-=lost;playSong('intro');
-  const gm=MAPS[CUR].region==='nagche'?'chuchu':MAPS[CUR].region==='pewenche'?'laku':'kuku';
+  const gm=MAPS[CUR].region==='nagche'?'chuchu':MAPS[CUR].region==='pewenche'?'laku':MAPS[CUR].region==='williche'?'cheche':'kuku';
   say([N('Te quedas sin fuerzas... Tu '+gm+' te encuentra y te lleva junto al kütral.'+(lost?' Pierdes '+numP(lost)+' ngülliw.':''),'You collapse... Your '+gm+' finds you and carries you back to the fire.'+(lost?' You lose '+numP(lost)+' ngülliw.':''))],()=>{
     S.curse=0;S.hp=maxHP();mode='map';B=null;const sv=S.save;AU.name=null;loadMap(sv.map,sv.x,sv.y)});
 }
@@ -228,6 +245,7 @@ function endBattle(how){
 function postBoss(){
   if(CUR==='ngen2')return postBoss2();
   if(CUR==='ngen3')return postBoss3();
+  if(CUR==='ngen4')return postBoss4();
   say([N('El cuero de Trelke-wekufü se hunde y el agua se aclara. Una figura de espuma y luz se levanta de la laguna.','Trelke-wekufü\'s hide sinks and the water clears. A figure of foam and light rises from the lagoon.')],()=>{
     S.flags.ngen=1;S.flags.dive=1;S.pieces=S.pieces||[];if(!S.pieces.includes('lafkenche'))S.pieces.push('lafkenche');S.flags.awake_lafkenche=1;if(CUR==='ngen')grid[7][8]='A';S.hp=Math.min(maxHP(),S.hp+HPQ);AU.name=null;playSong('ngen');
     const e=Object.assign({},MAPS.ngen.ents[1]);e.fx=e.x;e.fy=e.y;ents.push(e);persist();sfx('lvl');
@@ -273,5 +291,21 @@ function postBoss3(){
       Object.assign(L('','Küla trariwe trokiñ!','Entre la piedra todavía tibia queda otro trariwe trokiñ, tejido en café y blanco. Tienes 3 de 5.','In the still-warm stone lies another trariwe trokiñ, woven in brown and white. You have 3 of 5.'),{fx:()=>sfx('pick')}),
       N('Un círculo de luz aparece en el cráter: pisándolo puedes volver a la entrada de la morada, al lof pewenche o a las otras tierras.','A circle of light appears in the crater: step on it to return to the lair entrance, the Pewenche lof, or the other lands.'),
       N('Fin de la región pewenche (prototipo). Vuelve a los montones de nieve que viste en el camino: ahora puedes pasar. Faltan Williche y Puelmapu.','End of the Pewenche region (prototype). Go back to the snow heaps you saw on the road: now you can get through. Williche and Puelmapu remain.')]);
+  });
+}
+
+function postBoss4(){
+  say([N('Las velas del Kaleuche se rasgan y sus luces se apagan una a una. El barco se hunde en la niebla... y entonces sopla un viento fresco que la deshace por completo. Sobre el agua aparece una figura de aire, blanca y celeste.','The Kaleuche\'s sails tear and its lights go out one by one. The ship sinks into the fog... and then a fresh wind blows and scatters it completely. Above the water appears a figure made of air, white and sky blue.')],()=>{
+    S.flags.ngen4=1;S.flags.wind=1;S.pieces=S.pieces||[];if(!S.pieces.includes('williche'))S.pieces.push('williche');
+    grid[7][8]='A';for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++)if(grid[y][x]==='X')grid[y][x]=M.floor;
+    S.hp=Math.min(maxHP(),S.hp+HPQ);AU.name=null;playSong(rsong('ngen'));
+    const e=Object.assign({},MAPS.ngen4.ents[1]);e.fx=e.x;e.fy=e.y;ents.push(e);persist();sfx('lvl');
+    say([L('Ngen-kürüf','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.'),
+      L('Ngen-kürüf','Tami dungun mew nepen.','Con tus palabras desperté.','With your words I woke up.'),
+      N('Ngen-kürüf es el ngen del viento: lleva la lluvia, mueve el mar y despeja la niebla.','Ngen-kürüf is the ngen of the wind: it carries the rain, moves the sea and clears away the fog.'),
+      N('Ngen-kürüf te da su newen: ahora los remolinos de viento ya no te empujan. Los que viste en la costa lafkenche y en el sur se abren. Además ganas un corazón nuevo.','Ngen-kürüf gives you its newen: now the whirls of wind no longer push you back. The ones you saw on the Lafkenche coast and in the south open up. You also gain a new heart.'),
+      Object.assign(L('','Meli trariwe trokiñ!','Entre la espuma queda otro trariwe trokiñ, tejido en morado y blanco. Tienes 4 de 5.','In the foam lies another trariwe trokiñ, woven in purple and white. You have 4 of 5.'),{fx:()=>sfx('pick')}),
+      N('Un círculo de luz aparece en el muelle: pisándolo puedes volver a los acantilados, al lof williche o a las otras tierras.','A circle of light appears on the pier: step on it to return to the cliffs, the Williche lof, or the other lands.'),
+      N('Fin de la región williche (prototipo). Solo falta Puelmapu, al otro lado de la cordillera.','End of the Williche region (prototype). Only Puelmapu remains, on the other side of the mountains.')]);
   });
 }

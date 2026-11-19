@@ -68,3 +68,28 @@ Left unchanged: *Pun mew kintukefuy kulliñ* (habitual past in the story, "used 
 | Pire müley! Ayüwün! | Pewenche child | There is snow! I am so happy! |
 | Trutruka ayüken. (Weche wentru) | Nagche lof | I love the trutruka (young man) |
 | Iñche ka kümelen. | papay, both lofs | I am well too |
+
+## Williche region (Nov 2026)
+
+| Form | Where | Intended meaning | Question |
+|---|---|---|---|
+| lef- (lefnge, lefmu, lefmün) | battle root from the lonko | "run away!" | Is *lefnge* the right imperative after a consonant-final root (cf. *nagnge*)? |
+| tripa- (tripange, tripamu, tripamün) | battle root from the cave chest | "come out!" | |
+| ko wekufü, mawün wekufü | enemy names | water / rain wekufü | Invented kinds of wekufü. Kamawetu, basilisko and Kaleuche are from Williche/Chilote tradition. |
+| Kaleuche ñi lolo | dungeon name | the Kaleuche's cave | Is *lolo* right for a sea cave? |
+| Iñche tami cheche. | cheche | I am your cheche | |
+| Kimimi tami pu che? | cheche, kinship stone | Do you know your family? | |
+| Tañi chaw ñi ñuke / ñuke ñi ñuke / chaw ñi chaw / ñuke ñi chaw | kinship stone | my father's mother, etc. | |
+| amulayan / küpalayay / kimlayan | -la- + -a- stone | I will not go / she will not come / I will not know | |
+| Wiya iñche challwatun. / Wüle iñche challwatuan. / Fachantü eymi küpaymi. | fisherwoman time-words quiz | yesterday I fished / tomorrow I will fish / today you came | |
+| Küla ngen nepeyngün, pikeyngün. | Williche lonko | They say three ngen have woken up | |
+| Kuyfi, lafken mew amukefuy kiñe Kaleuche. / Pun mew pengekefuy. / Fütra wampo ngefuy. | nütramkafe | Long ago a Kaleuche went about the sea. / It was seen at night. / It was a big boat. | |
+| Wampo mew challwatuken. | fisherman | I fish from my canoe | |
+| Kaleuche pewmafiñ! | child | I dreamed about the Kaleuche! | |
+| Mawün ayüfiñ! | child | I love the rain! | |
+| Makuñ ngürekalen. Mawünley ka wütreley! | weaver | I am weaving a makuñ. It is raining and it is cold! | |
+| Challwa ka poñü dewmalen. | cook | I am cooking fish and potatoes | |
+| Ko mew amukey, welu namun nielay. | konew (wampo) | It travels on the water, but has no feet | |
+| Pekelafiyiñ, welu allkükefiyiñ. | konew (kürüf) | We do not see it, but we hear it | |
+| Ikelafiyiñ, pütokokefiyiñ. | konew (ko) | We do not eat it, we drink it | |
+| Kaleuche müley lafken mew! Pun mew pengekey. | kona | The Kaleuche is at sea! At night it is seen | |
