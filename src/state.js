@@ -74,7 +74,11 @@ const ET={
   kamawetu:{name:'kamawetu',hp:56,atk:10,xp:30,gold:[20,24],bs:70,twice:1,mini:1},
   basilisko:{name:'basilisko',hp:60,atk:10,xp:32,gold:[20,24],bs:70,drain:true,mini:1},
   kaleuche:{name:'Kaleuche',hp:130,atk:10,xp:110,gold:[100,100],boss:true,bs:112,hide:1},
-  witranalwe:{name:'Witranalwe',hp:100,atk:8,xp:70,gold:[60,60],boss:true,bs:110}};
+  witranalwe:{name:'Witranalwe',hp:100,atk:8,xp:70,gold:[60,60],boss:true,bs:110},
+  kuchifilu:{name:'Küchifilu',hp:120,atk:9,xp:120,gold:[150,150],boss:true,bs:96,spres:1,seals:['umawtu','küpakil','amutu']},
+  piwuchen:{name:'Piwüchen',hp:135,atk:10,xp:140,gold:[170,170],boss:true,bs:100,fly:true,spres:1,seals:['nag','llüka','küpakil']},
+  wallipen:{name:'Waillepeñ',hp:150,atk:10,xp:160,gold:[190,190],boss:true,bs:92,spres:1,armor:1,seals:['wütre','trafo','umawtu']},
+  trawko:{name:'Trawko',hp:160,atk:11,xp:180,gold:[220,220],boss:true,bs:88,spres:1,seals:['tripa','lef','amutukil']}};
 
 /* ---------- items ---------- */
 const ITEMS={

@@ -131,3 +131,12 @@ Left unchanged: *Pun mew kintukefuy kulliñ* (habitual past in the story, "used 
 - Konew K14: "Rumel witrukey, rumel dungukey, welu chumkawnorume amulay" (trayen); witru- 'caer agua/vaciarse'; chumkawnorume 'nunca'.
 - Lugares: Külakura wapi, Winkul mapu, Lil mapu (lil 'risco/peñasco'), Trayen mapu.
 - Canción nueva del epew de apertura (tema dramático en la menor).
+
+## Jefes secretos y corrección K14 (nov 2026, 4ª tanda)
+- K14 corregido: "Rumel tranapukey..." (tranapu- 'caer'; witru- era 'correr/fluir el agua'). Gracias por la corrección.
+- Jefes secretos (dibujados a mano, con sellos que se rompen con la orden justa):
+  - Küchifilu (chancho-culebra de los pantanos; grafía de cuchivilu, ¿küchifilu/kuchifilu?): sellos umawtunge → küpakilnge → amutunge.
+  - Piwüchen (culebra voladora; piwüchen/piwychen): sellos nagnge → llükange → küpakilnge; vuela: tras los sellos hay que bajarlo de nuevo con nagnge.
+  - Waillepeñ (oveja-ternero deforme; huallepén): sellos wütrenge → trafonge → umawtunge; además tiene coraza (trafonge otra vez tras los sellos).
+  - Trawko (El Trauco; ¿trawko/trauko?): sellos tripange → lefnge → amutukilnge.
+- Mecánica: con sellos activos todo daño queda en 1-2; todos resisten el newen especial (mitad de daño). Pistas en los diálogos de los ngen despiertos.

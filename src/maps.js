@@ -7,7 +7,7 @@ const K2={reward:'piwke',q:L('Konew','Pun mew wenu mew müley; antü mew ngelay.
   opts:[{m:'küyen',es:'luna',en:'moon',ok:1},{m:'antü',es:'sol',en:'sun'},{m:'mawida',es:'monte',en:'forest'},{m:'ko',es:'agua',en:'water'}]};
 const K13={reward:'piwke',q:L('Konew','Antü mew iñche engu trekakey, welu newen nielay, dungulay. Chem am ta tatey?','Camina conmigo bajo el sol, pero no tiene fuerza y no habla. ¿Qué será?','It walks with me under the sun, but it has no strength and does not speak. What could it be?'),
   opts:[{m:'llawfeñ',es:'sombra',en:'shadow',ok:1},{m:'küyen',es:'luna',en:'moon'},{m:'trewa',es:'perro',en:'dog'},{m:'pichiche',es:'niño',en:'child'}]};
-const K14={q:L('Konew','Rumel witrukey, rumel dungukey, welu chumkawnorume amulay. Chem am ta tatey?','Siempre cae, siempre habla, pero nunca se va. ¿Qué será?','It always falls, it always speaks, but it never leaves. What could it be?'),
+const K14={q:L('Konew','Rumel tranapukey, rumel dungukey, welu chumkawnorume amulay. Chem am ta tatey?','Siempre cae, siempre habla, pero nunca se va. ¿Qué será?','It always falls, it always speaks, but it never leaves. What could it be?'),
   opts:[{m:'trayen',es:'cascada',en:'waterfall',ok:1},{m:'mawün',es:'lluvia',en:'rain'},{m:'lewfü',es:'río',en:'river'},{m:'kürüf',es:'viento',en:'wind'}]};
 const MAPS={
 rupu:{name:'Lafken rüpü',g:{es:'El camino del mar',en:'The sea road'},floor:'.',bg:'coast',song:'coast',
@@ -89,7 +89,7 @@ const K4={reward:'piwke',q:L('Konew','Wenu mew tripakey, mapu mew ñamkey. Chem 
   opts:[{m:'mawün',es:'lluvia',en:'rain',ok:1},{m:'antü',es:'sol',en:'sun'},{m:'kürüf',es:'viento',en:'wind'},{m:'küyen',es:'luna',en:'moon'}]};
 Object.assign(MAPS,{
 l_wapi:{name:'Fotra mapu',g:{es:'Los pantanos de la costa',en:'The coastal marshes'},floor:'.',bg:'coast',song:'coast',pickStyle:'diwen',
- edges:{up:{to:'kuyum',x:8,y:11}},chests:{'28,4':'piwke'},stones:{'22,6':'fe'},digs:{'14,9':{}},
+ edges:{up:{to:'kuyum',x:8,y:11}},chests:{'28,4':'piwke'},stones:{'22,6':'fe'},digs:{'14,9':{},'21,11':{what:'sboss',boss:'kuchifilu',flag:'sb1',req:'ngen'}},
  ents:[{id:'diwfe',kind:'npc',look:'gatherer',fem:1,x:10,y:5,dir:'down',fixed:1,talk:()=>diwenfeTalk(),bub:['Diweñ!','Mari mari!']},
    {kind:'enemy',x:12,y:7,party:['laftrache','laftrache']},{kind:'enemy',x:18,y:10,party:['nidol','laftrache']},{kind:'enemy',x:28,y:11,party:['laftrache','laftrache','nidol']}]},
 l_ruka1:{name:'Kallfüray ñi ruka',g:{es:'La ruka de la papay Kallfüray',en:"Papay Kallfüray's ruka"},floor:'_',bg:'coast',song:'lof',pal:'rukain',wall:'ruka',interior:1,
@@ -146,7 +146,7 @@ n_ruka1:{name:'Sayen ñi ruka',region:'nagche',g:{es:'La ruka de la ñaña Sayen
  edges:{down:{to:'n_lof',x:3,y:4}},chests:{'11,5':'lawen1'},
  ents:[{id:'sayen',kind:'npc',look:'cook',fem:1,x:5,y:4,dir:'left',fixed:1,talk:()=>sayenTalk(),bub:['Mültrün!']}]},
 n_winkul:{region:'nagche',name:'Winkul mapu',g:{es:'Los cerros (zona difícil)',en:'The hill country (hard area)'},floor:',',bg:'field',song:'nag',pal:'nagche',
- edges:{up:{to:'n_mawida',x:16,y:11}},chests:{'26,9':'piwke'},stones:{'20,10':'kead'},konew:{'6,5':K13},
+ edges:{up:{to:'n_mawida',x:16,y:11}},chests:{'26,9':'piwke'},stones:{'20,10':'kead'},konew:{'6,5':K13},digs:{'28,3':{what:'sboss',boss:'piwuchen',flag:'sb2',req:'ngen2'}},
  ents:[{kind:'enemy',x:12,y:4,party:['fkolokolo','kolokolo']},{kind:'enemy',x:20,y:6,party:['chonchon','chonchon','kolokolo']},{kind:'enemy',x:8,y:8,party:['nguruvilu','anchi','kolokolo']},{kind:'enemy',x:27,y:3,party:['fkolokolo','chonchon']}]},
 n_mawida:{region:'nagche',name:'Fütra mawida',g:{es:'El bosque profundo',en:'The deep forest'},floor:',',bg:'field',song:'nag',
  edges:{left:{to:'n_lewfu',x:30,y:7},down:{to:'n_winkul',x:16,y:1}},stairs:{to:'nd1',x:22,y:4},
@@ -176,7 +176,9 @@ ngen2:{region:'nagche',ngenmap:1,name:'Ngen-mawida',g:{es:'El claro del bosque',
  stairs:{to:'nd3',x:3,y:7},
  ents:[{id:'boss',kind:'enemy',x:8,y:4,party:['witranalwe'],fixed:1,boss:1,flag:'boss2',
      pre:[N('En el claro hay una figura altísima y delgada, que brilla como si estuviera hecha de luz fría: el Witranalwe.','In the clearing stands a very tall, thin figure that glows as if made of cold light: the Witranalwe.'),L('','Müley Witranalwe!','¡Ahí está el Witranalwe!','There is the Witranalwe!')]},
-   {id:'ngen',kind:'npc',look:'ngen2',x:8,y:5,req:'ngen2',fixed:1,talk:()=>say([L('Ngen-mawida','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")])}]}
+   {id:'ngen',kind:'npc',look:'ngen2',x:8,y:5,req:'ngen2',fixed:1,talk:()=>{const ls=[L('Ngen-mawida','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")];
+   if(!S.flags.sb2)ls.push(N('«Y escucha: en los cerros del sur del bosque anida algo que silba de noche. En la loma despejada del este, escarba. Lleva contigo todas tus palabras: sus sellos solo se rompen con las justas.»','"And listen: in the hills south of the forest something nests that whistles at night. On the clear eastern knoll, dig. Bring all your words: its seals break only with the right ones."'));
+   say(ls)}}]}
 });
 /* ---------- PEWENCHE ---------- */
 const K5={reward:'piwke',q:L('Konew','Pewen mew tripakey; pukem mew ikeiñ. Chem am ta tatey?','Sale del pewen; en invierno lo comemos. ¿Qué será?','It comes from the pewen; in winter we eat it. What could it be?'),
@@ -230,7 +232,7 @@ p_pire:{region:'pewenche',name:'Pire mapu',g:{es:'Los campos de nieve',en:'The s
  edges:{up:{to:'p_degin',x:6,y:11},left:{to:'p_pewen',x:30,y:7},right:{to:'p_pillan',x:1,y:7,req:'pew_llawe',
    reqMsg:[N('Una puerta de hielo y piedra cierra el paso al pillañ. Tiene grabada una vieja llawe (llave).','A door of ice and stone blocks the pass to the volcano. An old llawe (key) is carved on it.'),
    N('Alguien muy mayor del lof debe conocer esta puerta...','Someone very old in the lof must know this door...')]}},
- chests:{'23,2':'pewgift'},konew:{'20,12':K11},digs:{'11,10':{}},
+ chests:{'23,2':'pewgift'},konew:{'20,12':K11},digs:{'11,10':{},'5,14':{what:'sboss',boss:'wallipen',flag:'sb3',req:'ngen3'}},
  signs:{},
  ents:[{kind:'enemy',x:6,y:4,party:['pire','pire','pire']},{kind:'enemy',x:18,y:9,party:['kura','pire']},{kind:'enemy',x:9,y:9,party:['kutral','pire']},
    {kind:'enemy',x:7,y:13,party:['pire','pire']},{kind:'enemy',x:27,y:14,party:['pire','kura','kutral']}]},
@@ -268,7 +270,9 @@ ngen3:{region:'pewenche',ngenmap:1,name:'Ngen-pewen',g:{es:'El cráter',en:'The 
  stairs:{to:'pd3',x:20,y:7},
  ents:[{id:'boss',kind:'enemy',x:8,y:4,party:['cherrufe'],fixed:1,boss:1,flag:'boss3',
      pre:[N('Desde la lava se levanta un gigante de roca negra, con grietas que brillan como brasas y una cabellera de fuego: el Cherrufe.','A giant of black rock rises from the lava, with cracks that glow like embers and a mane of fire: the Cherrufe.'),L('','Müley Cherrufe!','¡Ahí está el Cherrufe!','There is the Cherrufe!')]},
-   {id:'ngen',kind:'npc',look:'ngen3',x:8,y:5,req:'ngen3',fixed:1,talk:()=>say([L('Ngen-pewen','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")])}]}
+   {id:'ngen',kind:'npc',look:'ngen3',x:8,y:5,req:'ngen3',fixed:1,talk:()=>{const ls=[L('Ngen-pewen','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")];
+   if(!S.flags.sb3)ls.push(N('«Algo más duerme en los campos de nieve: bajo el ojo de agua congelado del sur. Escarba en su orilla, y lleva palabras de frío y de quiebre: sus sellos no ceden con menos.»','"Something else sleeps in the snowfields: beneath the frozen pool in the south. Dig at its edge, and bring words of cold and breaking: its seals yield to nothing less."'));
+   say(ls)}}]}
 });
 /* ---------- WILLICHE ---------- */
 const K8={reward:'piwke',q:L('Konew','Ko mew amukey, welu namun nielay. Chem am ta tatey?','Anda por el agua, pero no tiene pies. ¿Qué será?','It travels on the water, but it has no feet. What could it be?'),
@@ -312,7 +316,7 @@ w_ruka1:{region:'williche',name:'Kintul ñi ruka',g:{es:'La ruka del chachay Kin
  edges:{down:{to:'w_lof',x:3,y:4}},chests:{'2,5':'numgift'},
  ents:[{id:'kintul',kind:'npc',look:'elder',x:8,y:4,dir:'left',seated:1,fixed:1,talk:()=>kintulTalk(),bub:['Challwa...']}]},
 w_trayen:{region:'williche',name:'Trayen mapu',g:{es:'La garganta de la cascada (zona difícil)',en:'The waterfall gorge (hard area)'},floor:',',bg:'rainforest',song:'wil',pal:'williche',trees:'lawal',
- edges:{up:{to:'w_mawida',x:16,y:11}},konew:{'5,8':K14},digs:{'24,10':{}},
+ edges:{up:{to:'w_mawida',x:16,y:11}},konew:{'5,8':K14},digs:{'24,10':{},'14,7':{what:'sboss',boss:'trawko',flag:'sb4',req:'ngen4'}},
  ents:[{kind:'enemy',x:20,y:6,party:['basilisko','kowek']},{kind:'enemy',x:8,y:5,party:['mawek','mawek','mawek']},{kind:'enemy',x:28,y:6,party:['kamawetu','mawek']},{kind:'enemy',x:14,y:9,party:['basilisko','mawek','kowek']}]},
 w_inaltu:{region:'williche',name:'Lafken inaltu',g:{es:'Los acantilados',en:'The cliffs'},floor:'.',bg:'rainforest',song:'wil',pal:'williche',trees:'lawal',
  edges:{left:{to:'w_lafken',x:30,y:7}},stairs:{to:'wd1',x:22,y:3},
@@ -341,7 +345,9 @@ ngen4:{region:'williche',ngenmap:1,name:'Ngen-kürüf',g:{es:'El muelle en la ni
  stairs:{to:'wd3',x:3,y:7},
  ents:[{id:'boss',kind:'enemy',x:8,y:4,party:['kaleuche'],fixed:1,boss:1,flag:'boss4',
      pre:[N('De la niebla sale un barco iluminado, con velas rotas que brillan pálidas y música que nadie toca: el Kaleuche.','An illuminated ship comes out of the fog, with torn sails that glow pale and music no one is playing: the Kaleuche.'),L('','Müley Kaleuche!','¡Ahí está el Kaleuche!','There is the Kaleuche!')]},
-   {id:'ngen',kind:'npc',look:'ngen4',x:8,y:6,req:'ngen4',fixed:1,talk:()=>say([L('Ngen-kürüf','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")])}]}
+   {id:'ngen',kind:'npc',look:'ngen4',x:8,y:6,req:'ngen4',fixed:1,talk:()=>{const ls=[L('Ngen-kürüf','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")];
+   if(!S.flags.sb4)ls.push(N('«Una última cosa: en la garganta de la cascada vive un hombrecito que odia las visitas. Junto al puente del río, escarba. Y cuida tus palabras: dile que salga, y no dejes que se vaya.»','"One last thing: in the waterfall gorge lives a little man who hates visitors. Beside the river bridge, dig. And mind your words: tell him to come out, and do not let him leave."'));
+   say(ls)}}]}
 });
 for(const k in MAPS){const m=MAPS[k];if(!m.region)m.region='lafkenche';m.rows=MAPROWS[k];m.w=MAPROWS[k][0].length;m.h=MAPROWS[k].length}
 MAPS.inaltu.edges.right={to:'n_rupu',x:1,y:7,req:'ngen',reqMsg:[N('El camino hacia el este, a las tierras nagche, está cubierto de niebla. Primero despierta a Ngen-lafken.','The road east, to the Nagche lands, is covered in fog. First wake Ngen-lafken.')]};

@@ -9,7 +9,7 @@ function engage(e){
 }
 function relabel(){const cnt={},seen={};B.en.forEach(e=>cnt[e.t]=(cnt[e.t]||0)+1);
   B.en.forEach(e=>{seen[e.t]=(seen[e.t]||0)+1;if(e.label)return;e.label=ET[e.t].name+(cnt[e.t]>1||ET[e.t].name==='laftrache'&&B.en.length>1?' '+'ABCDE'[seen[e.t]-1]:'')})}
-function mkEnemy(t){return{t,hp:ET[t].hp,max:ET[t].hp,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'?1:0,armor:ET[t].armor?1:0,burn:ET[t].fire?1:0,hidden:0}}
+function mkEnemy(t){return{t,hp:ET[t].hp,max:ET[t].hp,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'?1:0,armor:ET[t].armor?1:0,burn:ET[t].fire?1:0,hidden:0,seals:ET[t].seals?ET[t].seals.slice():null}}
 function startBattle(party,o){
   mode='battle';banner.style.display='none';held.up=held.down=held.left=held.right=0;
   B={en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
@@ -84,7 +84,7 @@ function doSpecial(k,tgt){
   const head=L(S.name,sp.m+'!',G(sp),G(sp));head.fx=()=>{sfx('cast');B.flash=12;B.shake=8};
   if(k==='lawen'){S.hp=Math.min(maxHP(),S.hp+8);S.curse=0;fx.push('Recuperas dos piwke.');fxe.push('You recover two hearts.');head.fx=()=>{sfx('heal');spark(60,30,'#80ff90',16)}}
   else{targets=k==='wino'?[tgt]:aliveE();
-    let burnT=0;for(const e of targets){if(e.hidden){fx.push(e.label+' está escondido en la niebla: no lo alcanzas.');fxe.push(e.label+' is hidden in the fog: you cannot reach it.');continue}let d=k==='wino'?atk()*3+rnd(3):Math.round(atk()*1.5)+rnd(3);if(e.tall)d=Math.max(1,Math.round(d/3));if(e.armor)d=Math.max(1,Math.round(d/2));if(e.burn)burnT+=2;if(k==='kuruf'&&ET[e.t].fly)e.gr=3;e.pend=d;e.hp-=d;
+    let burnT=0;for(const e of targets){if(e.hidden){fx.push(e.label+' está escondido en la niebla: no lo alcanzas.');fxe.push(e.label+' is hidden in the fog: you cannot reach it.');continue}let d=k==='wino'?atk()*3+rnd(3):Math.round(atk()*1.5)+rnd(3);if(e.tall)d=Math.max(1,Math.round(d/3));if(e.armor)d=Math.max(1,Math.round(d/2));if(ET[e.t].spres){d=Math.max(1,Math.round(d/2));fx.push(e.label+' resiste tu newen.');fxe.push(e.label+' resists your newen.')}if(e.seals&&e.seals.length)d=Math.min(2,d);if(e.burn)burnT+=2;if(k==='kuruf'&&ET[e.t].fly)e.gr=3;e.pend=d;e.hp-=d;
       fx.push(e.label+' −'+d+(e.hp<=0?' (se va)':'')+'.');fxe.push(e.label+' −'+d+(e.hp<=0?' (gone)':'')+'.')}
     if(burnT){S.hp=Math.max(1,S.hp-burnT);fx.push('¡Te quemas! (−'+burnT+')');fxe.push('You get burned! (−'+burnT+')')}}
   const eff=N(fx.join(' '),fxe.join(' '));
@@ -93,6 +93,10 @@ function doSpecial(k,tgt){
 }
 function epos(e){return{x:e.px||128,y:e.py||100}}
 function pop(x,y,txt,col){B.pops.push({x,y,txt,col,t:50})}
+function sealGloss(code,lg){
+  const kil=code.endsWith('kil'),r=kil?code.slice(0,-3):code,vg=VG[r],g2=(kil?(lg==='en'?vg.nen:vg.nes):(lg==='en'?vg.en:vg.es))[0];
+  return lg==='en'?'The next seal whispers: «'+g2+'»':'El siguiente sello susurra: «'+g2+'»';
+}
 function resolve(r,kil,tg,ei){
   const al=aliveE(),coll=tg==='all',targets=coll?al:[B.en[tg]],n=targets.length,need=coll?endFor(n):0;
   B.cursor=null;
@@ -107,6 +111,15 @@ function resolve(r,kil,tg,ei){
     return say(lines,enemyPhase);
   }
   const pr=praise();B.last={r,k:kil};S.sp=Math.min(SPMAX,(S.sp||0)+1);
+  {const e0=targets[0];
+  if((!coll||n===1)&&e0.seals&&e0.seals.length&&(r+(kil?'kil':''))===e0.seals[0]){
+    e0.seals.shift();lines[0].fx=()=>{sfx('lvl');B.flash=14;B.shake=6};
+    if(e0.seals.length)lines.push(N('¡CRAC! Un sello de luz se quiebra sobre '+e0.label+'. Quedan '+e0.seals.length+'. '+sealGloss(e0.seals[0],'es'),
+      'CRACK! A seal of light shatters over '+e0.label+'. '+e0.seals.length+' left. '+sealGloss(e0.seals[0],'en')));
+    else lines.push(N('¡CRAC! ¡El último sello se quiebra sobre '+e0.label+'! Ahora tus palabras y tu newen sí pueden herirlo.',
+      'CRACK! The last seal shatters over '+e0.label+'! Now your words and your newen can truly hurt it.'));
+    return say(lines,enemyPhase);
+  }}
   const fx=[],fxe=[];
   const castFx=()=>{sfx('cast');B.flash=8};
   lines[0].fx=castFx;
@@ -118,6 +131,7 @@ function resolve(r,kil,tg,ei){
       if(e.tall){fx.push(e.label+' está erguido, altísimo: tus palabras le pasan por debajo.');fxe.push(e.label+' stands tall, towering: your words pass beneath it.');e.miss=1;continue}
       let d=coll?Math.max(1,Math.round((atk()+rnd(4))*.75)):atk()+rnd(4)+2;if(e.burn)burnT+=2;
       if(e.armor){d=Math.max(1,Math.round(d*.25));fx.push(e.label+': el golpe rebota en su coraza de piedra.');fxe.push(e.label+': the blow bounces off its stone crust.')}
+      if(e.seals&&e.seals.length){d=Math.min(2,d);fx.push(e.label+': los sellos de luz desvían casi todo el golpe.');fxe.push(e.label+': the seals of light turn aside most of the blow.')}
       e.pend=d;e.hp-=d;
       if(e.hp<=0){fx.push(e.label+' se va (−'+d+').');fxe.push(e.label+' goes away (−'+d+').')}else{fx.push(e.label+' −'+d+'.');fxe.push(e.label+' −'+d+'.')}}
   }else if(r==='amutu'){fx.push('Les dijiste que no se fueran... y se quedan, felices.');fxe.push('You told them not to leave... so they stay, happily.')}
@@ -224,6 +238,7 @@ function enemyPhase(){
   if(aliveE().some(x=>x.armor)&&!B.armorHint&&B.turn>=1){B.armorHint=1;lines.push(N('Pista: los golpes rebotan en la coraza de piedra. Quizás si le dices que se quiebre...','Hint: blows bounce off the stone crust. Maybe if you tell it to break...'))}
   if(bossE&&bossE.t==='cherrufe'&&bossE.burn&&!B.fireHint&&B.turn>=2&&S.roots.includes('wütre')){B.fireHint=1;lines.push(N('Pista: su fuego te quema cada vez que lo atacas. El frío podría apagarlo.','Hint: its fire burns you every time you attack it. The cold could put it out.'))}
   if(bossE&&bossE.t==='witranalwe'&&bossE.tall&&!B.tallHint&&B.turn>=1){B.tallHint=1;lines.push(N('Pista: erguido así, nada lo alcanza. Quizás si le dices que vuelva atrás...','Hint: standing tall like that, nothing reaches it. Maybe if you tell it to go back...'))}
+  if(bossE&&bossE.seals&&bossE.seals.length&&B.turn%3===1){lines.push(N('Los sellos de luz giran alrededor de '+bossE.label+'. '+sealGloss(bossE.seals[0],'es'),'The seals of light spin around '+bossE.label+'. '+sealGloss(bossE.seals[0],'en')))}
   if(B.tele&&!B.teleHint&&bossE){B.teleHint=1;lines.push(N('Pista: dile que no venga (küpa- con -kil-), a él solo o a todos, con la terminación correcta.','Hint: tell it not to come (küpa- with -kil-), to it alone or to all of them, with the right ending.'))}
   say(lines,()=>{
     if(S.hp<=0){S.hp=0;return defeat()}
@@ -250,6 +265,9 @@ function endBattle(how){
   if(how==='win'&&o.ent){ents=ents.filter(e=>e!==o.ent);if(o.ent.flag)S.flags[o.ent.flag]=1}
   B=null;persist();
   if(how!=='win'||!AU.song||AU.name!=='win')playSong(mapSong());
+  if(how==='win'&&o.sflag){S.flags[o.sflag]=1;persist();sfx('lvl');
+    return say([N('El wekufü secreto se deshace en jirones de sombra que el viento se lleva.','The secret wekufü breaks apart into shreds of shadow that the wind carries away.'),
+      L('','Newen!','Venciste a uno de los wekufü escondidos. Pocos pueden contarlo.','You defeated one of the hidden wekufü. Few can say the same.')],()=>gainPiwke([N('Donde estaba, algo rojo brilla en el suelo...','Where it stood, something red glints on the ground...')]));}
   if(how==='win'&&o.boss)postBoss();
 }
 function stepBackFromNgen(){

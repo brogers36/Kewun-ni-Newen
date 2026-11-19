@@ -350,6 +350,275 @@ def kaleuche(fr):
         y=45+int(1.8*math.sin(x*.4+fr*1.5))
         for yy in range(y,min(54,y+4)):g.p(x,yy,'f' if (x+yy)%3 else 'F')
     g.outline();return g.rows()
+# ---------- hand-drawn secret bosses ----------
+def kuchifilu(fr):
+    import math
+    g=G(50,38)
+    # coiled serpent body: big rear coil, mid loop, neck rising to the pig head at left
+    rows=[
+     (30,8, "SSSS"),
+     (27,9, "SSsssssSS"),
+     (25,10,"SsssssssssSS"),
+     (23,11,"SssssbbbsssssS"),
+     (22,12,"SsssbbbbbbsssssS"),
+     (21,13,"SsssbbbbbbbbsssssS"),
+     (20,14,"SsssbbbbbbbbbbsssssS"),
+     (20,15,"SssbbbbSSSSbbbbsssssS"),
+     (19,16,"SssbbbSS..SSbbbbsssssS"),
+     (19,17,"SssbbbS....SbbbbsssssS"),
+     (19,18,"SssbbbSS..SSbbbbsssssS"),
+     (20,19,"SssbbbbSSSSbbbbssssS"),
+     (9,20, "SSssssssssssssssbbbbbbbbbbbbssssS"),
+     (6,21, "SSsssssssssssssssssssbbbbbbbbbbbsssS"),
+     (4,22, "SSssssbbbbbbbbssssssssssssbbbbbbbsssS"),
+     (3,23, "SsssbbbbbbbbbbbbsssssssssssssssssssS"),
+     (2,24, "SssbbbbbbbbbbbbbbbssssssssssssssssS"),
+     (2,25, "SssbbbbbbbbbbbbbbbbsssssSSSSSSSSS"),
+     (2,26, "SsssbbbbbbbbbbbbbbbbsssS"),
+     (3,27, "SsssbbbbbbbbbbbbbbsssS"),
+     (4,28, "SssssbbbbbbbbbbsssSS"),
+     (6,29, "SSssssssssssssssSS"),
+     (8,30, "SSSssssssssSS"),
+    ]
+    for (x0,y,st) in rows:
+        for i,ch in enumerate(st):
+            if ch!='.':g.p(x0+i,y,ch)
+    # pig head rising at the left: heavy brow, big snout, tusks
+    head=[
+     (7,4, "SSsssSS"),
+     (6,5, "SsssssssS"),
+     (5,6, "SsssssssssS"),
+     (4,7, "SssssssssssS"),
+     (3,8, "SsssssssssssS"),
+     (2,9, "SssssssssssssS"),
+     (2,10,"SssssssssssssS"),
+     (1,11,"SsssssssssssssS"),
+     (0,12,"NNnnnssssssssssS"),
+     (0,13,"NnnnnnsssssssssS"),
+     (0,14,"NnnnnnssssssssssS"),
+     (0,15,"NnnnnnsssssssssS"),
+     (0,16,"NNnnnssssssssssS"),
+     (2,17,"SssssssssssssS"),
+     (3,18,"SssssssssssSS"),
+     (4,19,"SSsssssssSS"),
+    ]
+    for (x0,y,st) in head:
+        for i,ch in enumerate(st):
+            if ch!='.':g.p(x0+i,y,ch)
+    g.p(1,13,'k');g.r(1,15,2,1,'k')
+    g.r(8,8,3,2,'e');g.p(8,8,'k');g.p(10,9,'k')
+    if fr:g.r(8,8,3,2,'k');g.p(9,9,'e')
+    g.p(2,17,'w');g.p(3,18,'w');g.p(1,11,'w')
+    g.r(6,6,3,1,'S')
+    # mud drips and marsh slime
+    for (x,y) in [(4,19),(9,21),(14,24),(26,26),(33,22),(40,16),(44,20)]:
+        ln=2+((x*7+fr)%3)
+        for i in range(ln):g.p(x,y+i+1,'m')
+    for k in range(14):
+        x=8+k*3;y=21+(k*5)%8
+        if g.get(x,y)=='s':g.p(x,y,'m')
+    # tail tip raised at far right
+    for (x0,y,st) in [(42,13,"SS"),(43,11,"sS"),(44,9,"sS"),(45,8,"S")]:
+        for i,ch in enumerate(st):g.p(x0+i,y,ch)
+    g.outline();return g.rows()
+
+def piwuchen(fr):
+    import math
+    g=G(56,44)
+    w=fr  # wing beat
+    # wings: great bat membranes with finger bones
+    for sd,xm in ((1,28),(-1,27)):
+        for k in range(4):
+            # finger bones radiating
+            ln=[22,24,22,16][k]
+            ang=[-0.9,-0.45,0.0,0.45][k]+ (0.12 if w else -0.12)
+            for t in range(ln):
+                x=xm+sd*int(t*math.cos(ang))
+                y=14-int(t*math.sin(ang)*0.9)+ (2 if w else 0)
+                if 0<=x<56 and 0<=y<44:g.p(x,y,'W')
+        # membrane fill between bones (scan columns)
+    for x in range(1,55):
+        ys=[y for y in range(44) if g.get(x,y)=='W']
+        if len(ys)>=2:
+            for y in range(min(ys),max(ys)):
+                if g.get(x,y)=='.':g.p(x,y,'w')
+    # ragged wing trailing edges
+    for x in range(2,54,3):
+        ys=[y for y in range(44) if g.get(x,y) in 'wW']
+        if ys:
+            b=max(ys)
+            for i in range(1+((x*5+fr)%3)):g.p(x,b+1+i,'w')
+    # serpent body hanging vertically in the middle
+    body=[
+     (24,9, "SssssS"),
+     (24,9, "SsbbsS"),
+     (24,10,"SsbbsS"),
+     (24,11,"SsbbssS"),
+     (24,12,"SsbbssS"),
+     (24,13,"SsbbsS"),
+     (24,14,"SsbbsS"),
+     (24,15,"SsbbssS"),
+     (24,16,"SsbbssS"),
+     (24,17,"SsbbsS"),
+     (24,18,"SsbbsS"),
+     (24,19,"SssssS"),
+     (25,20,"SsssS"),
+     (25,21,"SsssS"),
+     (26,22,"SssS"),
+     (26,23,"SssS"),
+     (27,24,"SsS"),
+     (27,25,"SsS"),
+     (27,26,"SssS"),
+     (28,27,"SsS"),
+     (28,28,"SsS"),
+     (29,29,"SsS"),
+     (29,30,"SsS"),
+     (30,31,"SsS"),
+     (30,32,"SssS"),
+     (31,33,"SsS"),
+     (31,34,"sS"),
+     (32,35,"sS"),
+     (32,36,"s"),
+    ]
+    for (x0,y,st) in body:
+        for i,ch in enumerate(st):
+            if ch!='.':g.p(x0+i,y,ch)
+    # big round lamprey mouth head at the top
+    for (x0,y,st) in [(23,0,"SSSSSSSS"),(21,1,"SSsssssssSS"),(20,2,"SssMMMMMMssS"),(19,3,"SssMtMMtMMssS"),
+                      (19,4,"SsMMMMMMMMMsS"),(19,5,"SssMtMMMtMssS"),(20,6,"SssMMMMMMssS"),(21,7,"SSsssssssSS"),(23,8,"SSSSSSSS")]:
+        for i,ch in enumerate(st):g.p(x0+i,y,ch)
+    g.p(24,2,'t');g.p(27,2,'t');g.p(23,4,'t');g.p(28,4,'t');g.p(25,6,'t');g.p(26,6,'t')
+    g.r(24,4,3,1,'k')
+    g.p(18,3,'e');g.p(31,3,'e')
+    if fr:g.p(18,3,'k');g.p(31,4,'e')
+    g.outline();return g.rows()
+
+def wallipen(fr):
+    import math
+    g=G(46,38)
+    # lumpy wool body
+    rows=[
+     (14,4, "wwwwwww"),
+     (11,5, "wwwwwwwwwwwww"),
+     (9,6,  "wwwwwwwwwwwwwwwwww"),
+     (8,7,  "wwwwwwwwwwwwwwwwwwwwww"),
+     (7,8,  "wwwwwWWwwwwwwwwwwwwwwwwww"),
+     (6,9,  "wwwwwWWWwwwwwwwwwwWWwwwwwwww"),
+     (5,10, "wwwwwwWWwwwwwwwwwwWWWwwwwwwwww"),
+     (5,11, "wwwwwwwwwwwwwwwwwwwWWwwwwwwwwww"),
+     (4,12, "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"),
+     (4,13, "wwwWWwwwwwwwwwwwwwwwwwwwwwwwwWWww"),
+     (4,14, "wwWWWwwwwwwwwwwwWWwwwwwwwwwwwWWWw"),
+     (4,15, "wwwWWwwwwwwwwwwWWWwwwwwwwwwwwwWww"),
+     (4,16, "wwwwwwwwwwwwwwwwWWwwwwwwwwwwwwwww"),
+     (5,17, "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"),
+     (5,18, "wwwwwdddwwwwwwwwwwwwwwdddwwwwww"),
+     (6,19, "wwwwdddddwwwwwwwwwwwwdddddwwww"),
+     (7,20, "wwwddwwddwwwwwwwwwwwddwwddwww"),
+     (8,21, "wwwwwwwwwwwwwwwwwwwwwwwwwwww"),
+     (9,22, "wwwwwwwwwwwwwwwwwwwwwwwww"),
+    ]
+    for (x0,y,st) in rows:
+        for i,ch in enumerate(st):
+            if ch!='.':g.p(x0+i,y,ch)
+    # calf head on a low wrong-bent neck, facing left
+    head=[
+     (5,7, "hhhh"),
+     (3,8, "hhhhhhh"),
+     (2,9, "hhhhhhhh"),
+     (1,10,"hhhhhhhhh"),
+     (0,11,"hhhhhhhhhh"),
+     (0,12,"hhhhhhhhhh"),
+     (0,13,"hhhhhhhhhh"),
+     (0,14,"Hhhhhhhhhh"),
+     (0,15,"HHhhhhhhh"),
+     (0,16,"HHHhhhhh"),
+     (1,17,"HHhhhh"),
+     (2,18,"Hhhh"),
+    ]
+    for (x0,y,st) in head:
+        for i,ch in enumerate(st):g.p(x0+i,y,ch)
+    g.r(2,11,3,2,'e');g.p(2,11,'w')
+    if fr:g.r(2,11,3,2,'w');g.p(4,12,'e')
+    g.r(0,15,2,1,'n');g.p(1,16,'n')
+    g.p(5,10,'H')
+    # drooping ears / stubby horns
+    g.r(7,6,3,1,'H');g.p(6,7,'H');g.p(9,7,'h');g.p(10,6,'H')
+    # backward-bent legs, hooves
+    for (x0,top,bend) in [(11,23,-1),(19,24,1),(29,24,-1),(37,23,1)]:
+        for i in range(8):
+            x=x0+(bend if i>4 else 0)
+            g.p(x,top+i,'H');g.p(x+1,top+i,'h');g.p(x+2,top+i,'H')
+        g.r(x0+bend-1,top+8,5,2,'n')
+    # matted drips of wet wool
+    for (x,y) in [(10,22),(16,23),(26,23),(34,23),(42,21)]:
+        for i in range(2+((x+fr)%2)):g.p(x,y+i,'W')
+    g.outline();return g.rows()
+
+def trawko(fr):
+    import math
+    g=G(32,46)
+    rows=[
+     (14,0, "hh"),
+     (13,1, "hhhh"),
+     (12,2, "hHhhh"),
+     (11,3, "hhHhhh"),
+     (10,4, "hhhHhhhh"),
+     (9,5,  "hhhhHhhhhh"),
+     (8,6,  "hhhhhHhhhhhh"),
+     (7,7,  "hhhhhhHhhhhhhh"),
+     (6,8,  "hhhhhhhHhhhhhhhh"),
+     (5,9,  "HHHHHHHHHHHHHHHHHH"),
+     (8,10, "ffffffffffff"),
+     (8,11, "fffffffffffff"),
+     (7,12, "ffkeffffkeff"),
+     (7,13, "ffkkffffkkff"),
+     (7,14, "fffffNNffffff"),
+     (7,15, "bfffNNNNfffb"),
+     (6,16, "bbffffffffbbb"),
+     (5,17, "bbbbffffbbbbb"),
+     (5,18, "bbBbbbbbbbBbb"),
+     (5,19, "bbbbBbbbBbbbb"),
+     (6,20, "bbbbbbbbbbbb"),
+     (6,21, "bBbbbbbbbBb"),
+     (7,22, "bbbbbbbbbb"),
+     (4,23, "ccbbbbbbbbbbcc"),
+     (3,24, "cccccccccccccccc"),
+     (2,25, "ccCcccccccccccCcc"),
+     (2,26, "cCccccccccccccccCc"),
+     (2,27, "cCccccCCccccccccCc"),
+     (2,28, "cCcccCCCCcccccccCc"),
+     (2,29, "ccccccCCcccccccccc"),
+     (2,30, "cCcccccccccccccrCc"),
+     (2,31, "cCccccccccccccccCc"),
+     (2,32, "ccCcccccccccccCccc"),
+     (3,33, "ccccccccccccccc"),
+     (3,34, "cCcccccccccccCc"),
+     (4,35, "ccccccccccccc"),
+     (6,36, "ccccc..ccccc"),
+     (6,37, "ccccc..ccccc"),
+     (6,38, "cccc....cccc"),
+     (6,39, "cccc....cccc"),
+     (5,40, "ccccc....ccccc"),
+     (5,41, "nnnnn....nnnnn"),
+    ]
+    for (x0,y,st) in rows:
+        for i,ch in enumerate(st):
+            if ch!='.':g.p(x0+i,y,ch)
+    if fr:
+        g.p(7,12,'f');g.p(8,12,'e');g.p(13,12,'f');g.p(14,12,'e')
+    # stone axe (toki) raised in the right hand
+    for i in range(10):g.p(22+int(i*.3),30-i,'s')
+    for (x0,y,st) in [(22,14,"aaAA"),(21,15,"aaaAAA"),(21,16,"aaaaAA"),(21,17,"aaaAAA"),(22,18,"aaAA")]:
+        for i,ch in enumerate(st):g.p(x0+i,y,ch)
+    # left arm gripping a knot of the coat
+    g.r(3,27,2,3,'f');g.p(3,30,'f')
+    g.r(22,26,2,3,'f')
+    # moss tufts on the hat and shoulders
+    for (x,y) in [(12,4),(16,6),(8,9),(20,9)]:
+        g.p(x,y,'b');g.p(x+1,y,'B')
+    g.outline();return g.rows()
+
 # ---------- hand-drawn bosses ----------
 def witranalwe2(fr):
     g=G(30,60)
@@ -733,6 +1002,10 @@ PAL={
  'basilisko':{'s':'#4a7a3a','S':'#2a4a22','w':'#f0e8d8','r':'#d82828','y':'#f0c020','e':'#ffe040','k':'#000000','o':'#0e140a'},
  'kaleuche':{'h':'#352c26','H':'#1d1814','k':'#120d0a','m':'#443a2c','s':'#c4dcca','S':'#7e9e88','y':'#8affb6','e':'#d6ffe4','b':'#cfc8ae','Q':'#3e7a52','q':'#101713','f':'#b9c8bd','F':'#89a090','o':'#070807'},
  'ngen_kuruf':{'B':'#8fb4c8','b':'#bedcec','w':'#e4f4fc','R':'#ffffff','r':'#58c8e0','k':'#17384a','E':'#d8fbff','o':'#2a4a5e'},
+ 'kuchifilu':{'s':'#5a7a4a','S':'#39522f','b':'#8aa060','m':'#4a3a28','n':'#d89aa8','N':'#a86a78','e':'#ffe060','w':'#f0e8d8','k':'#141c10','o':'#0b120a'},
+ 'piwuchen':{'w':'#6a4a66','W':'#9a6a8e','s':'#7a3a3a','S':'#521f24','b':'#a85a50','t':'#f0e8d8','M':'#2e0a12','e':'#ff4040','k':'#180a10','o':'#140810'},
+ 'wallipen':{'w':'#cfcfc2','W':'#9f9f92','d':'#6a6a5e','h':'#8a7458','H':'#5e4c38','e':'#90c8ff','n':'#39302a','k':'#201c16','o':'#16120e'},
+ 'trawko':{'h':'#8a6a3a','H':'#5e4624','f':'#9a8a6a','b':'#5a7a3a','B':'#3a5424','c':'#6a5438','C':'#46381f','a':'#9a9aa2','A':'#5e5e68','s':'#7a5a30','r':'#a83030','N':'#7a6a4e','e':'#ffd040','n':'#2e2418','k':'#181408','o':'#120e06'},
  'trelke':{'h':'#6a5a34','H':'#463a20','u':'#8a7a4c','m':'#9a4a48','M':'#6a2a2e','W':'#e8c8c0','w':'#f4f0e0','r':'#a8503a','R':'#7a3424','e':'#ffd040','o':'#140e08'},
  'witranalwe':{'H':'#16161e','h':'#4a4a3a','q':'#0e0e14','F':'#c8ccc0','f':'#7a8274','k':'#0a0a0a','E':'#7aff9a','w':'#e8e8d8','P':'#24242c','p':'#34343e','A':'#3a3a46','K':'#9a9a90','c':'#d8d8c8','g':'#b8b8ac','G':'#808078','L':'#101014','o':'#040406'}}
 
@@ -761,7 +1034,11 @@ HI={
  'ngen_kuruf':{'glow':'RE','tex':{'b':'streak','B':'streak','w':'streak','r':'speck'}},
  'trelke':{'glow':'ewW','tex':{'h':'pore','H':'pore','u':'pore','m':'speck','M':'speck','r':'speck'}},
  'cherrufe':{'glow':'lLyOr','tex':{'b':'crack','B':'crack','h':'speck'}},
- 'kaleuche':{'glow':'yr','tex':{'h':'streak','H':'streak','s':'speck','S':'speck','f':'speck','F':'speck'}}}
+ 'kaleuche':{'glow':'ye','tex':{'h':'streak','H':'streak','s':'speck','S':'speck','f':'speck','F':'speck','b':'pore','q':'speck'}},
+ 'kuchifilu':{'glow':'e','tex':{'s':'pore','S':'pore','b':'speck','m':'speck'}},
+ 'piwuchen':{'glow':'e','tex':{'w':'streak','W':'streak','s':'pore','S':'pore'}},
+ 'wallipen':{'glow':'e','tex':{'w':'pore','W':'pore','h':'pore'}},
+ 'trawko':{'glow':'e','tex':{'c':'strand','C':'strand','h':'pore','b':'speck'}}}
 def hires(name,rows,pal):
     big=scale2x(rows);h=len(big);w=len(big[0]);cfg=HI[name]
     px=[[None]*w for _ in range(h)]
@@ -819,10 +1096,10 @@ def hires(name,rows,pal):
         out.append(r)
     return {v:k for k,v in cols.items()},out
 D={}
-BIG={'kowek':2,'mawek':2,'kamawetu':2,'basilisko':2,'kaleuche':2,'trelke':2,'witranalwe':2,'chonchon':2,'kutral':2,'pire':2,'kura':2,'nirivilu':2,'cherrufe':2}
-for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe2),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('nirivilu',nirivilu),('cherrufe',cherrufe2),('trelke',trelke),('ngen_lafken',ngen_lafken),('ngen_mawida',ngen_mawida),('ngen_pewen',ngen_pewen),('kowek',kowek),('mawek',mawek),('kamawetu',kamawetu),('basilisko',basilisko),('kaleuche',kaleuche),('ngen_kuruf',ngen_kuruf)]:
-    D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':{'witranalwe':'150,230,170','cherrufe':'255,130,50','trelke':'150,200,120','kaleuche':'190,220,200'}.get(name,0)}
-for name in ['witranalwe','trelke','cherrufe','kaleuche','ngen_lafken','ngen_mawida','ngen_pewen','ngen_kuruf']:
+BIG={'kuchifilu':2,'piwuchen':2,'wallipen':2,'trawko':2,'kowek':2,'mawek':2,'kamawetu':2,'basilisko':2,'kaleuche':2,'trelke':2,'witranalwe':2,'chonchon':2,'kutral':2,'pire':2,'kura':2,'nirivilu':2,'cherrufe':2}
+for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe2),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('nirivilu',nirivilu),('cherrufe',cherrufe2),('trelke',trelke),('ngen_lafken',ngen_lafken),('ngen_mawida',ngen_mawida),('ngen_pewen',ngen_pewen),('kowek',kowek),('mawek',mawek),('kamawetu',kamawetu),('basilisko',basilisko),('kaleuche',kaleuche),('ngen_kuruf',ngen_kuruf),('kuchifilu',kuchifilu),('piwuchen',piwuchen),('wallipen',wallipen),('trawko',trawko)]:
+    D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':{'witranalwe':'150,230,170','cherrufe':'255,130,50','trelke':'150,200,120','kaleuche':'190,220,200','kuchifilu':'170,200,120','piwuchen':'230,120,140','wallipen':'170,200,240','trawko':'190,220,140'}.get(name,0)}
+for name in ['witranalwe','trelke','cherrufe','kaleuche','ngen_lafken','ngen_mawida','ngen_pewen','ngen_kuruf','kuchifilu','piwuchen','wallipen','trawko']:
     fr=[];pal=None
     for f in D[name]['f']:
         p,rows=hires(name,f,PAL[name]);fr.append((p,rows))

@@ -125,7 +125,9 @@ function shop(where){
     },true,true);
   }
 }
-function ngenTalk(){say([L('Ngen-lafken','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")])}
+function ngenTalk(){const ls=[L('Ngen-lafken','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")];
+  if(!S.flags.sb1)ls.push(N('«Una cosa más... En los pantanos del sur de las dunas todavía se esconde un wekufü muy viejo. Donde el barro burbujea, junto al agua del este, escarba. Pero ve preparado: solo las palabras justas rompen sus sellos.»','"One more thing... In the marshes south of the dunes a very old wekufü still hides. Where the mud bubbles, by the eastern water, dig. But go prepared: only the right words break its seals."'));
+  say(ls)}
 function fireSave(){
   S.hp=maxHP();S.sp=SPMAX;S.save={map:CUR,x:P.x,y:P.y};persist();sfx('heal');
   say([L('','Kütral mew ürkütun.','Descansas junto al kütral. Tus piwke y tu newen especial se recuperan por completo, y tu camino queda guardado.','You rest by the fire. Your hearts and your special newen are fully restored, and your journey is saved.')]);
@@ -654,6 +656,18 @@ function kulonBush(x,y){
 
 /* ---------- Nagche overworld puzzles ---------- */
 function digFind(dk,dv){
+  if(dv&&dv.what==='sboss'){
+    if(S.flags[dv.flag])return say([N('Aquí ya no se mueve nada. La tierra está tranquila.','Nothing stirs here any more. The earth is at peace.')]);
+    const pre={kuchifilu:[N('El barro empieza a burbujear... y un chancho con cuerpo de culebra emerge chorreando lodo: ¡el Küchifilu!','The mud starts to bubble... and a pig with a snake\'s body rises dripping slime: the Küchifilu!'),
+        N('Tres sellos de luz lo protegen. El primero susurra: «¡Duérmete!»','Three seals of light protect it. The first whispers: «Sleep!»')],
+      piwuchen:[N('De la cima baja un silbido agudo. Una culebra con alas de murciélago cae del cielo: ¡el Piwüchen!','A shrill whistle comes down from the summit. A snake with bat wings drops from the sky: the Piwüchen!'),
+        N('Tres sellos de luz lo protegen. El primero susurra: «¡Baja!»','Three seals of light protect it. The first whispers: «Come down!»')],
+      wallipen:[N('El agua helada del ojo de agua se agita. Una criatura deforme, mitad oveja y mitad ternero, sale arrastrando las patas: ¡el Waillepeñ!','The icy pool stirs. A misshapen creature, half sheep and half calf, drags itself out: the Waillepeñ!'),
+        N('Tres sellos de luz lo protegen. El primero susurra: «¡Ten frío!»','Three seals of light protect it. The first whispers: «Be cold!»')],
+      trawko:[N('Un hacha de piedra se clava en un tronco, a un palmo de tu cabeza. Del helecho sale un hombrecito retorcido con sombrero de fibra: ¡el Trawko!','A stone axe thuds into a trunk, a hand\'s width from your head. Out of the ferns steps a twisted little man in a fiber hat: the Trawko!'),
+        N('Tres sellos de luz lo protegen. El primero susurra: «¡Sal!»','Three seals of light protect it. The first whispers: «Come out!»')]}[dv.boss];
+    return say(pre,()=>startBattle([dv.boss],{boss:1,sflag:dv.flag}));
+  }
   S.flags['dig:'+CUR+':'+dk]=1;
   if(dv&&dv.what==='pali'){S.flags.laf_palid=1;S.gold+=20;persist();sfx('lvl');
     return say([N('Entre el pasto alto aparece una bola de madera pulida: ¡la pali!','In the tall grass you find a polished wooden ball: the pali!'),
