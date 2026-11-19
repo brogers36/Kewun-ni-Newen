@@ -697,6 +697,9 @@ function digFind(dk,dv){
   if(dv&&dv.what==='pichun'){S.flags.puel_pichd=1;S.gold+=20;persist();sfx('lvl');
     return say([N('Entre el pasto pisado aparece una pluma larga y gris, atada con un hilo rojo: ¡la pluma de choyke!','In the trampled grass you find a long grey feather tied with a red thread: the choyke plume!'),
       L('','Choyke pichuñ!','La pluma del niño del lof. Te dará las gracias... y encuentras epu mari (20) ngülliw enterrados debajo.','The boy\'s plume. He will thank you... and you find epu mari (20) ngülliw buried beneath it.')]);}
+  if(dv&&dv.what==='pearl'){S.flags.ch_pearl=1;persist();sfx('lvl');
+    return say([N('Escarbas en la arena del fondo... y una luz blanca y redonda te mira desde abajo: ¡la lüq kura, la perla del pequeño chumpall!','You dig in the sand of the deep... and a round white light looks up at you: the lüq kura, the little chumpall\'s pearl!'),
+      L('','Lüq kura!','La perla canta bajito en tu mano. Llévasela a su dueño, en los jardines.','The pearl sings softly in your hand. Take it back to its owner, in the gardens.')]);}
   if(dv&&dv.what==='trutruka'){S.gear.trutruka=1;persist();sfx('lvl');
     return say([N('Entre los juncos mojados aparece una larga corneta de coligüe con un cuerno en la punta...','Among the wet reeds appears a long colihue horn with a cow horn at its tip...'),
       L('','Trutruka!','¡Encontraste la trutruka! En las peleas podrás tocarla: su sonido aturde a todos los wekufü (una vez por pelea). Cuéntale al trutrukatufe.','You found the trutruka! In battle you can blow it: its blast stuns all the wekufü (once per fight). Tell the trutrukatufe.')]);}
@@ -1047,8 +1050,10 @@ function kona5Talk(){
 }
 function freedN(){return ['gm1','gm2','gm3','gm4','gm5'].filter(f=>S.flags[f]).length}
 function ngoymanTalk(){
-  if(S.flags.won)return say([L('Kushe ñi am','Kom mapu konümpatuy. Chaltu may, '+nm()+'.','Toda la tierra vuelve a recordar. Gracias, '+nm()+'.','All the land remembers again. Thank you, '+nm()+'.'),
-    N('La figura de niebla ya casi no se ve: donde estaba, crece pasto nuevo. «Las tierras robadas siguen ahí, al oeste, si quieres volver a caminarlas. Y los que viven en ellas te recordarán siempre.»','The fog figure is barely visible now: where it stood, new grass is growing. "The stolen lands are still there, to the west, if you want to walk them again. And those who live in them will remember you always."')]);
+  if(S.flags.won)return say([L('Kushe ñi am','Kom mapu tukulpaturkey. Chaltu may, '+nm()+'.','Toda la tierra vuelve a recordar. Gracias, '+nm()+'.','All the land remembers again. Thank you, '+nm()+'.'),
+    N('La figura de niebla ya casi no se ve: donde estaba, crece pasto nuevo. «Las tierras robadas siguen ahí, al oeste, si quieres volver a caminarlas. Y los que viven en ellas te recordarán siempre.»','The fog figure is barely visible now: where it stood, new grass is growing. "The stolen lands are still there, to the west, if you want to walk them again. And those who live in them will remember you always."')]
+    .concat(!S.flags.chboss?[N('«Y escucha: en el lago williche, junto a la isla, hay un remolino que canta. Los chumpall, la gente del agua, necesitan ayuda. Baja con respeto.»','"And listen: in the Williche lake, beside the island, there is a whirlpool that sings. The chumpall, the water people, need help. Go down with respect."')]:[])
+    .concat(secretsDone()?[N('Junto al kütral del umbral brilla un portal tejido de luz: te llevará de vuelta a Santiago, la waria donde naciste. Allá también te necesitan.','Beside the threshold fire glows a portal woven of light: it will take you back to Santiago, the waria where you were born. They need you there too.')]:[]));
   const n=freedN();
   const ls=[L('Kushe ñi am','Akuymi, pichi weche... Afpun rüpü mew akuymi.','Llegaste... Llegaste al final del camino.','You have come... You have come to the end of the road.'),
     N('La figura es apenas niebla con forma de persona. Pero te mira con un cariño muy viejo, y la niebla no se atreve a tocarla.','The figure is barely fog in the shape of a person. But it looks at you with a very old tenderness, and the fog does not dare touch it.'),
@@ -1148,4 +1153,160 @@ function gPuelTalk(){
      {q:L('Werken','Amutu___ ("dicen que se fue")','"Dicen que se fue".','"They say he went away".'),o:['amutuy','amuturkey','amutuan'],a:'amuturkey'}],
     'el werken','the werken','Antes de irse te deja un lawen y kayu mari (60) ngülliw.','Before leaving he gives you a lawen and kayu mari (60) ngülliw.',
     ()=>{S.items.lawen++;S.gold+=60});
+}
+
+
+/* ================= MÜNCHE LAFKEN: the chumpall ================= */
+function chGardenTalk(){
+  const en=S.gloss==='en';
+  if(S.flags.ch1)return say([L('Chumpall','Taiñ tukukawe mongeley. Chaltu may!','Nuestro jardín está vivo. ¡Gracias!','Our garden is alive. Thank you!')]);
+  const qs=[{q:L('Chumpall','Chem am "ko"?','¿Qué es "ko"?','What is "ko"?'),o:[en?'water':'agua',en?'fire':'fuego',en?'stone':'piedra'],a:en?'water':'agua'},
+    {q:L('Chumpall','Chem am "challwa"?','¿Qué es "challwa"?','What is "challwa"?'),o:[en?'bird':'pájaro',en?'fish':'pescado',en?'wave':'ola'],a:en?'fish':'pescado'},
+    {q:L('Chumpall','Chem am "lafken"?','¿Qué es "lafken"?','What is "lafken"?'),o:[en?'the sea, the lake':'el mar, el lago',en?'the rain':'la lluvia',en?'the river':'el río'],a:en?'the sea, the lake':'el mar, el lago'}];
+  say([L('Chumpall','Mari mari, wenüy. Iñche chumpall ngen.','Hola, amiga o amigo. Yo soy chumpall.','Hello, friend. I am a chumpall.'),
+    N('La chumpall jardinera cuida huertas de algas y corales. Desde que llegó el Llufü Filu, sus plantas olvidan sus nombres... y sin nombre, se marchitan. Devuélveselos.','The chumpall gardener tends beds of kelp and coral. Since the Llufü Filu came, her plants forget their names... and without a name, they wither. Give the names back.')],()=>ask(0));
+  function ask(i){
+    if(i>=qs.length){S.flags.ch1=1;S.items.lawen++;S.gold+=40;persist();sfx('lvl');
+      return say([praise(),L('Chumpall','Kom mongetuy!','¡Todo revive!','Everything comes back to life!'),N('Las algas se enderezan y los corales vuelven a brillar. Te da un lawen y meli mari (40) ngülliw.','The kelp straightens and the coral glows again. She gives you a lawen and meli mari (40) ngülliw.')])}
+    const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
+    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Chumpall','Fey no...','Eso no...','Not that...')],()=>ask(0))}},true,false)}
+}
+function chChildTalk(){
+  if(S.flags.ch2)return say([L('Pichi chumpall','Ñi lüq kura! Komütufinge!','¡Mi perla! ¡Mírala!','My pearl! Look at it!')]);
+  if(S.flags.ch_pearl){S.flags.ch2=1;persist();sfx('lvl');
+    return gainPiwke([L('Pichi chumpall','Ñi lüq kura! Chaltu may, chaltu may!','¡Mi perla! ¡Gracias, gracias!','My pearl! Thank you, thank you!'),
+      N('El pequeño chumpall abraza su perla y da tres volteretas en el agua. De la alegría, suelta algo rojo que llevaba guardado...','The little chumpall hugs his pearl and turns three somersaults in the water. In his joy, he lets go of something red he had been keeping...')]);}
+  if(S.flags.ch2q)return say([L('Pichi chumpall','Llufü mapu mew ñami... kuyum mew.','Se perdió en la fosa... en la arena.','It was lost in the trench... in the sand.'),
+    N('«Donde la arena está blanda, entre los dos abismos. Escarba y la encontrarás.»','"Where the sand is soft, between the two chasms. Dig and you will find it."')]);
+  S.flags.ch2q=1;persist();
+  say([L('Pichi chumpall','Ngümaley... Ñi lüq kura ñami.','(Está llorando.) Se me perdió mi lüq kura, mi piedra blanca.','(He is crying.) I lost my lüq kura, my white stone.'),
+    N('Es una perla que canta. Cuando el Llufü Filu pasó, la onda se la llevó a la fosa profunda, al este. Quedó enterrada en la arena blanda.','It is a pearl that sings. When the Llufü Filu passed, the wave carried it to the deep trench, to the east. It lies buried in the soft sand.'),
+    L('Pichi chumpall','Kintulelen, chaltu!','¡Búscamela, porfa!','Please find it for me!')]);
+}
+function chSingerTalk(){
+  const en=S.gloss==='en';
+  if(S.flags.ch3)return say([L('Chumpall ülkantufe','Taiñ ül wiñotuy. Chaltu may.','Nuestro canto volvió. Gracias.','Our song has returned. Thank you.')]);
+  const qs=[{q:N('La ola tiene que VENIR hacia la orilla. Díselo:','The wave must COME toward the shore. Tell it:'),o:['küpange','amutunge','umawtunge'],a:'küpange'},
+    {q:N('La ola tiene que IRSE de las huertas. Díselo:','The wave must GO AWAY from the gardens. Tell it:'),o:['küpange','amutunge','nepenge'],a:'amutunge'},
+    {q:N('El agua brava tiene que DORMIRSE. Díselo:','The rough water must SLEEP. Tell it:'),o:['tripange','lefnge','umawtunge'],a:'umawtunge'}];
+  say([L('Chumpall ülkantufe','Mari mari. Taiñ lafken ül ñamkiawi.','Hola. El canto de nuestro mar anda perdido.','Hello. The song of our sea has gone astray.'),
+    N('Los chumpall gobiernan el agua cantándole órdenes. Pero el Llufü Filu desordenó el ül, el canto. Ayúdala a ordenar las palabras del agua.','The chumpall govern the water by singing commands to it. But the Llufü Filu scrambled the ül, the song. Help her put the water\'s words back in order.')],()=>ask(0));
+  function ask(i){
+    if(i>=qs.length){S.flags.ch3=1;S.items.kofke++;S.gold+=40;S.xp+=4;persist();sfx('lvl');
+      return say([praise(),L('Chumpall ülkantufe','Taiñ ül wiñotuy!','¡Nuestro canto volvió!','Our song has returned!'),N('El agua de la fosa se aquieta un momento, escuchando. Te da un kofke y meli mari (40) ngülliw. +4 kimün.','The water of the trench goes still for a moment, listening. She gives you a kofke and meli mari (40) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+    const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
+    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Chumpall ülkantufe','Fey no...','Eso no...','Not that...')],()=>ask(0))}},true,false)}
+}
+function chQueenTalk(){
+  const en=S.gloss==='en';
+  if(S.flags.chboss)return say([L('Ñidol chumpall','Taiñ lafken montuy. Rumel taiñ wenüy ngeaymi.','Nuestro mar está a salvo. Serás nuestra amiga o amigo para siempre.','Our sea is safe. You will be our friend forever.'),
+    N('Los chumpall nadan en círculos a tu alrededor, contentos. La lafkenkura brilla tibia en tu mano.','The chumpall swim circles around you, happy. The lafkenkura glows warm in your hand.')]);
+  const ready=S.flags.ch1&&S.flags.ch2&&S.flags.ch3;
+  const ls=[L('Ñidol chumpall','Mari mari, wenüy. Iñche ñidol chumpall ngen.','Hola. Yo guío a los chumpall.','Hello. I lead the chumpall.'),
+    N('La ñidol de los chumpall tiene el pelo largo como corriente de agua. Habla despacio, con pena.','The chumpall leader has hair long as a water current. She speaks slowly, with sorrow.'),
+    L('Ñidol chumpall','Llufü Filu akuy. Taiñ challwa, taiñ tukukawe, taiñ ül: kom apümnieyew.','Llegó el Llufü Filu. Nuestros peces, nuestras huertas, nuestro canto: lo está destruyendo todo.','The Llufü Filu has come. Our fish, our gardens, our song: it is destroying everything.')];
+  if(!ready){ls.push(N('«Antes de enfrentarlo, ayuda a mi gente: la jardinera de las huertas, el pequeño de la perla y la cantora de la fosa. Cuando los tres estén bien, cantaremos contigo.»','"Before facing it, help my people: the gardener of the beds, the little one of the pearl, and the singer of the trench. When all three are well, we will sing with you."'));
+    return say(ls);}
+  ls.push(N('«Ayudaste a los tres. Ahora los chumpall cantaremos contigo. El Llufü Filu duerme bajo este salón: tiene cinco formas, y con cada una que caiga, uno de nuestros cantores te levantará. ¿Lo despertamos?»','"You helped all three. Now we chumpall will sing with you. The Llufü Filu sleeps beneath this hall: it has five forms, and as each one falls, one of our singers will lift you up. Shall we wake it?"'));
+  say(ls,()=>choose(L('Ñidol chumpall','Weychayaiñ?','¿Peleamos juntos?','Shall we fight together?'),
+    [{m:'May, weychayaiñ!',g:en?'Yes, together!':'¡Sí, juntos!',v:1},{m:'Petu pepikawlan',g:en?'Not yet':'Todavía no',v:0}],v=>{
+    if(!v)return say([L('Ñidol chumpall','Küme rakiduamnge. Faw müleiñ.','Piénsalo. Aquí estaremos.','Think it over. We will be here.')]);
+    say([N('Los chumpall forman un círculo y golpean el agua con las palmas, todos a la vez. El suelo del salón tiembla... y de la fosa sube algo enorme, anillo tras anillo.','The chumpall form a circle and strike the water with their palms, all at once. The floor of the hall trembles... and out of the trench rises something enormous, coil after coil.'),
+      N('El Llufü Filu se esconde en el agua oscura. Lo que se esconde... sale cuando se le dice.','The Llufü Filu hides in the dark water. What hides... comes out when it is told to.')],
+      ()=>startBattle(['llufu1'],{boss:1,chain:'llufu'}));
+  },true,true));
+}
+
+/* ================= SANTIAGO: the return ================= */
+function secretsDone(){return !!(S.flags.sb1&&S.flags.sb2&&S.flags.sb3&&S.flags.sb4&&S.flags.sb5&&S.flags.sb6&&S.flags.epu_won&&S.flags.chboss)}
+function portalMenu(){
+  const en=S.gloss==='en',toStgo=M.region!=='santiago';
+  choose(L('','Wülngiñ','Un portal de luz tranquila, tejido como un trariwe.','A portal of calm light, woven like a trariwe.'),
+    [{m:toStgo?'Santiago mew amuan':'Wallmapu mew amuan',g:toStgo?(en?'Cross to Santiago':'Cruzar a Santiago'):(en?'Return to Wallmapu':'Volver a Wallmapu'),v:1},
+     {m:'Mülekan faw',g:en?'Stay here':'Quedarme aquí',v:0}],v=>{
+    if(!v)return;
+    sfx('cast');
+    if(toStgo){if(!S.flags.stgo_seen){S.flags.stgo_seen=1;persist();
+      return say([N('Cruzas la luz... y el aire cambia: bocinas lejanas, olor a pan y a micro. Estás de vuelta donde naciste: Santiago, la waria.','You cross the light... and the air changes: distant horns, the smell of bread and buses. You are back where you were born: Santiago, the waria.'),
+        N('Pero algo es distinto: en una plaza de la ciudad, alguien pintó un letrero en mapudungun. La lengua te siguió hasta acá. Ayuda a los wariache a hacerla crecer.','But something is different: in a city plaza, someone has painted a sign in Mapudungun. The language followed you here. Help the wariache make it grow.')],()=>loadMap('s_plaza',3,11));}
+      loadMap('s_plaza',3,11)}
+    else loadMap('ngoyman',4,3)},true,true);
+}
+function stDone(){return ['st1','st2','st3','st4','st5'].filter(f=>S.flags[f]).length}
+function stReward(flag,give,lines){
+  give();S.flags[flag]=1;
+  const all=stDone()===5;if(all)S.flags.stgo_done=1;
+  persist();sfx('lvl');
+  return say(lines.concat(all?[
+    N('Y entonces lo notas: en la plaza, en la población, en la ruka urbana... la gente se saluda en mapudungun. Chiquillos contando en el paradero. Una abuela enseñando. Un mural que dice MAPU.','And then you notice it: in the plaza, in the neighborhood, in the urban ruka... people greet each other in Mapudungun. Kids counting at the bus stop. A grandmother teaching. A mural that says MAPU.'),
+    L('','Waria mew ka mongeley taiñ dungun!','¡También en la ciudad vive nuestra lengua!','In the city, too, our language lives!'),
+    N('Santiago también es Wallmapu cuando se habla mapudungun. Tu viaje empezó aquí... y aquí vuelve a empezar, cada vez que alguien dice "mari mari".','Santiago is Wallmapu too when Mapudungun is spoken. Your journey began here... and here it begins again, every time someone says "mari mari".')]:[]));
+}
+function stKidsTalk(){
+  const en=S.gloss==='en';
+  if(S.flags.st1)return say([L('Pichikeche','Kiñe, epu, küla, meli, kechu!','¡Uno, dos, tres, cuatro, cinco!','One, two, three, four, five!'),N('Los niños cuentan a gritos, saltando la cuerda.','The kids count at the top of their lungs, jumping rope.')]);
+  const qs=[{q:L('Pichiche','"Epu"... ¿cuánto es?','"Epu", ¿cuánto es?','"Epu", how many is that?'),o:['2','3','5'],a:'2'},
+    {q:L('Pichiche','¿Qué viene después de "küla"?','¿Qué viene después de "küla" (3)?','What comes after "küla" (3)?'),o:['meli','kechu','mari'],a:'meli'},
+    {q:L('Pichiche','"Mari"... ¿cuánto es?','"Mari", ¿cuánto es?','"Mari", how many is that?'),o:['5','10','100'],a:'10'}];
+  say([L('Pichiche','Tío, tía! ¿Sabís contar en mapudungun?','¡Tío, tía! ¿Sabís contar en mapudungun?','Hey! Do you know how to count in Mapudungun?'),
+    N('Los niños de la plaza quieren saltar la cuerda contando en mapudungun, pero se les enredan los números. Enséñales.','The plaza kids want to jump rope counting in Mapudungun, but the numbers get tangled. Teach them.')],()=>ask(0));
+  function ask(i){
+    if(i>=qs.length)return stReward('st1',()=>{S.gold+=20},[praise(),L('Pichikeche','Kiñe, epu, küla...!','¡Uno, dos, tres...!','One, two, three...!'),N('Los niños saltan la cuerda contando en mapudungun, cada vez más fuerte. Te dan epu mari (20) ngülliw de sus alcancías, muy serios.','The kids jump rope counting in Mapudungun, louder and louder. They give you epu mari (20) ngülliw from their piggy banks, very serious.')]);
+    const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
+    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Pichiche','¿Seguro?...','¿Seguro?...','Are you sure?...')],()=>ask(0))}},true,false)}
+}
+function stMuralTalk(){
+  const en=S.gloss==='en';
+  if(S.flags.st3)return say([L('Muralista','¡Quedó hermoso! Chaltu may.','¡Quedó hermoso! Chaltu may.','It turned out beautiful! Chaltu may.'),N('El mural brilla con palabras enormes: KO · MAPU · CHE · NEWEN.','The mural glows with huge words: KO · MAPU · CHE · NEWEN.')]);
+  const qs=[{q:N('Para el agua del mural: ¿cuál es la palabra?','For the water in the mural: which is the word?'),o:['ko','kura','kütral'],a:'ko'},
+    {q:N('Para la tierra: ¿cuál es la palabra?','For the land: which is the word?'),o:['mawün','mapu','manke'],a:'mapu'},
+    {q:N('Para la gente: ¿cuál es la palabra?','For the people: which is the word?'),o:['che','chem','chew'],a:'che'}];
+  say([L('Muralista','¡Hola! Estoy pintando un mural para la población.','¡Hola! Estoy pintando un mural para la población.','Hi! I am painting a mural for the neighborhood.'),
+    N('Quiere escribir las palabras grandes en mapudungun, pero no está segura de cuáles son. Ayúdala a elegirlas.','She wants to paint the big words in Mapudungun, but she is not sure which ones they are. Help her choose.')],()=>ask(0));
+  function ask(i){
+    if(i>=qs.length)return stReward('st3',()=>{S.gold+=30},[praise(),L('Muralista','¡Eso es! KO... MAPU... CHE...','¡Eso es! KO... MAPU... CHE...','That is it! KO... MAPU... CHE...'),N('Pinta las palabras enormes, de colores. La gente se para a mirarlas y las lee en voz alta. Te da küla mari (30) ngülliw.','She paints the words huge, in bright colors. People stop to look and read them out loud. She gives you küla mari (30) ngülliw.')]);
+    const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
+    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Muralista','Mmm, no me suena...','Mmm, no me suena...','Hmm, that does not sound right...')],()=>ask(0))}},true,false)}
+}
+function stAbuelaTalk(){
+  if(S.flags.st2)return say([L('Papay','Tañi pu füchakeche ñi dungun, tañi pu pichikeche ñi dungun.','La lengua de mis abuelos, la lengua de mis nietos.','The language of my grandparents, the language of my grandchildren.'),N('La papay sonríe, tejiendo. Sus nietos practican el pentukuwün en un rincón de la ruka.','The papay smiles, weaving. Her grandchildren practice the pentukuwün in a corner of the ruka.')]);
+  const steps=[
+    {q:L('Papay','A ver: te pregunto "Chumleymi?". ¿Qué respondes?','A ver: te pregunto "¿cómo estás?". ¿Qué respondes?','Let me ask you: "How are you?". What do you answer?'),
+     o:[{m:'Kümelen, chaltu. Eymi kay?',ok:1},{m:'Kümeleymi.'},{m:'Chew tuwimi?'}]},
+    {q:L('Papay','"Chew tuwimi?" te pregunto ahora.','Ahora te pregunto: "¿De dónde vienes?"','Now I ask you: "Where are you from?"'),
+     o:[{m:'Santiago waria mew tuwün.',ok:1},{m:'Santiago mew tuwimi.'},{m:'Kümelen.'}]},
+    {q:L('Papay','Y al final: "Chumleyngün tami pu che?"','Y al final: "¿Cómo está tu gente?"','And last: "How are your people?"'),
+     o:[{m:'Kümeleyngün.',ok:1},{m:'Kümelen.'},{m:'Kümeleymi.'}]}];
+  say([L('Papay','Konpange! Quiero enseñarles el pentukuwün a mis nietos.','¡Pasa! Quiero enseñarles el pentukuwün a mis nietos.','Come in! I want to teach my grandchildren the pentukuwün.'),
+    N('«Pero hace tanto que no lo hago... Practica conmigo, para que me salga de corrido y ellos lo escuchen bien hecho.»','"But it has been so long... Practice with me, so it flows and they hear it done right."')],()=>step(0));
+  function step(i){
+    if(i>=steps.length)return stReward('st2',()=>{S.items.kofke+=2},[praise(),L('Papay','Fey tüfey! Kümey, kümey.','¡Eso es! Bien, bien.','That is it! Good, good.'),N('Los nietos repiten el saludo, primero bajito, después a gritos. La papay te da epu kofke recién hechos.','The grandchildren repeat the greeting, first in a whisper, then at the top of their lungs. The papay gives you two fresh kofke.')]);
+    const st2=steps[i];const opts=st2.o.map((o,k)=>({m:o.m,v:k}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
+    choose(st2.q,opts,v=>{if(st2.o[v].ok){sfx('ok');step(i+1)}else{sfx('bad');say([L('Papay','Mmm... piensa otra vez, pichiche.','Mmm... piensa otra vez.','Hmm... think again.')],()=>step(i))}},true,false)}
+}
+function stLiderTalk(){
+  const en=S.gloss==='en';
+  if(S.flags.st4)return say([L('Longko waria','Trawün müley! Kom pu che küpay.','¡Hay encuentro! Viene toda la gente.','There is a gathering! Everyone is coming.'),N('La ruka urbana está llena: clases, telar, palin en la cancha de al lado. El werken anota nombres y nombres.','The urban ruka is full: classes, weaving, palin on the field next door. The werken writes down name after name.')]);
+  const qs=[{q:N('Para abrir el trawün ante toda la gente, ¿qué se dice?','To open the gathering before everyone, what do you say?'),o:['Mari mari kom pu che','Pewkayal','Fey no'],a:'Mari mari kom pu che'},
+    {q:N('Para dar las gracias a los que vinieron:','To thank those who came:'),o:['Chaltu may pu che','Amutunge','Kümelen'],a:'Chaltu may pu che'},
+    {q:N('Para invitarlos a hablar, uno por uno:','To invite them to speak, one by one:'),o:['Dungunge, chaltu','Umawtunge','Lefnge'],a:'Dungunge, chaltu'}];
+  say([L('Longko waria','Mari mari. Estamos organizando un trawün, un gran encuentro.','Mari mari. Estamos organizando un trawün, un gran encuentro.','Mari mari. We are organizing a trawün, a great gathering.'),
+    N('El longko de la ruka urbana quiere abrir el encuentro en mapudungun, como corresponde. Ayúdalo con las palabras del trawün.','The leader of the urban ruka wants to open the gathering in Mapudungun, as is proper. Help him with the words of the trawün.')],()=>ask(0));
+  function ask(i){
+    if(i>=qs.length)return stReward('st4',()=>{S.items.lawen++},[praise(),L('Longko waria','Mari mari kom pu che!','¡Mari mari a toda la gente!','Mari mari to all the people!'),N('Lo dice fuerte, de corrido, y la ruka entera responde. Te da un lawen del huerto del centro.','He says it loud and clear, and the whole ruka answers. He gives you a lawen from the garden of the center.')]);
+    const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
+    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Longko waria','Mmm, no es eso...','Mmm, no es eso...','Hmm, that is not it...')],()=>ask(0))}},true,false)}
+}
+function stTeenTalk(){
+  const en=S.gloss==='en';
+  if(S.flags.st5)return say([L('Weche','Mari mari! Iñche... iñche wariache mapuche ngen.','¡Mari mari! Yo... yo soy mapuche de la ciudad.','Mari mari! I... I am a Mapuche of the city.'),N('Lo dice fuerte, sin agachar la cabeza. Le queda bien.','He says it loud, without lowering his head. It suits him.')]);
+  const qs=[{q:N('El weche dice: "me da vergüenza, lo hablo mal". ¿Qué palabra le recuerdas? La fuerza:','The teen says: "I am embarrassed, I speak it badly". Which word do you remind him of? Strength:'),o:['newen','ngoyman','wekufü'],a:'newen'},
+    {q:N('"¿Y si me equivoco?" Le dices que equivocarse también es...','"What if I get it wrong?" You tell him that getting it wrong is also...'),o:[en?'learning (kimün)':'aprender (kimün)',en?'forgetting (ngoyman)':'olvidar (ngoyman)',en?'running (lef)':'correr (lef)'],a:en?'learning (kimün)':'aprender (kimün)'},
+    {q:N('"¿Y yo puedo ser mapuche, si nací aquí?" Tú naciste aquí también. ¿Qué eres?','"Can I even be Mapuche, if I was born here?" You were born here too. What are you?'),o:[en?'wariache: Mapuche of the city':'wariache: mapuche de la ciudad',en?'a stranger':'un extraño',en?'a wekufü':'un wekufü'],a:en?'wariache: Mapuche of the city':'wariache: mapuche de la ciudad'}];
+  say([L('Weche','...¿Tú hablas mapudungun? Yo quiero, pero...','...¿Tú hablas mapudungun? Yo quiero, pero...','...Do you speak Mapudungun? I want to, but...'),
+    N('Un joven de la población te mira de reojo. Quiere aprender, pero le da vergüenza. Tú también empezaste sabiendo dos palabras. Dile lo que aprendiste en el camino.','A teenager from the neighborhood looks at you sideways. He wants to learn, but he is embarrassed. You also started knowing two words. Tell him what you learned on the road.')],()=>ask(0));
+  function ask(i){
+    if(i>=qs.length)return stReward('st5',()=>{S.piwke++;if(S.piwke%4===0)S.hp=Math.min(maxHP(),S.hp+HPQ)},[praise(),L('Weche','Ya... voy a ir a la ruka el jueves.','Ya... voy a ir a la ruka el jueves.','Okay... I will go to the ruka on Thursday.'),N('Sonríe por primera vez, y practica bajito: "mari mari... mari mari...". Te regala algo que encontró y guardaba: un pedazo de piwke, rojo y brillante.','He smiles for the first time and practices under his breath: "mari mari... mari mari...". He gives you something he found and kept: a piwke piece, red and shining.')]);
+    const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
+    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Weche','...no sé si eso me ayuda.','...no sé si eso me ayuda.','...I am not sure that helps.')],()=>ask(0))}},true,false)}
 }

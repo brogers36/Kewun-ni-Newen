@@ -84,6 +84,7 @@ function onStep(){
   if(sb&&!S.flags[sb.flag]&&!(sb.req&&!S.flags[sb.req])&&sb.t.indexOf(P.x+','+P.y)>=0)return sbossWake(sb);
   const c=grid[P.y][P.x];P.bump=0;
   if(c==='A'){warpMenu();return}
+  if(c==='@'){portalMenu();return}
   if(c==='S'){const st=M.stairs;if(!st)return;if(st.req&&!S.flags[st.req]){say(st.reqMsg);return}sfx('door');loadMap(st.to,st.x,st.y);return}
   if(c==='P'){setTileFlag(P.x,P.y);gainPiwke([]);return}
   if(c==='k'){setTileFlag(P.x,P.y);S.keys++;sfx('pick');persist();say([N('¡Encontraste una llave pequeña!','You found a small key!')]);return}
@@ -128,6 +129,9 @@ function interact(){
   if(c==='Y')return say([N('El paliwe, la cancha de palin. Mejor no interrumpir el partido.','The paliwe, the palin field. Better not interrupt the game.')]);
   if(c==='X')return say([N('Un remolino de viento te empuja hacia atrás. Necesitas el newen de Ngen-kürüf'+(M.region==='williche'?'.':' (otra región).'),'A whirl of wind pushes you back. You need the newen of Ngen-kürüf'+(M.region==='williche'?'.':' (another region).'))]);
   if(c==='v'){const what=M.dive&&M.dive[k];
+    if(what==='chumpall'){
+      if(!S.flags.won)return say([N('Un remolino quieto y muy hondo. Desde el fondo sube un canto bajito... pero el agua todavía no te deja entrar.','A still, very deep whirlpool. From the bottom rises a soft singing... but the water will not let you in yet.')]);
+      return say([N('El remolino canta. Con el newen de Ngen-lafken te sumerges, bajas y bajas... y el lago se abre en un mundo de luz verde: Münche lafken, la tierra de los chumpall.','The whirlpool sings. With the newen of Ngen-lafken you dive, down and down... and the lake opens into a world of green light: Münche lafken, the land of the chumpall.')],()=>{sfx('cast');loadMap('u_grotto',5,3)});}
     if(!S.flags.dive)return say([N('Un remolino oscuro en el agua. Es muy profundo para bajar... por ahora.','A dark whirlpool in the water. It is too deep to go down... for now.')]);
     if(S.flags['dive:'+CUR])return say([N('El agua está tranquila.','The water is calm.')]);
     S.flags['dive:'+CUR]=1;persist();

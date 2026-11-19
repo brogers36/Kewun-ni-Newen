@@ -48,7 +48,10 @@ const MCHK=[
   {m:'Ngoyman · tierras robadas',es:'Dentro de la niebla: cinco cautivos esperan en cinco tierras grises',en:'Inside the fog: five captives wait in five grey lands',lvl:26,at:['ngoyman',2,6],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone']},
   {m:'Ngoyman · puerta',es:'Los cinco cautivos liberados; ante la puerta del gran olvido',en:'All five captives freed; before the gate of the great forgetting',lvl:27,at:['g_wulngin',8,7],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands']},
   {m:'Ngoyman · kalku secreto',es:'La pampa robada: camina un paso al oeste, sobre la tierra agrietada',en:'The stolen plain: walk one step west, onto the cracked ground',lvl:27,at:['g_puel',25,8],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','sbosses']},
-  {m:'Ngoyman · jefe final',es:'El corazón de la niebla: Ti Fütra Ngoyman (tres formas)',en:'The heart of the fog: Ti Fütra Ngoyman (three forms)',lvl:28,at:['g_ngoyman',8,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','sbosses']}];
+  {m:'Ngoyman · jefe final',es:'El corazón de la niebla: Ti Fütra Ngoyman (tres formas)',en:'The heart of the fog: Ti Fütra Ngoyman (three forms)',lvl:28,at:['g_ngoyman',8,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','sbosses']},
+  {m:'Münche lafken · jardines',es:'Bajo el lago: los chumpall y sus problemas',en:'Under the lake: the chumpall and their troubles',lvl:28,at:['u_garden',3,7],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','finalwon']},
+  {m:'Münche lafken · jefe (5 formas)',es:'El salón de los chumpall: el Llufü Filu (cinco formas)',en:'The chumpall hall: the Llufü Filu (five forms)',lvl:29,at:['u_throne',8,5],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','finalwon','chq']},
+  {m:'Santiago · retorno',es:'Todos los secretos completos; el portal a la waria',en:'All secrets complete; the portal to the city',lvl:30,at:['ngoyman',4,3],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','finalwon','sbosses','epuwon','chq','chdone']}];
 const MSET={
   intro:s=>{s.flags.intro=1;s.roots.push('küpa')},
   pentu:s=>{Object.assign(s.flags,{pentu_prac:1,pentukun:1});s.roots.push('umawtu','nag');s.items.kulon+=2},
@@ -67,7 +70,11 @@ const MSET={
   puelcave:s=>{Object.assign(s.flags,{root_nepe:1,emini1:1,emini2:1,emini3:1,'pz:ed1':1,'pz:ed2':1});s.roots.push('nepe');s.items.lawen+=2},
   pueldone:s=>{Object.assign(s.flags,{ngen5:1,lelfun:1,boss5:1});s.pieces.push('puelche')},
   sbosses:s=>{Object.assign(s.flags,{sb1:1,sb2:1,sb3:1,sb4:1,sb5:1})},
-  ngoylands:s=>{Object.assign(s.flags,{gm1:1,gm2:1,gm3:1,gm4:1,gm5:1,gm_all:1,ngoy_open:1});s.pieces=s.pieces}};
+  ngoylands:s=>{Object.assign(s.flags,{gm1:1,gm2:1,gm3:1,gm4:1,gm5:1,gm_all:1,ngoy_open:1});s.pieces=s.pieces},
+  finalwon:s=>{Object.assign(s.flags,{won:1,bossF:1})},
+  chq:s=>{Object.assign(s.flags,{ch1:1,ch2:1,ch3:1,ch2q:1,ch_pearl:1})},
+  chdone:s=>{Object.assign(s.flags,{chboss:1});s.gear.lafkenkura=1},
+  epuwon:s=>{Object.assign(s.flags,{epu_won:1});s.gear.waiki=1}};
 function mBuild(c){
   const s=newState(HERO);s.pieces=[];
   for(const k of c.set)MSET[k](s);

@@ -4,7 +4,7 @@
 const PENSPOT=[[10,2],[12,3],[14,2],[11,3],[15,3]];
 let CUR='rupu',M=null,grid=null,ents=[],LAYERS=[],GT=null,PROPS=[],RUKAS=[],SCN=[];
 const P={x:1,y:6,fx:1,fy:6,ox:1,oy:6,t:0,moving:false,dir:'down',spd:.125};
-const WALK=new Set(['.',',','"','=','_','P','m','g','p','S','q','k','A','b']);
+const WALK=new Set(['.',',','"','=','_','P','m','g','p','S','q','k','A','b','@']);
 function inB(x,y){return x>=0&&y>=0&&x<M.w&&y<M.h}
 function walk(x,y){return inB(x,y)&&WALK.has(grid[y][x])}
 function entAt(x,y,skip){return ents.find(e=>e!==skip&&e.x===x&&e.y===y)}
@@ -34,9 +34,12 @@ const PALS={
   ngoypew:{G0:'#303a38',G1:'#46544e',G2:'#5c6c64',G3:'#84948c',GY:'#6a7c72',GL:'#98a8a0',GM:'#7a8c82',S0:'#8e96a2',S1:'#b2bac4',S2:'#ccd2da',S3:'#e4e8ee',D1:'#767270',D2:'#8c8886',D3:'#a6a2a0',FR:'#a0929a',FY:'#c2bca0',FW:'#f0f0f4'},
   ngoywil:{G0:'#243430',G1:'#384c44',G2:'#4a6056',G3:'#70877a',GY:'#587064',GL:'#84988c',GM:'#667c70',S0:'#767a72',S1:'#9aa096',S2:'#b4b8ac',S3:'#ccd0c4',D1:'#5e584c',D2:'#746e60',D3:'#8e887a',FR:'#8e8290',FY:'#b0ac84',FW:'#e2e6dc'},
   ngoypuel:{G0:'#4a4630',G1:'#645e42',G2:'#7c7654',G3:'#9e9878',GY:'#8a8462',GL:'#aea890',GM:'#948e6e',S0:'#8e887a',S1:'#aea896',S2:'#c4beac',S3:'#d8d4c4',D1:'#7e7662',D2:'#948c76',D3:'#aaa28c',FR:'#9a8a84',FY:'#beb48e',FW:'#e8e6da'},
+  stgo:{C0:'#3a3a44',C1:'#5a5a66',C2:'#73737e',C3:'#8e8e98',CD:'#4a4a54',G0:'#1e4420',G1:'#2f6630',G2:'#428442',G3:'#6aa862',GY:'#4e8a4a',GL:'#80b878',GM:'#60a058',S0:'#7a7a80',S1:'#9a9aa2',S2:'#b2b2ba',S3:'#c8c8d0',D1:'#8a7050',D2:'#a28866',D3:'#bca380',FR:'#d84850',FY:'#f8d048',FW:'#ffffff'},
+  munche:{C0:'#083038',C1:'#114a56',C2:'#1a5e6c',C3:'#2a7a88',CD:'#0c3a44',G0:'#0a3a42',G1:'#11525c',G2:'#1a6c76',G3:'#2e919a',GY:'#207a84',GL:'#48aab2',GM:'#2a8690',S0:'#1e5e74',S1:'#2a7a92',S2:'#3996ae',S3:'#52b2c8',W0:'#041824',W1:'#082836',W2:'#0e3a4c',W3:'#165064',WF:'#2a7a92',D1:'#1a5a6a',D2:'#247486',D3:'#3290a2',FR:'#ff8a9a',FY:'#ffe9a0',FW:'#d8fbff'},
+  munchedeep:{C0:'#06242e',C1:'#0e3a48',C2:'#164c5c',C3:'#246478',CD:'#0a2e3a',G0:'#062830',G1:'#0a3a44',G2:'#104c58',G3:'#1c6874',GY:'#145866',GL:'#2a7e8c',GM:'#1a6472',S0:'#123e50',S1:'#1a5468',S2:'#246a80',S3:'#328298',W0:'#020e16',W1:'#041a26',W2:'#082634',W3:'#0e3444',WF:'#1a5468',D1:'#0e4050',D2:'#165264',D3:'#206678',FR:'#ff8a9a',FY:'#ffe9a0',FW:'#d8fbff'},
   ngoycave:{C0:'#10141a',C1:'#242c38',C2:'#323c4a',C3:'#4c5868',CD:'#1c242e'},
   niebla:{G0:'#3a4440',G1:'#4e5a54',G2:'#64726a',G3:'#8a988e',GY:'#708076',GL:'#9aa89e',GM:'#7a8a80',D1:'#5a5a52',D2:'#6e6e64',D3:'#88887c',FR:'#a8b8c0',FY:'#c8d8d0',FW:'#e8f4f0'}};
-const WALLS={ruka:['#6a4a26','#9a7444','#84603a','#3a2812','#140c04'],williche:['#34464e','#5e7a84','#4a626a','#1c2a30','#0a1214'],lafken:['#5a4430','#8a7058','#78604a','#3c2c20','#201810'],pewenche:['#2e2224','#5a4448','#463438','#1a1214','#0a0606'],puelmapu:['#4a3a22','#7a6240','#604c30','#2a2012','#120c04'],ngoyman:['#2e3a4a','#54667e','#425264','#1a222e','#0a0e14'],nagche:['#3c4c3e','#6e8a68','#5a7058','#243026','#0e160e']};
+const WALLS={ruka:['#6a4a26','#9a7444','#84603a','#3a2812','#140c04'],williche:['#34464e','#5e7a84','#4a626a','#1c2a30','#0a1214'],lafken:['#5a4430','#8a7058','#78604a','#3c2c20','#201810'],pewenche:['#2e2224','#5a4448','#463438','#1a1214','#0a0606'],puelmapu:['#4a3a22','#7a6240','#604c30','#2a2012','#120c04'],ngoyman:['#2e3a4a','#54667e','#425264','#1a222e','#0a0e14'],chumpall:['#0e4a56','#2a8a9a','#1a6a7a','#062a34','#02141a'],santiago:['#7e7e88','#b2b2bc','#9898a2','#44444e','#1c1c22'],nagche:['#3c4c3e','#6e8a68','#5a7058','#243026','#0e160e']};
 function applyPal(){Object.assign(PL,PL0);const p=PALS[M.pal];if(p)for(const k in p)PL[k]=C3(p[k])}
 function gtype(ch){if(ch==='~'||ch==='v')return'~';if(ch==='.'||ch===','||ch==='='||ch==='_'||ch==='%'||ch==='"'||ch==='Y'||ch==='b')return ch;if(ch==='T'||ch==='W'||ch==='f')return',';return M.floor}
 function gAt(x,y){if(x<0||y<0||x>=M.w||y>=M.h)return null;return GT[y][x]}
@@ -146,7 +149,7 @@ function buildLayers(){
 function drawGroundStatics(c){
   for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++){const ch=grid[y][x],X=x*T,Y=y*T;
     if(ch==='%'){const below=y+1<M.h?grid[y+1][x]:'%';
-      const WC=WALLS[M.wall||(M.region==='nagche'?'nagche':M.region==='pewenche'?'pewenche':M.region==='williche'?'williche':M.region==='puelmapu'?'puelmapu':M.region==='ngoyman'?'ngoyman':'lafken')];
+      const WC=WALLS[M.wall||(M.region==='nagche'?'nagche':M.region==='pewenche'?'pewenche':M.region==='williche'?'williche':M.region==='puelmapu'?'puelmapu':M.region==='ngoyman'?'ngoyman':M.region==='chumpall'?'chumpall':M.region==='santiago'?'santiago':'lafken')];
       if(below!=='%'){R(c,X,Y+5,16,11,WC[0]);R(c,X,Y+4,16,1,WC[1]);R(c,X,Y+5,16,1,WC[2]);
         for(let r=0;r<3;r++){const yy=Y+6+r*3+ (r===2?1:0),off=((r+x)%2)*4;R(c,X,yy+2,16,1,WC[3]);for(let k=0;k<3;k++)R(c,X+((off+k*7)%16),yy,1,2,WC[3])}
         R(c,X,Y+15,16,1,WC[4]);
@@ -174,7 +177,7 @@ function placeNear(x,y,isEnt){
 }
 const RFLAG={lafkenche:'ngen',nagche:'ngen2',pewenche:'ngen3',williche:'ngen4',puelmapu:'ngen5'};
 const awake=r=>!!S.flags[RFLAG[r]];
-const SONGSET={ngoyman:{battle:'ngoyBattle',boss:'ngoyBoss'},puelmapu:{puel:'puel',puelG:'puelG',lof:'puelLof',lofG:'puelLofG',cave:'puelCave',battle:'puelBattle',boss:'puelBoss',ngen:'puelNgen'},williche:{lof:'wilLof',lofG:'wilLofG',cave:'wilCave',battle:'wilBattle',boss:'wilBoss',ngen:'wilNgen'},pewenche:{nag:'pew',nagG:'pewG',lof:'pewLof',lofG:'pewLofG',cave:'pewCave',battle:'pewBattle',boss:'pewBoss',ngen:'pewNgen'},nagche:{lof:'nagLof',lofG:'nagLofG',cave:'nagCave',battle:'nagBattle',boss:'nagBoss',ngen:'nagNgen'}};
+const SONGSET={chumpall:{battle:'deepBattle',boss:'deepBoss'},ngoyman:{battle:'ngoyBattle',boss:'ngoyBoss'},puelmapu:{puel:'puel',puelG:'puelG',lof:'puelLof',lofG:'puelLofG',cave:'puelCave',battle:'puelBattle',boss:'puelBoss',ngen:'puelNgen'},williche:{lof:'wilLof',lofG:'wilLofG',cave:'wilCave',battle:'wilBattle',boss:'wilBoss',ngen:'wilNgen'},pewenche:{nag:'pew',nagG:'pewG',lof:'pewLof',lofG:'pewLofG',cave:'pewCave',battle:'pewBattle',boss:'pewBoss',ngen:'pewNgen'},nagche:{lof:'nagLof',lofG:'nagLofG',cave:'nagCave',battle:'nagBattle',boss:'nagBoss',ngen:'nagNgen'}};
 const rsong=n=>{const r=M&&M.region;return (SONGSET[r]&&SONGSET[r][n])||n};
 function mapSong(){const m=MAPS[CUR];if(m.ngenmap)return rsong(awake(m.region)?'ngen':'cave');const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'||s==='pew'||s==='wil'||s==='puel'))return rsong(s+'G');return rsong(s)}
 function loadMap(id,x,y,quiet){
@@ -190,6 +193,7 @@ function loadMap(id,x,y,quiet){
   if(S.flags.snow)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='^')grid[yy][xx]=M.floor;
   if(S.flags.bramble)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='Ñ')grid[yy][xx]=M.floor;
   if(S.flags.lelfun)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='D')grid[yy][xx]=M.floor;
+  if(id==='ngoyman'&&typeof secretsDone==='function'&&secretsDone())grid[2][3]='@';
   buildLayers();
   ents=[];P.x=x;P.y=y;
   const [px0,py0]=placeNear(x,y);P.x=px0;P.y=py0;P.fx=P.x;P.fy=P.y;P.moving=false;

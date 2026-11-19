@@ -96,7 +96,12 @@ const ET={
   kalku:{name:'Fütra Kalku',hp:200,atk:13,xp:260,gold:[350,350],boss:true,bs:92,spres:1,seals:['llüka','wiñotu','ñamkil']},
   ngoyman1:{name:'Ti Fütra Ngoyman',hp:150,atk:12,xp:0,gold:[0,0],boss:true,bs:120},
   ngoyman2:{name:'Ngoyman ñi piwke',hp:160,atk:13,xp:0,gold:[0,0],boss:true,bs:110,armor:1,spres:1},
-  ngoyman3:{name:'Rüf Fütra Ngoyman',hp:170,atk:14,xp:400,gold:[500,500],boss:true,bs:116,spres:1}};
+  ngoyman3:{name:'Rüf Fütra Ngoyman',hp:185,atk:16,xp:400,gold:[500,500],boss:true,bs:116,spres:1,thick:1},
+  llufu1:{name:'Llufü Filu',hp:120,atk:13,xp:0,gold:[0,0],boss:true,bs:104},
+  llufu2:{name:'Llufü Filu ñi foro',hp:130,atk:13,xp:0,gold:[0,0],boss:true,bs:106,armor:1},
+  llufu3:{name:'Llufü Filu ñi müpü',hp:140,atk:14,xp:0,gold:[0,0],boss:true,bs:108,twice:1},
+  llufu4:{name:'Llufü Filu ñi piwke',hp:150,atk:14,xp:0,gold:[0,0],boss:true,bs:104,spres:1},
+  llufu5:{name:'Rüf Llufü Filu',hp:160,atk:15,xp:380,gold:[500,500],boss:true,bs:112,thick:1}};
 
 /* ---------- items ---------- */
 const ITEMS={
@@ -109,7 +114,8 @@ const GEAR={
   makun:{m:'makuñ',es:'poncho: defensa +2',en:'poncho: defense +2',p:30},
   trariwe:{m:'trariwe',es:'faja tejida: +1 piwke máximo',en:'woven sash: +1 max heart',p:40},
   futrawino:{m:'fütra wiño',es:'wiño grande: fuerza +3',en:'big palin stick: strength +3',p:50},
-  waiki:{m:'Epunamun ñi waiki',es:'la lanza del Epunamun: fuerza +2',en:"Epunamun's spear: strength +2",p:0,hide:1}};
+  waiki:{m:'Epunamun ñi waiki',es:'la lanza del Epunamun: fuerza +2',en:"Epunamun's spear: strength +2",p:0,hide:1},
+  lafkenkura:{m:'lafkenkura',es:'la piedra del mar de los chumpall: recuperas 2 de newen cada turno de pelea',en:'the chumpall sea stone: you recover 2 newen every battle turn',p:0,hide:1}};
 function useItem(id){
   const it=ITEMS[id];if(!S.items[id])return null;S.items[id]--;const mx=maxHP();
   if(id==='kulon')S.hp=Math.min(mx,S.hp+8);

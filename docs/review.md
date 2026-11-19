@@ -177,3 +177,16 @@ Mapudungun y referentes culturales que conviene verificar:
 - **Epílogo**: "Kom mapu konümpatuy" (toda la tierra vuelve a recordar; konümpa- recordar + -tu- restaurativo): verificar. "AFPUY · FIN" (afpuy = llegó a su fin): ¿mejor "Afi"?
 - **K18**: respuesta dungun (la palabra) con pista "Ngoyman ñi kayñe" (enemiga del olvido).
 - Música de la región en estilo épico/metal (sierra distorsionada); los nombres internos: ngoy, ngoyBattle, ngoyBoss, ngoyFinal.
+
+
+## Tanda 8 · Final ampliado, Münche lafken y Santiago
+
+- **"Kom mapu tukulpaturkey!"** reemplaza a konümpatuy como texto final (tukulpa- + -tu- + -rke- + -y), por indicación tuya.
+- **Rüf Fütra Ngoyman**: ahora pega más fuerte, recibe mitad de daño (cuerpo de niebla espesa), invoca a cualquier enemigo del juego ("el olvido recuerda a tus enemigos") y alza barreras de luz: un sello con una orden al azar de las raíces que el jugador conoce. Las barreras y los sellos de todos los wekufü secretos ahora se VEN en batalla (anillos de luz giratorios).
+- **Película final** antes del mensaje de exploración libre: 4 paneles (la niebla deshaciéndose, los cinco ngen, las palabras cayendo sobre Santiago, la ruka con la kuku), canción nueva 'ending'.
+- **Münche lafken** (región secreta bajo el lago williche, entra por el remolino junto a la isla tras ganar el juego): los **chumpall** (Shumpall) como pueblo del agua, con jardinera, niño de la perla (lüq kura), cantora del ül y la ñidol. Verificar: chumpall como gente del agua benévola (en las fuentes el Shumpall a veces rapta; aquí son aliados), "Taiñ lafken montuy", "ülkantufe", "Kellumuyiñ".
+- **Llufü Filu** (jefe de 5 formas, inventado; llufü 'profundo'): verificar el nombre o sugerir otro. El jugador pelea CON los chumpall: curan cada 3 turnos y entre forma y forma un cantor restaura todo y hiere a la serpiente. Recompensa: **lafkenkura** (regenera 2 de newen por turno de pelea).
+- **Portal a Santiago**: aparece en el umbral cuando están todos los secretos (sb1-6, Epunamun, Llufü Filu). Región pacífica sin batallas: niños contando, mural KO·MAPU·CHE, la papay del pentukuwün, el longko del trawün ("Mari mari kom pu che", "Dungunge, chaltu"), y el weche avergonzado (tema: wariache, newen, kimün). Verificar las frases urbanas y el registro chileno ("¿Sabís contar?", "compita").
+- **Corazones**: tope subido de 2 a 4 filas (40 piwke) en ambos HUD.
+- Música ngoyman extendida: más compases y solos de guitarra sintetizada (sierra distorsionada) en ngoy, ngoyBattle, ngoyBoss y ngoyFinal (solo armonizado a dos voces).
+- Arreglo de diseño: al caer un jefe final o el Llufü Filu, sus invocados se desvanecen con él (antes la pelea seguía contra los esbirros).

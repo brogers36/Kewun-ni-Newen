@@ -2,9 +2,10 @@
    BATTLE
    ============================================================ */
 let B=null;
+const SUMMONP=Object.keys(ET).filter(k=>!ET[k].boss);
 function engage(e){
   if(grace>0||active)return;
-  const go=()=>startBattle(e.party,{ent:e,boss:e.boss,mini:e.mini,final:e.final});
+  const go=()=>startBattle(e.party,{ent:e,boss:e.boss,mini:e.mini,final:e.final,chain:e.chain});
   if(e.pre)say(e.pre,go);else go();
 }
 function relabel(){const cnt={},seen={};B.en.forEach(e=>cnt[e.t]=(cnt[e.t]||0)+1);
@@ -84,12 +85,12 @@ function doSpecial(k,tgt){
   const head=L(S.name,sp.m+'!',G(sp),G(sp));head.fx=()=>{sfx('cast');B.flash=12;B.shake=8};
   if(k==='lawen'){S.hp=Math.min(maxHP(),S.hp+8);S.curse=0;fx.push('Recuperas dos piwke.');fxe.push('You recover two hearts.');head.fx=()=>{sfx('heal');spark(60,30,'#80ff90',16)}}
   else{targets=k==='wino'?[tgt]:aliveE();
-    let burnT=0;for(const e of targets){if(e.hidden){fx.push(e.label+' está escondido en la niebla: no lo alcanzas.');fxe.push(e.label+' is hidden in the fog: you cannot reach it.');continue}let d=k==='wino'?atk()*3+rnd(3):Math.round(atk()*1.5)+rnd(3);if(e.tall)d=Math.max(1,Math.round(d/3));if(e.armor)d=Math.max(1,Math.round(d/2));if(ET[e.t].spres){d=Math.max(1,Math.round(d/2));fx.push(e.label+' resiste tu newen.');fxe.push(e.label+' resists your newen.')}if(e.seals&&e.seals.length)d=Math.min(2,d);if(e.dreaming){d=Math.min(1,d);fx.push(e.label+' duerme caminando: hay que despertarlo.');fxe.push(e.label+' sleeps as it walks: it must be woken.')}if(e.down){d+=4;e.down=0}if(e.burn)burnT+=2;if(k==='kuruf'&&ET[e.t].fly)e.gr=3;e.pend=d;e.hp-=d;
+    let burnT=0;for(const e of targets){if(e.hidden){fx.push(e.label+' está escondido en la niebla: no lo alcanzas.');fxe.push(e.label+' is hidden in the fog: you cannot reach it.');continue}let d=k==='wino'?atk()*3+rnd(3):Math.round(atk()*1.5)+rnd(3);if(e.tall)d=Math.max(1,Math.round(d/3));if(e.armor)d=Math.max(1,Math.round(d/2));if(ET[e.t].spres){d=Math.max(1,Math.round(d/2));fx.push(e.label+' resiste tu newen.');fxe.push(e.label+' resists your newen.')}if(ET[e.t].thick)d=Math.max(1,Math.round(d/2));if(e.seals&&e.seals.length)d=Math.min(2,d);if(e.dreaming){d=Math.min(1,d);fx.push(e.label+' duerme caminando: hay que despertarlo.');fxe.push(e.label+' sleeps as it walks: it must be woken.')}if(e.down){d+=4;e.down=0}if(e.burn)burnT+=2;if(k==='kuruf'&&ET[e.t].fly)e.gr=3;e.pend=d;e.hp-=d;
       fx.push(e.label+' −'+d+(e.hp<=0?' (se va)':'')+'.');fxe.push(e.label+' −'+d+(e.hp<=0?' (gone)':'')+'.')}
     if(burnT){S.hp=Math.max(1,S.hp-burnT);fx.push('¡Te quemas! (−'+burnT+')');fxe.push('You get burned! (−'+burnT+')')}}
   const eff=N(fx.join(' '),fxe.join(' '));
   eff.fx=()=>{for(const e of targets){const p=epos(e);spark(p.x,p.y,k==='kuruf'?'#e8f4ff':'#ffd060',16);if(e.pend){e.hit=14;pop(p.x,p.y-10,'-'+e.pend,'#ffffff');sfx('hit');if(e.hp<=0){e.dead=true;e.fadeT=20}e.pend=0}}};
-  say([head,eff],()=>{for(const e of targets)if(e.hp<=0&&!e.dead){e.dead=true;e.fadeT=20}if(!aliveE().length)return victory();enemyPhase()});
+  say([head,eff],()=>{for(const e of targets)if(e.hp<=0&&!e.dead){e.dead=true;e.fadeT=20}bossSweep();if(!aliveE().length)return victory();enemyPhase()});
 }
 function epos(e){return{x:e.px||128,y:e.py||100}}
 function pop(x,y,txt,col){B.pops.push({x,y,txt,col,t:50})}
@@ -131,7 +132,8 @@ function resolve(r,kil,tg,ei){
       if(e.tall){fx.push(e.label+' está erguido, altísimo: tus palabras le pasan por debajo.');fxe.push(e.label+' stands tall, towering: your words pass beneath it.');e.miss=1;continue}
       let d=coll?Math.max(1,Math.round((atk()+rnd(4))*.75)):atk()+rnd(4)+2;if(e.burn)burnT+=2;
       if(e.armor){d=Math.max(1,Math.round(d*.25));fx.push(e.label+': el golpe rebota en su coraza de piedra.');fxe.push(e.label+': the blow bounces off its stone crust.')}
-      if(e.seals&&e.seals.length){d=Math.min(2,d);fx.push(e.label+': los sellos de luz desvían casi todo el golpe.');fxe.push(e.label+': the seals of light turn aside most of the blow.')}
+      if(ET[e.t].thick){d=Math.max(1,Math.round(d/2));fx.push(e.label+': su cuerpo de niebla espesa amortigua el golpe.');fxe.push(e.label+': its body of thick fog softens the blow.')}
+      if(e.seals&&e.seals.length){d=Math.min(2,d);fx.push(e.label+': la barrera de luz desvía casi todo el golpe.');fxe.push(e.label+': the barrier of light turns aside most of the blow.')}
       if(e.dreaming){d=Math.min(1,d);fx.push(e.label+' duerme caminando: tus golpes se pierden en su sueño gris. Algo te dice que hay que despertarlo.');fxe.push(e.label+' sleeps as it walks: your blows are lost in its grey dream. Something tells you it must be woken.')}
       if(e.down){d+=4;e.down=0;fx.push(e.label+' está en el suelo: el golpe entra con todo (+4).');fxe.push(e.label+' is on the ground: the blow lands full force (+4).')}
       e.pend=d;e.hp-=d;
@@ -193,10 +195,11 @@ function resolve(r,kil,tg,ei){
       else if(r==='nag'&&e.gr===3){pop(p.x,p.y-10,'↓','#ffe080')}
       else if(r==='küpa'&&kil){pop(p.x,p.y-10,'✋','#ffe080');sfx('block')}}};
   lines.push(eff);
-  say(lines,()=>{for(const e of targets)if(e.hp<=0&&!e.dead){e.dead=true;e.fadeT=20}if(!aliveE().length)return victory();enemyPhase()});
+  say(lines,()=>{for(const e of targets)if(e.hp<=0&&!e.dead){e.dead=true;e.fadeT=20}bossSweep();if(!aliveE().length)return victory();enemyPhase()});
 }
 function enemyPhase(){
   const fx=[],fxe=[];let dmgTotal=0;const hitsFx=[];
+  if(B.o.chain==='llufu'&&B.turn%3===2&&S.hp<maxHP()){S.hp=Math.min(maxHP(),S.hp+6);fx.push('Los chumpall cantan a tu alrededor: su ül te devuelve fuerzas (+6).');fxe.push('The chumpall sing around you: their ül gives you strength back (+6).');hitsFx.push(()=>{spark(60,30,'#7ae0c0',10);sfx('heal')})}
   const hitP=(e,mult,tag)=>{
     if(B.blocked&&B.blocked.has(e)){fx.push(e.label+': ¡bloqueado!');fxe.push(e.label+': blocked!');hitsFx.push(()=>{const p=epos(e);pop(p.x,p.y-10,'✋','#ffe080');sfx('block')});return}
     const T=ET[e.t],rush=B.rush&&B.rush.has(e);
@@ -208,18 +211,36 @@ function enemyPhase(){
     if(e.sl>0){e.sl--;fx.push(e.label+' duerme.');fxe.push(e.label+' is asleep.');continue}
     if(e.stun>0){e.stun--;fx.push(e.label+' todavía retrocede.');fxe.push(e.label+' is still backing away.');continue}
     if(e.t==='ngoyam'&&Math.random()<.3&&(S.sp||0)>0){S.sp--;fx.push(e.label+' te susurra el olvido: pierdes un punto de newen (✦).');fxe.push(e.label+' whispers forgetting to you: you lose one newen point (✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')});continue}
-    if(e.t==='ngoyman1'){
-      if(!e.hidden&&e.hideT>0){e.hideT--;if(e.hideT<=0){e.hidden=1;fx.push('La niebla vuelve a tragarse a Ti Fütra Ngoyman.');fxe.push('The fog swallows Ti Fütra Ngoyman again.');continue}}
-      if(!e.hidden&&!e.hideT&&B.turn===0){e.hidden=1;fx.push('El velo de niebla se cierra sobre el gran olvido: no ves dónde golpear.');fxe.push('The veil of fog closes over the great forgetting: you cannot see where to strike.');continue}
-      hitP(e,e.hidden?1:1.3,{es:' te azota con un jirón de niebla',en:' lashes you with a shred of fog'});continue}
+    if(e.t==='ngoyman1'||e.t==='llufu1'){const wat=e.t==='llufu1';
+      if(!e.hidden&&e.hideT>0){e.hideT--;if(e.hideT<=0){e.hidden=1;fx.push(wat?'El agua oscura vuelve a tragarse al Llufü Filu.':'La niebla vuelve a tragarse a Ti Fütra Ngoyman.');fxe.push(wat?'The dark water swallows the Llufü Filu again.':'The fog swallows Ti Fütra Ngoyman again.');continue}}
+      if(!e.hidden&&!e.hideT&&B.turn===0){e.hidden=1;fx.push(wat?'El Llufü Filu se hunde en el agua oscura: no ves dónde golpear.':'El velo de niebla se cierra sobre el gran olvido: no ves dónde golpear.');fxe.push(wat?'The Llufü Filu sinks into the dark water: you cannot see where to strike.':'The veil of fog closes over the great forgetting: you cannot see where to strike.');continue}
+      hitP(e,e.hidden?1:1.3,wat?{es:' te golpea con la cola desde lo oscuro',en:' strikes you with its tail from the dark'}:{es:' te azota con un jirón de niebla',en:' lashes you with a shred of fog'});continue}
+    if(e.t==='llufu2'){
+      if(!e.armor){e.armorT=(e.armorT||0)-1;if(e.armorT<=0){e.armor=1;fx.push('Las placas de la mandíbula del Llufü Filu vuelven a cerrarse.');fxe.push('The plates of the Llufü Filu\'s jaw lock shut again.');continue}}
+      hitP(e,B.turn%3===2?1.5:1,{es:' muerde con sus mandíbulas de piedra',en:' bites with its stone jaws'});continue}
+    if(e.t==='llufu4'){
+      if(!e.seals)e.seals=[];
+      if(!e.seals.length&&B.turn>0&&B.turn%3===0){const pool=S.roots.slice();let code=pool[rnd(pool.length)];if(Math.random()<.4)code+='kil';e.seals=[code];
+        fx.push('¡El piwke del Llufü Filu alza una barrera de luz! '+sealGloss(code,'es'));fxe.push('The Llufü Filu\'s heart raises a barrier of light! '+sealGloss(code,'en'));hitsFx.push(()=>{sfx('cast');B.flash=10});continue}
+      hitP(e,1.1,{es:' late con fuerza y el agua te golpea',en:' beats hard and the water slams you'});continue}
+    if(e.t==='llufu5'){
+      if(B.en.length<4&&Math.random()<.3){const t2=Math.random()<.5?'kowek':'mawek',ne=mkEnemy(t2);B.en.push(ne);relabel();
+        fx.push('El Llufü Filu llama a las aguas: ¡'+ne.label+' aparece!');fxe.push('The Llufü Filu calls the waters: '+ne.label+' appears!');continue}
+      if(B.turn%3===2){hitP(e,1.9,{es:' se deja caer entero sobre ti',en:' crashes its whole body down on you'});continue}
+      hitP(e,.9);hitP(e,.9,{es:' barre con la cola',en:' sweeps with its tail'});continue}
     if(e.t==='ngoyman2'){
       if(!e.armor){e.armorT=(e.armorT||0)-1;if(e.armorT<=0){e.armor=1;fx.push('La coraza gris del piwke vuelve a cerrarse.');fxe.push('The grey crust of the heart closes again.');continue}}
       if(B.turn%2===1&&(S.sp||0)>0){S.sp--;fx.push('El piwke del olvido late: una palabra tuya se borra (−✦).');fxe.push('The heart of forgetting beats: one of your words is erased (−✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')});hitP(e,.7,{es:' te golpea con su latido',en:' strikes you with its beat'});continue}
       hitP(e);continue}
     if(e.t==='ngoyman3'){
-      if(B.turn%3===2){hitP(e,1.8,{es:' descarga el golpe del olvido',en:' brings down the blow of forgetting'});continue}
-      if(Math.random()<.25&&(S.sp||0)>0){S.sp--;fx.push('Ti Fütra Ngoyman aspira tus palabras (−✦).');fxe.push('Ti Fütra Ngoyman breathes in your words (−✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')})}
-      hitP(e,.7);hitP(e,.7,{es:' golpea otra vez',en:' strikes again'});continue}
+      if(!e.seals)e.seals=[];
+      if(!e.seals.length&&B.turn>0&&B.turn%4===0){const pool=S.roots.slice();let code=pool[rnd(pool.length)];if(Math.random()<.4)code+='kil';e.seals=[code];
+        fx.push('¡Rüf Fütra Ngoyman alza una barrera de luz robada! '+sealGloss(code,'es'));fxe.push('Rüf Fütra Ngoyman raises a barrier of stolen light! '+sealGloss(code,'en'));hitsFx.push(()=>{sfx('cast');B.flash=10});continue}
+      if(B.en.length<4&&Math.random()<.3){const t2=SUMMONP[rnd(SUMMONP.length)],ne=mkEnemy(t2);B.en.push(ne);relabel();
+        fx.push('El olvido recuerda a tus enemigos: ¡'+ne.label+' sale de la niebla!');fxe.push('The forgetting remembers your enemies: '+ne.label+' steps out of the fog!');continue}
+      if(B.turn%3===2){hitP(e,2.0,{es:' descarga el golpe del olvido',en:' brings down the blow of forgetting'});continue}
+      if(Math.random()<.25&&(S.sp||0)>0){S.sp--;fx.push('Rüf Fütra Ngoyman aspira tus palabras (−✦).');fxe.push('Rüf Fütra Ngoyman breathes in your words (−✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')})}
+      hitP(e,.8);hitP(e,.8,{es:' golpea otra vez',en:' strikes again'});continue}
     if(e.t==='walichu'){
       if(!e.dreaming&&e.dreamT>0){e.dreamT--;
         if(e.dreamT<=0){e.dreaming=1;fx.push('El Walichu vuelve a envolverse en su sueño gris.');fxe.push('The Walichu wraps itself in its grey dream again.');continue}}
@@ -262,6 +283,7 @@ function enemyPhase(){
     if((e.t==='chonchon'||T.curse)&&!S.curse&&Math.random()<.25&&!(B.blocked&&B.blocked.has(e))){S.curse=1;fx.push(e.label+' grita "¡tue, tue!": quedas con maldición (fuerza −2). El lawen la quita.');fxe.push(e.label+' cries "tue, tue!": you are cursed (strength −2). Lawen lifts it.');hitsFx.push(()=>sfx('bad'));continue}
     hitP(e)}
   for(const e of aliveE()){if(e.gr>0)e.gr--;if(e.fear>0)e.fear--}
+  if(S.gear.lafkenkura&&S.hp>0&&S.hp<maxHP()){S.hp=Math.min(maxHP(),S.hp+2)}
   B.blocked=null;B.rush=null;B.turn++;
   const lines=[];
   if(fx.length){const l=N(fx.join(' '),fxe.join(' '));l.fx=()=>{hitsFx.forEach(f=>f());if(dmgTotal){B.shake=12;B.red=10;sfx('hurt')}};lines.push(l)}
@@ -277,6 +299,26 @@ function enemyPhase(){
     if(S.hp<=0){S.hp=0;return defeat()}
     battleMenu()});
 }
+const LLSING=[['Kallfüko','de pelo como agua quieta','with hair like still water'],['Milla ül','que canta con dos voces','who sings with two voices'],['Lafkenray','coronada de espuma','crowned with foam'],['Kürüko','el más viejo de todos','the oldest of them all']];
+function llufuStage(nx){
+  const e=mkEnemy(nx);B.en=[e];relabel();B.tele=false;B.blocked=null;B.rush=null;sfx('lvl');B.flash=16;B.shake=10;
+  S.hp=maxHP();S.sp=SPMAX;e.hp-=12;
+  const k={llufu2:0,llufu3:1,llufu4:2,llufu5:3}[nx],[snm,sd,sde]=LLSING[k];
+  const forms={llufu2:[N('¡Las aguas se abren! El Llufü Filu alza la cabeza: una mandíbula enorme de placas de piedra, llena de dientes.','The waters part! The Llufü Filu raises its head: a huge jaw of stone plates, full of teeth.')],
+    llufu3:[N('El Llufü Filu despliega una tormenta de aletas: el agua entera se vuelve un remolino de filos.','The Llufü Filu unfurls a storm of fins: the whole water becomes a whirl of blades.')],
+    llufu4:[N('Entre sus anillos aparece su piwke: un corazón que late luz robada, protegido por barreras.','Within its coils appears its piwke: a heart beating with stolen light, guarded by barriers.')],
+    llufu5:[N('El Llufü Filu entero se alza desde el fondo, más grande que la ruka más grande: Rüf Llufü Filu, la serpiente de lo profundo.','The whole Llufü Filu rears up from the depths, bigger than the biggest ruka: Rüf Llufü Filu, the serpent of the deep.')]}[nx];
+  forms.push(N('El chumpall '+snm+', '+sd+', canta a tu lado: tu piwke y tu newen se llenan de nuevo, y su ül golpea a la serpiente (−12).','The chumpall '+snm+', '+sde+', sings at your side: your hearts and your newen fill again, and their ül strikes the serpent (−12).'));
+  say(forms,battleMenu);
+}
+function postLlufu(){
+  S.flags.chboss=1;S.gear.lafkenkura=1;persist();sfx('lvl');
+  say([N('El Rüf Llufü Filu se hunde despacio, vencido, hacia una fosa tan honda que ni los chumpall la conocen. El agua queda limpia y quieta.','The Rüf Llufü Filu sinks slowly, defeated, into a trench so deep not even the chumpall know it. The water is left clean and still.'),
+    L('Ñidol chumpall','Chaltu may, '+nm()+'. Taiñ lafken montuy.','Gracias, '+nm()+'. Nuestro mar está a salvo.','Thank you, '+nm()+'. Our sea is safe.'),
+    N('Los cinco cantores chumpall te rodean y cantan juntos una sola vez. El agua entera brilla.','The five chumpall singers surround you and sing together, just once. The whole water glows.'),
+    Object.assign(L('','Lafkenkura!','La ñidol chumpall te regala una lafkenkura, una piedra del mar: desde ahora recuperas 2 de newen en cada turno de pelea.','The chumpall leader gives you a lafkenkura, a sea stone: from now on you recover 2 newen every battle turn.'),{fx:()=>sfx('lvl')})],
+    ()=>gainPiwke([N('Y entre las algas, algo rojo brilla...','And among the kelp, something red glints...')]));
+}
 function ngoyStage(n){
   const e=mkEnemy(n===2?'ngoyman2':'ngoyman3');B.en=[e];relabel();B.tele=false;B.blocked=null;B.rush=null;sfx('lvl');B.flash=16;B.shake=10;
   const ls=n===2?[N('El velo de niebla se rasga de arriba abajo... y detrás no hay cuerpo: hay un piwke enorme de piedra gris, envuelto en una coraza de olvido, latiendo despacio.','The veil of fog tears from top to bottom... and behind it there is no body: there is a huge heart of grey stone, wrapped in a crust of forgetting, beating slowly.'),
@@ -286,10 +328,16 @@ function ngoyStage(n){
     ls.push(N('Entonces una lanza cruza la niebla y se clava en el coloso (−15). El Epunamun aparece a tu lado, con las dos caras de frente al olvido: «¡Feypin! ¡Pelearía a tu lado!». Su newen te llena de nuevo: piwke y palabras al máximo.','Then a spear crosses the fog and sinks into the colossus (−15). The Epunamun appears at your side, both faces turned to the forgetting: "I said it! I would fight at your side!" His newen fills you again: hearts and words restored.'))}
   say(ls,battleMenu);
 }
+function bossSweep(){
+  if((B.o.final||B.o.chain==='llufu')&&aliveE().length&&!aliveE().some(x=>ET[x.t].boss)){
+    for(const x of aliveE()){x.hp=0;x.pend=0;x.dead=true;x.fadeT=20}}}
 function victory(){
   if(B.o.final){const st=B.en[0].t;
     if(st==='ngoyman1')return ngoyStage(2);
     if(st==='ngoyman2')return ngoyStage(3);}
+  if(B.o.chain==='llufu'){const st=B.en.find(e=>ET[e.t].boss);
+    const nx={llufu1:'llufu2',llufu2:'llufu3',llufu3:'llufu4',llufu4:'llufu5'}[st&&st.t];
+    if(nx)return llufuStage(nx);}
   const xp=B.en.reduce((a,e)=>a+ET[e.t].xp,0);let gold=B.en.reduce((a,e)=>{const g=ET[e.t].gold;return a+g[0]+rnd(g[1]-g[0]+1)},0);
   if(S.pw.gold){gold*=2;S.pw.gold=0}
   S.xp+=xp;S.gold+=gold;
@@ -320,6 +368,7 @@ function endBattle(how){
     return say([N('El wekufü secreto se deshace en jirones de sombra que el viento se lleva.','The secret wekufü breaks apart into shreds of shadow that the wind carries away.'),
       L('','Newen!','Venciste a uno de los wekufü escondidos. Pocos pueden contarlo.','You defeated one of the hidden wekufü. Few can say the same.')],()=>gainPiwke([N('Donde estaba, algo rojo brilla en el suelo...','Where it stood, something red glints on the ground...')]));}
   if(how==='win'&&o.final)return postFinal();
+  if(how==='win'&&o.chain==='llufu')return postLlufu();
   if(how==='win'&&o.boss)postBoss();
 }
 function stepBackFromNgen(){
@@ -413,11 +462,6 @@ function postBoss5(){
 
 function postFinal(){
   S.flags.won=1;persist();
-  say([N('El coloso se detiene... y suspira. La niebla entera tiembla, se afina, se deshace en hilos de plata que el viento se lleva hacia arriba.','The colossus stops... and sighs. The whole fog trembles, thins, and comes apart into silver threads that the wind carries upward.'),
-    N('Y entonces las oyes: todas las palabras que se había tragado. Vuelven como pájaros: al mar lafkenche, al monte nagche, a los pewenes, al sur de la lluvia, a la pampa abierta.','And then you hear them: all the words it had swallowed. They return like birds: to the Lafkenche sea, to the Nagche forest, to the pewen trees, to the rainy south, to the open plain.'),
-    L('','Kom mapu konümpatuy!','¡Toda la tierra vuelve a recordar!','All the land remembers again!'),
-    N('Los cinco ngen aparecen un momento a tu alrededor: agua, monte, pewen, viento y pasto. No dicen nada. Inclinan la cabeza, y eso lo dice todo.','The five ngen appear around you for a moment: water, forest, pewen, wind and grass. They say nothing. They bow their heads, and that says everything.'),
-    L('','Chaltu may, '+nm()+'.','El trariwe en tu cintura brilla una última vez: cinco tierras, una sola lengua viva. Mientras alguien la hable, el gran olvido no podrá volver.','The trariwe at your waist glows one last time: five lands, one living language. As long as someone speaks it, the great forgetting cannot return.'),
-    N('AFPUY · FIN — Puedes seguir jugando: las tierras, los wekufü escondidos y el Epunamun siguen ahí. Chaltu may por jugar Kewün ñi Newen.','AFPUY · THE END — You can keep playing: the lands, the hidden wekufü and the Epunamun are still there. Chaltu may for playing Kewün ñi Newen.')],
-    ()=>{AU.name=null;loadMap('ngoyman',8,8);});
+  say([N('El coloso se detiene... y suspira. La niebla entera tiembla, se afina, se deshace en hilos de plata que el viento se lleva hacia arriba.','The colossus stops... and sighs. The whole fog trembles, thins, and comes apart into silver threads that the wind carries upward.')],
+    ()=>startEndCut());
 }

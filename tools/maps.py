@@ -1088,6 +1088,92 @@ for k,st in {'g_lafken':(0,7),'g_nag':(0,7),'g_pewen':(0,7),'g_wil':(0,7),'g_pue
     missing=[(x,y,rows[y][x]) for y in range(len(rows)) for x in range(len(rows[0])) if rows[y][x] in set('PCKSFMNIkgHBOExJD') and (x,y) not in R2]
     print(k,'reach',len(R2),'MISSING' if missing else 'ok',missing)
 
+
+# ================= MÜNCHE LAFKEN: under the lake =================
+# secret whirlpool on the Williche island
+setr(W_['w_wapi'],16,10,1,1,'v')
+# u_grotto: the entry grotto
+g=[['%']*20 for _ in range(11)]
+carve0(g,2,2,16,7)
+g[2][4]='S'
+g[3][4]='F'
+carve0(g,18,5,2,1)
+g[7][14]='I'
+E_['u_grotto']=[''.join(r) for r in g]
+# u_garden: the chumpall gardens
+c=C(32,13,'.')
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]=='.' and y!=7:
+            if hh(x,y,140)<.16:c.g[y][x]='T'
+            elif hh(x,y,141)<.22:c.g[y][x]='"'
+c.r(0,7,1,1,'.');c.p(0,7,'.');c.p(31,7,'.')
+c.r(10,3,4,3,'.')
+c.r(18,8,4,3,'.')
+c.r(24,1,6,4,'#');c.r(25,2,4,2,'.');c.p(27,2,'C');c.p(27,4,'.');c.p(27,5,'.')
+c.r(3,9,3,2,'.');c.p(4,9,'F')
+E_['u_garden']=c.rows()
+# u_deep: the trench (hard)
+c=C(32,13,'.')
+c.r(8,3,3,7,'~');c.r(20,2,3,6,'~')
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]=='.' and y!=7:
+            if hh(x,y,142)<.12:c.g[y][x]='T'
+            elif hh(x,y,143)<.18:c.g[y][x]='"'
+            elif hh(x,y,144)<.05:c.g[y][x]='#'
+c.p(0,7,'.');c.p(31,7,'.')
+c.r(16,8,4,3,'.')
+c.r(4,4,4,3,'.')
+c.r(26,9,4,3,'.');c.p(27,10,'C')
+c.r(2,9,3,2,'.');c.p(3,9,'F')
+E_['u_deep']=c.rows()
+# u_throne: the chumpall hall
+g=[['%']*24 for _ in range(12)]
+carve0(g,3,2,18,8)
+carve0(g,0,7,3,1)
+g[2][11]='F'
+g[4][6]='I'
+carve0(g,10,2,4,2,'~')
+E_['u_throne']=[''.join(r) for r in g]
+for k,st in {'u_grotto':(4,2),'u_garden':(0,7),'u_deep':(0,7),'u_throne':(0,7)}.items():
+    rows=[r.replace('v','~') for r in E_[k]];R2=bfs2(rows,st)
+    missing=[(x,y,rows[y][x]) for y in range(len(rows)) for x in range(len(rows[0])) if rows[y][x] in set('PCKSFMNIkgHBOExJD') and (x,y) not in R2]
+    print(k,'reach',len(R2),'MISSING' if missing else 'ok',missing)
+
+
+# ================= SANTIAGO: the return =================
+# s_plaza: a plaza in the city
+c=C(34,14)
+c.r(0,9,34,1,'=')
+c.r(16,0,2,14,'=')
+c.r(4,1,8,4,'%');c.r(22,1,8,4,'%')
+c.r(14,6,6,2,'~');c.r(13,5,8,4,',');c.r(14,6,6,2,'~')
+c.p(3,10,'@')
+c.p(13,10,'V');c.p(20,11,'I')
+c.r(6,10,3,2,',')
+c.r(24,10,4,2,',')
+E_['s_plaza']=c.rows()
+# s_poblacion: the neighborhood with the urban ruka
+c=C(32,13)
+c.r(0,7,32,1,'=')
+for (x,y) in [(3,2),(9,2),(15,2),(21,2)]:c.r(x,y,4,3,'%')
+for (x,y) in [(3,9),(9,9)]:c.r(x,y,4,3,'%')
+c.r(25,8,3,2,'R')
+c.r(16,9,6,3,',')
+c.p(28,2,'T');c.p(29,3,'T');c.p(27,11,'T')
+E_['s_poblacion']=c.rows()
+# s_centro: the urban ruka cultural center
+g=[['%']*16 for _ in range(10)]
+carve0(g,1,1,14,7)
+g[2][3]='Z';g[2][12]='V';g[5][11]='U';g[1][7]='F'
+carve0(g,7,8,2,1)
+E_['s_centro']=[''.join(r) for r in g]
+for k,st in {'s_plaza':(0,9),'s_poblacion':(0,7),'s_centro':(7,8)}.items():
+    rows=[r.replace('@',',') for r in E_[k]];R2=bfs2(rows,st)
+    missing=[(x,y,rows[y][x]) for y in range(len(rows)) for x in range(len(rows[0])) if rows[y][x] in set('PCKSFMNIkgHBOExJD') and (x,y) not in R2]
+    print(k,'reach',len(R2),'MISSING' if missing else 'ok',missing)
+
 N.update(E_)
 for k,v in N.items():
     w=len(v[0])

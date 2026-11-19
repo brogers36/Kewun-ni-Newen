@@ -49,6 +49,8 @@ const LOOKS={
   lonko4:{t:'M',p:'#2a4a6a',P:'#1a3048',w:'#e8e0c8',r:'#c82828',b:'#c82828',s:'#c08458',S:'#8e5c36'},
   lonko3:{t:'M',p:'#6a4a2a',P:'#4a3018',w:'#f0e0b0',r:'#2a64c8',b:'#2a64c8',s:'#c88050',S:'#9a5a30'},
   lonko5:{t:'M',p:'#6a2a2a',P:'#481a1a',w:'#f0ead0',r:'#e0b040',b:'#e0b040',s:'#b87848',S:'#8a5630'},
+  chumpall:{t:'F',h:'#2aa8b8',H:'#7ae0e8',c:'#145a74',C:'#0a3a50',r:'#7ae0c0',b:'#7ae0c0',s:'#9accc8',S:'#5e9a96'},
+  chumpallm:{t:'M',p:'#145a74',P:'#0a3a50',w:'#7ae0e8',r:'#7ae0c0',b:'#2aa8b8',s:'#9accc8',S:'#5e9a96'},
   elder2:{t:'F',h:'#c8c8d0',H:'#f0f0f8',c:'#3a5a8a',C:'#24406a',r:'#e0b040',s:'#c08858',S:'#8a5a34'},
   elder:{t:'M',h:'#c8c8d0',H:'#f0f0f8',p:'#5a4a3a',P:'#3a2e24',b:'#8a2458',r:'#e8d8a0',s:'#b8784c',S:'#8a5634'}};
 const CCACHE={};
@@ -225,7 +227,7 @@ function enemyCanvas(t,size,fr){
 
 /* ---------- props ---------- */
 const PCACHE={};
-const CTLEAF={chacay:['#2e2c0a','#4c4812','#6a621c','#8a7e2e','#aca046','#d0c468'],lafken:['#0e2e14','#1a4a1e','#286a26','#3e8a30','#68ae42','#9ad060'],koyam:['#2a3208','#46520e','#646e16','#86882a','#acaa40','#d8cc64'],mawida:['#06221a','#0e3426','#184e36','#24684a','#3e8a62','#6ab48a']};
+const CTLEAF={kelp:['#063028','#0a4638','#106050','#1a7e66','#2aa080','#48c49a'],chacay:['#2e2c0a','#4c4812','#6a621c','#8a7e2e','#aca046','#d0c468'],lafken:['#0e2e14','#1a4a1e','#286a26','#3e8a30','#68ae42','#9ad060'],koyam:['#2a3208','#46520e','#646e16','#86882a','#acaa40','#d8cc64'],mawida:['#06221a','#0e3426','#184e36','#24684a','#3e8a62','#6ab48a']};
 function ctTree(v,style){
   const k='cttree'+style+v;if(PCACHE[k])return PCACHE[k];
   const W=36,Hh=42,[cvs,c]=mk(W,Hh),ramp=CTLEAF[style],tr=['#2a1a0c','#4a2e16','#6a4422','#8a5a30'];
@@ -397,6 +399,7 @@ function dynCanvas(ch,f){
     R(c,6,7,4,1,'#4a3a2a');break}
   case 'H':ell(c,8,9,6.5,6.5,'#7a7a8a');ell(c,7,8,5,5,'#9a9aaa');R(c,5,7,2,2,'#2a2a3a');R(c,9,7,2,2,'#2a2a3a');R(c,6,11,4,1,'#2a2a3a');R(c,5,6,2,1,'#c0c0d0');R(c,3,12,4,2,'#3a8a3a');R(c,10,3,3,2,'#3a8a3a');break;
   case 'E':R(c,0,0,16,16,'#6a6a7a');R(c,0,0,16,2,'#a8a8b8');R(c,1,2,14,13,'#7e7e8e');R(c,7,3,2,10,'#3a3a4a');R(c,4,6,8,2,'#3a3a4a');R(c,5,10,6,2,'#3a3a4a');R(c,0,14,16,2,'#4a4a5a');break;
+  case '@':ol=null;{const ph=f*.9;for(let ring=0;ring<3;ring++){const rr=6.5-ring*1.8;for(let a=0;a<14;a++){const an=a/14*Math.PI*2+ph*(ring%2?1:-1);if(a%3===ring%3)continue;R(c,8+Math.cos(an)*rr,8+Math.sin(an)*rr*.8,1,1,ring===0?'#c08aff':ring===1?'#7ab8ff':'#ffffff')}}ell(c,8,8,2,1.6,'#e8d8ff');R(c,7,1+(f%2),2,4,'rgba(200,170,255,.7)')}break;
   case 'A':ol=null;{const ph=f*.8;ell(c,8,9,7,4.5,'rgba(120,200,255,.35)');for(let a=0;a<16;a++){const an=a/16*Math.PI*2+ph;R(c,8+Math.cos(an)*6,9+Math.sin(an)*3.6,1,1,a%2?'#ffffff':'#9fd8ff')}ell(c,8,9,2.5,1.5,'#e8f8ff');R(c,7,1+(f%2),2,5,'rgba(220,245,255,.7)')}break;
   case '^':ell(c,8,11,7.8,5,'#b8c8dc');ell(c,8,9,7,5,'#e8f0f8');ell(c,6,7,4,3,'#ffffff');R(c,3,12,10,1,'#9aaac0');break;
   case 'D':{ell(c,8,10,7.5,5.5,'#5a4a22');ell(c,7,9,6,4.5,'#7a6632');for(let i=0;i<12;i++){const a=i/12*6.28;const x=8+Math.cos(a)*6.5,y=9.5+Math.sin(a)*4.8;R(c,x,y,1,1,'#3a3012');R(c,x+(i%2),y-1,1,1,'#d8cc90')}for(let i=0;i<7;i++){const x=3+i*2,y=4+(i%3)*2;R(c,x,y,1,3,'#8a7640');R(c,x,y,1,1,'#e8dca0')}R(c,2,13,12,1,'#3a3012');break}
