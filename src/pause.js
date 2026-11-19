@@ -22,7 +22,7 @@ function openPause(){
       ls.push(L('','-nge · -mu · -mün','a uno · a dos · a tres o más','to one · to two · to three or more'));
       if(S.runes.includes('kil'))ls.push(L('','-kil-','prohibición: "¡no...!"','prohibition: "don\'t...!"'));say(ls)}
     else if(v==='trariwe'){const R5=[['lafkenche','Lafkenche'],['nagche','Nagche'],['pewenche','Pewenche'],['williche','Williche'],['puelche','Puelmapu']];
-      say([L('','Trokiñ trariwe · '+(S.pieces||[]).length+'/5',R5.map(([k,n])=>((S.pieces||[]).includes(k)?'■ ':'□ ')+n).join('   '),R5.map(([k,n])=>((S.pieces||[]).includes(k)?'■ ':'□ ')+n).join('   ')),
+      say([L('','Trariwe trokiñ · '+(S.pieces||[]).length+'/5',R5.map(([k,n])=>((S.pieces||[]).includes(k)?'■ ':'□ ')+n).join('   '),R5.map(([k,n])=>((S.pieces||[]).includes(k)?'■ ':'□ ')+n).join('   ')),
         N('Con los cinco trokiñ, el trariwe completo podrá atravesar la niebla de Ti Fütra Ngoyman, al oeste del camino del mar.','With all five trokiñ, the complete trariwe will be able to pass through the fog of Ti Fütra Ngoyman, west of the sea road.')])}
     else if(v==='book')openBook(()=>openPause());
     else if(v==='hints'){S.hints=!S.hints;persist();openPause()}

@@ -94,7 +94,7 @@ function renderMap(){
         drawChar(c,e.look,sx,sy,e.dir||'down',fr,e.seated);
         if(e.act==='wood'){R(c,sx+(e.dir==='left'?9:1),sy-6,6,3,'#7a4a22');R(c,sx+(e.dir==='left'?9:1),sy-6,6,1,'#a87040')}}
       if(e.bub&&(frame+e.bt)%420<150&&Math.abs(e.x-P.x)+Math.abs(e.y-P.y)<9)bubble(sx+8,sy-(e.seated?2:8),e.bub[Math.floor((frame+e.bt)/420)%e.bub.length])}
-    else if(e.kind==='animal'){ell(c,sx+8,sy+15,7,2,'rgba(0,0,0,.3)');c.drawImage(animalCanvas(e.look,e.mv?Math.floor(frame/8)%2:0,e.dir==='right'?'right':'left'),sx-2,sy)}
+    else if(e.kind==='animal'){const ac=animalCanvas(e.look,e.mv?Math.floor(frame/8)%2:0,e.dir==='right'?'right':'left');ell(c,sx+8,sy+15,ac.width*.36,2,'rgba(0,0,0,.3)');c.drawImage(ac,sx+8-(ac.width>>1),sy+17-ac.height)}
     else{const t=e.party[0],sz=e.boss?30:e.mini?22:16,cvs=enemyCanvas(t,sz,Math.floor(frame/10)%2);
       const fly=ET[t].fly?6+Math.round(Math.sin(frame/8)*1.5):0;
       ell(c,sx+8,sy+14,sz/3,2,'rgba(0,0,0,.3)');
@@ -107,7 +107,7 @@ function renderMap(){
   for(let k=0;k<26;k++){const wx=Math.floor(h2(k,frame>>3,91)*LW),wy=Math.floor(h2(k,frame>>3,92)*LH),mx=Math.floor((wx+cx)/T),my=Math.floor((wy-VY+cy)/T);
     if(inB(mx,my)&&grid[my][mx]==='~'&&WD[my][mx]>1){const a=(frame%8)<4;R(c,wx,wy,1,1,'#f4faff');if(a){R(c,wx-1,wy,1,1,'rgba(220,240,255,.7)');R(c,wx+1,wy,1,1,'rgba(220,240,255,.7)')}}}
   for(const [gx,gy] of glows)for(const [r,a] of [[24,.05],[16,.07],[10,.08]])ell(c,gx,gy,r,r*.8,'rgba(255,170,80,'+a+')');
-  if(M.bg==='cave'){const px=Math.round(P.fx*T-cx+8),py=Math.round(P.fy*T-cy+VY+8);for(let y=VY;y<LH;y+=2)for(let x=0;x<LW;x+=2){const d=Math.hypot(x-px,y-py);if(d>70){const a=Math.min(.7,(d-70)/140);if(a>.05){c.fillStyle='rgba(0,0,0,'+a.toFixed(2)+')';c.fillRect(x,y,2,2)}}}}
+  if(M.bg==='cave'||M.bg==='cave2'){const px=Math.round(P.fx*T-cx+8),py=Math.round(P.fy*T-cy+VY+8);for(let y=VY;y<LH;y+=2)for(let x=0;x<LW;x+=2){const d=Math.hypot(x-px,y-py);if(d>70){const a=Math.min(.7,(d-70)/140);if(a>.05){c.fillStyle='rgba(0,0,0,'+a.toFixed(2)+')';c.fillRect(x,y,2,2)}}}}
   if(CUR==='rupu'){for(let k=0;k<7;k++){const fx=-cx+Math.round(Math.sin(frame/60+k)*6)+6,fy=k*30+((frame/3+k*17)%30)-cy+VY;for(const [rr,al] of [[26,.18],[16,.22],[9,.25]])ell(c,fx,fy,rr,rr*.7,'rgba(200,200,212,'+al+')')}}
   if(M.bg==='forest'){c.fillStyle=awake(M.region)?'rgba(255,240,160,.06)':'rgba(10,30,20,.3)';c.fillRect(0,VY,LW,VH)}
   if(M.bg==='lagoon'){c.fillStyle=S.flags.ngen?'rgba(120,200,255,.08)':'rgba(60,30,90,.22)';c.fillRect(0,VY,LW,VH)}
@@ -138,7 +138,10 @@ function drawHUD(c){
 }
 /* ---------- battle ---------- */
 const BG={},FG={};
+function mossify(cvs){const c=cvs.getContext('2d'),d=c.getImageData(0,0,cvs.width,cvs.height),a=d.data;
+  for(let i=0;i<a.length;i+=4){const r=a[i],g=a[i+1],b=a[i+2];if(r>g+6&&r>b){a[i]=Math.round(g*.85);a[i+1]=Math.round(r*.92+4);a[i+2]=Math.round(b*.8+r*.18)}}c.putImageData(d,0,0);return cvs}
 function buildBG(area){
+  if(area==='cave2')return mossify(buildBG('cave'));
   const [cvs,c]=mk(LW,LH);
   if(area==='coast'){bands(c,0,96,['#2858b8','#3a70d0','#5a90e0','#80b0ec','#a8ccf4','#c8e0f8']);
     ell(c,214,26,9,9,'#fffbe8');for(const [x,y,s] of [[46,26,1],[140,16,1.3],[234,44,.8]]){ell(c,x,y+3,17*s,5*s,'#c8dcf0');ell(c,x,y,15*s,5*s,'#ffffff');ell(c,x-6*s,y-3*s,7*s,5*s,'#ffffff');ell(c,x+6*s,y-2*s,6*s,4*s,'#ffffff')}
@@ -155,7 +158,7 @@ function buildBG(area){
     for(let x=0;x<LW;x++){const y=Math.round(108+Math.sin(x*.02+2)*3);R(c,x,y,1,14,x>70&&x<190?'#d8b040':'#48983c');if(x>70&&x<190&&h2(x,1,7)<.5)R(c,x,y,1,2,'#f0d060')}
     R(c,0,122,LW,LH-122,'#48a048');for(let y=124;y<LH;y+=3)for(let x=(y%6);x<LW;x+=11)if(h2(x,y,5)<.35)R(c,x,y,1,2,h2(x,y,6)<.5?'#68c058':'#307c34');
     for(let x=6;x<LW;x+=22){R(c,x,112,2,12,'#5a3818');R(c,x+1,112,1,12,'#8a5a30')}R(c,0,115,LW,1,'#8a5a30');R(c,0,119,LW,1,'#8a5a30');
-    for(let k=0;k<4;k++){const tr=treeCanvas(k%2);c.drawImage(tr,k<2?-4+k*20:LW-28-(k-2)*22,64+(k%2)*6)}}
+    for(let k=0;k<4;k++){const tr=treeCanvas(k%2,'koyam');c.drawImage(tr,k<2?-4+k*20:LW-28-(k-2)*22,64+(k%2)*6)}}
   else if(area==='forest'){bands(c,0,LH,['#0a1a10','#10241a','#163020','#1c3a24','#22442a']);
     for(let k=0;k<9;k++){const px=k*31-6+(k%2)*6,w=10+(k*7)%8;R(c,px,0,w,140,'#2a1e14');R(c,px,0,3,140,'#3e2e20');R(c,px+w-2,0,2,140,'#160e08');for(let y=8;y<140;y+=13)R(c,px+3,y+(k%3),w-5,1,'#22180e')}
     for(let k=0;k<26;k++){const x=(k*41)%LW,y=(k*17)%40;ell(c,x,y,22,14,k%2?'#1c4424':'#24522c')}
@@ -178,6 +181,7 @@ function buildBG(area){
   return cvs;
 }
 function buildFG(area){
+  if(area==='cave2')return mossify(buildFG('cave'));
   const [cvs,c]=mk(LW,LH);
   if(area==='coast'){for(const sd of [0,1])for(let k=0;k<14;k++){const bx=sd?LW-4-k*4:4+k*4,hg=10+((k*13)%14);for(let i=0;i<hg;i++)R(c,bx+(sd?-1:1)*Math.floor(i/4),LH-i,2,1,k%2?'#2f7a34':'#3e9444')}}
   else if(area==='field'){for(const sd of [0,1])for(let k=0;k<14;k++){const bx=sd?LW-4-k*4:4+k*4,hg=12+((k*13)%14);for(let i=0;i<hg;i++)R(c,bx+(sd?-1:1)*Math.floor(i/5),LH-i,2,1,k%2?'#2f7a34':'#c8a040')}}
@@ -196,7 +200,7 @@ function animBG(area){const c=lx;
     const bx=Math.round((frame*.4)%(LW+30)-15),by=Math.round(40+Math.sin(frame/25)*4),f=Math.sin(frame/5)>0?1:0;R(c,bx-1,by,3,1,'#202020');R(c,bx-4,by-f,3,1,'#202020');R(c,bx+2,by-f,3,1,'#202020')}
   else if(area==='forest'){for(let k=0;k<14;k++){const x=Math.round(10+k*18+Math.sin(frame/35+k)*8),y=Math.round(60+Math.sin(frame/27+k*2)*30+(k%4)*16);if((frame+k*11)%50<36){R(c,x,y,1,1,awake('nagche')?'#f8f0a0':'#a0e8ff');ell(c,x,y,2,2,'rgba(200,255,160,.2)')}}
     for(let k=0;k<4;k++){const lx2=(k*67+Math.floor(frame*.2))%LW,ly2=Math.floor((k*43+frame*.35)%130);R(c,lx2,ly2,2,1,'#6aa040')}}
-  else if(area==='cave'){for(let k=0;k<18;k++){const x=95+((k*37+Math.floor(frame*.15))%90)+Math.round(Math.sin(frame/40+k)*5),y=Math.floor((k*29+frame*.2)%140);if((frame+k)%30<22)R(c,x,y,1,1,'#ffeec8')}
+  else if(area==='cave'||area==='cave2'){for(let k=0;k<18;k++){const x=95+((k*37+Math.floor(frame*.15))%90)+Math.round(Math.sin(frame/40+k)*5),y=Math.floor((k*29+frame*.2)%140);if((frame+k)%30<22)R(c,x,y,1,1,'#ffeec8')}
     const dy=Math.floor(frame*1.5)%130;R(c,62,dy,1,3,'#9ad0f0');R(c,201,(dy+65)%130,1,3,'#9ad0f0')}
   else{for(let k=0;k<40;k++)if((frame+k*13)%50<38)R(c,(k*61)%LW,(k*23)%70,1,1,'#ffffff');
     for(let i=0;i<10;i++){const w=30-i*2;R(c,200-w/2+Math.round(Math.sin(frame/15+i)*4),112+i*7,w,1,i%2?'#f4e8c0':'#d8c8a0')}

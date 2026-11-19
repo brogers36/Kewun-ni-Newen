@@ -172,7 +172,7 @@ function enemyPhase(){
   const lines=[];
   if(fx.length){const l=N(fx.join(' '),fxe.join(' '));l.fx=()=>{hitsFx.forEach(f=>f());if(dmgTotal){B.shake=12;B.red=10;sfx('hurt')}};lines.push(l)}
   const bossE=aliveE().find(x=>ET[x.t].boss),bn=bossE?ET[bossE.t].name:'';
-  if(B.tele&&bossE)lines.push(L(bn,bn+' küpay!','¡'+bn+' viene!',bn+' is coming!'));
+  if(B.tele&&bossE)lines.push(L(bn,'Küpaley '+bn+'!','¡'+bn+' viene!',bn+' is coming!'));
   if(bossE&&bossE.t==='witranalwe'&&bossE.tall&&!B.tallHint&&B.turn>=1){B.tallHint=1;lines.push(N('Pista: erguido así, nada lo alcanza. Quizás si le dices que vuelva atrás...','Hint: standing tall like that, nothing reaches it. Maybe if you tell it to go back...'))}
   if(B.tele&&!B.teleHint&&bossE){B.teleHint=1;lines.push(N('Pista: dile que no venga (küpa- con -kil-), a él solo o a todos, con la terminación correcta.','Hint: tell it not to come (küpa- with -kil-), to it alone or to all of them, with the right ending.'))}
   say(lines,()=>{
@@ -212,7 +212,7 @@ function postBoss(){
       L('Ngen-lafken','Chaltu may.','Gracias.','Thank you.'),
       N('Ngen-lafken te da su newen: ahora puedes sumergirte en los remolinos oscuros del agua. Además ganas un corazón nuevo.','Ngen-lafken gives you its newen: now you can dive into the dark whirlpools in the water. You also gain a new heart.'),
       L('Ngen-lafken','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!"),
-      Object.assign(L('','Kiñe trokiñ trariwe!','Entre la espuma queda algo tejido: un trokiñ (pedazo) de un trariwe antiguo, con figuras del mar. Tienes 1 de 5.','Something woven is left in the foam: a trokiñ (piece) of an ancient trariwe, with figures of the sea. You have 1 of 5.'),{fx:()=>{sfx('lvl')}}),
+      Object.assign(L('','Kiñe trariwe trokiñ!','Entre la espuma queda algo tejido: un trokiñ (pedazo) de un trariwe antiguo, con figuras del mar. Tienes 1 de 5.','Something woven is left in the foam: a trokiñ (piece) of an ancient trariwe, with figures of the sea. You have 1 of 5.'),{fx:()=>{sfx('lvl')}}),
       N('Dicen que un trariwe completo, con un trokiñ de cada tierra, es lo único que puede atravesar la niebla del olvido y llegar hasta su origen: Ti Fütra Ngoyman, el gran olvido.','They say a complete trariwe, with one trokiñ from each land, is the only thing that can pass through the fog of forgetting and reach its source: Ti Fütra Ngoyman, the great forgetting.'),
       N('Un círculo de luz aparece en el islote: pisándolo puedes volver a la entrada de la cueva o al lof.','A circle of light appears on the islet: step on it to return to the cave entrance or to the lof.'),
       N('Fin de la región lafkenche (prototipo). Puedes volver a los remolinos de las dunas y de la orilla: ahora sí puedes explorarlos. Las demás regiones esperan: Nagche, Pewenche, Williche y Puelmapu.','End of the Lafkenche region (prototype). You can go back to the whirlpools in the dunes and on the shore: now you can explore them. The other regions are waiting: Nagche, Pewenche, Williche and Puelmapu.')]);
@@ -230,7 +230,7 @@ function postBoss2(){
       L('Ngen-mawida','Alün umawtun. Tami dungun mew nepen.','Dormí mucho tiempo. Con tus palabras desperté.','I slept a long time. With your words I woke up.'),
       N('Ngen-mawida es el ngen del monte: cuida los árboles, el lawen y los animales que viven entre ellos.','Ngen-mawida is the ngen of the forest: it looks after the trees, the medicine plants, and the animals that live among them.'),
       N('Ngen-mawida te da su newen: ahora los zarzales espinudos se apartan cuando pasas. Además ganas un corazón nuevo.','Ngen-mawida gives you its newen: now the thorny brambles move aside when you pass. You also gain a new heart.'),
-      Object.assign(L('','Epu trokiñ trariwe!','Entre las raíces queda otro trokiñ del trariwe antiguo, tejido en verde y amarillo. Tienes 2 de 5.','Among the roots lies another trokiñ of the ancient trariwe, woven in green and yellow. You have 2 of 5.'),{fx:()=>sfx('pick')}),
+      Object.assign(L('','Epu trariwe trokiñ!','Entre las raíces queda otro trokiñ del trariwe antiguo, tejido en verde y amarillo. Tienes 2 de 5.','Among the roots lies another trokiñ of the ancient trariwe, woven in green and yellow. You have 2 of 5.'),{fx:()=>sfx('pick')}),
       N('Un círculo de luz aparece en el claro: pisándolo puedes volver a la entrada de la guarida, al lof nagche o a las tierras lafkenche.','A circle of light appears in the clearing: step on it to return to the lair entrance, the Nagche lof, or the Lafkenche lands.'),
       N('Fin de la región nagche (prototipo). Vuelve a los zarzales que viste en el camino: ahora puedes pasar. Faltan Pewenche, Williche y Puelmapu.','End of the Nagche region (prototype). Go back to the brambles you saw on the road: now you can get through. Pewenche, Williche and Puelmapu remain.')]);
   });

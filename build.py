@@ -4,7 +4,7 @@
 """
 import os,sys
 ROOT=os.path.dirname(os.path.abspath(__file__))
-ORDER=['core1','audio','ui','state','spr','retro','maprows','maps','mapstate','maplogic','cutlogic','scripts','pause','battle','render','boot']
+ORDER=['core1','audio','ui','state','spr','spr2','retro','maprows','maps','mapstate','maplogic','cutlogic','scripts','pause','battle','render','boot']
 MASTER='--master' in sys.argv
 src=lambda f:open(os.path.join(ROOT,'src',f),encoding='utf-8').read()
 js='\n'.join(src(f+'.js') for f in ORDER).replace('</script>\n</body>\n</html>\n','')

@@ -1,6 +1,7 @@
 /* ============================================================
    MAP STATE + LAYER BUILDING
    ============================================================ */
+const PENSPOT=[[10,2],[12,3],[14,2],[11,3],[15,3]];
 let CUR='rupu',M=null,grid=null,ents=[],LAYERS=[],GT=null,PROPS=[],RUKAS=[],SCN=[];
 const P={x:1,y:6,fx:1,fy:6,ox:1,oy:6,t:0,moving:false,dir:'down',spd:.125};
 const WALK=new Set(['.',',','"','=','_','P','m','g','p','S','q','k','A','b']);
@@ -14,6 +15,13 @@ const PL={G0:C3('#18481c'),G1:C3('#307c34'),G2:C3('#48a048'),G3:C3('#80c868'),GY
   D1:C3('#a87848'),D2:C3('#c89860'),D3:C3('#e0bc80'),
   C0:C3('#201810'),C1:C3('#3c2c20'),C2:C3('#5a4430'),C3:C3('#78604a'),CD:C3('#4a3828'),
   FW:C3('#f8f8f8'),FY:C3('#f8d848'),FR:C3('#e85868')};
+const PL0=Object.assign({},PL);
+const PALS={
+  nagche:{G0:'#24461a',G1:'#3e7426',G2:'#5c9c34',G3:'#9ccc58',GY:'#6aa83c',GL:'#a4d070',GM:'#80b450',D1:'#9a6438',D2:'#b8844c',D3:'#d6aa68',FR:'#d83850',FY:'#f8d040',FW:'#fff8e8'},
+  nagforest:{G0:'#10301e',G1:'#1e4e30',G2:'#2e6a3e',G3:'#5a9a5c',GY:'#3a7a46',GL:'#6aa070',GM:'#4a8a56',D1:'#5a4a30',D2:'#6e5a3a',D3:'#8a7450',FR:'#c8a0f0',FY:'#f0e890',FW:'#e8fff0'},
+  nagcave:{C0:'#0e1610',C1:'#26322a',C2:'#3a4a3c',C3:'#56685a',CD:'#2e3c30'}};
+const WALLS={lafken:['#5a4430','#8a7058','#78604a','#3c2c20','#201810'],nagche:['#3c4c3e','#6e8a68','#5a7058','#243026','#0e160e']};
+function applyPal(){Object.assign(PL,PL0);const p=PALS[M.pal];if(p)for(const k in p)PL[k]=C3(p[k])}
 function gtype(ch){if(ch==='~'||ch==='v')return'~';if(ch==='.'||ch===','||ch==='='||ch==='_'||ch==='%'||ch==='"'||ch==='Y'||ch==='b')return ch;if(ch==='T'||ch==='W'||ch==='f')return',';return M.floor}
 function gAt(x,y){if(x<0||y<0||x>=M.w||y>=M.h)return null;return GT[y][x]}
 function edgeDist(tx,ty,lx,ly,pred){let d=99;const E=15.5;
@@ -72,7 +80,7 @@ function wdep(gx,gy){const fx=(gx-8)/16,fy=(gy-8)/16,x0=Math.floor(fx),y0=Math.f
   const v=(W(x0,y0)*(1-ax)+W(x0+1,y0)*ax)*(1-ay)+(W(x0,y0+1)*(1-ax)+W(x0+1,y0+1)*ax)*ay;return v*16-8}
 let WD=null;
 function buildLayers(){
-  GT=grid.map(r=>r.map(gtype));
+  applyPal();GT=grid.map(r=>r.map(gtype));
   WD=GT.map(r=>r.map(g=>g==='~'?99:0));
   for(let it=0;it<40;it++){let ch=0;for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++){if(WD[y][x]===0)continue;let m=WD[y][x];
     for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const xx=x+dx,yy=y+dy;const n=(xx<0||yy<0||xx>=M.w||yy>=M.h)?6:WD[yy][xx];if(n+1<m)m=n+1}
@@ -89,7 +97,7 @@ function buildLayers(){
   }
   PROPS=[];RUKAS=[];
   for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++){const ch=grid[y][x];
-    if(ch==='T')PROPS.push({y:y+.9,cvs:treeCanvas(Math.floor(h2(x,y,2)*3)),dx:x*T-2,dy:y*T-(y===0?4:10),sh:[x*T+8,y*T+14,7,2]});
+    if(ch==='T'){const tc=treeCanvas(Math.floor(h2(x,y,2)*3),M.trees);PROPS.push({y:y+.9,cvs:tc,dx:x*T+8-(tc.width>>1),dy:y*T+16-tc.height+(y===0?6:0),sh:[x*T+8,y*T+14,7,2]})}
     else if(ch==='#')PROPS.push({y:y+.8,cvs:rockCanvas(Math.floor(h2(x,y,2)*2)),dx:x*T,dy:y*T+2,sh:[x*T+8,y*T+14,7,2]});
     else if(ch==='V')PROPS.push({y:y+.9,cvs:boardCanvas(),dx:x*T-4,dy:y*T-6,sh:[x*T+8,y*T+15,10,2],board:1});
     else if(ch==='Z')PROPS.push({y:y+.9,loom:1,dx:x*T,dy:y*T-6,sh:[x*T+8,y*T+15,8,2]});
@@ -102,9 +110,12 @@ function buildLayers(){
 function drawGroundStatics(c){
   for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++){const ch=grid[y][x],X=x*T,Y=y*T;
     if(ch==='%'){const below=y+1<M.h?grid[y+1][x]:'%';
-      if(below!=='%'){R(c,X,Y+5,16,11,'#5a4430');R(c,X,Y+4,16,1,'#8a7058');R(c,X,Y+5,16,1,'#78604a');
-        for(let r=0;r<3;r++){const yy=Y+6+r*3+ (r===2?1:0),off=((r+x)%2)*4;R(c,X,yy+2,16,1,'#3c2c20');for(let k=0;k<3;k++)R(c,X+((off+k*7)%16),yy,1,2,'#3c2c20')}
-        R(c,X,Y+15,16,1,'#201810')}}
+      const WC=WALLS[M.region==='nagche'?'nagche':'lafken'];
+      if(below!=='%'){R(c,X,Y+5,16,11,WC[0]);R(c,X,Y+4,16,1,WC[1]);R(c,X,Y+5,16,1,WC[2]);
+        for(let r=0;r<3;r++){const yy=Y+6+r*3+ (r===2?1:0),off=((r+x)%2)*4;R(c,X,yy+2,16,1,WC[3]);for(let k=0;k<3;k++)R(c,X+((off+k*7)%16),yy,1,2,WC[3])}
+        R(c,X,Y+15,16,1,WC[4]);
+        if(M.region==='nagche'){for(let k=0;k<4;k++){const mx=Math.floor(h2(x,y,80+k)*15);if(h2(x,y,90+k)<.6)R(c,X+mx,Y+5,2,1+Math.floor(h2(x,y,95+k)*3),'#4a7a3a')}
+          if(h2(x,y,99)<.35){const rx=X+3+Math.floor(h2(x,y,98)*10);for(let i=0;i<6;i++)R(c,rx+(i%3===2?1:0),Y+6+i,1,1,'#5a3e22')}}}}
   }
   for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++){const ch=grid[y][x],X=x*T,Y=y*T;
     if(ch==='W'){R(c,X,Y,16,16,'#a07a30');for(let r=0;r<4;r++)for(let k=0;k<5;k++){const sx=X+1+k*3+(r%2),sy=Y+1+r*4;R(c,sx,sy,1,3,'#e8c050');R(c,sx,sy,1,1,'#f8e090');R(c,sx+1,sy+2,1,1,'#806020')}}
@@ -145,6 +156,7 @@ function loadMap(id,x,y,quiet){
     const e=Object.assign({},e0);
     const [ex,ey]=e.fixed||e.path?[e.x,e.y]:placeNear(e.x,e.y,true);e.x=ex;e.y=ey;e.fx=ex;e.fy=ey;e.cd=30+rnd(60);e.dir=e.dir||'down';e.pi=0;e.wait=e.pause||0;e.bt=rnd(400);e.ox=e.x;e.oy=e.y;
     ents.push(e)}
+  if(id==='n_kullin'){let i=0;for(const e0 of M.ents)if(e0.herd&&e0.flag&&S.flags[e0.flag]){const sp=PENSPOT[i++];ents.push({kind:'animal',look:e0.look,x:sp[0],y:sp[1],fx:sp[0],fy:sp[1],ox:sp[0],oy:sp[1],pen:[10,2,15,3],cd:30+rnd(60),wait:0,dir:i%2?'left':'right',home:1})}}
   SCN=(M.scenes||[]).map(s=>Object.assign({},s,{pl:[0,1,2,3].map(i=>({x:s.x*T+s.w*T*(i<2?.3:.7),y:s.y*T+s.h*T*(.3+.4*(i%2)),dir:'right'}))}));
   S.map=id;fade=16;grace=40;
   if(!quiet)showBanner(M.name,G(M.g));

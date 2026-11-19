@@ -63,7 +63,7 @@ function edge(d){
   const E=M.edges&&M.edges[d];if(!E)return;
   if(E.need){const n=(S.pieces||[]).length;if(P.bump)return;P.bump=1;
     return say([N('Una niebla gris y espesa cubre el camino hacia el oeste. Ahí las palabras se borran: es la niebla de Ti Fütra Ngoyman, el gran olvido.','A thick grey fog covers the road west. Words fade inside it: it is the fog of Ti Fütra Ngoyman, the great forgetting.'),
-      L('','Trokiñ trariwe: '+n+'/'+E.need,'Solo un trariwe completo puede atravesarla. Tienes '+n+' de '+E.need+' trokiñ: uno por cada tierra (Lafkenche, Nagche, Pewenche, Williche, Puelmapu).','Only a complete trariwe can pass through it. You have '+n+' of '+E.need+' trokiñ: one for each land (Lafkenche, Nagche, Pewenche, Williche, Puelmapu).')])}
+      L('','Trariwe trokiñ: '+n+'/'+E.need,'Solo un trariwe completo puede atravesarla. Tienes '+n+' de '+E.need+' trokiñ: uno por cada tierra (Lafkenche, Nagche, Pewenche, Williche, Puelmapu).','Only a complete trariwe can pass through it. You have '+n+' of '+E.need+' trokiñ: one for each land (Lafkenche, Nagche, Pewenche, Williche, Puelmapu).')])}
   if(E.req&&!S.flags[E.req]){say(E.reqMsg);return}
   loadMap(E.to,E.x,E.y);
 }

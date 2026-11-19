@@ -89,6 +89,9 @@ function drawNgen(c,x,y,s,t,v){
 const ECACHE={};
 function enemyCanvas(t,size,fr){
   const key=t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];
+  if(typeof SPR2!=='undefined'&&SPR2[t]){const k=Math.max(1,Math.floor(size/48)),base=tplCanvas(t,fr,k),pd=6*k,[cv,cc]=mk(base.width+pd*2,base.height+pd);
+    for(const [r,al] of [[1,.10],[.8,.12],[.6,.14]]){cc.fillStyle='rgba(170,220,255,'+al+')';cc.beginPath();cc.ellipse(cv.width/2,cv.height*.45,cv.width/2*r,cv.height/2*r,0,0,6.283);cc.fill()}
+    cc.drawImage(base,pd,pd);return ECACHE[key]=cv}
   const pad=3,s=size/16,[cvs,c]=mk(size+pad*2,size+pad*2);
   const E=(cx,cy,rx,ry,col)=>ell(c,pad+cx*s,pad+cy*s,rx*s,ry*s,col);
   const Q=(x,y,w,h,col)=>R(c,pad+x*s,pad+y*s,Math.max(1,w*s),Math.max(1,h*s),col);
@@ -147,8 +150,23 @@ function enemyCanvas(t,size,fr){
 
 /* ---------- props ---------- */
 const PCACHE={};
-function treeCanvas(v){
-  const k='tree'+v;if(PCACHE[k])return PCACHE[k];const [cvs,c]=mk(20,26);
+function treeCanvas(v,style){
+  style=style||'lafken';const k='tree'+style+v;if(PCACHE[k])return PCACHE[k];
+  if(style==='koyam'){const [cvs,c]=mk(24,30);
+    R(c,10,17,4,11,'#5a3a1e');R(c,12,17,2,11,'#3e2612');R(c,9,27,6,1,'#4a2e16');R(c,7,15,4,2,'#5a3a1e');R(c,13,14,4,2,'#5a3a1e');R(c,11,20,1,3,'#7a5230');
+    const lobes=[[7,11,5.5,4.5],[16,10,5.5,4.5],[11.5,6,7,5],[12,12,6,3.5],[5+v%2,7,3.5,3],[18-v%2,6,3.5,3]];
+    for(const [x,y,rx,ry] of lobes)ell(c,x,y+1,rx,ry,'#4a6a1c');
+    for(const [x,y,rx,ry] of lobes)ell(c,x,y,rx-.8,ry-.8,'#6e8e2a');
+    for(const [x,y,rx,ry] of lobes)ell(c,x-1,y-1,rx*.5,ry*.5,'#9ab442');
+    for(let i=0;i<18;i++){const px=2+Math.floor(h2(i,v,61)*20),py=2+Math.floor(h2(i,v,62)*12);if(h2(i,v,63)<.6)R(c,px,py,1,1,h2(i,v,64)<.5?'#c8d468':'#3a5414')}
+    outline(cvs,'#1a2408');return PCACHE[k]=cvs}
+  if(style==='mawida'){const [cvs,c]=mk(22,34);
+    R(c,9,22,4,10,'#3a2a1a');R(c,11,22,2,10,'#24180e');R(c,8,31,6,1,'#2e2014');R(c,9,25,1,2,'#4a6a3a');R(c,12,28,1,2,'#4a6a3a');
+    const tiers=[[11,20,9,4],[11,15,8,4],[11,10,6.5,4],[11,5.5,4.5,3.5],[11,2.5,2.5,2]];
+    for(const [x,y,rx,ry] of tiers){ell(c,x,y+1,rx,ry,'#123a2e');ell(c,x-.5,y,rx-.8,ry-.9,'#1e5a44');ell(c,x-2,y-1,rx*.45,ry*.45,'#2e7a5a')}
+    for(let i=0;i<12;i++){const px=3+Math.floor(h2(i,v,71)*16),py=3+Math.floor(h2(i,v,72)*20);if(h2(i,v,73)<.5)R(c,px,py,1,1,'#5aa078')}
+    outline(cvs,'#06140e');return PCACHE[k]=cvs}
+  const [cvs,c]=mk(20,26);
   R(c,8,17,4,7,'#6a4020');R(c,10,17,2,7,'#4a2a12');R(c,7,23,6,1,'#5a3418');
   ell(c,10,9.5,9.5,8.5,'#1c5c24');ell(c,9.5,9,8.2,7.4,'#287828');ell(c,8.5,7.5,6,5,'#40983c');
   for(let i=0;i<14;i++){const an=i/14*Math.PI*2;R(c,9.5+Math.cos(an)*5.6,8.5+Math.sin(an)*4.6,1,1,'#88d070')}
@@ -178,16 +196,14 @@ function rukaCanvas(bw,bh){
   outline(cvs,'#2a1808');
   return PCACHE[k]={cvs,ox,oy,smoke:[cx-ox,top-oy+1]};
 }
+function tplCanvas(name,fr,k,pad){
+  const key='tp'+name+fr+'_'+k+'_'+(pad||0);if(PCACHE[key])return PCACHE[key];
+  const d=SPR2[name],rows=d.f[fr%d.f.length],h=rows.length,w=rows[0].length,p=pad||0,[cvs,c]=mk(w*k+p*2,h*k+p*2);
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const ch=rows[y][x];if(ch!=='.')R(c,p+x*k,p+y*k,k,k,d.pal[ch])}
+  return PCACHE[key]=cvs}
 function animalCanvas(t,fr,dir){
   const key='an'+t+fr+dir;if(PCACHE[key])return PCACHE[key];
-  if(dir==='right'){const m=mirror(animalCanvas(t,fr,'left'));return PCACHE[key]=m}
-  const [cvs,c]=mk(20,16);const lg=fr?1:0;
-  if(t==='kawellu'){R(c,4,6,11,5,'#8a5428');R(c,13,7,2,3,'#6a3a18');R(c,2,2,4,7,'#8a5428');R(c,1,2,3,3,'#8a5428');R(c,0,3,2,2,'#5a3418');R(c,4,1,2,6,'#2a1a10');R(c,15,6,2,5,'#2a1a10');
-    R(c,5,11,2,4-lg,'#6a3a18');R(c,8,11,2,4,'#6a3a18');R(c,11,11,2,4-(1-lg),'#6a3a18');R(c,13,11,2,4,'#6a3a18');R(c,1,3,1,1,'#000')}
-  else if(t==='waka'){R(c,4,6,11,6,'#f0f0f0');R(c,7,7,3,3,'#202020');R(c,12,8,2,3,'#202020');R(c,1,4,5,5,'#f0f0f0');R(c,1,7,4,2,'#e0a0a0');R(c,0,3,2,1,'#e8e0d0');R(c,5,3,2,1,'#e8e0d0');R(c,2,5,1,1,'#000');R(c,15,7,2,1,'#202020');
-    R(c,5,12,2,3-lg,'#d0d0d0');R(c,8,12,2,3,'#d0d0d0');R(c,11,12,2,3-(1-lg),'#d0d0d0');R(c,13,12,2,3,'#d0d0d0')}
-  else{ell(c,10,8,6,4.5,'#f4f0e4');ell(c,9,7,4,3,'#ffffff');R(c,2,5,4,4,'#3a3a3a');R(c,3,6,1,1,'#fff');R(c,6,12,2,3-lg,'#3a3a3a');R(c,12,12,2,3,'#3a3a3a')}
-  cel(cvs,.8);outline(cvs,'#181018');return PCACHE[key]=cvs}
+  const base=tplCanvas(t,fr,1);return PCACHE[key]=dir==='right'?mirror(base):base}
 function loomCanvas(prog){
   const [cvs,c]=mk(16,22);R(c,1,2,2,20,'#6a4020');R(c,13,2,2,20,'#6a4020');R(c,0,2,16,2,'#8a5a30');R(c,0,18,16,2,'#8a5a30');
   for(let x=3;x<13;x++)R(c,x,4,1,14,'#e8dcc0');

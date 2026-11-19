@@ -375,6 +375,8 @@ function itemOpts(){return Object.keys(ITEMS).map(k=>({m:ITEMS[k].m+' ×'+S.item
 
 const SPR={"HEAD_M_D": ["....oooooooo....", "...ohhhhhhhho...", "..ohhHHhhhhhho..", "..obBbbBbbBbbo..", "..ohssssssssho..", "..ohseWssWesho..", "..ohseSssSesho..", "..ohssssssssho..", "..ohqssmmssqho..", "..ohhSssssShho..", "..ohhooSSoohho.."], "HEAD_M_U": ["....oooooooo....", "...ohhhhhhhho...", "..ohhHhhhhHhho..", "..obBbbBbbBbbo..", "..ohhhhhhhhhho..", "..ohhhhHhhhhho..", "..ohhhhbbhhhho..", "..ohhhhbbhhhho..", "..ohhhhhhhhhho..", "..ohhhhhhhhhho..", "..ohhhhoohhhho.."], "HEAD_M_R": ["....ooooooo.....", "...ohhhhhhho....", "..ohhhHHhhhho...", "..obBbbBbbBbo...", "..ohhhhssssso...", "..ohhhsssWeso...", "..ohhhsssSeso...", "..ohhhSssssso...", "..ohhhhsssmo....", "..ohhhhSsso.....", "..ohhhooSSo....."], "BODY_M_D": ["...oopppppppoo..", "..opppppwwpppPo.", ".ospppppwwpppPso", ".ospppprwwrppPso", ".ooppppwwwwppPoo", "..owrwrwrwrwrwo.", "..orwrwrwrwrwro.", "..opppppppppPPo.", "..owpwpwpwpwpwo."], "BODY_M_U": ["...oopppppppoo..", "..ohhhhhhhhhhPo.", ".osphhhhhhhhhPso", ".ospphhhhhhppPso", ".ooppppwwppppPoo", "..owrwrwrwrwrwo.", "..orwrwrwrwrwro.", "..opppppppppPPo.", "..owpwpwpwpwpwo."], "BODY_M_R": ["....oopppppoo...", "...opppwpppPo...", "...opppwpppPo...", "...oppppppsPo...", "...oppppppsso...", "...owrwrwrwro...", "...orwrwrwrwo...", "...opppppppPo...", "...owpwpwpwpo..."], "LEGS_D": [["....olLo.olLo...", "....olLo.olLo...", "...offfo.offfo..", "...ooooo.ooooo.."], ["....olLo.olLo...", "...offfo.olLo...", "...ooooo.offfo..", ".........ooooo.."], ["....olLo.olLo...", "....olLo.offfo..", "...offfo.ooooo..", "...ooooo........"]], "LEGS_R": [[".....olLlLo.....", ".....olLlLo.....", "....offfffo.....", "....ooooooo....."], ["...olLo.olLo....", "..olLo...olLo...", "..offfo..offfo..", "..ooooo..ooooo.."], [".....olLolLo....", "....olLo.offfo..", "...offfo.ooooo..", "...ooooo........"]], "HEAD_F_D": ["....oooooooo....", "...ohhhhhhhho...", "..ohhHHhhhhhho..", "..oxBxxBxxBxxo..", "..ohssssssssho..", "..ohseWssWesho..", "..ohseSssSesho..", "..ohssssssssho..", ".ohhqssmmssqhho.", ".ohhhSssssShhho.", ".ohhooSSSSoohho."], "HEAD_F_U": ["....oooooooo....", "...ohhhhhhhho...", "..ohhHhhhhHhho..", "..oxBxxBxxBxxo..", "..ohhhhhhhhhho..", "..ohhhhHhhhhho..", "..ohhhhhhhhhho..", ".ohhhhhhhhhhhho.", ".ohhhhhhhhhhhho.", ".ohhhhhhhhhhhho.", ".ohhhhoooohhhho."], "HEAD_F_R": ["....ooooooo.....", "...ohhhhhhho....", "..ohhhHHhhhho...", "..oxBxxBxxBxo...", "..ohhhhssssso...", "..ohhhsssWeso...", "..ohhhsssSeso...", ".ohhhhSssssso...", ".ohhhhhsssmo....", ".ohhhhhSsso.....", ".ohhhhooSSo....."], "BODY_F_D": [".ohhcccccccchho.", ".ohccccxxccccho.", ".ohsccxXXxcccso.", ".ohskkxxXxkkkso.", ".oookkkxkkkkooo.", "..orwrwrwrwrwo..", "..okkkkkkkkKKo..", "..okkkkkkkkKKo..", "..okkkkkkkkKKo.."], "BODY_F_U": [".ohhcccccccchho.", ".ohhhhhhhhhhhho.", ".ohshhhhhhhhhso.", ".ohskhhhhhhkkso.", ".oookkhhhhkkooo.", "..orwrwrwrwrwo..", "..okkkkkkkkKKo..", "..okkkkkkkkKKo..", "..okkkkkkkkKKo.."], "BODY_F_R": ["...ohcccccco....", "...ohccxxcCo....", "...ohcxXXxso....", "...ohkkxkkso....", "...ohkkkkkko....", "...orwrwrwro....", "...okkkkkkKo....", "...okkkkkkKo....", "..okkkkkkkKKo..."], "LEGSF_D": [["..okkkkkkkkKKo..", "...okkkkkkKKo...", "....offo.offo...", "....oooo.oooo..."], ["..okkkkkkkkKKo..", "...okkkkkkKKo...", "...offo..offo...", "...oooo...oooo.."], ["..okkkkkkkkKKo..", "...okkkkkkKKo...", "....offo.offo...", "...oooo..oooo..."]], "LEGSF_R": [["..okkkkkkkKKo...", "..okkkkkkkKKo...", "...offfo........", "...ooooo........"], ["..okkkkkkkKKo...", "..okkkkkkkKKo...", "..offo..offo....", "..oooo..oooo...."], ["..okkkkkkkKKo...", "..okkkkkkkKKo...", "....offfo.......", "....ooooo......."]]};
 
+const SPR2={"kawellu": {"pal": {"b": "#9a5a2a", "B": "#6e3a18", "h": "#c27c40", "m": "#2a1a10", "e": "#000000", "w": "#f2e6d0", "n": "#4a2a14", "k": "#2a2020", "o": "#1a1008"}, "f": [["....oBoBo.....................", "....obommo....................", "..ooobommmo...................", ".obbbbbbmmmo..................", "obbwebbbbmmmo.................", "obwbbbbbbbmmmo...o............", "bbwbbbbbbbbmmmooobooooo.......", "onnnbbbbbbbbmmmbbbbbbbboo.....", ".oooooobbbbbbmmmhhhhhhhhbooo..", ".......obbbbbbmmhhhhhbbbbbmmo.", "........obbbbbbbbbbbbbbbbbmmmo", ".......obbbbbbbbbbbbbbbbbbbmmo", "........obbbbbbbbbbbbbbbbbommo", "........obbbbbbBBBBBbbbbbbommo", ".........oBBBBBBBBBBBBBBBoommo", ".........oBBBBBBBBBBBBBBBoommo", "..........obboBBBBBBbboBBo.omo", "..........obboBBoooobboBBo.omo", "..........obboBBo..obboBBo..o.", "..........obboBBo..obboBBo....", "..........obboBBo..obboBBo....", "..........obbokko..obbokko....", "..........okkooo...okkooo.....", "...........oo.......oo........"], ["....oBoBo.....................", "....obommo....................", "..ooobommmo...................", ".obbbbbbmmmo..................", "obbwebbbbmmmo.................", "obwbbbbbbbmmmo...o............", "bbwbbbbbbbbmmmooobooooo.......", "onnnbbbbbbbbmmmbbbbbbbboo.....", ".oooooobbbbbbmmmhhhhhhhhbooo..", ".......obbbbbbmmhhhhhbbbbbmmo.", "........obbbbbbbbbbbbbbbbbmmmo", ".......obbbbbbbbbbbbbbbbbbbmmo", "........obbbbbbbbbbbbbbbbbommo", "........obbbbbbBBBBBbbbbbbommo", ".........oBBBBBBBBBBBBBBBoommo", ".........oBBBBBBBBBBBBBBBoommo", "..........obboBBBBBBbboBBo.omo", "..........obboBBoooobboBBo.omo", "..........obboBBo..obboBBo..o.", "..........obboBBo..obboBBo....", "..........obboBBo..obboBBo....", "..........okkoBBo..okkoBBo....", "...........oookko...oookko....", "..............oo.......oo....."]]}, "waka": {"pal": {"w": "#f6f4ee", "W": "#c8c4bc", "k": "#26221e", "u": "#e6a0a0", "n": "#8a4a4a", "e": "#000000", "c": "#e8dcc0", "K": "#3a3430", "o": "#1a1612"}, "f": [["..............................", "..............................", "o........o....................", "coo.oo.ooco...................", "occowwocco...oooooooo.........", "oowwwwwwooooowwwwwwwwooo......", "WWwwwwkwWWwwwwwwwwwkkkkwoo....", "owwwewwkwwwkkkkwwwkkkkkkwwo...", "owwwwwwwwwkkkkkkwwkkkkkkwwWo..", ".owwwwwwwwkkkkkkwwwkkkkwwwWo..", "ouuuuuuwwwwkkkkwwwwwwwkkwwWo..", "ounuunuwwwwwwwwwwwwwwkkkkwWo..", "ouuuuuuwwwwwwwkkkkwwwkkkkwWo..", ".oooooooowwwwwkkkkwwwwkkwwkko.", ".........oWWWWWWWWWWWWWWWokko.", ".........owwoWWwwwwuwwoWWooo..", ".........owwoWWoooouwwoWWo....", ".........owwoWWo...owwoWWo....", ".........owwoWWo...owwoWWo....", ".........owwoKKo...owwoKKo....", ".........oKKooo....oKKooo.....", "..........oo........oo........"], ["..............................", "..............................", "o........o....................", "coo.oo.ooco...................", "occowwocco...oooooooo.........", "oowwwwwwooooowwwwwwwwooo......", "WWwwwwkwWWwwwwwwwwwkkkkwoo....", "owwwewwkwwwkkkkwwwkkkkkkwwo...", "owwwwwwwwwkkkkkkwwkkkkkkwwWo..", ".owwwwwwwwkkkkkkwwwkkkkwwwWo..", "ouuuuuuwwwwkkkkwwwwwwwkkwwWo..", "ounuunuwwwwwwwwwwwwwwkkkkwWo..", "ouuuuuuwwwwwwwkkkkwwwkkkkwWo..", ".oooooooowwwwwkkkkwwwwkkwwkko.", ".........oWWWWWWWWWWWWWWWokko.", ".........owwoWWwwwwuwwoWWooo..", ".........owwoWWoooouwwoWWo....", ".........owwoWWo...owwoWWo....", ".........owwoWWo...owwoWWo....", ".........oKKoWWo...oKKoWWo....", "..........oooKKo....oooKKo....", ".............oo........oo....."]]}, "ofisa": {"pal": {"w": "#f4f0e4", "W": "#ffffff", "s": "#d4ccb8", "f": "#3a3434", "e": "#e8e0d0", "n": "#1a1414", "o": "#1a1614"}, "f": [["......................", "......................", "..........oooo........", "......oooowwwwoooo....", "....oowwwwwwwWwwwwo...", "..ooffwwwWwwwwwwwwwo..", ".offffwwwwwwwwwwWwwo..", "offefffwwwwwwwwwwwwwo.", "offffffwwswwswwswwwwo.", "offfffwwwwWwwwWwwwwwo.", "onffwwwwwwwwwwwwwWwwo.", ".oooowwwWwwwwwwwwwoo..", ".....owwwwwwswwwwo....", "......oofwfwwofofo....", ".......ofofooofofo....", ".......ofofo.ofofo....", ".......ofoo..ofoo.....", "........o.....o......."], ["......................", "......................", "..........oooo........", "......oooowwwwoooo....", "....oowwwwwwwWwwwwo...", "..ooffwwwWwwwwwwwwwo..", ".offffwwwwwwwwwwWwwo..", "offefffwwwwwwwwwwwwwo.", "offffffwwswwswwswwwwo.", "offfffwwwwWwwwWwwwwwo.", "onffwwwwwwwwwwwwwWwwo.", ".oooowwwWwwwwwwwwwoo..", ".....owwwwwwswwwwo....", "......oofwfwwofofo....", ".......ofofooofofo....", ".......ofofo.ofofo....", "........oofo..oofo....", "..........o.....o....."]]}, "witranalwe": {"pal": {"H": "#1c1c2e", "h": "#7a6a9a", "q": "#141428", "F": "#d0e0f8", "f": "#8aa0c8", "E": "#40f0ff", "e": "#1a6a90", "P": "#2c2c50", "p": "#46467a", "s": "#d0dcf0", "A": "#26264a", "K": "#d0e0f8", "L": "#121220", "o": "#06060e"}, "f": [["......oHHHHHHHHHHHHo......", "......oHHHHHHHHHHHHo......", "......oHHHHHHHHHHHHo......", "..ooooohhhhhhhhhhhhooooo..", ".oHHHHHHHHHHHHHHHHHHHHHHo.", ".oHHHHHHHHHHHHHHHHHHHHHHo.", "..oqqqqqqqqqqqqqqqqqqqqo..", "...ooooooFFFFFFFFoooooo...", "........oFFFFFFFFo........", "........oFEFFFFEFo........", "........oFeFFFFeFo........", "........ofFFFFFFfo........", "........ofFffffFfo........", ".........offffffo.........", ".....ooooooFFFFoooooo.....", "....oPPPqqPPqqPPqqPPPo....", "....oPAqqqPPqqPPqqqAPo....", ".....oAqqqPPqqPPqqqAo.....", ".....oAqqqPpqqpPqqqAo.....", ".....oAqqqPpqqpPqqqAo.....", "....oAqqqPPpqqpPPqqqAo....", "....oAqqqPPpqqpPPqqqAo....", "....oAqqssspqqsssqqqAo....", "....oAqqsPPsqqsPPsqqAo....", "....oAqssPPpqqsPPqsqAo....", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "..oAqqqPPPPpqqpPPPPqqqAo..", "..oAqqqPssspqqsssPPqsqAo..", "..oAqsqPsPPsqqsPPsPqsqAo..", "..oAqqsssPPpqqsPPPsssqAo..", "..oAqqqPPPPpqqpPPPPqqqAo..", ".oAqqqPPPPPpqqpPPPPPqqqAo.", ".oAqqqPPPPPpqqpPPPPPqqqAo.", ".oAqqqPPPPPpqqpPPPPPqqqAo.", ".oAqqqPPPPPppppPPPPPqqqAo.", ".oAAoooooLLooooLLoooooAAo.", ".oAAo...oLLo..oLLo...oAAo.", ".oAAo...oLLo..oLLo...oAAo.", ".oAAo...oLLo..oLLo...oAAo.", ".oAAo...oLLo..oLLo...oAAo.", "ooAAo...oLLo..oLLo...oAAoo", "KKKo....oLLo..oLLo....oKKK", "KKKo....oLLo..oLLo....oKKK", "KKKo....oLLo..oLLo....oKKK", "KoKo....oLLo..oLLo....oKoK", "o.o.....oLLo..oLLo.....o.o", "........oLLo..oLLo........", "........oLLo..oLLo........", "........oLLo..oLLo........", "........oLLo..oLLo........", ".......oLLLo..oLLLo.......", "........ooo....ooo........", ".........................."], ["......oHHHHHHHHHHHHo......", "......oHHHHHHHHHHHHo......", "......oHHHHHHHHHHHHo......", "..ooooohhhhhhhhhhhhooooo..", ".oHHHHHHHHHHHHHHHHHHHHHHo.", ".oHHHHHHHHHHHHHHHHHHHHHHo.", "..oqqqqqqqqqqqqqqqqqqqqo..", "...ooooooFFFFFFFFoooooo...", "........oFFFFFFFFo........", "........oFEFFFFEFo........", "........oFeFFFFeFo........", "........ofFFFFFFfo........", "........ofFffffFfo........", ".........offffffo.........", ".....ooooooFFFFoooooo.....", "....oPPPqqPPqqPPqqPPPo....", "....oPAqqqPPqqPPqqqAPo....", ".....oAqqqPPqqPPqqqAo.....", ".....oAqqqPpqqpPqqqAo.....", ".....oAqqqPpqqpPqqqAo.....", "....oAqqqPPpqqpPPqqqAo....", "....oAqqqPPpqqpPPqqqAo....", "....oAqqssspqqsssqqqAo....", "....oAqqsPPsqqsPPsqqAo....", "....oAqssPPpqqsPPqsqAo....", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "..oAqqqPPPPpqqpPPPPqqqAo..", "..oAqqqPssspqqsssPPqsqAo..", "..oAqsqPsPPsqqsPPsPqsqAo..", "..oAqqsssPPpqqsPPPsssqAo..", ".ooAqqqPPPPpqqpPPPPqqqAoo.", "oAqoqqPPPPPpqqpPPPPPqqoqAo", "oAqoqqPPPPPpqqpPPPPPqqoqAo", "oAqoqqPPPPPpqqpPPPPPqqoqAo", "oAqoqqPPPPPppppPPPPPqqoqAo", "oAAooooooLLooooLLooooooAAo", "oAAo....oLLo..oLLo....oAAo", "oAAo....oLLo..oLLo....oAAo", "oAAo....oLLo..oLLo....oAAo", "oAAo....oLLo..oLLo....oAAo", "oAAo....oLLo..oLLo....oAAo", "KKo.....oLLo..oLLo.....oKK", "KKo.....oLLo..oLLo.....oKK", "KKo.....oLLo..oLLo.....oKK", "oKo.....oLLo..oLLo.....oKo", ".o......oLLo..oLLo......o.", "........oLLo..oLLo........", "........oLLo..oLLo........", "........oLLo..oLLo........", "........oLLo..oLLo........", ".......oLLLo..oLLLo.......", "........ooo....ooo........", ".........................."]]}};
+
 /* ============================================================
    RETRO GRAPHICS (drawn at 256x224, shown at 2x)
    ============================================================ */
@@ -466,6 +468,9 @@ function drawNgen(c,x,y,s,t,v){
 const ECACHE={};
 function enemyCanvas(t,size,fr){
   const key=t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];
+  if(typeof SPR2!=='undefined'&&SPR2[t]){const k=Math.max(1,Math.floor(size/48)),base=tplCanvas(t,fr,k),pd=6*k,[cv,cc]=mk(base.width+pd*2,base.height+pd);
+    for(const [r,al] of [[1,.10],[.8,.12],[.6,.14]]){cc.fillStyle='rgba(170,220,255,'+al+')';cc.beginPath();cc.ellipse(cv.width/2,cv.height*.45,cv.width/2*r,cv.height/2*r,0,0,6.283);cc.fill()}
+    cc.drawImage(base,pd,pd);return ECACHE[key]=cv}
   const pad=3,s=size/16,[cvs,c]=mk(size+pad*2,size+pad*2);
   const E=(cx,cy,rx,ry,col)=>ell(c,pad+cx*s,pad+cy*s,rx*s,ry*s,col);
   const Q=(x,y,w,h,col)=>R(c,pad+x*s,pad+y*s,Math.max(1,w*s),Math.max(1,h*s),col);
@@ -524,8 +529,23 @@ function enemyCanvas(t,size,fr){
 
 /* ---------- props ---------- */
 const PCACHE={};
-function treeCanvas(v){
-  const k='tree'+v;if(PCACHE[k])return PCACHE[k];const [cvs,c]=mk(20,26);
+function treeCanvas(v,style){
+  style=style||'lafken';const k='tree'+style+v;if(PCACHE[k])return PCACHE[k];
+  if(style==='koyam'){const [cvs,c]=mk(24,30);
+    R(c,10,17,4,11,'#5a3a1e');R(c,12,17,2,11,'#3e2612');R(c,9,27,6,1,'#4a2e16');R(c,7,15,4,2,'#5a3a1e');R(c,13,14,4,2,'#5a3a1e');R(c,11,20,1,3,'#7a5230');
+    const lobes=[[7,11,5.5,4.5],[16,10,5.5,4.5],[11.5,6,7,5],[12,12,6,3.5],[5+v%2,7,3.5,3],[18-v%2,6,3.5,3]];
+    for(const [x,y,rx,ry] of lobes)ell(c,x,y+1,rx,ry,'#4a6a1c');
+    for(const [x,y,rx,ry] of lobes)ell(c,x,y,rx-.8,ry-.8,'#6e8e2a');
+    for(const [x,y,rx,ry] of lobes)ell(c,x-1,y-1,rx*.5,ry*.5,'#9ab442');
+    for(let i=0;i<18;i++){const px=2+Math.floor(h2(i,v,61)*20),py=2+Math.floor(h2(i,v,62)*12);if(h2(i,v,63)<.6)R(c,px,py,1,1,h2(i,v,64)<.5?'#c8d468':'#3a5414')}
+    outline(cvs,'#1a2408');return PCACHE[k]=cvs}
+  if(style==='mawida'){const [cvs,c]=mk(22,34);
+    R(c,9,22,4,10,'#3a2a1a');R(c,11,22,2,10,'#24180e');R(c,8,31,6,1,'#2e2014');R(c,9,25,1,2,'#4a6a3a');R(c,12,28,1,2,'#4a6a3a');
+    const tiers=[[11,20,9,4],[11,15,8,4],[11,10,6.5,4],[11,5.5,4.5,3.5],[11,2.5,2.5,2]];
+    for(const [x,y,rx,ry] of tiers){ell(c,x,y+1,rx,ry,'#123a2e');ell(c,x-.5,y,rx-.8,ry-.9,'#1e5a44');ell(c,x-2,y-1,rx*.45,ry*.45,'#2e7a5a')}
+    for(let i=0;i<12;i++){const px=3+Math.floor(h2(i,v,71)*16),py=3+Math.floor(h2(i,v,72)*20);if(h2(i,v,73)<.5)R(c,px,py,1,1,'#5aa078')}
+    outline(cvs,'#06140e');return PCACHE[k]=cvs}
+  const [cvs,c]=mk(20,26);
   R(c,8,17,4,7,'#6a4020');R(c,10,17,2,7,'#4a2a12');R(c,7,23,6,1,'#5a3418');
   ell(c,10,9.5,9.5,8.5,'#1c5c24');ell(c,9.5,9,8.2,7.4,'#287828');ell(c,8.5,7.5,6,5,'#40983c');
   for(let i=0;i<14;i++){const an=i/14*Math.PI*2;R(c,9.5+Math.cos(an)*5.6,8.5+Math.sin(an)*4.6,1,1,'#88d070')}
@@ -555,16 +575,14 @@ function rukaCanvas(bw,bh){
   outline(cvs,'#2a1808');
   return PCACHE[k]={cvs,ox,oy,smoke:[cx-ox,top-oy+1]};
 }
+function tplCanvas(name,fr,k,pad){
+  const key='tp'+name+fr+'_'+k+'_'+(pad||0);if(PCACHE[key])return PCACHE[key];
+  const d=SPR2[name],rows=d.f[fr%d.f.length],h=rows.length,w=rows[0].length,p=pad||0,[cvs,c]=mk(w*k+p*2,h*k+p*2);
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const ch=rows[y][x];if(ch!=='.')R(c,p+x*k,p+y*k,k,k,d.pal[ch])}
+  return PCACHE[key]=cvs}
 function animalCanvas(t,fr,dir){
   const key='an'+t+fr+dir;if(PCACHE[key])return PCACHE[key];
-  if(dir==='right'){const m=mirror(animalCanvas(t,fr,'left'));return PCACHE[key]=m}
-  const [cvs,c]=mk(20,16);const lg=fr?1:0;
-  if(t==='kawellu'){R(c,4,6,11,5,'#8a5428');R(c,13,7,2,3,'#6a3a18');R(c,2,2,4,7,'#8a5428');R(c,1,2,3,3,'#8a5428');R(c,0,3,2,2,'#5a3418');R(c,4,1,2,6,'#2a1a10');R(c,15,6,2,5,'#2a1a10');
-    R(c,5,11,2,4-lg,'#6a3a18');R(c,8,11,2,4,'#6a3a18');R(c,11,11,2,4-(1-lg),'#6a3a18');R(c,13,11,2,4,'#6a3a18');R(c,1,3,1,1,'#000')}
-  else if(t==='waka'){R(c,4,6,11,6,'#f0f0f0');R(c,7,7,3,3,'#202020');R(c,12,8,2,3,'#202020');R(c,1,4,5,5,'#f0f0f0');R(c,1,7,4,2,'#e0a0a0');R(c,0,3,2,1,'#e8e0d0');R(c,5,3,2,1,'#e8e0d0');R(c,2,5,1,1,'#000');R(c,15,7,2,1,'#202020');
-    R(c,5,12,2,3-lg,'#d0d0d0');R(c,8,12,2,3,'#d0d0d0');R(c,11,12,2,3-(1-lg),'#d0d0d0');R(c,13,12,2,3,'#d0d0d0')}
-  else{ell(c,10,8,6,4.5,'#f4f0e4');ell(c,9,7,4,3,'#ffffff');R(c,2,5,4,4,'#3a3a3a');R(c,3,6,1,1,'#fff');R(c,6,12,2,3-lg,'#3a3a3a');R(c,12,12,2,3,'#3a3a3a')}
-  cel(cvs,.8);outline(cvs,'#181018');return PCACHE[key]=cvs}
+  const base=tplCanvas(t,fr,1);return PCACHE[key]=dir==='right'?mirror(base):base}
 function loomCanvas(prog){
   const [cvs,c]=mk(16,22);R(c,1,2,2,20,'#6a4020');R(c,13,2,2,20,'#6a4020');R(c,0,2,16,2,'#8a5a30');R(c,0,18,16,2,'#8a5a30');
   for(let x=3;x<13;x++)R(c,x,4,1,14,'#e8dcc0');
@@ -644,13 +662,13 @@ lof:{name:'Lof',g:{es:'La comunidad',en:'The community'},floor:',',bg:'coast',so
  scenes:[{type:'palin',x:11,y:3,w:12,h:3}],
  ents:[{id:'lonko',kind:'npc',look:'lonko',x:18,y:7,talk:()=>lonkoTalk(),bub:['Mari mari!','Kümey antü.']},
    {id:'kuku2',kind:'npc',look:'kuku',fem:1,x:5,y:9,talk:()=>kukuLof()},
-   {id:'weaver',kind:'npc',look:'weaver',fem:1,x:6,y:3,dir:'up',act:'weave',fixed:1,talk:()=>weaverTalk(),bub:['Ngürekan.','Kümey!']},
+   {id:'weaver',kind:'npc',look:'weaver',fem:1,x:6,y:3,dir:'up',act:'weave',fixed:1,talk:()=>weaverTalk(),bub:['Ngürekalen.','Kümey!']},
    {id:'cook',kind:'npc',look:'cook',fem:1,x:24,y:8,act:'cook',path:[[24,8],[24,10],[28,10],[24,10]],pause:160,talk:()=>cookTalk(),bub:['Iyael!','Kofke, ilo, poñü...']},
    {id:'teacher',kind:'npc',look:'teacher',fem:1,x:13,y:12,dir:'down',act:'teach',fixed:1,talk:()=>teacherTalk(),bub:['Kiñe, epu, küla!','Chem pingey tüfa?','Mari mari, pichikeche!']},
    {id:'kid1',kind:'npc',look:'child',x:12,y:14,dir:'up',seated:1,fixed:1,talk:()=>kidTalk(0),bub:['Kiñe!','Kofke!']},
    {id:'kid2',kind:'npc',look:'childf',fem:1,x:13,y:14,dir:'up',seated:1,fixed:1,talk:()=>kidTalk(1),bub:['Epu!','Küla!']},
    {id:'kid3',kind:'npc',look:'child',x:14,y:14,dir:'up',seated:1,fixed:1,talk:()=>kidTalk(2),bub:['Meli!']},
-   {id:'walker',kind:'npc',look:'walker',x:6,y:10,act:'wood',path:[[6,10],[22,10]],pause:90,talk:()=>walkerTalk(),bub:['Mamüll yeken.']},
+   {id:'walker',kind:'npc',look:'walker',x:6,y:10,act:'wood',path:[[6,10],[22,10]],pause:90,talk:()=>walkerTalk(),bub:['Mamüll yelen.']},
    {id:'runner',kind:'npc',look:'childf',fem:1,x:17,y:13,path:[[17,13],[21,13],[21,14],[17,14]],pause:10,spd:10,talk:()=>runnerTalk(),bub:['Ayüwün!']},
    {id:'dog',kind:'npc',look:'dog',x:8,y:13,path:[[8,13],[10,13],[10,14],[8,14]],pause:40,talk:()=>dogTalk()},
    {id:'kona',kind:'npc',look:'kona',x:10,y:6,dir:'right',fixed:1,talk:()=>konaTalk(),bub:['Palin!','Kümey!']},
@@ -674,7 +692,7 @@ mawida:{name:'Mawida rüpü',g:{es:'El camino del monte',en:'The forest path'},f
    {kind:'enemy',x:17,y:11,party:['anchi','laftrache']},{kind:'enemy',x:26,y:12,party:['chonchon','anchi']}]},
 inaltu:{name:'Lafken inaltu',g:{es:'La orilla de la laguna',en:'The lagoon shore'},floor:'.',bg:'coast',song:'coast',
  edges:{left:{to:'mawida',x:30,y:7}},stairs:{to:'d1',x:1,y:6},dive:{'23,4':'gold'},
- ents:[{id:'challwafe2',kind:'npc',look:'fisher',x:8,y:9,path:[[8,9],[13,9]],pause:200,talk:()=>fisher2Talk(),bub:['Challwatuken.']},
+ ents:[{id:'challwafe2',kind:'npc',look:'fisher',x:8,y:9,path:[[8,9],[13,9]],pause:200,talk:()=>fisher2Talk(),bub:['Challwatulen.']},
    {id:'trader',kind:'npc',look:'seller',x:19,y:9,talk:()=>shop('inaltu')},
    {id:'machiko',kind:'npc',look:'fisherw',fem:1,x:28,y:9,talk:()=>shoreWomanTalk(),bub:['Trelke-wekufü...']},
    {kind:'enemy',x:10,y:5,party:['anchi','anchi']},{kind:'enemy',x:25,y:10,party:['laftrache','chonchon','laftrache']},
@@ -717,12 +735,12 @@ n_rupu:{region:'nagche',name:'Nagche rüpü',g:{es:'El camino a los llanos',en:'
    {kind:'enemy',x:24,y:10,party:['anchi','kolokolo','kolokolo']}]},
 n_lof:{region:'nagche',name:'Nagche lof',g:{es:'La comunidad de los llanos',en:'The lowland community'},floor:',',bg:'field',song:'lof',
  edges:{left:{to:'n_rupu',x:30,y:7},right:{to:'n_kullin',x:1,y:7,req:'nag_lonko',reqMsg:[N('Antes de seguir, habla con el lonko de este lof. Está junto al kütral.','Before you go on, speak with the lonko of this lof. He is by the fire.')]}},
- ents:[{id:'chuchu',kind:'npc',look:'kuku',fem:1,x:5,y:12,talk:()=>chuchuTalk(),bub:['Küme küpaymi!']},
+ ents:[{id:'chuchu',kind:'npc',look:'kuku',fem:1,x:5,y:12,talk:()=>chuchuTalk(),bub:['Na küme mi küpan!']},
    {id:'nlonko',kind:'npc',look:'lonko2',x:18,y:7,talk:()=>nLonkoTalk(),bub:['Mari mari!']},
    {id:'nutram',kind:'npc',look:'elder',x:16,y:8,dir:'up',fixed:1,act:'teach',talk:()=>nutramTalk(),bub:['Kuyfi...','Fey mew...']},
    {id:'lk1',kind:'npc',look:'child',x:15,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichiche','Epew ayüken!','¡Me gustan los epew!','I love epew!')])},
    {id:'lk2',kind:'npc',look:'childf',fem:1,x:17,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichi domo','Chem pikey ta Witranalwe?','¿Qué dice el Witranalwe?','What does the Witranalwe say?')])},
-   {id:'smith',kind:'npc',look:'walker',x:13,y:7,dir:'left',fixed:1,act:'smith',talk:()=>smithTalk(),bub:['Rütran.']},
+   {id:'smith',kind:'npc',look:'walker',x:13,y:7,dir:'left',fixed:1,act:'smith',talk:()=>smithTalk(),bub:['Rütralen.']},
    {id:'aw1',kind:'npc',look:'child',x:7,y:12,dir:'right',seated:1,fixed:1,act:'awar',talk:()=>awarTalk(),bub:['Awarkuden!','Kiñe, epu...']},
    {id:'aw2',kind:'npc',look:'childf',fem:1,x:9,y:12,dir:'left',seated:1,fixed:1,talk:()=>awarTalk(),bub:['Iñche wewün!']},
    {id:'nseller',kind:'npc',look:'seller',x:24,y:12,talk:()=>shop('n_lof')},
@@ -771,6 +789,9 @@ ngen2:{region:'nagche',ngenmap:1,name:'Ngen-mawida',g:{es:'El claro del bosque',
 for(const k in MAPS){const m=MAPS[k];if(!m.region)m.region='lafkenche';m.rows=MAPROWS[k];m.w=MAPROWS[k][0].length;m.h=MAPROWS[k].length}
 MAPS.inaltu.edges.right={to:'n_rupu',x:1,y:7,req:'ngen',reqMsg:[N('El camino hacia el este, a las tierras nagche, está cubierto de niebla. Primero despierta a Ngen-lafken.','The road east, to the Nagche lands, is covered in fog. First wake Ngen-lafken.')]};
 MAPS.ngen.ngenmap=1;
+for(const k of ['n_rupu','n_lof','n_kullin','n_lewfu']){MAPS[k].pal='nagche';MAPS[k].trees='koyam'}
+for(const k of ['n_mawida','ngen2']){MAPS[k].pal='nagforest';MAPS[k].trees='mawida'}
+for(const k of ['nd1','nd2','nd3']){MAPS[k].pal='nagcave';MAPS[k].bg='cave2'}
 MAPS.n_kullin.ents.forEach(e=>{if(e.herd&&e.look!=='ofisa')e.flag='hd_'+e.id});
 MAPS.nd1.pz.hint=N('Pista: de lo menor a lo mayor. meli (4), mari kechu (15), epu mari meli (24).','Hint: from smallest to largest. meli (4), mari kechu (15), epu mari meli (24).');
 
@@ -778,6 +799,7 @@ MAPS.nd1.pz.hint=N('Pista: de lo menor a lo mayor. meli (4), mari kechu (15), ep
 /* ============================================================
    MAP STATE + LAYER BUILDING
    ============================================================ */
+const PENSPOT=[[10,2],[12,3],[14,2],[11,3],[15,3]];
 let CUR='rupu',M=null,grid=null,ents=[],LAYERS=[],GT=null,PROPS=[],RUKAS=[],SCN=[];
 const P={x:1,y:6,fx:1,fy:6,ox:1,oy:6,t:0,moving:false,dir:'down',spd:.125};
 const WALK=new Set(['.',',','"','=','_','P','m','g','p','S','q','k','A','b']);
@@ -791,6 +813,13 @@ const PL={G0:C3('#18481c'),G1:C3('#307c34'),G2:C3('#48a048'),G3:C3('#80c868'),GY
   D1:C3('#a87848'),D2:C3('#c89860'),D3:C3('#e0bc80'),
   C0:C3('#201810'),C1:C3('#3c2c20'),C2:C3('#5a4430'),C3:C3('#78604a'),CD:C3('#4a3828'),
   FW:C3('#f8f8f8'),FY:C3('#f8d848'),FR:C3('#e85868')};
+const PL0=Object.assign({},PL);
+const PALS={
+  nagche:{G0:'#24461a',G1:'#3e7426',G2:'#5c9c34',G3:'#9ccc58',GY:'#6aa83c',GL:'#a4d070',GM:'#80b450',D1:'#9a6438',D2:'#b8844c',D3:'#d6aa68',FR:'#d83850',FY:'#f8d040',FW:'#fff8e8'},
+  nagforest:{G0:'#10301e',G1:'#1e4e30',G2:'#2e6a3e',G3:'#5a9a5c',GY:'#3a7a46',GL:'#6aa070',GM:'#4a8a56',D1:'#5a4a30',D2:'#6e5a3a',D3:'#8a7450',FR:'#c8a0f0',FY:'#f0e890',FW:'#e8fff0'},
+  nagcave:{C0:'#0e1610',C1:'#26322a',C2:'#3a4a3c',C3:'#56685a',CD:'#2e3c30'}};
+const WALLS={lafken:['#5a4430','#8a7058','#78604a','#3c2c20','#201810'],nagche:['#3c4c3e','#6e8a68','#5a7058','#243026','#0e160e']};
+function applyPal(){Object.assign(PL,PL0);const p=PALS[M.pal];if(p)for(const k in p)PL[k]=C3(p[k])}
 function gtype(ch){if(ch==='~'||ch==='v')return'~';if(ch==='.'||ch===','||ch==='='||ch==='_'||ch==='%'||ch==='"'||ch==='Y'||ch==='b')return ch;if(ch==='T'||ch==='W'||ch==='f')return',';return M.floor}
 function gAt(x,y){if(x<0||y<0||x>=M.w||y>=M.h)return null;return GT[y][x]}
 function edgeDist(tx,ty,lx,ly,pred){let d=99;const E=15.5;
@@ -849,7 +878,7 @@ function wdep(gx,gy){const fx=(gx-8)/16,fy=(gy-8)/16,x0=Math.floor(fx),y0=Math.f
   const v=(W(x0,y0)*(1-ax)+W(x0+1,y0)*ax)*(1-ay)+(W(x0,y0+1)*(1-ax)+W(x0+1,y0+1)*ax)*ay;return v*16-8}
 let WD=null;
 function buildLayers(){
-  GT=grid.map(r=>r.map(gtype));
+  applyPal();GT=grid.map(r=>r.map(gtype));
   WD=GT.map(r=>r.map(g=>g==='~'?99:0));
   for(let it=0;it<40;it++){let ch=0;for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++){if(WD[y][x]===0)continue;let m=WD[y][x];
     for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const xx=x+dx,yy=y+dy;const n=(xx<0||yy<0||xx>=M.w||yy>=M.h)?6:WD[yy][xx];if(n+1<m)m=n+1}
@@ -866,7 +895,7 @@ function buildLayers(){
   }
   PROPS=[];RUKAS=[];
   for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++){const ch=grid[y][x];
-    if(ch==='T')PROPS.push({y:y+.9,cvs:treeCanvas(Math.floor(h2(x,y,2)*3)),dx:x*T-2,dy:y*T-(y===0?4:10),sh:[x*T+8,y*T+14,7,2]});
+    if(ch==='T'){const tc=treeCanvas(Math.floor(h2(x,y,2)*3),M.trees);PROPS.push({y:y+.9,cvs:tc,dx:x*T+8-(tc.width>>1),dy:y*T+16-tc.height+(y===0?6:0),sh:[x*T+8,y*T+14,7,2]})}
     else if(ch==='#')PROPS.push({y:y+.8,cvs:rockCanvas(Math.floor(h2(x,y,2)*2)),dx:x*T,dy:y*T+2,sh:[x*T+8,y*T+14,7,2]});
     else if(ch==='V')PROPS.push({y:y+.9,cvs:boardCanvas(),dx:x*T-4,dy:y*T-6,sh:[x*T+8,y*T+15,10,2],board:1});
     else if(ch==='Z')PROPS.push({y:y+.9,loom:1,dx:x*T,dy:y*T-6,sh:[x*T+8,y*T+15,8,2]});
@@ -879,9 +908,12 @@ function buildLayers(){
 function drawGroundStatics(c){
   for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++){const ch=grid[y][x],X=x*T,Y=y*T;
     if(ch==='%'){const below=y+1<M.h?grid[y+1][x]:'%';
-      if(below!=='%'){R(c,X,Y+5,16,11,'#5a4430');R(c,X,Y+4,16,1,'#8a7058');R(c,X,Y+5,16,1,'#78604a');
-        for(let r=0;r<3;r++){const yy=Y+6+r*3+ (r===2?1:0),off=((r+x)%2)*4;R(c,X,yy+2,16,1,'#3c2c20');for(let k=0;k<3;k++)R(c,X+((off+k*7)%16),yy,1,2,'#3c2c20')}
-        R(c,X,Y+15,16,1,'#201810')}}
+      const WC=WALLS[M.region==='nagche'?'nagche':'lafken'];
+      if(below!=='%'){R(c,X,Y+5,16,11,WC[0]);R(c,X,Y+4,16,1,WC[1]);R(c,X,Y+5,16,1,WC[2]);
+        for(let r=0;r<3;r++){const yy=Y+6+r*3+ (r===2?1:0),off=((r+x)%2)*4;R(c,X,yy+2,16,1,WC[3]);for(let k=0;k<3;k++)R(c,X+((off+k*7)%16),yy,1,2,WC[3])}
+        R(c,X,Y+15,16,1,WC[4]);
+        if(M.region==='nagche'){for(let k=0;k<4;k++){const mx=Math.floor(h2(x,y,80+k)*15);if(h2(x,y,90+k)<.6)R(c,X+mx,Y+5,2,1+Math.floor(h2(x,y,95+k)*3),'#4a7a3a')}
+          if(h2(x,y,99)<.35){const rx=X+3+Math.floor(h2(x,y,98)*10);for(let i=0;i<6;i++)R(c,rx+(i%3===2?1:0),Y+6+i,1,1,'#5a3e22')}}}}
   }
   for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++){const ch=grid[y][x],X=x*T,Y=y*T;
     if(ch==='W'){R(c,X,Y,16,16,'#a07a30');for(let r=0;r<4;r++)for(let k=0;k<5;k++){const sx=X+1+k*3+(r%2),sy=Y+1+r*4;R(c,sx,sy,1,3,'#e8c050');R(c,sx,sy,1,1,'#f8e090');R(c,sx+1,sy+2,1,1,'#806020')}}
@@ -922,6 +954,7 @@ function loadMap(id,x,y,quiet){
     const e=Object.assign({},e0);
     const [ex,ey]=e.fixed||e.path?[e.x,e.y]:placeNear(e.x,e.y,true);e.x=ex;e.y=ey;e.fx=ex;e.fy=ey;e.cd=30+rnd(60);e.dir=e.dir||'down';e.pi=0;e.wait=e.pause||0;e.bt=rnd(400);e.ox=e.x;e.oy=e.y;
     ents.push(e)}
+  if(id==='n_kullin'){let i=0;for(const e0 of M.ents)if(e0.herd&&e0.flag&&S.flags[e0.flag]){const sp=PENSPOT[i++];ents.push({kind:'animal',look:e0.look,x:sp[0],y:sp[1],fx:sp[0],fy:sp[1],ox:sp[0],oy:sp[1],pen:[10,2,15,3],cd:30+rnd(60),wait:0,dir:i%2?'left':'right',home:1})}}
   SCN=(M.scenes||[]).map(s=>Object.assign({},s,{pl:[0,1,2,3].map(i=>({x:s.x*T+s.w*T*(i<2?.3:.7),y:s.y*T+s.h*T*(.3+.4*(i%2)),dir:'right'}))}));
   S.map=id;fade=16;grace=40;
   if(!quiet)showBanner(M.name,G(M.g));
@@ -994,7 +1027,7 @@ function edge(d){
   const E=M.edges&&M.edges[d];if(!E)return;
   if(E.need){const n=(S.pieces||[]).length;if(P.bump)return;P.bump=1;
     return say([N('Una niebla gris y espesa cubre el camino hacia el oeste. Ahí las palabras se borran: es la niebla de Ti Fütra Ngoyman, el gran olvido.','A thick grey fog covers the road west. Words fade inside it: it is the fog of Ti Fütra Ngoyman, the great forgetting.'),
-      L('','Trokiñ trariwe: '+n+'/'+E.need,'Solo un trariwe completo puede atravesarla. Tienes '+n+' de '+E.need+' trokiñ: uno por cada tierra (Lafkenche, Nagche, Pewenche, Williche, Puelmapu).','Only a complete trariwe can pass through it. You have '+n+' of '+E.need+' trokiñ: one for each land (Lafkenche, Nagche, Pewenche, Williche, Puelmapu).')])}
+      L('','Trariwe trokiñ: '+n+'/'+E.need,'Solo un trariwe completo puede atravesarla. Tienes '+n+' de '+E.need+' trokiñ: uno por cada tierra (Lafkenche, Nagche, Pewenche, Williche, Puelmapu).','Only a complete trariwe can pass through it. You have '+n+' of '+E.need+' trokiñ: one for each land (Lafkenche, Nagche, Pewenche, Williche, Puelmapu).')])}
   if(E.req&&!S.flags[E.req]){say(E.reqMsg);return}
   loadMap(E.to,E.x,E.y);
 }
@@ -1134,13 +1167,13 @@ function weaverTalk(){
   S.flags.weaver=1;
   say([L('Ngürekafe','Mari mari, '+addr(true)+'!','¡Hola, '+addr(true)+'!','Hello, '+addr(true)+'!'),
     L('Ngürekafe','Iñche ngürekan. Tüfa witral pingey.','Yo tejo. Esto se llama witral.','I weave. This is called a witral.'),
-    L('Ngürekafe','Kiñe makuñ ngürekan.','Estoy tejiendo un makuñ (poncho).','I am weaving a makuñ (poncho).'),
+    L('Ngürekafe','Kiñe makuñ ngürekalen.','Estoy tejiendo un makuñ (poncho).','I am weaving a makuñ (poncho).'),
     N('Cada figura del tejido se aprende mirando a las abuelas. Las manos también recuerdan.','Every figure in the weaving is learned by watching the grandmothers. Hands remember too.'),
     N('(Aprendiste: ngürekan = tejer, witral = telar, makuñ = poncho.)','(You learned: ngürekan = to weave, witral = loom, makuñ = poncho.)')]);
 }
 function cookTalk(){
   const lines=[L('Papay','Mari mari, '+addr(true)+'!','¡Hola, '+addr(true)+'!','Hello, '+addr(true)+'!'),
-    L('Papay','Iyael dewmaken.','Estoy haciendo comida.','I am making food.')];
+    L('Papay','Iyael dewmalen.','Estoy haciendo comida.','I am making food.')];
   if(!S.flags.cook){S.flags.cook=1;S.items.kofke++;persist();
     lines.push(L('Papay','Iaymi? Kiñe kofke elueyu.','¿Vas a comer? Te doy un pan.','Will you eat? I give you a bread.'),
       L(nm(),'Chaltu may, papay!','¡Gracias, señora!','Thank you, ma\'am!'),N('Recibiste un kofke.','You received a kofke.'));sfx('pick')}
@@ -1174,7 +1207,7 @@ function kidTalk(i){
     [L('Pichiche','Iñche ka kimün: "kofke", "ko", "kütral"!','Yo también sé: "pan", "agua", "fuego".','I know too: "bread", "water", "fire"!')]][i];
   say(T);
 }
-function walkerTalk(){say([L('Wentru','Mari mari, '+addr(false)+'.','Hola, '+addr(false)+'.','Hello, '+addr(false)+'.'),L('Wentru','Mamüll yeken ruka mew.','Llevo leña a la casa.','I am carrying firewood home.'),L('Wentru','Mawünay.','Va a llover.','It is going to rain.')])}
+function walkerTalk(){say([L('Wentru','Mari mari, '+addr(false)+'.','Hola, '+addr(false)+'.','Hello, '+addr(false)+'.'),L('Wentru','Mamüll yelen ruka mew.','Llevo leña a la casa.','I am carrying firewood home.'),L('Wentru','Mawünay.','Va a llover.','It is going to rain.')])}
 function runnerTalk(){say([L('Pichi domo','Ayüwün!','¡Qué contenta estoy!','I am so happy!'),N('La niña sigue corriendo en círculos, riéndose.','The girl keeps running in circles, laughing.')])}
 function dogTalk(){sfx('ok');say([L('','Trewa','Un trewa (perro) mueve la cola y te huele la mano.','A trewa (dog) wags its tail and sniffs your hand.')])}
 function konaTalk(){say([L('Kona','Mari mari, '+addr(false)+'! Palin müley.','¡Hola, '+addr(false)+'! Hay palin.','Hello, '+addr(false)+'! There is a palin game.'),
@@ -1204,7 +1237,7 @@ function pescadoraTalk(){
   }else say([L('Challwafe','Newentunge!','¡Ánimo!','Be strong!'),N('Los anchimallén brillan y curan a otros wekufü. Si los haces dormir con umawtu-, dejan de molestar.','The anchimallén glow and heal other wekufü. If you make them sleep with umawtu-, they stop helping.')]);
 }
 function gathererTalk(){
-  const ls=[L('Domo','Mari mari, '+addr(true)+'!','¡Hola, '+addr(true)+'!','Hello, '+addr(true)+'!'),L('Domo','Külon kintuken.','Ando buscando maqui.','I am looking for maqui.')];
+  const ls=[L('Domo','Mari mari, '+addr(true)+'!','¡Hola, '+addr(true)+'!','Hello, '+addr(true)+'!'),L('Domo','Külon kintulen.','Ando buscando maqui.','I am looking for maqui.')];
   if(!S.flags.gatherer){S.flags.gatherer=1;S.items.kulon+=2;persist();sfx('pick');ls.push(L('Domo','Epu külon elueyu.','Te doy dos külon.','I give you two külon.'),N('Recibiste dos külon.','You received two külon.'))}
   ls.push(L('Domo','Mawida mew müley lawen.','En el monte hay lawen (plantas que sanan).','In the forest there is lawen (healing plants).'));say(ls);
 }
@@ -1335,7 +1368,7 @@ function lonkoTalk(){
     if(S.flags.ngen)ls.push(L('Lonko','Ngen-lafken nepey. Chaltu may!','Ngen-lafken despertó. ¡Gracias!','Ngen-lafken has woken up. Thank you!'),
       N('La niebla se levantó del camino que sale al este de la laguna: lleva a las tierras nagche, los llanos. Allá vive tu chuchu.','The fog has lifted from the road leading east from the lagoon: it goes to the Nagche lands, the lowlands. Your chuchu lives there.'),
       N('Ese trokiñ de trariwe que traes es muy antiguo. Dicen que el trariwe completo, con un trokiñ de cada tierra, es lo único que puede atravesar la niebla de Ti Fütra Ngoyman, el gran olvido.','That trokiñ of trariwe you carry is very old. They say the complete trariwe, with one trokiñ from each land, is the only thing that can pass through the fog of Ti Fütra Ngoyman, the great forgetting.'));
-    else ls.push(L('Lonko','Ngen-lafken umawtuy. Trelke-wekufü müley lafken mew.','Ngen-lafken está dormido. Trelke-wekufü está en la laguna.','Ngen-lafken is asleep. Trelke-wekufü is in the lagoon.'),
+    else ls.push(L('Lonko','Ngen-lafken umawtuley. Trelke-wekufü müley lafken mew.','Ngen-lafken está dormido. Trelke-wekufü está en la laguna.','Ngen-lafken is asleep. Trelke-wekufü is in the lagoon.'),
       N('Sigue la costa hacia el este: las dunas, el monte y la orilla de la laguna.','Follow the coast east: the dunes, the forest, and the shore of the lagoon.'));
     return say(ls);
   }
@@ -1380,7 +1413,7 @@ function runPentukun(practice){
   function done(){
     S.flags.pentukun=1;learnRoot('umawtu');S.items.kulon+=2;persist();sfx('lvl');
     say([L('Lonko','Kümey, '+nm()+'! Mapudungun mew dungukeymi.','¡Bien, '+nm()+'! Hablas en mapudungun.','Good, '+nm()+'! You speak in Mapudungun.'),
-      L('Lonko','Ngen-lafken umawtuy. Trelke-wekufü müley lafken mew.','Ngen-lafken está dormido. Trelke-wekufü está en la laguna.','Ngen-lafken is asleep. Trelke-wekufü is in the lagoon.'),
+      L('Lonko','Ngen-lafken umawtuley. Trelke-wekufü müley lafken mew.','Ngen-lafken está dormido. Trelke-wekufü está en la laguna.','Ngen-lafken is asleep. Trelke-wekufü is in the lagoon.'),
       N('El trelke-wekufü lo tiene envuelto en el fondo de la laguna, más allá de las dunas y del monte. Por eso el mar está callado.','The trelke-wekufü has it wrapped up at the bottom of the lagoon, beyond the dunes and the forest. That is why the sea is silent.'),
       L('Lonko','Umawtu- kimeltueyu.','Te enseño umawtu- ("dormir").','I teach you umawtu- ("sleep").'),
       N('Con umawtunge, umawtumu o umawtumün haces dormir a los wekufü. Recibiste umawtu- y dos külon.','With umawtunge, umawtumu or umawtumün you put the wekufü to sleep. You received umawtu- and two külon.'),
@@ -1393,7 +1426,7 @@ function chuchuTalk(){
   if(!S.flags.chuchu){S.flags.chuchu=1;S.items.kofke++;persist();sfx('pick');
     return say([L('Chuchu','Mari mari, '+nm()+'! Iñche tami chuchu.','¡Hola, '+nm()+'! Soy tu chuchu.','Hello, '+nm()+'! I am your chuchu.'),
       N('Tu chuchu es la mamá de tu mamá. La kuku, la mamá de tu papá, vive en el lof lafkenche.','Your chuchu is your mother\'s mother. Your kuku, your father\'s mother, lives in the Lafkenche lof.'),
-      L('Chuchu','Küme küpaymi!','¡Qué bueno que viniste!','How good that you came!'),
+      L('Chuchu','Na küme mi küpan!','¡Qué bien que viniste!','How good that you came!'),
       L('Chuchu','Tüfa tañi ruka.','Esta es mi casa.','This is my house.'),
       L('Chuchu','Tüfa tami kofke.','Este es tu pan.','This is your bread.'),
       N('Tu chuchu te da un kofke. Fíjate: tañi = mi, tami = tu. Y ñi = su (de él o de ella). Tu chillka lo explica en «Tañi, tami, ñi».','Your chuchu gives you a kofke. Notice: tañi = my, tami = your. And ñi = his / her. Your chillka explains it under «Tañi, tami, ñi».'),
@@ -1427,7 +1460,7 @@ function nLonkoTalk(){
   function done(){
     S.flags.nag_lonko=1;learnRoot('llüka');S.items.kulon++;persist();sfx('lvl');
     say([L('Lonko','Kümey! Ngen-lafken nepey, pikeyngün.','¡Bien! Dicen que Ngen-lafken despertó.','Good! They say Ngen-lafken has woken up.'),
-      L('Lonko','Welu Ngen-mawida umawtuy.','Pero Ngen-mawida está dormido.','But Ngen-mawida is asleep.'),
+      L('Lonko','Welu Ngen-mawida umawtuley.','Pero Ngen-mawida está dormido.','But Ngen-mawida is asleep.'),
       N('Un Witranalwe, una figura altísima de luz fría que cuida los animales de un kalku, se adueñó del monte grande. Desde entonces los animales se pierden y los niños olvidan palabras.','A Witranalwe, a towering figure of cold light that guards a kalku\'s animals, has taken over the great forest. Since then the animals get lost and the children forget words.'),
       L('Lonko','Llüka- kimeltueyu.','Te enseño llüka- ("tener miedo").','I teach you llüka- ("be afraid").'),
       N('Con llükange, llükamu o llükamün asustas a los wekufü: por un rato golpean más débil. Recibiste llüka- y un külon.','With llükange, llükamu or llükamün you frighten the wekufü: for a while they hit weaker. You received llüka- and a külon.'),
@@ -1492,7 +1525,8 @@ function animalTalk(e){
     if(v==='k'){
       if(e.look==='ofisa'){sfx('bad');return say([N('La ofisa te sigue un poco... pero el wentru dijo «Ofisa nielan»: no tiene ovejas. La dejas volver con su rebaño.','The sheep follows you a little... but the man said «Ofisa nielan»: he has no sheep. You let it go back to its flock.')])}
       S.flags[e.flag]=1;ents=ents.filter(x=>x!==e);persist();sfx('pick');
-      return say([praise(),N(Ua({u:a.a})+' '+e.look+' te sigue hasta el corral del wentru. ('+herdN('kawellu')+'/3 kawellu · '+herdN('waka')+'/2 waka)','The '+e.look+' follows you to the man\'s pen. ('+herdN('kawellu')+'/3 kawellu · '+herdN('waka')+'/2 waka)')])}
+      {const n=herdN('kawellu')+herdN('waka'),sp=PENSPOT[n-1];ents.push({kind:'animal',look:e.look,x:sp[0],y:sp[1],fx:sp[0],fy:sp[1],ox:sp[0],oy:sp[1],pen:[10,2,15,3],cd:40,wait:0,dir:'right',home:1})}
+      return say([praise(),N(Ua({u:a.a})+' '+e.look+' te sigue hasta el corral del wentru, al norte. ('+herdN('kawellu')+'/3 kawellu · '+herdN('waka')+'/2 waka)','The '+e.look+' follows you to the man\'s pen, to the north. ('+herdN('kawellu')+'/3 kawellu · '+herdN('waka')+'/2 waka)')])}
     if(v==='a'){sfx('bad');for(let i=0;i<3;i++){const d=['up','down','left','right'][rnd(4)],[dx,dy]=DV[d];if(walk(e.x+dx,e.y+dy)&&!entAt(e.x+dx,e.y+dy,e)&&!(e.x+dx===P.x&&e.y+dy===P.y)){e.x+=dx;e.y+=dy}}
       return say([N(Ua({u:a.a})+' '+e.look+' se asusta y se aleja corriendo. Así no vendrá.','The '+e.look+' gets scared and runs off. It will not come that way.')])}
   },true,true);
@@ -1537,7 +1571,7 @@ function openPause(){
       ls.push(L('','-nge · -mu · -mün','a uno · a dos · a tres o más','to one · to two · to three or more'));
       if(S.runes.includes('kil'))ls.push(L('','-kil-','prohibición: "¡no...!"','prohibition: "don\'t...!"'));say(ls)}
     else if(v==='trariwe'){const R5=[['lafkenche','Lafkenche'],['nagche','Nagche'],['pewenche','Pewenche'],['williche','Williche'],['puelche','Puelmapu']];
-      say([L('','Trokiñ trariwe · '+(S.pieces||[]).length+'/5',R5.map(([k,n])=>((S.pieces||[]).includes(k)?'■ ':'□ ')+n).join('   '),R5.map(([k,n])=>((S.pieces||[]).includes(k)?'■ ':'□ ')+n).join('   ')),
+      say([L('','Trariwe trokiñ · '+(S.pieces||[]).length+'/5',R5.map(([k,n])=>((S.pieces||[]).includes(k)?'■ ':'□ ')+n).join('   '),R5.map(([k,n])=>((S.pieces||[]).includes(k)?'■ ':'□ ')+n).join('   ')),
         N('Con los cinco trokiñ, el trariwe completo podrá atravesar la niebla de Ti Fütra Ngoyman, al oeste del camino del mar.','With all five trokiñ, the complete trariwe will be able to pass through the fog of Ti Fütra Ngoyman, west of the sea road.')])}
     else if(v==='book')openBook(()=>openPause());
     else if(v==='hints'){S.hints=!S.hints;persist();openPause()}
@@ -1769,7 +1803,7 @@ function enemyPhase(){
   const lines=[];
   if(fx.length){const l=N(fx.join(' '),fxe.join(' '));l.fx=()=>{hitsFx.forEach(f=>f());if(dmgTotal){B.shake=12;B.red=10;sfx('hurt')}};lines.push(l)}
   const bossE=aliveE().find(x=>ET[x.t].boss),bn=bossE?ET[bossE.t].name:'';
-  if(B.tele&&bossE)lines.push(L(bn,bn+' küpay!','¡'+bn+' viene!',bn+' is coming!'));
+  if(B.tele&&bossE)lines.push(L(bn,'Küpaley '+bn+'!','¡'+bn+' viene!',bn+' is coming!'));
   if(bossE&&bossE.t==='witranalwe'&&bossE.tall&&!B.tallHint&&B.turn>=1){B.tallHint=1;lines.push(N('Pista: erguido así, nada lo alcanza. Quizás si le dices que vuelva atrás...','Hint: standing tall like that, nothing reaches it. Maybe if you tell it to go back...'))}
   if(B.tele&&!B.teleHint&&bossE){B.teleHint=1;lines.push(N('Pista: dile que no venga (küpa- con -kil-), a él solo o a todos, con la terminación correcta.','Hint: tell it not to come (küpa- with -kil-), to it alone or to all of them, with the right ending.'))}
   say(lines,()=>{
@@ -1809,7 +1843,7 @@ function postBoss(){
       L('Ngen-lafken','Chaltu may.','Gracias.','Thank you.'),
       N('Ngen-lafken te da su newen: ahora puedes sumergirte en los remolinos oscuros del agua. Además ganas un corazón nuevo.','Ngen-lafken gives you its newen: now you can dive into the dark whirlpools in the water. You also gain a new heart.'),
       L('Ngen-lafken','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!"),
-      Object.assign(L('','Kiñe trokiñ trariwe!','Entre la espuma queda algo tejido: un trokiñ (pedazo) de un trariwe antiguo, con figuras del mar. Tienes 1 de 5.','Something woven is left in the foam: a trokiñ (piece) of an ancient trariwe, with figures of the sea. You have 1 of 5.'),{fx:()=>{sfx('lvl')}}),
+      Object.assign(L('','Kiñe trariwe trokiñ!','Entre la espuma queda algo tejido: un trokiñ (pedazo) de un trariwe antiguo, con figuras del mar. Tienes 1 de 5.','Something woven is left in the foam: a trokiñ (piece) of an ancient trariwe, with figures of the sea. You have 1 of 5.'),{fx:()=>{sfx('lvl')}}),
       N('Dicen que un trariwe completo, con un trokiñ de cada tierra, es lo único que puede atravesar la niebla del olvido y llegar hasta su origen: Ti Fütra Ngoyman, el gran olvido.','They say a complete trariwe, with one trokiñ from each land, is the only thing that can pass through the fog of forgetting and reach its source: Ti Fütra Ngoyman, the great forgetting.'),
       N('Un círculo de luz aparece en el islote: pisándolo puedes volver a la entrada de la cueva o al lof.','A circle of light appears on the islet: step on it to return to the cave entrance or to the lof.'),
       N('Fin de la región lafkenche (prototipo). Puedes volver a los remolinos de las dunas y de la orilla: ahora sí puedes explorarlos. Las demás regiones esperan: Nagche, Pewenche, Williche y Puelmapu.','End of the Lafkenche region (prototype). You can go back to the whirlpools in the dunes and on the shore: now you can explore them. The other regions are waiting: Nagche, Pewenche, Williche and Puelmapu.')]);
@@ -1827,7 +1861,7 @@ function postBoss2(){
       L('Ngen-mawida','Alün umawtun. Tami dungun mew nepen.','Dormí mucho tiempo. Con tus palabras desperté.','I slept a long time. With your words I woke up.'),
       N('Ngen-mawida es el ngen del monte: cuida los árboles, el lawen y los animales que viven entre ellos.','Ngen-mawida is the ngen of the forest: it looks after the trees, the medicine plants, and the animals that live among them.'),
       N('Ngen-mawida te da su newen: ahora los zarzales espinudos se apartan cuando pasas. Además ganas un corazón nuevo.','Ngen-mawida gives you its newen: now the thorny brambles move aside when you pass. You also gain a new heart.'),
-      Object.assign(L('','Epu trokiñ trariwe!','Entre las raíces queda otro trokiñ del trariwe antiguo, tejido en verde y amarillo. Tienes 2 de 5.','Among the roots lies another trokiñ of the ancient trariwe, woven in green and yellow. You have 2 of 5.'),{fx:()=>sfx('pick')}),
+      Object.assign(L('','Epu trariwe trokiñ!','Entre las raíces queda otro trokiñ del trariwe antiguo, tejido en verde y amarillo. Tienes 2 de 5.','Among the roots lies another trokiñ of the ancient trariwe, woven in green and yellow. You have 2 of 5.'),{fx:()=>sfx('pick')}),
       N('Un círculo de luz aparece en el claro: pisándolo puedes volver a la entrada de la guarida, al lof nagche o a las tierras lafkenche.','A circle of light appears in the clearing: step on it to return to the lair entrance, the Nagche lof, or the Lafkenche lands.'),
       N('Fin de la región nagche (prototipo). Vuelve a los zarzales que viste en el camino: ahora puedes pasar. Faltan Pewenche, Williche y Puelmapu.','End of the Nagche region (prototype). Go back to the brambles you saw on the road: now you can get through. Pewenche, Williche and Puelmapu remain.')]);
   });
@@ -1929,7 +1963,7 @@ function renderMap(){
         drawChar(c,e.look,sx,sy,e.dir||'down',fr,e.seated);
         if(e.act==='wood'){R(c,sx+(e.dir==='left'?9:1),sy-6,6,3,'#7a4a22');R(c,sx+(e.dir==='left'?9:1),sy-6,6,1,'#a87040')}}
       if(e.bub&&(frame+e.bt)%420<150&&Math.abs(e.x-P.x)+Math.abs(e.y-P.y)<9)bubble(sx+8,sy-(e.seated?2:8),e.bub[Math.floor((frame+e.bt)/420)%e.bub.length])}
-    else if(e.kind==='animal'){ell(c,sx+8,sy+15,7,2,'rgba(0,0,0,.3)');c.drawImage(animalCanvas(e.look,e.mv?Math.floor(frame/8)%2:0,e.dir==='right'?'right':'left'),sx-2,sy)}
+    else if(e.kind==='animal'){const ac=animalCanvas(e.look,e.mv?Math.floor(frame/8)%2:0,e.dir==='right'?'right':'left');ell(c,sx+8,sy+15,ac.width*.36,2,'rgba(0,0,0,.3)');c.drawImage(ac,sx+8-(ac.width>>1),sy+17-ac.height)}
     else{const t=e.party[0],sz=e.boss?30:e.mini?22:16,cvs=enemyCanvas(t,sz,Math.floor(frame/10)%2);
       const fly=ET[t].fly?6+Math.round(Math.sin(frame/8)*1.5):0;
       ell(c,sx+8,sy+14,sz/3,2,'rgba(0,0,0,.3)');
@@ -1942,7 +1976,7 @@ function renderMap(){
   for(let k=0;k<26;k++){const wx=Math.floor(h2(k,frame>>3,91)*LW),wy=Math.floor(h2(k,frame>>3,92)*LH),mx=Math.floor((wx+cx)/T),my=Math.floor((wy-VY+cy)/T);
     if(inB(mx,my)&&grid[my][mx]==='~'&&WD[my][mx]>1){const a=(frame%8)<4;R(c,wx,wy,1,1,'#f4faff');if(a){R(c,wx-1,wy,1,1,'rgba(220,240,255,.7)');R(c,wx+1,wy,1,1,'rgba(220,240,255,.7)')}}}
   for(const [gx,gy] of glows)for(const [r,a] of [[24,.05],[16,.07],[10,.08]])ell(c,gx,gy,r,r*.8,'rgba(255,170,80,'+a+')');
-  if(M.bg==='cave'){const px=Math.round(P.fx*T-cx+8),py=Math.round(P.fy*T-cy+VY+8);for(let y=VY;y<LH;y+=2)for(let x=0;x<LW;x+=2){const d=Math.hypot(x-px,y-py);if(d>70){const a=Math.min(.7,(d-70)/140);if(a>.05){c.fillStyle='rgba(0,0,0,'+a.toFixed(2)+')';c.fillRect(x,y,2,2)}}}}
+  if(M.bg==='cave'||M.bg==='cave2'){const px=Math.round(P.fx*T-cx+8),py=Math.round(P.fy*T-cy+VY+8);for(let y=VY;y<LH;y+=2)for(let x=0;x<LW;x+=2){const d=Math.hypot(x-px,y-py);if(d>70){const a=Math.min(.7,(d-70)/140);if(a>.05){c.fillStyle='rgba(0,0,0,'+a.toFixed(2)+')';c.fillRect(x,y,2,2)}}}}
   if(CUR==='rupu'){for(let k=0;k<7;k++){const fx=-cx+Math.round(Math.sin(frame/60+k)*6)+6,fy=k*30+((frame/3+k*17)%30)-cy+VY;for(const [rr,al] of [[26,.18],[16,.22],[9,.25]])ell(c,fx,fy,rr,rr*.7,'rgba(200,200,212,'+al+')')}}
   if(M.bg==='forest'){c.fillStyle=awake(M.region)?'rgba(255,240,160,.06)':'rgba(10,30,20,.3)';c.fillRect(0,VY,LW,VH)}
   if(M.bg==='lagoon'){c.fillStyle=S.flags.ngen?'rgba(120,200,255,.08)':'rgba(60,30,90,.22)';c.fillRect(0,VY,LW,VH)}
@@ -1973,7 +2007,10 @@ function drawHUD(c){
 }
 /* ---------- battle ---------- */
 const BG={},FG={};
+function mossify(cvs){const c=cvs.getContext('2d'),d=c.getImageData(0,0,cvs.width,cvs.height),a=d.data;
+  for(let i=0;i<a.length;i+=4){const r=a[i],g=a[i+1],b=a[i+2];if(r>g+6&&r>b){a[i]=Math.round(g*.85);a[i+1]=Math.round(r*.92+4);a[i+2]=Math.round(b*.8+r*.18)}}c.putImageData(d,0,0);return cvs}
 function buildBG(area){
+  if(area==='cave2')return mossify(buildBG('cave'));
   const [cvs,c]=mk(LW,LH);
   if(area==='coast'){bands(c,0,96,['#2858b8','#3a70d0','#5a90e0','#80b0ec','#a8ccf4','#c8e0f8']);
     ell(c,214,26,9,9,'#fffbe8');for(const [x,y,s] of [[46,26,1],[140,16,1.3],[234,44,.8]]){ell(c,x,y+3,17*s,5*s,'#c8dcf0');ell(c,x,y,15*s,5*s,'#ffffff');ell(c,x-6*s,y-3*s,7*s,5*s,'#ffffff');ell(c,x+6*s,y-2*s,6*s,4*s,'#ffffff')}
@@ -1990,7 +2027,7 @@ function buildBG(area){
     for(let x=0;x<LW;x++){const y=Math.round(108+Math.sin(x*.02+2)*3);R(c,x,y,1,14,x>70&&x<190?'#d8b040':'#48983c');if(x>70&&x<190&&h2(x,1,7)<.5)R(c,x,y,1,2,'#f0d060')}
     R(c,0,122,LW,LH-122,'#48a048');for(let y=124;y<LH;y+=3)for(let x=(y%6);x<LW;x+=11)if(h2(x,y,5)<.35)R(c,x,y,1,2,h2(x,y,6)<.5?'#68c058':'#307c34');
     for(let x=6;x<LW;x+=22){R(c,x,112,2,12,'#5a3818');R(c,x+1,112,1,12,'#8a5a30')}R(c,0,115,LW,1,'#8a5a30');R(c,0,119,LW,1,'#8a5a30');
-    for(let k=0;k<4;k++){const tr=treeCanvas(k%2);c.drawImage(tr,k<2?-4+k*20:LW-28-(k-2)*22,64+(k%2)*6)}}
+    for(let k=0;k<4;k++){const tr=treeCanvas(k%2,'koyam');c.drawImage(tr,k<2?-4+k*20:LW-28-(k-2)*22,64+(k%2)*6)}}
   else if(area==='forest'){bands(c,0,LH,['#0a1a10','#10241a','#163020','#1c3a24','#22442a']);
     for(let k=0;k<9;k++){const px=k*31-6+(k%2)*6,w=10+(k*7)%8;R(c,px,0,w,140,'#2a1e14');R(c,px,0,3,140,'#3e2e20');R(c,px+w-2,0,2,140,'#160e08');for(let y=8;y<140;y+=13)R(c,px+3,y+(k%3),w-5,1,'#22180e')}
     for(let k=0;k<26;k++){const x=(k*41)%LW,y=(k*17)%40;ell(c,x,y,22,14,k%2?'#1c4424':'#24522c')}
@@ -2013,6 +2050,7 @@ function buildBG(area){
   return cvs;
 }
 function buildFG(area){
+  if(area==='cave2')return mossify(buildFG('cave'));
   const [cvs,c]=mk(LW,LH);
   if(area==='coast'){for(const sd of [0,1])for(let k=0;k<14;k++){const bx=sd?LW-4-k*4:4+k*4,hg=10+((k*13)%14);for(let i=0;i<hg;i++)R(c,bx+(sd?-1:1)*Math.floor(i/4),LH-i,2,1,k%2?'#2f7a34':'#3e9444')}}
   else if(area==='field'){for(const sd of [0,1])for(let k=0;k<14;k++){const bx=sd?LW-4-k*4:4+k*4,hg=12+((k*13)%14);for(let i=0;i<hg;i++)R(c,bx+(sd?-1:1)*Math.floor(i/5),LH-i,2,1,k%2?'#2f7a34':'#c8a040')}}
@@ -2031,7 +2069,7 @@ function animBG(area){const c=lx;
     const bx=Math.round((frame*.4)%(LW+30)-15),by=Math.round(40+Math.sin(frame/25)*4),f=Math.sin(frame/5)>0?1:0;R(c,bx-1,by,3,1,'#202020');R(c,bx-4,by-f,3,1,'#202020');R(c,bx+2,by-f,3,1,'#202020')}
   else if(area==='forest'){for(let k=0;k<14;k++){const x=Math.round(10+k*18+Math.sin(frame/35+k)*8),y=Math.round(60+Math.sin(frame/27+k*2)*30+(k%4)*16);if((frame+k*11)%50<36){R(c,x,y,1,1,awake('nagche')?'#f8f0a0':'#a0e8ff');ell(c,x,y,2,2,'rgba(200,255,160,.2)')}}
     for(let k=0;k<4;k++){const lx2=(k*67+Math.floor(frame*.2))%LW,ly2=Math.floor((k*43+frame*.35)%130);R(c,lx2,ly2,2,1,'#6aa040')}}
-  else if(area==='cave'){for(let k=0;k<18;k++){const x=95+((k*37+Math.floor(frame*.15))%90)+Math.round(Math.sin(frame/40+k)*5),y=Math.floor((k*29+frame*.2)%140);if((frame+k)%30<22)R(c,x,y,1,1,'#ffeec8')}
+  else if(area==='cave'||area==='cave2'){for(let k=0;k<18;k++){const x=95+((k*37+Math.floor(frame*.15))%90)+Math.round(Math.sin(frame/40+k)*5),y=Math.floor((k*29+frame*.2)%140);if((frame+k)%30<22)R(c,x,y,1,1,'#ffeec8')}
     const dy=Math.floor(frame*1.5)%130;R(c,62,dy,1,3,'#9ad0f0');R(c,201,(dy+65)%130,1,3,'#9ad0f0')}
   else{for(let k=0;k<40;k++)if((frame+k*13)%50<38)R(c,(k*61)%LW,(k*23)%70,1,1,'#ffffff');
     for(let i=0;i<10;i++){const w=30-i*2;R(c,200-w/2+Math.round(Math.sin(frame/15+i)*4),112+i*7,w,1,i%2?'#f4e8c0':'#d8c8a0')}

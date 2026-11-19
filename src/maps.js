@@ -16,13 +16,13 @@ lof:{name:'Lof',g:{es:'La comunidad',en:'The community'},floor:',',bg:'coast',so
  scenes:[{type:'palin',x:11,y:3,w:12,h:3}],
  ents:[{id:'lonko',kind:'npc',look:'lonko',x:18,y:7,talk:()=>lonkoTalk(),bub:['Mari mari!','Kümey antü.']},
    {id:'kuku2',kind:'npc',look:'kuku',fem:1,x:5,y:9,talk:()=>kukuLof()},
-   {id:'weaver',kind:'npc',look:'weaver',fem:1,x:6,y:3,dir:'up',act:'weave',fixed:1,talk:()=>weaverTalk(),bub:['Ngürekan.','Kümey!']},
+   {id:'weaver',kind:'npc',look:'weaver',fem:1,x:6,y:3,dir:'up',act:'weave',fixed:1,talk:()=>weaverTalk(),bub:['Ngürekalen.','Kümey!']},
    {id:'cook',kind:'npc',look:'cook',fem:1,x:24,y:8,act:'cook',path:[[24,8],[24,10],[28,10],[24,10]],pause:160,talk:()=>cookTalk(),bub:['Iyael!','Kofke, ilo, poñü...']},
    {id:'teacher',kind:'npc',look:'teacher',fem:1,x:13,y:12,dir:'down',act:'teach',fixed:1,talk:()=>teacherTalk(),bub:['Kiñe, epu, küla!','Chem pingey tüfa?','Mari mari, pichikeche!']},
    {id:'kid1',kind:'npc',look:'child',x:12,y:14,dir:'up',seated:1,fixed:1,talk:()=>kidTalk(0),bub:['Kiñe!','Kofke!']},
    {id:'kid2',kind:'npc',look:'childf',fem:1,x:13,y:14,dir:'up',seated:1,fixed:1,talk:()=>kidTalk(1),bub:['Epu!','Küla!']},
    {id:'kid3',kind:'npc',look:'child',x:14,y:14,dir:'up',seated:1,fixed:1,talk:()=>kidTalk(2),bub:['Meli!']},
-   {id:'walker',kind:'npc',look:'walker',x:6,y:10,act:'wood',path:[[6,10],[22,10]],pause:90,talk:()=>walkerTalk(),bub:['Mamüll yeken.']},
+   {id:'walker',kind:'npc',look:'walker',x:6,y:10,act:'wood',path:[[6,10],[22,10]],pause:90,talk:()=>walkerTalk(),bub:['Mamüll yelen.']},
    {id:'runner',kind:'npc',look:'childf',fem:1,x:17,y:13,path:[[17,13],[21,13],[21,14],[17,14]],pause:10,spd:10,talk:()=>runnerTalk(),bub:['Ayüwün!']},
    {id:'dog',kind:'npc',look:'dog',x:8,y:13,path:[[8,13],[10,13],[10,14],[8,14]],pause:40,talk:()=>dogTalk()},
    {id:'kona',kind:'npc',look:'kona',x:10,y:6,dir:'right',fixed:1,talk:()=>konaTalk(),bub:['Palin!','Kümey!']},
@@ -46,7 +46,7 @@ mawida:{name:'Mawida rüpü',g:{es:'El camino del monte',en:'The forest path'},f
    {kind:'enemy',x:17,y:11,party:['anchi','laftrache']},{kind:'enemy',x:26,y:12,party:['chonchon','anchi']}]},
 inaltu:{name:'Lafken inaltu',g:{es:'La orilla de la laguna',en:'The lagoon shore'},floor:'.',bg:'coast',song:'coast',
  edges:{left:{to:'mawida',x:30,y:7}},stairs:{to:'d1',x:1,y:6},dive:{'23,4':'gold'},
- ents:[{id:'challwafe2',kind:'npc',look:'fisher',x:8,y:9,path:[[8,9],[13,9]],pause:200,talk:()=>fisher2Talk(),bub:['Challwatuken.']},
+ ents:[{id:'challwafe2',kind:'npc',look:'fisher',x:8,y:9,path:[[8,9],[13,9]],pause:200,talk:()=>fisher2Talk(),bub:['Challwatulen.']},
    {id:'trader',kind:'npc',look:'seller',x:19,y:9,talk:()=>shop('inaltu')},
    {id:'machiko',kind:'npc',look:'fisherw',fem:1,x:28,y:9,talk:()=>shoreWomanTalk(),bub:['Trelke-wekufü...']},
    {kind:'enemy',x:10,y:5,party:['anchi','anchi']},{kind:'enemy',x:25,y:10,party:['laftrache','chonchon','laftrache']},
@@ -89,12 +89,12 @@ n_rupu:{region:'nagche',name:'Nagche rüpü',g:{es:'El camino a los llanos',en:'
    {kind:'enemy',x:24,y:10,party:['anchi','kolokolo','kolokolo']}]},
 n_lof:{region:'nagche',name:'Nagche lof',g:{es:'La comunidad de los llanos',en:'The lowland community'},floor:',',bg:'field',song:'lof',
  edges:{left:{to:'n_rupu',x:30,y:7},right:{to:'n_kullin',x:1,y:7,req:'nag_lonko',reqMsg:[N('Antes de seguir, habla con el lonko de este lof. Está junto al kütral.','Before you go on, speak with the lonko of this lof. He is by the fire.')]}},
- ents:[{id:'chuchu',kind:'npc',look:'kuku',fem:1,x:5,y:12,talk:()=>chuchuTalk(),bub:['Küme küpaymi!']},
+ ents:[{id:'chuchu',kind:'npc',look:'kuku',fem:1,x:5,y:12,talk:()=>chuchuTalk(),bub:['Na küme mi küpan!']},
    {id:'nlonko',kind:'npc',look:'lonko2',x:18,y:7,talk:()=>nLonkoTalk(),bub:['Mari mari!']},
    {id:'nutram',kind:'npc',look:'elder',x:16,y:8,dir:'up',fixed:1,act:'teach',talk:()=>nutramTalk(),bub:['Kuyfi...','Fey mew...']},
    {id:'lk1',kind:'npc',look:'child',x:15,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichiche','Epew ayüken!','¡Me gustan los epew!','I love epew!')])},
    {id:'lk2',kind:'npc',look:'childf',fem:1,x:17,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichi domo','Chem pikey ta Witranalwe?','¿Qué dice el Witranalwe?','What does the Witranalwe say?')])},
-   {id:'smith',kind:'npc',look:'walker',x:13,y:7,dir:'left',fixed:1,act:'smith',talk:()=>smithTalk(),bub:['Rütran.']},
+   {id:'smith',kind:'npc',look:'walker',x:13,y:7,dir:'left',fixed:1,act:'smith',talk:()=>smithTalk(),bub:['Rütralen.']},
    {id:'aw1',kind:'npc',look:'child',x:7,y:12,dir:'right',seated:1,fixed:1,act:'awar',talk:()=>awarTalk(),bub:['Awarkuden!','Kiñe, epu...']},
    {id:'aw2',kind:'npc',look:'childf',fem:1,x:9,y:12,dir:'left',seated:1,fixed:1,talk:()=>awarTalk(),bub:['Iñche wewün!']},
    {id:'nseller',kind:'npc',look:'seller',x:24,y:12,talk:()=>shop('n_lof')},
@@ -143,6 +143,9 @@ ngen2:{region:'nagche',ngenmap:1,name:'Ngen-mawida',g:{es:'El claro del bosque',
 for(const k in MAPS){const m=MAPS[k];if(!m.region)m.region='lafkenche';m.rows=MAPROWS[k];m.w=MAPROWS[k][0].length;m.h=MAPROWS[k].length}
 MAPS.inaltu.edges.right={to:'n_rupu',x:1,y:7,req:'ngen',reqMsg:[N('El camino hacia el este, a las tierras nagche, está cubierto de niebla. Primero despierta a Ngen-lafken.','The road east, to the Nagche lands, is covered in fog. First wake Ngen-lafken.')]};
 MAPS.ngen.ngenmap=1;
+for(const k of ['n_rupu','n_lof','n_kullin','n_lewfu']){MAPS[k].pal='nagche';MAPS[k].trees='koyam'}
+for(const k of ['n_mawida','ngen2']){MAPS[k].pal='nagforest';MAPS[k].trees='mawida'}
+for(const k of ['nd1','nd2','nd3']){MAPS[k].pal='nagcave';MAPS[k].bg='cave2'}
 MAPS.n_kullin.ents.forEach(e=>{if(e.herd&&e.look!=='ofisa')e.flag='hd_'+e.id});
 MAPS.nd1.pz.hint=N('Pista: de lo menor a lo mayor. meli (4), mari kechu (15), epu mari meli (24).','Hint: from smallest to largest. meli (4), mari kechu (15), epu mari meli (24).');
 
