@@ -151,6 +151,6 @@ function updateMap(){
   for(const sc of SCN)if(sc.type==='palin'){
     const X=sc.x*T,Y=sc.y*T,w=sc.w*T,h=sc.h*T;
     sc.bx=X+w/2+Math.sin(frame/70)*(w/2-14)+Math.sin(frame/23)*8;sc.by=Y+h/2+Math.sin(frame/41)*(h/2-8);
-    sc.pl.forEach((p,i)=>{const tx=sc.bx+(i<2?-10:10)+Math.sin(frame/30+i)*6,ty=sc.by+(i%2?8:-8);const dx=tx-p.x,dy=ty-p.y;p.x+=dx*.035;p.y+=dy*.035;p.mv=Math.abs(dx)+Math.abs(dy)>3;if(Math.abs(dx)>1)p.dir=dx>0?'right':'left'});
+    sc.pl.forEach((p,i)=>{const tx=sc.bx+(i<2?-1:1)*(CT?16:10)+Math.sin(frame/30+i)*6,ty=sc.by+(i%2?1:-1)*(CT?11:8);const dx=tx-p.x,dy=ty-p.y;p.x+=dx*.035;p.y+=dy*.035;p.mv=Math.abs(dx)+Math.abs(dy)>3;if(Math.abs(dx)>1)p.dir=dx>0?'right':'left'});
   }
 }
