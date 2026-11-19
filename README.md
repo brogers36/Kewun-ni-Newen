@@ -82,20 +82,19 @@ An experimental look switched on by the `CT` flag: painterly dithered grass, san
 
 `.` sand · `,` grass · `"` tall grass · `=` path · `~` water · `v` whirlpool · `#` rock · `T` tree · `R` ruka · `F` kütral (save and heal) · `C` chest · `K` konew door · `S` stairs · `I` sign · `P` piwke piece · `m`/`g`/`p` pickups · `_` cave floor · `%` cave wall · `B` block · `O` plate · `G` gate · `k` key · `L` locked door · `N` numeral stone · `J` brazier · `H` talking stone · `E` puzzle door · `A` warp circle · `W` wheat · `f` fence · `b` bridge · `Ñ` bramble · `X` wind barrier · `Y` palin field · `Z` loom · `U` pot · `V` board
 
-## Toward a phone app
+## Phone app
 
-The game is a single HTML page with touch controls, built into `www/`. That folder is the layout [Capacitor](https://capacitorjs.com/) expects, so wrapping it as an Android or iOS app needs only a few commands and no changes to the game code:
+The game is installable on phones two ways, both fed by this repo:
 
-```
-npm init -y
-npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/ios
-npx cap init "Kewün ñi Newen" cl.kewun.newen --web-dir www
-npx cap add android      # needs Android Studio
-npx cap add ios          # needs a Mac with Xcode
-npx cap sync             # run again after each build.py
-```
+**Installable web app (PWA), iPhone and Android.** `www/` now carries `manifest.webmanifest`, a service worker (`sw.js`) and icons, so the GitHub Pages site is installable: open <https://brogers36.github.io/Kewun-ni-Newen/> on the phone, then *Add to Home Screen* (Safari: Share menu; Android Chrome offers an install prompt). It launches fullscreen with its own kultrung icon and keeps working offline after the first load; when online again it picks up the latest build automatically. Saves live in the installed app's own localStorage.
 
-A lighter option is to make it an installable web app (PWA) by adding a `manifest.json` and a service worker to `www/`. Players can then add it to their home screen from the browser.
+**Downloadable Android APK.** `.github/workflows/android.yml` wraps `www/` with [Capacitor](https://capacitorjs.com/) on every push and publishes a signed APK to the rolling release, always at the same link:
+
+> <https://github.com/brogers36/Kewun-ni-Newen/releases/download/android/KewunNiNewen.apk>
+
+Android users download it from the [Releases page](https://github.com/brogers36/Kewun-ni-Newen/releases/tag/android), allow installing from that source once, and later versions install over the old one without losing saves. The signing keystore (`android-signing/`) is committed so the signature stays stable; if the app ever goes to Google Play, generate a new private key there instead of reusing this public one.
+
+The build master strips the PWA tags (`build.py --master`), so only the player copy registers the service worker.
 
 ## Derechos · Rights
 

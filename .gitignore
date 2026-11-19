@@ -4,3 +4,6 @@ ios/
 .DS_Store
 __pycache__/
 master/
+*.apk
+aligned.apk
+assets/generated/

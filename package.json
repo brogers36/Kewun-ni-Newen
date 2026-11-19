@@ -1,0 +1,12 @@
+{
+  "name": "kewun-ni-newen",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kewün ñi Newen · RPG para aprender mapudungun",
+  "devDependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^7.0.0",
+    "@capacitor/core": "^7.0.0"
+  }
+}
