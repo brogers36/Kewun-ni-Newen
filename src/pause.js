@@ -12,7 +12,9 @@ function openPause(){
     {m:en?'Hints: '+(S.hints?'on':'off'):'Pistas: '+(S.hints?'sí':'no'),g:en?'Show how many each ending addresses':'Mostrar a cuántos se dirige cada terminación',v:'hints'},
     {m:en?'Gloss: English':'Glosa: Español',g:en?'Switch to Spanish':'Cambiar a inglés',v:'lang'},
     {m:AU.muted?(en?'Music: off':'Música: no'):(en?'Music: on':'Música: sí'),g:'N',v:'mus'},
+    {m:en?'Title screen':'Volver al inicio',g:en?'Your progress is saved':'Se guarda tu avance',v:'title'},
     {m:en?'Close':'Cerrar',v:'x'}],v=>{
+    if(v==='title')return goTitle();
     if(v==='items'){choose({es:'Chemkün',en:'Items'},itemOpts().concat([{m:en?'Back':'Volver',v:'x'}]),k=>{if(!k||k==='x')return;const l=useItem(k);persist();say([l])},true)}
     else if(v==='stats'){const g=Object.keys(GEAR).filter(k=>S.gear[k]).map(k=>GEAR[k].m).join(', ')||'∅';
       say([N(`${S.name} · kimün ${S.lvl} (${S.xp}/${xpNeed()}) · newen ${S.hp}/${maxHP()} · fuerza ${atk()} · defensa ${def()} · ngülliw ${numP(S.gold)} · piwke ${S.piwke%4}/4 · llaves ${S.keys||0}`+(S.curse?' · MALDICIÓN':''),
@@ -50,6 +52,10 @@ const BOOK={
     L('','pu che · pu domo · pu kawellu','la gente · las mujeres · los caballos','the people · the women · the horses'),
     N('Y el verbo cambia: -ngu para dos, -ngün para tres o más. Ejemplo con pe- ("ver"):','And the verb changes: -ngu for two, -ngün for three or more. Example with pe- ("see"):'),
     L('','epu wentru peyngu · pu wentru peyngün','dos hombres ven · los hombres ven','two men see · the men see')]},
+  dir:{m:'Pikun, puel...',es:'Los rumbos',en:'Directions',lines:[
+    N('Los cuatro rumbos. Con püle se dice «hacia»: pikun püle, «hacia el norte».','The four directions. With püle you say «toward»: pikun püle, «toward the north».'),
+    L('','pikun · willi · puel · lafken','norte · sur · este · oeste (hacia el mar)','north · south · east · west (toward the sea)'),
+    N('Por eso la gente del sur es williche y la tierra del este es Puelmapu.','That is why the people of the south are williche and the land of the east is Puelmapu.')]},
   fu:{m:'Kuyfi · -fu-',es:'Lo que pasaba antes',en:'What used to happen',lines:[
     N('En los relatos, -fu- marca algo que pasaba o que había antes, y que ya no es así.','In stories, -fu- marks something that happened or existed before, and is no longer so.'),
     L('','mülefuy · pefun · konfuy','había, estaba · vi, había visto · entró, había entrado','there was · I saw, had seen · he/she went in, had gone in'),

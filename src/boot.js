@@ -19,7 +19,7 @@ $('title').addEventListener('pointerdown',()=>{auInit();if(!AU.name)playSong('in
 playSong('intro');
 $('bNew').onclick=()=>{auInit();S=newState(HERO);$('title').style.display='none';startCut()};
 $('bCont').onclick=()=>{
-  auInit();
+  auInit();const sv=loadSave();if(!sv)return;
   S=Object.assign(newState(sv.hero||'llanka'),sv);S.gloss=LANG;S.pw={speed:0,pewen:0,gold:0};S.roots=S.roots.map(r=>r==='amu'?'amutu':r);if(S.last)S.last=null;$('title').style.display='none';mode='map';AU.name=null;loadMap(MAPS[S.map]?S.map:'rupu',S.x,S.y);
 };
 updLang();

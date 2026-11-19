@@ -30,3 +30,13 @@ Changed from simple or habitual forms to -le- for actions in progress. Please co
 | Rütralen. | Rütran. | silversmith bubble (is *rütra-* right as a verb here?) |
 
 Left unchanged: *Pun mew kintukefuy kulliñ* (habitual past in the story, "used to go around looking"), *Iñche wiñotuan lof mew* (future).
+
+## Nagche overworld puzzles (Nov 2026)
+
+| Form | Where | Intended meaning | Question |
+|---|---|---|---|
+| Tüfa kura mew: pikun püle epu, puel püle kayu. | carved stone, Nagche rüpü | From this stone: two toward the north, six toward the east | Is *tüfa kura mew* natural for "from this stone"? |
+| lafken (as "west") | Chillka "Los rumbos" | west, toward the sea | Would *ngulu* be preferred? |
+| Ofisafe ngen. | shepherd girl, Kulliñ mapu | I look after sheep | Is *ofisafe* acceptable? |
+| Kayu ofisa nien. / Chumten ofisa nien? | shepherd girl | I have six sheep / How many sheep do I have? | |
+| Wüle ka challwatuan. | fisherman, Lewfü | Tomorrow I will fish again | |

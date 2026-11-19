@@ -89,6 +89,7 @@ function interact(){
   const [dx,dy]=DV[P.dir],tx=P.x+dx,ty=P.y+dy;
   const e=entAt(tx,ty);
   if(e){if(e.kind==='npc'){e.dir=OPP[P.dir];e.wait=Math.max(e.wait,90);sfx('ok');e.talk()}else if(e.kind==='animal'){e.wait=120;sfx('ok');animalTalk(e)}else engage(e);return}
+  const dk=P.x+','+P.y;if(M.digs&&M.digs[dk]&&!S.flags['dig:'+CUR+':'+dk]&&(!inB(tx,ty)||WALK.has(grid[ty][tx])))return digFind(dk);
   if(!inB(tx,ty))return;
   const c=grid[ty][tx],k=tx+','+ty;
   if(c==='F')return fireSave();

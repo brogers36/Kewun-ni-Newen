@@ -392,6 +392,7 @@ function animalTalk(e){
   },true,true);
 }
 function animalStep(e){
+  if(e.still)return;
   if(e.wait>0){e.wait--;e.mv=false;return}
   if(--e.cd>0)return;e.cd=40+rnd(80);if(Math.random()<.45){e.mv=false;return}
   const d=['up','down','left','right'][rnd(4)],[dx,dy]=DV[d],nx=e.x+dx,ny=e.y+dy;e.dir=dx<0?'left':dx>0?'right':e.dir;
@@ -405,4 +406,42 @@ function kona2Talk(){
   say([L('Kona','Witranalwe müley mawida mew. Llükan!','El Witranalwe está en el monte. ¡Tengo miedo!','The Witranalwe is in the forest. I am afraid!'),
     N('Su guarida está bajando por la escalera de piedra, aquí al lado. Dicen que adentro hay piedras con números grandes y otra piedra que habla de muchas personas.','Its lair is down the stone stairway, right here. They say inside there are stones with big numbers and another stone that talks about many people.'),
     L('Kona','Iñche wiñotuan lof mew.','Yo voy a volver al lof.','I am going back to the lof.')]);
+}
+
+/* ---------- Nagche overworld puzzles ---------- */
+function digFind(dk){
+  S.flags['dig:'+CUR+':'+dk]=1;S.gold+=50;S.items.kofke++;persist();sfx('lvl');
+  say([N('Escarbas la tierra justo aquí... ¡hay algo enterrado!','You dig right here... something is buried!'),praise(),
+    L('','Kechu mari ngülliw!','Un cántaro antiguo con kechu mari (50) ngülliw y un kofke.','An old jug with kechu mari (50) ngülliw and a kofke.')]);
+}
+function shepTalk(){
+  const en=S.gloss==='en';
+  if(S.flags.sheep)return say([L('Pichi domo','Kayu ofisa nien. Chaltu may!','Tengo seis ovejas. ¡Gracias!','I have six sheep. Thank you!')]);
+  say([L('Pichi domo','Mari mari, '+addr(true)+'! Ofisafe ngen.','¡Hola! Cuido ovejas.','Hello! I look after sheep.'),
+    N('Desde que llegó el Witranalwe no me salen las cuentas. ¿Me ayudas a contarlas? Están todas en el corral.','Since the Witranalwe came I keep losing count. Will you help me count them? They are all in the pen.')],ask);
+  function ask(){const o=['kechu','kayu','regle','pura'].map(m=>({m,v:m}));for(let a=3;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
+    choose(L('Pichi domo','Chumten ofisa nien?','¿Cuántas ovejas tengo?','How many sheep do I have?'),o.concat([{m:'Pewkayal',g:en?'(count first)':'(contar primero)',v:'x'}]),v=>{
+      if(!v||v==='x')return;
+      if(v==='kayu'){S.flags.sheep=1;S.items.kulon+=2;S.gold+=20;persist();sfx('lvl');
+        return say([praise(),L('Pichi domo','Kayu ofisa! Chaltu may!','¡Seis ovejas! ¡Gracias!','Six sheep! Thank you!'),L('','Epu külon · epu mari ngülliw','Te da dos külon y epu mari (20) ngülliw.','She gives you two külon and epu mari (20) ngülliw.')])}
+      sfx('bad');say([L('Pichi domo','Fey no...','Eso no...','Not that...'),N('Mira bien el corral y cuenta otra vez.','Look carefully at the pen and count again.')])},true,true)}
+}
+function nFisherTalk(){
+  const en=S.gloss==='en';
+  if(S.flags.nfish)return say([L('Challwafe','Wüle ka challwatuan.','Mañana voy a pescar otra vez.','Tomorrow I will fish again.')]);
+  const qs=[{q:L('Challwafe','Wüle iñche amu___','Mañana yo iré.','Tomorrow I will go.'),o:['amun','amuan','amuay'],a:'amuan'},
+    {q:L('Challwafe','Eymi kim___','Tú sabrás.','You will know.'),o:['kimimi','kiman','kimaymi'],a:'kimaymi'},
+    {q:L('Challwafe','Fey challwatu___','Él va a pescar.','He will fish.'),o:['challwatuay','challwatuy','challwatuan'],a:'challwatuay'}];
+  say([L('Challwafe','Mari mari, '+addr(false)+'. Challwatulen.','Hola. Estoy pescando.','Hello. I am fishing.'),
+    N('El pescador quiere hablar de lo que vendrá, pero las palabras se le escapan como peces. Ayúdalo a terminar los verbos: todo lo que todavía no pasa.','The fisherman wants to talk about what is to come, but the words slip away from him like fish. Help him finish the verbs: everything that has not happened yet.')],()=>ask(0));
+  function ask(i){
+    if(i>=qs.length){S.flags.nfish=1;S.items.lawen+=2;S.gold+=20;S.xp+=4;persist();sfx('lvl');
+      return say([praise(),L('Challwafe','Chaltu may! Wüle ka challwatuan.','¡Gracias! Mañana voy a pescar otra vez.','Thank you! Tomorrow I will fish again.'),N('Te da dos lawen y epu mari (20) ngülliw. +4 kimün.','He gives you two lawen and epu mari (20) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+    const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
+      if(v==='_book')return openBook(()=>ask(i));
+      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Challwafe','Fey no...','Eso no...','Not that...'),N('Piensa: ¿ya pasó, o todavía no?','Think: has it already happened, or not yet?')],()=>ask(0))}},false,false)}
+}
+function goTitle(){
+  persist();active=null;menu.style.display='none';dlg.style.display='none';banner.style.display='none';B=null;
+  mode='title';$('title').style.display='';$('bCont').style.display='';AU.name=null;playSong('intro');
 }
