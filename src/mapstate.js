@@ -24,8 +24,9 @@ const PALS={
   williche:{G0:'#123a2a',G1:'#1e5a3c',G2:'#2e7a4c',G3:'#5aa870',GY:'#3a8a58',GL:'#7ab890',GM:'#4a9a66',S0:'#7a7a6a',S1:'#a8a894',S2:'#c4c2ac',S3:'#e0dec8',D1:'#5a4a3a',D2:'#6e5c48',D3:'#8a7860',FR:'#e04880',FY:'#f0e070',FW:'#ffffff'},
   wilcave:{C0:'#0a1214',C1:'#1e2e34',C2:'#2a3e46',C3:'#46606a',CD:'#22343a'},
   pewcave:{C0:'#140808',C1:'#3a1a14',C2:'#4a2620',C3:'#6a382c',CD:'#2c1410'},
-  nagcave:{C0:'#0e1610',C1:'#26322a',C2:'#3a4a3c',C3:'#56685a',CD:'#2e3c30'}};
-const WALLS={williche:['#34464e','#5e7a84','#4a626a','#1c2a30','#0a1214'],lafken:['#5a4430','#8a7058','#78604a','#3c2c20','#201810'],pewenche:['#2e2224','#5a4448','#463438','#1a1214','#0a0606'],nagche:['#3c4c3e','#6e8a68','#5a7058','#243026','#0e160e']};
+  nagcave:{C0:'#0e1610',C1:'#26322a',C2:'#3a4a3c',C3:'#56685a',CD:'#2e3c30'},
+  rukain:{C0:'#1a0e06',C1:'#38220e',C2:'#54381c',C3:'#74542e',CD:'#2a180a'}};
+const WALLS={ruka:['#6a4a26','#9a7444','#84603a','#3a2812','#140c04'],williche:['#34464e','#5e7a84','#4a626a','#1c2a30','#0a1214'],lafken:['#5a4430','#8a7058','#78604a','#3c2c20','#201810'],pewenche:['#2e2224','#5a4448','#463438','#1a1214','#0a0606'],nagche:['#3c4c3e','#6e8a68','#5a7058','#243026','#0e160e']};
 function applyPal(){Object.assign(PL,PL0);const p=PALS[M.pal];if(p)for(const k in p)PL[k]=C3(p[k])}
 function gtype(ch){if(ch==='~'||ch==='v')return'~';if(ch==='.'||ch===','||ch==='='||ch==='_'||ch==='%'||ch==='"'||ch==='Y'||ch==='b')return ch;if(ch==='T'||ch==='W'||ch==='f')return',';return M.floor}
 function gAt(x,y){if(x<0||y<0||x>=M.w||y>=M.h)return null;return GT[y][x]}
@@ -123,15 +124,18 @@ function buildLayers(){
     else if(ch==='V')PROPS.push({y:y+.9,cvs:boardCanvas(),dx:x*T-4,dy:y*T-6,sh:[x*T+8,y*T+15,10,2],board:1});
     else if(ch==='Z')PROPS.push({y:y+.9,loom:1,dx:x*T,dy:y*T-6,sh:[x*T+8,y*T+15,8,2]});
     else if(ch==='U')PROPS.push({y:y+.9,pot:1,dx:x*T,dy:y*T,sh:[x*T+8,y*T+14,7,2]});
+    else if(ch==='M')PROPS.push({y:y+.9,cvs:kulonCanvas(Math.floor(h2(x,y,7)*2)),dx:x*T-2,dy:y*T-8,sh:[x*T+8,y*T+14,8,2]});
     else if(ch==='R'&&(x===0||grid[y][x-1]!=='R')&&(y===0||grid[y-1][x]!=='R')){
       let bw=0,bh=0;while(x+bw<M.w&&grid[y][x+bw]==='R')bw++;while(y+bh<M.h&&grid[y+bh][x]==='R')bh++;
       const rk=rukaCanvas(bw,bh);PROPS.push({y:y+bh-.1,cvs:rk.cvs,dx:x*T-rk.ox,dy:y*T-rk.oy,sh:[x*T+bw*8+3,y*T+bh*16-1,bw*8+2,3]});
-      RUKAS.push([x*T+rk.smoke[0],y*T+rk.smoke[1]])}}
+      RUKAS.push([x*T+rk.smoke[0],y*T+rk.smoke[1]]);
+      const dtx=x+(bw>>1),dty=y+bh-1;
+      if(M.doors&&M.doors[dtx+','+dty])PROPS.push({y:y+bh-.05,door:1,dx:dtx*T+3,dy:y*T+bh*16-13,sh:[dtx*T+8,dty*T+15,5,2]})}}
 }
 function drawGroundStatics(c){
   for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++){const ch=grid[y][x],X=x*T,Y=y*T;
     if(ch==='%'){const below=y+1<M.h?grid[y+1][x]:'%';
-      const WC=WALLS[M.region==='nagche'?'nagche':M.region==='pewenche'?'pewenche':M.region==='williche'?'williche':'lafken'];
+      const WC=WALLS[M.wall||(M.region==='nagche'?'nagche':M.region==='pewenche'?'pewenche':M.region==='williche'?'williche':'lafken')];
       if(below!=='%'){R(c,X,Y+5,16,11,WC[0]);R(c,X,Y+4,16,1,WC[1]);R(c,X,Y+5,16,1,WC[2]);
         for(let r=0;r<3;r++){const yy=Y+6+r*3+ (r===2?1:0),off=((r+x)%2)*4;R(c,X,yy+2,16,1,WC[3]);for(let k=0;k<3;k++)R(c,X+((off+k*7)%16),yy,1,2,WC[3])}
         R(c,X,Y+15,16,1,WC[4]);

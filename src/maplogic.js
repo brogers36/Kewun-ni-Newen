@@ -38,6 +38,7 @@ function tryMove(d){
   const e=entAt(nx,ny);
   if(e){if(e.kind==='enemy')engage(e);return}
   const c=grid[ny][nx];
+  if(M.doors&&M.doors[nx+','+ny]&&d==='up'){const D=M.doors[nx+','+ny];sfx('door');loadMap(D.to,D.x,D.y);return}
   if(c==='B')return pushBlock(nx,ny,dx,dy);
   if(c==='L')return unlock(nx,ny);
   if(c==='E'){if(!P.bump){P.bump=1;say([N('Una puerta de piedra tallada. No se mueve: algo cerca debe abrirla.','A carved stone door. It will not move: something nearby must open it.')])}return}
@@ -89,7 +90,8 @@ function interact(){
   const [dx,dy]=DV[P.dir],tx=P.x+dx,ty=P.y+dy;
   const e=entAt(tx,ty);
   if(e){if(e.kind==='npc'){e.dir=OPP[P.dir];e.wait=Math.max(e.wait,90);sfx('ok');e.talk()}else if(e.kind==='animal'){e.wait=120;sfx('ok');animalTalk(e)}else engage(e);return}
-  const dk=P.x+','+P.y;if(M.digs&&M.digs[dk]&&!S.flags['dig:'+CUR+':'+dk]&&(!inB(tx,ty)||WALK.has(grid[ty][tx])))return digFind(dk);
+  const dk=P.x+','+P.y,dv=M.digs&&M.digs[dk];
+  if(dv&&!(dv.req&&!S.flags[dv.req])&&!S.flags['dig:'+CUR+':'+dk]&&(!inB(tx,ty)||WALK.has(grid[ty][tx])||grid[ty][tx]==='T'||grid[ty][tx]==='#'))return digFind(dk,dv);
   if(!inB(tx,ty))return;
   const c=grid[ty][tx],k=tx+','+ty;
   if(c==='F')return fireSave();
@@ -106,6 +108,7 @@ function interact(){
   if(c==='U')return say([L('','Iyael','La olla hierve sobre el fuego. Huele a comida.','The pot simmers over the fire. It smells like food.')]);
   if(c==='^')return say([N('Un montón de nieve dura te cierra el paso. Necesitas el newen de Ngen-pewen.','A heap of hard snow blocks your way. You need the newen of Ngen-pewen.')]);
   if(c==='Ñ')return say([N('Un zarzal lleno de espinas te cierra el paso. Necesitas el newen de Ngen-mawida.','A bramble full of thorns blocks your way. You need the newen of Ngen-mawida.')]);
+  if(c==='M')return kulonBush(tx,ty);
   if(c==='W')return say([L('','Kachilla','Un campo de kachilla (trigo) dorado, listo para cosechar.','A field of golden kachilla (wheat), ready for harvest.')]);
   if(c==='f')return say([N('Una cerca de palos.','A wooden fence.')]);
   if(c==='Y')return say([N('El paliwe, la cancha de palin. Mejor no interrumpir el partido.','The paliwe, the palin field. Better not interrupt the game.')]);

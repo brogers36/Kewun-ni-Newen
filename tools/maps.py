@@ -327,29 +327,47 @@ c.p(17,7,'F');c.p(32,1,'P')
 for (x,y) in [(2,6),(13,11),(28,11),(18,2)]:c.r(x,y,3,2,'R')
 c.p(7,3,'Z');c.p(24,7,'U')
 P_['p_lof']=c.rows()
-# --- p_pewen: araucaria forest, seasons stones ---
-c=C(32,13)
+# --- p_pewen: araucaria forest, seasons stones, hidden kulon grove ---
+c=C(32,17)
 c.r(0,7,32,1,'=')
-for y in range(1,12):
+for y in range(1,7):
     for x in range(1,31):
-        if c.g[y][x]==',' and hh(x,y,3)<.42 and not (7<=x<=21 and 1<=y<=6) and not (12<=x<=14 and y in (5,6)) and y not in (6,8):c.g[y][x]='T'
+        if c.g[y][x]==',' and hh(x,y,3)<.42 and not (7<=x<=21 and 1<=y<=6) and not (12<=x<=14 and y in (5,6)) and y!=6:c.g[y][x]='T'
 c.r(7,1,15,5,',');c.r(13,5,1,2,',')
 for x in (9,12,15,18):c.p(x,3,'N')
 c.p(13,5,'I')
 c.r(24,1,7,5,'T');c.r(25,1,5,3,',');c.p(27,4,'E');c.p(27,5,',');c.p(27,6,',');c.p(27,2,'C')
-c.r(2,9,3,3,',');c.p(3,10,'F')
-for (x,y,w,h) in [(8,1,3,1),(16,4,3,1),(6,9,2,2)]:c.r(x,y,w,h,'.')
+# south forest (rows 8-15): winding paths, twin pewen dig, hidden grove
+for y in range(8,16):
+    for x in range(1,31):
+        if c.g[y][x]==',' and hh(x,y,21)<.46:c.g[y][x]='T'
+c.r(2,8,4,1,',');c.r(14,8,3,1,',');c.p(22,8,',')
+c.r(2,9,4,3,',');c.p(3,10,'F')
+c.r(15,9,1,3,',');c.r(10,11,6,1,',')
+c.r(10,12,4,3,',');c.p(11,13,'P')
+c.r(3,12,1,3,',');c.r(3,14,8,1,',')
+c.p(7,9,'T');c.p(8,9,',');c.p(9,9,'T')
+c.r(22,9,1,4,',');c.r(23,12,2,1,',')
+c.r(24,12,7,4,',')
+for (x,y) in [(26,13),(28,14),(25,14),(29,12)]:c.p(x,y,'M')
+c.p(27,13,'C')
 P_['p_pewen']=c.rows()
-# --- p_pire: snowfield, ice-block puzzle ---
-c=C(32,13,'.')
+# --- p_pire: snowfield, ice-block puzzle, southern flats ---
+c=C(32,17,'.')
 c.r(0,7,32,1,'=')
 c.r(20,1,7,5,'#');c.r(21,1,5,3,'.');c.p(23,2,'C');c.p(23,4,'G');c.p(23,5,'.')
 for (x,y) in [(9,3),(14,2)]:c.p(x,y,'B')
 for (x,y) in [(9,5),(16,4)]:c.p(x,y,'O')
-for (x,y,w,h) in [(2,1,2,2),(28,9,2,2),(12,9,2,2)]:c.r(x,y,w,h,'T')
+for (x,y,w,h) in [(2,1,2,2),(12,9,2,2)]:c.r(x,y,w,h,'T')
 for (x,y) in [(5,10),(6,10),(19,9),(20,9)]:c.p(x,y,'#')
 c.r(1,9,3,1,',');c.p(2,10,'F')
 c.r(26,8,5,4,'T');c.r(27,9,3,2,'.');c.p(28,10,'P');c.p(28,8,'^')
+# southern flats: frozen tarn, pewen cluster, konew pocket
+c.r(4,12,3,2,'~')
+c.r(14,13,2,2,'T');c.r(24,14,2,2,'T');c.p(9,14,'T');c.p(2,14,'T')
+c.r(17,12,7,1,'#');c.p(20,12,'K')
+c.r(17,13,1,3,'#');c.r(23,13,1,3,'#')
+c.p(20,14,'P');c.p(18,14,'g')
 P_['p_pire']=c.rows()
 # --- p_pillan: volcano slope ---
 c=C(32,13)
@@ -365,10 +383,69 @@ c.p(10,10,'F');c.r(9,9,3,3,',');c.p(10,10,'F')
 for x in range(0,28):c.g[7][x]='='
 c.g[8][27]=c.g[7][27]='=';c.r(27,6,1,2,'.')
 P_['p_pillan']=c.rows()
-# --- lair: vertically flipped Lafkenche cave ---
-P_['pd1']=[r.replace('J','N') for r in M['d1'][::-1]]
-P_['pd2']=M['d2'][::-1]
-P_['pd3']=M['d3'][::-1]
+# --- ruka interiors ---
+def interior(w,h):
+    g=[['_']*w for _ in range(h)]
+    for x in range(w):g[0][x]=g[h-1][x]='%'
+    for y in range(h):g[y][0]=g[y][w-1]='%'
+    return g
+def carve(g,x,y,w,h,ch='_'):
+    for yy in range(y,y+h):
+        for xx in range(x,x+w):g[yy][xx]=ch
+rk=interior(14,9)
+carve(rk,6,8,2,1)
+rk1=[r[:] for r in rk];rk2=[r[:] for r in rk]
+rk1[3][7]='F';rk1[2][3]='Z';rk1[5][4]='U';rk1[2][11]='C'
+rk2[3][7]='F';rk2[5][11]='C';rk2[2][3]='V'
+P_['p_ruka1']=[''.join(r) for r in rk1]
+P_['p_ruka2']=[''.join(r) for r in rk2]
+# --- lair: Cherrufe ñi ruka, three unique branching floors ---
+g=[['%']*26 for _ in range(12)]
+carve(g,1,1,6,5)
+carve(g,10,1,5,5);carve(g,11,2,2,3,'~')
+carve(g,19,1,6,3)
+carve(g,10,7,9,4)
+carve(g,21,7,4,4)
+carve(g,0,4,1,1)
+carve(g,7,4,3,1)
+carve(g,15,2,4,1)
+carve(g,3,6,1,1);carve(g,3,7,7,1)
+carve(g,12,6,1,1)
+carve(g,22,4,1,3)
+carve(g,19,9,2,1)
+g[5][22]='K';g[2][19]='L';g[9][19]='E'
+g[1][1]='F';g[3][3]='C';g[5][2]='k'
+g[1][23]='C'
+g[8][12]='N';g[8][15]='N';g[8][18]='N'
+g[10][13]='I'
+g[9][23]='S'
+P_['pd1']=[''.join(r) for r in g]
+g=[['%']*26 for _ in range(12)]
+carve(g,1,1,5,4)
+carve(g,8,1,6,4)
+carve(g,16,1,9,4)
+carve(g,6,6,17,5)
+carve(g,1,7,4,3)
+carve(g,0,2,1,1)
+carve(g,6,2,2,1)
+carve(g,15,2,1,1)
+carve(g,21,5,1,1)
+carve(g,12,5,1,1)
+carve(g,10,7,1,3,'~');carve(g,15,8,1,3,'~')
+g[2][14]='G';g[2][9]='B';g[3][11]='B';g[4][9]='O';g[3][13]='O'
+g[1][20]='C';g[3][18]='H'
+g[8][5]='K';g[7][2]='C'
+g[9][22]='S'
+P_['pd2']=[''.join(r) for r in g]
+g=[['%']*24 for _ in range(10)]
+carve(g,1,1,22,8)
+carve(g,3,4,18,2,'~')
+g[4][7]=g[5][7]='b';g[4][16]=g[5][16]='b'
+for (x,y) in [(5,2),(11,2),(18,2),(6,7),(12,7)]:g[y][x]='%'
+carve(g,0,1,1,1)
+g[2][2]='F';g[2][20]='C'
+g[7][21]='S'
+P_['pd3']=[''.join(r) for r in g]
 # --- crater arena ---
 P_['ngen3']=[
 "%"*18,
@@ -394,10 +471,20 @@ def bfs(rows,start):
             X,Y=x+dx,y+dy
             if 0<=X<W and 0<=Y<H and (X,Y) not in seen and rows[Y][X] in OPEN:seen.add((X,Y));st.append((X,Y))
     return seen
-for k in ['p_rupu','p_lof','p_pewen','p_pire','p_pillan']:
-    v=P_[k];sy=7 if k!='p_lof' else 9;R=bfs(v,(0,sy))
-    right=[(len(v[0])-1,y) for y in range(len(v)) if (len(v[0])-1,y) in R]
-    print(k,'reach',len(R),'right edge',right)
+OPEN2=set('.,"=_PmgpSqkAbKLEGBONJHCFSIMZUV^')
+def bfs2(rows,start):
+    H=len(rows);W=len(rows[0]);seen={start};st=[start]
+    while st:
+        x,y=st.pop()
+        for dx,dy in((1,0),(-1,0),(0,1),(0,-1)):
+            X,Y=x+dx,y+dy
+            if 0<=X<W and 0<=Y<H and (X,Y) not in seen and rows[Y][X] in OPEN2:seen.add((X,Y));st.append((X,Y))
+    return seen
+STARTS={'p_rupu':(0,7),'p_lof':(0,9),'p_pewen':(0,7),'p_pire':(0,7),'p_pillan':(3,1),'p_ruka1':(6,7),'p_ruka2':(6,7),'pd1':(1,4),'pd2':(1,2),'pd3':(1,1)}
+for k,st in STARTS.items():
+    v=P_[k];R2=bfs2(v,st)
+    missing=[(x,y,v[y][x]) for y in range(len(v)) for x in range(len(v[0])) if v[y][x] in set('PCKSFMNIkgHBOE') and (x,y) not in R2]
+    print(k,'reach',len(R2),'MISSING' if missing else 'ok',missing)
 N.update(P_)
 
 # ================= WILLICHE =================

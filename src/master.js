@@ -34,7 +34,7 @@ const MSET={
   wilcave:s=>{Object.assign(s.flags,{root_tripa:1,wmini1:1,wmini2:1,wmini3:1,'pz:wd1':1,'pz:wd2':1});s.roots.push('tripa');s.items.lawen+=2},
   wildone:s=>{Object.assign(s.flags,{ngen4:1,wind:1,boss4:1});s.pieces.push('williche')},
   pewlof:s=>{Object.assign(s.flags,{laku:1,pew_lonko:1,pew_ke:1,'pz:p_pewen':1});s.roots.push('trafo')},
-  pewcave:s=>{Object.assign(s.flags,{root_wutre:1,pmini1:1,pmini2:1,pmini3:1,'pz:pd1':1,'pz:pd2':1});s.roots.push('wütre');s.items.lawen+=2},
+  pewcave:s=>{Object.assign(s.flags,{root_wutre:1,pmini1:1,pmini2:1,pmini3:1,'pz:pd1':1,'pz:pd2':1,pew_ngu1:1,pew_ngu2:1,pew_chaiwe:1,pew_basket:1,pew_llawe:1});s.roots.push('wütre');s.items.lawen+=2},
   pewdone:s=>{Object.assign(s.flags,{ngen3:1,snow:1,boss3:1});s.pieces.push('pewenche')},
   nagdone:s=>{Object.assign(s.flags,{ngen2:1,bramble:1,boss2:1});s.pieces.push('nagche')}};
 function mBuild(c){

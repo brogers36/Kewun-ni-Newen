@@ -93,3 +93,14 @@ Left unchanged: *Pun mew kintukefuy kulliñ* (habitual past in the story, "used 
 | Pekelafiyiñ, welu allkükefiyiñ. | konew (kürüf) | We do not see it, but we hear it | |
 | Ikelafiyiñ, pütokokefiyiñ. | konew (ko) | We do not eat it, we drink it | |
 | Kaleuche müley lafken mew! Pun mew pengekey. | kona | The Kaleuche is at sea! At night it is seen | |
+
+## Pewenche · rukas y expansión (nov 2026)
+- "Kütral mew ngülliw kotüken" (Rayen): kotü- 'tostar' (de kotün); revisar forma habitual kotüken.
+- "Yenge tüfachi ngülliw arriero mew": ye- 'llevar' + -nge imperativo.
+- "Chafolen" (Nawel, 'estoy con tos'): chafo- 'tos/resfrío' + -le- estativo; ¿chafon / chafolen?
+- "Ñami ñi chaiwe! Fentren külon niefuy.": ñam- 'perderse'; chaiwe 'canasto'; niefuy 'tenía'.
+- "Külon lawen ngey" (el maqui es remedio).
+- "Kuyfi, pillañ rüpü mew amukefuiñ" (-ke-fu- habitual del pasado, 1pl -iñ).
+- "Fewla kümelkalen" (ahora estoy mejor).
+- Konew K11: "Lig makuñ mew takukefi kom mapu" (taku- 'cubrir/tapar', -ke- habitual, -fi 3ª obj.); respuesta: pire.
+- Nombres: papay Rayen, chachay Nawel (¿apropiados?).

@@ -591,6 +591,10 @@ def hhash(x,y,k):
     import math;v=math.sin(x*12.9898+y*78.233+k*37.7)*43758.5453;return v-math.floor(v)
 HI={
  'witranalwe':{'glow':'EwFc','tex':{'P':'streak','q':'streak','A':'streak','g':'strand','G':'strand','H':'speck'}},
+ 'ngen_lafken':{'glow':'wf','tex':{'d':'streak','m':'streak','l':'speck'}},
+ 'ngen_mawida':{'glow':'y','tex':{'b':'pore','B':'pore','h':'pore','m':'speck','L':'speck','G':'speck','l':'speck'}},
+ 'ngen_pewen':{'glow':'ysF','tex':{'n':'speck','N':'speck','u':'pore','U':'pore','v':'speck','g':'streak','G':'streak'}},
+ 'ngen_kuruf':{'glow':'Rw','tex':{'b':'streak','B':'streak','r':'speck'}},
  'trelke':{'glow':'ewW','tex':{'h':'pore','H':'pore','u':'pore','m':'speck','M':'speck','r':'speck'}},
  'cherrufe':{'glow':'lLyOr','tex':{'b':'crack','B':'crack','h':'speck'}},
  'kaleuche':{'glow':'yr','tex':{'h':'streak','H':'streak','s':'speck','S':'speck','f':'speck','F':'speck'}}}
@@ -654,7 +658,7 @@ D={}
 BIG={'kowek':2,'mawek':2,'kamawetu':2,'basilisko':2,'kaleuche':2,'trelke':2,'witranalwe':2,'chonchon':2,'kutral':2,'pire':2,'kura':2,'nirivilu':2,'cherrufe':2}
 for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe2),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('nirivilu',nirivilu),('cherrufe',cherrufe2),('trelke',trelke),('ngen_lafken',ngen_lafken),('ngen_mawida',ngen_mawida),('ngen_pewen',ngen_pewen),('kowek',kowek),('mawek',mawek),('kamawetu',kamawetu),('basilisko',basilisko),('kaleuche',kaleuche),('ngen_kuruf',ngen_kuruf)]:
     D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':{'witranalwe':'150,230,170','cherrufe':'255,130,50','trelke':'150,200,120','kaleuche':'190,220,200'}.get(name,0)}
-for name in ['witranalwe','trelke','cherrufe','kaleuche']:
+for name in ['witranalwe','trelke','cherrufe','kaleuche','ngen_lafken','ngen_mawida','ngen_pewen','ngen_kuruf']:
     fr=[];pal=None
     for f in D[name]['f']:
         p,rows=hires(name,f,PAL[name]);fr.append((p,rows))

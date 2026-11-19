@@ -150,6 +150,8 @@ function openChest(x,y,what){
     N('El frío apaga el fuego de los wekufü de fuego, y hace tiritar a los demás. Pero a los wekufü de nieve... les encanta.','The cold puts out the fire of fire wekufü, and makes the others shiver. But snow wekufü... love it.')])}
   if(what==='pewgift'){S.gold+=60;S.items.lawen++;persist();return say([L('','Kayu mari ngülliw!','Dentro hay kayu mari (60) ngülliw y un lawen.','Inside are kayu mari (60) ngülliw and a lawen.')])}
   if(what==='lawen1'){S.items.lawen++;persist();return say([L('','Lawen!','Encontraste un lawen (remedio).','You found a lawen (medicine).')])}
+  if(what==='rukagift'){S.gold+=30;persist();return say([L('','Küla mari ngülliw!','Un saquito de ngülliw tostados: küla mari (30).','A little bag of toasted pewen nuts: küla mari (30).')])}
+  if(what==='kulongift'){S.items.kulon+=2;persist();return say([L('','Epu külon!','Dentro hay dos külon (maqui).','Inside are two külon (maqui berries).')])}
   if(what==='piwke')return gainPiwke([N('Dentro del cofre brilla algo rojo...','Something red glows inside the chest...')]);
   if(what==='rune'){S.runes.push('kil');S.flags.rune_kil=1;persist();sfx('lvl');return say([
     L('','-kil-','Encontraste la runa -kil-: la prohibición. Pone el imperativo en negativo: "¡no...!"','You found the -kil- rune: prohibition. It turns a command negative: "don\'t...!"'),
@@ -434,9 +436,52 @@ function kona2Talk(){
     L('Kona','Iñche wiñotuan lof mew.','Yo voy a volver al lof.','I am going back to the lof.')]);
 }
 
+/* ---------- Pewenche rukas ---------- */
+function rayenTalk(){
+  if(!S.flags.pew_ngu1){S.flags.pew_ngu1=1;S.gold+=10;persist();sfx('pick');
+    return say([L('Papay Rayen','Mari mari, '+addr(true)+'! Konpange, konpange!','¡Hola! ¡Pasa, pasa!','Hello! Come in, come in!'),
+      L('Papay Rayen','Kütral mew ngülliw kotüken.','Estoy tostando ngülliw (piñones) al fuego.','I am toasting ngülliw (pewen nuts) on the fire.'),
+      N('El ngülliw es la semilla del pewen: comida, harina y hasta moneda en estas tierras. Te convida un puñado tostado: mari (10) ngülliw.','The ngülliw is the seed of the pewen tree: food, flour, even money in these lands. She treats you to a toasted handful: mari (10) ngülliw.'),
+      L('Papay Rayen','Yenge tüfachi ngülliw arriero mew. Rüpü mew müley.','Lleva estos piñones al arriero. Está en el camino, con sus caballos.','Take these pewen nuts to the muleteer. He is on the road, with his horses.'),
+      N('Fíjate en yenge: ye- es «llevar» y -nge la orden: «¡lleva!».','Notice yenge: ye- is «carry» and -nge the command: «carry!».')]);}
+  if(!S.flags.pew_ngu2)return say([L('Papay Rayen','Arriero mew amunge! Rüpü mew müley.','¡Ve donde el arriero! Está en el camino.','Go to the muleteer! He is on the road.')]);
+  say([L('Papay Rayen','Chaltu may, '+addr(true)+'!','¡Gracias!','Thank you!'),
+    L('Papay Rayen','Ürkütunge kütral mew.','Descansa junto al fuego.','Rest by the fire.')]);
+}
+function nawelTalk(){
+  if(S.flags.pew_llawe)return say([L('Chachay Nawel','Fewla kümelkalen. Chaltu may!','Ahora estoy mejor. ¡Gracias!','I am better now. Thank you!'),
+    L('Chachay Nawel','Pillañ mew amunge, '+addr(false)+'.','Ve al volcán.','Go to the volcano.')]);
+  if(S.flags.pew_basket){S.flags.pew_llawe=1;S.items.kulon+=2;persist();sfx('lvl');
+    return say([N('Le entregas el chaiwe lleno de külon.','You hand him the chaiwe full of maqui berries.'),
+      L('Chachay Nawel','Chaltu may! Külon lawen ngey.','¡Gracias! El maqui es remedio.','Thank you! Maqui is medicine.'),
+      N('Prepara un remedio oscuro y se lo toma. Poco a poco deja de toser. Te regala dos külon.','He brews a dark remedy and drinks it. Little by little the cough fades. He gives you two külon.'),
+      L('Chachay Nawel','Allkütunge. Kuyfi, pillañ rüpü mew amukefuiñ.','Escucha. Antiguamente íbamos por el paso del pillañ.','Listen. Long ago we used to travel the volcano pass.'),
+      N('Te entrega una vieja llave de piedra: la llawe del paso. «La puerta de hielo, en los campos de nieve, se abre con esto.»','He hands you an old stone key: the llawe of the pass. "The ice door, in the snowfields, opens with this."'),
+      L('','Llawe!','¡Conseguiste la llawe del paso del pillañ!','You got the llawe of the volcano pass!')]);}
+  if(S.flags.pew_chaiwe)return say([L('Chachay Nawel','Kof kof... Ñami ñi chaiwe mawida mew.','Cof cof... Mi canasto se perdió en el bosque.','Cough cough... My basket got lost in the forest.'),
+    N('«Al sur del camino del bosque hay un rincón escondido lleno de külon. Ahí quedó.»','"South of the forest road there is a hidden corner full of maqui. It was left there."')]);
+  S.flags.pew_chaiwe=1;persist();
+  say([L('Chachay Nawel','Mari mari... kof kof! Chafolen.','Hola... ¡cof cof! Estoy con tos.','Hello... cough, cough! I have a cough.'),
+    N('El chachay Nawel es el hombre más viejo del lof. Se mejora con un remedio de külon (maqui), pero...','Chachay Nawel is the oldest man in the lof. A maqui remedy would help him, but...'),
+    L('Chachay Nawel','Ñami ñi chaiwe! Fentren külon niefuy.','¡Se me perdió el chaiwe (canasto)! Tenía mucho maqui.','My chaiwe (basket) got lost! It had a lot of maqui.'),
+    N('«Lo dejé en el bosque de pewenes, en un rincón escondido al sur del camino, donde crecen los külon. Mis piernas ya no me llevan hasta allá... ¿me lo buscas?»','"I left it in the pewen forest, in a hidden corner south of the road, where the maqui bushes grow. My legs will not carry me there any more... will you look for it?"')]);
+}
+function kulonBush(x,y){
+  const found=S.flags.pew_basket;
+  if(S.flags.pew_chaiwe&&!found&&x+','+y==='28,14'){S.flags.pew_basket=1;persist();sfx('lvl');
+    return say([N('Entre las ramas del külon hay un chaiwe viejo, lleno de frutitos morados.','Among the maqui branches there is an old chaiwe, full of little purple berries.'),
+      L('','Chaiwe!','¡Encontraste el chaiwe del chachay Nawel!','You found chachay Nawel\'s chaiwe!')]);}
+  if(S.flags.pew_chaiwe&&!found)return say([N('Buscas entre las ramas... pero aquí no hay ningún chaiwe.','You search among the branches... but there is no chaiwe here.'),
+    L('','Külon','Un külon (maqui) cargado de frutitos morados.','A külon (maqui) loaded with little purple berries.')]);
+  say([L('','Külon','Un külon (maqui) cargado de frutitos morados. Con sus frutos se hace remedio y mushay.','A külon (maqui) loaded with little purple berries. Its fruit makes medicine and mushay.')]);
+}
+
 /* ---------- Nagche overworld puzzles ---------- */
-function digFind(dk){
-  S.flags['dig:'+CUR+':'+dk]=1;S.gold+=50;S.items.kofke++;persist();sfx('lvl');
+function digFind(dk,dv){
+  S.flags['dig:'+CUR+':'+dk]=1;
+  if(dv&&dv.what==='piwke'){persist();sfx('lvl');
+    return gainPiwke([N('Escarbas la tierra justo aquí... ¡hay algo enterrado!','You dig right here... something is buried!'),praise()]);}
+  S.gold+=50;S.items.kofke++;persist();sfx('lvl');
   say([N('Escarbas la tierra justo aquí... ¡hay algo enterrado!','You dig right here... something is buried!'),praise(),
     L('','Kechu mari ngülliw!','Un cántaro antiguo con kechu mari (50) ngülliw y un kofke.','An old jug with kechu mari (50) ngülliw and a kofke.')]);
 }
@@ -492,7 +537,8 @@ function pLonkoTalk(){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen3)ls.push(L('Lonko','Ngen-pewen nepey. Chaltu may!','Ngen-pewen despertó. ¡Gracias!','Ngen-pewen has woken up. Thank you!'),
       N('Ya llevas tres trariwe trokiñ. Dicen que en el sur, en tierras williche, y al otro lado de la cordillera, en Puelmapu, esperan los últimos.','You now carry three trariwe trokiñ. They say the last ones wait in the south, in Williche lands, and across the mountains, in Puelmapu.'));
-    else ls.push(L('Lonko','Pillañ mew amunge.','Ve al volcán.','Go to the volcano.'),N('Pasando el bosque de pewenes y los campos de nieve está el pillañ. La morada del Cherrufe está adentro.','Past the pewen forest and the snowfields is the pillañ. The Cherrufe\'s lair is inside.'));
+    else ls.push(L('Lonko','Pillañ mew amunge.','Ve al volcán.','Go to the volcano.'),N('Pasando el bosque de pewenes y los campos de nieve está el pillañ. La morada del Cherrufe está adentro.','Past the pewen forest and the snowfields is the pillañ. The Cherrufe\'s lair is inside.'),
+      N('Y en este lof las puertas están abiertas: entra en las rukas. La papay Rayen y el chachay Nawel siempre reciben visitas.','And in this lof the doors are open: go into the rukas. Papay Rayen and chachay Nawel always welcome visitors.'));
     return say(ls);
   }
   const steps=[
@@ -532,6 +578,11 @@ function gathTalk(){
 }
 function arrieroTalk(){
   const en=S.gloss==='en';
+  if(S.flags.pew_ngu1&&!S.flags.pew_ngu2){S.flags.pew_ngu2=1;persist();sfx('lvl');
+    return say([N('Le entregas los ngülliw tostados de la papay Rayen.','You hand him papay Rayen\'s toasted pewen nuts.'),
+      L('Wentru','Chaltu may! Kümey ngülliw!','¡Gracias! ¡Qué ricos piñones!','Thank you! What good pewen nuts!'),
+      L('Wentru','Allkütunge: pewen mapu mew, epu fütra pewen müley, rüpü ñi willi püle.','Escucha: en el bosque hay dos pewenes gemelos, al sur del camino.','Listen: in the forest there are two twin pewen trees, south of the road.'),
+      N('«Mis caballos siempre escarban justo entre esos dos árboles. Algo brilla ahí abajo. Busca justo en medio.»','"My horses always paw at the ground right between those two trees. Something shines down there. Search right in the middle."')]);}
   if(S.flags.pew_ke)return say([L('Wentru','Kawellu mew amuken. Pewkayal!','Yo ando a caballo. ¡Hasta luego!','I ride on horseback. See you later!')]);
   const qs=[{q:L('Wentru','Pu pewenche ngülliw i___','Los pewenche comen piñones (siempre, de costumbre).','The Pewenche eat pewen nuts (always, as a habit).'),o:['iyngün','ikeyngün','ikey'],a:'ikeyngün'},
     {q:L('Wentru','Iñche mapudungu___','Yo hablo mapudungun (siempre, de costumbre).','I speak Mapudungun (always, as a habit).'),o:['mapudungun','mapudunguken','mapudungukey'],a:'mapudunguken'},

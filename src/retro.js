@@ -62,9 +62,9 @@ function charSprite(look,dir,fr){
 }
 /* ---------- Chrono Trigger-style characters (CT preview only) ---------- */
 function ctShade(hex,t){const [r,g,b]=hexRGB(hex);const f=v=>Math.max(0,Math.min(255,Math.round(t<0?v*(1+t):v+(255-v)*t)));return 'rgb('+f(r)+','+f(g)+','+f(b)+')'}
-function ctCharSprite(look,dir,fr){
-  const key='ct'+look+dir+fr;if(CCACHE[key])return CCACHE[key];
-  if(dir==='left')return CCACHE[key]=mirror(ctCharSprite(look,'right',fr));
+function ctCharSprite(look,dir,fr,seated){
+  const key='ct'+look+dir+fr+(seated?'z':'');if(CCACHE[key])return CCACHE[key];
+  if(dir==='left')return CCACHE[key]=mirror(ctCharSprite(look,'right',fr,seated));
   const L0=LOOKS[look],pal=Object.assign({},BASEP,L0),F=L0.t==='F',small=!!L0.small;
   const W=18,H=small?26:32,g=[...Array(H)].map(()=>Array(W).fill(null));
   const P=(x,y,m)=>{x=Math.round(x);y=Math.round(y);if(x>=0&&x<W&&y>=0&&y<H)g[y][x]=m};
@@ -74,14 +74,19 @@ function ctCharSprite(look,dir,fr){
   const tY=14,tH=small?6:9,lY=tY+tH,lH=small?4:7;   // torso top/height, legs top/height
   const R=dir==='right',U=dir==='up';
   // ---- legs / feet ----
-  if(!F||U||R){
+  if(seated){
+    // folded legs: a lap in front, feet tucked at the sides
+    const lc=F?'c':'l';
+    if(R){Rr(6,lY,8,2,lc);Rr(12,lY+1,2,1,'f')}
+    else{Rr(4,lY,10,2,lc);P(4,lY+2,'f');P(5,lY+2,'f');P(12,lY+2,'f');P(13,lY+2,'f')}
+  } else if(!F||U||R){
     if(R){const a=st===1?-1:st===2?1:0;Rr(7+a,lY,3,lH-1,'l');Rr(9-a,lY,3,lH-1,'L');Rr(6+a*2,lY+lH-1,4,1,'f');Rr(9-a*2,lY+lH-1,4,1,'f')}
     else{const a=st===1?1:0,b=st===2?1:0;Rr(5,lY,3,lH-1-a,'l');Rr(10,lY,3,lH-1-b,'l');Rr(4,lY+lH-1-a,4,1,'f');Rr(10,lY+lH-1-b,4,1,'f')}
   } else {Rr(5,lY+lH-2,3,2,'f');Rr(10,lY+lH-2,3,2,'f')}
   // ---- torso ----
   const tc=F?'c':'p';
-  if(R){Rr(6,tY,7,tH,tc);if(F)for(let y=0;y<lH-1;y++)Rr(6-(y>>1),lY+y,7+(y>>1)+(y>>2),1,tc)}
-  else{E(9,tY+2,5.2,2.6,tc);Rr(4,tY+1,10,tH-1,tc);if(F)for(let y=0;y<lH-1;y++)Rr(4-(y>>2),lY+y,10+((y>>2)*2),1,tc)}
+  if(R){Rr(6,tY,7,tH,tc);if(F&&!seated)for(let y=0;y<lH-1;y++)Rr(6-(y>>1),lY+y,7+(y>>1)+(y>>2),1,tc)}
+  else{E(9,tY+2,5.2,2.6,tc);Rr(4,tY+1,10,tH-1,tc);if(F&&!seated)for(let y=0;y<lH-1;y++)Rr(4-(y>>2),lY+y,10+((y>>2)*2),1,tc)}
   // pattern band / belt
   const by=tY+tH-3;
   if(!U||F){if(R)Rr(6,by,7,1,'r');else Rr(4,by,10,1,'r');for(let x=(R?6:4);x<(R?13:14);x+=2)P(x,by+1,'w')}
@@ -125,12 +130,13 @@ function ctCharSprite(look,dir,fr){
     c.fillStyle=col;c.fillRect(x,y,1,1)}
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){if(g[y][x])continue;let nb=null;for(const [dx,dy] of [[0,1],[1,0],[-1,0],[0,-1]]){const xx=x+dx,yy=y+dy;if(xx>=0&&yy>=0&&xx<W&&yy<H&&g[yy][xx]){nb=g[yy][xx];break}}
     if(nb){c.fillStyle=ctShade(base(nb),-.72);c.fillRect(x,y,1,1)}}
+  if(seated){const hh=lY+4,[cv2,c2]=mk(W,hh);c2.drawImage(cvs,0,0,W,hh,0,0,W,hh);return CCACHE[key]=cv2}
   return CCACHE[key]=cvs;
 }
 function drawChar(c,look,x,y,dir,fr,seated){
   if(CT){const L0=LOOKS[look],s=ctCharSprite(look,dir,[0,1,0,2][fr%4]===0?0:fr%4),Hh=s.height;
     ell(c,x+9,y+15,7,2.4,'rgba(0,10,20,.3)');
-    if(seated){c.drawImage(s,0,0,18,Hh-8,x-1,y+16-(Hh-8)+2,18,Hh-8);return}
+    if(seated){const ss=ctCharSprite(look,dir==='left'?'left':dir,0,true);c.drawImage(ss,x-1,y+16-ss.height+1);return}
     c.drawImage(s,x-1,y+16-Hh);return}
   ell(c,x+8,y+14,6,2,'rgba(0,0,0,.3)');
   const s=charSprite(look,dir,fr);
@@ -144,10 +150,11 @@ function dogSprite(fr,dir){const key='dog'+fr+dir;if(CCACHE[key])return CCACHE[k
   return CCACHE[key]=dir==='right'?mirror(cvs):cvs}
 function drawNgen(c,x,y,s,t,v){
   const name=v==='mawida'?'ngen_mawida':v==='pewen'?'ngen_pewen':v==='kuruf'?'ngen_kuruf':'ngen_lafken',au={ngen_lafken:'160,220,255',ngen_mawida:'200,240,140',ngen_pewen:'255,220,140',ngen_kuruf:'200,250,255'}[name];
-  const k=Math.max(1,Math.round(s)),fr=Math.floor(t/20)%2,cvs=tplCanvas(name,fr,k),w=cvs.width,h=cvs.height,bob=Math.round(Math.sin(t/25)*k);
+  const k0=Math.max(1,Math.round(s)),fr=Math.floor(t/20)%2,hb=typeof SPR2!=='undefined'&&SPR2[name+'@b'];
+  const k=hb?Math.max(1,Math.round(s/2)):k0,cvs=hb?tplCanvas(name+'@b',fr,k):tplCanvas(name,fr,k0),w=cvs.width,h=cvs.height,bob=Math.round(Math.sin(t/25)*Math.max(1,k));
   for(const [r,a] of [[1.15,.07],[.9,.1],[.7,.14]])ell(c,x,y-h/2+bob,w*.6*r,h*.55*r,'rgba('+au+','+a+')');
   c.drawImage(cvs,Math.round(x-w/2),Math.round(y-h+bob));
-  for(let i=0;i<6;i++){const a=t/20+i*1.05;R(c,x+Math.round(Math.cos(a)*w*.62),y-Math.round(h/2)+Math.round(Math.sin(a)*h*.45),k,k,'rgba('+au+',.9)')}
+  for(let i=0;i<6;i++){const a=t/20+i*1.05,kk=Math.max(1,hb?k*2:k);R(c,x+Math.round(Math.cos(a)*w*.62),y-Math.round(h/2)+Math.round(Math.sin(a)*h*.45),kk,kk,'rgba('+au+',.9)')}
 }
 
 /* ---------- enemies (designed on a 16-unit grid, cel-shaded at any size) ---------- */
@@ -273,6 +280,25 @@ function rockCanvas(v){
   const k='rock'+v;if(PCACHE[k])return PCACHE[k];const [cvs,c]=mk(16,14);
   ell(c,8,8,7,5.5,'#686878');ell(c,7,7,5.5,4,'#9898a8');ell(c,5,5,2,1.4,'#d0d0dc');R(c,10,10,3,1,'#484858');R(c,2,9,2,1,'#484858');
   outline(cvs,'#202028');return PCACHE[k]=cvs}
+function kulonCanvas(v){
+  const k='kul'+v;if(PCACHE[k])return PCACHE[k];const [cvs,c]=mk(20,24);
+  R(c,9,19,2,4,'#6a3a28');R(c,8,20,1,2,'#8a5038');
+  const L=[[10,12,8,7,'#1e4a28'],[6,10,5,5,'#2a5e34'],[14,10,5,5,'#2a5e34'],[10,7,6,5,'#38763e'],[8,9,4,4,'#469048'],[13,8,3,3,'#469048']];
+  for(const [x,y,rx,ry,col] of L)ell(c,x,y,rx,ry,col);
+  for(let i=0;i<9;i++){const a=h2(i,v,1)*6.28,r=3+h2(i,v,2)*5,x=10+Math.cos(a)*r,y=11+Math.sin(a)*r*.7;R(c,x,y,1,1,'#58a858')}
+  for(let i=0;i<7;i++){const x=4+Math.floor(h2(i,v,3)*13),y=6+Math.floor(h2(i,v,4)*9);
+    R(c,x,y,2,2,'#3a1448');R(c,x,y,1,1,'#6a2a88');R(c,x+1,y+1,1,1,'#200830')}
+  outline(cvs,'#122414');
+  return PCACHE[k]=cvs}
+function doorwayCanvas(f){
+  const k='dw'+f;if(PCACHE[k])return PCACHE[k];const [cvs,c]=mk(10,13);
+  for(let y=0;y<12;y++)for(let x=1;x<9;x++){const d=Math.abs(x-4.5)/4+ (12-y)/14;
+    c.fillStyle=d<.55?'#ffe9a8':d<.8?'#f8c060':d<1.05?'#c07828':'#5a3014';c.fillRect(x,y,1,1)}
+  R(c,0,0,1,12,'#3a2410');R(c,9,0,1,12,'#3a2410');
+  for(let y=1;y<11;y+=2){R(c,1,y,1,1,'#8a2a2a');R(c,8,y,1,1,'#1a1a3a')}
+  if(f)R(c,4,2,2,7,'#fff4cc');
+  R(c,0,12,10,1,'#7a5a34');
+  return PCACHE[k]=cvs}
 function rukaCanvas(bw,bh){
   const k='ruka'+bw+'x'+bh;if(PCACHE[k])return PCACHE[k];
   const W0=bw*16,H0=bh*16,ox=2,oy=10,[cvs,c]=mk(W0+4,H0+12),cx=ox+W0/2;
