@@ -4497,14 +4497,28 @@ function renderBattle(){
   if(B.flash>0){c.fillStyle='rgba(255,255,255,'+(B.flash/16)+')';c.fillRect(0,0,LW,LH);B.flash--}
   if(B.red>0){c.fillStyle='rgba(255,0,0,'+(B.red/30)+')';c.fillRect(0,0,LW,LH);B.red--}
 }
-function loop(){requestAnimationFrame(loop);try{loopBody()}catch(e){console.error(e)}}
-function loopBody(){
-  frame++;OV=[];
-  if(mode==='map'&&M){updateMap();renderMap()}
+/* fixed 60 Hz timestep: game speed is the same at any frame rate.
+   A slow phone catches up (up to 4 updates per paint, so it gets choppy,
+   not slow); a 120 Hz screen paints twice per update instead of running
+   the game at double speed. */
+let _lt=0,_acc=0;
+function loop(ts){requestAnimationFrame(loop);try{loopBody(ts)}catch(e){console.error(e)}}
+function loopBody(ts){
+  const now=ts||performance.now();
+  if(!_lt)_lt=now;
+  _acc+=Math.min(100,now-_lt);_lt=now;
+  let steps=0;
+  while(_acc>=1000/60&&steps<4){_acc-=1000/60;steps++;
+    frame++;
+    if(mode==='map'&&M)updateMap();
+  }
+  if(!steps)return;
+  OV=[];
+  if(mode==='map'&&M)renderMap();
   else if(mode==='battle'&&B)renderBattle();
   else if(mode==='cut')renderCut();
   else if(mode==='title')paintLand(lx,frame,false);
-  if(fade>0&&mode==='map'){lx.fillStyle='rgba(0,0,0,'+(fade/16)+')';lx.fillRect(0,0,LW,LH);fade--}
+  if(fade>0&&mode==='map'){lx.fillStyle='rgba(0,0,0,'+(fade/16)+')';lx.fillRect(0,0,LW,LH);fade=Math.max(0,fade-steps)}
   ctx.drawImage(LO,0,0,W,H);
   for(const f of OV)f();
 }
