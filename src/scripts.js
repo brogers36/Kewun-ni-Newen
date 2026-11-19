@@ -681,7 +681,10 @@ function sbossWake(sb){
     trawko:[N('Un hacha de piedra se clava en un tronco, a un palmo de tu cabeza. Del helecho sale un hombrecito retorcido con sombrero de fibra: ¡el Trawko!','A stone axe thuds into a trunk, a hand\'s width from your head. Out of the ferns steps a twisted little man in a fiber hat: the Trawko!'),
       N('Tres sellos de luz lo protegen. El primero susurra: «¡Sal!»','Three seals of light protect it. The first whispers: «Come out!»')],
     chadikura:[N('La tierra blanda cruje bajo tus pies... y la sal entera se levanta y se arma sola: un gigante de cristal blanco con grietas que brillan verdes. El wekufü del lago seco despierta a medias.','The soft ground crunches under your feet... and the salt itself rises and assembles: a giant of white crystal with cracks that glow green. The wekufü of the dried lake half-wakes.'),
-      N('Tres sellos de luz lo protegen. El primero susurra: «¡Despierta!»','Three seals of light protect it. The first whispers: «Wake up!»')]}[sb.boss];
+      N('Tres sellos de luz lo protegen. El primero susurra: «¡Despierta!»','Three seals of light protect it. The first whispers: «Wake up!»')],
+    kalku:[N('El pasto gris se abre y una figura flaca sale de la tierra agrietada, envuelta en un manto de plumas negras, con un bastón de hueso: el Fütra Kalku, el que vendió las tierras a la niebla.','The grey grass parts and a gaunt figure rises from the cracked earth, wrapped in a cloak of black feathers, carrying a bone staff: the Fütra Kalku, the one who sold the lands to the fog.'),
+      L('Fütra Kalku','Ngoyman ñi duam mew küdawken. Eymi... ngoyaymi.','Trabajo para el olvido. Y tú... serás olvidado.','I work for the forgetting. And you... will be forgotten.'),
+      N('Tres sellos de sombra lo protegen. El primero susurra: «¡Ten miedo!»','Three seals of shadow protect him. The first whispers: «Be afraid!»')]}[sb.boss];
   say(pre,()=>startBattle([sb.boss],{boss:1,sflag:sb.flag}));
 }
 
@@ -1042,15 +1045,22 @@ function kona5Talk(){
   say([L('Kona','Walichu müley chenke mew! Umawtulen miawkey.','¡El Walichu está en el chenque! Anda caminando dormido.','The Walichu is in the chenque! It walks about asleep.'),
     N('El chenque baja entre las piedras, aquí al lado. Dicen que adentro hay piedras con números enormes, una puerta con llave, y otra piedra que pregunta de quién son las cosas. Y al fondo, el Walichu, envuelto en su sueño gris: a ese, dicen, primero hay que despertarlo.','The chenque goes down among the rocks, right here. They say inside there are stones with huge numbers, a locked door, and another stone that asks whose things are whose. And at the bottom, the Walichu, wrapped in its grey dream: that one, they say, must first be woken.')]);
 }
+function freedN(){return ['gm1','gm2','gm3','gm4','gm5'].filter(f=>S.flags[f]).length}
 function ngoymanTalk(){
-
-  say([L('Kushe ñi am','Akuymi, pichi weche... Afpun rüpü mew akuymi.','Llegaste... Llegaste al final del camino.','You have come... You have come to the end of the road.'),
+  if(S.flags.won)return say([L('Kushe ñi am','Kom mapu konümpatuy. Chaltu may, '+nm()+'.','Toda la tierra vuelve a recordar. Gracias, '+nm()+'.','All the land remembers again. Thank you, '+nm()+'.'),
+    N('La figura de niebla ya casi no se ve: donde estaba, crece pasto nuevo. «Las tierras robadas siguen ahí, al oeste, si quieres volver a caminarlas. Y los que viven en ellas te recordarán siempre.»','The fog figure is barely visible now: where it stood, new grass is growing. "The stolen lands are still there, to the west, if you want to walk them again. And those who live in them will remember you always."')]);
+  const n=freedN();
+  const ls=[L('Kushe ñi am','Akuymi, pichi weche... Afpun rüpü mew akuymi.','Llegaste... Llegaste al final del camino.','You have come... You have come to the end of the road.'),
     N('La figura es apenas niebla con forma de persona. Pero te mira con un cariño muy viejo, y la niebla no se atreve a tocarla.','The figure is barely fog in the shape of a person. But it looks at you with a very old tenderness, and the fog does not dare touch it.'),
-    L('Kushe ñi am','Kechu trokiñ, kechu mapu, kiñe trariwe.','Cinco trokiñ, cinco tierras, un solo trariwe.','Five trokiñ, five lands, one single trariwe.'),
-    N('«Despertaste a los cinco ngen y tejiste de nuevo lo que el olvido había cortado. Detrás de mí duerme Ti Fütra Ngoyman, el gran olvido. Su puerta se abrirá pronto... y tus palabras serán tu única arma.»','"You woke the five ngen and wove back together what forgetting had cut apart. Behind me sleeps Ti Fütra Ngoyman, the great forgetting. Its door will open soon... and your words will be your only weapon."'),
-    N('(Fin del prototipo: la batalla final contra Ti Fütra Ngoyman llegará en la próxima versión. ¡Chaltu may por jugar!)','(End of the prototype: the final battle against Ti Fütra Ngoyman will come in the next version. Chaltu may for playing!)')]
-    .concat(S.flags.sb5&&!S.flags.epu_won?[N('Antes de irte, la figura señala el pasto junto al kütral: «Alguien te mira desde hace rato. Un guerrero de dos caras. No es wekufü: no le temas... pero si te habla, escúchalo con respeto.»','Before you go, the figure points to the grass by the fire: "Someone has been watching you for a while. A warrior with two faces. He is no wekufü: do not fear him... but if he speaks to you, listen with respect."')]:[]));
+    L('Kushe ñi am','Kechu trokiñ, kechu mapu, kiñe trariwe.','Cinco trokiñ, cinco tierras, un solo trariwe.','Five trokiñ, five lands, one single trariwe.')];
+  if(n===0)ls.push(N('«Hacia el oeste, la niebla guarda lo que ha robado: un pedazo de cada tierra, gris y callado. Y en cada pedazo tiene preso a alguien: un niño, un pescador, una recolectora, una pescadora, un werken. Libéralos con tus palabras: solo cuando los cinco hayan vuelto a sus tierras se abrirá la puerta del gran olvido.»','"To the west, the fog keeps what it has stolen: a piece of every land, grey and silent. And in every piece it holds someone captive: a child, a fisherman, a gatherer, a fisherwoman, a werken. Free them with your words: only when all five have returned to their lands will the gate of the great forgetting open."'));
+  else if(!S.flags.gm_all)ls.push(N('«Ya volvieron '+n+' de 5 cautivos a sus tierras. La niebla se vuelve más delgada con cada uno... sigue hacia el oeste.»','"'+n+' of 5 captives have returned to their lands. The fog grows thinner with each one... keep going west."'));
+  else ls.push(N('«Los cinco volvieron. La puerta del gran olvido está abierta, al fondo de la pampa robada. Tus palabras serán tu única arma... y serán suficientes.»','"All five have returned. The gate of the great forgetting is open, beyond the stolen plain. Your words will be your only weapon... and they will be enough."'));
+  if(S.flags.gm_all&&!S.flags.sb6)ls.push(N('«Una advertencia: el que vendió las tierras a la niebla todavía camina por la pampa robada. Un fütra kalku, con manto de plumas negras. La tierra agrietada lo delata... si te atreves a pisarla.»','"A warning: the one who sold the lands to the fog still walks the stolen plain. A great kalku, in a cloak of black feathers. The cracked earth betrays him... if you dare to tread it."'));
+  if(S.flags.sb5&&!S.flags.epu_won)ls.push(N('Antes de irte, la figura señala el pasto junto al kütral: «Alguien te mira desde hace rato. Un guerrero de dos caras. No es wekufü: no le temas... pero si te habla, escúchalo con respeto.»','Before you go, the figure points to the grass by the fire: "Someone has been watching you for a while. A warrior with two faces. He is no wekufü: do not fear him... but if he speaks to you, listen with respect."'));
+  say(ls);
 }
+
 
 function epunamunTalk(){
   const en=S.gloss==='en';
@@ -1066,4 +1076,76 @@ function epunamunTalk(){
       if(!v)return say([L('Epunamun','Küme rakiduamnge. Faw müleken.','Piénsalo bien. Aquí estaré.','Think it over. I will be here.')]);
       say([N('El Epunamun golpea el suelo con las dos lanzas a la vez. Tres sellos de luz se encienden a su alrededor. El primero susurra: «¡Duérmete!»','The Epunamun strikes the ground with both spears at once. Three seals of light kindle around him. The first whispers: «Sleep!»')],()=>startBattle(['epunamun'],{boss:1,sflag:'epu_won'}));
     },true,true)});
+}
+
+/* ---------- Ngoyman captives ---------- */
+function freeCaptive(id,gm,who,whoen,reward,rewardEn,give){
+  give();S.flags[gm]=1;
+  const all=['gm1','gm2','gm3','gm4','gm5'].every(f=>S.flags[f]);if(all)S.flags.gm_all=1;
+  persist();sfx('lvl');
+  const e=ents.find(x=>x.id===id);if(e)ents=ents.filter(x=>x!==e);
+  return gainPiwke([praise(),
+    N('La niebla alrededor de '+who+' se afloja, se deshace... y '+who+' se vuelve una luz tibia que vuela hacia el este, de regreso a su tierra.','The fog around '+whoen+' loosens, comes apart... and '+whoen+' becomes a warm light that flies east, back home.'),
+    N(reward,rewardEn)].concat(all?[L('','Kom wiñotuyngün!','¡Los cinco cautivos volvieron a sus tierras! A lo lejos se oye un crujido enorme: la puerta del gran olvido se está abriendo.','All five captives have returned to their lands! Far away you hear a huge groan: the gate of the great forgetting is opening.')]:[]));
+}
+function capQuiz(id,gm,label,intro,qs,who,whoen,reward,rewardEn,give){
+  const en=S.gloss==='en';
+  say(intro,()=>ask(0));
+  function ask(i){
+    if(i>=qs.length)return freeCaptive(id,gm,who,whoen,reward,rewardEn,give);
+    const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
+    choose(q.q,o.concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
+      if(v==='_book')return openBook(()=>ask(i));
+      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L(label,'Fey no...','Eso no...','Not that...'),N('La niebla se aprieta otra vez. Respira, y vuelve a empezar.','The fog tightens again. Breathe, and start over.')],()=>ask(0))}},false,false)}
+}
+function gLafTalk(){
+  capQuiz('cap1','gm1','Pichiche',
+    [L('Pichiche','K-kellumuchi...','A-ayúdenme...','H-help me...'),
+     N('Un niño lafkenche está envuelto en hilos de niebla. Sus palabras se están borrando: ayúdalo a recordarlas y la niebla lo soltará.','A Lafkenche child is wrapped in threads of fog. His words are being erased: help him remember them and the fog will let him go.')],
+    [{q:L('Pichiche','Chumleymi? ...Chem pin?','Si te preguntan "¿cómo estás?", ¿qué respondes?','If they ask "how are you?", what do you answer?'),o:['Kümelen','Kümeleymi','Kümeley'],a:'Kümelen'},
+     {q:L('Pichiche','Chem pin "gracias"?','¿Cómo se dice "gracias"?','How do you say "thank you"?'),o:['chaltu may','mari mari','pewkayal'],a:'chaltu may'},
+     {q:L('Pichiche','Chem pin "hasta luego"?','¿Cómo se dice "hasta luego"?','How do you say "see you later"?'),o:['pewkayal','mari mari','fey no'],a:'pewkayal'}],
+    'el niño','the child','Antes de irse te deja epu kofke y meli mari (40) ngülliw.','Before leaving he gives you two kofke and meli mari (40) ngülliw.',
+    ()=>{S.items.kofke+=2;S.gold+=40});
+}
+function gNagTalk(){
+  capQuiz('cap2','gm2','Challwafe',
+    [L('Challwafe','Kellumuchi... Ngoyman mew mülen.','Ayúdame... Estoy dentro del olvido.','Help me... I am inside the forgetting.'),
+     N('Un pescador nagche está atrapado en la niebla. Olvidó lo que viene: el futuro. Devuélvele el -a- y la niebla lo soltará.','A Nagche fisherman is trapped in the fog. He has forgotten what is to come: the future. Give him back the -a- and the fog will let him go.')],
+    [{q:L('Challwafe','Wüle iñche challwatu___','Mañana yo pescaré.','Tomorrow I will fish.'),o:['challwatun','challwatuan','challwatuy'],a:'challwatuan'},
+     {q:L('Challwafe','Eymi amu___','Tú irás.','You will go.'),o:['amuymi','amuaymi','amuan'],a:'amuaymi'},
+     {q:L('Challwafe','Fey umawtu___','Ella dormirá.','She will sleep.'),o:['umawtuy','umawtuay','umawtuan'],a:'umawtuay'}],
+    'el pescador','the fisherman','Antes de irse te deja un lawen y meli mari (40) ngülliw.','Before leaving he gives you a lawen and meli mari (40) ngülliw.',
+    ()=>{S.items.lawen++;S.gold+=40});
+}
+function gPewTalk(){
+  capQuiz('cap3','gm3','Ngülliwfe',
+    [L('Ngülliwfe','Kellumuchi... Rakin ñamün.','Ayúdame... Perdí los números.','Help me... I have lost the numbers.'),
+     N('Una recolectora pewenche cuenta ngülliw que ya no sabe contar. Devuélvele los números y la niebla la soltará.','A Pewenche gatherer counts pine nuts she no longer knows how to count. Give her back the numbers and the fog will let her go.')],
+    [{q:L('Ngülliwfe','Kechu mari... chumten am?','Kechu mari, ¿cuánto es?','Kechu mari, how many is that?'),o:['15','50','500'],a:'50'},
+     {q:L('Ngülliwfe','Pataka... chumten am?','Pataka, ¿cuánto es?','Pataka, how many is that?'),o:['100','1000','40'],a:'100'},
+     {q:L('Ngülliwfe','Warangka... chumten am?','Warangka, ¿cuánto es?','Warangka, how many is that?'),o:['100','500','1000'],a:'1000'}],
+    'la recolectora','the gatherer','Antes de irse te deja epu külon y meli mari (40) ngülliw.','Before leaving she gives you two külon and meli mari (40) ngülliw.',
+    ()=>{S.items.kulon+=2;S.gold+=40});
+}
+function gWilTalk(){
+  const en=S.gloss==='en';
+  capQuiz('cap4','gm4','Challwafe domo',
+    [L('Challwafe domo','Kellumuchi... Chumül? Chumül am?','Ayúdame... ¿Cuándo? ¿Cuándo?','Help me... When? When?'),
+     N('Una pescadora williche perdió los días en la niebla: ayer, hoy y mañana se le mezclan. Ordénaselos y la niebla la soltará.','A Williche fisherwoman has lost the days in the fog: yesterday, today and tomorrow blur together. Set them in order and the fog will let her go.')],
+    [{q:L('Challwafe domo','"Wiya"... chem am?','"Wiya", ¿qué es?','"Wiya", what is it?'),o:[en?'yesterday':'ayer',en?'tomorrow':'mañana',en?'today':'hoy'],a:en?'yesterday':'ayer'},
+     {q:L('Challwafe domo','"Wüle"... chem am?','"Wüle", ¿qué es?','"Wüle", what is it?'),o:[en?'today':'hoy',en?'tomorrow':'mañana',en?'yesterday':'ayer'],a:en?'tomorrow':'mañana'},
+     {q:L('Challwafe domo','Wiya iñche challwatu___','Ayer yo pesqué.','Yesterday I fished.'),o:['challwatun','challwatuan','challwatuay'],a:'challwatun'}],
+    'la pescadora','the fisherwoman','Antes de irse te deja un kofke, un lawen y meli mari (40) ngülliw.','Before leaving she gives you a kofke, a lawen and meli mari (40) ngülliw.',
+    ()=>{S.items.kofke++;S.items.lawen++;S.gold+=40});
+}
+function gPuelTalk(){
+  capQuiz('cap5','gm5','Werken',
+    [L('Werken','Kellumuchi... Ñi dungu ñamyawi.','Ayúdame... Mis mensajes andan perdidos.','Help me... My messages have gone astray.'),
+     N('Un werken puelche lleva mensajes que la niebla le borró. Son los más difíciles: ir y venir, y lo que dicen otros. Devuélveselos y la niebla lo soltará.','A Puelche messenger carries messages the fog erased. They are the hardest ones: going and coming, and what others say. Give them back and the fog will let him go.')],
+    [{q:L('Werken','Kintu___ ("fui a buscar allá")','"Fui a buscar (allá y volví)".','"I went looking (over there and back)".'),o:['kintun','kintumen','kintupan'],a:'kintumen'},
+     {q:L('Werken','Kellu___ ("vino a ayudar acá")','"Vino a ayudar (hacia acá)".','"He came here to help".'),o:['kellumey','kellupay','kelluy'],a:'kellupay'},
+     {q:L('Werken','Amutu___ ("dicen que se fue")','"Dicen que se fue".','"They say he went away".'),o:['amutuy','amuturkey','amutuan'],a:'amuturkey'}],
+    'el werken','the werken','Antes de irse te deja un lawen y kayu mari (60) ngülliw.','Before leaving he gives you a lawen and kayu mari (60) ngülliw.',
+    ()=>{S.items.lawen++;S.gold+=60});
 }

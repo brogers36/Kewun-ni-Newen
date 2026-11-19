@@ -29,8 +29,14 @@ const PALS={
   puelmapu:{G0:'#5a4a16',G1:'#8a7224',G2:'#b09434',G3:'#d8c05c',GY:'#c0a040',GL:'#e8d47c',GM:'#caa84c',S0:'#9a8456',S1:'#c4ac78',S2:'#dcc896',S3:'#f0e2b8',D1:'#8a6a3a',D2:'#aa8850',D3:'#c8a86c',FR:'#d84830',FY:'#f8e048',FW:'#fff8e0'},
   salar:{G0:'#6a6240',G1:'#8a8258',G2:'#a89e70',G3:'#c8c094',GY:'#b0a878',GL:'#d8d0a8',GM:'#beb484',S0:'#c0bcae',S1:'#dedacc',S2:'#efecdf',S3:'#fffdf2',D1:'#a89a7e',D2:'#c0b496',D3:'#d8ccb0',W0:'#4a6a62',W1:'#6a9a8a',W2:'#8ab8a6',W3:'#b0d8c6',WF:'#e0f4ea',FR:'#d84830',FY:'#f8e048',FW:'#ffffff'},
   puelcave:{C0:'#160f06',C1:'#3a2a12',C2:'#55401e',C3:'#74582c',CD:'#2c2010'},
+  ngoylaf:{G0:'#2e3a30',G1:'#44544a',G2:'#5a6e60',G3:'#84988a',GY:'#68806e',GL:'#98ac9e',GM:'#788c7e',S0:'#8a887c',S1:'#aaa89a',S2:'#c2c0b2',S3:'#d8d6c8',W0:'#20303e',W1:'#32485a',W2:'#466078',W3:'#64809a',WF:'#9ab4c8',D1:'#7a7468',D2:'#948e80',D3:'#aca698',FR:'#9a8a90',FY:'#c0b890',FW:'#e8e8e0'},
+  ngoynag:{G0:'#323a2c',G1:'#485444',G2:'#5e6c58',G3:'#869480',GY:'#6c7c66',GL:'#9aa894',GM:'#7c8c76',D1:'#78705e',D2:'#8e8674',D3:'#a8a08e',FR:'#9a8488',FY:'#bcb488',FW:'#e4e4da'},
+  ngoypew:{G0:'#303a38',G1:'#46544e',G2:'#5c6c64',G3:'#84948c',GY:'#6a7c72',GL:'#98a8a0',GM:'#7a8c82',S0:'#8e96a2',S1:'#b2bac4',S2:'#ccd2da',S3:'#e4e8ee',D1:'#767270',D2:'#8c8886',D3:'#a6a2a0',FR:'#a0929a',FY:'#c2bca0',FW:'#f0f0f4'},
+  ngoywil:{G0:'#243430',G1:'#384c44',G2:'#4a6056',G3:'#70877a',GY:'#587064',GL:'#84988c',GM:'#667c70',S0:'#767a72',S1:'#9aa096',S2:'#b4b8ac',S3:'#ccd0c4',D1:'#5e584c',D2:'#746e60',D3:'#8e887a',FR:'#8e8290',FY:'#b0ac84',FW:'#e2e6dc'},
+  ngoypuel:{G0:'#4a4630',G1:'#645e42',G2:'#7c7654',G3:'#9e9878',GY:'#8a8462',GL:'#aea890',GM:'#948e6e',S0:'#8e887a',S1:'#aea896',S2:'#c4beac',S3:'#d8d4c4',D1:'#7e7662',D2:'#948c76',D3:'#aaa28c',FR:'#9a8a84',FY:'#beb48e',FW:'#e8e6da'},
+  ngoycave:{C0:'#10141a',C1:'#242c38',C2:'#323c4a',C3:'#4c5868',CD:'#1c242e'},
   niebla:{G0:'#3a4440',G1:'#4e5a54',G2:'#64726a',G3:'#8a988e',GY:'#708076',GL:'#9aa89e',GM:'#7a8a80',D1:'#5a5a52',D2:'#6e6e64',D3:'#88887c',FR:'#a8b8c0',FY:'#c8d8d0',FW:'#e8f4f0'}};
-const WALLS={ruka:['#6a4a26','#9a7444','#84603a','#3a2812','#140c04'],williche:['#34464e','#5e7a84','#4a626a','#1c2a30','#0a1214'],lafken:['#5a4430','#8a7058','#78604a','#3c2c20','#201810'],pewenche:['#2e2224','#5a4448','#463438','#1a1214','#0a0606'],puelmapu:['#4a3a22','#7a6240','#604c30','#2a2012','#120c04'],nagche:['#3c4c3e','#6e8a68','#5a7058','#243026','#0e160e']};
+const WALLS={ruka:['#6a4a26','#9a7444','#84603a','#3a2812','#140c04'],williche:['#34464e','#5e7a84','#4a626a','#1c2a30','#0a1214'],lafken:['#5a4430','#8a7058','#78604a','#3c2c20','#201810'],pewenche:['#2e2224','#5a4448','#463438','#1a1214','#0a0606'],puelmapu:['#4a3a22','#7a6240','#604c30','#2a2012','#120c04'],ngoyman:['#2e3a4a','#54667e','#425264','#1a222e','#0a0e14'],nagche:['#3c4c3e','#6e8a68','#5a7058','#243026','#0e160e']};
 function applyPal(){Object.assign(PL,PL0);const p=PALS[M.pal];if(p)for(const k in p)PL[k]=C3(p[k])}
 function gtype(ch){if(ch==='~'||ch==='v')return'~';if(ch==='.'||ch===','||ch==='='||ch==='_'||ch==='%'||ch==='"'||ch==='Y'||ch==='b')return ch;if(ch==='T'||ch==='W'||ch==='f')return',';return M.floor}
 function gAt(x,y){if(x<0||y<0||x>=M.w||y>=M.h)return null;return GT[y][x]}
@@ -140,7 +146,7 @@ function buildLayers(){
 function drawGroundStatics(c){
   for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++){const ch=grid[y][x],X=x*T,Y=y*T;
     if(ch==='%'){const below=y+1<M.h?grid[y+1][x]:'%';
-      const WC=WALLS[M.wall||(M.region==='nagche'?'nagche':M.region==='pewenche'?'pewenche':M.region==='williche'?'williche':M.region==='puelmapu'?'puelmapu':'lafken')];
+      const WC=WALLS[M.wall||(M.region==='nagche'?'nagche':M.region==='pewenche'?'pewenche':M.region==='williche'?'williche':M.region==='puelmapu'?'puelmapu':M.region==='ngoyman'?'ngoyman':'lafken')];
       if(below!=='%'){R(c,X,Y+5,16,11,WC[0]);R(c,X,Y+4,16,1,WC[1]);R(c,X,Y+5,16,1,WC[2]);
         for(let r=0;r<3;r++){const yy=Y+6+r*3+ (r===2?1:0),off=((r+x)%2)*4;R(c,X,yy+2,16,1,WC[3]);for(let k=0;k<3;k++)R(c,X+((off+k*7)%16),yy,1,2,WC[3])}
         R(c,X,Y+15,16,1,WC[4]);
@@ -168,7 +174,7 @@ function placeNear(x,y,isEnt){
 }
 const RFLAG={lafkenche:'ngen',nagche:'ngen2',pewenche:'ngen3',williche:'ngen4',puelmapu:'ngen5'};
 const awake=r=>!!S.flags[RFLAG[r]];
-const SONGSET={puelmapu:{puel:'puel',puelG:'puelG',lof:'puelLof',lofG:'puelLofG',cave:'puelCave',battle:'puelBattle',boss:'puelBoss',ngen:'puelNgen'},williche:{lof:'wilLof',lofG:'wilLofG',cave:'wilCave',battle:'wilBattle',boss:'wilBoss',ngen:'wilNgen'},pewenche:{nag:'pew',nagG:'pewG',lof:'pewLof',lofG:'pewLofG',cave:'pewCave',battle:'pewBattle',boss:'pewBoss',ngen:'pewNgen'},nagche:{lof:'nagLof',lofG:'nagLofG',cave:'nagCave',battle:'nagBattle',boss:'nagBoss',ngen:'nagNgen'}};
+const SONGSET={ngoyman:{battle:'ngoyBattle',boss:'ngoyBoss'},puelmapu:{puel:'puel',puelG:'puelG',lof:'puelLof',lofG:'puelLofG',cave:'puelCave',battle:'puelBattle',boss:'puelBoss',ngen:'puelNgen'},williche:{lof:'wilLof',lofG:'wilLofG',cave:'wilCave',battle:'wilBattle',boss:'wilBoss',ngen:'wilNgen'},pewenche:{nag:'pew',nagG:'pewG',lof:'pewLof',lofG:'pewLofG',cave:'pewCave',battle:'pewBattle',boss:'pewBoss',ngen:'pewNgen'},nagche:{lof:'nagLof',lofG:'nagLofG',cave:'nagCave',battle:'nagBattle',boss:'nagBoss',ngen:'nagNgen'}};
 const rsong=n=>{const r=M&&M.region;return (SONGSET[r]&&SONGSET[r][n])||n};
 function mapSong(){const m=MAPS[CUR];if(m.ngenmap)return rsong(awake(m.region)?'ngen':'cave');const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'||s==='pew'||s==='wil'||s==='puel'))return rsong(s+'G');return rsong(s)}
 function loadMap(id,x,y,quiet){

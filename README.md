@@ -13,7 +13,7 @@ The player is a young wariache, Llanka or Millaray. They travel the Mapuche land
 | Pewenche (mountains) | Playable: 5 overworld maps, a 3-floor lair inside the volcano, the Cherrufe, Ngen-pewen |
 | Williche (south) | Playable: 5 overworld maps, a 3-floor sea cave, the Kaleuche, Ngen-kürüf |
 | Puelmapu (east, the pampa) | Playable: 7 overworld maps, a 3-floor chenque, the Walichu, Ngen-lelfün |
-| Ngoyman (finale) | Threshold scene playable with the complete trariwe; the final battle against Ti Fütra Ngoyman is next |
+| Ngoyman (finale) | Playable: five stolen-biome areas with captive-freeing quests and puzzles, metal soundtrack, the Fütra Kalku, and the three-stage Ti Fütra Ngoyman |
 
 ## Play
 

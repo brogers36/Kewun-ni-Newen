@@ -4,7 +4,7 @@
 let B=null;
 function engage(e){
   if(grace>0||active)return;
-  const go=()=>startBattle(e.party,{ent:e,boss:e.boss,mini:e.mini});
+  const go=()=>startBattle(e.party,{ent:e,boss:e.boss,mini:e.mini,final:e.final});
   if(e.pre)say(e.pre,go);else go();
 }
 function relabel(){const cnt={},seen={};B.en.forEach(e=>cnt[e.t]=(cnt[e.t]||0)+1);
@@ -12,8 +12,8 @@ function relabel(){const cnt={},seen={};B.en.forEach(e=>cnt[e.t]=(cnt[e.t]||0)+1
 function mkEnemy(t){return{t,hp:ET[t].hp,max:ET[t].hp,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'?1:0,armor:ET[t].armor?1:0,burn:ET[t].fire?1:0,hidden:0,dreaming:ET[t].dream?1:0,dreamT:0,down:0,seals:ET[t].seals?ET[t].seals.slice():null}}
 function startBattle(party,o){
   mode='battle';banner.style.display='none';held.up=held.down=held.left=held.right=0;
-  B={en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
-  relabel();sfx('enc');playSong(rsong(o.boss?'boss':'battle'));
+  B={en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(M.fog&&M.bg!=='fjord'?'fog:':'')+M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
+  relabel();sfx('enc');playSong(o.final?'ngoyFinal':rsong(o.boss?'boss':'battle'));
   const alive=B.en.length,same=party.every(t=>t===party[0]),nameL=same?ET[party[0]].name:'wekufü';
   const lst=same?nameL:'wekufü ('+party.map(t=>ET[t].name).join(', ')+')';
   say([L('','Müley '+numW(alive)+' '+nameL+'!','¡Hay '+alive+' '+lst+'!','There '+(alive>1?'are ':'is ')+alive+' '+lst+'!')],battleMenu);
@@ -207,6 +207,19 @@ function enemyPhase(){
   for(const e of aliveE()){const T=ET[e.t];
     if(e.sl>0){e.sl--;fx.push(e.label+' duerme.');fxe.push(e.label+' is asleep.');continue}
     if(e.stun>0){e.stun--;fx.push(e.label+' todavía retrocede.');fxe.push(e.label+' is still backing away.');continue}
+    if(e.t==='ngoyam'&&Math.random()<.3&&(S.sp||0)>0){S.sp--;fx.push(e.label+' te susurra el olvido: pierdes un punto de newen (✦).');fxe.push(e.label+' whispers forgetting to you: you lose one newen point (✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')});continue}
+    if(e.t==='ngoyman1'){
+      if(!e.hidden&&e.hideT>0){e.hideT--;if(e.hideT<=0){e.hidden=1;fx.push('La niebla vuelve a tragarse a Ti Fütra Ngoyman.');fxe.push('The fog swallows Ti Fütra Ngoyman again.');continue}}
+      if(!e.hidden&&!e.hideT&&B.turn===0){e.hidden=1;fx.push('El velo de niebla se cierra sobre el gran olvido: no ves dónde golpear.');fxe.push('The veil of fog closes over the great forgetting: you cannot see where to strike.');continue}
+      hitP(e,e.hidden?1:1.3,{es:' te azota con un jirón de niebla',en:' lashes you with a shred of fog'});continue}
+    if(e.t==='ngoyman2'){
+      if(!e.armor){e.armorT=(e.armorT||0)-1;if(e.armorT<=0){e.armor=1;fx.push('La coraza gris del piwke vuelve a cerrarse.');fxe.push('The grey crust of the heart closes again.');continue}}
+      if(B.turn%2===1&&(S.sp||0)>0){S.sp--;fx.push('El piwke del olvido late: una palabra tuya se borra (−✦).');fxe.push('The heart of forgetting beats: one of your words is erased (−✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')});hitP(e,.7,{es:' te golpea con su latido',en:' strikes you with its beat'});continue}
+      hitP(e);continue}
+    if(e.t==='ngoyman3'){
+      if(B.turn%3===2){hitP(e,1.8,{es:' descarga el golpe del olvido',en:' brings down the blow of forgetting'});continue}
+      if(Math.random()<.25&&(S.sp||0)>0){S.sp--;fx.push('Ti Fütra Ngoyman aspira tus palabras (−✦).');fxe.push('Ti Fütra Ngoyman breathes in your words (−✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')})}
+      hitP(e,.7);hitP(e,.7,{es:' golpea otra vez',en:' strikes again'});continue}
     if(e.t==='walichu'){
       if(!e.dreaming&&e.dreamT>0){e.dreamT--;
         if(e.dreamT<=0){e.dreaming=1;fx.push('El Walichu vuelve a envolverse en su sueño gris.');fxe.push('The Walichu wraps itself in its grey dream again.');continue}}
@@ -264,7 +277,19 @@ function enemyPhase(){
     if(S.hp<=0){S.hp=0;return defeat()}
     battleMenu()});
 }
+function ngoyStage(n){
+  const e=mkEnemy(n===2?'ngoyman2':'ngoyman3');B.en=[e];relabel();B.tele=false;B.blocked=null;B.rush=null;sfx('lvl');B.flash=16;B.shake=10;
+  const ls=n===2?[N('El velo de niebla se rasga de arriba abajo... y detrás no hay cuerpo: hay un piwke enorme de piedra gris, envuelto en una coraza de olvido, latiendo despacio.','The veil of fog tears from top to bottom... and behind it there is no body: there is a huge heart of grey stone, wrapped in a crust of forgetting, beating slowly.'),
+      N('Es el corazón del gran olvido. Cada latido borra una palabra en alguna parte.','It is the heart of the great forgetting. Every beat erases a word somewhere.')]
+    :[N('¡El piwke de piedra se parte en dos! De la grieta sale todo lo que el olvido se ha tragado: un coloso de niebla y silencio, con dos ojos como lunas apagadas: la forma verdadera de Ti Fütra Ngoyman.','The stone heart splits in two! Out of the crack pours everything the forgetting has swallowed: a colossus of fog and silence, with two eyes like burnt-out moons: the true form of Ti Fütra Ngoyman.')];
+  if(n===3&&S.flags.epu_won){S.hp=maxHP();S.sp=SPMAX;e.hp-=15;
+    ls.push(N('Entonces una lanza cruza la niebla y se clava en el coloso (−15). El Epunamun aparece a tu lado, con las dos caras de frente al olvido: «¡Feypin! ¡Pelearía a tu lado!». Su newen te llena de nuevo: piwke y palabras al máximo.','Then a spear crosses the fog and sinks into the colossus (−15). The Epunamun appears at your side, both faces turned to the forgetting: "I said it! I would fight at your side!" His newen fills you again: hearts and words restored.'))}
+  say(ls,battleMenu);
+}
 function victory(){
+  if(B.o.final){const st=B.en[0].t;
+    if(st==='ngoyman1')return ngoyStage(2);
+    if(st==='ngoyman2')return ngoyStage(3);}
   const xp=B.en.reduce((a,e)=>a+ET[e.t].xp,0);let gold=B.en.reduce((a,e)=>{const g=ET[e.t].gold;return a+g[0]+rnd(g[1]-g[0]+1)},0);
   if(S.pw.gold){gold*=2;S.pw.gold=0}
   S.xp+=xp;S.gold+=gold;
@@ -294,6 +319,7 @@ function endBattle(how){
   if(how==='win'&&o.sflag){S.flags[o.sflag]=1;persist();sfx('lvl');
     return say([N('El wekufü secreto se deshace en jirones de sombra que el viento se lleva.','The secret wekufü breaks apart into shreds of shadow that the wind carries away.'),
       L('','Newen!','Venciste a uno de los wekufü escondidos. Pocos pueden contarlo.','You defeated one of the hidden wekufü. Few can say the same.')],()=>gainPiwke([N('Donde estaba, algo rojo brilla en el suelo...','Where it stood, something red glints on the ground...')]));}
+  if(how==='win'&&o.final)return postFinal();
   if(how==='win'&&o.boss)postBoss();
 }
 function stepBackFromNgen(){
@@ -383,4 +409,15 @@ function postBoss5(){
       N('Un círculo de luz aparece en el círculo de piedras: pisándolo puedes volver a la meseta, al lof puelche o a las otras tierras.','A circle of light appears in the stone circle: step on it to return to the meseta, the Puelche lof, or the other lands.'),
       N('Fin de la región puelche (prototipo). Con el trariwe completo, la niebla del oeste ya puede abrirse...','End of the Puelche region (prototype). With the trariwe complete, the fog in the west can now be opened...')]);
   });
+}
+
+function postFinal(){
+  S.flags.won=1;persist();
+  say([N('El coloso se detiene... y suspira. La niebla entera tiembla, se afina, se deshace en hilos de plata que el viento se lleva hacia arriba.','The colossus stops... and sighs. The whole fog trembles, thins, and comes apart into silver threads that the wind carries upward.'),
+    N('Y entonces las oyes: todas las palabras que se había tragado. Vuelven como pájaros: al mar lafkenche, al monte nagche, a los pewenes, al sur de la lluvia, a la pampa abierta.','And then you hear them: all the words it had swallowed. They return like birds: to the Lafkenche sea, to the Nagche forest, to the pewen trees, to the rainy south, to the open plain.'),
+    L('','Kom mapu konümpatuy!','¡Toda la tierra vuelve a recordar!','All the land remembers again!'),
+    N('Los cinco ngen aparecen un momento a tu alrededor: agua, monte, pewen, viento y pasto. No dicen nada. Inclinan la cabeza, y eso lo dice todo.','The five ngen appear around you for a moment: water, forest, pewen, wind and grass. They say nothing. They bow their heads, and that says everything.'),
+    L('','Chaltu may, '+nm()+'.','El trariwe en tu cintura brilla una última vez: cinco tierras, una sola lengua viva. Mientras alguien la hable, el gran olvido no podrá volver.','The trariwe at your waist glows one last time: five lands, one living language. As long as someone speaks it, the great forgetting cannot return.'),
+    N('AFPUY · FIN — Puedes seguir jugando: las tierras, los wekufü escondidos y el Epunamun siguen ahí. Chaltu may por jugar Kewün ñi Newen.','AFPUY · THE END — You can keep playing: the lands, the hidden wekufü and the Epunamun are still there. Chaltu may for playing Kewün ñi Newen.')],
+    ()=>{AU.name=null;loadMap('ngoyman',8,8);});
 }

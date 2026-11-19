@@ -140,6 +140,8 @@ function renderMap(){
   if(M.bg==='crater'){c.fillStyle=awake(M.region)?'rgba(255,200,120,.05)':'rgba(120,20,0,.18)';c.fillRect(0,VY,LW,VH)}
   if(M.region==='williche'&&!awake('williche')&&!M.dungeon){for(let k=0;k<9;k++){const fx=((k*61+frame*(.15+(k%3)*.08))%(LW+120))-60,fy=VY+((k*47)%LH);ell(c,fx,fy,46+(k%3)*14,14+(k%2)*6,'rgba(220,228,236,.16)')}c.fillStyle='rgba(200,210,220,.10)';c.fillRect(0,VY,LW,VH)}
   if(M.bg==='fjord'){c.fillStyle=awake(M.region)?'rgba(255,240,200,.05)':'rgba(10,20,44,.38)';c.fillRect(0,VY,LW,VH)}
+  if(M.fog){c.fillStyle=S.flags.won?'rgba(255,244,210,.06)':'rgba(148,158,174,.16)';c.fillRect(0,VY,LW,VH);
+    if(!S.flags.won)for(let k=0;k<5;k++){const wx=((k*83+frame)%(LW+80))-40,wy=24+k*((VH-30)/5);c.fillStyle='rgba(190,198,210,.08)';c.beginPath();c.ellipse(wx,VY+wy,46,8,0,0,6.283);c.fill()}}
   if(M.bg==='cave'||M.bg==='cave2'||M.bg==='cave3'||M.bg==='cave4'){const px=Math.round(P.fx*T-cx+8),py=Math.round(P.fy*T-cy+VY+8);for(let y=VY;y<LH;y+=2)for(let x=0;x<LW;x+=2){const d=Math.hypot(x-px,y-py);if(d>70){const a=Math.min(.7,(d-70)/140);if(a>.05){c.fillStyle='rgba(0,0,0,'+a.toFixed(2)+')';c.fillRect(x,y,2,2)}}}}
   if(CUR==='rupu'){for(let k=0;k<7;k++){const fx=-cx+Math.round(Math.sin(frame/60+k)*6)+6,fy=k*30+((frame/3+k*17)%30)-cy+VY;for(const [rr,al] of [[26,.18],[16,.22],[9,.25]])ell(c,fx,fy,rr,rr*.7,'rgba(200,200,212,'+al+')')}}
   if(M.bg==='forest'){c.fillStyle=awake(M.region)?'rgba(255,240,160,.06)':'rgba(10,30,20,.3)';c.fillRect(0,VY,LW,VH)}
@@ -234,7 +236,14 @@ function polishBG(cvs,area){
   for(const [r,a] of [[1.5,.028],[1.15,.028],[.8,.028],[.5,.028]])ell(c,120,168,118*r,54*r,'rgba(255,250,225,'+a+')');
 }
 function birds(c,list){for(const [x,y] of list){R(c,x-2,y,2,1,'#24304a');R(c,x+1,y,2,1,'#24304a');R(c,x,y-1,1,1,'#24304a')}}
+function greyify(cvs){const c=cvs.getContext('2d'),d=c.getImageData(0,0,cvs.width,cvs.height),a=d.data;
+  for(let i=0;i<a.length;i+=4){const r0=a[i],g0=a[i+1],b0=a[i+2],l=(r0+g0+b0)/3;
+    a[i]=Math.round(r0*.3+l*.62+14);a[i+1]=Math.round(g0*.3+l*.66+16);a[i+2]=Math.round(b0*.3+l*.74+22)}
+  c.putImageData(d,0,0);
+  c.fillStyle='rgba(150,160,175,.14)';c.fillRect(0,0,cvs.width,cvs.height);
+  return cvs}
 function buildBG(area){
+  if(area.startsWith&&area.startsWith('fog:'))return greyify(buildBG(area.slice(4)));
   if(area==='cave2'||area==='cave3'||area==='cave4'||area==='cave5')return buildBGraw(area);
   const cvs=buildBGraw(area);polishBG(cvs,area);return cvs;
 }
@@ -306,6 +315,7 @@ function buildBGraw(area){
   return cvs;
 }
 function buildFG(area){
+  if(area.startsWith&&area.startsWith('fog:'))return greyify(buildFG(area.slice(4)));
   if(area==='cave2')return mossify(buildFG('cave'));
   if(area==='cave3'||area==='crater')return lavify(buildFG('cave'));
   if(area==='cave4')return fogify(buildFG('cave'));

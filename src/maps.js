@@ -354,6 +354,8 @@ const K15={q:L('Konew','Müpükelay, welu lefkey; fütrake namun niey. Chem am t
   opts:[{m:'choyke',es:'ñandú',en:'rhea',ok:1},{m:'luan',es:'guanaco',en:'guanaco'},{m:'mañke',es:'cóndor',en:'condor'},{m:'trewa',es:'perro',en:'dog'}]};
 const K16={reward:'piwke',q:L('Konew','Antü amuy, fey akuy; kom takukefi, welu küdawkelay. Chem am ta tatey?','Se va el sol, y él llega; todo lo cubre, pero no trabaja. ¿Qué será?','The sun leaves, and it arrives; it covers everything, but it does no work. What could it be?'),
   opts:[{m:'pun',es:'noche',en:'night',ok:1},{m:'antü',es:'sol',en:'sun'},{m:'küyen',es:'luna',en:'moon'},{m:'tromü',es:'nube',en:'cloud'}]};
+const K18={reward:'piwke',q:L('Konew','Pekelafiyiñ, nükelafiyiñ, welu kom nentukey newen. Ngoyman ñi kayñe. Chem am ta tatey?','No se ve, no se agarra, pero de ella sale todo el newen. Es la enemiga del olvido. ¿Qué será?','It cannot be seen, it cannot be held, yet all newen comes from it. It is the enemy of forgetting. What could it be?'),
+  opts:[{m:'dungun',es:'la palabra, el habla',en:'the word, speech',ok:1},{m:'kütral',es:'fuego',en:'fire'},{m:'ko',es:'agua',en:'water'},{m:'kura',es:'piedra',en:'stone'}]};
 const K17={reward:'piwke',q:L('Konew','Lafken mew mülekey; ko amutuy, fey mülewey. Lig ngey. Chem am ta tatey?','Vive en el mar; el agua se va, y él se queda. Es blanco. ¿Qué será?','It lives in the sea; the water leaves, and it stays. It is white. What could it be?'),
   opts:[{m:'chadi',es:'sal',en:'salt',ok:1},{m:'pire',es:'nieve',en:'snow'},{m:'kuyum',es:'arena',en:'sand'},{m:'challwa',es:'pescado',en:'fish'}]};
 Object.assign(MAPS,{
@@ -433,11 +435,47 @@ ngen5:{region:'puelmapu',ngenmap:1,name:'Ngen-lelfün',g:{es:'El círculo de pie
    {id:'ngen',kind:'npc',look:'ngen5',x:8,y:5,req:'ngen5',fixed:1,talk:()=>{const ls=[L('Ngen-lelfün','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")];
    if(!S.flags.sb5)ls.push(N('«Una cosa más: bajo el salitral del sur duerme algo que nació cuando el agua se fue: un wekufü de pura sal, duro como la piedra. Camina por la tierra blanda junto a las pozas blancas. Y lleva todas tus palabras: despiértalo, quiébralo, y no lo dejes volver a armarse.»','"One more thing: under the southern salt flat sleeps something born when the water left: a wekufü of pure salt, hard as stone. Walk the soft ground beside the white pools. And bring all your words: wake it, break it, and do not let it put itself back together."'));
    say(ls)}}]},
-ngoyman:{region:'puelmapu',name:'Ngoyman wülngiñ',g:{es:'El umbral de la niebla',en:'The threshold of the fog'},floor:',',bg:'fjord',song:'epew',pal:'niebla',trees:'mawida',
- edges:{right:{to:'rupu',x:1,y:10}},
+ngoyman:{region:'ngoyman',name:'Ngoyman wülngiñ',g:{es:'El umbral de la niebla',en:'The threshold of the fog'},floor:',',bg:'fjord',song:'ngoy',pal:'niebla',trees:'mawida',fog:1,
+ edges:{right:{to:'rupu',x:1,y:10},left:{to:'g_lafken',x:30,y:7}},
  signs:{'8,5':[L('Kura','Faw müley Ti Fütra Ngoyman ñi wülngiñ.','Una piedra muy antigua: «Aquí está el umbral del gran olvido».','A very old stone: «Here is the threshold of the great forgetting».')]},
  ents:[{id:'ngoyku',kind:'npc',look:'elder2',fem:1,x:8,y:4,dir:'down',fixed:1,talk:()=>ngoymanTalk(),bub:['...']},
-   {id:'epuwar',kind:'npc',look:'kona',x:4,y:8,dir:'right',fixed:1,req:'sb5',talk:()=>epunamunTalk(),bub:['Newen...','Epu ange...']}]}
+   {id:'epuwar',kind:'npc',look:'kona',x:4,y:8,dir:'right',fixed:1,req:'sb5',talk:()=>epunamunTalk(),bub:['Newen...','Epu ange...']}]},
+g_lafken:{region:'ngoyman',name:'Ngoyman lafken',g:{es:'La costa robada',en:'The stolen coast'},floor:'.',bg:'coast',song:'ngoy',pal:'ngoylaf',fog:1,
+ edges:{right:{to:'ngoyman',x:1,y:6},left:{to:'g_nag',x:30,y:7}},konew:{'24,3':K18},dive:{'6,10':'piwke'},digs:{'15,8':{}},
+ ents:[{id:'cap1',kind:'npc',look:'child',x:10,y:4,dir:'down',fixed:1,flag:'gm1',talk:()=>gLafTalk(),bub:['...','Kellumuchi!']},
+   {kind:'enemy',x:16,y:3,party:['nidol','ngoyam']},{kind:'enemy',x:24,y:8,party:['piwichen','nidol']},{kind:'enemy',x:8,y:8,party:['ngoyam','ngoyam','piwichen']}]},
+g_nag:{region:'ngoyman',name:'Ngoyman lelfün',g:{es:'Los llanos robados',en:'The stolen lowlands'},floor:',',bg:'field',song:'ngoy',pal:'ngoynag',trees:'koyam',fog:1,
+ edges:{right:{to:'g_lafken',x:1,y:7},left:{to:'g_pewen',x:30,y:7}},chests:{'6,3':'mawgift','28,2':'piwke'},digs:{'24,10':{}},
+ ents:[{id:'cap2',kind:'npc',look:'fisher',x:20,y:8,dir:'down',fixed:1,flag:'gm2',talk:()=>gNagTalk(),bub:['...','Kellumuchi!']},
+   {kind:'enemy',x:10,y:3,party:['fkolokolo','ngoyam']},{kind:'enemy',x:26,y:9,party:['nguruvilu','fkolokolo']},{kind:'enemy',x:14,y:10,party:['ngoyam','nguruvilu','fkolokolo']}]},
+g_pewen:{region:'ngoyman',name:'Ngoyman pire',g:{es:'La cordillera robada',en:'The stolen heights'},floor:'.',bg:'mount',song:'ngoy',pal:'ngoypew',trees:'pewen',fog:1,
+ edges:{right:{to:'g_nag',x:1,y:7},left:{to:'g_wil',x:30,y:7}},chests:{'28,2':'puelgift'},digs:{'14,9':{}},
+ pz:{kind:'N',tiles:{'22,3':{lab:'kiñe warangka',i:0},'24,3':{lab:'epu warangka',i:1},'26,3':{lab:'kechu warangka',i:2}}},
+ signs:{'22,5':[N('Una piedra tallada: «de lo menor a lo mayor». Tres piedras heladas esperan.','A carved stone: «from the smallest to the largest». Three frozen stones wait.')]},
+ ents:[{id:'cap3',kind:'npc',look:'gatherer',fem:1,x:7,y:8,dir:'down',fixed:1,flag:'gm3',talk:()=>gPewTalk(),bub:['...','Kellumuchi!']},
+   {kind:'enemy',x:12,y:3,party:['fkura','ngoyam']},{kind:'enemy',x:26,y:9,party:['nirivilu','fkura']},{kind:'enemy',x:16,y:10,party:['fkura','nirivilu','ngoyam']}]},
+g_wil:{region:'ngoyman',name:'Ngoyman mawida',g:{es:'El bosque robado',en:'The stolen rainforest'},floor:',',bg:'rainforest',song:'ngoy',pal:'ngoywil',trees:'lawal',fog:1,
+ edges:{right:{to:'g_pewen',x:1,y:7},left:{to:'g_puel',x:30,y:7}},chests:{'27,9':'numgift'},
+ pz:{kind:'J',tiles:{'6,3':{lab:'kelü',col:'#d84040',i:0},'8,3':{lab:'lig',col:'#f0ead8',i:1},'10,3':{lab:'kurü',col:'#303030',i:2}}},
+ signs:{'8,4':[L('Kura','Kelü, lig, kurü.','Una piedra tallada: «rojo, blanco, negro». Tres braseros apagados esperan su fuego.','A carved stone: «red, white, black». Three cold braziers wait for their fire.')]},
+ ents:[{id:'cap4',kind:'npc',look:'fisherw',fem:1,x:16,y:6,dir:'down',fixed:1,flag:'gm4',talk:()=>gWilTalk(),bub:['...','Kellumuchi!']},
+   {kind:'enemy',x:12,y:9,party:['kamawetu','ngoyam']},{kind:'enemy',x:24,y:4,party:['basilisko','kamawetu']},{kind:'enemy',x:5,y:10,party:['ngoyam','basilisko','kamawetu']}]},
+g_puel:{region:'ngoyman',name:'Ngoyman chadi',g:{es:'La pampa robada',en:'The stolen plain'},floor:',',bg:'pampa',song:'ngoy',pal:'ngoypuel',trees:'chacay',fog:1,
+ edges:{right:{to:'g_wil',x:1,y:7},left:{to:'g_wulngin',x:16,y:7}},digs:{'6,9':{}},
+ sbt:{t:['22,8','23,8','24,8','22,9','23,9','24,9'],boss:'kalku',flag:'sb6',req:'gm_all'},
+ ents:[{id:'cap5',kind:'npc',look:'walker',x:10,y:5,dir:'down',fixed:1,flag:'gm5',talk:()=>gPuelTalk(),bub:['...','Kellumuchi!']},
+   {kind:'enemy',x:16,y:3,party:['fmewlen','ngoyam']},{kind:'enemy',x:26,y:4,party:['kurutoro','fmewlen']},{kind:'enemy',x:14,y:10,party:['kurutoro','ngoyam','fmewlen']}]},
+g_wulngin:{region:'ngoyman',name:'Ngoyman ñi wülngiñ',g:{es:'La puerta del gran olvido',en:'The gate of the great forgetting'},floor:'_',bg:'fjord',song:'ngoy',dungeon:1,pal:'ngoycave',fog:1,
+ edges:{right:{to:'g_puel',x:1,y:7}},stairs:{to:'g_ngoyman',x:8,y:9,req:'gm_all',reqMsg:[N('Una puerta de niebla sólida, fría como la piedra. Dentro de ella giran cinco sombras: un niño de la costa, un pescador, una recolectora, una pescadora del sur y un werken.','A door of solid fog, cold as stone. Inside it five shadows turn: a child of the coast, a fisherman, a gatherer, a fisherwoman of the south and a werken.'),
+   N('La puerta solo se abrirá cuando los cinco cautivos hayan vuelto a sus tierras.','The door will only open when all five captives have returned to their lands.')]},
+ signs:{'8,5':[L('Kura','Faw umawtuley Ti Fütra Ngoyman.','Una piedra negra: «Aquí duerme el gran olvido». Detrás de la puerta, la niebla es tan espesa que parece piedra.','A black stone: «Here sleeps the great forgetting». Beyond the door, the fog is so thick it looks like stone.')]},
+ ents:[]},
+g_ngoyman:{region:'ngoyman',name:'Ti Fütra Ngoyman',g:{es:'El corazón de la niebla',en:'The heart of the fog'},floor:'_',bg:'fjord',song:'ngoy',dungeon:1,pal:'ngoycave',fog:1,
+ stairs:{to:'g_wulngin',x:8,y:3},
+ ents:[{id:'boss',kind:'enemy',x:8,y:4,party:['ngoyman1'],fixed:1,boss:1,final:1,flag:'bossF',
+   pre:[N('Aquí la niebla no flota: se acumula, como siglos. En el centro de la sala respira algo enorme que no tiene forma... o que las tiene todas.','Here the fog does not drift: it piles up, like centuries. In the middle of the hall something enormous breathes, something with no shape... or with all of them.'),
+     L('','Müley Ti Fütra Ngoyman!','¡El gran olvido está aquí!','The great forgetting is here!'),
+     N('Un velo de niebla lo envuelve por completo. Lo que se esconde... sale cuando se le dice.','A veil of fog wraps it completely. What hides... comes out when it is told to.')]}]}
 });
 for(const k in MAPS){const m=MAPS[k];if(!m.region)m.region='lafkenche';m.rows=MAPROWS[k];m.w=MAPROWS[k][0].length;m.h=MAPROWS[k].length}
 MAPS.inaltu.edges.right={to:'n_rupu',x:1,y:7,req:'ngen',reqMsg:[N('El camino hacia el este, a las tierras nagche, está cubierto de niebla. Primero despierta a Ngen-lafken.','The road east, to the Nagche lands, is covered in fog. First wake Ngen-lafken.')]};
@@ -456,3 +494,6 @@ MAPS.nd1.pz.hint=N('Pista: de lo menor a lo mayor. meli (4), mari kechu (15), ep
 MAPS.p_degin.edges.right={to:'e_rupu',x:1,y:7,req:'ngen4',reqMsg:[N('Hacia el este, el camino baja al otro lado de la cordillera: Puelmapu. Pero una niebla espesa lo cubre. Primero despierta a Ngen-kürüf.','To the east the road goes down the far side of the mountains: Puelmapu. But a thick fog covers it. First wake Ngen-kürüf.')]};
 MAPS.rupu.edges.left={to:'ngoyman',x:16,y:6,need:5};
 MAPS.ed1.pz.hint=N('Pista: de lo menor a lo mayor. pataka (100), kechu pataka (500), warangka (1000).','Hint: from smallest to largest. pataka (100), kechu pataka (500), warangka (1000).');
+
+MAPS.g_pewen.pz.hint=N('Pista: de lo menor a lo mayor. kiñe warangka (1000), epu warangka (2000), kechu warangka (5000).','Hint: from smallest to largest. kiñe warangka (1000), epu warangka (2000), kechu warangka (5000).');
+MAPS.g_wil.pz.hint=N('Pista: lee la piedra tallada. Kelü = rojo, lig = blanco, kurü = negro.','Hint: read the carved stone. Kelü = red, lig = white, kurü = black.');

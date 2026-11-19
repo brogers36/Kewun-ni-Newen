@@ -966,7 +966,7 @@ E_['ngoyman']=[
 "T,,\"\",,,,,,,\"\",,,T",
 "T,,,,,,,,,,,,,,,,T",
 "T\",,,,,,I,,,,,,\",T",
-"T,,,,,,,,,,,,,,,,,",
+",,,,,,,,,,,,,,,,,,",
 "T,,\",,,,,,,,,\",,,T",
 "T,,,,,,,,,F,,,,,,T",
 "T\",,,,,,,,,,,,,\",T",
@@ -988,6 +988,106 @@ for k,st in {'e_rupu':(0,7),'e_lof':(0,9),'e_lelfun':(0,7),'e_mallin':(16,1),'e_
     rows=[r.replace('D',',') for r in E_[k]];R2=bfs2(rows,st)
     missing=[(x,y,rows[y][x]) for y in range(len(rows)) for x in range(len(rows[0])) if rows[y][x] in set('PCKSFMNIkgHBOExJDm') and (x,y) not in R2]
     print(k,'reach',len(R2),'MISSING' if missing else 'ok',missing)
+
+# ================= NGOYMAN: the stolen lands =================
+# g_lafken: the drowned coast
+c=C(32,13,'.')
+c.r(1,10,30,2,'~')
+for y in range(1,10):
+    for x in range(1,31):
+        if c.g[y][x]=='.' and y!=7:
+            if hh(x,y,120)<.16:c.g[y][x]='"'
+            elif hh(x,y,121)<.06:c.g[y][x]='T'
+c.p(0,7,'.');c.p(31,7,'.')
+c.r(3,2,3,3,'.');c.p(4,3,'F')
+c.r(22,2,5,4,'#');c.r(23,3,3,2,'.');c.p(24,3,'K');c.p(24,5,'.');c.p(24,6,'.')
+c.p(6,10,'v');c.p(6,9,'.')
+c.r(9,3,3,3,'.')
+c.r(14,8,3,2,'.')
+E_['g_lafken']=c.rows()
+# g_nag: the grey lowlands
+c=C(32,13)
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]==',' and y!=7:
+            if hh(x,y,122)<.10:c.g[y][x]='T'
+            elif hh(x,y,123)<.08:c.g[y][x]='"'
+c.p(0,7,',');c.p(31,7,',')
+c.r(14,2,5,3,'W');c.r(13,2,1,3,'f');c.r(19,2,1,3,'f')
+c.r(5,2,6,4,'#')
+c.r(6,3,2,2,',');c.p(8,3,',');c.p(8,4,'B');c.p(8,5,',')
+c.p(6,3,'C')
+c.r(2,8,3,3,',');c.p(3,9,'F')
+c.r(19,7,4,3,',')
+c.p(28,2,'C');c.r(27,2,3,2,',')
+c.p(28,2,'C')
+c.r(23,9,3,2,',')
+E_['g_nag']=c.rows()
+# g_pewen: the frozen heights
+c=C(32,13,'.')
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]=='.' and y!=7:
+            if hh(x,y,124)<.20:c.g[y][x]='#'
+            elif hh(x,y,125)<.07:c.g[y][x]='T'
+c.p(0,7,'.');c.p(31,7,'.')
+c.r(20,1,10,6,'#')
+c.r(21,2,8,4,'.')
+c.p(22,3,'N');c.p(24,3,'N');c.p(26,3,'N')
+c.p(22,5,'I')
+c.p(28,2,'C');c.p(27,2,'E')
+c.p(24,6,'.');c.r(24,7,1,1,'.')
+c.r(6,7,4,3,'.')
+c.r(3,2,3,3,'.');c.p(4,3,'F')
+c.r(13,9,3,2,'.')
+E_['g_pewen']=c.rows()
+# g_wil: the silent rainforest
+c=C(32,13)
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]==',' and y!=7:
+            if hh(x,y,126)<.26:c.g[y][x]='T'
+            elif hh(x,y,127)<.08:c.g[y][x]='"'
+c.p(0,7,',');c.p(31,7,',')
+c.r(14,9,4,2,'~')
+c.r(5,2,7,4,',')
+c.p(6,3,'J');c.p(8,3,'J');c.p(10,3,'J')
+c.p(8,4,'I')
+c.r(24,8,6,4,'#');c.r(25,9,4,2,',');c.p(27,9,'C');c.p(24,10,'E');c.p(23,10,',')
+c.r(15,5,4,3,',')
+c.r(2,8,3,3,',');c.p(3,9,'F')
+E_['g_wil']=c.rows()
+# g_puel: the ashen pampa
+c=C(32,13)
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]==',' and y!=7:
+            if hh(x,y,128)<.22:c.g[y][x]='"'
+            elif hh(x,y,129)<.05:c.g[y][x]='T'
+c.p(0,7,',');c.p(31,7,',')
+c.r(21,7,5,4,',')
+c.r(8,4,4,3,',')
+c.r(26,1,4,3,',');c.p(27,2,'F')
+c.r(5,8,3,2,',')
+E_['g_puel']=c.rows()
+# g_wulngin: the gate court
+g=[['%']*18 for _ in range(13)]
+carve0(g,3,2,12,9)
+g[2][8]='S'
+g[5][8]='I'
+g[8][10]='F'
+carve0(g,15,7,3,1)
+E_['g_wulngin']=[''.join(r) for r in g]
+# g_ngoyman: the heart of the fog
+g=[['%']*18 for _ in range(13)]
+carve0(g,3,2,12,10)
+g[11][8]='S'
+E_['g_ngoyman']=[''.join(r) for r in g]
+for k,st in {'g_lafken':(0,7),'g_nag':(0,7),'g_pewen':(0,7),'g_wil':(0,7),'g_puel':(0,7),'g_wulngin':(16,7),'g_ngoyman':(8,10)}.items():
+    rows=[r.replace('D',',') for r in E_[k]];R2=bfs2(rows,st)
+    missing=[(x,y,rows[y][x]) for y in range(len(rows)) for x in range(len(rows[0])) if rows[y][x] in set('PCKSFMNIkgHBOExJD') and (x,y) not in R2]
+    print(k,'reach',len(R2),'MISSING' if missing else 'ok',missing)
+
 N.update(E_)
 for k,v in N.items():
     w=len(v[0])

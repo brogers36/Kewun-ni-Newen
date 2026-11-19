@@ -44,7 +44,11 @@ const MCHK=[
   {m:'Puelmapu · wekufü secreto',es:'Junto a la poza sur del salitral: camina un paso al este, sobre la tierra agrietada',en:'Beside the southern salt-flat pool: walk one step east, onto the cracked ground',lvl:25,at:['e_salitral',14,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone']},
   {m:'Puelmapu · completa',es:'Kechu trokiñ: el trariwe COMPLETO',en:'Five trokiñ: the trariwe COMPLETE',lvl:25,at:['e_lof',17,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone']},
   {m:'Ngoyman · umbral',es:'Con el trariwe completo, junto a la niebla del oeste',en:'With the complete trariwe, beside the western fog',lvl:26,at:['rupu',2,10],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone']},
-  {m:'Ngoyman · Epunamun',es:'La prueba del guerrero de dos caras, en el umbral de la niebla',en:"The two-faced warrior's trial, at the threshold of the fog",lvl:26,at:['ngoyman',6,8],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','sbosses']}];
+  {m:'Ngoyman · Epunamun',es:'La prueba del guerrero de dos caras, en el umbral de la niebla',en:"The two-faced warrior's trial, at the threshold of the fog",lvl:26,at:['ngoyman',6,8],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','sbosses']},
+  {m:'Ngoyman · tierras robadas',es:'Dentro de la niebla: cinco cautivos esperan en cinco tierras grises',en:'Inside the fog: five captives wait in five grey lands',lvl:26,at:['ngoyman',2,6],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone']},
+  {m:'Ngoyman · puerta',es:'Los cinco cautivos liberados; ante la puerta del gran olvido',en:'All five captives freed; before the gate of the great forgetting',lvl:27,at:['g_wulngin',8,7],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands']},
+  {m:'Ngoyman · kalku secreto',es:'La pampa robada: camina un paso al oeste, sobre la tierra agrietada',en:'The stolen plain: walk one step west, onto the cracked ground',lvl:27,at:['g_puel',25,8],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','sbosses']},
+  {m:'Ngoyman · jefe final',es:'El corazón de la niebla: Ti Fütra Ngoyman (tres formas)',en:'The heart of the fog: Ti Fütra Ngoyman (three forms)',lvl:28,at:['g_ngoyman',8,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','sbosses']}];
 const MSET={
   intro:s=>{s.flags.intro=1;s.roots.push('küpa')},
   pentu:s=>{Object.assign(s.flags,{pentu_prac:1,pentukun:1});s.roots.push('umawtu','nag');s.items.kulon+=2},
@@ -62,7 +66,8 @@ const MSET={
   puellof:s=>{Object.assign(s.flags,{weku:1,puel_lonko:1,puel_dir:1,'pz:e_lelfun':1});s.roots.push('trana')},
   puelcave:s=>{Object.assign(s.flags,{root_nepe:1,emini1:1,emini2:1,emini3:1,'pz:ed1':1,'pz:ed2':1});s.roots.push('nepe');s.items.lawen+=2},
   pueldone:s=>{Object.assign(s.flags,{ngen5:1,lelfun:1,boss5:1});s.pieces.push('puelche')},
-  sbosses:s=>{Object.assign(s.flags,{sb1:1,sb2:1,sb3:1,sb4:1,sb5:1})}};
+  sbosses:s=>{Object.assign(s.flags,{sb1:1,sb2:1,sb3:1,sb4:1,sb5:1})},
+  ngoylands:s=>{Object.assign(s.flags,{gm1:1,gm2:1,gm3:1,gm4:1,gm5:1,gm_all:1,ngoy_open:1});s.pieces=s.pieces}};
 function mBuild(c){
   const s=newState(HERO);s.pieces=[];
   for(const k of c.set)MSET[k](s);

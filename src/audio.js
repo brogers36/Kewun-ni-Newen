@@ -234,6 +234,27 @@ const SONGS={
   {w:'square',v:.05,t:'B3 D4 G4 D4 B3 D4 G4 D4 | C4 E4 G4 E4 C4 E4 G4 E4 | D4 F#4 A4 F#4 D4 F#4 A4 F#4 | B3 D4 G4 D4 D4 F#4 A4 F#4'},
   {w:'triangle',v:.4,t:'G2 - - - D3 - - - | C3 - - - G2 - - - | D3 - - - A2 - - - | G2 - - - D2 - - -'},
   {d:1,v:.3,t:'k . h . s . h . | k . h k s . h h'}]}),
+ ngoy:mkSong({bpm:138,loop:1,ch:[
+  {w:'sawtooth',v:.085,dist:1,t:'E2 E2 . E2 G2 . E2 E2 | D2 D2 . D2 A2 . D2 D2 | C2 C2 . C2 G2 . C2 C2 | B1 B1 . B1 D2 . B1 B1'},
+  {w:'sawtooth',v:.055,dist:1,t:'E4 - G4 - B4 - A4 G4 | D4 - F#4 - A4 - G4 F#4 | C4 - E4 - G4 - A4 B4 | B3 - D4 - F#4 - A4 B4'},
+  {w:'square',v:.035,t:'. . E5 . . . G5 . | . . D5 . . . F#5 . | . . C5 . . . E5 . | . . B4 . . . D#5 .'},
+  {d:1,v:.5,t:'k k h k s k h k | k k h k s k h h'}]}),
+ ngoyBattle:mkSong({bpm:184,loop:1,ch:[
+  {w:'sawtooth',v:.09,dist:1,t:'E2 E2 E2 G2 E2 E2 | C2 C2 C2 D2 C2 C2 | E2 E2 E2 G2 E2 E2 | A2 A2 G2 F#2 F2 F2'},
+  {w:'square',v:.11,t:'E6 - B5 E6 - G6 | F#6 - D6 B5 - - | E6 - B5 E6 - G6 | A6 - G6 F#6 - - | G6 - F#6 E6 - D6 | C6 - B5 A5 - - | B5 - D#6 F#6 - A6 | B6 - - B5 - -'},
+  {w:'sawtooth',v:.05,dist:1,t:'E4 G4 B4 E4 G4 B4 | C4 E4 G4 C4 E4 G4 | E4 G4 B4 E4 G4 B4 | A3 C4 E4 B3 D#4 F#4'},
+  {d:1,v:.6,t:'k k s k k k | k k s k k s'}]}),
+ ngoyBoss:mkSong({bpm:150,loop:1,ch:[
+  {w:'sawtooth',v:.09,dist:1,t:'E2 E2 . E2 Bb2 . E2 E2 | E2 E2 . E2 A2 . G2 G2 | C2 C2 . C2 F#2 . C2 C2 | B1 B1 . B1 Bb1 . B1 B1'},
+  {w:'sawtooth',v:.06,dist:1,t:'E5 - - Bb4 - - G4 - | A4 - - - G4 - F4 - | E4 - G4 - Bb4 - Db5 - | C5 - - B4 - - - -'},
+  {w:'square',v:.04,t:'E4 Bb4 E5 Bb4 E4 Bb4 E5 Bb4 | C4 G4 C5 G4 C4 G4 C5 G4'},
+  {d:1,v:.6,t:'k h s h k k s h | k h s h k s s c'}]}),
+ ngoyFinal:mkSong({bpm:164,loop:1,ch:[
+  {w:'sawtooth',v:.085,dist:1,t:'E2 E2 . E2 C2 C2 . C2 | D2 D2 . D2 B1 B1 . B1 | A1 A1 . A1 C2 C2 . C2 | D2 D2 D2 D2 B1 B1 B1 B1'},
+  {w:'sawtooth',v:.06,dist:1,t:'B4 - E5 - G5 - F#5 E5 | D5 - - C5 B4 - - - | A4 - C5 - E5 - G5 F#5 | F#5 - - - B4 - - -'},
+  {w:'square',v:.05,t:'E6 - - - G6 - - - | F#6 - - - D6 - - - | C6 - - - E6 - - - | D#6 - - - B5 - - -'},
+  {w:'triangle',v:.4,t:'E3 - - - C3 - - - | D3 - - - B2 - - - | A2 - - - C3 - - - | D3 - - - B2 - - -'},
+  {d:1,v:.6,t:'k k h k s k h k | k k h k s k s s'}]}),
  win:mkSong({bpm:176,loop:0,ch:[
   {w:'sawtooth',v:.09,dist:1,t:'E3 E3 . E3 E3 . G3 - | A3 A3 . A3 A3 . C4 - | D4 - - - C4 - - - | B3 - - - B3 B3 B3 B3 | E4 - - - - - - - | . . . .'},
   {w:'sawtooth',v:.08,dist:1,t:'B3 B3 . B3 B3 . D4 - | E4 E4 . E4 E4 . G4 - | A4 - - - G4 - - - | F#4 - - - F#4 F#4 F#4 F#4 | B4 - - - - - - - | . . . .'},
