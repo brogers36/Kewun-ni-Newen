@@ -239,137 +239,6 @@ def thick(g,x0,y0,x1,y1,r,c):
         for yy in range(int(y-r-1),int(y+r+2)):
             for xx in range(int(x-r-1),int(x+r+2)):
                 if (xx+.5-x)**2+(yy+.5-y)**2<=r*r:g.p(xx,yy,c)
-def witranalwe2(fr):
-    W=28;g=G(W,62);c=W/2
-    def sym(x,y,w,h,col):g.r(x,y,w,h,col);g.r(W-x-w,y,w,h,col)
-    # coat (long, widening, tattered hem)
-    for y in range(19,58):
-        hw=4+int((y-19)*7/38)
-        for x in range(int(c-hw),int(c+hw)):
-            col='P'
-            if x<c-hw+2 or x>=c+hw-2:col='q'
-            elif abs(x-c+.5)<1.5 and y>24:col='q'
-            elif (x-int(c-hw))%5==2 and y>30:col='p'
-            g.p(x,y,col)
-    for x in range(0,W):
-        cut=int(2.5+2.5*__import__('math').sin(x*1.7+fr))
-        for y in range(58-cut,58):
-            if g.a[y][x] in 'Ppq':g.a[y][x]='.'
-    # lapels
-    for y in range(19,27):g.p(int(c)-2-(y-19)//3,y,'p');g.p(int(c)+1+(y-19)//3,y,'p')
-    # arms: long sleeves then bony hands with claws
-    sw=fr
-    for y in range(20,42):
-        ax=int(c-6-(y-20)*3/22)-1
-        g.r(ax-(sw if y>34 else 0),y,2,1,'A');g.r(W-ax-2+(sw if y>34 else 0),y,2,1,'A')
-    for side in (0,1):
-        hx=int(c-6-3)-1-sw if side==0 else W-(int(c-6-3)-1)-2+sw
-        for y in range(42,47):g.r(hx,y,2,1,'K')
-        for k,dx in enumerate((-1,0,1,2)):
-            for y in range(47,50+(k%2)):g.p(hx+dx,y,'c')
-    # hair (long grey strands)
-    for x,len_ in [(8,20),(9,15),(18,15),(19,20),(10,9),(17,9)]:
-        for y in range(8,8+len_):
-            if g.a[y][x] in '.PqpA':g.p(x,y,'g' if (x+y)%3 else 'G')
-    # head/face
-    g.e(c,12,3.6,5,'F');g.r(11,14,6,4,'F')
-    g.r(11,10,2,2,'k');g.r(15,10,2,2,'k');g.p(12,11,'E');g.p(15,11,'E')
-    g.p(13,13,'f');g.p(14,13,'f');g.r(11,13,1,3,'f');g.r(16,13,1,3,'f')
-    g.r(12,16,4,1,'k');g.p(12,17,'w');g.p(14,17,'w');g.p(13,17,'k');g.p(15,17,'k')
-    g.r(12,18,4,1,'f')
-    # hat
-    g.r(9,0,10,5,'H');g.r(9,4,10,1,'h');g.r(2,5,24,2,'H');g.r(3,7,22,1,'q')
-    # feet
-    sym(10,57,3,2,'L')
-    g.outline();return g.rows()
-def trelke(fr):
-    W=50;g=G(W,62)
-    import math
-    def rel(cx,cy,rx,ry,ang,col,only=None):
-        ca,sa=math.cos(ang),math.sin(ang)
-        for y in range(g.h):
-            for x in range(W):
-                dx,dy=x+.5-cx,y+.5-cy;u=dx*ca+dy*sa;v=-dx*sa+dy*ca
-                if (u/rx)**2+(v/ry)**2<=1 and (only is None or g.a[y][x] in only):g.p(x,y,col)
-    # hide: tall curved sheet
-    rel(28,26,13,22,.25,'h');rel(22,44,9,12,-.3,'h');rel(22,10,11,7,-.4,'h')
-    # frilled hide edge (right)
-    for y in range(6,52,3):
-        x=max([xx for xx in range(W) if g.a[y][xx]=='h'] or [0])
-        g.p(x+1,y,'h');g.p(x+1,y+1,'H')
-    for y in range(g.h):
-        for x in range(W):
-            if g.a[y][x]=='h' and x>31:g.a[y][x]='H'
-            elif g.a[y][x]=='h' and x<20 and y<16:g.a[y][x]='u'
-    # long mouth (tilted slit), flesh and palate teeth
-    rel(21,26,7.5,17,.18,'m');rel(22,27,4.5,12,.18,'M')
-    for k in range(18):
-        x=20+(k%3)*2+((k//3)%2);y=17+(k//3)*3
-        if g.get(x,y)=='M':g.p(x,y,'W')
-    # teeth along both lips (outside ring of mouth)
-    ca,sa=math.cos(.18),math.sin(.18)
-    for t in range(0,360,7):
-        r=math.radians(t);u=8.6*math.cos(r);v=18.2*math.sin(r)
-        x=int(21+u*ca-v*sa);y=int(26+u*sa+v*ca)
-        if g.get(x,y) in 'hHu':g.p(x,y,'w')
-        u2=9.6*math.cos(r);v2=19.2*math.sin(r);x2=int(21+u2*ca-v2*sa);y2=int(26+u2*sa+v2*ca)
-        if g.get(x2,y2) in 'hHu' and (t//7)%2:g.p(x2,y2,'W')
-    # eye stalks from the top lobe
-    sw=1 if fr else 0
-    for (bx,by,tx,ty) in [(16,8,8-sw,1),(19,6,15+sw,0),(23,6,24-sw,1),(13,12,5+sw,8)]:
-        thick(g,bx,by,tx,ty+2,.6,'r');g.e(tx+.5,ty+1.6,1.7,1.5,'r');g.p(tx,ty+1,'e')
-    # tendrils: from mouth and from the bottom
-    for y in range(30,46):g.p(20+int(math.sin(y*.55+fr)*2),y,'r')
-    for (bx,ph) in [(16,0),(22,1.4),(28,2.6)]:
-        for y in range(52,62):
-            x=bx+int(2.2*math.sin(y*.55+ph+fr));g.p(x,y,'r');g.p(x+1,y,'R')
-    g.outline();return g.rows()
-def cherrufe2(fr):
-    W=48;g=G(W,54);c=W/2
-    import math
-    # crown slabs (separate stone plates)
-    for (tx,ty) in [(11,3),(17,0),(24,-1),(31,0),(37,3)]:
-        thick(g,c+(tx-c)*.25,13,tx,ty+1,1.25,'b')
-        thick(g,c+(tx-c)*.25-.5,13,tx-.5,ty+1,.5,'h')
-        g.p(int(tx),max(0,ty),'h')
-        mx=c+(tx-c)*.6;my=13+(ty-13)*.6;g.p(int(mx),int(my),'l');g.p(int(mx),int(my)+1,'l')
-    # head
-    g.e(c,16,4,5.5,'b');g.r(int(c)-3,18,6,4,'b')
-    g.p(22,15,'y');g.p(25,15,'y');g.p(22,16,'O');g.p(25,16,'O')
-    g.p(23,19,'l');g.p(24,20,'l');g.p(24,18,'l')
-    # torso (crouched, broad)
-    g.e(c,30,11,9,'b');g.r(14,26,20,10,'b');g.e(c,38,8,5,'b')
-    # left arm reaching down to ground
-    thick(g,14,27,8,36,2.6,'b');thick(g,8,36,9,48,2.3,'b');g.r(6,48,6,2,'b')
-    # right arm forward with open hand
-    thick(g,34,27,39,34,2.6,'b');thick(g,39,34,38,40,2.2,'b')
-    g.e(38,42,3,2.4,'h')
-    for k in range(4):g.r(36+k,44,1,2,'h')
-    # legs crouched
-    thick(g,19,40,15,47,2.6,'B');thick(g,15,47,17,52,2.2,'B');thick(g,29,40,33,47,2.6,'B');thick(g,33,47,31,52,2.2,'B')
-    # shading
-    for y in range(54):
-        for x in range(W):
-            if g.a[y][x]=='b' and x>c+4:g.a[y][x]='B'
-    # lava veins (random walk)
-    import random
-    rnd=random.Random(7)
-    for start in [(24,24),(20,29),(28,29),(16,33),(32,32),(10,40),(37,35),(24,36),(18,45),(31,45)]:
-        x,y=start
-        for i in range(9):
-            if g.a[y][x] in 'bB':g.a[y][x]='l' if i%3 else 'L'
-            x+=rnd.choice((-1,0,1));y+=rnd.choice((0,1,1))
-            if not(0<=x<W and 0<=y<54):break
-    for y in range(22,34):g.p(24,y,'L')
-    g.e(24,28,1.6,1.6,'y')
-    # drips from left hand
-    for x in (7,9,11):
-        for y in range(50,53-(x%2)):g.p(x,y,'l')
-    # flame from right hand
-    f=fr
-    for (x,y,rx,ry,col) in [(39,48,4,5,'r'),(39,49,2.8,3.6,'O'),(39,50,1.6,2.2,'y'),(36+f,52,1.6,2,'O'),(42-f,52,1.4,1.8,'r')]:g.e(x,y,rx,ry,col)
-    g.outline();return g.rows()
-
 def kowek(fr):
     g=G(18,18);import math
     g.e(9,11,6.5,5.5,'b');g.e(9,7,3.6,4.6,'b');g.p(9,1+fr,'b');g.p(9,2,'b');g.r(8,3,3,2,'b')
@@ -481,6 +350,224 @@ def kaleuche(fr):
         y=45+int(1.8*math.sin(x*.4+fr*1.5))
         for yy in range(y,min(54,y+4)):g.p(x,yy,'f' if (x+yy)%3 else 'F')
     g.outline();return g.rows()
+# ---------- hand-drawn bosses ----------
+def witranalwe2(fr):
+    g=G(30,60)
+    seg={
+     0:[(12,"hHHHHH")],
+     1:[(11,"hHHHHHHH")],
+     2:[(11,"hHHHHHHH")],
+     3:[(11,"HHHHHHHH")],
+     4:[(11,"HHHHHHHH")],
+     5:[(10,"HHHHHHHHHH")],
+     6:[(8,"hHHHHHHHHHHHHH")],
+     7:[(2,"hhHHHHHHHHHHHHHHHHHHHHHHHH")],
+     8:[(1,"hHHHHHHHHHHHHHHHHHHHHHHHHHHH")],
+     9:[(2,"qqqqqqqqqqqqqqqqqqqqqqqqqq")],
+     10:[(10,"qffFFFFffq")],
+     11:[(10,"fFFFFFFFFf")],
+     12:[(10,"fFkEFFkEFf")],
+     13:[(10,"fFkkFFkkFf")],
+     14:[(10,"fFfFFFFfFf")],
+     15:[(11,"FFfkkfFF")],
+     16:[(11,"FFFFFFFF")],
+     17:[(11,"FkkkkkkF")],
+     18:[(12,"fFFFFf")],
+     19:[(12,"ffff")],
+     20:[(9,"cPPPPPPPPPPc")],
+     21:[(8,"cPPPPPPPPPPPPc")],
+     22:[(6,"ApPPPPPPPPPPPPPPPA")],
+     23:[(4,"ApppPPPPPPPPPPPPPPPPpA")],
+     24:[(3,"AppppPPPPPPPPPPPPPPPPPpA")],
+     25:[(3,"ApppPPPPPPPPPPPPPPPPPPpA")],
+     26:[(3,"AppPPPPPPPPPPPPPPPPPPPpA")],
+    }
+    torsoB=(4,"AppPpPPPPPKKPPPPPPPPpA")
+    torsoN=(4,"AppPpPPPPPPPPPPPPPPPpA")
+    for y in range(27,43):
+        seg[y]=[torsoB if y%3==0 else torsoN]
+    lower=(3,"ApppPpPPPPPPPPPPPPPPPPpA")
+    for y in range(43,57):
+        seg[y]=[lower]
+    sh=fr
+    seg[57]=[(3+sh,"Ap"),(6,"pP"),(9,"PPP"),(13,"PPPP"),(18,"PP"),(21-sh,"Pp"),(24,"pA")]
+    seg[58]=[(5,"P"),(9+sh,"P"),(14,"PP"),(19,"P"),(23-sh,"P")]
+    for y,parts in seg.items():
+        for (x0,st) in parts:
+            for i,ch in enumerate(st):
+                if ch!='.':g.p(x0+i,y,ch)
+    # pale bony hands at the sleeve openings
+    for (x0,rows) in [(5,range(32,36)),(23,range(32,36))]:
+        for y in rows:g.p(x0,y,'f');g.p(x0+1,y,'F')
+    g.p(5,36,'f');g.p(24,36,'f')
+    # silver clasp at the collar
+    g.p(14,21,'K');g.p(15,21,'K')
+    # eye flicker on frame 2
+    if fr:
+        g.p(13,12,'w');g.p(17,12,'w')
+        g.p(13,14,'E');g.p(17,14,'E')
+    g.outline();return g.rows()
+
+def cherrufe2(fr):
+    import math
+    g=G(46,56)
+    rows={}
+    rows[10]=(14,"hbbbbbbbbbbbbbbbbh")
+    rows[11]=(10,"hbbbbbbbbbbbbbbbbbbbbbbbh")
+    rows[12]=(7,"hhbbbbbbbbbbbbbbbbbbbbbbbbbbbh")
+    rows[13]=(5,"hhbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbBh")
+    rows[14]=(4,"hbbbbbbbbBBbbbbbbbbbbbbbbbbbbBBbbbBh")
+    rows[15]=(3,"hbbbbbbbbbBBbbbbbbbbbbbbbbbbbbBBbbbbBBh")
+    rows[16]=(3,"hbbbbbbbbbbBbbbbbbbbbbbbbbbbbbbBbbbbBBBh")
+    rows[17]=(2,"hbbbbbbhhbbbBbbbbbbbbbbbbbbbbbbbBbbbBBBBBh")
+    rows[18]=(2,"hbbbbbhhbbbbBbbbbbbbbbbbbbbbbbbbbBbbbBBBBh")
+    # torso rows with plate seams
+    torso=[
+     (2,"hbbbbbhh.bbbBbbbbbbbbbbbbbbbbbbbB.bbBBBBBh"),
+     (2,"hbbbbbh..bbbbBBbbbbbbbbbbbbbbbbB..bbbBBBBh"),
+     (2,"hbbbbbh..bBBBBbbbbbbbbbbbbbbbbbb..bBBBBBBh"),
+     (2,"hbbbbbh..bbbbbbbbbbbbbbbbbbbbbbb..bBBBBBBh"),
+     (2,"hbbbbhh..bbbbbbbbbbBBbbbbbbbbbbb..bbBBBBBh"),
+     (2,"hbbbbh...bbbbbbbbbBBBBbbbbbbbbb...bBBBBBBh"),
+     (2,"hbbbbh...bbbbbbbbbBBBBbbbbbbbbb...bBBBBBBh"),
+     (2,"hbbbbh...bbbbBBbbbbBBbbbbBBbbbb...bBBBBBBh"),
+     (2,"hbbbbh...bbbbbBbbbbBBbbbbBbbbbb...bBBBBBBh"),
+     (2,"hbbbhh...bbbbbbbbbbBBbbbbbbbbbb...bbBBBBBh"),
+     (2,"hbbbbh...bbbbbbbbbbBBbbbbbbbbbb...bBBBBBBh"),
+     (2,"hbbbbh...bbbbBBbbbbBBbbbbBBbbbb...bBBBBBBh"),
+     (2,"hbbbbh...bbbbbBbbbbBBbbbbBbbbbb...bBBBBBBh"),
+     (2,"hbbbbhh..bbbbbbbbbbBBbbbbbbbbbb..bbBBBBBBh"),
+     (2,"hbbbbbh..bbbbbbbbbbbbbbbbbbbbbb..bBBBBBBBh"),
+     (2,"hbbbbbhh.bbbbbbbbbbbbbbbbbbbbbb.bbBBBBBBh"),
+    ]
+    for i,t in enumerate(torso):rows[19+i]=t
+    # fists and legs
+    rows[35]=(1,"hbbbbbbh..bbbbbbbbbbbbbbbbbbbbbb..bBBBBBBBBh")
+    rows[36]=(1,"hbbbbbbh...bbbbbbbbbbbbbbbbbbbb...bBBBBBBBBh")
+    rows[37]=(1,"hbbbbbbbh..bbbbbbbbbbbbbbbbbbbb..bBBBBBBBBBh")
+    rows[38]=(0,"hbbbbbbbbh..bbbbbbbbbbbbbbbbbb..bBBBBBBBBBBBh")
+    rows[39]=(0,"hbbhbbbbbh..bbbbbbbbbbbbbbbbbb..bBBBBBBBbBBBh")
+    rows[40]=(0,"hbhhbbbbbh..bbbbbbbbbbbbbbbbbb..bBBBBBBhBBBBh")
+    rows[41]=(0,"hbhbbbbbbh..bbbbbBbbbbbbBbbbbb..bBBBBBBBhBBBh")
+    rows[42]=(0,"hbbbbbbbbh..bbbbbBbbbbbbBbbbbb..bBBBBBBBBBBBh")
+    rows[43]=(0,"hbbbbbbbh..bbbbbbBbbbbbbBbbbbbb..bBBBBBBBBBBh")
+    rows[44]=(0,"hhbbbbbh..bbbbbbbBbbbbbbBbbbbbbb..bBBBBBBBBh")
+    rows[45]=(1,"hbbbbh...bbbbbbbBbbbbbbBbbbbbbb...bBBBBBBh")
+    rows[46]=(2,"hbbbh...bbbbbbbbBbbbbbbBbbbbbbbb...bBBBBh")
+    rows[47]=(10,"bbbbbbbBbbbbbbBbbbbbbb")
+    rows[48]=(9,"bbbbbbbbBbbbbbbBbbbbbbbb")
+    rows[49]=(8,"hbbbbbbbbBbbbbbbBbbbbbbbbB")
+    rows[50]=(7,"hbbbbbbbbbBbbbbbbBbbbbbbbbbB")
+    rows[51]=(6,"hbbbbbbbbbbBbbbbbbBbbbbbbbbbbB")
+    rows[52]=(6,"hhbbbbbbbbbBbbbbbbBbbbbbbbbbBB")
+    for y,(x0,st) in rows.items():
+        for i,ch in enumerate(st):
+            if ch!='.':g.p(x0+i,y,ch)
+    # head sunk between the shoulders
+    for (x0,y,st) in [(18,4,"bbbbbbbbbb"),(17,5,"bbbbbbbbbbbb"),(17,6,"bbbbbbbbbbbb"),
+                      (17,7,"bb"),(27,7,"bb"),(17,8,"bbbbbbbbbbbb"),(17,9,"bbbbbbbbbbbb")]:
+        for i,ch in enumerate(st):g.p(x0+i,y,ch)
+    g.r(18,6,3,2,'O');g.r(24,6,3,2,'O');g.r(19,6,2,1,'y');g.r(25,6,2,1,'y')
+    g.r(18,5,3,1,'B');g.r(24,5,3,1,'B')
+    for i,ch in enumerate("lrOOrl"):g.p(19+i,9,ch)
+    g.p(21,10,'r');g.p(23,10,'r')
+    # lava crack veins down the chest and arms
+    vein=[(23,12),(23,13),(22,14),(22,15),(23,16),(23,17),(22,18),(22,19),(23,20),(23,21),(22,22),
+          (23,23),(23,24),(22,25),(22,26),(23,27),(23,28),(22,29),(23,30),(23,31),(22,32),(23,33),(23,34)]
+    for n,(x,y) in enumerate(vein):
+        g.p(x,y,'r' if (n+fr)%3 else 'O')
+        if n%5==2:g.p(x-1,y,'l');g.p(x+1,y,'r')
+    for (x,y) in [(18,22),(27,25),(16,28),(29,30),(19,31),(26,21)]:
+        g.p(x,y,'r');g.p(x+1,y,'l')
+    for (x,y) in [(5,24),(40,26),(4,33),(41,35),(6,40),(39,41)]:
+        g.p(x,y,'O');g.p(x,y+1,'r')
+    # fire mane
+    import math as _m
+    for k in range(16):
+        x=13+k*1.3;h0=3+int(2.5*_m.sin(k*1.7+fr*2.6))+2
+        for i in range(h0):
+            ch='y' if i>h0-2 else ('O' if i>h0-4 else 'r')
+            g.p(int(x),3-i+ (1 if (k+fr)%2 else 0),ch)
+    # magma pools at the feet
+    for x in range(8,38):
+        if (x*7+fr*3)%9<4:g.p(x,53,'O');g.p(x,54,'r')
+    g.outline();return g.rows()
+
+def trelke(fr):
+    import math
+    g=G(54,42)
+    R_={}
+    R_[1]=(8,"rrr")
+    R_[2]=(6,"rRRr")
+    R_[3]=(5,"rRRr")
+    R_[4]=(4,"rRRr..rr")
+    R_[5]=(3,"rRRr..rRr")
+    R_[6]=(3,"rRr...rRr")
+    R_[7]=(2,"rRr....rRr")
+    R_[8]=(2,"rr......rr")
+    rows=[
+     (16,0, "uhhhh"),
+     (13,1, "uhhhhhhhh"),
+     (11,2, "uhhhhhhhhhhhhu"),
+     (9,3,  "uhhhhhhhhhhhhhhhhhuu"),
+     (8,4,  "uhhhhhhhhhhhhhhhhhhhhhuuu"),
+     (7,5,  "uhhhhhhhhhhhhhhhhhhhhhhhhhuuuu"),
+     (6,6,  "uhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhuuuu"),
+     (5,7,  "uhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhuuuu"),
+     (4,8,  "uhhhhhhhhhhHHhhhhhhhhhhhhhhhhhhhhhhhhhuuuu"),
+     (4,9,  "hhhhhhhhhhHHHHhhhhhhhhhhhhhhhhhhhhhhhhhhuuuu"),
+     (3,10, "hhhhhhhhhhhHHHHhhhhhhhhhhhhhMmhhhhhhhhhhhhuuuu"),
+     (3,11, "hhhhhhhhhhhhHHhhhhhhhhhhhhhMMmmhhhhhhhhhhhhuuu"),
+     (2,12, "hhhhhhhhhhhhhhhhhhhhhhhhhhhMMmmhhhhhhhhhhhhhhuu"),
+     (2,13, "hhhhhhhhhhhhhhhhhhhhhhhhhhhhMmhhhhhhhhhhhhhhhhu"),
+     (1,14, "hhhhHHhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhHHhhhhhhhhu"),
+     (1,15, "hhhhHHhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhHHHHhhhhhhhhu"),
+     (1,16, "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhHHHHhhhhhhhhhu"),
+     (0,17, "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhHHhhhhhhhhhhhu"),
+     (0,18, "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhu"),
+     (0,19, "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhu"),
+     (0,20, "hHhhhhhhhhhhhhhhhhhhhhhhhhhMmhhhhhhhhhhhhhhhhhhhhhhhu"),
+     (0,21, "hHhhhhhhhhhhhhhhhhhhhhhhhhMMmmhhhhhhhhhhhhhhhhhhhhhu"),
+     (0,22, "hhhhhhhhhhhhhhhhhhhhhhhhhhMMmmhhhhhhhhhhhhhhhhhhhhu"),
+     (1,23, "hhhhhhhhhhhhhhhhhhhhhhhhhhMmhhhhhhhhhhhhhhhhhhhhhu"),
+     (1,24, "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhu"),
+     (2,25, "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"),
+    ]
+    for (x0,y,st) in rows:
+        for i,ch in enumerate(st):
+            if ch!='.':g.p(x0+i,y,ch)
+    # ragged scalloped hem of the hide
+    for x in range(2,52):
+        d=3+int(2.2*math.sin(x*0.7+fr*1.2))
+        top=26
+        for y in range(top,top+d):
+            g.p(x,y,'H' if y>top+d-2 else 'h')
+    # face: heavy low-slung head at the left edge
+    for (x0,y,st) in [(3,11,"HHHHH"),(2,12,"HHHHHHH"),(1,13,"HHHHHHHH"),(0,14,"HHHHHHHHH"),(0,15,"HHHHHHHHH"),
+                      (0,16,"HHHHHHHHHH"),(0,17,"HHHHHHHHH"),(1,18,"HHHHHHHH"),(2,19,"HHHHHHH")]:
+        for i,ch in enumerate(st):g.p(x0+i,y,ch)
+    g.r(3,14,3,2,'e');g.p(3,14,'w')
+    if fr:g.r(3,14,3,2,'w')
+    g.p(1,16,'M');g.p(2,17,'m')
+    for i,ch in enumerate("wHwHwHw"):g.p(1+i,19,ch)
+    g.p(0,18,'w');g.p(8,19,'w')
+    # legs with bone claws
+    for (x0,top) in [(8,29),(18,30),(32,30),(44,29)]:
+        for y in range(top,36):
+            g.p(x0,y,'H');g.p(x0+1,y,'h');g.p(x0+2,y,'H')
+        g.p(x0-1,36,'R');g.p(x0,36,'w');g.p(x0+1,37,'w');g.p(x0+2,36,'w');g.p(x0+3,36,'R')
+    # raw flesh patches and matted streaks
+    for (x,y) in [(22,6),(23,7),(36,12),(37,13),(12,19),(13,20),(44,20),(45,21)]:
+        g.p(x,y,'m');g.p(x+1,y,'M')
+    for k in range(16):
+        x=6+k*3;y=9+(k*5)%12
+        g.p(x,y,'H');g.p(x,y+1,'H')
+    # horn pair curling over the head
+    for y,(x0,st) in R_.items():
+        for i,ch in enumerate(st):
+            if ch!='.':g.p(x0+i,y,ch)
+    g.outline();return g.rows()
+
 # ---------- ngen: hand-drawn humanoid master, skinned per element ----------
 NGEN_BODY={
  1:[(11,"444443")],
