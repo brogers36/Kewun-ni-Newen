@@ -11,8 +11,9 @@ function relabel(){const cnt={},seen={};B.en.forEach(e=>cnt[e.t]=(cnt[e.t]||0)+1
   B.en.forEach(e=>{seen[e.t]=(seen[e.t]||0)+1;if(e.label)return;e.label=ET[e.t].name+(cnt[e.t]>1||ET[e.t].name==='laftrache'&&B.en.length>1?' '+'ABCDE'[seen[e.t]-1]:'')})}
 function mkEnemy(t){return{t,hp:ET[t].hp,max:ET[t].hp,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'?1:0,armor:ET[t].armor?1:0,burn:ET[t].fire?1:0,hidden:0}}
 function startBattle(party,o){
+  let field=null;if(CT&&mode==='map'&&M){const keep=ents;ents=ents.filter(e=>e!==o.ent);renderMap();OV=[];field=document.createElement('canvas');field.width=LW;field.height=LH;field.getContext('2d').drawImage(LO,0,0);ents=keep}
   mode='battle';banner.style.display='none';held.up=held.down=held.left=held.right=0;
-  B={en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
+  B={en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp,field};
   relabel();sfx('enc');playSong(rsong(o.boss?'boss':'battle'));
   const alive=B.en.length,same=party.every(t=>t===party[0]),nameL=same?ET[party[0]].name:'wekufü';
   const lst=same?nameL:'wekufü ('+party.map(t=>ET[t].name).join(', ')+')';

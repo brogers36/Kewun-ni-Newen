@@ -37,7 +37,18 @@ function edgeDist(tx,ty,lx,ly,pred){let d=99;const E=15.5;
   if(pred(gAt(tx-1,ty+1)))d=Math.min(d,Math.hypot(lx+.5,E-ly));if(pred(gAt(tx+1,ty+1)))d=Math.min(d,Math.hypot(E-lx,E-ly));
   return d}
 const isLand=g=>g!==null&&g!=='~',isWater=g=>g==='~',isGrass=g=>g===','||g==='"'||g==='Y';
+function vnoise(x,y,s,k){const gx=Math.floor(x/s),gy=Math.floor(y/s),fx=x/s-gx,fy=y/s-gy,a=h2(gx,gy,k),b=h2(gx+1,gy,k),c=h2(gx,gy+1,k),d=h2(gx+1,gy+1,k),u=fx*fx*(3-2*fx),v=fy*fy*(3-2*fy);return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v}
+const BAYER=[[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
+function ditherRamp(ramp,n,gx,gy){const t=Math.max(0,Math.min(.999,n))*(ramp.length-1),i=Math.floor(t),f=t-i;return ramp[Math.min(ramp.length-1,f>(BAYER[gy&3][gx&3]+.5)/16?i+1:i)]}
+function ctGrass(gx,gy){
+  let n=vnoise(gx,gy,44,5)*.75+vnoise(gx,gy,14,6)*.25;n=Math.max(0,Math.min(1,(n-.22)/.56));
+  const ramp=[lerp3(PL.G0,PL.G1,.35),PL.G1,lerp3(PL.G1,PL.G2,.5),PL.G2,lerp3(PL.G2,PL.G3,.4),lerp3(PL.G2,PL.G3,.7)];
+  let col=ditherRamp(ramp,n,gx,gy);
+  const cx=gx>>2,cy=gy>>2;if(h2(cx,cy,41)<.16){const lx=gx&3,ly=gy&3;if((lx===1&&ly<3)||(lx===2&&ly===1))col=lerp3(col,PL.G3,.6);else if(lx===1&&ly===3)col=lerp3(col,PL.G0,.5)}
+  if(h2(gx>>4,gy>>4,11)<.07){const fx=3+Math.floor(h2(gx>>4,gy>>4,12)*10),fy=3+Math.floor(h2(gx>>4,gy>>4,13)*10),dx=(gx&15)-fx,dy=(gy&15)-fy;if(dx===0&&dy===0)return PL.FY;if(Math.abs(dx)+Math.abs(dy)===1)return PL.FW}
+  return col}
 function grassPix(gx,gy,base){
+  if(CT)return ctGrass(gx,gy);
   const tx=gx>>4,ty=gy>>4,lx=gx&15,ly=gy&15;
   if(h2(tx,ty,11)<.18){const fx=3+Math.floor(h2(tx,ty,12)*10),fy=3+Math.floor(h2(tx,ty,13)*10),dx=lx-fx,dy=ly-fy;
     if(dx===0&&dy===0)return PL.FY;if(Math.abs(dx)+Math.abs(dy)===1)return h2(tx,ty,14)<.5?PL.FW:PL.FR}
@@ -66,15 +77,19 @@ function gpix(gx,gy,f){
   if(g==='.'||g==='='){
     const dg=edgeDist(tx,ty,lx,ly,isGrass),thr=1.6+((gx*7+gy*3)%3)*.7;
     if(dg<thr-1)return grassPix(gx,gy,PL.G2);if(dg<thr)return PL.G0;
+    if(g==='.'&&CT){const dw=edgeDist(tx,ty,lx,ly,isWater);if(dw<2.2)return PL.S1;return ditherRamp([PL.S1,lerp3(PL.S1,PL.S2,.5),PL.S2,lerp3(PL.S2,PL.S3,.5)],vnoise(gx,gy,14,21)*.6+vnoise(gx,gy,5,22)*.4,gx,gy)}
     if(g==='.'){const dw=edgeDist(tx,ty,lx,ly,isWater);if(dw<2.2)return PL.S1;
       const n=h2(gx,gy,1);if(n<.03)return PL.S1;if(n>.992)return PL.S3;
       if(gy%4===0&&(gx+((gy>>2)%3)*5)%14<3&&h2(gx>>4,gy>>2,5)<.5)return PL.S1;return PL.S2}
     if(M.pave){const u=gx%8,v=gy%8;if(u===7||v===7)return PL.GM;if(u===0||v===0)return lerp3(PL.GL,[255,255,255],.25);return PL.GL}
     const ds=edgeDist(tx,ty,lx,ly,x=>x==='.');if(ds<1.5)return PL.S2;
+    if(CT){if(h2(gx>>1,gy>>1,8)<.035)return (gy&1)?PL.D1:lerp3(PL.D3,[255,255,255],.25);return ditherRamp([PL.D1,lerp3(PL.D1,PL.D2,.5),PL.D2,lerp3(PL.D2,PL.D3,.5),PL.D3],vnoise(gx,gy,12,31)*.7+vnoise(gx,gy,4,32)*.3,gx,gy)}
     if(h2(gx>>1,gy>>1,8)<.07)return (gy&1)?PL.D1:PL.D3;return PL.D2}
   if(g==='b'){if(ly<2||ly>13)return ly===0||ly===15?[60,36,20]:[120,78,40];return (gx%4===0)?[90,58,30]:(h2(gx>>2,gy,3)<.2?[150,100,56]:[170,118,66])}
   if(g===',')return grassPix(gx,gy,PL.G2);
   if(g==='Y')return grassPix(gx,gy,PL.GY);
+  if(g==='"'&&CT){const u=gx%8,v=gy%8,ox=(gx>>3)%2?1:0,d=Math.hypot(u-3.5-ox*.5,v-4);if(d>3.9)return ctGrass(gx,gy);if(d>3.2)return PL.G0;
+    if(h2(gx,gy,77)<.07&&d<2.8)return PL.FY;const leaf=((u*2+v+((gx>>3)*3))%4);return leaf===0?PL.G0:(u+v<6?PL.G3:leaf===1?PL.G1:PL.G2)}
   if(g==='"'){const u=gx%8,v=gy%8,d=Math.hypot(u-3.5,v-3.5);if(d>3.6)return PL.G2;if(d>2.9)return PL.G0;if(u+v<5&&d<2.4)return PL.G3;if((u===3||u===4)&&(v===3||v===4))return PL.G0;return PL.G1}
   if(g==='_'){const u=gx%8,v=gy%8;let col=(u===7||v===7)?PL.C1:(u===0||v===0)?PL.C3:(h2(gx>>3,gy>>3,4)<.25?PL.CD:PL.C2);
     if(gAt(tx,ty-1)==='%'&&ly<4)col=lerp3(col,[10,6,4],.45);return col}

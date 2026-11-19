@@ -146,8 +146,25 @@ function enemyCanvas(t,size,fr){
 
 /* ---------- props ---------- */
 const PCACHE={};
+const CTLEAF={lafken:['#0e2e14','#1a4a1e','#286a26','#3e8a30','#68ae42','#9ad060'],koyam:['#2a3208','#46520e','#646e16','#86882a','#acaa40','#d8cc64'],mawida:['#06221a','#0e3426','#184e36','#24684a','#3e8a62','#6ab48a']};
+function ctTree(v,style){
+  const k='cttree'+style+v;if(PCACHE[k])return PCACHE[k];
+  const W=36,Hh=42,[cvs,c]=mk(W,Hh),ramp=CTLEAF[style],tr=['#2a1a0c','#4a2e16','#6a4422','#8a5a30'];
+  R(c,15,24,6,17,tr[1]);R(c,15,24,2,17,tr[2]);R(c,19,24,2,17,tr[0]);for(let y=26;y<40;y+=3)R(c,16,y,2,1,tr[3]);R(c,12,39,12,2,tr[1]);R(c,11,40,3,1,tr[0]);R(c,22,40,3,1,tr[0]);
+  const cl=[[18,15,12],[9,19,8],[27,19,8],[13,9,8],[23,9,8],[18,5,7],[7,12,5],[29,12,5]].map(([x,y,r])=>[x+(h2(v,x,5)-.5)*2,y+(h2(v,y,6)-.5)*2,r]);
+  const id=c.getImageData(0,0,W,Hh),d=id.data,hx=hexRGB;
+  for(let y=0;y<Hh;y++)for(let x=0;x<W;x++){let best=null,bl=-9;
+    for(const [cx,cy,r] of cl){const dd=Math.hypot(x+.5-cx,y+.5-cy);if(dd<=r){const l=(-(x+.5-cx)*.6-(y+.5-cy)*.8)/r;const e=1-dd/r;const sc=l*1.6+e*.8;if(sc>bl){bl=sc;best=[cx,cy,r,dd,l]}}}
+    if(!best)continue;const [cx,cy,r,dd,l]=best;
+    let ti=Math.round(2+l*1.8);if(dd>r-1.2)ti=Math.min(ti,1);if(y>cy+r*.45)ti-=1;
+    const lx=x%4,ly=y%3,off=((y/3|0)%2)*2,leafc=((x+off)>>2)*5+(y/3|0)*3+v;
+    if(ly===0&&((lx+off)%4)===1)ti+=1;else if(ly===2&&((lx+off)%4)===3)ti-=2;else if(leafc%7===0)ti+=1;
+    if(l>.5&&h2(x,y,v+91)<.25)ti+=1;
+    if(h2(x,y,v+90)<.04)ti=0;
+    ti=Math.max(0,Math.min(5,ti));const [rr,gg,bb]=hx(ramp[ti]),i=(y*W+x)*4;d[i]=rr;d[i+1]=gg;d[i+2]=bb;d[i+3]=255}
+  c.putImageData(id,0,0);outline(cvs,'#061008');return PCACHE[k]=cvs}
 function treeCanvas(v,style){
-  style=style||'lafken';const k='tree'+style+v;if(PCACHE[k])return PCACHE[k];
+  style=style||'lafken';if(CT&&CTLEAF[style])return ctTree(v,style);const k='tree'+style+v;if(PCACHE[k])return PCACHE[k];
   if(style==='koyam'){const [cvs,c]=mk(24,30);
     R(c,10,17,4,11,'#5a3a1e');R(c,12,17,2,11,'#3e2612');R(c,9,27,6,1,'#4a2e16');R(c,7,15,4,2,'#5a3a1e');R(c,13,14,4,2,'#5a3a1e');R(c,11,20,1,3,'#7a5230');
     const lobes=[[7,11,5.5,4.5],[16,10,5.5,4.5],[11.5,6,7,5],[12,12,6,3.5],[5+v%2,7,3.5,3],[18-v%2,6,3.5,3]];

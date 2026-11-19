@@ -67,6 +67,14 @@ python3 build.py --master   # writes master/index.html (not committed)
 
 The master copy has a «Maestro · Elegir región» button on the title screen that starts the game at any checkpoint (the start of a region, its lof, its dungeon entrance, its boss, or the region finished), with the earlier regions already completed and the hero at a matching level. In the game, G (or the MAE button on the phone pad) opens the master menu: jump to any map, heal, add ngülliw, turn ordinary battles off, or win the current battle. It saves separately from the player version, so testing never touches a real save. When a new region is added, add its checkpoints to `MCHK` and `MSET` in `src/master.js`.
 
+### Chrono Trigger-style preview
+
+```
+python3 build.py --ct       # writes ct/index.html (not committed)
+```
+
+An experimental look switched on by the `CT` flag: painterly dithered grass, sand and paths; leafy canopy trees; soft shadows; warm light around fires and a vignette; battles fought on the field itself with blue gradient windows. It includes the master tools. The player build is unchanged.
+
 ### Map tile key
 
 `.` sand · `,` grass · `"` tall grass · `=` path · `~` water · `v` whirlpool · `#` rock · `T` tree · `R` ruka · `F` kütral (save and heal) · `C` chest · `K` konew door · `S` stairs · `I` sign · `P` piwke piece · `m`/`g`/`p` pickups · `_` cave floor · `%` cave wall · `B` block · `O` plate · `G` gate · `k` key · `L` locked door · `N` numeral stone · `J` brazier · `H` talking stone · `E` puzzle door · `A` warp circle · `W` wheat · `f` fence · `b` bridge · `Ñ` bramble · `X` wind barrier · `Y` palin field · `Z` loom · `U` pot · `V` board
