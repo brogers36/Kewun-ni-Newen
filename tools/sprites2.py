@@ -370,6 +370,89 @@ def cherrufe2(fr):
     for (x,y,rx,ry,col) in [(39,48,4,5,'r'),(39,49,2.8,3.6,'O'),(39,50,1.6,2.2,'y'),(36+f,52,1.6,2,'O'),(42-f,52,1.4,1.8,'r')]:g.e(x,y,rx,ry,col)
     g.outline();return g.rows()
 
+def ngen_lafken(fr):
+    W=26;g=G(W,34);c=W/2
+    import math
+    # swirling wave base
+    g.e(c,30,11,3.6,'m');g.e(c,29,8,2.6,'l')
+    for x in range(2,24):
+        y=27+int(1.5*math.sin(x*.7+fr*2))
+        g.p(x,y,'f')
+    # body flowing upward
+    for y in range(11,29):
+        hw=3+int((y-11)*.32)+int(math.sin(y*.6+fr)*1)
+        for x in range(int(c-hw),int(c+hw)):
+            g.p(x,y,'d' if x<c-hw+2 else ('l' if x>c else 'm'))
+    # arms like waves
+    for i in range(7):
+        x=int(c-5-i);y=15+int(math.sin(i*.8+fr)*1.5)+i//2
+        g.p(x,y,'m');g.p(x,y+1,'d');g.p(W-1-x,y,'l');g.p(W-1-x,y+1,'m')
+    g.p(int(c-12),16+fr,'f');g.p(int(c+11),16+fr,'f')
+    # head
+    g.e(c,7,4.4,4.8,'l');g.e(c-1,6,2.6,2.6,'w')
+    # wave hair curls
+    for (x,y) in [(7,3),(8,2),(9,1),(10,1),(16,1),(17,1),(18,2),(19,3),(6,5),(20,5),(6,7),(20,7),(7,9),(19,9)]:g.p(x,y,'f')
+    g.p(7,2,'f');g.p(19,2,'f')
+    # face
+    g.r(11,6,1,2,'k');g.r(15,6,1,2,'k');g.p(10,8,'d');g.p(16,8,'d');g.p(12,10,'d');g.p(13,10,'d');g.p(14,10,'d');g.p(11,9,'d');g.p(15,9,'d')
+    # foam spray dots
+    for (x,y) in [(3,22),(22,21),(4,25),(21,25)]:g.p(x,y,'f')
+    g.outline();return g.rows()
+def ngen_mawida(fr):
+    W=28;g=G(W,36);c=W/2
+    import math
+    # roots
+    for (x0,dx) in [(9,-3),(12,-1),(15,1),(18,3)]:
+        for i in range(4):g.p(x0+dx*i//3,32+i,'B')
+    # trunk body
+    for y in range(13,33):
+        hw=3+int((y-13)*.18)
+        for x in range(int(c-hw),int(c+hw)):
+            g.p(x,y,'B' if x>=c+1 else ('b' if (x+y)%5 else 'h'))
+    # bark lines
+    for y in range(14,32,3):g.p(int(c)-1,y,'B')
+    # moss patches
+    for (x,y) in [(11,18),(12,18),(15,24),(16,24),(12,28),(11,29)]:g.p(x,y,'m')
+    # branch arms with leaves
+    for i in range(8):
+        x=int(c-4-i);y=16-i//2+(fr if i>5 else 0)
+        g.p(x,y,'b');g.p(W-1-x,y,'b')
+    for (x,y) in [(4,11),(5,12),(3,12),(22,11),(23,12),(24,12)]:g.e(x+.5,y+.5,1.6,1.3,'L')
+    # head (wood mask)
+    g.e(c,9,4,4.6,'h');g.r(11,11,6,3,'h')
+    g.p(12,9,'k');g.p(16,9,'k');g.p(12,8,'y');g.p(16,8,'y');g.r(13,12,3,1,'B')
+    # leafy crown with gold flowers
+    for (x,y,rx,ry,col) in [(c,3,8,3.6,'G'),(c-4,4,4,2.6,'L'),(c+4,4,4,2.6,'L'),(c,1.5,5,2.2,'L'),(c-1,0.8,2.6,1.2,'l')]:g.e(x,y,rx,ry,col)
+    for (x,y) in [(9,3),(14,1),(19,3),(11,5),(17,5)]:g.p(x,y,'y')
+    g.outline();return g.rows()
+def ngen_pewen(fr):
+    W=30;g=G(W,40);c=W/2
+    import math
+    # body: golden trunk with araucaria-scale pattern
+    for y in range(15,37):
+        hw=3+int((y-15)*.17)
+        for x in range(int(c-hw),int(c+hw)):
+            col='g' if x<c else 'G'
+            if (x+(y//2)%2)%3==0 and y%2==0:col='s'
+            g.p(x,y,col)
+    g.e(c,37,7,1.6,'G');g.r(int(c)-5,36,10,2,'G')
+    # arms as upturned pewen branches
+    for side in (-1,1):
+        for i in range(9):
+            x=int(c+side*(4+i));y=17-int(i*.5)
+            g.p(x,y,'n');g.p(x,y+1,'N')
+        tx=int(c+side*13);g.p(tx,12-fr,'n');g.p(tx,11-fr,'n');g.p(tx-side,12-fr,'n')
+    # belt of pewen nuts
+    for x in range(int(c)-4,int(c)+4,2):g.p(x,24,'u');g.p(x,25,'U')
+    # head
+    g.e(c,11,3.8,4.2,'F');g.p(13,11,'k');g.p(17,11,'k');g.p(13,10,'y');g.p(17,10,'y');g.r(14,13,3,1,'U')
+    # pewen crown: umbrella of branch tufts with upturned tips
+    for (x,y,rx,ry) in [(c,6,12,2.6),(c,3.6,9,2.4),(c,1.6,5.5,1.8)]:
+        g.e(x,y+.8,rx,ry,'N');g.e(x,y,rx-.6,ry-.6,'n')
+        g.p(int(x-rx)+1,int(y)-2,'n');g.p(int(x-rx)+1,int(y)-1,'n');g.p(int(x+rx)-2,int(y)-2,'n');g.p(int(x+rx)-2,int(y)-1,'n')
+        for k in range(int(x-rx)+3,int(x+rx)-3,3):g.p(k,int(y)-1,'v')
+    g.outline();return g.rows()
+
 PAL={
  'kawellu':{'b':'#9a5a2a','B':'#6e3a18','h':'#c27c40','m':'#2a1a10','e':'#000000','w':'#f2e6d0','n':'#4a2a14','k':'#2a2020','o':'#1a1008'},
  'waka':{'w':'#f6f4ee','W':'#c8c4bc','k':'#26221e','u':'#e6a0a0','n':'#8a4a4a','e':'#000000','c':'#e8dcc0','K':'#3a3430','o':'#1a1612'},
@@ -380,11 +463,14 @@ PAL={
  'kura':{'g':'#8a8a90','G':'#5a5a64','k':'#2a2a30','e':'#ff8a20','h':'#c0c0c8','o':'#16161c'},
  'nirivilu':{'o':'#d8742a','O':'#a85018','w':'#f4e8d8','k':'#1a1010','y':'#f8e040','s':'#3a8a5a','S':'#1e5a38'},
  'cherrufe':{'b':'#3a2c2c','B':'#241a1c','h':'#6a5450','r':'#e83018','O':'#f89020','y':'#ffe880','l':'#e8401c','L':'#ffa030','o':'#0e0608'},
+ 'ngen_lafken':{'d':'#2a64a8','m':'#5aa8e0','l':'#9ad8f8','w':'#e8f6ff','f':'#ffffff','k':'#081a44','o':'#0a2a5a'},
+ 'ngen_mawida':{'b':'#8a6a3e','B':'#5a4226','h':'#c8a46a','m':'#5aa040','L':'#4a9a3a','l':'#8ad060','G':'#2e6a2a','y':'#f8e050','k':'#1a2a10','o':'#10200c'},
+ 'ngen_pewen':{'v':'#7ac87a','g':'#e8b440','G':'#b8822a','s':'#ffd878','F':'#f0c890','k':'#3a2410','y':'#fff0a0','n':'#3a8a4a','N':'#246a36','u':'#c87a3a','U':'#7a4a20','o':'#2a1a08'},
  'trelke':{'h':'#6a5a34','H':'#463a20','u':'#8a7a4c','m':'#9a4a48','M':'#6a2a2e','W':'#e8c8c0','w':'#f4f0e0','r':'#a8503a','R':'#7a3424','e':'#ffd040','o':'#140e08'},
  'witranalwe':{'H':'#16161e','h':'#4a4a3a','q':'#0e0e14','F':'#c8ccc0','f':'#7a8274','k':'#0a0a0a','E':'#7aff9a','w':'#e8e8d8','P':'#24242c','p':'#34343e','A':'#3a3a46','K':'#9a9a90','c':'#d8d8c8','g':'#b8b8ac','G':'#808078','L':'#101014','o':'#040406'}}
 D={}
 BIG={'trelke':2,'witranalwe':2,'chonchon':2,'kutral':2,'pire':2,'kura':2,'nirivilu':2,'cherrufe':2}
-for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe2),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('nirivilu',nirivilu),('cherrufe',cherrufe2),('trelke',trelke)]:
+for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe2),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('nirivilu',nirivilu),('cherrufe',cherrufe2),('trelke',trelke),('ngen_lafken',ngen_lafken),('ngen_mawida',ngen_mawida),('ngen_pewen',ngen_pewen)]:
     D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':{'witranalwe':'150,230,170','cherrufe':'255,130,50','trelke':'150,200,120'}.get(name,0)}
 open(OUT,'w').write('const SPR2='+json.dumps(D,ensure_ascii=False)+';\n')
 if __name__=='__main__':

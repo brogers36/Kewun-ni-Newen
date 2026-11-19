@@ -71,26 +71,11 @@ function dogSprite(fr,dir){const key='dog'+fr+dir;if(CCACHE[key])return CCACHE[k
   (fr?DOG2:DOG).forEach((r,y)=>{for(let x=0;x<16;x++){const ch=r[x];if(ch!=='.'){c.fillStyle=ch==='o'?'#181018':ch==='e'?'#000':'#a06838';c.fillRect(x,y,1,1)}}});
   return CCACHE[key]=dir==='right'?mirror(cvs):cvs}
 function drawNgen(c,x,y,s,t,v){
-  if(v==='pewen'){const b=k=>Math.round(k*s);
-    for(const [r,a] of [[16,.08],[12,.12],[9,.16]])ell(c,x,y-b(14),b(r),b(r*1.15),'rgba(255,220,160,'+a+')');
-    ell(c,x,y-b(2),b(7),b(2.2),'#3a2a1a');R(c,x-b(2),y-b(18),b(4),b(17),'#7a5a3a');R(c,x,y-b(18),b(2),b(17),'#5a3a22');
-    for(let i=0;i<5;i++){const yy=y-b(18)-b(i*2.2),w=b(9-i*1.4);R(c,x-w,yy,w*2,Math.max(1,b(1.2)),'#2e6a3a');R(c,x-w,yy-b(1),Math.max(1,b(1.4)),Math.max(1,b(1.4)),'#2e6a3a');R(c,x+w-b(1.4),yy-b(1),Math.max(1,b(1.4)),Math.max(1,b(1.4)),'#2e6a3a')}
-    ell(c,x,y-b(10),b(3.4),b(3.4),'#c8a070');R(c,x-b(1.6),y-b(11),Math.max(1,b(.9)),Math.max(1,b(1.2)),'#3a2410');R(c,x+b(.8),y-b(11),Math.max(1,b(.9)),Math.max(1,b(1.2)),'#3a2410');
-    for(let i=0;i<6;i++){const a=t/22+i*1.05;R(c,x+Math.round(Math.cos(a)*b(10)),y-b(14)+Math.round(Math.sin(a)*b(12)),Math.max(1,b(.7)),Math.max(1,b(.7)),'#fff0c0')}return}
-  if(v==='mawida'){const b=k=>Math.round(k*s);
-    for(const [r,a] of [[16,.08],[12,.12],[9,.16]])ell(c,x,y-b(14),b(r),b(r*1.15),'rgba(200,240,140,'+a+')');
-    ell(c,x,y-b(2),b(8),b(2.5),'#4a3a1a');ell(c,x,y-b(10),b(5),b(9),'#5a8a2a');ell(c,x-b(1),y-b(12),b(3.4),b(6.5),'#8ac850');
-    ell(c,x,y-b(21),b(4),b(4),'#a8d870');for(let i=0;i<6;i++){const a=i/6*6.28+t/40;ell(c,x+Math.cos(a)*b(5),y-b(24)+Math.sin(a)*b(2),b(1.6),b(1.2),'#4a9a3a')}
-    R(c,x-b(1.6),y-b(21),Math.max(1,b(.9)),Math.max(1,b(1.2)),'#2a4a1a');R(c,x+b(.8),y-b(21),Math.max(1,b(.9)),Math.max(1,b(1.2)),'#2a4a1a');
-    for(let i=0;i<6;i++){const a=t/20+i*1.05;R(c,x+Math.round(Math.cos(a)*b(10)),y-b(14)+Math.round(Math.sin(a)*b(12)),Math.max(1,b(.7)),Math.max(1,b(.7)),'#f8f0a0')}return}
-  const b=k=>Math.round(k*s);
-  for(const [r,a] of [[16,.08],[12,.12],[9,.16]])ell(c,x,y-b(14),b(r),b(r*1.15),'rgba(160,220,255,'+a+')');
-  const wob=Math.sin(t/12)*s;
-  ell(c,x,y-b(2),b(9),b(3),'rgba(232,248,255,.9)');ell(c,x,y-b(10),b(5.5)+wob*.3,b(9),'#5aa8e0');ell(c,x-b(1),y-b(12),b(3.6),b(6.5),'#9ad8f8');
-  ell(c,x,y-b(21),b(3.6),b(3.8),'#d8f2ff');ell(c,x-b(1),y-b(22),b(1.6),b(1.6),'#ffffff');
-  R(c,x-b(1.6),y-b(22),Math.max(1,b(.9)),Math.max(1,b(1.2)),'#2a64a8');R(c,x+b(.8),y-b(22),Math.max(1,b(.9)),Math.max(1,b(1.2)),'#2a64a8');
-  for(let i=0;i<6;i++){const a=t/20+i*1.05;R(c,x+Math.round(Math.cos(a)*b(10)),y-b(14)+Math.round(Math.sin(a)*b(12)),Math.max(1,b(.7)),Math.max(1,b(.7)),'#ffffff')}
-  ell(c,x-b(6),y-b(4),b(3),b(1.4),'#e8f6ff');ell(c,x+b(6),y-b(4),b(3),b(1.4),'#e8f6ff');
+  const name=v==='mawida'?'ngen_mawida':v==='pewen'?'ngen_pewen':'ngen_lafken',au={ngen_lafken:'160,220,255',ngen_mawida:'200,240,140',ngen_pewen:'255,220,140'}[name];
+  const k=Math.max(1,Math.round(s)),fr=Math.floor(t/20)%2,cvs=tplCanvas(name,fr,k),w=cvs.width,h=cvs.height,bob=Math.round(Math.sin(t/25)*k);
+  for(const [r,a] of [[1.15,.07],[.9,.1],[.7,.14]])ell(c,x,y-h/2+bob,w*.6*r,h*.55*r,'rgba('+au+','+a+')');
+  c.drawImage(cvs,Math.round(x-w/2),Math.round(y-h+bob));
+  for(let i=0;i<6;i++){const a=t/20+i*1.05;R(c,x+Math.round(Math.cos(a)*w*.62),y-Math.round(h/2)+Math.round(Math.sin(a)*h*.45),k,k,'rgba('+au+',.9)')}
 }
 
 /* ---------- enemies (designed on a 16-unit grid, cel-shaded at any size) ---------- */
