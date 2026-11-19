@@ -139,6 +139,11 @@ function openChest(x,y,what){
     L('','wiñotu-','Encontraste una raíz nueva: wiñotu-, «volver, regresar».','You found a new root: wiñotu-, «go back, return».'),
     L('','wiñotunge · wiñotumu · wiñotumün','¡Vuelve atrás! (a uno) · (a dos) · (a tres o más)','Go back! (to one) · (to two) · (to three or more)'),
     N('Un wekufü al que le dices que vuelva atrás retrocede y pierde su turno. Y dicen que hasta el Witranalwe se encoge cuando lo obligan a retroceder.','A wekufü you tell to go back steps away and loses its turn. And they say even the Witranalwe shrinks when it is forced back.')])}
+  if(what==='wutre'){learnRoot('wütre');S.flags.root_wutre=1;persist();sfx('lvl');return say([
+    L('','wütre-','Encontraste una raíz nueva: wütre-, «tener frío».','You found a new root: wütre-, «be cold».'),
+    L('','wütrenge · wütremu · wütremün','¡Ten frío! (a uno) · (a dos) · (a tres o más)','Be cold! (to one) · (to two) · (to three or more)'),
+    N('El frío apaga el fuego de los wekufü de fuego, y hace tiritar a los demás. Pero a los wekufü de nieve... les encanta.','The cold puts out the fire of fire wekufü, and makes the others shiver. But snow wekufü... love it.')])}
+  if(what==='pewgift'){S.gold+=60;S.items.lawen++;persist();return say([L('','Kayu mari ngülliw!','Dentro hay kayu mari (60) ngülliw y un lawen.','Inside are kayu mari (60) ngülliw and a lawen.')])}
   if(what==='lawen1'){S.items.lawen++;persist();return say([L('','Lawen!','Encontraste un lawen (remedio).','You found a lawen (medicine).')])}
   if(what==='piwke')return gainPiwke([N('Dentro del cofre brilla algo rojo...','Something red glows inside the chest...')]);
   if(what==='rune'){S.runes.push('kil');S.flags.rune_kil=1;persist();sfx('lvl');return say([
@@ -189,6 +194,11 @@ const STONES={
     qs:[{q:L('Kura','___ ruka','Mi casa.','My house.'),o:['tami','ñi','tañi'],a:'tañi'},
         {q:L('Kura','___ kawellu','Tu caballo.','Your horse.'),o:['tañi','tami','ñi'],a:'tami'},
         {q:L('Kura','___ trewa','Su perro (de él o de ella).','His / her dog.'),o:['ñi','tañi','tami'],a:'ñi'}]},
+  quest:{intro:[L('Kura','Mari mari! Kimimi chem, iney, chew?','¡Hola! ¿Conoces chem, iney, chew?','Hello! Do you know chem, iney, chew?'),N('Completa mis preguntas con la palabra que pregunta y te abro el paso.','Complete my questions with the question word and I will open the way.')],
+    qs:[{q:L('Kura','___ pingeymi?','¿Cómo te llamas?','What is your name?'),o:['Chew','Iney','Chem'],a:'Iney'},
+        {q:L('Kura','___ tuwimi?','¿De dónde eres?','Where are you from?'),o:['Chew','Chumül','Iney'],a:'Chew'},
+        {q:L('Kura','___ nieymi?','¿Qué tienes?','What do you have?'),o:['Chumten','Chem','Chew'],a:'Chem'},
+        {q:L('Kura','___ ngülliw nieymi?','¿Cuántos piñones tienes?','How many pewen nuts do you have?'),o:['Chumten','Chumül','Iney'],a:'Chumten'}]},
   plur:{intro:[L('Kura','Mari mari! Kimimi pu?','¡Hola! ¿Conoces pu?','Hello! Do you know pu?'),N('Cuando son dos o muchos, el verbo también cambia. Completa los verbos.','When there are two or many, the verb changes too. Complete the verbs.')],
     qs:[{q:L('Kura','Pu wentru amu___','Los hombres van.','The men go.'),o:['amuy','amuyngu','amuyngün'],a:'amuyngün'},
         {q:L('Kura','Epu domo küpa___','Dos mujeres vienen.','Two women come.'),o:['küpayngu','küpay','küpayngün'],a:'küpayngu'},
@@ -204,7 +214,8 @@ function stoneTalk(id){
       if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Kura','Fey no...','Eso no...','Not that...'),N('Vuelve a intentarlo desde el principio.','Try again from the beginning.')],()=>ask(0))}},false,false)}
 }
 const WARPS={lafkenche:[{m:'Lafken inaltu',es:'Entrada de la cueva (orilla)',en:'Cave entrance (lagoon shore)',to:['inaltu',21,5]},{m:'Lafkenche lof',es:'El lof de la costa',en:'The coast lof',to:['lof',17,9]}],
-  nagche:[{m:'Fütra mawida',es:'Entrada de la guarida (monte)',en:'Lair entrance (forest)',to:['n_mawida',28,4]},{m:'Nagche lof',es:'El lof de los llanos',en:'The lowland lof',to:['n_lof',17,9]}]};
+  nagche:[{m:'Fütra mawida',es:'Entrada de la guarida (monte)',en:'Lair entrance (forest)',to:['n_mawida',28,4]},{m:'Nagche lof',es:'El lof de los llanos',en:'The lowland lof',to:['n_lof',17,9]}],
+  pewenche:[{m:'Pillañ inaltu',es:'Entrada de la morada (volcán)',en:'Lair entrance (volcano)',to:['p_pillan',28,4]},{m:'Pewenche lof',es:'El lof de los pewenes',en:'The pewen lof',to:['p_lof',17,9]}]};
 function warpMenu(){
   const opts=[];for(const r in WARPS)if(awake(r))for(const w of WARPS[r])opts.push({m:w.m,g:G(w),v:w.to});
   opts.push({m:'Mülekan faw',g:S.gloss==='en'?'Stay here':'Quedarme aquí',v:'x'});
@@ -444,4 +455,83 @@ function nFisherTalk(){
 function goTitle(){
   persist();active=null;menu.style.display='none';dlg.style.display='none';banner.style.display='none';B=null;
   mode='title';$('title').style.display='';$('bCont').style.display='';AU.name=null;playSong('intro');
+}
+
+/* ================= PEWENCHE ================= */
+function lakuTalk(){
+  if(!S.flags.laku){S.flags.laku=1;S.gold+=20;persist();sfx('pick');
+    return say([L('Laku','Mari mari, '+nm()+'! Iñche tami laku.','¡Hola, '+nm()+'! Soy tu laku.','Hello, '+nm()+'! I am your laku.'),
+      N('Tu laku es el papá de tu papá. Subió a la cordillera para la cosecha de ngülliw.','Your laku is your father\'s father. He came up to the mountains for the ngülliw harvest.'),
+      L('Laku','Tüfa ta ngülliw: pewen ñi fün.','Esto es ngülliw: el fruto del pewen.','This is ngülliw: the fruit of the pewen.'),
+      N('Los ngülliw que has juntado en tu viaje son estos piñones. Con ellos se hace trafkintu: se intercambian cosas. Tu laku te regala epu mari (20).','The ngülliw you have gathered on your journey are these pewen nuts. With them people do trafkintu: they exchange things. Your laku gives you epu mari (20).'),
+      L('Laku','Chem pimi? Iney eymi? Chew amuaymi?','¿Qué dijiste? ¿Quién eres tú? ¿A dónde irás?','What did you say? Who are you? Where will you go?'),
+      N('Así se pregunta: chem (qué), iney (quién), chew (dónde), chumül (cuándo), chumten (cuánto). Tu chillka las tiene en «Chem, iney, chew».','This is how you ask: chem (what), iney (who), chew (where), chumül (when), chumten (how much). Your chillka has them under «Chem, iney, chew».'),
+      L('Laku','Lonko mew amunge. Kütral mew müley.','Ve donde el lonko. Está junto al kütral.','Go to the lonko. He is by the fire.')]);}
+  const ls=[L('Laku','Mari mari, '+nm()+'!','¡Hola, '+nm()+'!','Hello, '+nm()+'!')];
+  if(S.flags.ngen3)ls.push(L('Laku','Ngen-pewen nepey! Ayüwün.','¡Ngen-pewen despertó! Estoy feliz.','Ngen-pewen has woken up! I am happy.'));
+  else ls.push(N('El pillañ (el volcán) queda al este, pasando el bosque de pewenes y los campos de nieve.','The pillañ (the volcano) lies to the east, past the pewen forest and the snowfields.'));
+  say(ls);
+}
+function pLonkoTalk(){
+  if(S.flags.pew_lonko){
+    const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
+    if(S.flags.ngen3)ls.push(L('Lonko','Ngen-pewen nepey. Chaltu may!','Ngen-pewen despertó. ¡Gracias!','Ngen-pewen has woken up. Thank you!'),
+      N('Ya llevas tres trariwe trokiñ. Dicen que en el sur, en tierras williche, y al otro lado de la cordillera, en Puelmapu, esperan los últimos.','You now carry three trariwe trokiñ. They say the last ones wait in the south, in Williche lands, and across the mountains, in Puelmapu.'));
+    else ls.push(L('Lonko','Pillañ mew amunge.','Ve al volcán.','Go to the volcano.'),N('Pasando el bosque de pewenes y los campos de nieve está el pillañ. La morada del Cherrufe está adentro.','Past the pewen forest and the snowfields is the pillañ. The Cherrufe\'s lair is inside.'));
+    return say(ls);
+  }
+  const steps=[
+    {q:L('Lonko','Mari mari, '+nm()+'. Chumleymi?','Hola, '+nm()+'. ¿Cómo estás?','Hello, '+nm()+'. How are you?'),
+     o:[{m:'Kümelen. Eymi kay?',es:'Estoy bien. ¿Y tú?',en:'I am well. And you?',ok:1},{m:'Kümeleyngün.',es:'Ellos están bien.',en:'They are well.'},{m:'Chumleymi?',es:'¿Cómo estás?',en:'How are you?'}]},
+    {q:L('Lonko','Iñche ka kümelen. Chew tuwimi?','Yo también estoy bien. ¿De dónde eres?','I am well too. Where are you from?'),
+     o:[{m:'Lafken mapu tuwün.',es:'Vengo de la tierra del mar.',en:'I come from the land of the sea.',ok:1},{m:'Chew tuwimi?',es:'¿De dónde eres tú?',en:'Where are you from?'},{m:'Pewen mapu tuwimi.',es:'Tú vienes de la tierra de los pewenes.',en:'You come from the land of the pewen trees.'}]},
+    {q:L('Lonko','Chumleyngün tami pu che?','¿Cómo está tu gente?','How are your people?'),
+     o:[{m:'Kümeleyngün.',es:'Ellos están bien.',en:'They are well.',ok:1},{m:'Kümelen.',es:'Yo estoy bien.',en:'I am well.'},{m:'Kümeleymi.',es:'Tú estás bien.',en:'You are well.'}]}];
+  say([N('El lonko pewenche se levanta para saludarte. Recuerda el pentukuwün.','The Pewenche lonko stands up to greet you. Remember the pentukuwün.')],()=>step(0));
+  function step(i){
+    if(i>=steps.length)return done();
+    const s=steps[i],en=S.gloss==='en';
+    const opts=s.o.map((o,k)=>({m:o.m,g:S.hints?(en?o.en:o.es):'',v:k}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
+    choose(s.q,opts,v=>{if(s.o[v].ok)say([praise()],()=>step(i+1));else{sfx('bad');say([N('El lonko espera, en silencio. Piensa en lo que te preguntó.','The lonko waits in silence. Think about what he asked you.')],()=>step(i))}},false,true);
+  }
+  function done(){
+    S.flags.pew_lonko=1;learnRoot('trafo');S.items.kulon++;persist();sfx('lvl');
+    say([L('Lonko','Kümey! Ngen-lafken ka Ngen-mawida nepeyngu, pikeyngün.','¡Bien! Dicen que Ngen-lafken y Ngen-mawida despertaron.','Good! They say Ngen-lafken and Ngen-mawida have woken up.'),
+      L('Lonko','Welu Ngen-pewen umawtuley.','Pero Ngen-pewen está dormido.','But Ngen-pewen is asleep.'),
+      N('Un Cherrufe, un gigante de roca y lava, salió del pillañ. Su calor seca los pewenes y la nieve se vuelve dura como piedra. Desde entonces hay menos ngülliw y la gente olvida las palabras.','A Cherrufe, a giant of rock and lava, came out of the pillañ. Its heat dries the pewen trees and the snow turns hard as stone. Since then there are fewer ngülliw and people forget the words.'),
+      L('Lonko','Trafo- kimeltueyu.','Te enseño trafo- ("quebrarse").','I teach you trafo- ("break").'),
+      N('Con trafonge, trafomu o trafomün se quiebra la coraza de piedra de los wekufü. Recibiste trafo- y un külon.','With trafonge, trafomu or trafomün the stone crust of the wekufü cracks. You received trafo- and a külon.'),
+      L('Lonko','Pillañ mew amunge, '+nm()+'.','Ve al volcán, '+nm()+'.','Go to the volcano, '+nm()+'.')]);
+  }
+}
+function pNutramTalk(){
+  say([L('Nütramkafe','Mari mari, '+addr(true)+'. Nütramkayaiñ?','Hola. ¿Conversamos?','Hello. Shall we talk?'),
+    L('Nütramkafe','Kuyfi, pillañ mew mülefuy kiñe Cherrufe.','Hace mucho tiempo, en el volcán había un Cherrufe.','Long ago, in the volcano, there was a Cherrufe.'),
+    L('Nütramkafe','Kütral ka kura ngefuy.','Era de fuego y de piedra.','It was made of fire and stone.'),
+    L('Nütramkafe','Pu che llükakefuy.','La gente le tenía miedo.','People used to fear it.'),
+    N('Dicen que los golpes rebotan en su piedra, y que su fuego quema a quien lo toca. Pero la piedra se quiebra, y el fuego se apaga con el frío.','They say blows bounce off its stone, and its fire burns whoever touches it. But stone cracks, and fire goes out in the cold.')]);
+}
+function gathTalk(){
+  say([L('Domo','Fentren ngülliw müley!','¡Hay muchos piñones!','There are lots of pewen nuts!'),
+    N('Las mujeres juntan los ngülliw que caen de los pewenes. Este año caen pocos: el calor del Cherrufe seca los árboles.','The women gather the nuts that fall from the pewen trees. This year few are falling: the Cherrufe\'s heat dries the trees.')]);
+}
+function arrieroTalk(){
+  const en=S.gloss==='en';
+  if(S.flags.pew_ke)return say([L('Wentru','Kawellu mew amuken. Pewkayal!','Yo ando a caballo. ¡Hasta luego!','I ride on horseback. See you later!')]);
+  const qs=[{q:L('Wentru','Pu pewenche ngülliw i___','Los pewenche comen piñones (siempre, de costumbre).','The Pewenche eat pewen nuts (always, as a habit).'),o:['iyngün','ikeyngün','ikey'],a:'ikeyngün'},
+    {q:L('Wentru','Iñche mapudungu___','Yo hablo mapudungun (siempre, de costumbre).','I speak Mapudungun (always, as a habit).'),o:['mapudungun','mapudunguken','mapudungukey'],a:'mapudunguken'},
+    {q:L('Wentru','Eymi kawellu mew amu___','Tú andas a caballo (siempre, de costumbre).','You ride on horseback (always, as a habit).'),o:['amuymi','amukeymi','amuken'],a:'amukeymi'}];
+  say([L('Wentru','Mari mari, '+addr(false)+'. Kawellu mew amuken.','Hola. Yo ando a caballo.','Hello. I ride on horseback.'),
+    N('Fíjate en amuken: -ke- dice lo que alguien hace siempre, por costumbre. El arriero quiere ver si lo entiendes. Tu chillka lo explica en «-ke-».','Notice amuken: -ke- says what someone always does, as a habit. The muleteer wants to see if you understand. Your chillka explains it under «-ke-».')],()=>ask(0));
+  function ask(i){
+    if(i>=qs.length){S.flags.pew_ke=1;S.items.kofke+=2;S.gold+=30;S.xp+=4;persist();sfx('lvl');
+      return say([praise(),L('Wentru','Kümey! Mapudungukeymi!','¡Bien! ¡Hablas mapudungun!','Good! You speak Mapudungun!'),N('Te da dos kofke y küla mari (30) ngülliw. +4 kimün.','He gives you two kofke and küla mari (30) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+    const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
+      if(v==='_book')return openBook(()=>ask(i));
+      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Wentru','Fey no...','Eso no...','Not that...'),N('Piensa: ¿quién lo hace, y lo hace siempre?','Think: who does it, and do they always do it?')],()=>ask(0))}},false,false)}
+}
+function kona3Talk(){
+  if(S.flags.ngen3)return say([L('Kona','Cherrufe ngelay! Ayüwün!','¡Ya no está el Cherrufe! ¡Qué feliz estoy!','The Cherrufe is gone! I am so happy!')]);
+  say([L('Kona','Cherrufe müley pillañ mew. Kütral ka kura ngey!','El Cherrufe está en el volcán. ¡Es de fuego y de piedra!','The Cherrufe is in the volcano. It is made of fire and stone!'),
+    N('La entrada está entre las rocas, subiendo al este. Dicen que adentro hay piedras con números muy grandes y otra que hace preguntas.','The entrance is among the rocks, up to the east. They say inside there are stones with very big numbers and another one that asks questions.')]);
 }

@@ -106,6 +106,46 @@ const SONGS={
   {w:'square',v:.05,t:'B3 D4 G4 D4 B3 D4 G4 D4 | C4 E4 G4 E4 C4 E4 G4 E4 | A3 C4 E4 C4 A3 C4 E4 C4 | D4 F#4 A4 F#4 D4 F#4 A4 F#4'},
   {w:'triangle',v:.4,t:'G2 - - - D3 - - - | C3 - - - G2 - - - | A2 - - - E3 - - - | D3 - - - A2 - - -'},
   {d:1,v:.3,t:'k . h . s . h . | k . h k s . h h'}]}),
+ pew:mkSong({bpm:100,loop:1,ch:[
+  {w:'triangle',v:.5,t:'E5 - G5 A5 B5 - A5 G5 | E5 - - - D5 - - - | E5 - G5 A5 B5 - D6 B5 | A5 - - - - - - - | B5 - A5 G5 E5 - G5 A5 | B5 - - - A5 G5 E5 - | D5 - E5 G5 A5 - G5 E5 | E5 - - - - - - -'},
+  {w:'square',v:.05,t:'E4 B4 E5 B4 E4 B4 E5 B4 | D4 A4 D5 A4 D4 A4 D5 A4 | C4 G4 C5 G4 C4 G4 C5 G4 | D4 A4 D5 A4 B3 F#4 B4 F#4'},
+  {w:'triangle',v:.45,t:'E2 - - - E3 - - - | D2 - - - D3 - - - | C2 - - - C3 - - - | D2 - - - B1 - - -'},
+  {d:1,v:.4,t:'k . . h k . s . | k . h . k . s h'}]}),
+ pewG:mkSong({bpm:64,loop:1,ch:[
+  {w:'triangle',v:.5,t:'E5 - - - D5 - B4 - | A4 - - - - - - - | B4 - - - D5 - E5 - | B4 - - - - - - - | G4 - - - A4 - B4 - | D5 - - - B4 - A4 - | G4 - - - F#4 - - - | E4 - - - - - - -'},
+  {w:'square',v:.04,t:'E3 B3 E4 B3 E3 B3 E4 B3 | A2 E3 A3 E3 A2 E3 A3 E3 | C3 G3 C4 G3 C3 G3 C4 G3 | B2 F#3 B3 F#3 B2 F#3 B3 F#3'},
+  {w:'triangle',v:.4,t:'E2 - - - - - - - | A1 - - - - - - - | C2 - - - - - - - | B1 - - - - - - -'},
+  {d:1,v:.2,t:'k . . . . . . . | . . . . h . . .'}]}),
+ pewLof:mkSong({bpm:92,loop:1,ch:[
+  {w:'triangle',v:.55,t:'G5 - E5 D5 - E5 | G5 - A5 B5 - - | A5 - G5 E5 - D5 | E5 - - - - - | G5 - E5 D5 - B4 | D5 - E5 G5 - - | A5 - G5 E5 - D5 | G5 - - - - -'},
+  {w:'square',v:.05,t:'B3 D4 G4 B3 D4 G4 | C4 E4 G4 C4 E4 G4 | A3 C4 E4 A3 C4 E4 | D4 G4 B4 D4 G4 B4'},
+  {w:'triangle',v:.4,t:'G2 - - D3 - - | C3 - - G2 - - | A2 - - E3 - - | D3 - - G2 - -'},
+  {d:1,v:.32,t:'k . h k . h'}]}),
+ pewLofG:mkSong({bpm:70,loop:1,ch:[
+  {w:'triangle',v:.5,t:'D5 - - B4 - A4 | G4 - - - - - | E4 - G4 A4 - B4 | A4 - - - - - | D5 - - B4 - A4 | G4 - E4 D4 - - | E4 - G4 A4 - G4 | G4 - - - - -'},
+  {w:'square',v:.04,t:'B3 D4 G4 D4 B3 D4 | C4 E4 G4 E4 C4 E4 | A3 C4 E4 C4 A3 C4 | D4 F#4 A4 F#4 D4 F#4'},
+  {w:'triangle',v:.4,t:'G2 - - - - - | C3 - - - - - | A2 - - - - - | D3 - - - - -'},
+  {d:1,v:.2,t:'k . . . . .'}]}),
+ pewCave:mkSong({bpm:80,loop:1,ch:[
+  {w:'triangle',v:.42,t:'C5 - - - Eb5 - D5 - | C5 - - - G4 - - - | Ab4 - - - Bb4 - C5 - | G4 - - - - - - - | C5 - Eb5 - F5 - G5 - | Ab5 - - - G5 - F5 - | Eb5 - D5 - B4 - - - | C5 - - - - - - -'},
+  {w:'square',v:.045,t:'C3 G3 C4 G3 C3 G3 C4 G3 | Ab2 Eb3 Ab3 Eb3 Ab2 Eb3 Ab3 Eb3 | F2 C3 F3 C3 F2 C3 F3 C3 | G2 D3 G3 D3 G2 B2 D3 G3'},
+  {w:'sawtooth',v:.04,t:'C2 - - - - - - - | Ab1 - - - - - - - | F1 - - - - - - - | G1 - - - - - - -'},
+  {d:1,v:.3,t:'k . . k . . s . | k . . . . k s h'}]}),
+ pewBattle:mkSong({bpm:160,loop:1,ch:[
+  {w:'square',v:.12,t:'D5 F5 G5 A5 - G5 F5 D5 | C5 - D5 - F5 - - - | D5 F5 G5 A5 - C6 A5 G5 | A5 - - - - - - - | Bb5 - A5 - G5 - F5 - | G5 - F5 - D5 - C5 - | D5 F5 A5 D6 - C6 A5 G5 | D5 - - - D6 - - -'},
+  {w:'triangle',v:.55,t:'D2 D3 D2 D3 D2 D3 D2 D3 | C2 C3 C2 C3 C2 C3 C2 C3 | Bb1 Bb2 Bb1 Bb2 Bb1 Bb2 Bb1 Bb2 | C2 C3 C2 C3 A1 A2 A1 A2'},
+  {w:'square',v:.04,t:'F4 A4 D5 A4 F4 A4 D5 A4 | E4 G4 C5 G4 E4 G4 C5 G4 | D4 F4 Bb4 F4 D4 F4 Bb4 F4 | E4 G4 C5 G4 C#4 E4 A4 E4'},
+  {d:1,v:.55,t:'k h s h k h s s'}]}),
+ pewBoss:mkSong({bpm:150,loop:1,ch:[
+  {w:'sawtooth',v:.06,t:'C5 - Db5 - C5 - G4 - | Ab4 - G4 - F4 - G4 - | C5 - Db5 - Eb5 - F5 - | G5 - - - F5 - Eb5 - | Db5 - - - C5 - Bb4 - | C5 - - - G4 - - - | Ab4 - Bb4 - C5 - Db5 - | C5 - - - - - - -'},
+  {w:'triangle',v:.55,t:'C2 C2 C3 C2 C2 C2 C3 C2 | Ab1 Ab1 Ab2 Ab1 Ab1 Ab1 Ab2 Ab1 | Bb1 Bb1 Bb2 Bb1 Bb1 Bb1 Bb2 Bb1 | C2 C2 C3 C2 Db2 Db2 Db3 Db2'},
+  {w:'square',v:.05,t:'C4 . . Eb4 . . G4 . | Db4 . . F4 . . Ab4 .'},
+  {d:1,v:.55,t:'k k s h k k s s | k h s h k k s k'}]}),
+ pewNgen:mkSong({bpm:84,loop:1,ch:[
+  {w:'triangle',v:.5,t:'A5 - F#5 - D5 - E5 - | F#5 - - - E5 - - - | D5 - E5 - F#5 - A5 - | B5 - - - - - - - | A5 - B5 - A5 - F#5 - | E5 - - - D5 - E5 - | F#5 - E5 - D5 - B4 - | D5 - - - - - - -'},
+  {w:'square',v:.05,t:'F#4 A4 D5 A4 F#4 A4 D5 A4 | E4 A4 C#5 A4 E4 A4 C#5 A4 | D4 G4 B4 G4 D4 G4 B4 G4 | E4 A4 C#5 A4 F#4 A4 D5 A4'},
+  {w:'triangle',v:.4,t:'D3 - - - A2 - - - | A2 - - - E3 - - - | G2 - - - D3 - - - | A2 - - - D3 - - -'},
+  {d:1,v:.3,t:'k . h . s . h . | k . h k s . h h'}]}),
  win:mkSong({bpm:150,loop:0,ch:[
   {w:'square',v:.14,t:'C5 E5 G5 C6 - - G5 C6 - - - - . . . .'},
   {w:'triangle',v:.5,t:'C3 - - - G2 - - - C3 - - - . . . .'},

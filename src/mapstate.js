@@ -19,8 +19,11 @@ const PL0=Object.assign({},PL);
 const PALS={
   nagche:{G0:'#24461a',G1:'#3e7426',G2:'#5c9c34',G3:'#9ccc58',GY:'#6aa83c',GL:'#a4d070',GM:'#80b450',D1:'#9a6438',D2:'#b8844c',D3:'#d6aa68',FR:'#d83850',FY:'#f8d040',FW:'#fff8e8'},
   nagforest:{G0:'#10301e',G1:'#1e4e30',G2:'#2e6a3e',G3:'#5a9a5c',GY:'#3a7a46',GL:'#6aa070',GM:'#4a8a56',D1:'#5a4a30',D2:'#6e5a3a',D3:'#8a7450',FR:'#c8a0f0',FY:'#f0e890',FW:'#e8fff0'},
+  pewenche:{G0:'#1e3a2a',G1:'#2e5a3e',G2:'#4a7a54',G3:'#7aa880',GY:'#5a8a62',GL:'#9ac0a0',GM:'#6a9a72',S0:'#8a98b0',S1:'#c4d0e2',S2:'#e6edf6',S3:'#ffffff',D1:'#7a6a5a',D2:'#948472',D3:'#b0a08c',FR:'#f0f0ff',FY:'#ffe0a0',FW:'#ffffff'},
+  ash:{G0:'#2a2a24',G1:'#4a4a3a',G2:'#62624e',G3:'#8a8a70',GY:'#6a6a54',GL:'#9a9a80',GM:'#7a7a62',S0:'#3a3434',S1:'#5a5252',S2:'#6e6464',S3:'#8a8080',D1:'#4a3a32',D2:'#5a4a40',D3:'#74645a',FR:'#f86018',FY:'#ffb040',FW:'#d0c0b0'},
+  pewcave:{C0:'#140808',C1:'#3a1a14',C2:'#4a2620',C3:'#6a382c',CD:'#2c1410'},
   nagcave:{C0:'#0e1610',C1:'#26322a',C2:'#3a4a3c',C3:'#56685a',CD:'#2e3c30'}};
-const WALLS={lafken:['#5a4430','#8a7058','#78604a','#3c2c20','#201810'],nagche:['#3c4c3e','#6e8a68','#5a7058','#243026','#0e160e']};
+const WALLS={lafken:['#5a4430','#8a7058','#78604a','#3c2c20','#201810'],pewenche:['#2e2224','#5a4448','#463438','#1a1214','#0a0606'],nagche:['#3c4c3e','#6e8a68','#5a7058','#243026','#0e160e']};
 function applyPal(){Object.assign(PL,PL0);const p=PALS[M.pal];if(p)for(const k in p)PL[k]=C3(p[k])}
 function gtype(ch){if(ch==='~'||ch==='v')return'~';if(ch==='.'||ch===','||ch==='='||ch==='_'||ch==='%'||ch==='"'||ch==='Y'||ch==='b')return ch;if(ch==='T'||ch==='W'||ch==='f')return',';return M.floor}
 function gAt(x,y){if(x<0||y<0||x>=M.w||y>=M.h)return null;return GT[y][x]}
@@ -43,15 +46,16 @@ function gpix(gx,gy,f){
   const tx=gx>>4,ty=gy>>4,lx=gx&15,ly=gy&15,g=GT[ty][tx];
   if(g==='~'){
     const dl=edgeDist(tx,ty,lx,ly,isLand);
-    if(dl<1)return PL.W0;
-    if(dl<2.2+(((gx>>1)+f)%3===0?1:0))return PL.WF;
-    if(dl<3.6)return PL.W3;
+    if(dl<1)return M.lava?[40,16,12]:PL.W0;
+    if(dl<2.2+(((gx>>1)+f)%3===0?1:0))return M.lava?[255,236,150]:PL.WF;
+    if(dl<3.6)return M.lava?[255,170,60]:PL.W3;
     let dep=dl<99?dl:wdep(gx,gy);dep+=Math.sin(gx*.09+gy*.05)*1.6+Math.sin(gx*.031-gy*.07)*2;
-    const TIERS=[[104,152,228],[80,128,214],[64,108,198],[52,90,180],[42,74,160],[34,60,140]];
+    const TIERS=M.lava?[[255,200,80],[250,150,40],[230,100,30],[200,70,24],[170,50,20],[140,36,16]]:[[104,152,228],[80,128,214],[64,108,198],[52,90,180],[42,74,160],[34,60,140]];
     let ti=dep<6?0:dep<10?1:dep<16?2:dep<24?3:dep<34?4:5;
     const nb=[6,10,16,24,34][ti];if(ti<5&&nb-dep<1.4&&(gx+gy)%2===0)ti++;
     let col=TIERS[ti];
     const ph=f*2.094,w1=Math.sin(gx*.21+gy*.62+ph)+Math.sin(gx*.07-gy*.33+ph*.5+1.3);
+    if(M.lava){if(w1>1.5)col=lerp3(col,[255,240,170],.6);else if(w1<-1.5)col=lerp3(col,[60,20,10],.5);return col}
     if(w1>1.62)col=lerp3(col,[176,212,248],.65);else if(w1>1.45&&(gx&1))col=lerp3(col,[150,196,244],.45);else if(w1<-1.6)col=lerp3(col,[20,40,100],.3);
     const u=(gx+f*3+((gy>>3)%2)*6)%14,v=gy%9;
     if(ti<=2&&((v===3&&(u===0||u===3))||(v===4&&(u===1||u===2))))col=lerp3(col,[200,224,252],.6);
@@ -110,10 +114,11 @@ function buildLayers(){
 function drawGroundStatics(c){
   for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++){const ch=grid[y][x],X=x*T,Y=y*T;
     if(ch==='%'){const below=y+1<M.h?grid[y+1][x]:'%';
-      const WC=WALLS[M.region==='nagche'?'nagche':'lafken'];
+      const WC=WALLS[M.region==='nagche'?'nagche':M.region==='pewenche'?'pewenche':'lafken'];
       if(below!=='%'){R(c,X,Y+5,16,11,WC[0]);R(c,X,Y+4,16,1,WC[1]);R(c,X,Y+5,16,1,WC[2]);
         for(let r=0;r<3;r++){const yy=Y+6+r*3+ (r===2?1:0),off=((r+x)%2)*4;R(c,X,yy+2,16,1,WC[3]);for(let k=0;k<3;k++)R(c,X+((off+k*7)%16),yy,1,2,WC[3])}
         R(c,X,Y+15,16,1,WC[4]);
+        if(M.region==='pewenche'){for(let k=0;k<3;k++){const mx=Math.floor(h2(x,y,80+k)*14);if(h2(x,y,90+k)<.55){R(c,X+mx,Y+6+k*3,1,2,'#f86018');R(c,X+mx+1,Y+7+k*3,1,1,'#ffb040')}}}
         if(M.region==='nagche'){for(let k=0;k<4;k++){const mx=Math.floor(h2(x,y,80+k)*15);if(h2(x,y,90+k)<.6)R(c,X+mx,Y+5,2,1+Math.floor(h2(x,y,95+k)*3),'#4a7a3a')}
           if(h2(x,y,99)<.35){const rx=X+3+Math.floor(h2(x,y,98)*10);for(let i=0;i<6;i++)R(c,rx+(i%3===2?1:0),Y+6+i,1,1,'#5a3e22')}}}}
   }
@@ -134,11 +139,11 @@ function placeNear(x,y,isEnt){
     if(seen.size>900)break;for(const [d,e] of [[1,0],[-1,0],[0,1],[0,-1]])if(inB(a+d,b+e))q.push([a+d,b+e])}
   return [x,y];
 }
-const RFLAG={lafkenche:'ngen',nagche:'ngen2'};
+const RFLAG={lafkenche:'ngen',nagche:'ngen2',pewenche:'ngen3'};
 const awake=r=>!!S.flags[RFLAG[r]];
-const SONGSET={nagche:{lof:'nagLof',lofG:'nagLofG',cave:'nagCave',battle:'nagBattle',boss:'nagBoss',ngen:'nagNgen'}};
+const SONGSET={pewenche:{nag:'pew',nagG:'pewG',lof:'pewLof',lofG:'pewLofG',cave:'pewCave',battle:'pewBattle',boss:'pewBoss',ngen:'pewNgen'},nagche:{lof:'nagLof',lofG:'nagLofG',cave:'nagCave',battle:'nagBattle',boss:'nagBoss',ngen:'nagNgen'}};
 const rsong=n=>{const r=M&&M.region;return (SONGSET[r]&&SONGSET[r][n])||n};
-function mapSong(){const m=MAPS[CUR];if(m.ngenmap)return rsong(awake(m.region)?'ngen':'cave');const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'))return rsong(s+'G');return rsong(s)}
+function mapSong(){const m=MAPS[CUR];if(m.ngenmap)return rsong(awake(m.region)?'ngen':'cave');const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'||s==='pew'))return rsong(s+'G');return rsong(s)}
 function loadMap(id,x,y,quiet){
   CUR=id;M=MAPS[id];
   grid=M.rows.map(r=>r.split(''));
@@ -148,6 +153,7 @@ function loadMap(id,x,y,quiet){
   PZ={n:0,lit:new Set()};
   if(S.flags['pz:'+id]){for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='E')grid[yy][xx]=M.floor;if(M.pz)for(const k in M.pz.tiles)PZ.lit.add(k)}
   if(!awake(M.region))for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='A')grid[yy][xx]=M.floor;
+  if(S.flags.snow)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='^')grid[yy][xx]=M.floor;
   if(S.flags.bramble)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='Ñ')grid[yy][xx]=M.floor;
   buildLayers();
   ents=[];P.x=x;P.y=y;

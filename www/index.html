@@ -66,7 +66,7 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
       <button id="skip">Saltar ▶▶</button>
       <div id="title">
         <h1>Kewün ñi Newen</h1>
-        <div class="sub">Prototipo · Lafkenche y Nagche</div>
+        <div class="sub">Prototipo · Lafkenche, Nagche y Pewenche</div>
         <div class="row">
           <button class="hero on" id="hL"><canvas width="32" height="48"></canvas><span>Llanka</span></button>
           <button class="hero" id="hM"><canvas width="32" height="48"></canvas><span>Millaray</span></button>
@@ -224,6 +224,46 @@ const SONGS={
   {w:'square',v:.05,t:'B3 D4 G4 D4 B3 D4 G4 D4 | C4 E4 G4 E4 C4 E4 G4 E4 | A3 C4 E4 C4 A3 C4 E4 C4 | D4 F#4 A4 F#4 D4 F#4 A4 F#4'},
   {w:'triangle',v:.4,t:'G2 - - - D3 - - - | C3 - - - G2 - - - | A2 - - - E3 - - - | D3 - - - A2 - - -'},
   {d:1,v:.3,t:'k . h . s . h . | k . h k s . h h'}]}),
+ pew:mkSong({bpm:100,loop:1,ch:[
+  {w:'triangle',v:.5,t:'E5 - G5 A5 B5 - A5 G5 | E5 - - - D5 - - - | E5 - G5 A5 B5 - D6 B5 | A5 - - - - - - - | B5 - A5 G5 E5 - G5 A5 | B5 - - - A5 G5 E5 - | D5 - E5 G5 A5 - G5 E5 | E5 - - - - - - -'},
+  {w:'square',v:.05,t:'E4 B4 E5 B4 E4 B4 E5 B4 | D4 A4 D5 A4 D4 A4 D5 A4 | C4 G4 C5 G4 C4 G4 C5 G4 | D4 A4 D5 A4 B3 F#4 B4 F#4'},
+  {w:'triangle',v:.45,t:'E2 - - - E3 - - - | D2 - - - D3 - - - | C2 - - - C3 - - - | D2 - - - B1 - - -'},
+  {d:1,v:.4,t:'k . . h k . s . | k . h . k . s h'}]}),
+ pewG:mkSong({bpm:64,loop:1,ch:[
+  {w:'triangle',v:.5,t:'E5 - - - D5 - B4 - | A4 - - - - - - - | B4 - - - D5 - E5 - | B4 - - - - - - - | G4 - - - A4 - B4 - | D5 - - - B4 - A4 - | G4 - - - F#4 - - - | E4 - - - - - - -'},
+  {w:'square',v:.04,t:'E3 B3 E4 B3 E3 B3 E4 B3 | A2 E3 A3 E3 A2 E3 A3 E3 | C3 G3 C4 G3 C3 G3 C4 G3 | B2 F#3 B3 F#3 B2 F#3 B3 F#3'},
+  {w:'triangle',v:.4,t:'E2 - - - - - - - | A1 - - - - - - - | C2 - - - - - - - | B1 - - - - - - -'},
+  {d:1,v:.2,t:'k . . . . . . . | . . . . h . . .'}]}),
+ pewLof:mkSong({bpm:92,loop:1,ch:[
+  {w:'triangle',v:.55,t:'G5 - E5 D5 - E5 | G5 - A5 B5 - - | A5 - G5 E5 - D5 | E5 - - - - - | G5 - E5 D5 - B4 | D5 - E5 G5 - - | A5 - G5 E5 - D5 | G5 - - - - -'},
+  {w:'square',v:.05,t:'B3 D4 G4 B3 D4 G4 | C4 E4 G4 C4 E4 G4 | A3 C4 E4 A3 C4 E4 | D4 G4 B4 D4 G4 B4'},
+  {w:'triangle',v:.4,t:'G2 - - D3 - - | C3 - - G2 - - | A2 - - E3 - - | D3 - - G2 - -'},
+  {d:1,v:.32,t:'k . h k . h'}]}),
+ pewLofG:mkSong({bpm:70,loop:1,ch:[
+  {w:'triangle',v:.5,t:'D5 - - B4 - A4 | G4 - - - - - | E4 - G4 A4 - B4 | A4 - - - - - | D5 - - B4 - A4 | G4 - E4 D4 - - | E4 - G4 A4 - G4 | G4 - - - - -'},
+  {w:'square',v:.04,t:'B3 D4 G4 D4 B3 D4 | C4 E4 G4 E4 C4 E4 | A3 C4 E4 C4 A3 C4 | D4 F#4 A4 F#4 D4 F#4'},
+  {w:'triangle',v:.4,t:'G2 - - - - - | C3 - - - - - | A2 - - - - - | D3 - - - - -'},
+  {d:1,v:.2,t:'k . . . . .'}]}),
+ pewCave:mkSong({bpm:80,loop:1,ch:[
+  {w:'triangle',v:.42,t:'C5 - - - Eb5 - D5 - | C5 - - - G4 - - - | Ab4 - - - Bb4 - C5 - | G4 - - - - - - - | C5 - Eb5 - F5 - G5 - | Ab5 - - - G5 - F5 - | Eb5 - D5 - B4 - - - | C5 - - - - - - -'},
+  {w:'square',v:.045,t:'C3 G3 C4 G3 C3 G3 C4 G3 | Ab2 Eb3 Ab3 Eb3 Ab2 Eb3 Ab3 Eb3 | F2 C3 F3 C3 F2 C3 F3 C3 | G2 D3 G3 D3 G2 B2 D3 G3'},
+  {w:'sawtooth',v:.04,t:'C2 - - - - - - - | Ab1 - - - - - - - | F1 - - - - - - - | G1 - - - - - - -'},
+  {d:1,v:.3,t:'k . . k . . s . | k . . . . k s h'}]}),
+ pewBattle:mkSong({bpm:160,loop:1,ch:[
+  {w:'square',v:.12,t:'D5 F5 G5 A5 - G5 F5 D5 | C5 - D5 - F5 - - - | D5 F5 G5 A5 - C6 A5 G5 | A5 - - - - - - - | Bb5 - A5 - G5 - F5 - | G5 - F5 - D5 - C5 - | D5 F5 A5 D6 - C6 A5 G5 | D5 - - - D6 - - -'},
+  {w:'triangle',v:.55,t:'D2 D3 D2 D3 D2 D3 D2 D3 | C2 C3 C2 C3 C2 C3 C2 C3 | Bb1 Bb2 Bb1 Bb2 Bb1 Bb2 Bb1 Bb2 | C2 C3 C2 C3 A1 A2 A1 A2'},
+  {w:'square',v:.04,t:'F4 A4 D5 A4 F4 A4 D5 A4 | E4 G4 C5 G4 E4 G4 C5 G4 | D4 F4 Bb4 F4 D4 F4 Bb4 F4 | E4 G4 C5 G4 C#4 E4 A4 E4'},
+  {d:1,v:.55,t:'k h s h k h s s'}]}),
+ pewBoss:mkSong({bpm:150,loop:1,ch:[
+  {w:'sawtooth',v:.06,t:'C5 - Db5 - C5 - G4 - | Ab4 - G4 - F4 - G4 - | C5 - Db5 - Eb5 - F5 - | G5 - - - F5 - Eb5 - | Db5 - - - C5 - Bb4 - | C5 - - - G4 - - - | Ab4 - Bb4 - C5 - Db5 - | C5 - - - - - - -'},
+  {w:'triangle',v:.55,t:'C2 C2 C3 C2 C2 C2 C3 C2 | Ab1 Ab1 Ab2 Ab1 Ab1 Ab1 Ab2 Ab1 | Bb1 Bb1 Bb2 Bb1 Bb1 Bb1 Bb2 Bb1 | C2 C2 C3 C2 Db2 Db2 Db3 Db2'},
+  {w:'square',v:.05,t:'C4 . . Eb4 . . G4 . | Db4 . . F4 . . Ab4 .'},
+  {d:1,v:.55,t:'k k s h k k s s | k h s h k k s k'}]}),
+ pewNgen:mkSong({bpm:84,loop:1,ch:[
+  {w:'triangle',v:.5,t:'A5 - F#5 - D5 - E5 - | F#5 - - - E5 - - - | D5 - E5 - F#5 - A5 - | B5 - - - - - - - | A5 - B5 - A5 - F#5 - | E5 - - - D5 - E5 - | F#5 - E5 - D5 - B4 - | D5 - - - - - - -'},
+  {w:'square',v:.05,t:'F#4 A4 D5 A4 F#4 A4 D5 A4 | E4 A4 C#5 A4 E4 A4 C#5 A4 | D4 G4 B4 G4 D4 G4 B4 G4 | E4 A4 C#5 A4 F#4 A4 D5 A4'},
+  {w:'triangle',v:.4,t:'D3 - - - A2 - - - | A2 - - - E3 - - - | G2 - - - D3 - - - | A2 - - - D3 - - -'},
+  {d:1,v:.3,t:'k . h . s . h . | k . h k s . h h'}]}),
  win:mkSong({bpm:150,loop:0,ch:[
   {w:'square',v:.14,t:'C5 E5 G5 C6 - - G5 C6 - - - - . . . .'},
   {w:'triangle',v:.5,t:'C3 - - - G2 - - - C3 - - - . . . .'},
@@ -336,7 +376,7 @@ function showBanner(m,g){banner.querySelector('b').textContent=m;banner.querySel
    STATE
    ============================================================ */
 const HPQ=4,SPMAX=3;
-function maxHP(){return S.baseMax+(S.gear.trariwe?4:0)+Math.floor(S.piwke/4)*4+(S.flags.ngen?4:0)+(S.flags.ngen2?4:0)}
+function maxHP(){return S.baseMax+(S.gear.trariwe?4:0)+Math.floor(S.piwke/4)*4+(S.flags.ngen?4:0)+(S.flags.ngen2?4:0)+(S.flags.ngen3?4:0)}
 function atk(){return S.baseAtk+(S.gear.futrawino?3:0)-(S.curse?2:0)}
 function def(){return S.baseDef+(S.gear.makun?2:0)}
 function xpNeed(){return 10+S.lvl*10}
@@ -354,7 +394,9 @@ const ROOTS={
   umawtu:{m:'umawtu-',es:'dormir',en:'sleep'},
   nag:{m:'nag-',es:'bajar',en:'come down'},
   'llüka':{m:'llüka-',es:'tener miedo',en:'be afraid'},
-  'wiñotu':{m:'wiñotu-',es:'volver, regresar',en:'go back'}};
+  'wiñotu':{m:'wiñotu-',es:'volver, regresar',en:'go back'},
+  trafo:{m:'trafo-',es:'quebrarse, romperse',en:'break'},
+  'wütre':{m:'wütre-',es:'tener frío',en:'be cold'}};
 const ENDS=['nge','mu','mün'];
 const endFor=n=>n<=1?0:n===2?1:2;
 const VG={
@@ -368,6 +410,10 @@ const VG={
        nes:['¡No bajes!','¡No bajen (ustedes dos)!','¡No bajen (todos)!'],nen:["Don't come down!","Don't come down, you two!","Don't come down, all of you!"]},
   'llüka':{es:['¡Ten miedo!','¡Tengan miedo (ustedes dos)!','¡Tengan miedo (todos)!'],en:['Be afraid!','Be afraid, you two!','Be afraid, all of you!'],
        nes:['¡No tengas miedo!','¡No tengan miedo (ustedes dos)!','¡No tengan miedo (todos)!'],nen:["Don't be afraid!","Don't be afraid, you two!","Don't be afraid, all of you!"]},
+  trafo:{es:['¡Quiébrate!','¡Quiébrense (ustedes dos)!','¡Quiébrense (todos)!'],en:['Break!','Break, you two!','Break, all of you!'],
+       nes:['¡No te quiebres!','¡No se quiebren (ustedes dos)!','¡No se quiebren (todos)!'],nen:["Don't break!","Don't break, you two!","Don't break, all of you!"]},
+  'wütre':{es:['¡Ten frío!','¡Tengan frío (ustedes dos)!','¡Tengan frío (todos)!'],en:['Be cold!','Be cold, you two!','Be cold, all of you!'],
+       nes:['¡No tengas frío!','¡No tengan frío (ustedes dos)!','¡No tengan frío (todos)!'],nen:["Don't be cold!","Don't be cold, you two!","Don't be cold, all of you!"]},
   'wiñotu':{es:['¡Vuelve atrás!','¡Vuelvan atrás (ustedes dos)!','¡Vuelvan atrás (todos)!'],en:['Go back!','Go back, you two!','Go back, all of you!'],
        nes:['¡No vuelvas atrás!','¡No vuelvan (ustedes dos)!','¡No vuelvan (todos)!'],nen:["Don't go back!","Don't go back, you two!","Don't go back, all of you!"]}};
 
@@ -382,6 +428,12 @@ const ET={
   kolokolo:{name:'kolokolo',hp:13,atk:6,xp:7,gold:[4,7],bs:42,curse:1},
   fkolokolo:{name:'fütra kolokolo',hp:38,atk:8,xp:20,gold:[12,16],bs:64,curse:1},
   nguruvilu:{name:'nguruvilu',hp:40,atk:8,xp:24,gold:[14,18],bs:70,twice:1},
+  kutral:{name:'kütral wekufü',hp:14,atk:6,xp:8,gold:[5,8],bs:40,fire:1},
+  pire:{name:'pire wekufü',hp:12,atk:6,xp:8,gold:[5,8],bs:42,fly:true,snow:1},
+  kura:{name:'kura wekufü',hp:18,atk:6,xp:9,gold:[6,9],bs:46,armor:1},
+  fkura:{name:'fütra kura wekufü',hp:46,atk:9,xp:24,gold:[16,20],bs:66,armor:1},
+  nirivilu:{name:'ñirivilu',hp:44,atk:9,xp:26,gold:[16,20],bs:72,twice:1},
+  cherrufe:{name:'Cherrufe',hp:110,atk:9,xp:90,gold:[80,80],boss:true,bs:110,armor:1,fire:1},
   witranalwe:{name:'Witranalwe',hp:100,atk:8,xp:70,gold:[60,60],boss:true,bs:110}};
 
 /* ---------- items ---------- */
@@ -405,7 +457,7 @@ function itemOpts(){return Object.keys(ITEMS).map(k=>({m:ITEMS[k].m+' ×'+S.item
 
 const SPR={"HEAD_M_D": ["....oooooooo....", "...ohhhhhhhho...", "..ohhHHhhhhhho..", "..obBbbBbbBbbo..", "..ohssssssssho..", "..ohseWssWesho..", "..ohseSssSesho..", "..ohssssssssho..", "..ohqssmmssqho..", "..ohhSssssShho..", "..ohhooSSoohho.."], "HEAD_M_U": ["....oooooooo....", "...ohhhhhhhho...", "..ohhHhhhhHhho..", "..obBbbBbbBbbo..", "..ohhhhhhhhhho..", "..ohhhhHhhhhho..", "..ohhhhbbhhhho..", "..ohhhhbbhhhho..", "..ohhhhhhhhhho..", "..ohhhhhhhhhho..", "..ohhhhoohhhho.."], "HEAD_M_R": ["....ooooooo.....", "...ohhhhhhho....", "..ohhhHHhhhho...", "..obBbbBbbBbo...", "..ohhhhssssso...", "..ohhhsssWeso...", "..ohhhsssSeso...", "..ohhhSssssso...", "..ohhhhsssmo....", "..ohhhhSsso.....", "..ohhhooSSo....."], "BODY_M_D": ["...oopppppppoo..", "..opppppwwpppPo.", ".ospppppwwpppPso", ".ospppprwwrppPso", ".ooppppwwwwppPoo", "..owrwrwrwrwrwo.", "..orwrwrwrwrwro.", "..opppppppppPPo.", "..owpwpwpwpwpwo."], "BODY_M_U": ["...oopppppppoo..", "..ohhhhhhhhhhPo.", ".osphhhhhhhhhPso", ".ospphhhhhhppPso", ".ooppppwwppppPoo", "..owrwrwrwrwrwo.", "..orwrwrwrwrwro.", "..opppppppppPPo.", "..owpwpwpwpwpwo."], "BODY_M_R": ["....oopppppoo...", "...opppwpppPo...", "...opppwpppPo...", "...oppppppsPo...", "...oppppppsso...", "...owrwrwrwro...", "...orwrwrwrwo...", "...opppppppPo...", "...owpwpwpwpo..."], "LEGS_D": [["....olLo.olLo...", "....olLo.olLo...", "...offfo.offfo..", "...ooooo.ooooo.."], ["....olLo.olLo...", "...offfo.olLo...", "...ooooo.offfo..", ".........ooooo.."], ["....olLo.olLo...", "....olLo.offfo..", "...offfo.ooooo..", "...ooooo........"]], "LEGS_R": [[".....olLlLo.....", ".....olLlLo.....", "....offfffo.....", "....ooooooo....."], ["...olLo.olLo....", "..olLo...olLo...", "..offfo..offfo..", "..ooooo..ooooo.."], [".....olLolLo....", "....olLo.offfo..", "...offfo.ooooo..", "...ooooo........"]], "HEAD_F_D": ["....oooooooo....", "...ohhhhhhhho...", "..ohhHHhhhhhho..", "..oxBxxBxxBxxo..", "..ohssssssssho..", "..ohseWssWesho..", "..ohseSssSesho..", "..ohssssssssho..", ".ohhqssmmssqhho.", ".ohhhSssssShhho.", ".ohhooSSSSoohho."], "HEAD_F_U": ["....oooooooo....", "...ohhhhhhhho...", "..ohhHhhhhHhho..", "..oxBxxBxxBxxo..", "..ohhhhhhhhhho..", "..ohhhhHhhhhho..", "..ohhhhhhhhhho..", ".ohhhhhhhhhhhho.", ".ohhhhhhhhhhhho.", ".ohhhhhhhhhhhho.", ".ohhhhoooohhhho."], "HEAD_F_R": ["....ooooooo.....", "...ohhhhhhho....", "..ohhhHHhhhho...", "..oxBxxBxxBxo...", "..ohhhhssssso...", "..ohhhsssWeso...", "..ohhhsssSeso...", ".ohhhhSssssso...", ".ohhhhhsssmo....", ".ohhhhhSsso.....", ".ohhhhooSSo....."], "BODY_F_D": [".ohhcccccccchho.", ".ohccccxxccccho.", ".ohsccxXXxcccso.", ".ohskkxxXxkkkso.", ".oookkkxkkkkooo.", "..orwrwrwrwrwo..", "..okkkkkkkkKKo..", "..okkkkkkkkKKo..", "..okkkkkkkkKKo.."], "BODY_F_U": [".ohhcccccccchho.", ".ohhhhhhhhhhhho.", ".ohshhhhhhhhhso.", ".ohskhhhhhhkkso.", ".oookkhhhhkkooo.", "..orwrwrwrwrwo..", "..okkkkkkkkKKo..", "..okkkkkkkkKKo..", "..okkkkkkkkKKo.."], "BODY_F_R": ["...ohcccccco....", "...ohccxxcCo....", "...ohcxXXxso....", "...ohkkxkkso....", "...ohkkkkkko....", "...orwrwrwro....", "...okkkkkkKo....", "...okkkkkkKo....", "..okkkkkkkKKo..."], "LEGSF_D": [["..okkkkkkkkKKo..", "...okkkkkkKKo...", "....offo.offo...", "....oooo.oooo..."], ["..okkkkkkkkKKo..", "...okkkkkkKKo...", "...offo..offo...", "...oooo...oooo.."], ["..okkkkkkkkKKo..", "...okkkkkkKKo...", "....offo.offo...", "...oooo..oooo..."]], "LEGSF_R": [["..okkkkkkkKKo...", "..okkkkkkkKKo...", "...offfo........", "...ooooo........"], ["..okkkkkkkKKo...", "..okkkkkkkKKo...", "..offo..offo....", "..oooo..oooo...."], ["..okkkkkkkKKo...", "..okkkkkkkKKo...", "....offfo.......", "....ooooo......."]]};
 
-const SPR2={"kawellu": {"pal": {"b": "#9a5a2a", "B": "#6e3a18", "h": "#c27c40", "m": "#2a1a10", "e": "#000000", "w": "#f2e6d0", "n": "#4a2a14", "k": "#2a2020", "o": "#1a1008"}, "f": [["....oBoBo.....................", "....obommo....................", "..ooobommmo...................", ".obbbbbbmmmo..................", "obbwebbbbmmmo.................", "obwbbbbbbbmmmo...o............", "bbwbbbbbbbbmmmooobooooo.......", "onnnbbbbbbbbmmmbbbbbbbboo.....", ".oooooobbbbbbmmmhhhhhhhhbooo..", ".......obbbbbbmmhhhhhbbbbbmmo.", "........obbbbbbbbbbbbbbbbbmmmo", ".......obbbbbbbbbbbbbbbbbbbmmo", "........obbbbbbbbbbbbbbbbbommo", "........obbbbbbBBBBBbbbbbbommo", ".........oBBBBBBBBBBBBBBBoommo", ".........oBBBBBBBBBBBBBBBoommo", "..........obboBBBBBBbboBBo.omo", "..........obboBBoooobboBBo.omo", "..........obboBBo..obboBBo..o.", "..........obboBBo..obboBBo....", "..........obboBBo..obboBBo....", "..........obbokko..obbokko....", "..........okkooo...okkooo.....", "...........oo.......oo........"], ["....oBoBo.....................", "....obommo....................", "..ooobommmo...................", ".obbbbbbmmmo..................", "obbwebbbbmmmo.................", "obwbbbbbbbmmmo...o............", "bbwbbbbbbbbmmmooobooooo.......", "onnnbbbbbbbbmmmbbbbbbbboo.....", ".oooooobbbbbbmmmhhhhhhhhbooo..", ".......obbbbbbmmhhhhhbbbbbmmo.", "........obbbbbbbbbbbbbbbbbmmmo", ".......obbbbbbbbbbbbbbbbbbbmmo", "........obbbbbbbbbbbbbbbbbommo", "........obbbbbbBBBBBbbbbbbommo", ".........oBBBBBBBBBBBBBBBoommo", ".........oBBBBBBBBBBBBBBBoommo", "..........obboBBBBBBbboBBo.omo", "..........obboBBoooobboBBo.omo", "..........obboBBo..obboBBo..o.", "..........obboBBo..obboBBo....", "..........obboBBo..obboBBo....", "..........okkoBBo..okkoBBo....", "...........oookko...oookko....", "..............oo.......oo....."]], "big": 1, "aura": 0}, "waka": {"pal": {"w": "#f6f4ee", "W": "#c8c4bc", "k": "#26221e", "u": "#e6a0a0", "n": "#8a4a4a", "e": "#000000", "c": "#e8dcc0", "K": "#3a3430", "o": "#1a1612"}, "f": [["..............................", "..............................", "o........o....................", "coo.oo.ooco...................", "occowwocco...oooooooo.........", "oowwwwwwooooowwwwwwwwooo......", "WWwwwwkwWWwwwwwwwwwkkkkwoo....", "owwwewwkwwwkkkkwwwkkkkkkwwo...", "owwwwwwwwwkkkkkkwwkkkkkkwwWo..", ".owwwwwwwwkkkkkkwwwkkkkwwwWo..", "ouuuuuuwwwwkkkkwwwwwwwkkwwWo..", "ounuunuwwwwwwwwwwwwwwkkkkwWo..", "ouuuuuuwwwwwwwkkkkwwwkkkkwWo..", ".oooooooowwwwwkkkkwwwwkkwwkko.", ".........oWWWWWWWWWWWWWWWokko.", ".........owwoWWwwwwuwwoWWooo..", ".........owwoWWoooouwwoWWo....", ".........owwoWWo...owwoWWo....", ".........owwoWWo...owwoWWo....", ".........owwoKKo...owwoKKo....", ".........oKKooo....oKKooo.....", "..........oo........oo........"], ["..............................", "..............................", "o........o....................", "coo.oo.ooco...................", "occowwocco...oooooooo.........", "oowwwwwwooooowwwwwwwwooo......", "WWwwwwkwWWwwwwwwwwwkkkkwoo....", "owwwewwkwwwkkkkwwwkkkkkkwwo...", "owwwwwwwwwkkkkkkwwkkkkkkwwWo..", ".owwwwwwwwkkkkkkwwwkkkkwwwWo..", "ouuuuuuwwwwkkkkwwwwwwwkkwwWo..", "ounuunuwwwwwwwwwwwwwwkkkkwWo..", "ouuuuuuwwwwwwwkkkkwwwkkkkwWo..", ".oooooooowwwwwkkkkwwwwkkwwkko.", ".........oWWWWWWWWWWWWWWWokko.", ".........owwoWWwwwwuwwoWWooo..", ".........owwoWWoooouwwoWWo....", ".........owwoWWo...owwoWWo....", ".........owwoWWo...owwoWWo....", ".........oKKoWWo...oKKoWWo....", "..........oooKKo....oooKKo....", ".............oo........oo....."]], "big": 1, "aura": 0}, "ofisa": {"pal": {"w": "#f4f0e4", "W": "#ffffff", "s": "#d4ccb8", "f": "#3a3434", "e": "#e8e0d0", "n": "#1a1414", "o": "#1a1614"}, "f": [["......................", "......................", "..........oooo........", "......oooowwwwoooo....", "....oowwwwwwwWwwwwo...", "..ooffwwwWwwwwwwwwwo..", ".offffwwwwwwwwwwWwwo..", "offefffwwwwwwwwwwwwwo.", "offffffwwswwswwswwwwo.", "offfffwwwwWwwwWwwwwwo.", "onffwwwwwwwwwwwwwWwwo.", ".oooowwwWwwwwwwwwwoo..", ".....owwwwwwswwwwo....", "......oofwfwwofofo....", ".......ofofooofofo....", ".......ofofo.ofofo....", ".......ofoo..ofoo.....", "........o.....o......."], ["......................", "......................", "..........oooo........", "......oooowwwwoooo....", "....oowwwwwwwWwwwwo...", "..ooffwwwWwwwwwwwwwo..", ".offffwwwwwwwwwwWwwo..", "offefffwwwwwwwwwwwwwo.", "offffffwwswwswwswwwwo.", "offfffwwwwWwwwWwwwwwo.", "onffwwwwwwwwwwwwwWwwo.", ".oooowwwWwwwwwwwwwoo..", ".....owwwwwwswwwwo....", "......oofwfwwofofo....", ".......ofofooofofo....", ".......ofofo.ofofo....", "........oofo..oofo....", "..........o.....o....."]], "big": 1, "aura": 0}, "witranalwe": {"pal": {"H": "#1c1c2e", "h": "#7a6a9a", "q": "#141428", "F": "#d0e0f8", "f": "#8aa0c8", "E": "#40f0ff", "e": "#1a6a90", "P": "#2c2c50", "p": "#46467a", "s": "#d0dcf0", "A": "#26264a", "K": "#d0e0f8", "L": "#121220", "o": "#06060e"}, "f": [["......oHHHHHHHHHHHHo......", "......oHHHHHHHHHHHHo......", "......oHHHHHHHHHHHHo......", "..ooooohhhhhhhhhhhhooooo..", ".oHHHHHHHHHHHHHHHHHHHHHHo.", ".oHHHHHHHHHHHHHHHHHHHHHHo.", "..oqqqqqqqqqqqqqqqqqqqqo..", "...ooooooFFFFFFFFoooooo...", "........oFFFFFFFFo........", "........oFEFFFFEFo........", "........oFeFFFFeFo........", "........ofFFFFFFfo........", "........ofFffffFfo........", ".........offffffo.........", ".....ooooooFFFFoooooo.....", "....oPPPqqPPqqPPqqPPPo....", "....oPAqqqPPqqPPqqqAPo....", ".....oAqqqPPqqPPqqqAo.....", ".....oAqqqPpqqpPqqqAo.....", ".....oAqqqPpqqpPqqqAo.....", "....oAqqqPPpqqpPPqqqAo....", "....oAqqqPPpqqpPPqqqAo....", "....oAqqssspqqsssqqqAo....", "....oAqqsPPsqqsPPsqqAo....", "....oAqssPPpqqsPPqsqAo....", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "..oAqqqPPPPpqqpPPPPqqqAo..", "..oAqqqPssspqqsssPPqsqAo..", "..oAqsqPsPPsqqsPPsPqsqAo..", "..oAqqsssPPpqqsPPPsssqAo..", "..oAqqqPPPPpqqpPPPPqqqAo..", ".oAqqqPPPPPpqqpPPPPPqqqAo.", ".oAqqqPPPPPpqqpPPPPPqqqAo.", ".oAqqqPPPPPpqqpPPPPPqqqAo.", ".oAqqqPPPPPppppPPPPPqqqAo.", ".oAAoooooLLooooLLoooooAAo.", ".oAAo...oLLo..oLLo...oAAo.", ".oAAo...oLLo..oLLo...oAAo.", ".oAAo...oLLo..oLLo...oAAo.", ".oAAo...oLLo..oLLo...oAAo.", "ooAAo...oLLo..oLLo...oAAoo", "KKKo....oLLo..oLLo....oKKK", "KKKo....oLLo..oLLo....oKKK", "KKKo....oLLo..oLLo....oKKK", "KoKo....oLLo..oLLo....oKoK", "o.o.....oLLo..oLLo.....o.o", "........oLLo..oLLo........", "........oLLo..oLLo........", "........oLLo..oLLo........", "........oLLo..oLLo........", ".......oLLLo..oLLLo.......", "........ooo....ooo........", ".........................."], ["......oHHHHHHHHHHHHo......", "......oHHHHHHHHHHHHo......", "......oHHHHHHHHHHHHo......", "..ooooohhhhhhhhhhhhooooo..", ".oHHHHHHHHHHHHHHHHHHHHHHo.", ".oHHHHHHHHHHHHHHHHHHHHHHo.", "..oqqqqqqqqqqqqqqqqqqqqo..", "...ooooooFFFFFFFFoooooo...", "........oFFFFFFFFo........", "........oFEFFFFEFo........", "........oFeFFFFeFo........", "........ofFFFFFFfo........", "........ofFffffFfo........", ".........offffffo.........", ".....ooooooFFFFoooooo.....", "....oPPPqqPPqqPPqqPPPo....", "....oPAqqqPPqqPPqqqAPo....", ".....oAqqqPPqqPPqqqAo.....", ".....oAqqqPpqqpPqqqAo.....", ".....oAqqqPpqqpPqqqAo.....", "....oAqqqPPpqqpPPqqqAo....", "....oAqqqPPpqqpPPqqqAo....", "....oAqqssspqqsssqqqAo....", "....oAqqsPPsqqsPPsqqAo....", "....oAqssPPpqqsPPqsqAo....", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "..oAqqqPPPPpqqpPPPPqqqAo..", "..oAqqqPssspqqsssPPqsqAo..", "..oAqsqPsPPsqqsPPsPqsqAo..", "..oAqqsssPPpqqsPPPsssqAo..", ".ooAqqqPPPPpqqpPPPPqqqAoo.", "oAqoqqPPPPPpqqpPPPPPqqoqAo", "oAqoqqPPPPPpqqpPPPPPqqoqAo", "oAqoqqPPPPPpqqpPPPPPqqoqAo", "oAqoqqPPPPPppppPPPPPqqoqAo", "oAAooooooLLooooLLooooooAAo", "oAAo....oLLo..oLLo....oAAo", "oAAo....oLLo..oLLo....oAAo", "oAAo....oLLo..oLLo....oAAo", "oAAo....oLLo..oLLo....oAAo", "oAAo....oLLo..oLLo....oAAo", "KKo.....oLLo..oLLo.....oKK", "KKo.....oLLo..oLLo.....oKK", "KKo.....oLLo..oLLo.....oKK", "oKo.....oLLo..oLLo.....oKo", ".o......oLLo..oLLo......o.", "........oLLo..oLLo........", "........oLLo..oLLo........", "........oLLo..oLLo........", "........oLLo..oLLo........", ".......oLLLo..oLLLo.......", "........ooo....ooo........", ".........................."]], "big": 2, "aura": 1}, "chonchon": {"pal": {"s": "#d6a27a", "S": "#a06a48", "h": "#1c1418", "W": "#f4f0e6", "r": "#ff2a2a", "k": "#5a0a0a", "q": "#c87860", "m": "#3a0e0e", "w": "#5a3a5c", "v": "#82587c", "b": "#24142a", "c": "#e8e0d0", "o": "#0e060e"}, "f": [[".occo......................occo.", "..obo......................obo..", "..owbo....................obwo..", "..owwbo.....oooooooo.....obwwo..", "..owwwbo..oohhhhhhhhoo..obwwwo..", ".owwwwbboohhhhhhhhhhhhoobbwwwwo.", "owwwwwwbbohhhhhhhhhhhhobbwwwwwwo", "wwwwwwwwbbhhhhhsshhhhhbbwwwwwwww", "bbbwwwwwwbhhshhhhhhShhbwwwwwwbbb", "ooobbbbbbvhhhhsssshhhhvbbbbbbooo", "...owwwvvbhhsshsshSShhbvvwwwo...", "...owwwwvbssWrssssrWSSbvwwwwo...", "...owwwwbossWksSsskWSSobwwwwo...", "..owwwobo.ossssSssSSSo.obowwwo..", "...owbbo..oqsssSSsSSqo..obbwo...", "...oboo....osSssssSSo....oobo...", "....o......osmmmmmmSo......o....", "............ooWmmWoo............", ".............oSSSSo.............", "..............oooo..............", "................................", "................................"], ["................................", "................................", "................................", "............oooooooo............", ".oo.......oohhhhhhhhoo.......oo.", "occoo....ohhhhhhhhhhhho....oocco", ".obbbooo.ohhhhhhhhhhhho.ooobbbo.", "..owwbbboohhhhhsshhhhhoobbbwwo..", "..owwwbbbbhhshhhhhhShhbbbbwwwo..", "..owwwwwvbhhhhsssshhhhbvwwwwwo..", ".owwwwwvvvhhsshsshSShhvvvwwwwwo.", ".owwwwwbbbssWrssssrWSSbbbwwwwwo.", "owwbbbbwwvssWksSsskWSSvwwbbbbwwo", "obbwwwwwwbossssSssSSSobwwwwwwbbo", ".oooowwwwboqsssSSsSSqobwwwwoooo.", "....owwwbo.osSssssSSo.obwwwo....", ".....owobo.osmmmmmmSo.obowo.....", ".....owbo...ooWmmWoo...obwo.....", "......obo....oSSSSo....obo......", ".....obo......oooo......obo.....", "......o..................o......", "................................"]], "big": 2, "aura": 0}};
+const SPR2={"kawellu": {"pal": {"b": "#9a5a2a", "B": "#6e3a18", "h": "#c27c40", "m": "#2a1a10", "e": "#000000", "w": "#f2e6d0", "n": "#4a2a14", "k": "#2a2020", "o": "#1a1008"}, "f": [["....oBoBo.....................", "....obommo....................", "..ooobommmo...................", ".obbbbbbmmmo..................", "obbwebbbbmmmo.................", "obwbbbbbbbmmmo...o............", "bbwbbbbbbbbmmmooobooooo.......", "onnnbbbbbbbbmmmbbbbbbbboo.....", ".oooooobbbbbbmmmhhhhhhhhbooo..", ".......obbbbbbmmhhhhhbbbbbmmo.", "........obbbbbbbbbbbbbbbbbmmmo", ".......obbbbbbbbbbbbbbbbbbbmmo", "........obbbbbbbbbbbbbbbbbommo", "........obbbbbbBBBBBbbbbbbommo", ".........oBBBBBBBBBBBBBBBoommo", ".........oBBBBBBBBBBBBBBBoommo", "..........obboBBBBBBbboBBo.omo", "..........obboBBoooobboBBo.omo", "..........obboBBo..obboBBo..o.", "..........obboBBo..obboBBo....", "..........obboBBo..obboBBo....", "..........obbokko..obbokko....", "..........okkooo...okkooo.....", "...........oo.......oo........"], ["....oBoBo.....................", "....obommo....................", "..ooobommmo...................", ".obbbbbbmmmo..................", "obbwebbbbmmmo.................", "obwbbbbbbbmmmo...o............", "bbwbbbbbbbbmmmooobooooo.......", "onnnbbbbbbbbmmmbbbbbbbboo.....", ".oooooobbbbbbmmmhhhhhhhhbooo..", ".......obbbbbbmmhhhhhbbbbbmmo.", "........obbbbbbbbbbbbbbbbbmmmo", ".......obbbbbbbbbbbbbbbbbbbmmo", "........obbbbbbbbbbbbbbbbbommo", "........obbbbbbBBBBBbbbbbbommo", ".........oBBBBBBBBBBBBBBBoommo", ".........oBBBBBBBBBBBBBBBoommo", "..........obboBBBBBBbboBBo.omo", "..........obboBBoooobboBBo.omo", "..........obboBBo..obboBBo..o.", "..........obboBBo..obboBBo....", "..........obboBBo..obboBBo....", "..........okkoBBo..okkoBBo....", "...........oookko...oookko....", "..............oo.......oo....."]], "big": 1, "aura": 0}, "waka": {"pal": {"w": "#f6f4ee", "W": "#c8c4bc", "k": "#26221e", "u": "#e6a0a0", "n": "#8a4a4a", "e": "#000000", "c": "#e8dcc0", "K": "#3a3430", "o": "#1a1612"}, "f": [["..............................", "..............................", "o........o....................", "coo.oo.ooco...................", "occowwocco...oooooooo.........", "oowwwwwwooooowwwwwwwwooo......", "WWwwwwkwWWwwwwwwwwwkkkkwoo....", "owwwewwkwwwkkkkwwwkkkkkkwwo...", "owwwwwwwwwkkkkkkwwkkkkkkwwWo..", ".owwwwwwwwkkkkkkwwwkkkkwwwWo..", "ouuuuuuwwwwkkkkwwwwwwwkkwwWo..", "ounuunuwwwwwwwwwwwwwwkkkkwWo..", "ouuuuuuwwwwwwwkkkkwwwkkkkwWo..", ".oooooooowwwwwkkkkwwwwkkwwkko.", ".........oWWWWWWWWWWWWWWWokko.", ".........owwoWWwwwwuwwoWWooo..", ".........owwoWWoooouwwoWWo....", ".........owwoWWo...owwoWWo....", ".........owwoWWo...owwoWWo....", ".........owwoKKo...owwoKKo....", ".........oKKooo....oKKooo.....", "..........oo........oo........"], ["..............................", "..............................", "o........o....................", "coo.oo.ooco...................", "occowwocco...oooooooo.........", "oowwwwwwooooowwwwwwwwooo......", "WWwwwwkwWWwwwwwwwwwkkkkwoo....", "owwwewwkwwwkkkkwwwkkkkkkwwo...", "owwwwwwwwwkkkkkkwwkkkkkkwwWo..", ".owwwwwwwwkkkkkkwwwkkkkwwwWo..", "ouuuuuuwwwwkkkkwwwwwwwkkwwWo..", "ounuunuwwwwwwwwwwwwwwkkkkwWo..", "ouuuuuuwwwwwwwkkkkwwwkkkkwWo..", ".oooooooowwwwwkkkkwwwwkkwwkko.", ".........oWWWWWWWWWWWWWWWokko.", ".........owwoWWwwwwuwwoWWooo..", ".........owwoWWoooouwwoWWo....", ".........owwoWWo...owwoWWo....", ".........owwoWWo...owwoWWo....", ".........oKKoWWo...oKKoWWo....", "..........oooKKo....oooKKo....", ".............oo........oo....."]], "big": 1, "aura": 0}, "ofisa": {"pal": {"w": "#f4f0e4", "W": "#ffffff", "s": "#d4ccb8", "f": "#3a3434", "e": "#e8e0d0", "n": "#1a1414", "o": "#1a1614"}, "f": [["......................", "......................", "..........oooo........", "......oooowwwwoooo....", "....oowwwwwwwWwwwwo...", "..ooffwwwWwwwwwwwwwo..", ".offffwwwwwwwwwwWwwo..", "offefffwwwwwwwwwwwwwo.", "offffffwwswwswwswwwwo.", "offfffwwwwWwwwWwwwwwo.", "onffwwwwwwwwwwwwwWwwo.", ".oooowwwWwwwwwwwwwoo..", ".....owwwwwwswwwwo....", "......oofwfwwofofo....", ".......ofofooofofo....", ".......ofofo.ofofo....", ".......ofoo..ofoo.....", "........o.....o......."], ["......................", "......................", "..........oooo........", "......oooowwwwoooo....", "....oowwwwwwwWwwwwo...", "..ooffwwwWwwwwwwwwwo..", ".offffwwwwwwwwwwWwwo..", "offefffwwwwwwwwwwwwwo.", "offffffwwswwswwswwwwo.", "offfffwwwwWwwwWwwwwwo.", "onffwwwwwwwwwwwwwWwwo.", ".oooowwwWwwwwwwwwwoo..", ".....owwwwwwswwwwo....", "......oofwfwwofofo....", ".......ofofooofofo....", ".......ofofo.ofofo....", "........oofo..oofo....", "..........o.....o....."]], "big": 1, "aura": 0}, "witranalwe": {"pal": {"H": "#1c1c2e", "h": "#7a6a9a", "q": "#141428", "F": "#d0e0f8", "f": "#8aa0c8", "E": "#40f0ff", "e": "#1a6a90", "P": "#2c2c50", "p": "#46467a", "s": "#d0dcf0", "A": "#26264a", "K": "#d0e0f8", "L": "#121220", "o": "#06060e"}, "f": [["......oHHHHHHHHHHHHo......", "......oHHHHHHHHHHHHo......", "......oHHHHHHHHHHHHo......", "..ooooohhhhhhhhhhhhooooo..", ".oHHHHHHHHHHHHHHHHHHHHHHo.", ".oHHHHHHHHHHHHHHHHHHHHHHo.", "..oqqqqqqqqqqqqqqqqqqqqo..", "...ooooooFFFFFFFFoooooo...", "........oFFFFFFFFo........", "........oFEFFFFEFo........", "........oFeFFFFeFo........", "........ofFFFFFFfo........", "........ofFffffFfo........", ".........offffffo.........", ".....ooooooFFFFoooooo.....", "....oPPPqqPPqqPPqqPPPo....", "....oPAqqqPPqqPPqqqAPo....", ".....oAqqqPPqqPPqqqAo.....", ".....oAqqqPpqqpPqqqAo.....", ".....oAqqqPpqqpPqqqAo.....", "....oAqqqPPpqqpPPqqqAo....", "....oAqqqPPpqqpPPqqqAo....", "....oAqqssspqqsssqqqAo....", "....oAqqsPPsqqsPPsqqAo....", "....oAqssPPpqqsPPqsqAo....", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "..oAqqqPPPPpqqpPPPPqqqAo..", "..oAqqqPssspqqsssPPqsqAo..", "..oAqsqPsPPsqqsPPsPqsqAo..", "..oAqqsssPPpqqsPPPsssqAo..", "..oAqqqPPPPpqqpPPPPqqqAo..", ".oAqqqPPPPPpqqpPPPPPqqqAo.", ".oAqqqPPPPPpqqpPPPPPqqqAo.", ".oAqqqPPPPPpqqpPPPPPqqqAo.", ".oAqqqPPPPPppppPPPPPqqqAo.", ".oAAoooooLLooooLLoooooAAo.", ".oAAo...oLLo..oLLo...oAAo.", ".oAAo...oLLo..oLLo...oAAo.", ".oAAo...oLLo..oLLo...oAAo.", ".oAAo...oLLo..oLLo...oAAo.", "ooAAo...oLLo..oLLo...oAAoo", "KKKo....oLLo..oLLo....oKKK", "KKKo....oLLo..oLLo....oKKK", "KKKo....oLLo..oLLo....oKKK", "KoKo....oLLo..oLLo....oKoK", "o.o.....oLLo..oLLo.....o.o", "........oLLo..oLLo........", "........oLLo..oLLo........", "........oLLo..oLLo........", "........oLLo..oLLo........", ".......oLLLo..oLLLo.......", "........ooo....ooo........", ".........................."], ["......oHHHHHHHHHHHHo......", "......oHHHHHHHHHHHHo......", "......oHHHHHHHHHHHHo......", "..ooooohhhhhhhhhhhhooooo..", ".oHHHHHHHHHHHHHHHHHHHHHHo.", ".oHHHHHHHHHHHHHHHHHHHHHHo.", "..oqqqqqqqqqqqqqqqqqqqqo..", "...ooooooFFFFFFFFoooooo...", "........oFFFFFFFFo........", "........oFEFFFFEFo........", "........oFeFFFFeFo........", "........ofFFFFFFfo........", "........ofFffffFfo........", ".........offffffo.........", ".....ooooooFFFFoooooo.....", "....oPPPqqPPqqPPqqPPPo....", "....oPAqqqPPqqPPqqqAPo....", ".....oAqqqPPqqPPqqqAo.....", ".....oAqqqPpqqpPqqqAo.....", ".....oAqqqPpqqpPqqqAo.....", "....oAqqqPPpqqpPPqqqAo....", "....oAqqqPPpqqpPPqqqAo....", "....oAqqssspqqsssqqqAo....", "....oAqqsPPsqqsPPsqqAo....", "....oAqssPPpqqsPPqsqAo....", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "...oAqqqPPPpqqpPPPqqqAo...", "..oAqqqPPPPpqqpPPPPqqqAo..", "..oAqqqPssspqqsssPPqsqAo..", "..oAqsqPsPPsqqsPPsPqsqAo..", "..oAqqsssPPpqqsPPPsssqAo..", ".ooAqqqPPPPpqqpPPPPqqqAoo.", "oAqoqqPPPPPpqqpPPPPPqqoqAo", "oAqoqqPPPPPpqqpPPPPPqqoqAo", "oAqoqqPPPPPpqqpPPPPPqqoqAo", "oAqoqqPPPPPppppPPPPPqqoqAo", "oAAooooooLLooooLLooooooAAo", "oAAo....oLLo..oLLo....oAAo", "oAAo....oLLo..oLLo....oAAo", "oAAo....oLLo..oLLo....oAAo", "oAAo....oLLo..oLLo....oAAo", "oAAo....oLLo..oLLo....oAAo", "KKo.....oLLo..oLLo.....oKK", "KKo.....oLLo..oLLo.....oKK", "KKo.....oLLo..oLLo.....oKK", "oKo.....oLLo..oLLo.....oKo", ".o......oLLo..oLLo......o.", "........oLLo..oLLo........", "........oLLo..oLLo........", "........oLLo..oLLo........", "........oLLo..oLLo........", ".......oLLLo..oLLLo.......", "........ooo....ooo........", ".........................."]], "big": 2, "aura": "170,220,255"}, "chonchon": {"pal": {"s": "#d6a27a", "S": "#a06a48", "h": "#1c1418", "W": "#f4f0e6", "r": "#ff2a2a", "k": "#5a0a0a", "q": "#c87860", "m": "#3a0e0e", "w": "#5a3a5c", "v": "#82587c", "b": "#24142a", "c": "#e8e0d0", "o": "#0e060e"}, "f": [[".occo......................occo.", "..obo......................obo..", "..owbo....................obwo..", "..owwbo.....oooooooo.....obwwo..", "..owwwbo..oohhhhhhhhoo..obwwwo..", ".owwwwbboohhhhhhhhhhhhoobbwwwwo.", "owwwwwwbbohhhhhhhhhhhhobbwwwwwwo", "wwwwwwwwbbhhhhhsshhhhhbbwwwwwwww", "bbbwwwwwwbhhshhhhhhShhbwwwwwwbbb", "ooobbbbbbvhhhhsssshhhhvbbbbbbooo", "...owwwvvbhhsshsshSShhbvvwwwo...", "...owwwwvbssWrssssrWSSbvwwwwo...", "...owwwwbossWksSsskWSSobwwwwo...", "..owwwobo.ossssSssSSSo.obowwwo..", "...owbbo..oqsssSSsSSqo..obbwo...", "...oboo....osSssssSSo....oobo...", "....o......osmmmmmmSo......o....", "............ooWmmWoo............", ".............oSSSSo.............", "..............oooo..............", "................................", "................................"], ["................................", "................................", "................................", "............oooooooo............", ".oo.......oohhhhhhhhoo.......oo.", "occoo....ohhhhhhhhhhhho....oocco", ".obbbooo.ohhhhhhhhhhhho.ooobbbo.", "..owwbbboohhhhhsshhhhhoobbbwwo..", "..owwwbbbbhhshhhhhhShhbbbbwwwo..", "..owwwwwvbhhhhsssshhhhbvwwwwwo..", ".owwwwwvvvhhsshsshSShhvvvwwwwwo.", ".owwwwwbbbssWrssssrWSSbbbwwwwwo.", "owwbbbbwwvssWksSsskWSSvwwbbbbwwo", "obbwwwwwwbossssSssSSSobwwwwwwbbo", ".oooowwwwboqsssSSsSSqobwwwwoooo.", "....owwwbo.osSssssSSo.obwwwo....", ".....owobo.osmmmmmmSo.obowo.....", ".....owbo...ooWmmWoo...obwo.....", "......obo....oSSSSo....obo......", ".....obo......oooo......obo.....", "......o..................o......", "................................"]], "big": 2, "aura": 0}, "kutral": {"pal": {"r": "#d82818", "O": "#f87818", "y": "#f8d040", "w": "#fff8d0", "k": "#3a0808", "o": "#2a0806"}, "f": [["......orro......", "......orro......", ".....orrrrooo...", "...ooorOOrorro..", "..orrorOOrorro..", "..orrorOOrorro..", "..orrooOOooOOo..", "..oOOrrOOrrOOo..", "..oOOrOOOOrOOo..", "..oOOOOOOOOrro..", ".orrOOOOOOOOrro.", ".orrOOkyyykOrro.", ".orOOykyyykOOro.", ".orOOyywwyyOOro.", ".orrOywwwwyOrro.", "..orOywkkkyOro..", "...orOywwyOro...", "....orOOOOro....", ".....oooooo....."], [".......oo.......", "......orro......", "...oo.orro......", "..orroorro.oo...", "..orrorOOrorro..", "..orrorOOrorro..", "..oOOooOOoorro..", "..oOOrrOOrrOOo..", "..oOOrOOOOrOOo..", "..orrOOOOOOOOo..", ".orrOOOOOOOOrro.", ".orrOOkyyykOrro.", ".orOOykyyykOOro.", ".orOOyywwyyOOro.", ".orrOywwwwyOrro.", "..orOywkkkyOro..", "...orOywwyOro...", "....orOOOOro....", ".....oooooo....."]], "big": 2, "aura": 0}, "pire": {"pal": {"w": "#f4faff", "b": "#a8c8f0", "c": "#60e0ff", "k": "#1a3a7a", "o": "#203060"}, "f": [["..................", "...............o..", "..o...oooooo..oco.", ".ocooowwwwwbooccco", "occcwwwwwwwbbboco.", ".ocowwwwwwwbbboo..", "..owwwwwwwwbbbbo..", "..owwwckwwwckbbo..", ".oowwwkkwwwkkbbo..", "ocowwwwwwwwbbbboo.", "cccowwwwwwwbbbooco", "ocoowwwwkkwbbboccc", ".o..owwwwwwbbo.oco", "....owwwwwwbbo..o.", ".....owwwwwoo.....", ".....owwbbwo......", "......oobbo.......", "........oo........"], ["..................", "...............o..", "..o...oooooo..oco.", ".ocooowwwwwbooccco", "occcwwwwwwwbbboco.", ".ocowwwwwwwbbboo..", "..owwwwwwwwbbbbo..", "..owwwckwwwckbbo..", ".oowwwkkwwwkkbbo..", "ocowwwwwwwwbbbboo.", "cccowwwwwwwbbbooco", "ocoowwwwkkwbbboccc", ".o..owwwwwwbbo.oco", "....owwwwwwbbo..o.", ".....owwwwwoo.....", ".....owwwwwo......", "......owbbo.......", ".......obbo......."]], "big": 2, "aura": 0}, "kura": {"pal": {"g": "#8a8a90", "G": "#5a5a64", "k": "#2a2a30", "e": "#ff8a20", "h": "#c0c0c8", "o": "#16161c"}, "f": [["....................", ".......oooooo.......", ".....ooggggggoo.....", "....oggggghggGGo....", "....ogggghgggGGo....", "...ogggeegggeeGGo...", "...ogkgggggggkGGo...", ".oogggggggggkGGGGo..", "oGGGgghggggggGGGGoo.", "oGGGgggkgggggGGGGGGo", "oGGGggggkggggGGGGGGo", "oGGGggggkggggGGGGGGo", "oGGGgggggggkgGGGGGGo", ".oooGGGGGGGGkGGGGGGo", "...oGGGGGGGGGGGGooo.", "....oGGGGooGGGGo....", "....oGGGGooGGGGo...."], ["....................", ".......oooooo.......", ".....ooggggggoo.....", "....oggggghggGGo....", "....ogggghgggGGo....", "...ogggeegggeeGGo...", "...ogkgggggggkGGo...", "..ogggggggggkGGGGoo.", ".ooggghggggggGGGGGGo", "oGGGgggkgggggGGGGGGo", "oGGGggggkggggGGGGGGo", "oGGGggggkggggGGGGGGo", "oGGGgggggggkgGGGGGGo", "oGGGGGGGGGGGkGGGooo.", ".oooGGGGGGGGGGGGo...", "....oGGGGooGGGGo....", "....oGGGGooGGGGo...."]], "big": 2, "aura": 0}, "nirivilu": {"pal": {"o": "#d8742a", "O": "#a85018", "w": "#f4e8d8", "k": "#1a1010", "y": "#f8e040", "s": "#3a8a5a", "S": "#1e5a38"}, "f": [["................................", "...o..o.........................", "..oOooOo........................", "...okooko..................oo...", "...ooooo..................osSoo.", ".ooooooo.................oosssso", "ooooyooo.oo.............ossoosso", "koookooooooooo..........osso.oSo", "owwwwoooooooooo.........ooSo..o.", ".owwoooooooooooo......oosSo.....", "..oo.ooowwwwooosoooooosssso.....", ".....oowwwwwwoosssssssssso......", ".....oOOwwwwOOssssssSsssso......", ".....oOOooooOOsssssssssSo.......", ".....oOOo..oOOossSsssooo........", ".....okko..okkooooooo...........", "......oo....oo..................", "................................"], ["................................", "...o..o.........................", "..oOooOo.....................oo.", "...okooko...................osso", "...ooooo....................osso", ".ooooooo...................osSSo", "ooooyooo.oo................osso.", "koookooooooooo.............ooo..", "owwwwoooooooooo...........osso..", ".owwoooooooooooo..........osso..", "..oo.ooowwwwoooso.....oo.oooSo..", ".....oowwwwwwoosoooooossosSoo...", ".....oOOwwwwOOssssssssssssso....", ".....oOOooooOOssssssSssssoo.....", ".....oOOo..oOOossssssssSo.......", ".....okko..okkossSsssooo........", "......oo....oo.oooooo...........", "................................"]], "big": 2, "aura": 0}, "cherrufe": {"pal": {"b": "#3a3036", "B": "#241c22", "r": "#e83018", "O": "#f89020", "y": "#ffe060", "w": "#ffffff", "l": "#f86018", "L": "#f8a028", "k": "#1a0606", "o": "#0e0608"}, "f": [["................orrrrOOrrrro................", "..............ooorrrrOOrrrrooo..............", ".............orrorOOrOOrOOrorro.............", "............orrrrrOOrOOrOOrrrrro............", "............orrrrrOOrOOrOOrrrrro............", "............orOOrrOOrOOrOOrrOOro............", "............orOOroOOrOOrOOorOOro............", "............orOOrbrrbrrbrrbrOOro............", "............orOOrbbbbbbbbbbrOOro............", ".............oOObbbbbbbbbbbBOOo.............", "..............obBBBBbbbbBBBBBo..............", ".............obbbbbbbbbbbbbBBBo.............", ".............obbbywybbbbywyBBBo.............", ".............obbbyyybbbbyyyBBBo.............", ".............obbbbbbbbbbbbbBBBo.............", "..............obbbbbbbbbbbbBBo..............", "..............obbblkLLLLklbBBo..............", "..............obbbkkkkkkkkbBBo..............", ".............obbbbbbbbbbbbbBBBo.............", "...ooooooo..obbbbbbbbbbbbbbBBBBo..ooooooo...", "..obbbbbbboobbbbbbbbbbbbbbbBBBBBooBBBBBBBo..", "..obbbbbbboobbbbbbbbbbbbbblBBBBBooBBBBBBBo..", "..obbbbbbbbbbbbbbblbbbbbblbBBBBBBBBBBBBBBo..", "..obbbbbbbbbbbbbbbblbbbbblbBBBBBBBBBBBBBBo..", "..obbbbbbbbbbbbbbbblbbbblbbBBBBBBBBBBBBBBo..", ".oBBBBBBbbbbbbbbbbbbLLLLbbbBBBBBBBBBBBBBBBo.", ".oBBBBBBoobbbbbbbbbLLyyLLbbBBBBBBBooBBBBBBo.", ".oBBlBBBoobbbbbbbbbLyyyyLbbBBBBBBBooBBBlBBo.", ".oBBBlBBoobbbblbbbbLyyyyLbbBBlBBBBooBBlBBBo.", ".oBBBBBBoobbbbblbbbLLyyLLbbBBBlBBBooBBBBBBo.", ".oBBBBBBoobbbbbbbbbbLLLLbbbBBBBBBBooBBBBBBo.", ".oBBBBBBoobbbbbbbbbbbbllbbbBBBBBBBooBBBBBBo.", ".oBBBBBBoobbbbbbbbbbbbbblbbBBBBBBBooBBBBBBo.", ".oBBBBBBoobbbbbbbbbbbbbbbbbBBBBBBBooBBBBBBo.", ".oBBBBBBo.ooobbbbbbbbbbbbbbBBBBooo.oBBBBBBo.", ".oBBBBBBo....obbbbbbbbbbbbbBBBo....oBBBBBBo.", "obbbbbbbbo..oBBBbbbbbbbbbbbBBBBo..oBBBBBBBBo", "obbbbbbbbo..oBBBBBbbbbbbbbBBBBBo..oBBBBBBBBo", "obbbbbbbbo..oBBBlBBooooooBBlBBBo..oBBBBBBBBo", "obbbbbbbbo..oBBBBBBo....oBBBBBBo..oBBBBBBBBo", ".oooooooo...oBBBBBBo....oBBBBBBo...oooooooo.", "............oBBBBBBo....oBBBBBBo............", "............oBBBBBBo....oBBBBBBo............", "...........oBBBBBBBBo..oBBBBBBBBo...........", "...........oBBBBBBBBo..oBBBBBBBBo...........", "............oooooooo....oooooooo............"], ["................orrrrOOrrrro................", "................orrrrOOrrrro................", "..............ooorOOrOOrOOrooo..............", ".............orrorOOrOOrOOrorro.............", "............orrrrrOOrOOrOOrrrrro............", "............orOOrrOOrOOrOOrrOOro............", "............orOOrrOOrOOrOOrrOOro............", "............orOOrbrrbrrbrrbrOOro............", "............orOOrbbbbbbbbbbrOOro............", ".............oOObbbbbbbbbbbBOOo.............", "..............obBBBBbbbbBBBBBo..............", ".............obbbbbbbbbbbbbBBBo.............", ".............obbbywybbbbywyBBBo.............", ".............obbbyyybbbbyyyBBBo.............", ".............obbbbbbbbbbbbbBBBo.............", "..............obbbbbbbbbbbbBBo..............", "..............obbblkLLLLklbBBo..............", "..............obbbkkkkkkkkbBBo..............", ".............obbbbbbbbbbbbbBBBo.............", "............obbbbbbbbbbbbbbBBBBo............", "...ooooooo.obbbbbbbbbbbbbbbBBBBBo.ooooooo...", "..obbbbbbboobbbbbbbbbbbbbblBBBBBooBBBBBBBo..", "..obbbbbbbbbbbbbbblbbbbbblbBBBBBBBBBBBBBBo..", "..obbbbbbbbbbbbbbbblbbbbblbBBBBBBBBBBBBBBo..", "..obbbbbbbbbbbbbbbblbbbblbbBBBBBBBBBBBBBBo..", "..obbbbbbbbbbbbbbbbbLLLLbbbBBBBBBBBBBBBBBo..", ".oBBBBBBbbbbbbbbbbbLLyyLLbbBBBBBBBBBBBBBBBo.", ".oBBlBBBoobbbbbbbbbLyyyyLbbBBBBBBBooBBBlBBo.", ".oBBBlBBoobbbblbbbbLyyyyLbbBBlBBBBooBBlBBBo.", ".oBBBBBBoobbbbblbbbLLyyLLbbBBBlBBBooBBBBBBo.", ".oBBBBBBoobbbbbbbbbbLLLLbbbBBBBBBBooBBBBBBo.", ".oBBBBBBoobbbbbbbbbbbbllbbbBBBBBBBooBBBBBBo.", ".oBBBBBBoobbbbbbbbbbbbbblbbBBBBBBBooBBBBBBo.", ".oBBBBBBoobbbbbbbbbbbbbbbbbBBBBBBBooBBBBBBo.", ".oBBBBBBo.ooobbbbbbbbbbbbbbBBBBooo.oBBBBBBo.", ".oBBBBBBo....obbbbbbbbbbbbbBBBo....oBBBBBBo.", ".oBBBBBBo...oBBBbbbbbbbbbbbBBBBo...oBBBBBBo.", "obbbbbbbbo..oBBBBBbbbbbbbbBBBBBo..oBBBBBBBBo", "obbbbbbbbo..oBBBlBBooooooBBlBBBo..oBBBBBBBBo", "obbbbbbbbo..oBBBBBBo....oBBBBBBo..oBBBBBBBBo", "obbbbbbbbo..oBBBBBBo....oBBBBBBo..oBBBBBBBBo", ".oooooooo...oBBBBBBo....oBBBBBBo...oooooooo.", "............oBBBBBBo....oBBBBBBo............", "...........oBBBBBBBBo..oBBBBBBBBo...........", "...........oBBBBBBBBo..oBBBBBBBBo...........", "............oooooooo....oooooooo............"]], "big": 2, "aura": "255,130,50"}};
 
 /* ============================================================
    RETRO GRAPHICS (drawn at 256x224, shown at 2x)
@@ -455,6 +507,8 @@ const LOOKS={
   walker:{t:'M',p:'#7a6a4a',P:'#5a4a30',b:'#c0a020',r:'#c0a020'},
   kona:{t:'M',p:'#2a5a3a',P:'#1a3a26',b:'#f0f0f0',r:'#e0b040'},
   lonko2:{t:'M',p:'#3a3a6a',P:'#24244a',w:'#e8d8a0',r:'#c82828',b:'#c82828',s:'#c47c4c',S:'#985830'},
+  lonko3:{t:'M',p:'#6a4a2a',P:'#4a3018',w:'#f0e0b0',r:'#2a64c8',b:'#2a64c8',s:'#c88050',S:'#9a5a30'},
+  elder2:{t:'F',h:'#c8c8d0',H:'#f0f0f8',c:'#3a5a8a',C:'#24406a',r:'#e0b040',s:'#c08858',S:'#8a5a34'},
   elder:{t:'M',h:'#c8c8d0',H:'#f0f0f8',p:'#5a4a3a',P:'#3a2e24',b:'#8a2458',r:'#e8d8a0',s:'#b8784c',S:'#8a5634'}};
 const CCACHE={};
 function charSprite(look,dir,fr){
@@ -478,6 +532,12 @@ function dogSprite(fr,dir){const key='dog'+fr+dir;if(CCACHE[key])return CCACHE[k
   (fr?DOG2:DOG).forEach((r,y)=>{for(let x=0;x<16;x++){const ch=r[x];if(ch!=='.'){c.fillStyle=ch==='o'?'#181018':ch==='e'?'#000':'#a06838';c.fillRect(x,y,1,1)}}});
   return CCACHE[key]=dir==='right'?mirror(cvs):cvs}
 function drawNgen(c,x,y,s,t,v){
+  if(v==='pewen'){const b=k=>Math.round(k*s);
+    for(const [r,a] of [[16,.08],[12,.12],[9,.16]])ell(c,x,y-b(14),b(r),b(r*1.15),'rgba(255,220,160,'+a+')');
+    ell(c,x,y-b(2),b(7),b(2.2),'#3a2a1a');R(c,x-b(2),y-b(18),b(4),b(17),'#7a5a3a');R(c,x,y-b(18),b(2),b(17),'#5a3a22');
+    for(let i=0;i<5;i++){const yy=y-b(18)-b(i*2.2),w=b(9-i*1.4);R(c,x-w,yy,w*2,Math.max(1,b(1.2)),'#2e6a3a');R(c,x-w,yy-b(1),Math.max(1,b(1.4)),Math.max(1,b(1.4)),'#2e6a3a');R(c,x+w-b(1.4),yy-b(1),Math.max(1,b(1.4)),Math.max(1,b(1.4)),'#2e6a3a')}
+    ell(c,x,y-b(10),b(3.4),b(3.4),'#c8a070');R(c,x-b(1.6),y-b(11),Math.max(1,b(.9)),Math.max(1,b(1.2)),'#3a2410');R(c,x+b(.8),y-b(11),Math.max(1,b(.9)),Math.max(1,b(1.2)),'#3a2410');
+    for(let i=0;i<6;i++){const a=t/22+i*1.05;R(c,x+Math.round(Math.cos(a)*b(10)),y-b(14)+Math.round(Math.sin(a)*b(12)),Math.max(1,b(.7)),Math.max(1,b(.7)),'#fff0c0')}return}
   if(v==='mawida'){const b=k=>Math.round(k*s);
     for(const [r,a] of [[16,.08],[12,.12],[9,.16]])ell(c,x,y-b(14),b(r),b(r*1.15),'rgba(200,240,140,'+a+')');
     ell(c,x,y-b(2),b(8),b(2.5),'#4a3a1a');ell(c,x,y-b(10),b(5),b(9),'#5a8a2a');ell(c,x-b(1),y-b(12),b(3.4),b(6.5),'#8ac850');
@@ -501,7 +561,7 @@ function enemyCanvas(t,size,fr){
   if(typeof SPR2!=='undefined'&&SPR2[t]){const d=SPR2[t],k=size>=40?(d.big||1):1,base=tplCanvas(t,fr,k);
     if(!d.aura)return ECACHE[key]=base;
     const pd=6*k,[cv,cc]=mk(base.width+pd*2,base.height+pd);
-    for(const [r,al] of [[1,.10],[.8,.12],[.6,.14]]){cc.fillStyle='rgba(170,220,255,'+al+')';cc.beginPath();cc.ellipse(cv.width/2,cv.height*.45,cv.width/2*r,cv.height/2*r,0,0,6.283);cc.fill()}
+    for(const [r,al] of [[1,.10],[.8,.12],[.6,.14]]){cc.fillStyle='rgba('+d.aura+','+al+')';cc.beginPath();cc.ellipse(cv.width/2,cv.height*.45,cv.width/2*r,cv.height/2*r,0,0,6.283);cc.fill()}
     cc.drawImage(base,pd,pd);return ECACHE[key]=cv}
   const pad=3,s=size/16,[cvs,c]=mk(size+pad*2,size+pad*2);
   const E=(cx,cy,rx,ry,col)=>ell(c,pad+cx*s,pad+cy*s,rx*s,ry*s,col);
@@ -571,6 +631,13 @@ function treeCanvas(v,style){
     for(const [x,y,rx,ry] of lobes)ell(c,x-1,y-1,rx*.5,ry*.5,'#9ab442');
     for(let i=0;i<18;i++){const px=2+Math.floor(h2(i,v,61)*20),py=2+Math.floor(h2(i,v,62)*12);if(h2(i,v,63)<.6)R(c,px,py,1,1,h2(i,v,64)<.5?'#c8d468':'#3a5414')}
     outline(cvs,'#1a2408');return PCACHE[k]=cvs}
+  if(style==='pewen'){const [cvs,c]=mk(24,40);
+    R(c,10,10,4,28,'#6a4a30');R(c,12,10,2,28,'#4a3020');for(let y=12;y<38;y+=3)R(c,10,y,4,1,'#5a3a24');R(c,8,37,8,2,'#4a3020');
+    const tiers=[[12,4,11,2.4],[12,8,10,2.2],[12,12,8,2],[12,15,6,1.8]];
+    for(const [x,y,rx,ry] of tiers){ell(c,x,y+1,rx,ry,'#1c4428');ell(c,x,y,rx-.6,ry-.5,'#2e6a3a');R(c,x-rx,y-2,2,2,'#2e6a3a');R(c,x+rx-2,y-2,2,2,'#2e6a3a');R(c,x-rx+1,y-3,1,1,'#4a8a52');R(c,x+rx-2,y-3,1,1,'#4a8a52')}
+    ell(c,12,2,5,1.6,'#2e6a3a');R(c,9,1,6,1,'#4a8a52');
+    for(let i=0;i<10;i++){const px=2+Math.floor(h2(i,v,81)*20),py=1+Math.floor(h2(i,v,82)*15);if(h2(i,v,83)<.5)R(c,px,py,1,1,'#5a9a5e')}
+    outline(cvs,'#0a1a10');return PCACHE[k]=cvs}
   if(style==='mawida'){const [cvs,c]=mk(22,34);
     R(c,9,22,4,10,'#3a2a1a');R(c,11,22,2,10,'#24180e');R(c,8,31,6,1,'#2e2014');R(c,9,25,1,2,'#4a6a3a');R(c,12,28,1,2,'#4a6a3a');
     const tiers=[[11,20,9,4],[11,15,8,4],[11,10,6.5,4],[11,5.5,4.5,3.5],[11,2.5,2.5,2]];
@@ -659,6 +726,7 @@ function dynCanvas(ch,f){
   case 'H':ell(c,8,9,6.5,6.5,'#7a7a8a');ell(c,7,8,5,5,'#9a9aaa');R(c,5,7,2,2,'#2a2a3a');R(c,9,7,2,2,'#2a2a3a');R(c,6,11,4,1,'#2a2a3a');R(c,5,6,2,1,'#c0c0d0');R(c,3,12,4,2,'#3a8a3a');R(c,10,3,3,2,'#3a8a3a');break;
   case 'E':R(c,0,0,16,16,'#6a6a7a');R(c,0,0,16,2,'#a8a8b8');R(c,1,2,14,13,'#7e7e8e');R(c,7,3,2,10,'#3a3a4a');R(c,4,6,8,2,'#3a3a4a');R(c,5,10,6,2,'#3a3a4a');R(c,0,14,16,2,'#4a4a5a');break;
   case 'A':ol=null;{const ph=f*.8;ell(c,8,9,7,4.5,'rgba(120,200,255,.35)');for(let a=0;a<16;a++){const an=a/16*Math.PI*2+ph;R(c,8+Math.cos(an)*6,9+Math.sin(an)*3.6,1,1,a%2?'#ffffff':'#9fd8ff')}ell(c,8,9,2.5,1.5,'#e8f8ff');R(c,7,1+(f%2),2,5,'rgba(220,245,255,.7)')}break;
+  case '^':ell(c,8,11,7.8,5,'#b8c8dc');ell(c,8,9,7,5,'#e8f0f8');ell(c,6,7,4,3,'#ffffff');R(c,3,12,10,1,'#9aaac0');break;
   case 'Ñ':ell(c,8,9,7.5,6.5,'#2a4a1a');ell(c,7,8,6,5,'#3a6a24');for(let i=0;i<14;i++){const a=i/14*6.28;R(c,8+Math.cos(a)*6.5,9+Math.sin(a)*5.5,1,1,'#c8b070')}for(let i=0;i<6;i++)R(c,4+i*2,5+(i%3)*3,1,1,'#e04060');break;
   case 'X':ol=null;{const ph=f*1.57;ell(c,8,12,6,2,'rgba(0,0,0,.25)');for(let i=0;i<4;i++){const a=ph+i*1.57;ell(c,8+Math.cos(a)*4,8+Math.sin(a)*2-i,4.4-i*.5,1.5,i%2?'#ecf2fa':'#aab8c6')}for(let i=0;i<3;i++)R(c,1+((f+i)%4)*3,3+i*4,4,1,'#ffffff')}break;
   case 'v':ol=null;for(let r=0;r<3;r++){const rr=7-r*2;for(let a=0;a<20;a++){const an=a/20*Math.PI*2+f*.8*(r%2?1:-1);if(a%3===0)continue;R(c,8+Math.cos(an)*rr,8+Math.sin(an)*rr*.8,1,1,r===0?'#163e6e':r===1?'#9fd0ff':'#ffffff')}}ell(c,8,8,1.4,1.1,'#0a2448');break;
@@ -674,7 +742,7 @@ function drawHeart(c,x,y,q){
     R(c,x+xx,y+yy,1,1,col)}
 }
 
-const MAPROWS={"rupu": ["~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "~~~~~..~~~~~~~~~~...~~~~~~~..~", "~~~.........~~~~.......~~~...~", "#.......F................#...#", "#....,,,..........,,,...,,,..#", "==============================", "#.,,,...........,,,,.....,,,.#", ",,TT,,....TT...,,TTT,,..,,TT,T", ",TTT,,..,TTT,,,,TTTT,,,,,TTT,T", "P,,TT,,,,,,TT,,,,,TT,,,\"\",,,,T", ",,,,,,,,,g,,,,,,,,,,,,\"\"\",,,,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "lof": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,PT", "T,RRR,Z,,,,,,,,,,,,,,,,,,,,,RRR,,T", "T,RRR,,,,,,YYYYYYYYYYYY,,,,,RRR,,T", "T,,,,,,,,,,YYYYYYYYYYYY,,,,,,,,,,T", "T,,,,,,,,,,YYYYYYYYYYYY,,,,,,,,,,T", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "T,RRR,,,,,,,,,,,,F,,,,,,,,,,RRR,,T", "T,RRR,,,,,,,,,,,,,,,,,,,,U,,RRR,,T", "==================================", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "T,,RRR,,,,,,,V,,,,,,,,,,,RRR,,,,,T", "T,,RRR,,,,,,,,,,,,,,,,,,,RRR,,,,,T", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "kuyum": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T....\"\"\"\".......~~~~~~~~~~~....T", "T..m.\"\"\"\"\"\"......~~~~~~~~~~....T", "T....\"\"\"\"\"......~v~~~~~~~~~....T", "T.....N...............XXXXX.N..T", "T..T......\"\"\"\"......I.XC..X....T", "T.........\"\"\"\"........XXXXX..F.T", "================................", "T....,,,,.....\"\"\"\"..N...........", "T..p.,TT,.....\"\"\"\"........#####T", "T....,,,,...N.....P.......E,,C,T", "T.......\"\"\"\".............I#,,,,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "mawida": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T,,,,TT,,,,,,,,\"\"\"\",,,,TT,,,,,PT", "T,,,,TT,,,##,,,\"\"\"\",,,,TT,,,,,,T", "T,,,,,,,,,##,,,,,,,,,,,,,,,,##,T", "T,,\"\",,,,,,,,,,TTTT,,,,,,,,,##,T", "T,,\"\",,F,,,,,,,TTTT,,,,\"\",,,,,,T", "T,,,,,,,,,,,,,,,,,,,,,,\"\",,,,,,T", "================================", "T,,,,,,,,TT,,,,,,,,,,,,,,,,,,,,T", "T,,##,,,,TT,,,,\"\"\"\",,,,TTT,,,,,T", "T,,##,,,,,,,,,,\"\"\"\",,,,TTT,H,F,T", "T,,,,,,TTT,,,,,,,,,,,,,,,,TTETTT", "T,,,,,,TTT,,,,,,,,,,##,,,,T,,,,T", "T,,,,,,,,,,,,,,,,,,,,##,,,T,gC,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "inaltu": ["~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~...~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~.S.~~~~~~~~~", "~~~~..~~~~~~~~~~~~~~...v~~~~~~~~", "~~.......~~~~~~~~~~~.=.~~~~~~~~~", "......\"\"\"......~~~~~.=.~~~~....~", "=====================.=====.....", "...RRR.....\"\"\"...F...........RRR", "...RRR..,,,,,................RRR", "P........,,,,,,....\"\"\"..........", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "d1": ["%%%%%%%%%%%%%%%%%%%%%%", "%F_____%%%%%%%_____%C%", "%______%%%%%%%______E%", "%______K_____L_______%", "%______%%%%%%%J__J__J%", "%__k___%%%%%%%__%%%__%", "_______%%%%%%%__%%%__%", "%______%%%%%%%____I__%", "%_C____%%%%%%%______%%", "%______%%%%%%%______S%", "%%%%%%%%%%%%%%%%%%%%%%"], "d2": ["%%%%%%%%%%%%%%%%%%%%%%", "%F_____%%%_______%%%%%", "%__B___%%%__H____%%%%%", "%______G_________K__S%", "%____O_%%%___E___%%%%%", "%______%%%__%C%__%%%%%", "_______%%%___%___%%%%%", "%______%%%%%%%%%%%%%%%", "%%%%%%%%%%%%%%%%%%%%%%"], "d3": ["%%%%%%%%%%%%%%%%%%%%%%", "%F____%________%%%%%%%", "%_____%_B____B_%____%%", "%__k__L________G____S%", "%_____%__O__O__%____%%", "%_____%________%_____%", "______%%%%%%%%%%F____%", "%%%%%%%%%%%%%%%%%%%%%%"], "ngen": ["~~~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~", "~~~~~......~~~~~~~", "~~~~..........~~~~", "~~~............~~~", "~~~............~~~", "~~~~..........~~~~", "~~~~~~..A...~~~~~~", "~~~~~~~....~~~~~~~", "~~~~~~~....~~~~~~~", "~~~~~~~.F..~~~~~~~", "~~~~~~~.S.~~~~~~~~", "~~~~~~~~~~~~~~~~~~"], "n_rupu": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T,,,,,,,,,,ffffffffff,,,,,T,,,,T", "T,,\"\",,,,,,fWWWWWWWWf,,,,,T,P,,T", "T,,\"\",,F,,,fWWWWWWWWf,,,,,T,,,,T", "T,,,,,,,,,,fWWWWWWWWf,,,,,TÑTTTT", "T,,,,,,,,,,ffffffffff,,,,,,,,,,T", "T,,TT,,,,,,,,,,,,,,,,,,,,,\"\",,,T", "================================", "T,,,,,,\"\",,,,,,,,,,,,TT,,,,,,,,T", "T,,##,,\"\",,,TT,,,,,,,TT,,,,##,,T", "T,,##,,,,,,,TT,,,,,,,,,,,,,##,,T", "T,,,,I,,,,,,,,,g,,,,,,,,,,,,,,,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "n_lof": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,PT", "T,RRR,,,,,,,,,,,,,,,,ffffffffff,,T", "T,RRR,,,,,,,,,,,,,,,,f,,,,,,,,f,,T", "T,,,,,,,,,,,,,,,,,,,,f,,,,,,,,f,,T", "T,,,,,,,,RRR,,,,,,,,,ffffffffff,,T", "T,,,,,,,,RRR,,,,,,,,,,,,,,,,,,,,,T", "T,,RRR,,,,,,,,,,,F,,,,,,,,,RRR,,,T", "T,,RRR,,,,,,,,,,,,,,,,,,,,,RRR,,,T", "==================================", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "n_kullin": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T,,,,,,,,ffffffff,,,,,,,,,,,,,,T", "T,,,,,,,,f,,,,,,f,,,,,,,,,,,,,,T", "T,,,,,,,,f,,,,,,f,,,,,,TTT,,,,,T", "T,,F,,,,,ffff,fff,,,,,,TTT,,,,,T", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "T,,,\"\",,,,,,,,,,,,,,,,,,,,\"\",,,T", "================================", "T,,,,,,,,,,,,,,ffffffff,,,,,,,,T", "T,,TT,,,,,,,\"\",f,,,,,,f,##,,,,,T", "T,,TT,,,,,,,\"\",f,,,,,,f,##,,,,,T", "T,,,,,,,,,,,,,,ffffffff,,,,,,P,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "n_lewfu": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T,,,,,,,,,,,,~~~~,,,,,,,,,T,C,,T", "T,,,,,,,,,,,,~~~~,,,,,,,,,T,,,,T", "T,,F,,,,,,,,,~~~~,,,,,,,,,T,,,,T", "T,,,,,,,,,,,,~~~~,,,,,,,,,TETTTT", "T,,,,,,,,,,,,~~~~,,,,,,,,H,,,,,T", "T,,,,,,,,,,,,~~~~,,,,,,,,,,,,,,T", "=============bbbb===============", "T,,,,,,,,,,,,~~~~,,,,,,,,,,,,,,T", "T,,##,,,,,,,,~~~~,,,,,,,,,,,,,,T", "T,,,,,,,,,,,,~~~~,,,,,,,,,,T,,,T", "T,,,,,,,,,,,,~~~~,,,,,,,,,,Ñ,P,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "n_mawida": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T,,,,TT,,,,,,,TT,,,,,,,,TT,,,,,T", "T,\"\",TT,,TT,,,TT,,\"\",,,,TT,,,,,T", "T,,,,,,,,TT,,,,,,,,,,,,,,,,,S,,T", "T,,F,,,,,,,,,,TTT,,,,,,,,,,,,,,T", "T,,,,TT,,,,,,,TTT,,,,\"\",,,,TT,,T", "T,,,,TT,,,,,,,,,,,,,,\"\",,,,TT,,T", "============================,,,T", "T,,,,,,,,,,TT,,,,,,,,,,,,,,,,,,T", "T,,##,,,,,,TT,,,\"\",,,,,,,TTT,,,T", "T,,##,,,,,,,,,,,\"\",,,,,,,TTT,,gT", "T,,,,,,,TT,,,,,,,,,,,,,,,,,,,,,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "nd1": ["%%%%%%%%%%%%%%%%%%%%%%", "%C%_____%%%%%%%_____F%", "%E______%%%%%%%______%", "%_______L_____K______%", "%N__N__N%%%%%%%______%", "%__%%%__%%%%%%%___k__%", "%__%%%__%%%%%%%_______", "%__I____%%%%%%%______%", "%%______%%%%%%%____C_%", "%S______%%%%%%%______%", "%%%%%%%%%%%%%%%%%%%%%%"], "nd2": ["%%%%%%%%%%%%%%%%%%%%%%", "%%%%%_______%%%_____F%", "%%%%%____H__%%%___B__%", "%S__K_________G______%", "%%%%%___E___%%%_O____%", "%%%%%__%C%__%%%______%", "%%%%%___%___%%%_______", "%%%%%%%%%%%%%%%______%", "%%%%%%%%%%%%%%%%%%%%%%"], "nd3": ["%%%%%%%%%%%%%%%%%%%%%%", "%%%%%%%________%____F%", "%%____%_B____B_%_____%", "%S____G________L__k__%", "%%____%__O__O__%_____%", "%_____%________%_____%", "%____F%%%%%%%%%%______", "%%%%%%%%%%%%%%%%%%%%%%"], "ngen2": ["TTTTTTTTTTTTTTTTTT", "TTTTT,,,,,,,,TTTTT", "TTT,,,,,,,,,,,,TTT", "TT,,,,,,,,,,,,,,TT", "TT,,,,,,,,,,,,,,TT", "TT,,,,,,,,,,,,,,TT", "TTT,,,,,,,,,,,,TTT", "TTTTT,,,A,,,TTTTTT", "TTTTTT,,,,,TTTTTTT", "TTTTTTT,,,,TTTTTTT", "TTTTTTT,F,,TTTTTTT", "TTTTTTT,S,TTTTTTTT", "TTTTTTTTTTTTTTTTTT"]};
+const MAPROWS={"rupu": ["~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "~~~~~..~~~~~~~~~~...~~~~~~~..~", "~~~.........~~~~.......~~~...~", "#.......F................#...#", "#....,,,..........,,,...,,,..#", "==============================", "#.,,,...........,,,,.....,,,.#", ",,TT,,....TT...,,TTT,,..,,TT,T", ",TTT,,..,TTT,,,,TTTT,,,,,TTT,T", "P,,TT,,,,,,TT,,,,,TT,,,\"\",,,,T", ",,,,,,,,,g,,,,,,,,,,,,\"\"\",,,,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "lof": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,PT", "T,RRR,Z,,,,,,,,,,,,,,,,,,,,,RRR,,T", "T,RRR,,,,,,YYYYYYYYYYYY,,,,,RRR,,T", "T,,,,,,,,,,YYYYYYYYYYYY,,,,,,,,,,T", "T,,,,,,,,,,YYYYYYYYYYYY,,,,,,,,,,T", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "T,RRR,,,,,,,,,,,,F,,,,,,,,,,RRR,,T", "T,RRR,,,,,,,,,,,,,,,,,,,,U,,RRR,,T", "==================================", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "T,,RRR,,,,,,,V,,,,,,,,,,,RRR,,,,,T", "T,,RRR,,,,,,,,,,,,,,,,,,,RRR,,,,,T", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "kuyum": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T....\"\"\"\".......~~~~~~~~~~~....T", "T..m.\"\"\"\"\"\"......~~~~~~~~~~....T", "T....\"\"\"\"\"......~v~~~~~~~~~....T", "T.....N...............XXXXX.N..T", "T..T......\"\"\"\"......I.XC..X....T", "T.........\"\"\"\"........XXXXX..F.T", "================................", "T....,,,,.....\"\"\"\"..N...........", "T..p.,TT,.....\"\"\"\"........#####T", "T....,,,,...N.....P.......E,,C,T", "T.......\"\"\"\".............I#,,,,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "mawida": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T,,,,TT,,,,,,,,\"\"\"\",,,,TT,,,,,PT", "T,,,,TT,,,##,,,\"\"\"\",,,,TT,,,,,,T", "T,,,,,,,,,##,,,,,,,,,,,,,,,,##,T", "T,,\"\",,,,,,,,,,TTTT,,,,,,,,,##,T", "T,,\"\",,F,,,,,,,TTTT,,,,\"\",,,,,,T", "T,,,,,,,,,,,,,,,,,,,,,,\"\",,,,,,T", "================================", "T,,,,,,,,TT,,,,,,,,,,,,,,,,,,,,T", "T,,##,,,,TT,,,,\"\"\"\",,,,TTT,,,,,T", "T,,##,,,,,,,,,,\"\"\"\",,,,TTT,H,F,T", "T,,,,,,TTT,,,,,,,,,,,,,,,,TTETTT", "T,,,,,,TTT,,,,,,,,,,##,,,,T,,,,T", "T,,,,,,,,,,,,,,,,,,,,##,,,T,gC,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "inaltu": ["~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~...~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~.S.~~~~~~~~~", "~~~~..~~~~~~~~~~~~~~...v~~~~~~~~", "~~.......~~~~~~~~~~~.=.~~~~~~~~~", "......\"\"\"......~~~~~.=.~~~~....~", "=====================.=====.....", "...RRR.....\"\"\"...F...........RRR", "...RRR..,,,,,................RRR", "P........,,,,,,....\"\"\"..........", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "d1": ["%%%%%%%%%%%%%%%%%%%%%%", "%F_____%%%%%%%_____%C%", "%______%%%%%%%______E%", "%______K_____L_______%", "%______%%%%%%%J__J__J%", "%__k___%%%%%%%__%%%__%", "_______%%%%%%%__%%%__%", "%______%%%%%%%____I__%", "%_C____%%%%%%%______%%", "%______%%%%%%%______S%", "%%%%%%%%%%%%%%%%%%%%%%"], "d2": ["%%%%%%%%%%%%%%%%%%%%%%", "%F_____%%%_______%%%%%", "%__B___%%%__H____%%%%%", "%______G_________K__S%", "%____O_%%%___E___%%%%%", "%______%%%__%C%__%%%%%", "_______%%%___%___%%%%%", "%______%%%%%%%%%%%%%%%", "%%%%%%%%%%%%%%%%%%%%%%"], "d3": ["%%%%%%%%%%%%%%%%%%%%%%", "%F____%________%%%%%%%", "%_____%_B____B_%____%%", "%__k__L________G____S%", "%_____%__O__O__%____%%", "%_____%________%_____%", "______%%%%%%%%%%F____%", "%%%%%%%%%%%%%%%%%%%%%%"], "ngen": ["~~~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~", "~~~~~......~~~~~~~", "~~~~..........~~~~", "~~~............~~~", "~~~............~~~", "~~~~..........~~~~", "~~~~~~..A...~~~~~~", "~~~~~~~....~~~~~~~", "~~~~~~~....~~~~~~~", "~~~~~~~.F..~~~~~~~", "~~~~~~~.S.~~~~~~~~", "~~~~~~~~~~~~~~~~~~"], "n_rupu": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T,,,,,,,,,,ffffffffff,,,,,T,,,,T", "T,,\"\",,,,,,fWWWWWWWWf,,,,,T,P,,T", "T,,\"\",,F,,,fWWWWWWWWf,,,,,T,,,,T", "T,,,,,,,,,,fWWWWWWWWf,,,,,TÑTTTT", "T,,,,,,,,,,ffffffffff,,,,,,,,,,T", "T,,TT,,,,,,,,,,,,,,,,,,,,,\"\",,,T", "================================", "T,,,,,,\"\",,,,,,,,,,,,TT,,,,,,,,T", "T,,##,,\"\",,,TT,,,,,,,TT,,,,##,,T", "T,,##,,,,,,,TT,,,,,,,,,,,,,##,,T", "T,,,,I,,,,,,,,,g,,,,,,,,,,,,,,,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "n_lof": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,PT", "T,RRR,,,,,,,,,,,,,,,,ffffffffff,,T", "T,RRR,,,,,,,,,,,,,,,,f,,,,,,,,f,,T", "T,,,,,,,,,,,,,,,,,,,,f,,,,,,,,f,,T", "T,,,,,,,,RRR,,,,,,,,,ffffffffff,,T", "T,,,,,,,,RRR,,,,,,,,,,,,,,,,,,,,,T", "T,,RRR,,,,,,,,,,,F,,,,,,,,,RRR,,,T", "T,,RRR,,,,,,,,,,,,,,,,,,,,,RRR,,,T", "==================================", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "n_kullin": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T,,,,,,,,ffffffff,,,,,,,,,,,,,,T", "T,,,,,,,,f,,,,,,f,,,,,,,,,,,,,,T", "T,,,,,,,,f,,,,,,f,,,,,,TTT,,,,,T", "T,,F,,,,,ffff,fff,,,,,,TTT,,,,,T", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "T,,,\"\",,,,,,,,,,,,,,,,,,,,\"\",,,T", "================================", "T,,,,,,,,,,,,,,ffffffff,,,,,,,,T", "T,,TT,,,,,,,\"\",f,,,,,,f,##,,,,,T", "T,,TT,,,,,,,\"\",f,,,,,,f,##,,,,,T", "T,,,,,,,,,,,,,,ffffffff,,,,,,P,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "n_lewfu": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T,,,,,,,,,,,,~~~~,,,,,,,,,T,C,,T", "T,,,,,,,,,,,,~~~~,,,,,,,,,T,,,,T", "T,,F,,,,,,,,,~~~~,,,,,,,,,T,,,,T", "T,,,,,,,,,,,,~~~~,,,,,,,,,TETTTT", "T,,,,,,,,,,,,~~~~,,,,,,,,H,,,,,T", "T,,,,,,,,,,,,~~~~,,,,,,,,,,,,,,T", "=============bbbb===============", "T,,,,,,,,,,,,~~~~,,,,,,,,,,,,,,T", "T,,##,,,,,,,,~~~~,,,,,,,,,,,,,,T", "T,,,,,,,,,,,,~~~~,,,,,,,,,,T,,,T", "T,,,,,,,,,,,,~~~~,,,,,,,,,,Ñ,P,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "n_mawida": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T,,,,TT,,,,,,,TT,,,,,,,,TT,,,,,T", "T,\"\",TT,,TT,,,TT,,\"\",,,,TT,,,,,T", "T,,,,,,,,TT,,,,,,,,,,,,,,,,,S,,T", "T,,F,,,,,,,,,,TTT,,,,,,,,,,,,,,T", "T,,,,TT,,,,,,,TTT,,,,\"\",,,,TT,,T", "T,,,,TT,,,,,,,,,,,,,,\"\",,,,TT,,T", "================================", "T,,,,,,,,,,TT,,,,,,,,,,,,,,,,,,T", "T,,##,,,,,,TT,,,\"\",,,,,,,TTT,,,T", "T,,##,,,,,,,,,,,\"\",,,,,,,TTT,,gT", "T,,,,,,,TT,,,,,,,,,,,,,,,,,,,,,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "nd1": ["%%%%%%%%%%%%%%%%%%%%%%", "%C%_____%%%%%%%_____F%", "%E______%%%%%%%______%", "%_______L_____K______%", "%N__N__N%%%%%%%______%", "%__%%%__%%%%%%%___k__%", "%__%%%__%%%%%%%_______", "%__I____%%%%%%%______%", "%%______%%%%%%%____C_%", "%S______%%%%%%%______%", "%%%%%%%%%%%%%%%%%%%%%%"], "nd2": ["%%%%%%%%%%%%%%%%%%%%%%", "%%%%%_______%%%_____F%", "%%%%%____H__%%%___B__%", "%S__K_________G______%", "%%%%%___E___%%%_O____%", "%%%%%__%C%__%%%______%", "%%%%%___%___%%%_______", "%%%%%%%%%%%%%%%______%", "%%%%%%%%%%%%%%%%%%%%%%"], "nd3": ["%%%%%%%%%%%%%%%%%%%%%%", "%%%%%%%________%____F%", "%%____%_B____B_%_____%", "%S____G________L__k__%", "%%____%__O__O__%_____%", "%_____%________%_____%", "%____F%%%%%%%%%%______", "%%%%%%%%%%%%%%%%%%%%%%"], "ngen2": ["TTTTTTTTTTTTTTTTTT", "TTTTT,,,,,,,,TTTTT", "TTT,,,,,,,,,,,,TTT", "TT,,,,,,,,,,,,,,TT", "TT,,,,,,,,,,,,,,TT", "TT,,,,,,,,,,,,,,TT", "TTT,,,,,,,,,,,,TTT", "TTTTT,,,A,,,TTTTTT", "TTTTTT,,,,,TTTTTTT", "TTTTTTT,,,,TTTTTTT", "TTTTTTT,F,,TTTTTTT", "TTTTTTT,S,TTTTTTTT", "TTTTTTTTTTTTTTTTTT"], "p_rupu": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T,..,,,,,TT,,,,,,~~,,,,,,,,T,P,T", "T,..,,,,,TT,,#,,,~~,,,,,...T,,,T", "T,..,,F,,,,,,,,,,~~,,,,,...T,,,T", "T,,,,,,,,,,,,#,,,~~,,,,,,,,TT^TT", "T,,TT,,,,,,,,,,,,~~,,,TT,,,,,,,T", "T,,TT,,,,,,,,,,,,~~,,,TT,,,,,,,T", "=================bb=============", "T,,,,,,...,,,,,,,~~,,,,,,,,,,,,T", "T,##,,,...,,,TT,,~~,,...,,,,##,T", "T,##,,,,,,,,,TT,,~~,,...,,,,##,T", "T,,,,,,,,,,,,,,,,~~,,,,,,,,,,,,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "p_lof": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T,,,,,,,,,,,,....,,,T,,T,,T,,,,,PT", "T,RRR,,,,,,,,....,,,,,,,,,,,,,,,,T", "T,RRR,,,,,,,,,,,,,,,,T,,,T,,,,,,,T", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T,,T", "T,,,,,,,,RRR,,,,,,,,,,,,,,,,,,,,,T", "T,,,,,,,,RRR,,,,,,,,,,,,,,,,,,,,,T", "T,,,,,,,,,,,,,,,,F,,,,,,,,,RRR,,,T", "T,,,,,,,,,,,,,,,,,,,,,,,,,,RRR,,,T", "==================================", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "T,,,,,...,,,,,,,,,,,,,,,,,,,,,,,,T", "T,,,,,...,,,,,,,,,,,,,,,,,,,,,,,,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "p_pewen": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "TT,T,,T,...,,,,,,,,,,,TTT,,,,,TT", "TTT,,T,,,,,,,,,,,,,,,,TTT,,C,,TT", "T,TT,,T,,N,,N,,N,,N,,,T,T,,,,,TT", "T,T,,TT,,,,,,,,,...,,,,,TTTETTTT", "T,,,,,,,,,,,,I,,,,,,,,T,TTT,TTTT", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "================================", "T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T", "TT,,,,..,,T,,T,,T,,TTTTT,T,,,,,T", "TT,F,T..,,TT,TT,,,T,,T,,,,,,T,,T", "T,,,,,T,,T,,TTT,T,,,T,T,TTT,TTTT", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "p_pire": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T.TT................#.....#....T", "T.TT..........B.....#..C..#....T", "T........B..........#.....#....T", "T...............O...###G###....T", "T........O..........###.###....T", "T..............................T", "================================", "T.........................TT^TTT", "T,,,........TT.....##.....T...TT", "T.F..##.....TT............T.P.TT", "T.........................TTTTTT", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "p_pillan": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "TT,P,T.,..,,,,,#.,,,,.,,,######T", "TT,,,T,,,#,,,,.,,,.,,,.,,#....#T", "TT,,,T,.,,.,,,,,,,,,,,,..#..S.#T", "TTTKTT,.,,,#,##,,,,,#,,.,#....#T", "T.,,,,,#,,#,.,,,,.,,##..,#....#T", "T,,.,,,,,..,,,#,,,.,,.,,,##..##T", "===========================.,,,T", "T,#,,,,,,,,#,,,#,,,,,,,,,,,=,#,T", "T,,,,,,,,,,,,,,,,,,,,,,,,,#,.#,T", "T,,,,,#,.,F,,,,,..,..,,,.,#,#,,T", "T,,,,.,,,,,,,##,,,,,,..,,,#,,,,T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "pd1": ["%%%%%%%%%%%%%%%%%%%%%%", "%______%%%%%%%______S%", "%_C____%%%%%%%______%%", "%______%%%%%%%____I__%", "_______%%%%%%%__%%%__%", "%__k___%%%%%%%__%%%__%", "%______%%%%%%%N__N__N%", "%______K_____L_______%", "%______%%%%%%%______E%", "%F_____%%%%%%%_____%C%", "%%%%%%%%%%%%%%%%%%%%%%"], "pd2": ["%%%%%%%%%%%%%%%%%%%%%%", "%______%%%%%%%%%%%%%%%", "_______%%%___%___%%%%%", "%______%%%__%C%__%%%%%", "%____O_%%%___E___%%%%%", "%______G_________K__S%", "%__B___%%%__H____%%%%%", "%F_____%%%_______%%%%%", "%%%%%%%%%%%%%%%%%%%%%%"], "pd3": ["%%%%%%%%%%%%%%%%%%%%%%", "______%%%%%%%%%%F____%", "%_____%________%_____%", "%_____%__O__O__%____%%", "%__k__L________G____S%", "%_____%_B____B_%____%%", "%F____%________%%%%%%%", "%%%%%%%%%%%%%%%%%%%%%%"], "ngen3": ["%%%%%%%%%%%%%%%%%%", "%%%%%~~~~~~~~%%%%%", "%%%~~~______~~~%%%", "%%~~__________~~%%", "%%~____________~%%", "%%~____________~%%", "%%%~__________~%%%", "%%%%%___A____%%%%%", "%%%%%%_____%%%%%%%", "%%%%%%%____%%%%%%%", "%%%%%%%_F__%%%%%%%", "%%%%%%%_S_%%%%%%%%", "%%%%%%%%%%%%%%%%%%"]};
 
 /* ============================================================
    MAPS (Lafkenche region)
@@ -822,12 +890,75 @@ ngen2:{region:'nagche',ngenmap:1,name:'Ngen-mawida',g:{es:'El claro del bosque',
      pre:[N('En el claro hay una figura altísima y delgada, que brilla como si estuviera hecha de luz fría: el Witranalwe.','In the clearing stands a very tall, thin figure that glows as if made of cold light: the Witranalwe.'),L('','Müley Witranalwe!','¡Ahí está el Witranalwe!','There is the Witranalwe!')]},
    {id:'ngen',kind:'npc',look:'ngen2',x:8,y:3,req:'ngen2',fixed:1,talk:()=>say([L('Ngen-mawida','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")])}]}
 });
+/* ---------- PEWENCHE ---------- */
+const K5={reward:'piwke',q:L('Konew','Pewen mew tripakey; pukem mew ikeiñ. Chem am ta tatey?','Sale del pewen; en invierno lo comemos. ¿Qué será?','It comes from the pewen; in winter we eat it. What could it be?'),
+  opts:[{m:'ngülliw',es:'piñón',en:'pewen nut',ok:1},{m:'kofke',es:'pan',en:'bread'},{m:'ilo',es:'carne',en:'meat'},{m:'poñü',es:'papa',en:'potato'}]};
+const K6={q:L('Konew','Pun mew pengekey; antü mew ñamkey. Chem am ta tatey?','De noche se ve; de día desaparece. ¿Qué será?','At night it is seen; by day it disappears. What could it be?'),
+  opts:[{m:'wangülen',es:'estrella',en:'star',ok:1},{m:'antü',es:'sol',en:'sun'},{m:'kürüf',es:'viento',en:'wind'},{m:'mawün',es:'lluvia',en:'rain'}]};
+const K7={reward:'piwke',q:L('Konew','Kütral ñi püñeñ; wenu püle amukey, ñamkey. Chem am ta tatey?','Hijo del fuego; se va hacia arriba y desaparece. ¿Qué será?','Child of the fire; it goes upward and disappears. What could it be?'),
+  opts:[{m:'fütron',es:'humo',en:'smoke',ok:1},{m:'kütral',es:'fuego',en:'fire'},{m:'ko',es:'agua',en:'water'},{m:'kura',es:'piedra',en:'stone'}]};
+Object.assign(MAPS,{
+p_rupu:{region:'pewenche',name:'Pewenche rüpü',g:{es:'El camino a la cordillera',en:'The road to the mountains'},floor:',',bg:'mount',song:'pew',pal:'pewenche',trees:'pewen',
+ edges:{left:{to:'n_mawida',x:30,y:7},right:{to:'p_lof',x:1,y:9}},
+ ents:[{id:'arriero',kind:'npc',look:'walker',x:25,y:8,dir:'left',fixed:1,talk:()=>arrieroTalk(),bub:['Kawellu mew amuken.']},
+   {kind:'enemy',x:8,y:3,party:['pire']},{kind:'enemy',x:12,y:10,party:['kura','pire']},{kind:'enemy',x:22,y:3,party:['kutral','kutral']},{kind:'enemy',x:26,y:10,party:['pire','pire','kura']}]},
+p_lof:{region:'pewenche',name:'Pewenche lof',g:{es:'La comunidad de los pewenes',en:'The community of the pewen trees'},floor:',',bg:'mount',song:'lof',pal:'pewenche',trees:'pewen',
+ edges:{left:{to:'p_rupu',x:30,y:7},right:{to:'p_pewen',x:1,y:7,req:'pew_lonko',reqMsg:[N('Antes de seguir, habla con el lonko de este lof. Está junto al kütral.','Before you go on, speak with the lonko of this lof. He is by the fire.')]}},
+ ents:[{id:'laku',kind:'npc',look:'elder',x:5,y:11,talk:()=>lakuTalk(),bub:['Mari mari!']},
+   {id:'plonko',kind:'npc',look:'lonko3',x:18,y:7,talk:()=>pLonkoTalk(),bub:['Mari mari!']},
+   {id:'pnutram',kind:'npc',look:'elder2',x:16,y:8,dir:'up',fixed:1,act:'teach',talk:()=>pNutramTalk(),bub:['Kuyfi...','Cherrufe...']},
+   {id:'pk1',kind:'npc',look:'child',x:15,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichiche','Ngülliw ayüken!','¡Me gustan los piñones!','I love pewen nuts!')])},
+   {id:'pk2',kind:'npc',look:'childf',fem:1,x:17,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichi domo','Chumül amuaymi pillañ mew?','¿Cuándo vas a ir al volcán?','When will you go to the volcano?')])},
+   {id:'gath1',kind:'npc',look:'gatherer',fem:1,x:21,y:2,dir:'up',fixed:1,act:'weave',talk:()=>gathTalk(),bub:['Ngülliw!']},
+   {id:'gath2',kind:'npc',look:'cook',fem:1,x:24,y:2,dir:'up',fixed:1,act:'weave',talk:()=>gathTalk(),bub:['Fentren ngülliw!']},
+   {id:'pseller',kind:'npc',look:'seller',x:24,y:12,talk:()=>shop('p_lof')}]},
+p_pewen:{region:'pewenche',name:'Pewen mapu',g:{es:'El bosque de pewenes',en:'The pewen forest'},floor:',',bg:'mount',song:'pew',pal:'pewenche',trees:'pewen',
+ edges:{left:{to:'p_lof',x:32,y:9},right:{to:'p_pire',x:1,y:7}},chests:{'27,2':'piwke'},
+ pz:{kind:'N',tiles:{'9,3':{lab:'rimü',i:2},'12,3':{lab:'pewü',i:0},'15,3':{lab:'pukem',i:3},'18,3':{lab:'walüng',i:1}}},
+ signs:{'13,5':[L('Kura','Rayen mew llitukey; pire mew afkey.','Una piedra tallada: «Empieza con las flores; termina con la nieve». Cuatro piedras esperan.','A carved stone: «It begins with the flowers; it ends with the snow». Four stones wait.'),N('Tu chillka tiene las estaciones del año.','Your chillka has the seasons of the year.')]},
+ ents:[{kind:'enemy',x:10,y:8,party:['kura','kura']},{kind:'enemy',x:20,y:6,party:['pire','pire']},{kind:'enemy',x:26,y:8,party:['kutral','kura','pire']}]},
+p_pire:{region:'pewenche',name:'Pire mapu',g:{es:'Los campos de nieve',en:'The snowfields'},floor:'.',bg:'mount',song:'pew',pal:'pewenche',trees:'pewen',
+ edges:{left:{to:'p_pewen',x:30,y:7},right:{to:'p_pillan',x:1,y:7}},chests:{'23,2':'pewgift'},
+ signs:{},
+ ents:[{kind:'enemy',x:6,y:4,party:['pire','pire','pire']},{kind:'enemy',x:18,y:9,party:['kura','pire']},{kind:'enemy',x:9,y:9,party:['kutral','pire']}]},
+p_pillan:{region:'pewenche',name:'Pillañ inaltu',g:{es:'Al pie del volcán',en:'At the foot of the volcano'},floor:',',bg:'mount',song:'pew',pal:'ash',trees:'pewen',
+ edges:{left:{to:'p_pire',x:30,y:7}},stairs:{to:'pd1',x:1,y:4},konew:{'3,4':K5},
+ ents:[{id:'kona3',kind:'npc',look:'kona',x:24,y:8,talk:()=>kona3Talk(),bub:['Cherrufe...']},
+   {kind:'enemy',x:8,y:3,party:['kutral','kutral','kura']},{kind:'enemy',x:17,y:9,party:['kura','kura']},{kind:'enemy',x:14,y:3,party:['kutral','pire','kutral']}]},
+pd1:{region:'pewenche',name:'Cherrufe ñi ruka · 1',g:{es:'La morada del Cherrufe (piso 1)',en:"The Cherrufe's lair (floor 1)"},floor:'_',bg:'cave3',song:'cave',dungeon:1,pal:'pewcave',lava:1,
+ edges:{left:{to:'p_pillan',x:28,y:4}},stairs:{to:'pd2',x:1,y:2},
+ chests:{'2,2':'lawen1','20,9':'piwke'},konew:{'7,7':K6},
+ pz:{kind:'N',tiles:{'14,6':{lab:'pataka',i:1},'17,6':{lab:'epu pataka',i:2},'20,6':{lab:'kechu mari',i:0}}},
+ signs:{'18,3':[N('Una piedra tallada: «de lo menor a lo mayor». Tres piedras con números grandes esperan.','A carved stone: «from the smallest to the largest». Three stones with big numbers wait.')]},
+ ents:[{kind:'enemy',x:3,y:8,party:['kutral','kutral']},{kind:'enemy',x:4,y:2,party:['kura']},{kind:'enemy',x:16,y:8,party:['kutral','kura']},{kind:'enemy',x:16,y:3,party:['kutral','kutral','kutral']},
+   {id:'pmini1',kind:'enemy',x:19,y:1,party:['nirivilu','kutral'],fixed:1,mini:1,flag:'pmini1',
+     pre:[N('Un zorro con una larga cola de culebra se enrosca junto a la escalera: el ñirivilu.','A fox with a long snake tail coils up by the stairs: the ñirivilu.')]}]},
+pd2:{region:'pewenche',name:'Cherrufe ñi ruka · 2',g:{es:'La morada del Cherrufe (piso 2)',en:"The Cherrufe's lair (floor 2)"},floor:'_',bg:'cave3',song:'cave',dungeon:1,pal:'pewcave',lava:1,
+ edges:{left:{to:'pd1',x:19,y:1}},stairs:{to:'pd3',x:1,y:1,req:'root_wutre',reqMsg:[N('Algo te dice que todavía falta algo en este piso.','Something tells you there is still something missing on this floor.')]},
+ chests:{'13,3':'wutre'},konew:{'17,5':K7},stones:{'12,6':'quest'},
+ ents:[{kind:'enemy',x:3,y:3,party:['kura','kura','kura']},{kind:'enemy',x:14,y:6,party:['kutral','pire']},
+   {id:'pmini2',kind:'enemy',x:15,y:5,party:['fkura','kutral'],fixed:1,mini:1,flag:'pmini2',
+     pre:[N('Un wekufü de piedra, grande como una ruka, se levanta del suelo.','A stone wekufü, as big as a ruka, rises from the ground.')]}]},
+pd3:{region:'pewenche',name:'Cherrufe ñi ruka · 3',g:{es:'La morada del Cherrufe (piso 3)',en:"The Cherrufe's lair (floor 3)"},floor:'_',bg:'cave3',song:'cave',dungeon:1,pal:'pewcave',lava:1,
+ edges:{left:{to:'pd2',x:19,y:5}},stairs:{to:'ngen3',x:8,y:9},
+ ents:[{kind:'enemy',x:2,y:2,party:['kura','kutral','pire']},
+   {id:'pmini3',kind:'enemy',x:19,y:4,party:['kutral','kura','nirivilu'],fixed:1,mini:1,flag:'pmini3',
+     pre:[N('El aire quema. Tres wekufü cuidan la bajada al cráter.','The air burns. Three wekufü guard the way down to the crater.')]}]},
+ngen3:{region:'pewenche',ngenmap:1,name:'Ngen-pewen',g:{es:'El cráter',en:'The crater'},floor:'_',bg:'crater',song:'cave',pal:'pewcave',lava:1,
+ stairs:{to:'pd3',x:19,y:4},
+ ents:[{id:'boss',kind:'enemy',x:8,y:4,party:['cherrufe'],fixed:1,boss:1,flag:'boss3',
+     pre:[N('Desde la lava se levanta un gigante de roca negra, con grietas que brillan como brasas y una cabellera de fuego: el Cherrufe.','A giant of black rock rises from the lava, with cracks that glow like embers and a mane of fire: the Cherrufe.'),L('','Müley Cherrufe!','¡Ahí está el Cherrufe!','There is the Cherrufe!')]},
+   {id:'ngen',kind:'npc',look:'ngen3',x:8,y:3,req:'ngen3',fixed:1,talk:()=>say([L('Ngen-pewen','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")])}]}
+});
 for(const k in MAPS){const m=MAPS[k];if(!m.region)m.region='lafkenche';m.rows=MAPROWS[k];m.w=MAPROWS[k][0].length;m.h=MAPROWS[k].length}
 MAPS.inaltu.edges.right={to:'n_rupu',x:1,y:7,req:'ngen',reqMsg:[N('El camino hacia el este, a las tierras nagche, está cubierto de niebla. Primero despierta a Ngen-lafken.','The road east, to the Nagche lands, is covered in fog. First wake Ngen-lafken.')]};
 MAPS.ngen.ngenmap=1;
 for(const k of ['n_rupu','n_lof','n_kullin','n_lewfu']){MAPS[k].pal='nagche';MAPS[k].trees='koyam'}
 for(const k of ['n_mawida','ngen2']){MAPS[k].pal='nagforest';MAPS[k].trees='mawida'}
 for(const k of ['nd1','nd2','nd3']){MAPS[k].pal='nagcave';MAPS[k].bg='cave2'}
+MAPS.n_mawida.edges.right={to:'p_rupu',x:1,y:7,req:'ngen2',reqMsg:[N('Hacia el este el camino sube a la cordillera, pero una niebla espesa lo cubre. Primero despierta a Ngen-mawida.','To the east the road climbs into the mountains, but a thick fog covers it. First wake Ngen-mawida.')]};
+MAPS.pd1.pz.hint=N('Pista: de lo menor a lo mayor. kechu mari (50), pataka (100), epu pataka (200).','Hint: from smallest to largest. kechu mari (50), pataka (100), epu pataka (200).');
+MAPS.p_pewen.pz.hint=N('Pista: pewü (primavera), walüng (verano), rimü (otoño), pukem (invierno).','Hint: pewü (spring), walüng (summer), rimü (autumn), pukem (winter).');
 MAPS.n_kullin.ents.forEach(e=>{if(e.herd&&e.look!=='ofisa')e.flag='hd_'+e.id});
 MAPS.nd1.pz.hint=N('Pista: de lo menor a lo mayor. meli (4), mari kechu (15), epu mari meli (24).','Hint: from smallest to largest. meli (4), mari kechu (15), epu mari meli (24).');
 
@@ -853,8 +984,11 @@ const PL0=Object.assign({},PL);
 const PALS={
   nagche:{G0:'#24461a',G1:'#3e7426',G2:'#5c9c34',G3:'#9ccc58',GY:'#6aa83c',GL:'#a4d070',GM:'#80b450',D1:'#9a6438',D2:'#b8844c',D3:'#d6aa68',FR:'#d83850',FY:'#f8d040',FW:'#fff8e8'},
   nagforest:{G0:'#10301e',G1:'#1e4e30',G2:'#2e6a3e',G3:'#5a9a5c',GY:'#3a7a46',GL:'#6aa070',GM:'#4a8a56',D1:'#5a4a30',D2:'#6e5a3a',D3:'#8a7450',FR:'#c8a0f0',FY:'#f0e890',FW:'#e8fff0'},
+  pewenche:{G0:'#1e3a2a',G1:'#2e5a3e',G2:'#4a7a54',G3:'#7aa880',GY:'#5a8a62',GL:'#9ac0a0',GM:'#6a9a72',S0:'#8a98b0',S1:'#c4d0e2',S2:'#e6edf6',S3:'#ffffff',D1:'#7a6a5a',D2:'#948472',D3:'#b0a08c',FR:'#f0f0ff',FY:'#ffe0a0',FW:'#ffffff'},
+  ash:{G0:'#2a2a24',G1:'#4a4a3a',G2:'#62624e',G3:'#8a8a70',GY:'#6a6a54',GL:'#9a9a80',GM:'#7a7a62',S0:'#3a3434',S1:'#5a5252',S2:'#6e6464',S3:'#8a8080',D1:'#4a3a32',D2:'#5a4a40',D3:'#74645a',FR:'#f86018',FY:'#ffb040',FW:'#d0c0b0'},
+  pewcave:{C0:'#140808',C1:'#3a1a14',C2:'#4a2620',C3:'#6a382c',CD:'#2c1410'},
   nagcave:{C0:'#0e1610',C1:'#26322a',C2:'#3a4a3c',C3:'#56685a',CD:'#2e3c30'}};
-const WALLS={lafken:['#5a4430','#8a7058','#78604a','#3c2c20','#201810'],nagche:['#3c4c3e','#6e8a68','#5a7058','#243026','#0e160e']};
+const WALLS={lafken:['#5a4430','#8a7058','#78604a','#3c2c20','#201810'],pewenche:['#2e2224','#5a4448','#463438','#1a1214','#0a0606'],nagche:['#3c4c3e','#6e8a68','#5a7058','#243026','#0e160e']};
 function applyPal(){Object.assign(PL,PL0);const p=PALS[M.pal];if(p)for(const k in p)PL[k]=C3(p[k])}
 function gtype(ch){if(ch==='~'||ch==='v')return'~';if(ch==='.'||ch===','||ch==='='||ch==='_'||ch==='%'||ch==='"'||ch==='Y'||ch==='b')return ch;if(ch==='T'||ch==='W'||ch==='f')return',';return M.floor}
 function gAt(x,y){if(x<0||y<0||x>=M.w||y>=M.h)return null;return GT[y][x]}
@@ -877,15 +1011,16 @@ function gpix(gx,gy,f){
   const tx=gx>>4,ty=gy>>4,lx=gx&15,ly=gy&15,g=GT[ty][tx];
   if(g==='~'){
     const dl=edgeDist(tx,ty,lx,ly,isLand);
-    if(dl<1)return PL.W0;
-    if(dl<2.2+(((gx>>1)+f)%3===0?1:0))return PL.WF;
-    if(dl<3.6)return PL.W3;
+    if(dl<1)return M.lava?[40,16,12]:PL.W0;
+    if(dl<2.2+(((gx>>1)+f)%3===0?1:0))return M.lava?[255,236,150]:PL.WF;
+    if(dl<3.6)return M.lava?[255,170,60]:PL.W3;
     let dep=dl<99?dl:wdep(gx,gy);dep+=Math.sin(gx*.09+gy*.05)*1.6+Math.sin(gx*.031-gy*.07)*2;
-    const TIERS=[[104,152,228],[80,128,214],[64,108,198],[52,90,180],[42,74,160],[34,60,140]];
+    const TIERS=M.lava?[[255,200,80],[250,150,40],[230,100,30],[200,70,24],[170,50,20],[140,36,16]]:[[104,152,228],[80,128,214],[64,108,198],[52,90,180],[42,74,160],[34,60,140]];
     let ti=dep<6?0:dep<10?1:dep<16?2:dep<24?3:dep<34?4:5;
     const nb=[6,10,16,24,34][ti];if(ti<5&&nb-dep<1.4&&(gx+gy)%2===0)ti++;
     let col=TIERS[ti];
     const ph=f*2.094,w1=Math.sin(gx*.21+gy*.62+ph)+Math.sin(gx*.07-gy*.33+ph*.5+1.3);
+    if(M.lava){if(w1>1.5)col=lerp3(col,[255,240,170],.6);else if(w1<-1.5)col=lerp3(col,[60,20,10],.5);return col}
     if(w1>1.62)col=lerp3(col,[176,212,248],.65);else if(w1>1.45&&(gx&1))col=lerp3(col,[150,196,244],.45);else if(w1<-1.6)col=lerp3(col,[20,40,100],.3);
     const u=(gx+f*3+((gy>>3)%2)*6)%14,v=gy%9;
     if(ti<=2&&((v===3&&(u===0||u===3))||(v===4&&(u===1||u===2))))col=lerp3(col,[200,224,252],.6);
@@ -944,10 +1079,11 @@ function buildLayers(){
 function drawGroundStatics(c){
   for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++){const ch=grid[y][x],X=x*T,Y=y*T;
     if(ch==='%'){const below=y+1<M.h?grid[y+1][x]:'%';
-      const WC=WALLS[M.region==='nagche'?'nagche':'lafken'];
+      const WC=WALLS[M.region==='nagche'?'nagche':M.region==='pewenche'?'pewenche':'lafken'];
       if(below!=='%'){R(c,X,Y+5,16,11,WC[0]);R(c,X,Y+4,16,1,WC[1]);R(c,X,Y+5,16,1,WC[2]);
         for(let r=0;r<3;r++){const yy=Y+6+r*3+ (r===2?1:0),off=((r+x)%2)*4;R(c,X,yy+2,16,1,WC[3]);for(let k=0;k<3;k++)R(c,X+((off+k*7)%16),yy,1,2,WC[3])}
         R(c,X,Y+15,16,1,WC[4]);
+        if(M.region==='pewenche'){for(let k=0;k<3;k++){const mx=Math.floor(h2(x,y,80+k)*14);if(h2(x,y,90+k)<.55){R(c,X+mx,Y+6+k*3,1,2,'#f86018');R(c,X+mx+1,Y+7+k*3,1,1,'#ffb040')}}}
         if(M.region==='nagche'){for(let k=0;k<4;k++){const mx=Math.floor(h2(x,y,80+k)*15);if(h2(x,y,90+k)<.6)R(c,X+mx,Y+5,2,1+Math.floor(h2(x,y,95+k)*3),'#4a7a3a')}
           if(h2(x,y,99)<.35){const rx=X+3+Math.floor(h2(x,y,98)*10);for(let i=0;i<6;i++)R(c,rx+(i%3===2?1:0),Y+6+i,1,1,'#5a3e22')}}}}
   }
@@ -968,11 +1104,11 @@ function placeNear(x,y,isEnt){
     if(seen.size>900)break;for(const [d,e] of [[1,0],[-1,0],[0,1],[0,-1]])if(inB(a+d,b+e))q.push([a+d,b+e])}
   return [x,y];
 }
-const RFLAG={lafkenche:'ngen',nagche:'ngen2'};
+const RFLAG={lafkenche:'ngen',nagche:'ngen2',pewenche:'ngen3'};
 const awake=r=>!!S.flags[RFLAG[r]];
-const SONGSET={nagche:{lof:'nagLof',lofG:'nagLofG',cave:'nagCave',battle:'nagBattle',boss:'nagBoss',ngen:'nagNgen'}};
+const SONGSET={pewenche:{nag:'pew',nagG:'pewG',lof:'pewLof',lofG:'pewLofG',cave:'pewCave',battle:'pewBattle',boss:'pewBoss',ngen:'pewNgen'},nagche:{lof:'nagLof',lofG:'nagLofG',cave:'nagCave',battle:'nagBattle',boss:'nagBoss',ngen:'nagNgen'}};
 const rsong=n=>{const r=M&&M.region;return (SONGSET[r]&&SONGSET[r][n])||n};
-function mapSong(){const m=MAPS[CUR];if(m.ngenmap)return rsong(awake(m.region)?'ngen':'cave');const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'))return rsong(s+'G');return rsong(s)}
+function mapSong(){const m=MAPS[CUR];if(m.ngenmap)return rsong(awake(m.region)?'ngen':'cave');const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'||s==='pew'))return rsong(s+'G');return rsong(s)}
 function loadMap(id,x,y,quiet){
   CUR=id;M=MAPS[id];
   grid=M.rows.map(r=>r.split(''));
@@ -982,6 +1118,7 @@ function loadMap(id,x,y,quiet){
   PZ={n:0,lit:new Set()};
   if(S.flags['pz:'+id]){for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='E')grid[yy][xx]=M.floor;if(M.pz)for(const k in M.pz.tiles)PZ.lit.add(k)}
   if(!awake(M.region))for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='A')grid[yy][xx]=M.floor;
+  if(S.flags.snow)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='^')grid[yy][xx]=M.floor;
   if(S.flags.bramble)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='Ñ')grid[yy][xx]=M.floor;
   buildLayers();
   ents=[];P.x=x;P.y=y;
@@ -1106,6 +1243,7 @@ function interact(){
   if(c==='V')return say([L('','Mari mari · Kiñe, epu, küla','Una pizarra con palabras en mapudungun: "hola" y "uno, dos, tres".','A board with words in Mapudungun: "hello" and "one, two, three".')]);
   if(c==='Z')return say([L('','Witral','Un witral, el telar mapuche. El tejido muestra figuras escalonadas en rojo, negro y blanco.','A witral, the Mapuche loom. The weaving shows stepped figures in red, black and white.')]);
   if(c==='U')return say([L('','Iyael','La olla hierve sobre el fuego. Huele a comida.','The pot simmers over the fire. It smells like food.')]);
+  if(c==='^')return say([N('Un montón de nieve dura te cierra el paso. Necesitas el newen de Ngen-pewen.','A heap of hard snow blocks your way. You need the newen of Ngen-pewen.')]);
   if(c==='Ñ')return say([N('Un zarzal lleno de espinas te cierra el paso. Necesitas el newen de Ngen-mawida.','A bramble full of thorns blocks your way. You need the newen of Ngen-mawida.')]);
   if(c==='W')return say([L('','Kachilla','Un campo de kachilla (trigo) dorado, listo para cosechar.','A field of golden kachilla (wheat), ready for harvest.')]);
   if(c==='f')return say([N('Una cerca de palos.','A wooden fence.')]);
@@ -1318,6 +1456,11 @@ function openChest(x,y,what){
     L('','wiñotu-','Encontraste una raíz nueva: wiñotu-, «volver, regresar».','You found a new root: wiñotu-, «go back, return».'),
     L('','wiñotunge · wiñotumu · wiñotumün','¡Vuelve atrás! (a uno) · (a dos) · (a tres o más)','Go back! (to one) · (to two) · (to three or more)'),
     N('Un wekufü al que le dices que vuelva atrás retrocede y pierde su turno. Y dicen que hasta el Witranalwe se encoge cuando lo obligan a retroceder.','A wekufü you tell to go back steps away and loses its turn. And they say even the Witranalwe shrinks when it is forced back.')])}
+  if(what==='wutre'){learnRoot('wütre');S.flags.root_wutre=1;persist();sfx('lvl');return say([
+    L('','wütre-','Encontraste una raíz nueva: wütre-, «tener frío».','You found a new root: wütre-, «be cold».'),
+    L('','wütrenge · wütremu · wütremün','¡Ten frío! (a uno) · (a dos) · (a tres o más)','Be cold! (to one) · (to two) · (to three or more)'),
+    N('El frío apaga el fuego de los wekufü de fuego, y hace tiritar a los demás. Pero a los wekufü de nieve... les encanta.','The cold puts out the fire of fire wekufü, and makes the others shiver. But snow wekufü... love it.')])}
+  if(what==='pewgift'){S.gold+=60;S.items.lawen++;persist();return say([L('','Kayu mari ngülliw!','Dentro hay kayu mari (60) ngülliw y un lawen.','Inside are kayu mari (60) ngülliw and a lawen.')])}
   if(what==='lawen1'){S.items.lawen++;persist();return say([L('','Lawen!','Encontraste un lawen (remedio).','You found a lawen (medicine).')])}
   if(what==='piwke')return gainPiwke([N('Dentro del cofre brilla algo rojo...','Something red glows inside the chest...')]);
   if(what==='rune'){S.runes.push('kil');S.flags.rune_kil=1;persist();sfx('lvl');return say([
@@ -1368,6 +1511,11 @@ const STONES={
     qs:[{q:L('Kura','___ ruka','Mi casa.','My house.'),o:['tami','ñi','tañi'],a:'tañi'},
         {q:L('Kura','___ kawellu','Tu caballo.','Your horse.'),o:['tañi','tami','ñi'],a:'tami'},
         {q:L('Kura','___ trewa','Su perro (de él o de ella).','His / her dog.'),o:['ñi','tañi','tami'],a:'ñi'}]},
+  quest:{intro:[L('Kura','Mari mari! Kimimi chem, iney, chew?','¡Hola! ¿Conoces chem, iney, chew?','Hello! Do you know chem, iney, chew?'),N('Completa mis preguntas con la palabra que pregunta y te abro el paso.','Complete my questions with the question word and I will open the way.')],
+    qs:[{q:L('Kura','___ pingeymi?','¿Cómo te llamas?','What is your name?'),o:['Chew','Iney','Chem'],a:'Iney'},
+        {q:L('Kura','___ tuwimi?','¿De dónde eres?','Where are you from?'),o:['Chew','Chumül','Iney'],a:'Chew'},
+        {q:L('Kura','___ nieymi?','¿Qué tienes?','What do you have?'),o:['Chumten','Chem','Chew'],a:'Chem'},
+        {q:L('Kura','___ ngülliw nieymi?','¿Cuántos piñones tienes?','How many pewen nuts do you have?'),o:['Chumten','Chumül','Iney'],a:'Chumten'}]},
   plur:{intro:[L('Kura','Mari mari! Kimimi pu?','¡Hola! ¿Conoces pu?','Hello! Do you know pu?'),N('Cuando son dos o muchos, el verbo también cambia. Completa los verbos.','When there are two or many, the verb changes too. Complete the verbs.')],
     qs:[{q:L('Kura','Pu wentru amu___','Los hombres van.','The men go.'),o:['amuy','amuyngu','amuyngün'],a:'amuyngün'},
         {q:L('Kura','Epu domo küpa___','Dos mujeres vienen.','Two women come.'),o:['küpayngu','küpay','küpayngün'],a:'küpayngu'},
@@ -1383,7 +1531,8 @@ function stoneTalk(id){
       if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Kura','Fey no...','Eso no...','Not that...'),N('Vuelve a intentarlo desde el principio.','Try again from the beginning.')],()=>ask(0))}},false,false)}
 }
 const WARPS={lafkenche:[{m:'Lafken inaltu',es:'Entrada de la cueva (orilla)',en:'Cave entrance (lagoon shore)',to:['inaltu',21,5]},{m:'Lafkenche lof',es:'El lof de la costa',en:'The coast lof',to:['lof',17,9]}],
-  nagche:[{m:'Fütra mawida',es:'Entrada de la guarida (monte)',en:'Lair entrance (forest)',to:['n_mawida',28,4]},{m:'Nagche lof',es:'El lof de los llanos',en:'The lowland lof',to:['n_lof',17,9]}]};
+  nagche:[{m:'Fütra mawida',es:'Entrada de la guarida (monte)',en:'Lair entrance (forest)',to:['n_mawida',28,4]},{m:'Nagche lof',es:'El lof de los llanos',en:'The lowland lof',to:['n_lof',17,9]}],
+  pewenche:[{m:'Pillañ inaltu',es:'Entrada de la morada (volcán)',en:'Lair entrance (volcano)',to:['p_pillan',28,4]},{m:'Pewenche lof',es:'El lof de los pewenes',en:'The pewen lof',to:['p_lof',17,9]}]};
 function warpMenu(){
   const opts=[];for(const r in WARPS)if(awake(r))for(const w of WARPS[r])opts.push({m:w.m,g:G(w),v:w.to});
   opts.push({m:'Mülekan faw',g:S.gloss==='en'?'Stay here':'Quedarme aquí',v:'x'});
@@ -1625,6 +1774,85 @@ function goTitle(){
   mode='title';$('title').style.display='';$('bCont').style.display='';AU.name=null;playSong('intro');
 }
 
+/* ================= PEWENCHE ================= */
+function lakuTalk(){
+  if(!S.flags.laku){S.flags.laku=1;S.gold+=20;persist();sfx('pick');
+    return say([L('Laku','Mari mari, '+nm()+'! Iñche tami laku.','¡Hola, '+nm()+'! Soy tu laku.','Hello, '+nm()+'! I am your laku.'),
+      N('Tu laku es el papá de tu papá. Subió a la cordillera para la cosecha de ngülliw.','Your laku is your father\'s father. He came up to the mountains for the ngülliw harvest.'),
+      L('Laku','Tüfa ta ngülliw: pewen ñi fün.','Esto es ngülliw: el fruto del pewen.','This is ngülliw: the fruit of the pewen.'),
+      N('Los ngülliw que has juntado en tu viaje son estos piñones. Con ellos se hace trafkintu: se intercambian cosas. Tu laku te regala epu mari (20).','The ngülliw you have gathered on your journey are these pewen nuts. With them people do trafkintu: they exchange things. Your laku gives you epu mari (20).'),
+      L('Laku','Chem pimi? Iney eymi? Chew amuaymi?','¿Qué dijiste? ¿Quién eres tú? ¿A dónde irás?','What did you say? Who are you? Where will you go?'),
+      N('Así se pregunta: chem (qué), iney (quién), chew (dónde), chumül (cuándo), chumten (cuánto). Tu chillka las tiene en «Chem, iney, chew».','This is how you ask: chem (what), iney (who), chew (where), chumül (when), chumten (how much). Your chillka has them under «Chem, iney, chew».'),
+      L('Laku','Lonko mew amunge. Kütral mew müley.','Ve donde el lonko. Está junto al kütral.','Go to the lonko. He is by the fire.')]);}
+  const ls=[L('Laku','Mari mari, '+nm()+'!','¡Hola, '+nm()+'!','Hello, '+nm()+'!')];
+  if(S.flags.ngen3)ls.push(L('Laku','Ngen-pewen nepey! Ayüwün.','¡Ngen-pewen despertó! Estoy feliz.','Ngen-pewen has woken up! I am happy.'));
+  else ls.push(N('El pillañ (el volcán) queda al este, pasando el bosque de pewenes y los campos de nieve.','The pillañ (the volcano) lies to the east, past the pewen forest and the snowfields.'));
+  say(ls);
+}
+function pLonkoTalk(){
+  if(S.flags.pew_lonko){
+    const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
+    if(S.flags.ngen3)ls.push(L('Lonko','Ngen-pewen nepey. Chaltu may!','Ngen-pewen despertó. ¡Gracias!','Ngen-pewen has woken up. Thank you!'),
+      N('Ya llevas tres trariwe trokiñ. Dicen que en el sur, en tierras williche, y al otro lado de la cordillera, en Puelmapu, esperan los últimos.','You now carry three trariwe trokiñ. They say the last ones wait in the south, in Williche lands, and across the mountains, in Puelmapu.'));
+    else ls.push(L('Lonko','Pillañ mew amunge.','Ve al volcán.','Go to the volcano.'),N('Pasando el bosque de pewenes y los campos de nieve está el pillañ. La morada del Cherrufe está adentro.','Past the pewen forest and the snowfields is the pillañ. The Cherrufe\'s lair is inside.'));
+    return say(ls);
+  }
+  const steps=[
+    {q:L('Lonko','Mari mari, '+nm()+'. Chumleymi?','Hola, '+nm()+'. ¿Cómo estás?','Hello, '+nm()+'. How are you?'),
+     o:[{m:'Kümelen. Eymi kay?',es:'Estoy bien. ¿Y tú?',en:'I am well. And you?',ok:1},{m:'Kümeleyngün.',es:'Ellos están bien.',en:'They are well.'},{m:'Chumleymi?',es:'¿Cómo estás?',en:'How are you?'}]},
+    {q:L('Lonko','Iñche ka kümelen. Chew tuwimi?','Yo también estoy bien. ¿De dónde eres?','I am well too. Where are you from?'),
+     o:[{m:'Lafken mapu tuwün.',es:'Vengo de la tierra del mar.',en:'I come from the land of the sea.',ok:1},{m:'Chew tuwimi?',es:'¿De dónde eres tú?',en:'Where are you from?'},{m:'Pewen mapu tuwimi.',es:'Tú vienes de la tierra de los pewenes.',en:'You come from the land of the pewen trees.'}]},
+    {q:L('Lonko','Chumleyngün tami pu che?','¿Cómo está tu gente?','How are your people?'),
+     o:[{m:'Kümeleyngün.',es:'Ellos están bien.',en:'They are well.',ok:1},{m:'Kümelen.',es:'Yo estoy bien.',en:'I am well.'},{m:'Kümeleymi.',es:'Tú estás bien.',en:'You are well.'}]}];
+  say([N('El lonko pewenche se levanta para saludarte. Recuerda el pentukuwün.','The Pewenche lonko stands up to greet you. Remember the pentukuwün.')],()=>step(0));
+  function step(i){
+    if(i>=steps.length)return done();
+    const s=steps[i],en=S.gloss==='en';
+    const opts=s.o.map((o,k)=>({m:o.m,g:S.hints?(en?o.en:o.es):'',v:k}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
+    choose(s.q,opts,v=>{if(s.o[v].ok)say([praise()],()=>step(i+1));else{sfx('bad');say([N('El lonko espera, en silencio. Piensa en lo que te preguntó.','The lonko waits in silence. Think about what he asked you.')],()=>step(i))}},false,true);
+  }
+  function done(){
+    S.flags.pew_lonko=1;learnRoot('trafo');S.items.kulon++;persist();sfx('lvl');
+    say([L('Lonko','Kümey! Ngen-lafken ka Ngen-mawida nepeyngu, pikeyngün.','¡Bien! Dicen que Ngen-lafken y Ngen-mawida despertaron.','Good! They say Ngen-lafken and Ngen-mawida have woken up.'),
+      L('Lonko','Welu Ngen-pewen umawtuley.','Pero Ngen-pewen está dormido.','But Ngen-pewen is asleep.'),
+      N('Un Cherrufe, un gigante de roca y lava, salió del pillañ. Su calor seca los pewenes y la nieve se vuelve dura como piedra. Desde entonces hay menos ngülliw y la gente olvida las palabras.','A Cherrufe, a giant of rock and lava, came out of the pillañ. Its heat dries the pewen trees and the snow turns hard as stone. Since then there are fewer ngülliw and people forget the words.'),
+      L('Lonko','Trafo- kimeltueyu.','Te enseño trafo- ("quebrarse").','I teach you trafo- ("break").'),
+      N('Con trafonge, trafomu o trafomün se quiebra la coraza de piedra de los wekufü. Recibiste trafo- y un külon.','With trafonge, trafomu or trafomün the stone crust of the wekufü cracks. You received trafo- and a külon.'),
+      L('Lonko','Pillañ mew amunge, '+nm()+'.','Ve al volcán, '+nm()+'.','Go to the volcano, '+nm()+'.')]);
+  }
+}
+function pNutramTalk(){
+  say([L('Nütramkafe','Mari mari, '+addr(true)+'. Nütramkayaiñ?','Hola. ¿Conversamos?','Hello. Shall we talk?'),
+    L('Nütramkafe','Kuyfi, pillañ mew mülefuy kiñe Cherrufe.','Hace mucho tiempo, en el volcán había un Cherrufe.','Long ago, in the volcano, there was a Cherrufe.'),
+    L('Nütramkafe','Kütral ka kura ngefuy.','Era de fuego y de piedra.','It was made of fire and stone.'),
+    L('Nütramkafe','Pu che llükakefuy.','La gente le tenía miedo.','People used to fear it.'),
+    N('Dicen que los golpes rebotan en su piedra, y que su fuego quema a quien lo toca. Pero la piedra se quiebra, y el fuego se apaga con el frío.','They say blows bounce off its stone, and its fire burns whoever touches it. But stone cracks, and fire goes out in the cold.')]);
+}
+function gathTalk(){
+  say([L('Domo','Fentren ngülliw müley!','¡Hay muchos piñones!','There are lots of pewen nuts!'),
+    N('Las mujeres juntan los ngülliw que caen de los pewenes. Este año caen pocos: el calor del Cherrufe seca los árboles.','The women gather the nuts that fall from the pewen trees. This year few are falling: the Cherrufe\'s heat dries the trees.')]);
+}
+function arrieroTalk(){
+  const en=S.gloss==='en';
+  if(S.flags.pew_ke)return say([L('Wentru','Kawellu mew amuken. Pewkayal!','Yo ando a caballo. ¡Hasta luego!','I ride on horseback. See you later!')]);
+  const qs=[{q:L('Wentru','Pu pewenche ngülliw i___','Los pewenche comen piñones (siempre, de costumbre).','The Pewenche eat pewen nuts (always, as a habit).'),o:['iyngün','ikeyngün','ikey'],a:'ikeyngün'},
+    {q:L('Wentru','Iñche mapudungu___','Yo hablo mapudungun (siempre, de costumbre).','I speak Mapudungun (always, as a habit).'),o:['mapudungun','mapudunguken','mapudungukey'],a:'mapudunguken'},
+    {q:L('Wentru','Eymi kawellu mew amu___','Tú andas a caballo (siempre, de costumbre).','You ride on horseback (always, as a habit).'),o:['amuymi','amukeymi','amuken'],a:'amukeymi'}];
+  say([L('Wentru','Mari mari, '+addr(false)+'. Kawellu mew amuken.','Hola. Yo ando a caballo.','Hello. I ride on horseback.'),
+    N('Fíjate en amuken: -ke- dice lo que alguien hace siempre, por costumbre. El arriero quiere ver si lo entiendes. Tu chillka lo explica en «-ke-».','Notice amuken: -ke- says what someone always does, as a habit. The muleteer wants to see if you understand. Your chillka explains it under «-ke-».')],()=>ask(0));
+  function ask(i){
+    if(i>=qs.length){S.flags.pew_ke=1;S.items.kofke+=2;S.gold+=30;S.xp+=4;persist();sfx('lvl');
+      return say([praise(),L('Wentru','Kümey! Mapudungukeymi!','¡Bien! ¡Hablas mapudungun!','Good! You speak Mapudungun!'),N('Te da dos kofke y küla mari (30) ngülliw. +4 kimün.','He gives you two kofke and küla mari (30) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+    const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
+      if(v==='_book')return openBook(()=>ask(i));
+      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Wentru','Fey no...','Eso no...','Not that...'),N('Piensa: ¿quién lo hace, y lo hace siempre?','Think: who does it, and do they always do it?')],()=>ask(0))}},false,false)}
+}
+function kona3Talk(){
+  if(S.flags.ngen3)return say([L('Kona','Cherrufe ngelay! Ayüwün!','¡Ya no está el Cherrufe! ¡Qué feliz estoy!','The Cherrufe is gone! I am so happy!')]);
+  say([L('Kona','Cherrufe müley pillañ mew. Kütral ka kura ngey!','El Cherrufe está en el volcán. ¡Es de fuego y de piedra!','The Cherrufe is in the volcano. It is made of fire and stone!'),
+    N('La entrada está entre las rocas, subiendo al este. Dicen que adentro hay piedras con números muy grandes y otra que hace preguntas.','The entrance is among the rocks, up to the east. They say inside there are stones with very big numbers and another one that asks questions.')]);
+}
+
 /* ============================================================
    PAUSE MENU
    ============================================================ */
@@ -1683,6 +1911,16 @@ const BOOK={
     N('Los cuatro rumbos. Con püle se dice «hacia»: pikun püle, «hacia el norte».','The four directions. With püle you say «toward»: pikun püle, «toward the north».'),
     L('','pikun · willi · puel · ngulu','norte · sur · este · oeste','north · south · east · west'),
     N('Por eso la gente del sur es williche y la tierra del este es Puelmapu.','That is why the people of the south are williche and the land of the east is Puelmapu.')]},
+  quest:{m:'Chem, iney, chew...',es:'Preguntas',en:'Questions',lines:[
+    L('','chem · iney · chew · chumül · chumten','qué · quién · dónde · cuándo · cuánto','what · who · where · when · how much'),
+    L('','Chem pimi? · Iney eymi? · Chew amuaymi?','¿Qué dijiste? · ¿Quién eres? · ¿A dónde irás?','What did you say? · Who are you? · Where will you go?')]},
+  ke:{m:'-ke-',es:'Lo que se hace siempre',en:'What is always done',lines:[
+    N('-ke- va antes de la terminación de persona y dice lo que se hace siempre, por costumbre. Ejemplo con pe- ("ver"):','-ke- goes before the person ending and says what is always done, as a habit. Example with pe- ("see"):'),
+    L('','peken · pekeymi · pekey','yo veo siempre · tú ves siempre · él/ella ve siempre','I always see · you always see · he/she always sees'),
+    L('','pekeyngu · pekeyngün','ellos dos ven siempre · ellos ven siempre','they two always see · they always see')]},
+  seasons:{m:'Pewü, walüng...',es:'Las estaciones',en:'The seasons',lines:[
+    L('','pewü · walüng · rimü · pukem','primavera · verano · otoño · invierno','spring · summer · autumn · winter'),
+    N('El año empieza a florecer en pewü; en rimü caen los ngülliw de los pewenes, y en pukem llega la nieve.','The year begins to bloom in pewü; in rimü the nuts fall from the pewen trees, and in pukem the snow arrives.')]},
   fu:{m:'Kuyfi · -fu-',es:'Lo que pasaba antes',en:'What used to happen',lines:[
     N('En los relatos, -fu- marca algo que pasaba o que había antes, y que ya no es así.','In stories, -fu- marks something that happened or existed before, and is no longer so.'),
     L('','mülefuy · pefun · konfuy','había, estaba · vi, había visto · entró, había entrado','there was · I saw, had seen · he/she went in, had gone in'),
@@ -1724,7 +1962,7 @@ function engage(e){
 }
 function relabel(){const cnt={},seen={};B.en.forEach(e=>cnt[e.t]=(cnt[e.t]||0)+1);
   B.en.forEach(e=>{seen[e.t]=(seen[e.t]||0)+1;if(e.label)return;e.label=ET[e.t].name+(cnt[e.t]>1||ET[e.t].name==='laftrache'&&B.en.length>1?' '+'ABCDE'[seen[e.t]-1]:'')})}
-function mkEnemy(t){return{t,hp:ET[t].hp,max:ET[t].hp,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'?1:0}}
+function mkEnemy(t){return{t,hp:ET[t].hp,max:ET[t].hp,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'?1:0,armor:ET[t].armor?1:0,burn:ET[t].fire?1:0}}
 function startBattle(party,o){
   mode='battle';banner.style.display='none';held.up=held.down=held.left=held.right=0;
   B={en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
@@ -1794,8 +2032,9 @@ function doSpecial(k,tgt){
   const head=L(S.name,sp.m+'!',G(sp),G(sp));head.fx=()=>{sfx('cast');B.flash=12;B.shake=8};
   if(k==='lawen'){S.hp=Math.min(maxHP(),S.hp+8);S.curse=0;fx.push('Recuperas dos piwke.');fxe.push('You recover two hearts.');head.fx=()=>{sfx('heal');spark(60,30,'#80ff90',16)}}
   else{targets=k==='wino'?[tgt]:aliveE();
-    for(const e of targets){let d=k==='wino'?atk()*3+rnd(3):Math.round(atk()*1.5)+rnd(3);if(e.tall)d=Math.max(1,Math.round(d/3));if(k==='kuruf'&&ET[e.t].fly)e.gr=3;e.pend=d;e.hp-=d;
-      fx.push(e.label+' −'+d+(e.hp<=0?' (se va)':'')+'.');fxe.push(e.label+' −'+d+(e.hp<=0?' (gone)':'')+'.')}}
+    let burnT=0;for(const e of targets){let d=k==='wino'?atk()*3+rnd(3):Math.round(atk()*1.5)+rnd(3);if(e.tall)d=Math.max(1,Math.round(d/3));if(e.armor)d=Math.max(1,Math.round(d/2));if(e.burn)burnT+=2;if(k==='kuruf'&&ET[e.t].fly)e.gr=3;e.pend=d;e.hp-=d;
+      fx.push(e.label+' −'+d+(e.hp<=0?' (se va)':'')+'.');fxe.push(e.label+' −'+d+(e.hp<=0?' (gone)':'')+'.')}
+    if(burnT){S.hp=Math.max(1,S.hp-burnT);fx.push('¡Te quemas! (−'+burnT+')');fxe.push('You get burned! (−'+burnT+')')}}
   const eff=N(fx.join(' '),fxe.join(' '));
   eff.fx=()=>{for(const e of targets){const p=epos(e);spark(p.x,p.y,k==='kuruf'?'#e8f4ff':'#ffd060',16);if(e.pend){e.hit=14;pop(p.x,p.y-10,'-'+e.pend,'#ffffff');sfx('hit');if(e.hp<=0){e.dead=true;e.fadeT=20}e.pend=0}}};
   say([head,eff],()=>{for(const e of targets)if(e.hp<=0&&!e.dead){e.dead=true;e.fadeT=20}if(!aliveE().length)return victory();enemyPhase()});
@@ -1819,11 +2058,14 @@ function resolve(r,kil,tg,ei){
   const fx=[],fxe=[];
   const castFx=()=>{sfx('cast');B.flash=8};
   lines[0].fx=castFx;
+  let burnT=0;
   if(r==='amutu'&&!kil){
     for(const e of targets){const T=ET[e.t];
       if(T.fly&&e.gr<=0){fx.push(e.label+' vuela muy alto: no te alcanza.');fxe.push(e.label+' flies too high: it does not reach.');e.miss=1;continue}
       if(e.tall){fx.push(e.label+' está erguido, altísimo: tus palabras le pasan por debajo.');fxe.push(e.label+' stands tall, towering: your words pass beneath it.');e.miss=1;continue}
-      const d=coll?Math.max(1,Math.round((atk()+rnd(4))*.75)):atk()+rnd(4)+2;e.pend=d;e.hp-=d;
+      let d=coll?Math.max(1,Math.round((atk()+rnd(4))*.75)):atk()+rnd(4)+2;if(e.burn)burnT+=2;
+      if(e.armor){d=Math.max(1,Math.round(d*.25));fx.push(e.label+': el golpe rebota en su coraza de piedra.');fxe.push(e.label+': the blow bounces off its stone crust.')}
+      e.pend=d;e.hp-=d;
       if(e.hp<=0){fx.push(e.label+' se va (−'+d+').');fxe.push(e.label+' goes away (−'+d+').')}else{fx.push(e.label+' −'+d+'.');fxe.push(e.label+' −'+d+'.')}}
   }else if(r==='amutu'){fx.push('Les dijiste que no se fueran... y se quedan, felices.');fxe.push('You told them not to leave... so they stay, happily.')}
   else if(r==='küpa'&&!kil){fx.push('¡Les dijiste que vinieran! Se lanzan sobre ti.');fxe.push('You told them to come! They rush at you.');B.rush=new Set(targets)}
@@ -1834,6 +2076,14 @@ function resolve(r,kil,tg,ei){
   else if(r==='nag'&&!kil){let any=0;for(const e of targets)if(ET[e.t].fly){e.gr=3;any=1;fx.push(e.label+' baja al suelo.');fxe.push(e.label+' comes down to the ground.')}
       if(!any){fx.push('No vuela: ya está abajo.');fxe.push('It does not fly: it is already down.')}}
   else if(r==='nag'){fx.push('Les dijiste que no bajaran. Siguen donde estaban.');fxe.push('You told them not to come down. They stay where they were.')}
+  else if(r==='trafo'&&!kil){for(const e of targets){if(e.armor){e.armor=0;e.armorT=ET[e.t].boss?4:0;fx.push(e.label+': ¡se le quiebra la coraza de piedra!');fxe.push(e.label+': its stone crust cracks apart!')}else{fx.push(e.label+' no tiene coraza que quebrar.');fxe.push(e.label+' has no crust to break.')}}}
+  else if(r==='trafo'){fx.push('Les dijiste que no se quebraran. Nada cambia.');fxe.push('You told them not to break. Nothing changes.')}
+  else if(r==='wütre'&&!kil){for(const e of targets){const T=ET[e.t];
+      if(T.snow){e.hp=Math.min(e.max,e.hp+4);fx.push(e.label+' es de nieve: ¡le encanta el frío! (+4)');fxe.push(e.label+' is made of snow: it loves the cold! (+4)')}
+      else if(e.burn){e.burn=0;e.cool=T.boss?3:0;if(!T.boss)e.stun=1;fx.push(e.label+': ¡su fuego se apaga!');fxe.push(e.label+': its fire goes out!')}
+      else if(!T.boss&&Math.random()<(coll?.4:.6)){e.stun=1;fx.push(e.label+' tirita de frío y pierde su turno.');fxe.push(e.label+' shivers with cold and loses its turn.')}
+      else{fx.push(e.label+' tirita, pero sigue ahí.');fxe.push(e.label+' shivers, but stays put.')}}}
+  else if(r==='wütre'){fx.push('Les dijiste que no tuvieran frío. Se ven contentos.');fxe.push('You told them not to be cold. They look pleased.')}
   else if(r==='llüka'&&!kil){for(const e of targets){const T=ET[e.t];
       if(T.boss&&e.tall){fx.push(e.label+' no siente miedo mientras está erguido.');fxe.push(e.label+' feels no fear while it stands tall.');continue}
       if(T.boss||Math.random()<(coll?.75:.92)){e.fear=3;fx.push(e.label+' tiembla de miedo: golpeará más débil.');fxe.push(e.label+' trembles with fear: it will hit weaker.')}else{fx.push(e.label+' no se asusta.');fxe.push(e.label+' is not scared.')}}}
@@ -1843,6 +2093,7 @@ function resolve(r,kil,tg,ei){
       if(T.boss&&B.tele){B.tele=false;fx.push(e.label+' retrocede y pierde el impulso: ya no se lanza.');fxe.push(e.label+' steps back and loses its momentum: it no longer lunges.');continue}
       if(!T.boss&&Math.random()<(coll?.6:.85)){e.stun=1;fx.push(e.label+' retrocede y pierde su turno.');fxe.push(e.label+' steps back and loses its turn.')}else{fx.push(e.label+' se tambalea, pero sigue ahí.');fxe.push(e.label+' staggers, but stays put.')}}}
   else if(r==='wiñotu'){fx.push('Les dijiste que no retrocedieran. Se quedan firmes.');fxe.push('You told them not to go back. They hold their ground.')}
+  if(burnT){S.hp=Math.max(1,S.hp-burnT);fx.push('¡Te quemas con su fuego! (−'+burnT+')');fxe.push('You get burned by its fire! (−'+burnT+')')}
   const eff=L('',pr.m+(S.sp>=2?'  ✦'+S.sp:''),fx.join(' '),fxe.join(' '));
   eff.fx=()=>{for(const e of targets){const p=epos(e);spark(p.x,p.y,r==='amutu'?'#fff6a0':r==='umawtu'?'#a0c8ff':r==='nag'?'#ffe080':'#ffffff',10);
       if(e.pend){e.hit=12;pop(p.x,p.y-10,'-'+e.pend,'#ffffff');sfx('hit');if(e.hp<=0){e.dead=true;e.fadeT=20}e.pend=0}
@@ -1865,6 +2116,14 @@ function enemyPhase(){
   for(const e of aliveE()){const T=ET[e.t];
     if(e.sl>0){e.sl--;fx.push(e.label+' duerme.');fxe.push(e.label+' is asleep.');continue}
     if(e.stun>0){e.stun--;fx.push(e.label+' todavía retrocede.');fxe.push(e.label+' is still backing away.');continue}
+    if(e.t==='cherrufe'){
+      if(B.tele){B.tele=false;hitP(e,2.2,{es:' te cae encima como un río de lava',en:' falls on you like a river of lava'});continue}
+      if(!e.armor&&e.armorT>0){e.armorT--;if(e.armorT<=0){e.armor=1;fx.push('La lava se endurece: la coraza del Cherrufe vuelve.');fxe.push("The lava hardens: the Cherrufe's crust comes back.");continue}}
+      if(!e.burn&&e.cool>0){e.cool--;if(e.cool<=0){e.burn=1;fx.push('El Cherrufe vuelve a arder.');fxe.push('The Cherrufe bursts into flame again.');continue}}
+      const roll=Math.random(),kc=aliveE().filter(x=>x.t==='kutral').length;
+      if(roll<.28&&B.turn>0&&B.turn-(e.lastTele||-9)>2){B.tele=true;e.lastTele=B.turn;fx.push('El Cherrufe levanta los brazos: la lava hierve a sus pies.');fxe.push('The Cherrufe raises its arms: the lava boils at its feet.');continue}
+      if(roll<.45&&kc<1&&B.en.length<5){const ne=mkEnemy('kutral');B.en.push(ne);relabel();fx.push('¡El Cherrufe lanza una chispa: aparece '+ne.label+'!');fxe.push('The Cherrufe throws a spark: '+ne.label+' appears!');continue}
+      hitP(e);continue}
     if(e.t==='witranalwe'){
       if(B.tele){B.tele=false;hitP(e,2.2,{es:' se lanza sobre ti',en:' lunges at you'});continue}
       if(!e.tall&&e.low>0){e.low--;if(e.low<=0){e.tall=1;fx.push('Witranalwe vuelve a erguirse, altísimo.');fxe.push('The Witranalwe rises up again, towering.');continue}}
@@ -1888,6 +2147,8 @@ function enemyPhase(){
   if(fx.length){const l=N(fx.join(' '),fxe.join(' '));l.fx=()=>{hitsFx.forEach(f=>f());if(dmgTotal){B.shake=12;B.red=10;sfx('hurt')}};lines.push(l)}
   const bossE=aliveE().find(x=>ET[x.t].boss),bn=bossE?ET[bossE.t].name:'';
   if(B.tele&&bossE)lines.push(L(bn,'Küpaley '+bn+'!','¡'+bn+' viene!',bn+' is coming!'));
+  if(aliveE().some(x=>x.armor)&&!B.armorHint&&B.turn>=1){B.armorHint=1;lines.push(N('Pista: los golpes rebotan en la coraza de piedra. Quizás si le dices que se quiebre...','Hint: blows bounce off the stone crust. Maybe if you tell it to break...'))}
+  if(bossE&&bossE.t==='cherrufe'&&bossE.burn&&!B.fireHint&&B.turn>=2&&S.roots.includes('wütre')){B.fireHint=1;lines.push(N('Pista: su fuego te quema cada vez que lo atacas. El frío podría apagarlo.','Hint: its fire burns you every time you attack it. The cold could put it out.'))}
   if(bossE&&bossE.t==='witranalwe'&&bossE.tall&&!B.tallHint&&B.turn>=1){B.tallHint=1;lines.push(N('Pista: erguido así, nada lo alcanza. Quizás si le dices que vuelva atrás...','Hint: standing tall like that, nothing reaches it. Maybe if you tell it to go back...'))}
   if(B.tele&&!B.teleHint&&bossE){B.teleHint=1;lines.push(N('Pista: dile que no venga (küpa- con -kil-), a él solo o a todos, con la terminación correcta.','Hint: tell it not to come (küpa- with -kil-), to it alone or to all of them, with the right ending.'))}
   say(lines,()=>{
@@ -1906,7 +2167,7 @@ function victory(){
 }
 function defeat(){
   const lost=Math.floor(S.gold/4);S.gold-=lost;playSong('intro');
-  const gm=MAPS[CUR].region==='nagche'?'chuchu':'kuku';
+  const gm=MAPS[CUR].region==='nagche'?'chuchu':MAPS[CUR].region==='pewenche'?'laku':'kuku';
   say([N('Te quedas sin fuerzas... Tu '+gm+' te encuentra y te lleva junto al kütral.'+(lost?' Pierdes '+numP(lost)+' ngülliw.':''),'You collapse... Your '+gm+' finds you and carries you back to the fire.'+(lost?' You lose '+numP(lost)+' ngülliw.':''))],()=>{
     S.curse=0;S.hp=maxHP();mode='map';B=null;const sv=S.save;AU.name=null;loadMap(sv.map,sv.x,sv.y)});
 }
@@ -1919,6 +2180,7 @@ function endBattle(how){
 }
 function postBoss(){
   if(CUR==='ngen2')return postBoss2();
+  if(CUR==='ngen3')return postBoss3();
   say([N('El cuero de Trelke-wekufü se hunde y el agua se aclara. Una figura de espuma y luz se levanta de la laguna.','Trelke-wekufü\'s hide sinks and the water clears. A figure of foam and light rises from the lagoon.')],()=>{
     S.flags.ngen=1;S.flags.dive=1;S.pieces=S.pieces||[];if(!S.pieces.includes('lafkenche'))S.pieces.push('lafkenche');S.flags.awake_lafkenche=1;if(CUR==='ngen')grid[7][8]='A';S.hp=Math.min(maxHP(),S.hp+HPQ);AU.name=null;playSong('ngen');
     const e=Object.assign({},MAPS.ngen.ents[1]);e.fx=e.x;e.fy=e.y;ents.push(e);persist();sfx('lvl');
@@ -1948,6 +2210,22 @@ function postBoss2(){
       Object.assign(L('','Epu trariwe trokiñ!','Entre las raíces queda otro trokiñ del trariwe antiguo, tejido en verde y amarillo. Tienes 2 de 5.','Among the roots lies another trokiñ of the ancient trariwe, woven in green and yellow. You have 2 of 5.'),{fx:()=>sfx('pick')}),
       N('Un círculo de luz aparece en el claro: pisándolo puedes volver a la entrada de la guarida, al lof nagche o a las tierras lafkenche.','A circle of light appears in the clearing: step on it to return to the lair entrance, the Nagche lof, or the Lafkenche lands.'),
       N('Fin de la región nagche (prototipo). Vuelve a los zarzales que viste en el camino: ahora puedes pasar. Faltan Pewenche, Williche y Puelmapu.','End of the Nagche region (prototype). Go back to the brambles you saw on the road: now you can get through. Pewenche, Williche and Puelmapu remain.')]);
+  });
+}
+
+function postBoss3(){
+  say([N('La coraza del Cherrufe se parte en mil pedazos y su fuego se hunde en la lava, que se enfría y se vuelve piedra. Desde una grieta brota una semilla, y en un instante crece un pewen joven y dorado.','The Cherrufe\'s crust splits into a thousand pieces and its fire sinks into the lava, which cools and turns to stone. A seed sprouts from a crack, and in an instant a young golden pewen grows.')],()=>{
+    S.flags.ngen3=1;S.flags.snow=1;S.pieces=S.pieces||[];if(!S.pieces.includes('pewenche'))S.pieces.push('pewenche');
+    grid[7][8]='A';for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++)if(grid[y][x]==='^')grid[y][x]=M.floor;
+    S.hp=Math.min(maxHP(),S.hp+HPQ);AU.name=null;playSong(rsong('ngen'));
+    const e=Object.assign({},MAPS.ngen3.ents[1]);e.fx=e.x;e.fy=e.y;ents.push(e);persist();sfx('lvl');
+    say([L('Ngen-pewen','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.'),
+      L('Ngen-pewen','Tami dungun mew nepen.','Con tus palabras desperté.','With your words I woke up.'),
+      N('Ngen-pewen es el ngen de los pewenes: cuida los árboles, sus ngülliw y a la gente que vive de ellos.','Ngen-pewen is the ngen of the pewen trees: it looks after the trees, their nuts, and the people who live from them.'),
+      N('Ngen-pewen te da su newen: ahora la nieve dura se abre cuando pasas. Además ganas un corazón nuevo.','Ngen-pewen gives you its newen: now the hard snow opens when you pass. You also gain a new heart.'),
+      Object.assign(L('','Küla trariwe trokiñ!','Entre la piedra todavía tibia queda otro trariwe trokiñ, tejido en café y blanco. Tienes 3 de 5.','In the still-warm stone lies another trariwe trokiñ, woven in brown and white. You have 3 of 5.'),{fx:()=>sfx('pick')}),
+      N('Un círculo de luz aparece en el cráter: pisándolo puedes volver a la entrada de la morada, al lof pewenche o a las otras tierras.','A circle of light appears in the crater: step on it to return to the lair entrance, the Pewenche lof, or the other lands.'),
+      N('Fin de la región pewenche (prototipo). Vuelve a los montones de nieve que viste en el camino: ahora puedes pasar. Faltan Williche y Puelmapu.','End of the Pewenche region (prototype). Go back to the snow heaps you saw on the road: now you can get through. Williche and Puelmapu remain.')]);
   });
 }
 
@@ -2004,7 +2282,7 @@ function renderCut(){
     ell(c,96,186,12,3,'rgba(0,0,0,.3)');c.drawImage(charSprite('kuku','down',0),72,114,48,72)}
 }
 /* ---------- map ---------- */
-const DYN=new Set(['Ñ','F','C','K','S','I','X','v','P','m','g','p','k','L','G','B','O','q','Q','N','J','H','E','A']);
+const DYN=new Set(['^','Ñ','F','C','K','S','I','X','v','P','m','g','p','k','L','G','B','O','q','Q','N','J','H','E','A']);
 const BOB=new Set(['P','m','g','p','k']);
 function bubble(x,y,text){OV.push(()=>{ctx.font='bold 13px ui-monospace,Menlo,Consolas,monospace';const w=ctx.measureText(text).width+12,bx=Math.round(x*2-w/2),by=Math.round(y*2-26);
   ctx.fillStyle='#181018';ctx.fillRect(bx-2,by-2,w+4,24);ctx.fillStyle='#fffaf0';ctx.fillRect(bx,by,w,20);ctx.fillStyle='#181018';ctx.fillRect(x*2-3,by+20,6,4);ctx.fillStyle='#fffaf0';ctx.fillRect(x*2-1,by+20,2,2);
@@ -2042,6 +2320,7 @@ function renderMap(){
     if(e.kind==='npc'){
       if(e.look==='ngen')drawNgen(c,sx+8,sy+15,1,frame);
       else if(e.look==='ngen2')drawNgen(c,sx+8,sy+15,1,frame,'mawida');
+      else if(e.look==='ngen3')drawNgen(c,sx+8,sy+15,1,frame,'pewen');
       else if(e.look==='dog'){ell(c,sx+8,sy+14,6,2,'rgba(0,0,0,.3)');c.drawImage(dogSprite(e.mv?Math.floor(frame/6)%2:0,e.dir),sx,sy+4)}
       else{let fr=e.mv?Math.floor(frame/7)%4:0;if(e.act==='weave'||e.act==='teach')fr=Math.floor(frame/24)%2?1:0;
         drawChar(c,e.look,sx,sy,e.dir||'down',fr,e.seated);
@@ -2058,9 +2337,10 @@ function renderMap(){
   list.sort((a,b)=>a.y-b.y).forEach(o=>o.d());
   for(const [rx,ry] of RUKAS)for(let k=0;k<5;k++){const ph=((frame+k*28)%140)/140;ell(c,rx-cx+Math.sin(ph*6+k)*3*ph,ry-cy+VY-ph*28,2+ph*5,(2+ph*5)*.8,'rgba(225,225,235,'+(.4*(1-ph))+')')}
   for(let k=0;k<26;k++){const wx=Math.floor(h2(k,frame>>3,91)*LW),wy=Math.floor(h2(k,frame>>3,92)*LH),mx=Math.floor((wx+cx)/T),my=Math.floor((wy-VY+cy)/T);
-    if(inB(mx,my)&&grid[my][mx]==='~'&&WD[my][mx]>1){const a=(frame%8)<4;R(c,wx,wy,1,1,'#f4faff');if(a){R(c,wx-1,wy,1,1,'rgba(220,240,255,.7)');R(c,wx+1,wy,1,1,'rgba(220,240,255,.7)')}}}
+    if(inB(mx,my)&&grid[my][mx]==='~'&&WD[my][mx]>1){const a=(frame%8)<4;R(c,wx,wy,1,1,M.lava?'#fff0a0':'#f4faff');if(a){R(c,wx-1,wy,1,1,'rgba(220,240,255,.7)');R(c,wx+1,wy,1,1,'rgba(220,240,255,.7)')}}}
   for(const [gx,gy] of glows)for(const [r,a] of [[24,.05],[16,.07],[10,.08]])ell(c,gx,gy,r,r*.8,'rgba(255,170,80,'+a+')');
-  if(M.bg==='cave'||M.bg==='cave2'){const px=Math.round(P.fx*T-cx+8),py=Math.round(P.fy*T-cy+VY+8);for(let y=VY;y<LH;y+=2)for(let x=0;x<LW;x+=2){const d=Math.hypot(x-px,y-py);if(d>70){const a=Math.min(.7,(d-70)/140);if(a>.05){c.fillStyle='rgba(0,0,0,'+a.toFixed(2)+')';c.fillRect(x,y,2,2)}}}}
+  if(M.bg==='crater'){c.fillStyle=awake(M.region)?'rgba(255,200,120,.05)':'rgba(120,20,0,.18)';c.fillRect(0,VY,LW,VH)}
+  if(M.bg==='cave'||M.bg==='cave2'||M.bg==='cave3'){const px=Math.round(P.fx*T-cx+8),py=Math.round(P.fy*T-cy+VY+8);for(let y=VY;y<LH;y+=2)for(let x=0;x<LW;x+=2){const d=Math.hypot(x-px,y-py);if(d>70){const a=Math.min(.7,(d-70)/140);if(a>.05){c.fillStyle='rgba(0,0,0,'+a.toFixed(2)+')';c.fillRect(x,y,2,2)}}}}
   if(CUR==='rupu'){for(let k=0;k<7;k++){const fx=-cx+Math.round(Math.sin(frame/60+k)*6)+6,fy=k*30+((frame/3+k*17)%30)-cy+VY;for(const [rr,al] of [[26,.18],[16,.22],[9,.25]])ell(c,fx,fy,rr,rr*.7,'rgba(200,200,212,'+al+')')}}
   if(M.bg==='forest'){c.fillStyle=awake(M.region)?'rgba(255,240,160,.06)':'rgba(10,30,20,.3)';c.fillRect(0,VY,LW,VH)}
   if(M.bg==='lagoon'){c.fillStyle=S.flags.ngen?'rgba(120,200,255,.08)':'rgba(60,30,90,.22)';c.fillRect(0,VY,LW,VH)}
@@ -2091,10 +2371,24 @@ function drawHUD(c){
 }
 /* ---------- battle ---------- */
 const BG={},FG={};
+function lavify(cvs){const c=cvs.getContext('2d'),d=c.getImageData(0,0,cvs.width,cvs.height),a=d.data;
+  for(let i=0;i<a.length;i+=4){const r=a[i],g=a[i+1],b=a[i+2],l=(r+g+b)/3;if(b>r+20&&b>g){a[i]=Math.min(255,l*1.9+40);a[i+1]=Math.round(l*.9);a[i+2]=Math.round(l*.3)}else{a[i]=Math.round(r*.7+l*.15);a[i+1]=Math.round(g*.45);a[i+2]=Math.round(b*.45)}}c.putImageData(d,0,0);return cvs}
 function mossify(cvs){const c=cvs.getContext('2d'),d=c.getImageData(0,0,cvs.width,cvs.height),a=d.data;
   for(let i=0;i<a.length;i+=4){const r=a[i],g=a[i+1],b=a[i+2];if(r>g+6&&r>b){a[i]=Math.round(g*.85);a[i+1]=Math.round(r*.92+4);a[i+2]=Math.round(b*.8+r*.18)}}c.putImageData(d,0,0);return cvs}
 function buildBG(area){
   if(area==='cave2')return mossify(buildBG('cave'));
+  if(area==='cave3')return lavify(buildBG('cave'));
+  if(area==='mount'||area==='crater'){const [cvs,c]=mk(LW,LH),cr=area==='crater';
+    bands(c,0,96,cr?['#1a0606','#2a0a08','#3a100a','#4a160c','#5a1e10','#6a2814']:['#4a78c0','#5a88cc','#6c98d6','#86acdf','#a2c0e8','#c0d6f0']);
+    if(!cr){for(const [x,y,s] of [[50,20,1],[170,14,.9]]){ell(c,x,y+3,17*s,5*s,'#c8dcf0');ell(c,x,y,15*s,5*s,'#ffffff');ell(c,x-6*s,y-3*s,7*s,5*s,'#ffffff')}}
+    for(let i=0;i<50;i++){const w=Math.round(6+i*2.2);R(c,140-w/2,40+i,w,1,i<10?(cr?'#5a2a24':'#f8fbff'):i<13?(cr?'#4a2420':'#c8d4e8'):(cr?'#2a1414':'#6a7a98'));if(i>=10&&i%3===0&&!cr)R(c,140-w/2,40+i,Math.round(w/3),1,'#8494b0')}
+    ell(c,140,38,6,3,cr?'#f86018':'#9a9aa8');
+    ridge(c,86,16,1.4,cr?'#2a1010':'#7a90b8');ridge(c,92,10,3.7,cr?'#1a0a08':'#5a7a9a',cr?'#2a1010':'#7a90b8');
+    R(c,0,98,LW,LH-98,cr?'#2a1410':'#e6edf6');for(let x=0;x<LW;x++){const y=Math.round(98+Math.sin(x*.04)*3);R(c,x,y,1,3,cr?'#3a1a14':'#ffffff')}
+    for(let y=104;y<LH;y+=3)for(let x=(y%6);x<LW;x+=13)if(h2(x,y,5)<.35)R(c,x,y,2,1,cr?'#4a2018':'#c4d0e2');
+    if(cr){for(let y=150;y<LH;y+=2)for(let x=0;x<LW;x++)if(Math.sin(x*.05+y*.2)>.9)R(c,x,y,1,1,'#f86018')}
+    else for(let k=0;k<4;k++){const tr=treeCanvas(k%3,'pewen');c.drawImage(tr,k<2?-2+k*22:LW-26-(k-2)*24,62+(k%2)*6)}
+    return cvs}
   const [cvs,c]=mk(LW,LH);
   if(area==='coast'){bands(c,0,96,['#2858b8','#3a70d0','#5a90e0','#80b0ec','#a8ccf4','#c8e0f8']);
     ell(c,214,26,9,9,'#fffbe8');for(const [x,y,s] of [[46,26,1],[140,16,1.3],[234,44,.8]]){ell(c,x,y+3,17*s,5*s,'#c8dcf0');ell(c,x,y,15*s,5*s,'#ffffff');ell(c,x-6*s,y-3*s,7*s,5*s,'#ffffff');ell(c,x+6*s,y-2*s,6*s,4*s,'#ffffff')}
@@ -2135,6 +2429,8 @@ function buildBG(area){
 }
 function buildFG(area){
   if(area==='cave2')return mossify(buildFG('cave'));
+  if(area==='cave3'||area==='crater')return lavify(buildFG('cave'));
+  if(area==='mount'){const [cvs,c]=mk(LW,LH);for(const sd of [0,1])for(let k=0;k<12;k++){const bx=sd?LW-4-k*5:4+k*5,hg=8+((k*13)%10);for(let i=0;i<hg;i++)R(c,bx+(sd?-1:1)*Math.floor(i/5),LH-i,3,1,k%2?'#ffffff':'#d8e2f0')}return cvs}
   const [cvs,c]=mk(LW,LH);
   if(area==='coast'){for(const sd of [0,1])for(let k=0;k<14;k++){const bx=sd?LW-4-k*4:4+k*4,hg=10+((k*13)%14);for(let i=0;i<hg;i++)R(c,bx+(sd?-1:1)*Math.floor(i/4),LH-i,2,1,k%2?'#2f7a34':'#3e9444')}}
   else if(area==='field'){for(const sd of [0,1])for(let k=0;k<14;k++){const bx=sd?LW-4-k*4:4+k*4,hg=12+((k*13)%14);for(let i=0;i<hg;i++)R(c,bx+(sd?-1:1)*Math.floor(i/5),LH-i,2,1,k%2?'#2f7a34':'#c8a040')}}
@@ -2153,7 +2449,10 @@ function animBG(area){const c=lx;
     const bx=Math.round((frame*.4)%(LW+30)-15),by=Math.round(40+Math.sin(frame/25)*4),f=Math.sin(frame/5)>0?1:0;R(c,bx-1,by,3,1,'#202020');R(c,bx-4,by-f,3,1,'#202020');R(c,bx+2,by-f,3,1,'#202020')}
   else if(area==='forest'){for(let k=0;k<14;k++){const x=Math.round(10+k*18+Math.sin(frame/35+k)*8),y=Math.round(60+Math.sin(frame/27+k*2)*30+(k%4)*16);if((frame+k*11)%50<36){R(c,x,y,1,1,awake('nagche')?'#f8f0a0':'#a0e8ff');ell(c,x,y,2,2,'rgba(200,255,160,.2)')}}
     for(let k=0;k<4;k++){const lx2=(k*67+Math.floor(frame*.2))%LW,ly2=Math.floor((k*43+frame*.35)%130);R(c,lx2,ly2,2,1,'#6aa040')}}
-  else if(area==='cave'||area==='cave2'){for(let k=0;k<18;k++){const x=95+((k*37+Math.floor(frame*.15))%90)+Math.round(Math.sin(frame/40+k)*5),y=Math.floor((k*29+frame*.2)%140);if((frame+k)%30<22)R(c,x,y,1,1,'#ffeec8')}
+  else if(area==='mount'||area==='crater'){for(let k=0;k<5;k++){const ph=((frame*.4+k*30)%120)/120;ell(c,140+Math.sin(ph*6+k)*4*ph,36-ph*30,3+ph*6,(3+ph*6)*.7,area==='crater'?'rgba(80,40,30,'+(.5*(1-ph))+')':'rgba(200,200,210,'+(.5*(1-ph))+')')}
+    if(area==='mount')for(let k=0;k<30;k++){const x=(k*37+Math.floor(frame*.3))%LW,y=Math.floor((k*53+frame*.6)%LH);R(c,x,y,1,1,'#ffffff')}
+    else for(let k=0;k<20;k++){const x=(k*41+Math.floor(Math.sin(frame/30+k)*6))%LW,y=LH-Math.floor((k*29+frame*.5)%140);R(c,x,y,1,1,'#ffb040')}}
+  else if(area==='cave'||area==='cave2'||area==='cave3'){for(let k=0;k<18;k++){const x=95+((k*37+Math.floor(frame*.15))%90)+Math.round(Math.sin(frame/40+k)*5),y=Math.floor((k*29+frame*.2)%140);if((frame+k)%30<22)R(c,x,y,1,1,'#ffeec8')}
     const dy=Math.floor(frame*1.5)%130;R(c,62,dy,1,3,'#9ad0f0');R(c,201,(dy+65)%130,1,3,'#9ad0f0')}
   else{for(let k=0;k<40;k++)if((frame+k*13)%50<38)R(c,(k*61)%LW,(k*23)%70,1,1,'#ffffff');
     for(let i=0;i<10;i++){const w=30-i*2;R(c,200-w/2+Math.round(Math.sin(frame/15+i)*4),112+i*7,w,1,i%2?'#f4e8c0':'#d8c8a0')}

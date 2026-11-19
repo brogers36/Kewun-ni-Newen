@@ -154,16 +154,99 @@ def chonchon(fr):
     g.r(14,18,4,1,'S')
     g.outline();return g.rows()
 
+def kutral(fr):
+    g=G(16,19)
+    g.e(8,12.5,6,6,'r');g.e(8,13,4.6,4.8,'O');g.e(8,14,3,3.4,'y');g.e(8,15,1.6,1.8,'w')
+    tips=[(4,7,1.2,3),(8,4,1.6,4.5),(12,6,1.2,3.5)] if fr==0 else [(4,6,1.2,3.5),(8,5,1.6,4),(12,7,1.2,3)]
+    for x,y,rx,ry in tips:g.e(x,y,rx,ry,'r');g.e(x,y+1.5,rx*.6,ry*.6,'O')
+    g.p(6,12,'k');g.p(10,12,'k');g.p(6,11,'k');g.p(10,11,'k');g.r(7,15,3,1,'k')
+    g.outline();return g.rows()
+def pire(fr):
+    g=G(18,18)
+    g.e(9,8,6,5.5,'w');g.e(9,12,4.5,3,'w');g.e(8.5,13.5+fr*.5,2.6,3.2,'w')
+    for y in range(3,15):
+        for x in range(18):
+            if g.a[y][x]=='w' and x>=11:g.a[y][x]='b'
+    g.e(9,16+fr,1.4,1.2,'b')
+    for (x,y) in [(2,4),(15,3),(1,10),(16,11)]:
+        g.p(x,y,'c');g.p(x-1,y,'c');g.p(x+1,y,'c');g.p(x,y-1,'c');g.p(x,y+1,'c')
+    g.r(6,7,2,2,'k');g.r(11,7,2,2,'k');g.p(6,7,'c');g.p(11,7,'c')
+    g.r(8,11,2,1,'k')
+    g.outline();return g.rows()
+def kura(fr):
+    g=G(20,17)
+    g.e(10,9,7,6,'g');g.r(4,9,12,6,'g');g.e(10,5,5,3.5,'g')
+    for y in range(17):
+        for x in range(20):
+            if g.a[y][x]=='g' and (x>12 or y>12):g.a[y][x]='G'
+    g.r(1,8+fr,3,5,'G');g.r(16,8+(1-fr),3,5,'G')
+    g.r(5,15,4,2,'G');g.r(11,15,4,2,'G')
+    for (x,y) in [(7,9),(8,10),(8,11),(13,6),(12,7),(11,12),(12,13),(5,6)]:g.p(x,y,'k')
+    g.r(7,5,2,1,'e');g.r(12,5,2,1,'e');g.p(10,3,'h');g.p(9,4,'h');g.p(6,8,'h')
+    g.outline();return g.rows()
+def nirivilu(fr):
+    g=G(32,18)
+    # snake tail (right) with curl
+    pts=[(14,12),(17,13),(20,13),(23,12),(25,10),(26,7),(28,5),(30,6)] if fr==0 else [(14,12),(17,14),(20,14),(23,13),(26,12),(28,9),(29,6),(30,4)]
+    for i,(x,y) in enumerate(pts):
+        rr=2.4-i*.22;g.e(x,y,rr,rr,'s')
+    for i,(x,y) in enumerate(pts[:-1]):
+        if i%2==0:g.p(x,y-1,'S')
+    for (x,y) in pts[1::2]:g.p(x,y+1,'S')
+    # fox body
+    g.e(10,10,5,3.6,'o');g.r(6,12,2,4,'O');g.r(12,12,2,4,'O');g.r(6,15,2,1,'k');g.r(12,15,2,1,'k')
+    g.e(10,11.5,3,1.5,'w')
+    # head
+    g.e(4.5,7,3.6,3,'o');g.r(0,7,3,2,'o');g.p(0,7,'k');g.e(3,8.6,2.2,1,'w')
+    g.r(3,2,2,3,'o');g.r(6,2,2,3,'o');g.p(3,2,'O');g.p(6,2,'O');g.p(4,3,'k');g.p(7,3,'k')
+    g.p(4,6,'y');g.p(4,7,'k')
+    g.outline();return g.rows()
+def cherrufe(fr):
+    W=44;g=G(W,46);c=W/2
+    def sym(x,y,w,h,col):g.r(x,y,w,h,col);g.r(W-x-w,y,w,h,col)
+    # legs
+    sym(13,36,6,8,'B');sym(12,43,8,2,'B')
+    # torso
+    g.e(c,27,12,11,'b');g.r(10,22,24,12,'b')
+    # arms
+    sw=fr
+    sym(3,20+sw,7,6,'b');sym(2,25+sw,6,12,'B');sym(1,36+sw,8,4,'b')
+    # head
+    g.e(c,13,8,7,'b');g.r(15,13,14,6,'b')
+    # flame hair
+    flames=[(15,6,2,4),(19,3,2,5),(22,2,2.4,6),(25,3,2,5),(29,6,2,4)]
+    for x,y,rx,ry in flames:
+        yy=y+(fr if x%2 else -fr)*0
+        g.e(x,yy+fr*.5,rx,ry,'r');g.e(x,yy+1.5,rx*.6,ry*.6,'O')
+    # shading right side
+    for y in range(46):
+        for x in range(W):
+            if g.a[y][x]=='b' and x>=c+5:g.a[y][x]='B'
+    # lava cracks
+    cracks=[(18,22),(19,23),(19,24),(20,25),(26,21),(25,22),(25,23),(24,24),(21,30),(22,31),(23,31),(24,32),(14,28),(15,29),(29,28),(30,29),(4,27),(5,28),(39,27),(38,28),(16,38),(27,38)]
+    for x,y in cracks:g.p(x,y,'l')
+    g.e(c,28,3.2,3,'L');g.e(c,28,1.8,1.6,'y')
+    # face
+    sym(17,12,3,2,'y');g.p(18,12,'w');g.p(W-19,12,'w')
+    sym(16,10,4,1,'B')
+    g.r(18,16,8,2,'k');sym(18,16,1,1,'l');g.r(20,16,4,1,'L')
+    g.outline();return g.rows()
+
 PAL={
  'kawellu':{'b':'#9a5a2a','B':'#6e3a18','h':'#c27c40','m':'#2a1a10','e':'#000000','w':'#f2e6d0','n':'#4a2a14','k':'#2a2020','o':'#1a1008'},
  'waka':{'w':'#f6f4ee','W':'#c8c4bc','k':'#26221e','u':'#e6a0a0','n':'#8a4a4a','e':'#000000','c':'#e8dcc0','K':'#3a3430','o':'#1a1612'},
  'ofisa':{'w':'#f4f0e4','W':'#ffffff','s':'#d4ccb8','f':'#3a3434','e':'#e8e0d0','n':'#1a1414','o':'#1a1614'},
  'chonchon':{'s':'#d6a27a','S':'#a06a48','h':'#1c1418','W':'#f4f0e6','r':'#ff2a2a','k':'#5a0a0a','q':'#c87860','m':'#3a0e0e','w':'#5a3a5c','v':'#82587c','b':'#24142a','c':'#e8e0d0','o':'#0e060e'},
+ 'kutral':{'r':'#d82818','O':'#f87818','y':'#f8d040','w':'#fff8d0','k':'#3a0808','o':'#2a0806'},
+ 'pire':{'w':'#f4faff','b':'#a8c8f0','c':'#60e0ff','k':'#1a3a7a','o':'#203060'},
+ 'kura':{'g':'#8a8a90','G':'#5a5a64','k':'#2a2a30','e':'#ff8a20','h':'#c0c0c8','o':'#16161c'},
+ 'nirivilu':{'o':'#d8742a','O':'#a85018','w':'#f4e8d8','k':'#1a1010','y':'#f8e040','s':'#3a8a5a','S':'#1e5a38'},
+ 'cherrufe':{'b':'#3a3036','B':'#241c22','r':'#e83018','O':'#f89020','y':'#ffe060','w':'#ffffff','l':'#f86018','L':'#f8a028','k':'#1a0606','o':'#0e0608'},
  'witranalwe':{'H':'#1c1c2e','h':'#7a6a9a','q':'#141428','F':'#d0e0f8','f':'#8aa0c8','E':'#40f0ff','e':'#1a6a90','P':'#2c2c50','p':'#46467a','s':'#d0dcf0','A':'#26264a','K':'#d0e0f8','L':'#121220','o':'#06060e'}}
 D={}
-BIG={'witranalwe':2,'chonchon':2}
-for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe),('chonchon',chonchon)]:
-    D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':1 if name=='witranalwe' else 0}
+BIG={'witranalwe':2,'chonchon':2,'kutral':2,'pire':2,'kura':2,'nirivilu':2,'cherrufe':2}
+for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('nirivilu',nirivilu),('cherrufe',cherrufe)]:
+    D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':{'witranalwe':'170,220,255','cherrufe':'255,130,50'}.get(name,0)}
 open(OUT,'w').write('const SPR2='+json.dumps(D,ensure_ascii=False)+';\n')
 if __name__=='__main__':
     for n in D:

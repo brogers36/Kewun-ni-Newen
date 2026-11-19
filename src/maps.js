@@ -144,12 +144,75 @@ ngen2:{region:'nagche',ngenmap:1,name:'Ngen-mawida',g:{es:'El claro del bosque',
      pre:[N('En el claro hay una figura altísima y delgada, que brilla como si estuviera hecha de luz fría: el Witranalwe.','In the clearing stands a very tall, thin figure that glows as if made of cold light: the Witranalwe.'),L('','Müley Witranalwe!','¡Ahí está el Witranalwe!','There is the Witranalwe!')]},
    {id:'ngen',kind:'npc',look:'ngen2',x:8,y:3,req:'ngen2',fixed:1,talk:()=>say([L('Ngen-mawida','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")])}]}
 });
+/* ---------- PEWENCHE ---------- */
+const K5={reward:'piwke',q:L('Konew','Pewen mew tripakey; pukem mew ikeiñ. Chem am ta tatey?','Sale del pewen; en invierno lo comemos. ¿Qué será?','It comes from the pewen; in winter we eat it. What could it be?'),
+  opts:[{m:'ngülliw',es:'piñón',en:'pewen nut',ok:1},{m:'kofke',es:'pan',en:'bread'},{m:'ilo',es:'carne',en:'meat'},{m:'poñü',es:'papa',en:'potato'}]};
+const K6={q:L('Konew','Pun mew pengekey; antü mew ñamkey. Chem am ta tatey?','De noche se ve; de día desaparece. ¿Qué será?','At night it is seen; by day it disappears. What could it be?'),
+  opts:[{m:'wangülen',es:'estrella',en:'star',ok:1},{m:'antü',es:'sol',en:'sun'},{m:'kürüf',es:'viento',en:'wind'},{m:'mawün',es:'lluvia',en:'rain'}]};
+const K7={reward:'piwke',q:L('Konew','Kütral ñi püñeñ; wenu püle amukey, ñamkey. Chem am ta tatey?','Hijo del fuego; se va hacia arriba y desaparece. ¿Qué será?','Child of the fire; it goes upward and disappears. What could it be?'),
+  opts:[{m:'fütron',es:'humo',en:'smoke',ok:1},{m:'kütral',es:'fuego',en:'fire'},{m:'ko',es:'agua',en:'water'},{m:'kura',es:'piedra',en:'stone'}]};
+Object.assign(MAPS,{
+p_rupu:{region:'pewenche',name:'Pewenche rüpü',g:{es:'El camino a la cordillera',en:'The road to the mountains'},floor:',',bg:'mount',song:'pew',pal:'pewenche',trees:'pewen',
+ edges:{left:{to:'n_mawida',x:30,y:7},right:{to:'p_lof',x:1,y:9}},
+ ents:[{id:'arriero',kind:'npc',look:'walker',x:25,y:8,dir:'left',fixed:1,talk:()=>arrieroTalk(),bub:['Kawellu mew amuken.']},
+   {kind:'enemy',x:8,y:3,party:['pire']},{kind:'enemy',x:12,y:10,party:['kura','pire']},{kind:'enemy',x:22,y:3,party:['kutral','kutral']},{kind:'enemy',x:26,y:10,party:['pire','pire','kura']}]},
+p_lof:{region:'pewenche',name:'Pewenche lof',g:{es:'La comunidad de los pewenes',en:'The community of the pewen trees'},floor:',',bg:'mount',song:'lof',pal:'pewenche',trees:'pewen',
+ edges:{left:{to:'p_rupu',x:30,y:7},right:{to:'p_pewen',x:1,y:7,req:'pew_lonko',reqMsg:[N('Antes de seguir, habla con el lonko de este lof. Está junto al kütral.','Before you go on, speak with the lonko of this lof. He is by the fire.')]}},
+ ents:[{id:'laku',kind:'npc',look:'elder',x:5,y:11,talk:()=>lakuTalk(),bub:['Mari mari!']},
+   {id:'plonko',kind:'npc',look:'lonko3',x:18,y:7,talk:()=>pLonkoTalk(),bub:['Mari mari!']},
+   {id:'pnutram',kind:'npc',look:'elder2',x:16,y:8,dir:'up',fixed:1,act:'teach',talk:()=>pNutramTalk(),bub:['Kuyfi...','Cherrufe...']},
+   {id:'pk1',kind:'npc',look:'child',x:15,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichiche','Ngülliw ayüken!','¡Me gustan los piñones!','I love pewen nuts!')])},
+   {id:'pk2',kind:'npc',look:'childf',fem:1,x:17,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichi domo','Chumül amuaymi pillañ mew?','¿Cuándo vas a ir al volcán?','When will you go to the volcano?')])},
+   {id:'gath1',kind:'npc',look:'gatherer',fem:1,x:21,y:2,dir:'up',fixed:1,act:'weave',talk:()=>gathTalk(),bub:['Ngülliw!']},
+   {id:'gath2',kind:'npc',look:'cook',fem:1,x:24,y:2,dir:'up',fixed:1,act:'weave',talk:()=>gathTalk(),bub:['Fentren ngülliw!']},
+   {id:'pseller',kind:'npc',look:'seller',x:24,y:12,talk:()=>shop('p_lof')}]},
+p_pewen:{region:'pewenche',name:'Pewen mapu',g:{es:'El bosque de pewenes',en:'The pewen forest'},floor:',',bg:'mount',song:'pew',pal:'pewenche',trees:'pewen',
+ edges:{left:{to:'p_lof',x:32,y:9},right:{to:'p_pire',x:1,y:7}},chests:{'27,2':'piwke'},
+ pz:{kind:'N',tiles:{'9,3':{lab:'rimü',i:2},'12,3':{lab:'pewü',i:0},'15,3':{lab:'pukem',i:3},'18,3':{lab:'walüng',i:1}}},
+ signs:{'13,5':[L('Kura','Rayen mew llitukey; pire mew afkey.','Una piedra tallada: «Empieza con las flores; termina con la nieve». Cuatro piedras esperan.','A carved stone: «It begins with the flowers; it ends with the snow». Four stones wait.'),N('Tu chillka tiene las estaciones del año.','Your chillka has the seasons of the year.')]},
+ ents:[{kind:'enemy',x:10,y:8,party:['kura','kura']},{kind:'enemy',x:20,y:6,party:['pire','pire']},{kind:'enemy',x:26,y:8,party:['kutral','kura','pire']}]},
+p_pire:{region:'pewenche',name:'Pire mapu',g:{es:'Los campos de nieve',en:'The snowfields'},floor:'.',bg:'mount',song:'pew',pal:'pewenche',trees:'pewen',
+ edges:{left:{to:'p_pewen',x:30,y:7},right:{to:'p_pillan',x:1,y:7}},chests:{'23,2':'pewgift'},
+ signs:{},
+ ents:[{kind:'enemy',x:6,y:4,party:['pire','pire','pire']},{kind:'enemy',x:18,y:9,party:['kura','pire']},{kind:'enemy',x:9,y:9,party:['kutral','pire']}]},
+p_pillan:{region:'pewenche',name:'Pillañ inaltu',g:{es:'Al pie del volcán',en:'At the foot of the volcano'},floor:',',bg:'mount',song:'pew',pal:'ash',trees:'pewen',
+ edges:{left:{to:'p_pire',x:30,y:7}},stairs:{to:'pd1',x:1,y:4},konew:{'3,4':K5},
+ ents:[{id:'kona3',kind:'npc',look:'kona',x:24,y:8,talk:()=>kona3Talk(),bub:['Cherrufe...']},
+   {kind:'enemy',x:8,y:3,party:['kutral','kutral','kura']},{kind:'enemy',x:17,y:9,party:['kura','kura']},{kind:'enemy',x:14,y:3,party:['kutral','pire','kutral']}]},
+pd1:{region:'pewenche',name:'Cherrufe ñi ruka · 1',g:{es:'La morada del Cherrufe (piso 1)',en:"The Cherrufe's lair (floor 1)"},floor:'_',bg:'cave3',song:'cave',dungeon:1,pal:'pewcave',lava:1,
+ edges:{left:{to:'p_pillan',x:28,y:4}},stairs:{to:'pd2',x:1,y:2},
+ chests:{'2,2':'lawen1','20,9':'piwke'},konew:{'7,7':K6},
+ pz:{kind:'N',tiles:{'14,6':{lab:'pataka',i:1},'17,6':{lab:'epu pataka',i:2},'20,6':{lab:'kechu mari',i:0}}},
+ signs:{'18,3':[N('Una piedra tallada: «de lo menor a lo mayor». Tres piedras con números grandes esperan.','A carved stone: «from the smallest to the largest». Three stones with big numbers wait.')]},
+ ents:[{kind:'enemy',x:3,y:8,party:['kutral','kutral']},{kind:'enemy',x:4,y:2,party:['kura']},{kind:'enemy',x:16,y:8,party:['kutral','kura']},{kind:'enemy',x:16,y:3,party:['kutral','kutral','kutral']},
+   {id:'pmini1',kind:'enemy',x:19,y:1,party:['nirivilu','kutral'],fixed:1,mini:1,flag:'pmini1',
+     pre:[N('Un zorro con una larga cola de culebra se enrosca junto a la escalera: el ñirivilu.','A fox with a long snake tail coils up by the stairs: the ñirivilu.')]}]},
+pd2:{region:'pewenche',name:'Cherrufe ñi ruka · 2',g:{es:'La morada del Cherrufe (piso 2)',en:"The Cherrufe's lair (floor 2)"},floor:'_',bg:'cave3',song:'cave',dungeon:1,pal:'pewcave',lava:1,
+ edges:{left:{to:'pd1',x:19,y:1}},stairs:{to:'pd3',x:1,y:1,req:'root_wutre',reqMsg:[N('Algo te dice que todavía falta algo en este piso.','Something tells you there is still something missing on this floor.')]},
+ chests:{'13,3':'wutre'},konew:{'17,5':K7},stones:{'12,6':'quest'},
+ ents:[{kind:'enemy',x:3,y:3,party:['kura','kura','kura']},{kind:'enemy',x:14,y:6,party:['kutral','pire']},
+   {id:'pmini2',kind:'enemy',x:15,y:5,party:['fkura','kutral'],fixed:1,mini:1,flag:'pmini2',
+     pre:[N('Un wekufü de piedra, grande como una ruka, se levanta del suelo.','A stone wekufü, as big as a ruka, rises from the ground.')]}]},
+pd3:{region:'pewenche',name:'Cherrufe ñi ruka · 3',g:{es:'La morada del Cherrufe (piso 3)',en:"The Cherrufe's lair (floor 3)"},floor:'_',bg:'cave3',song:'cave',dungeon:1,pal:'pewcave',lava:1,
+ edges:{left:{to:'pd2',x:19,y:5}},stairs:{to:'ngen3',x:8,y:9},
+ ents:[{kind:'enemy',x:2,y:2,party:['kura','kutral','pire']},
+   {id:'pmini3',kind:'enemy',x:19,y:4,party:['kutral','kura','nirivilu'],fixed:1,mini:1,flag:'pmini3',
+     pre:[N('El aire quema. Tres wekufü cuidan la bajada al cráter.','The air burns. Three wekufü guard the way down to the crater.')]}]},
+ngen3:{region:'pewenche',ngenmap:1,name:'Ngen-pewen',g:{es:'El cráter',en:'The crater'},floor:'_',bg:'crater',song:'cave',pal:'pewcave',lava:1,
+ stairs:{to:'pd3',x:19,y:4},
+ ents:[{id:'boss',kind:'enemy',x:8,y:4,party:['cherrufe'],fixed:1,boss:1,flag:'boss3',
+     pre:[N('Desde la lava se levanta un gigante de roca negra, con grietas que brillan como brasas y una cabellera de fuego: el Cherrufe.','A giant of black rock rises from the lava, with cracks that glow like embers and a mane of fire: the Cherrufe.'),L('','Müley Cherrufe!','¡Ahí está el Cherrufe!','There is the Cherrufe!')]},
+   {id:'ngen',kind:'npc',look:'ngen3',x:8,y:3,req:'ngen3',fixed:1,talk:()=>say([L('Ngen-pewen','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")])}]}
+});
 for(const k in MAPS){const m=MAPS[k];if(!m.region)m.region='lafkenche';m.rows=MAPROWS[k];m.w=MAPROWS[k][0].length;m.h=MAPROWS[k].length}
 MAPS.inaltu.edges.right={to:'n_rupu',x:1,y:7,req:'ngen',reqMsg:[N('El camino hacia el este, a las tierras nagche, está cubierto de niebla. Primero despierta a Ngen-lafken.','The road east, to the Nagche lands, is covered in fog. First wake Ngen-lafken.')]};
 MAPS.ngen.ngenmap=1;
 for(const k of ['n_rupu','n_lof','n_kullin','n_lewfu']){MAPS[k].pal='nagche';MAPS[k].trees='koyam'}
 for(const k of ['n_mawida','ngen2']){MAPS[k].pal='nagforest';MAPS[k].trees='mawida'}
 for(const k of ['nd1','nd2','nd3']){MAPS[k].pal='nagcave';MAPS[k].bg='cave2'}
+MAPS.n_mawida.edges.right={to:'p_rupu',x:1,y:7,req:'ngen2',reqMsg:[N('Hacia el este el camino sube a la cordillera, pero una niebla espesa lo cubre. Primero despierta a Ngen-mawida.','To the east the road climbs into the mountains, but a thick fog covers it. First wake Ngen-mawida.')]};
+MAPS.pd1.pz.hint=N('Pista: de lo menor a lo mayor. kechu mari (50), pataka (100), epu pataka (200).','Hint: from smallest to largest. kechu mari (50), pataka (100), epu pataka (200).');
+MAPS.p_pewen.pz.hint=N('Pista: pewü (primavera), walüng (verano), rimü (otoño), pukem (invierno).','Hint: pewü (spring), walüng (summer), rimü (autumn), pukem (winter).');
 MAPS.n_kullin.ents.forEach(e=>{if(e.herd&&e.look!=='ofisa')e.flag='hd_'+e.id});
 MAPS.nd1.pz.hint=N('Pista: de lo menor a lo mayor. meli (4), mari kechu (15), epu mari meli (24).','Hint: from smallest to largest. meli (4), mari kechu (15), epu mari meli (24).');
 

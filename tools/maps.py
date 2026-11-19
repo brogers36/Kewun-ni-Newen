@@ -265,7 +265,7 @@ N['n_mawida']=[
 "T,,F"+","*10+"TTT"+","*14+"T",
 "T,,,,TT,,,,,,,TTT,,,,\"\",,,,TT,,T",
 "T,,,,TT"+","*14+"\"\",,,,TT,,T",
-"="*28+",,,T",
+"="*32,
 "T"+","*10+"TT"+","*18+"T",
 "T,,##,,,,,,TT,,,\"\",,,,,,,TTT,,,T",
 "T,,##"+","*11+"\"\""+","*7+"TTT,,gT",
@@ -288,6 +288,111 @@ N['ngen2']=[
 "TTTTTTT,F,,TTTTTTT",
 "TTTTTTT,S,TTTTTTTT",
 "T"*18]
+
+# ================= PEWENCHE =================
+class C:
+    def __init__(s,w,h,fill=','):
+        s.w,s.h=w,h;s.g=[[fill]*w for _ in range(h)]
+        for x in range(w):s.g[0][x]=s.g[h-1][x]='T'
+        for y in range(h):s.g[y][0]=s.g[y][w-1]='T'
+    def p(s,x,y,c):s.g[y][x]=c
+    def r(s,x,y,w,h,c):
+        for yy in range(y,y+h):
+            for xx in range(x,x+w):s.g[yy][xx]=c
+    def rows(s):return[''.join(r) for r in s.g]
+def hh(x,y,k):
+    import math;v=math.sin(x*12.9898+y*78.233+k*37.719)*43758.5453;return v-math.floor(v)
+P_={}
+# --- p_rupu: foothills road with a stream ---
+c=C(32,13)
+c.r(0,7,32,1,'=')
+c.r(17,1,2,11,'~');c.r(17,7,2,1,'b')
+for (x,y,w,h) in [(2,1,2,3),(24,2,3,2),(7,8,3,2),(21,9,3,2)]:c.r(x,y,w,h,'.')
+for (x,y,w,h) in [(9,1,2,2),(3,5,2,2),(22,5,2,2),(13,9,2,2)]:c.r(x,y,w,h,'T')
+for (x,y) in [(2,9),(3,9),(2,10),(3,10),(28,9),(29,9),(28,10),(29,10),(13,2),(13,4)]:c.p(x,y,'#')
+c.p(6,3,'F')
+c.r(27,1,5,4,'T');c.r(28,1,3,3,',');c.p(29,1,'P');c.p(29,4,'^')
+P_['p_rupu']=c.rows()
+# --- p_lof: pewenche community ---
+c=C(34,14)
+c.r(0,9,34,1,'=')
+for (x,y,w,h) in [(2,2,3,2),(9,5,3,2),(27,7,3,2)]:c.r(x,y,w,h,'R')
+for (x,y) in [(20,1),(23,1),(26,1),(21,3),(25,3),(30,4)]:c.p(x,y,'T')
+for (x,y,w,h) in [(13,1,4,2),(6,11,3,2)]:c.r(x,y,w,h,'.')
+c.p(17,7,'F');c.p(32,1,'P')
+P_['p_lof']=c.rows()
+# --- p_pewen: araucaria forest, seasons stones ---
+c=C(32,13)
+c.r(0,7,32,1,'=')
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]==',' and hh(x,y,3)<.42 and not (7<=x<=21 and 1<=y<=6) and not (12<=x<=14 and y in (5,6)) and y not in (6,8):c.g[y][x]='T'
+c.r(7,1,15,5,',');c.r(13,5,1,2,',')
+for x in (9,12,15,18):c.p(x,3,'N')
+c.p(13,5,'I')
+c.r(24,1,7,5,'T');c.r(25,1,5,3,',');c.p(27,4,'E');c.p(27,5,',');c.p(27,6,',');c.p(27,2,'C')
+c.r(2,9,3,3,',');c.p(3,10,'F')
+for (x,y,w,h) in [(8,1,3,1),(16,4,3,1),(6,9,2,2)]:c.r(x,y,w,h,'.')
+P_['p_pewen']=c.rows()
+# --- p_pire: snowfield, ice-block puzzle ---
+c=C(32,13,'.')
+c.r(0,7,32,1,'=')
+c.r(20,1,7,5,'#');c.r(21,1,5,3,'.');c.p(23,2,'C');c.p(23,4,'G');c.p(23,5,'.')
+for (x,y) in [(9,3),(14,2)]:c.p(x,y,'B')
+for (x,y) in [(9,5),(16,4)]:c.p(x,y,'O')
+for (x,y,w,h) in [(2,1,2,2),(28,9,2,2),(12,9,2,2)]:c.r(x,y,w,h,'T')
+for (x,y) in [(5,10),(6,10),(19,9),(20,9)]:c.p(x,y,'#')
+c.r(1,9,3,1,',');c.p(2,10,'F')
+c.r(26,8,5,4,'T');c.r(27,9,3,2,'.');c.p(28,10,'P');c.p(28,8,'^')
+P_['p_pire']=c.rows()
+# --- p_pillan: volcano slope ---
+c=C(32,13)
+c.r(0,7,28,1,'=')
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]==',' and y!=7 and hh(x,y,5)<.12:c.g[y][x]='#'
+        elif c.g[y][x]==',' and y!=7 and hh(x,y,6)<.2:c.g[y][x]='.'
+c.r(25,1,6,6,'#');c.r(26,2,4,4,'.');c.p(28,3,'S');c.p(28,6,'.');c.r(27,4,3,3,'.')
+c.r(25,5,1,2,'#');c.r(30,5,1,2,'#');c.r(26,6,1,1,'#');c.r(29,6,1,1,'#')
+c.r(1,1,5,4,'T');c.r(2,1,3,3,',');c.p(3,1,'P');c.p(3,4,'K')
+c.p(10,10,'F');c.r(9,9,3,3,',');c.p(10,10,'F')
+for x in range(0,28):c.g[7][x]='='
+c.g[8][27]=c.g[7][27]='=';c.r(27,6,1,2,'.')
+P_['p_pillan']=c.rows()
+# --- lair: vertically flipped Lafkenche cave ---
+P_['pd1']=[r.replace('J','N') for r in M['d1'][::-1]]
+P_['pd2']=M['d2'][::-1]
+P_['pd3']=M['d3'][::-1]
+# --- crater arena ---
+P_['ngen3']=[
+"%"*18,
+"%%%%%~~~~~~~~%%%%%",
+"%%%~~~______~~~%%%",
+"%%~~__________~~%%",
+"%%~____________~%%",
+"%%~____________~%%",
+"%%%~__________~%%%",
+"%%%%%___A____%%%%%",
+"%%%%%%_____%%%%%%%",
+"%%%%%%%____%%%%%%%",
+"%%%%%%%_F__%%%%%%%",
+"%%%%%%%_S_%%%%%%%%",
+"%"*18]
+# reachability check (walkable incl. puzzle tiles that open)
+OPEN=set('.,"=_PmgpSqkAb')
+def bfs(rows,start):
+    H=len(rows);W=len(rows[0]);seen={start};st=[start]
+    while st:
+        x,y=st.pop()
+        for dx,dy in((1,0),(-1,0),(0,1),(0,-1)):
+            X,Y=x+dx,y+dy
+            if 0<=X<W and 0<=Y<H and (X,Y) not in seen and rows[Y][X] in OPEN:seen.add((X,Y));st.append((X,Y))
+    return seen
+for k in ['p_rupu','p_lof','p_pewen','p_pire','p_pillan']:
+    v=P_[k];sy=7 if k!='p_lof' else 9;R=bfs(v,(0,sy))
+    right=[(len(v[0])-1,y) for y in range(len(v)) if (len(v[0])-1,y) in R]
+    print(k,'reach',len(R),'right edge',right)
+N.update(P_)
 for k,v in N.items():
     w=len(v[0])
     for i,r in enumerate(v): assert len(r)==w,(k,i,len(r),w,r)

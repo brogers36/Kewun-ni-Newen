@@ -2,7 +2,7 @@
    STATE
    ============================================================ */
 const HPQ=4,SPMAX=3;
-function maxHP(){return S.baseMax+(S.gear.trariwe?4:0)+Math.floor(S.piwke/4)*4+(S.flags.ngen?4:0)+(S.flags.ngen2?4:0)}
+function maxHP(){return S.baseMax+(S.gear.trariwe?4:0)+Math.floor(S.piwke/4)*4+(S.flags.ngen?4:0)+(S.flags.ngen2?4:0)+(S.flags.ngen3?4:0)}
 function atk(){return S.baseAtk+(S.gear.futrawino?3:0)-(S.curse?2:0)}
 function def(){return S.baseDef+(S.gear.makun?2:0)}
 function xpNeed(){return 10+S.lvl*10}
@@ -20,7 +20,9 @@ const ROOTS={
   umawtu:{m:'umawtu-',es:'dormir',en:'sleep'},
   nag:{m:'nag-',es:'bajar',en:'come down'},
   'llüka':{m:'llüka-',es:'tener miedo',en:'be afraid'},
-  'wiñotu':{m:'wiñotu-',es:'volver, regresar',en:'go back'}};
+  'wiñotu':{m:'wiñotu-',es:'volver, regresar',en:'go back'},
+  trafo:{m:'trafo-',es:'quebrarse, romperse',en:'break'},
+  'wütre':{m:'wütre-',es:'tener frío',en:'be cold'}};
 const ENDS=['nge','mu','mün'];
 const endFor=n=>n<=1?0:n===2?1:2;
 const VG={
@@ -34,6 +36,10 @@ const VG={
        nes:['¡No bajes!','¡No bajen (ustedes dos)!','¡No bajen (todos)!'],nen:["Don't come down!","Don't come down, you two!","Don't come down, all of you!"]},
   'llüka':{es:['¡Ten miedo!','¡Tengan miedo (ustedes dos)!','¡Tengan miedo (todos)!'],en:['Be afraid!','Be afraid, you two!','Be afraid, all of you!'],
        nes:['¡No tengas miedo!','¡No tengan miedo (ustedes dos)!','¡No tengan miedo (todos)!'],nen:["Don't be afraid!","Don't be afraid, you two!","Don't be afraid, all of you!"]},
+  trafo:{es:['¡Quiébrate!','¡Quiébrense (ustedes dos)!','¡Quiébrense (todos)!'],en:['Break!','Break, you two!','Break, all of you!'],
+       nes:['¡No te quiebres!','¡No se quiebren (ustedes dos)!','¡No se quiebren (todos)!'],nen:["Don't break!","Don't break, you two!","Don't break, all of you!"]},
+  'wütre':{es:['¡Ten frío!','¡Tengan frío (ustedes dos)!','¡Tengan frío (todos)!'],en:['Be cold!','Be cold, you two!','Be cold, all of you!'],
+       nes:['¡No tengas frío!','¡No tengan frío (ustedes dos)!','¡No tengan frío (todos)!'],nen:["Don't be cold!","Don't be cold, you two!","Don't be cold, all of you!"]},
   'wiñotu':{es:['¡Vuelve atrás!','¡Vuelvan atrás (ustedes dos)!','¡Vuelvan atrás (todos)!'],en:['Go back!','Go back, you two!','Go back, all of you!'],
        nes:['¡No vuelvas atrás!','¡No vuelvan (ustedes dos)!','¡No vuelvan (todos)!'],nen:["Don't go back!","Don't go back, you two!","Don't go back, all of you!"]}};
 
@@ -48,6 +54,12 @@ const ET={
   kolokolo:{name:'kolokolo',hp:13,atk:6,xp:7,gold:[4,7],bs:42,curse:1},
   fkolokolo:{name:'fütra kolokolo',hp:38,atk:8,xp:20,gold:[12,16],bs:64,curse:1},
   nguruvilu:{name:'nguruvilu',hp:40,atk:8,xp:24,gold:[14,18],bs:70,twice:1},
+  kutral:{name:'kütral wekufü',hp:14,atk:6,xp:8,gold:[5,8],bs:40,fire:1},
+  pire:{name:'pire wekufü',hp:12,atk:6,xp:8,gold:[5,8],bs:42,fly:true,snow:1},
+  kura:{name:'kura wekufü',hp:18,atk:6,xp:9,gold:[6,9],bs:46,armor:1},
+  fkura:{name:'fütra kura wekufü',hp:46,atk:9,xp:24,gold:[16,20],bs:66,armor:1},
+  nirivilu:{name:'ñirivilu',hp:44,atk:9,xp:26,gold:[16,20],bs:72,twice:1},
+  cherrufe:{name:'Cherrufe',hp:110,atk:9,xp:90,gold:[80,80],boss:true,bs:110,armor:1,fire:1},
   witranalwe:{name:'Witranalwe',hp:100,atk:8,xp:70,gold:[60,60],boss:true,bs:110}};
 
 /* ---------- items ---------- */

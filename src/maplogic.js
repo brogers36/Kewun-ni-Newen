@@ -104,6 +104,7 @@ function interact(){
   if(c==='V')return say([L('','Mari mari · Kiñe, epu, küla','Una pizarra con palabras en mapudungun: "hola" y "uno, dos, tres".','A board with words in Mapudungun: "hello" and "one, two, three".')]);
   if(c==='Z')return say([L('','Witral','Un witral, el telar mapuche. El tejido muestra figuras escalonadas en rojo, negro y blanco.','A witral, the Mapuche loom. The weaving shows stepped figures in red, black and white.')]);
   if(c==='U')return say([L('','Iyael','La olla hierve sobre el fuego. Huele a comida.','The pot simmers over the fire. It smells like food.')]);
+  if(c==='^')return say([N('Un montón de nieve dura te cierra el paso. Necesitas el newen de Ngen-pewen.','A heap of hard snow blocks your way. You need the newen of Ngen-pewen.')]);
   if(c==='Ñ')return say([N('Un zarzal lleno de espinas te cierra el paso. Necesitas el newen de Ngen-mawida.','A bramble full of thorns blocks your way. You need the newen of Ngen-mawida.')]);
   if(c==='W')return say([L('','Kachilla','Un campo de kachilla (trigo) dorado, listo para cosechar.','A field of golden kachilla (wheat), ready for harvest.')]);
   if(c==='f')return say([N('Una cerca de palos.','A wooden fence.')]);

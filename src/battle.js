@@ -9,7 +9,7 @@ function engage(e){
 }
 function relabel(){const cnt={},seen={};B.en.forEach(e=>cnt[e.t]=(cnt[e.t]||0)+1);
   B.en.forEach(e=>{seen[e.t]=(seen[e.t]||0)+1;if(e.label)return;e.label=ET[e.t].name+(cnt[e.t]>1||ET[e.t].name==='laftrache'&&B.en.length>1?' '+'ABCDE'[seen[e.t]-1]:'')})}
-function mkEnemy(t){return{t,hp:ET[t].hp,max:ET[t].hp,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'?1:0}}
+function mkEnemy(t){return{t,hp:ET[t].hp,max:ET[t].hp,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'?1:0,armor:ET[t].armor?1:0,burn:ET[t].fire?1:0}}
 function startBattle(party,o){
   mode='battle';banner.style.display='none';held.up=held.down=held.left=held.right=0;
   B={en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
@@ -79,8 +79,9 @@ function doSpecial(k,tgt){
   const head=L(S.name,sp.m+'!',G(sp),G(sp));head.fx=()=>{sfx('cast');B.flash=12;B.shake=8};
   if(k==='lawen'){S.hp=Math.min(maxHP(),S.hp+8);S.curse=0;fx.push('Recuperas dos piwke.');fxe.push('You recover two hearts.');head.fx=()=>{sfx('heal');spark(60,30,'#80ff90',16)}}
   else{targets=k==='wino'?[tgt]:aliveE();
-    for(const e of targets){let d=k==='wino'?atk()*3+rnd(3):Math.round(atk()*1.5)+rnd(3);if(e.tall)d=Math.max(1,Math.round(d/3));if(k==='kuruf'&&ET[e.t].fly)e.gr=3;e.pend=d;e.hp-=d;
-      fx.push(e.label+' −'+d+(e.hp<=0?' (se va)':'')+'.');fxe.push(e.label+' −'+d+(e.hp<=0?' (gone)':'')+'.')}}
+    let burnT=0;for(const e of targets){let d=k==='wino'?atk()*3+rnd(3):Math.round(atk()*1.5)+rnd(3);if(e.tall)d=Math.max(1,Math.round(d/3));if(e.armor)d=Math.max(1,Math.round(d/2));if(e.burn)burnT+=2;if(k==='kuruf'&&ET[e.t].fly)e.gr=3;e.pend=d;e.hp-=d;
+      fx.push(e.label+' −'+d+(e.hp<=0?' (se va)':'')+'.');fxe.push(e.label+' −'+d+(e.hp<=0?' (gone)':'')+'.')}
+    if(burnT){S.hp=Math.max(1,S.hp-burnT);fx.push('¡Te quemas! (−'+burnT+')');fxe.push('You get burned! (−'+burnT+')')}}
   const eff=N(fx.join(' '),fxe.join(' '));
   eff.fx=()=>{for(const e of targets){const p=epos(e);spark(p.x,p.y,k==='kuruf'?'#e8f4ff':'#ffd060',16);if(e.pend){e.hit=14;pop(p.x,p.y-10,'-'+e.pend,'#ffffff');sfx('hit');if(e.hp<=0){e.dead=true;e.fadeT=20}e.pend=0}}};
   say([head,eff],()=>{for(const e of targets)if(e.hp<=0&&!e.dead){e.dead=true;e.fadeT=20}if(!aliveE().length)return victory();enemyPhase()});
@@ -104,11 +105,14 @@ function resolve(r,kil,tg,ei){
   const fx=[],fxe=[];
   const castFx=()=>{sfx('cast');B.flash=8};
   lines[0].fx=castFx;
+  let burnT=0;
   if(r==='amutu'&&!kil){
     for(const e of targets){const T=ET[e.t];
       if(T.fly&&e.gr<=0){fx.push(e.label+' vuela muy alto: no te alcanza.');fxe.push(e.label+' flies too high: it does not reach.');e.miss=1;continue}
       if(e.tall){fx.push(e.label+' está erguido, altísimo: tus palabras le pasan por debajo.');fxe.push(e.label+' stands tall, towering: your words pass beneath it.');e.miss=1;continue}
-      const d=coll?Math.max(1,Math.round((atk()+rnd(4))*.75)):atk()+rnd(4)+2;e.pend=d;e.hp-=d;
+      let d=coll?Math.max(1,Math.round((atk()+rnd(4))*.75)):atk()+rnd(4)+2;if(e.burn)burnT+=2;
+      if(e.armor){d=Math.max(1,Math.round(d*.25));fx.push(e.label+': el golpe rebota en su coraza de piedra.');fxe.push(e.label+': the blow bounces off its stone crust.')}
+      e.pend=d;e.hp-=d;
       if(e.hp<=0){fx.push(e.label+' se va (−'+d+').');fxe.push(e.label+' goes away (−'+d+').')}else{fx.push(e.label+' −'+d+'.');fxe.push(e.label+' −'+d+'.')}}
   }else if(r==='amutu'){fx.push('Les dijiste que no se fueran... y se quedan, felices.');fxe.push('You told them not to leave... so they stay, happily.')}
   else if(r==='küpa'&&!kil){fx.push('¡Les dijiste que vinieran! Se lanzan sobre ti.');fxe.push('You told them to come! They rush at you.');B.rush=new Set(targets)}
@@ -119,6 +123,14 @@ function resolve(r,kil,tg,ei){
   else if(r==='nag'&&!kil){let any=0;for(const e of targets)if(ET[e.t].fly){e.gr=3;any=1;fx.push(e.label+' baja al suelo.');fxe.push(e.label+' comes down to the ground.')}
       if(!any){fx.push('No vuela: ya está abajo.');fxe.push('It does not fly: it is already down.')}}
   else if(r==='nag'){fx.push('Les dijiste que no bajaran. Siguen donde estaban.');fxe.push('You told them not to come down. They stay where they were.')}
+  else if(r==='trafo'&&!kil){for(const e of targets){if(e.armor){e.armor=0;e.armorT=ET[e.t].boss?4:0;fx.push(e.label+': ¡se le quiebra la coraza de piedra!');fxe.push(e.label+': its stone crust cracks apart!')}else{fx.push(e.label+' no tiene coraza que quebrar.');fxe.push(e.label+' has no crust to break.')}}}
+  else if(r==='trafo'){fx.push('Les dijiste que no se quebraran. Nada cambia.');fxe.push('You told them not to break. Nothing changes.')}
+  else if(r==='wütre'&&!kil){for(const e of targets){const T=ET[e.t];
+      if(T.snow){e.hp=Math.min(e.max,e.hp+4);fx.push(e.label+' es de nieve: ¡le encanta el frío! (+4)');fxe.push(e.label+' is made of snow: it loves the cold! (+4)')}
+      else if(e.burn){e.burn=0;e.cool=T.boss?3:0;if(!T.boss)e.stun=1;fx.push(e.label+': ¡su fuego se apaga!');fxe.push(e.label+': its fire goes out!')}
+      else if(!T.boss&&Math.random()<(coll?.4:.6)){e.stun=1;fx.push(e.label+' tirita de frío y pierde su turno.');fxe.push(e.label+' shivers with cold and loses its turn.')}
+      else{fx.push(e.label+' tirita, pero sigue ahí.');fxe.push(e.label+' shivers, but stays put.')}}}
+  else if(r==='wütre'){fx.push('Les dijiste que no tuvieran frío. Se ven contentos.');fxe.push('You told them not to be cold. They look pleased.')}
   else if(r==='llüka'&&!kil){for(const e of targets){const T=ET[e.t];
       if(T.boss&&e.tall){fx.push(e.label+' no siente miedo mientras está erguido.');fxe.push(e.label+' feels no fear while it stands tall.');continue}
       if(T.boss||Math.random()<(coll?.75:.92)){e.fear=3;fx.push(e.label+' tiembla de miedo: golpeará más débil.');fxe.push(e.label+' trembles with fear: it will hit weaker.')}else{fx.push(e.label+' no se asusta.');fxe.push(e.label+' is not scared.')}}}
@@ -128,6 +140,7 @@ function resolve(r,kil,tg,ei){
       if(T.boss&&B.tele){B.tele=false;fx.push(e.label+' retrocede y pierde el impulso: ya no se lanza.');fxe.push(e.label+' steps back and loses its momentum: it no longer lunges.');continue}
       if(!T.boss&&Math.random()<(coll?.6:.85)){e.stun=1;fx.push(e.label+' retrocede y pierde su turno.');fxe.push(e.label+' steps back and loses its turn.')}else{fx.push(e.label+' se tambalea, pero sigue ahí.');fxe.push(e.label+' staggers, but stays put.')}}}
   else if(r==='wiñotu'){fx.push('Les dijiste que no retrocedieran. Se quedan firmes.');fxe.push('You told them not to go back. They hold their ground.')}
+  if(burnT){S.hp=Math.max(1,S.hp-burnT);fx.push('¡Te quemas con su fuego! (−'+burnT+')');fxe.push('You get burned by its fire! (−'+burnT+')')}
   const eff=L('',pr.m+(S.sp>=2?'  ✦'+S.sp:''),fx.join(' '),fxe.join(' '));
   eff.fx=()=>{for(const e of targets){const p=epos(e);spark(p.x,p.y,r==='amutu'?'#fff6a0':r==='umawtu'?'#a0c8ff':r==='nag'?'#ffe080':'#ffffff',10);
       if(e.pend){e.hit=12;pop(p.x,p.y-10,'-'+e.pend,'#ffffff');sfx('hit');if(e.hp<=0){e.dead=true;e.fadeT=20}e.pend=0}
@@ -150,6 +163,14 @@ function enemyPhase(){
   for(const e of aliveE()){const T=ET[e.t];
     if(e.sl>0){e.sl--;fx.push(e.label+' duerme.');fxe.push(e.label+' is asleep.');continue}
     if(e.stun>0){e.stun--;fx.push(e.label+' todavía retrocede.');fxe.push(e.label+' is still backing away.');continue}
+    if(e.t==='cherrufe'){
+      if(B.tele){B.tele=false;hitP(e,2.2,{es:' te cae encima como un río de lava',en:' falls on you like a river of lava'});continue}
+      if(!e.armor&&e.armorT>0){e.armorT--;if(e.armorT<=0){e.armor=1;fx.push('La lava se endurece: la coraza del Cherrufe vuelve.');fxe.push("The lava hardens: the Cherrufe's crust comes back.");continue}}
+      if(!e.burn&&e.cool>0){e.cool--;if(e.cool<=0){e.burn=1;fx.push('El Cherrufe vuelve a arder.');fxe.push('The Cherrufe bursts into flame again.');continue}}
+      const roll=Math.random(),kc=aliveE().filter(x=>x.t==='kutral').length;
+      if(roll<.28&&B.turn>0&&B.turn-(e.lastTele||-9)>2){B.tele=true;e.lastTele=B.turn;fx.push('El Cherrufe levanta los brazos: la lava hierve a sus pies.');fxe.push('The Cherrufe raises its arms: the lava boils at its feet.');continue}
+      if(roll<.45&&kc<1&&B.en.length<5){const ne=mkEnemy('kutral');B.en.push(ne);relabel();fx.push('¡El Cherrufe lanza una chispa: aparece '+ne.label+'!');fxe.push('The Cherrufe throws a spark: '+ne.label+' appears!');continue}
+      hitP(e);continue}
     if(e.t==='witranalwe'){
       if(B.tele){B.tele=false;hitP(e,2.2,{es:' se lanza sobre ti',en:' lunges at you'});continue}
       if(!e.tall&&e.low>0){e.low--;if(e.low<=0){e.tall=1;fx.push('Witranalwe vuelve a erguirse, altísimo.');fxe.push('The Witranalwe rises up again, towering.');continue}}
@@ -173,6 +194,8 @@ function enemyPhase(){
   if(fx.length){const l=N(fx.join(' '),fxe.join(' '));l.fx=()=>{hitsFx.forEach(f=>f());if(dmgTotal){B.shake=12;B.red=10;sfx('hurt')}};lines.push(l)}
   const bossE=aliveE().find(x=>ET[x.t].boss),bn=bossE?ET[bossE.t].name:'';
   if(B.tele&&bossE)lines.push(L(bn,'Küpaley '+bn+'!','¡'+bn+' viene!',bn+' is coming!'));
+  if(aliveE().some(x=>x.armor)&&!B.armorHint&&B.turn>=1){B.armorHint=1;lines.push(N('Pista: los golpes rebotan en la coraza de piedra. Quizás si le dices que se quiebre...','Hint: blows bounce off the stone crust. Maybe if you tell it to break...'))}
+  if(bossE&&bossE.t==='cherrufe'&&bossE.burn&&!B.fireHint&&B.turn>=2&&S.roots.includes('wütre')){B.fireHint=1;lines.push(N('Pista: su fuego te quema cada vez que lo atacas. El frío podría apagarlo.','Hint: its fire burns you every time you attack it. The cold could put it out.'))}
   if(bossE&&bossE.t==='witranalwe'&&bossE.tall&&!B.tallHint&&B.turn>=1){B.tallHint=1;lines.push(N('Pista: erguido así, nada lo alcanza. Quizás si le dices que vuelva atrás...','Hint: standing tall like that, nothing reaches it. Maybe if you tell it to go back...'))}
   if(B.tele&&!B.teleHint&&bossE){B.teleHint=1;lines.push(N('Pista: dile que no venga (küpa- con -kil-), a él solo o a todos, con la terminación correcta.','Hint: tell it not to come (küpa- with -kil-), to it alone or to all of them, with the right ending.'))}
   say(lines,()=>{
@@ -191,7 +214,7 @@ function victory(){
 }
 function defeat(){
   const lost=Math.floor(S.gold/4);S.gold-=lost;playSong('intro');
-  const gm=MAPS[CUR].region==='nagche'?'chuchu':'kuku';
+  const gm=MAPS[CUR].region==='nagche'?'chuchu':MAPS[CUR].region==='pewenche'?'laku':'kuku';
   say([N('Te quedas sin fuerzas... Tu '+gm+' te encuentra y te lleva junto al kütral.'+(lost?' Pierdes '+numP(lost)+' ngülliw.':''),'You collapse... Your '+gm+' finds you and carries you back to the fire.'+(lost?' You lose '+numP(lost)+' ngülliw.':''))],()=>{
     S.curse=0;S.hp=maxHP();mode='map';B=null;const sv=S.save;AU.name=null;loadMap(sv.map,sv.x,sv.y)});
 }
@@ -204,6 +227,7 @@ function endBattle(how){
 }
 function postBoss(){
   if(CUR==='ngen2')return postBoss2();
+  if(CUR==='ngen3')return postBoss3();
   say([N('El cuero de Trelke-wekufü se hunde y el agua se aclara. Una figura de espuma y luz se levanta de la laguna.','Trelke-wekufü\'s hide sinks and the water clears. A figure of foam and light rises from the lagoon.')],()=>{
     S.flags.ngen=1;S.flags.dive=1;S.pieces=S.pieces||[];if(!S.pieces.includes('lafkenche'))S.pieces.push('lafkenche');S.flags.awake_lafkenche=1;if(CUR==='ngen')grid[7][8]='A';S.hp=Math.min(maxHP(),S.hp+HPQ);AU.name=null;playSong('ngen');
     const e=Object.assign({},MAPS.ngen.ents[1]);e.fx=e.x;e.fy=e.y;ents.push(e);persist();sfx('lvl');
@@ -233,5 +257,21 @@ function postBoss2(){
       Object.assign(L('','Epu trariwe trokiñ!','Entre las raíces queda otro trokiñ del trariwe antiguo, tejido en verde y amarillo. Tienes 2 de 5.','Among the roots lies another trokiñ of the ancient trariwe, woven in green and yellow. You have 2 of 5.'),{fx:()=>sfx('pick')}),
       N('Un círculo de luz aparece en el claro: pisándolo puedes volver a la entrada de la guarida, al lof nagche o a las tierras lafkenche.','A circle of light appears in the clearing: step on it to return to the lair entrance, the Nagche lof, or the Lafkenche lands.'),
       N('Fin de la región nagche (prototipo). Vuelve a los zarzales que viste en el camino: ahora puedes pasar. Faltan Pewenche, Williche y Puelmapu.','End of the Nagche region (prototype). Go back to the brambles you saw on the road: now you can get through. Pewenche, Williche and Puelmapu remain.')]);
+  });
+}
+
+function postBoss3(){
+  say([N('La coraza del Cherrufe se parte en mil pedazos y su fuego se hunde en la lava, que se enfría y se vuelve piedra. Desde una grieta brota una semilla, y en un instante crece un pewen joven y dorado.','The Cherrufe\'s crust splits into a thousand pieces and its fire sinks into the lava, which cools and turns to stone. A seed sprouts from a crack, and in an instant a young golden pewen grows.')],()=>{
+    S.flags.ngen3=1;S.flags.snow=1;S.pieces=S.pieces||[];if(!S.pieces.includes('pewenche'))S.pieces.push('pewenche');
+    grid[7][8]='A';for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++)if(grid[y][x]==='^')grid[y][x]=M.floor;
+    S.hp=Math.min(maxHP(),S.hp+HPQ);AU.name=null;playSong(rsong('ngen'));
+    const e=Object.assign({},MAPS.ngen3.ents[1]);e.fx=e.x;e.fy=e.y;ents.push(e);persist();sfx('lvl');
+    say([L('Ngen-pewen','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.'),
+      L('Ngen-pewen','Tami dungun mew nepen.','Con tus palabras desperté.','With your words I woke up.'),
+      N('Ngen-pewen es el ngen de los pewenes: cuida los árboles, sus ngülliw y a la gente que vive de ellos.','Ngen-pewen is the ngen of the pewen trees: it looks after the trees, their nuts, and the people who live from them.'),
+      N('Ngen-pewen te da su newen: ahora la nieve dura se abre cuando pasas. Además ganas un corazón nuevo.','Ngen-pewen gives you its newen: now the hard snow opens when you pass. You also gain a new heart.'),
+      Object.assign(L('','Küla trariwe trokiñ!','Entre la piedra todavía tibia queda otro trariwe trokiñ, tejido en café y blanco. Tienes 3 de 5.','In the still-warm stone lies another trariwe trokiñ, woven in brown and white. You have 3 of 5.'),{fx:()=>sfx('pick')}),
+      N('Un círculo de luz aparece en el cráter: pisándolo puedes volver a la entrada de la morada, al lof pewenche o a las otras tierras.','A circle of light appears in the crater: step on it to return to the lair entrance, the Pewenche lof, or the other lands.'),
+      N('Fin de la región pewenche (prototipo). Vuelve a los montones de nieve que viste en el camino: ahora puedes pasar. Faltan Williche y Puelmapu.','End of the Pewenche region (prototype). Go back to the snow heaps you saw on the road: now you can get through. Williche and Puelmapu remain.')]);
   });
 }

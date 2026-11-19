@@ -37,3 +37,23 @@ Left unchanged: *Pun mew kintukefuy kulliñ* (habitual past in the story, "used 
 |---|---|---|---|
 | Kayu ofisa nien. / Chumten ofisa nien? | shepherd girl | I have six sheep / How many sheep do I have? | |
 | Wüle ka challwatuan. | fisherman, Lewfü | Tomorrow I will fish again | |
+
+## Pewenche region (Nov 2026)
+
+| Form | Where | Intended meaning | Question |
+|---|---|---|---|
+| trafo- (trafonge, trafomu, trafomün) | battle root from the lonko | "break!" said to a stone wekufü | Is *trafo-* right as an intransitive "break" in an imperative? |
+| wütre- (wütrenge, wütremu, wütremün) | battle root from the lair chest | "be cold!" | Is *wütre-* usable as a verb this way? |
+| kütral wekufü, pire wekufü, kura wekufü | enemy names | fire / snow / stone wekufü | These are invented kinds of wekufü, not named beings from tradition. Ñirivilu and Cherrufe are from tradition. |
+| Tüfa ta ngülliw: pewen ñi fün. | laku | This is ngülliw: the fruit of the pewen | |
+| Chem pimi? Iney eymi? Chew amuaymi? | laku | What did you say? Who are you? Where will you go? | |
+| Ngen-lafken ka Ngen-mawida nepeyngu, pikeyngün. | Pewenche lonko | They say Ngen-lafken and Ngen-mawida have woken up | |
+| Kütral ka kura ngefuy. / Pu che llükakefuy. | nütramkafe | It was fire and stone. / People used to fear it. | |
+| Fentren ngülliw müley! | gatherers | There are lots of pewen nuts! | |
+| Ngülliw ayüken! | child | I love pewen nuts! | |
+| Pu pewenche ngülliw ikeyngün. / Mapudunguken. / Kawellu mew amukeymi. | arriero -ke- quiz | habitual forms | |
+| Pewen mew tripakey; pukem mew ikeiñ. | konew (ngülliw) | It comes from the pewen; in winter we eat it | |
+| Pun mew pengekey; antü mew ñamkey. | konew (wangülen) | At night it is seen; by day it disappears | |
+| Kütral ñi püñeñ; wenu püle amukey, ñamkey. | konew (fütron) | Child of the fire; it goes upward and disappears | |
+| Rayen mew llitukey; pire mew afkey. | carved stone, seasons puzzle | It begins with the flowers; it ends with the snow | |
+| Cherrufe müley pillañ mew. Kütral ka kura ngey! | kona | The Cherrufe is in the volcano. It is fire and stone! | |

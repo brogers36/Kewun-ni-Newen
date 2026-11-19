@@ -56,6 +56,16 @@ const BOOK={
     N('Los cuatro rumbos. Con püle se dice «hacia»: pikun püle, «hacia el norte».','The four directions. With püle you say «toward»: pikun püle, «toward the north».'),
     L('','pikun · willi · puel · ngulu','norte · sur · este · oeste','north · south · east · west'),
     N('Por eso la gente del sur es williche y la tierra del este es Puelmapu.','That is why the people of the south are williche and the land of the east is Puelmapu.')]},
+  quest:{m:'Chem, iney, chew...',es:'Preguntas',en:'Questions',lines:[
+    L('','chem · iney · chew · chumül · chumten','qué · quién · dónde · cuándo · cuánto','what · who · where · when · how much'),
+    L('','Chem pimi? · Iney eymi? · Chew amuaymi?','¿Qué dijiste? · ¿Quién eres? · ¿A dónde irás?','What did you say? · Who are you? · Where will you go?')]},
+  ke:{m:'-ke-',es:'Lo que se hace siempre',en:'What is always done',lines:[
+    N('-ke- va antes de la terminación de persona y dice lo que se hace siempre, por costumbre. Ejemplo con pe- ("ver"):','-ke- goes before the person ending and says what is always done, as a habit. Example with pe- ("see"):'),
+    L('','peken · pekeymi · pekey','yo veo siempre · tú ves siempre · él/ella ve siempre','I always see · you always see · he/she always sees'),
+    L('','pekeyngu · pekeyngün','ellos dos ven siempre · ellos ven siempre','they two always see · they always see')]},
+  seasons:{m:'Pewü, walüng...',es:'Las estaciones',en:'The seasons',lines:[
+    L('','pewü · walüng · rimü · pukem','primavera · verano · otoño · invierno','spring · summer · autumn · winter'),
+    N('El año empieza a florecer en pewü; en rimü caen los ngülliw de los pewenes, y en pukem llega la nieve.','The year begins to bloom in pewü; in rimü the nuts fall from the pewen trees, and in pukem the snow arrives.')]},
   fu:{m:'Kuyfi · -fu-',es:'Lo que pasaba antes',en:'What used to happen',lines:[
     N('En los relatos, -fu- marca algo que pasaba o que había antes, y que ya no es así.','In stories, -fu- marks something that happened or existed before, and is no longer so.'),
     L('','mülefuy · pefun · konfuy','había, estaba · vi, había visto · entró, había entrado','there was · I saw, had seen · he/she went in, had gone in'),

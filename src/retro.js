@@ -46,6 +46,8 @@ const LOOKS={
   walker:{t:'M',p:'#7a6a4a',P:'#5a4a30',b:'#c0a020',r:'#c0a020'},
   kona:{t:'M',p:'#2a5a3a',P:'#1a3a26',b:'#f0f0f0',r:'#e0b040'},
   lonko2:{t:'M',p:'#3a3a6a',P:'#24244a',w:'#e8d8a0',r:'#c82828',b:'#c82828',s:'#c47c4c',S:'#985830'},
+  lonko3:{t:'M',p:'#6a4a2a',P:'#4a3018',w:'#f0e0b0',r:'#2a64c8',b:'#2a64c8',s:'#c88050',S:'#9a5a30'},
+  elder2:{t:'F',h:'#c8c8d0',H:'#f0f0f8',c:'#3a5a8a',C:'#24406a',r:'#e0b040',s:'#c08858',S:'#8a5a34'},
   elder:{t:'M',h:'#c8c8d0',H:'#f0f0f8',p:'#5a4a3a',P:'#3a2e24',b:'#8a2458',r:'#e8d8a0',s:'#b8784c',S:'#8a5634'}};
 const CCACHE={};
 function charSprite(look,dir,fr){
@@ -69,6 +71,12 @@ function dogSprite(fr,dir){const key='dog'+fr+dir;if(CCACHE[key])return CCACHE[k
   (fr?DOG2:DOG).forEach((r,y)=>{for(let x=0;x<16;x++){const ch=r[x];if(ch!=='.'){c.fillStyle=ch==='o'?'#181018':ch==='e'?'#000':'#a06838';c.fillRect(x,y,1,1)}}});
   return CCACHE[key]=dir==='right'?mirror(cvs):cvs}
 function drawNgen(c,x,y,s,t,v){
+  if(v==='pewen'){const b=k=>Math.round(k*s);
+    for(const [r,a] of [[16,.08],[12,.12],[9,.16]])ell(c,x,y-b(14),b(r),b(r*1.15),'rgba(255,220,160,'+a+')');
+    ell(c,x,y-b(2),b(7),b(2.2),'#3a2a1a');R(c,x-b(2),y-b(18),b(4),b(17),'#7a5a3a');R(c,x,y-b(18),b(2),b(17),'#5a3a22');
+    for(let i=0;i<5;i++){const yy=y-b(18)-b(i*2.2),w=b(9-i*1.4);R(c,x-w,yy,w*2,Math.max(1,b(1.2)),'#2e6a3a');R(c,x-w,yy-b(1),Math.max(1,b(1.4)),Math.max(1,b(1.4)),'#2e6a3a');R(c,x+w-b(1.4),yy-b(1),Math.max(1,b(1.4)),Math.max(1,b(1.4)),'#2e6a3a')}
+    ell(c,x,y-b(10),b(3.4),b(3.4),'#c8a070');R(c,x-b(1.6),y-b(11),Math.max(1,b(.9)),Math.max(1,b(1.2)),'#3a2410');R(c,x+b(.8),y-b(11),Math.max(1,b(.9)),Math.max(1,b(1.2)),'#3a2410');
+    for(let i=0;i<6;i++){const a=t/22+i*1.05;R(c,x+Math.round(Math.cos(a)*b(10)),y-b(14)+Math.round(Math.sin(a)*b(12)),Math.max(1,b(.7)),Math.max(1,b(.7)),'#fff0c0')}return}
   if(v==='mawida'){const b=k=>Math.round(k*s);
     for(const [r,a] of [[16,.08],[12,.12],[9,.16]])ell(c,x,y-b(14),b(r),b(r*1.15),'rgba(200,240,140,'+a+')');
     ell(c,x,y-b(2),b(8),b(2.5),'#4a3a1a');ell(c,x,y-b(10),b(5),b(9),'#5a8a2a');ell(c,x-b(1),y-b(12),b(3.4),b(6.5),'#8ac850');
@@ -92,7 +100,7 @@ function enemyCanvas(t,size,fr){
   if(typeof SPR2!=='undefined'&&SPR2[t]){const d=SPR2[t],k=size>=40?(d.big||1):1,base=tplCanvas(t,fr,k);
     if(!d.aura)return ECACHE[key]=base;
     const pd=6*k,[cv,cc]=mk(base.width+pd*2,base.height+pd);
-    for(const [r,al] of [[1,.10],[.8,.12],[.6,.14]]){cc.fillStyle='rgba(170,220,255,'+al+')';cc.beginPath();cc.ellipse(cv.width/2,cv.height*.45,cv.width/2*r,cv.height/2*r,0,0,6.283);cc.fill()}
+    for(const [r,al] of [[1,.10],[.8,.12],[.6,.14]]){cc.fillStyle='rgba('+d.aura+','+al+')';cc.beginPath();cc.ellipse(cv.width/2,cv.height*.45,cv.width/2*r,cv.height/2*r,0,0,6.283);cc.fill()}
     cc.drawImage(base,pd,pd);return ECACHE[key]=cv}
   const pad=3,s=size/16,[cvs,c]=mk(size+pad*2,size+pad*2);
   const E=(cx,cy,rx,ry,col)=>ell(c,pad+cx*s,pad+cy*s,rx*s,ry*s,col);
@@ -162,6 +170,13 @@ function treeCanvas(v,style){
     for(const [x,y,rx,ry] of lobes)ell(c,x-1,y-1,rx*.5,ry*.5,'#9ab442');
     for(let i=0;i<18;i++){const px=2+Math.floor(h2(i,v,61)*20),py=2+Math.floor(h2(i,v,62)*12);if(h2(i,v,63)<.6)R(c,px,py,1,1,h2(i,v,64)<.5?'#c8d468':'#3a5414')}
     outline(cvs,'#1a2408');return PCACHE[k]=cvs}
+  if(style==='pewen'){const [cvs,c]=mk(24,40);
+    R(c,10,10,4,28,'#6a4a30');R(c,12,10,2,28,'#4a3020');for(let y=12;y<38;y+=3)R(c,10,y,4,1,'#5a3a24');R(c,8,37,8,2,'#4a3020');
+    const tiers=[[12,4,11,2.4],[12,8,10,2.2],[12,12,8,2],[12,15,6,1.8]];
+    for(const [x,y,rx,ry] of tiers){ell(c,x,y+1,rx,ry,'#1c4428');ell(c,x,y,rx-.6,ry-.5,'#2e6a3a');R(c,x-rx,y-2,2,2,'#2e6a3a');R(c,x+rx-2,y-2,2,2,'#2e6a3a');R(c,x-rx+1,y-3,1,1,'#4a8a52');R(c,x+rx-2,y-3,1,1,'#4a8a52')}
+    ell(c,12,2,5,1.6,'#2e6a3a');R(c,9,1,6,1,'#4a8a52');
+    for(let i=0;i<10;i++){const px=2+Math.floor(h2(i,v,81)*20),py=1+Math.floor(h2(i,v,82)*15);if(h2(i,v,83)<.5)R(c,px,py,1,1,'#5a9a5e')}
+    outline(cvs,'#0a1a10');return PCACHE[k]=cvs}
   if(style==='mawida'){const [cvs,c]=mk(22,34);
     R(c,9,22,4,10,'#3a2a1a');R(c,11,22,2,10,'#24180e');R(c,8,31,6,1,'#2e2014');R(c,9,25,1,2,'#4a6a3a');R(c,12,28,1,2,'#4a6a3a');
     const tiers=[[11,20,9,4],[11,15,8,4],[11,10,6.5,4],[11,5.5,4.5,3.5],[11,2.5,2.5,2]];
@@ -250,6 +265,7 @@ function dynCanvas(ch,f){
   case 'H':ell(c,8,9,6.5,6.5,'#7a7a8a');ell(c,7,8,5,5,'#9a9aaa');R(c,5,7,2,2,'#2a2a3a');R(c,9,7,2,2,'#2a2a3a');R(c,6,11,4,1,'#2a2a3a');R(c,5,6,2,1,'#c0c0d0');R(c,3,12,4,2,'#3a8a3a');R(c,10,3,3,2,'#3a8a3a');break;
   case 'E':R(c,0,0,16,16,'#6a6a7a');R(c,0,0,16,2,'#a8a8b8');R(c,1,2,14,13,'#7e7e8e');R(c,7,3,2,10,'#3a3a4a');R(c,4,6,8,2,'#3a3a4a');R(c,5,10,6,2,'#3a3a4a');R(c,0,14,16,2,'#4a4a5a');break;
   case 'A':ol=null;{const ph=f*.8;ell(c,8,9,7,4.5,'rgba(120,200,255,.35)');for(let a=0;a<16;a++){const an=a/16*Math.PI*2+ph;R(c,8+Math.cos(an)*6,9+Math.sin(an)*3.6,1,1,a%2?'#ffffff':'#9fd8ff')}ell(c,8,9,2.5,1.5,'#e8f8ff');R(c,7,1+(f%2),2,5,'rgba(220,245,255,.7)')}break;
+  case '^':ell(c,8,11,7.8,5,'#b8c8dc');ell(c,8,9,7,5,'#e8f0f8');ell(c,6,7,4,3,'#ffffff');R(c,3,12,10,1,'#9aaac0');break;
   case 'Ñ':ell(c,8,9,7.5,6.5,'#2a4a1a');ell(c,7,8,6,5,'#3a6a24');for(let i=0;i<14;i++){const a=i/14*6.28;R(c,8+Math.cos(a)*6.5,9+Math.sin(a)*5.5,1,1,'#c8b070')}for(let i=0;i<6;i++)R(c,4+i*2,5+(i%3)*3,1,1,'#e04060');break;
   case 'X':ol=null;{const ph=f*1.57;ell(c,8,12,6,2,'rgba(0,0,0,.25)');for(let i=0;i<4;i++){const a=ph+i*1.57;ell(c,8+Math.cos(a)*4,8+Math.sin(a)*2-i,4.4-i*.5,1.5,i%2?'#ecf2fa':'#aab8c6')}for(let i=0;i<3;i++)R(c,1+((f+i)%4)*3,3+i*4,4,1,'#ffffff')}break;
   case 'v':ol=null;for(let r=0;r<3;r++){const rr=7-r*2;for(let a=0;a<20;a++){const an=a/20*Math.PI*2+f*.8*(r%2?1:-1);if(a%3===0)continue;R(c,8+Math.cos(an)*rr,8+Math.sin(an)*rr*.8,1,1,r===0?'#163e6e':r===1?'#9fd0ff':'#ffffff')}}ell(c,8,8,1.4,1.1,'#0a2448');break;
