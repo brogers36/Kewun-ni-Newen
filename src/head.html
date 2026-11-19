@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kewün ñi Newen · Prototipo</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-monospace,Menlo,Consolas,"DejaVu Sans Mono",monospace;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+#wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px}
+#screen{position:relative;--s:3;width:calc(256px*var(--s));height:calc(224px*var(--s));box-shadow:0 0 0 3px #2b2433,0 8px 30px #000;overflow:hidden}
+#cv{width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000}
+#ui{position:absolute;inset:0;font-size:calc(6.2px*var(--s));pointer-events:none}
+#ui>*{pointer-events:auto}
+.box{position:absolute;left:3%;right:3%;bottom:3%;background:#18186af2;border:3px solid #e8e8f8;border-radius:6px;padding:.7em .9em;box-shadow:inset 0 0 0 3px #7880d0,0 0 0 2px #000;image-rendering:pixelated}
+#dlg{display:none;cursor:pointer;min-height:24%}
+#dlg .who{color:#f8e070;font-weight:bold;margin-bottom:.2em}
+#dlg .m{font-size:1.18em;font-weight:bold;color:#fff;margin-bottom:.25em}
+#dlg .g{color:#c8d8ff;font-style:italic;line-height:1.35}
+#dlg .more{position:absolute;right:.6em;bottom:.3em;color:#e8d49a;animation:bl 1s infinite}
+@keyframes bl{50%{opacity:0}}
+#menu{display:none;max-height:50%;overflow:auto}
+#menu .p{margin-bottom:.45em}
+#menu .p .m{font-weight:bold;font-size:1.1em;color:#fff}
+#menu .p .g{color:#bfe3d0;font-style:italic}
+#menu .list{display:grid;grid-template-columns:1fr 1fr;gap:.35em}
+#menu .list.one{grid-template-columns:1fr}
+.opt{font:inherit;color:#f4ecd8;background:#202080;border:2px solid #4850a8;border-radius:3px;padding:.35em .5em;text-align:left;cursor:pointer;display:flex;flex-direction:column}
+.opt .om{font-weight:bold;color:#fff}
+.opt .og{font-size:.82em;color:#bfe3d0}
+.opt.sel{border-color:#f8e070;background:#3038a8}
+.opt:disabled{opacity:.4;cursor:default}
+#banner{position:absolute;left:50%;top:22%;transform:translateX(-50%);background:#18186aee;border:3px solid #e8e8f8;box-shadow:inset 0 0 0 2px #7880d0;padding:.4em 1.2em;border-radius:3px;text-align:center;display:none;pointer-events:none}
+#banner b{display:block;font-size:1.3em;color:#fff}
+#banner span{color:#bfe3d0;font-style:italic}
+#title{position:absolute;inset:0;background:linear-gradient(#0d0b1022,#0d0b10bb 85%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.55em;text-align:center;padding:1em}
+#title h1{margin:0;font-size:2.5em;color:#ffe9b0;text-shadow:0 3px 0 #7a3a1a,0 0 14px #000,0 0 3px #000;letter-spacing:.04em}
+#title .sub{color:#cfe6ff;font-size:1.05em;text-shadow:0 0 4px #000}
+#title .row{display:flex;gap:.6em;flex-wrap:wrap;justify-content:center;align-items:center;text-shadow:0 0 4px #000}
+#title button{font:inherit;padding:.4em .9em;border-radius:4px;border:2px solid #e8d49a;background:#2a2238;color:#fff;cursor:pointer}
+.hero{display:flex;flex-direction:column;align-items:center;gap:.2em;padding:.4em .7em!important;border-color:#4a3d5c!important}
+.hero.on{border-color:#ffcf6a!important;background:#3d3050!important}
+.hero canvas{width:calc(32px*var(--s)/1.5);height:calc(48px*var(--s)/1.5);image-rendering:pixelated}
+#title .help{font-size:.75em;color:#d8d0e4;max-width:36em;line-height:1.4;background:#0d0b10aa;padding:.4em .6em;border-radius:4px}
+#title .copy{font-size:.7em;color:#a99fb8;position:absolute;bottom:.6em}
+#skip{position:absolute;right:.6em;top:.6em;font:inherit;font-size:.85em;padding:.25em .7em;border-radius:4px;border:2px solid #e8d49a;background:#2a2238cc;color:#fff;cursor:pointer;display:none}
+#pad{display:flex;gap:28px;align-items:center;justify-content:center}
+#dpad{display:grid;grid-template-columns:repeat(3,48px);grid-template-rows:repeat(3,48px);gap:3px}
+#dpad button,#ab button{font:bold 16px ui-monospace,monospace;color:#f4ecd8;background:#2a2238;border:2px solid #4a3d5c;border-radius:8px;touch-action:none}
+#dpad button:active,#ab button:active{background:#4a3d5c}
+#ab{display:flex;gap:10px;align-items:center}
+#ab button{width:58px;height:58px;border-radius:50%}
+#ab .sm{width:46px;height:34px;border-radius:8px;font-size:11px}
+@media (hover:hover) and (pointer:fine){#pad{opacity:.55}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="screen">
+    <canvas id="cv" width="512" height="448"></canvas>
+    <div id="ui">
+      <div id="banner"><b></b><span></span></div>
+      <div id="dlg" class="box"><div class="who"></div><div class="m"></div><div class="g"></div><div class="more">▼</div></div>
+      <div id="menu" class="box"><div class="p"></div><div class="list"></div></div>
+      <button id="skip">Saltar ▶▶</button>
+      <div id="title">
+        <h1>Kewün ñi Newen</h1>
+        <div class="sub">Prototipo · Lafkenche y Nagche</div>
+        <div class="row">
+          <button class="hero on" id="hL"><canvas width="32" height="48"></canvas><span>Llanka</span></button>
+          <button class="hero" id="hM"><canvas width="32" height="48"></canvas><span>Millaray</span></button>
+        </div>
+        <div class="row">
+          <button id="bNew">Llitun · Nuevo juego</button>
+          <button id="bCont" style="display:none">Continuar · Continue</button>
+        </div>
+        <div class="row"><button id="bLang">Glosa: Español</button><button id="bMus">♪ Música: sí</button></div>
+        <div class="help">Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música.<br>Arrows / WASD: move · Z, Enter or Space: talk / confirm (A) · X or Esc: back / menu (B) · N: music.</div>
+        <div class="copy">© 2026. Todos los derechos reservados · All rights reserved.</div>
+      </div>
+    </div>
+  </div>
+  <div id="pad">
+    <div id="dpad">
+      <span></span><button data-d="up">▲</button><span></span>
+      <button data-d="left">◀</button><span></span><button data-d="right">▶</button>
+      <span></span><button data-d="down">▼</button><span></span>
+    </div>
+    <div id="ab">
+      <button class="sm" id="pN">♪</button>
+      <button class="sm" id="pM">MENÚ</button>
+      <button id="pB">B</button>
+      <button id="pA">A</button>
+    </div>
+  </div>
+</div>
+<script>
+'use strict';
