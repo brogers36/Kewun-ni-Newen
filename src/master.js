@@ -58,7 +58,7 @@ const MSET={
   lafcave:s=>{Object.assign(s.flags,{rune_kil:1,mini1:1,mini2:1,mini3:1,'pz:d1':1,'pz:d2':1});s.runes.push('kil');s.items.lawen+=2;s.items.kofke+=2},
   lafdone:s=>{Object.assign(s.flags,{ngen:1,dive:1,boss:1,awake_lafkenche:1});s.pieces.push('lafkenche');s.gear.trariwe=1;s.gear.makun=1},
   naglof:s=>{Object.assign(s.flags,{chuchu:1,nag_lonko:1,herd_task:1,herd:1,awar:1,'pz:n_lewfu':1});s.roots.push('llüka');s.piwke+=1},
-  nagcave:s=>{Object.assign(s.flags,{root_winotu:1,nmini1:1,nmini2:1,nmini3:1,'pz:nd1':1,'pz:nd2':1});s.roots.push('wiñotu');s.items.lawen+=2},
+  nagcave:s=>{Object.assign(s.flags,{root_winotu:1,nmini1:1,nmini2:1,nmini3:1,'pz:nd1':1,'pz:nd2':1});s.roots.push('wüñotreka');s.items.lawen+=2},
   willof:s=>{Object.assign(s.flags,{cheche:1,wil_lonko:1,wil_time:1,'pz:w_mawida':1});s.roots.push('lef')},
   wilcave:s=>{Object.assign(s.flags,{root_tripa:1,wmini1:1,wmini2:1,wmini3:1,'pz:wd1':1,'pz:wd2':1});s.roots.push('tripa');s.items.lawen+=2},
   wildone:s=>{Object.assign(s.flags,{ngen4:1,wind:1,boss4:1});s.pieces.push('williche')},

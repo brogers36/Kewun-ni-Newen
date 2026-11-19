@@ -138,9 +138,9 @@ function openChest(x,y,what){
   setTileFlag(x,y);sfx('pick');
   if(what==='numgift'){S.gold+=30;S.items.kofke++;persist();return say([L('','Küla mari ngülliw!','Dentro hay küla mari (30) ngülliw y un kofke.','Inside are küla mari (30) ngülliw and a kofke.')])}
   if(what==='mawgift'){S.gold+=40;S.items.lawen++;persist();return say([L('','Meli mari ngülliw!','Dentro hay meli mari (40) ngülliw y un lawen.','Inside are meli mari (40) ngülliw and a lawen.')])}
-  if(what==='winotu'){learnRoot('wiñotu');S.flags.root_winotu=1;persist();sfx('lvl');return say([
-    L('','wiñotu-','Encontraste una raíz nueva: wiñotu-, «volver, regresar».','You found a new root: wiñotu-, «go back, return».'),
-    L('','wiñotunge · wiñotumu · wiñotumün','¡Vuelve atrás! (a uno) · (a dos) · (a tres o más)','Go back! (to one) · (to two) · (to three or more)'),
+  if(what==='winotu'){learnRoot('wüñotreka');S.flags.root_winotu=1;persist();sfx('lvl');return say([
+    L('','wüñotreka-','Encontraste una raíz nueva: wüñotreka-, «volver atrás, retroceder».','You found a new root: wüñotreka-, «step back».'),
+    L('','wüñotrekange · wüñotrekamu · wüñotrekamün','¡Vuelve atrás! (a uno) · (a dos) · (a tres o más)','Go back! (to one) · (to two) · (to three or more)'),
     N('Un wekufü al que le dices que vuelva atrás retrocede y pierde su turno. Y dicen que hasta el Witranalwe se encoge cuando lo obligan a retroceder.','A wekufü you tell to go back steps away and loses its turn. And they say even the Witranalwe shrinks when it is forced back.')])}
   if(what==='tripa'){learnRoot('tripa');S.flags.root_tripa=1;persist();sfx('lvl');return say([
     L('','tripa-','Encontraste una raíz nueva: tripa-, «salir».','You found a new root: tripa-, «come out».'),
@@ -481,7 +481,7 @@ function kona2Talk(){
   if(S.flags.ngen2)return say([L('Kona','Witranalwe ngelay! Ayüwün!','¡Ya no está el Witranalwe! ¡Qué feliz estoy!','The Witranalwe is gone! I am so happy!')]);
   say([L('Kona','Witranalwe müley mawida mew. Llükan!','El Witranalwe está en el monte. ¡Tengo miedo!','The Witranalwe is in the forest. I am afraid!'),
     N('Su guarida está bajando por la escalera de piedra, aquí al lado. Dicen que adentro hay piedras con números grandes y otra piedra que habla de muchas personas.','Its lair is down the stone stairway, right here. They say inside there are stones with big numbers and another stone that talks about many people.'),
-    L('Kona','Iñche wiñotuan lof mew.','Yo voy a volver al lof.','I am going back to the lof.')]);
+    L('Kona','Iñche wüñotrekaan lof mew.','Yo voy a volver al lof.','I am going back to the lof.')]);
 }
 
 /* ---------- lof mini-quests ---------- */
@@ -1091,7 +1091,7 @@ function freeCaptive(id,gm,who,whoen,reward,rewardEn,give){
   const e=ents.find(x=>x.id===id);if(e)ents=ents.filter(x=>x!==e);
   return gainPiwke([praise(),
     N('La niebla alrededor de '+who+' se afloja, se deshace... y '+who+' se vuelve una luz tibia que vuela hacia el este, de regreso a su tierra.','The fog around '+whoen+' loosens, comes apart... and '+whoen+' becomes a warm light that flies east, back home.'),
-    N(reward,rewardEn)].concat(all?[L('','Kom wiñotuyngün!','¡Los cinco cautivos volvieron a sus tierras! A lo lejos se oye un crujido enorme: la puerta del gran olvido se está abriendo.','All five captives have returned to their lands! Far away you hear a huge groan: the gate of the great forgetting is opening.')]:[]));
+    N(reward,rewardEn)].concat(all?[L('','Kom wüñotrekayngün!','¡Los cinco cautivos volvieron a sus tierras! A lo lejos se oye un crujido enorme: la puerta del gran olvido se está abriendo.','All five captives have returned to their lands! Far away you hear a huge groan: the gate of the great forgetting is opening.')]:[]));
 }
 function capQuiz(id,gm,label,intro,qs,who,whoen,reward,rewardEn,give){
   const en=S.gloss==='en';
@@ -1185,7 +1185,7 @@ function chChildTalk(){
 }
 function chSingerTalk(){
   const en=S.gloss==='en';
-  if(S.flags.ch3)return say([L('Chumpall ülkantufe','Taiñ ül wiñotuy. Chaltu may.','Nuestro canto volvió. Gracias.','Our song has returned. Thank you.')]);
+  if(S.flags.ch3)return say([L('Chumpall ülkantufe','Taiñ ül wüñotrekay. Chaltu may.','Nuestro canto volvió. Gracias.','Our song has returned. Thank you.')]);
   const qs=[{q:N('La ola tiene que VENIR hacia la orilla. Díselo:','The wave must COME toward the shore. Tell it:'),o:['küpange','amutunge','umawtunge'],a:'küpange'},
     {q:N('La ola tiene que IRSE de las huertas. Díselo:','The wave must GO AWAY from the gardens. Tell it:'),o:['küpange','amutunge','nepenge'],a:'amutunge'},
     {q:N('El agua brava tiene que DORMIRSE. Díselo:','The rough water must SLEEP. Tell it:'),o:['tripange','lefnge','umawtunge'],a:'umawtunge'}];
@@ -1193,7 +1193,7 @@ function chSingerTalk(){
     N('Los chumpall gobiernan el agua cantándole órdenes. Pero el Llufü Filu desordenó el ül, el canto. Ayúdala a ordenar las palabras del agua.','The chumpall govern the water by singing commands to it. But the Llufü Filu scrambled the ül, the song. Help her put the water\'s words back in order.')],()=>ask(0));
   function ask(i){
     if(i>=qs.length){S.flags.ch3=1;S.items.kofke++;S.gold+=40;S.xp+=4;persist();sfx('lvl');
-      return say([praise(),L('Chumpall ülkantufe','Taiñ ül wiñotuy!','¡Nuestro canto volvió!','Our song has returned!'),N('El agua de la fosa se aquieta un momento, escuchando. Te da un kofke y meli mari (40) ngülliw. +4 kimün.','The water of the trench goes still for a moment, listening. She gives you a kofke and meli mari (40) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+      return say([praise(),L('Chumpall ülkantufe','Taiñ ül wüñotrekay!','¡Nuestro canto volvió!','Our song has returned!'),N('El agua de la fosa se aquieta un momento, escuchando. Te da un kofke y meli mari (40) ngülliw. +4 kimün.','The water of the trench goes still for a moment, listening. She gives you a kofke and meli mari (40) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
     choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Chumpall ülkantufe','Fey no...','Eso no...','Not that...')],()=>ask(0))}},true,false)}
 }

@@ -151,6 +151,20 @@ const DOG2=["................","..oo............",".obbo.........o.",".obbbooooo
 function dogSprite(fr,dir){const key='dog'+fr+dir;if(CCACHE[key])return CCACHE[key];const [cvs,c]=mk(16,10);
   (fr?DOG2:DOG).forEach((r,y)=>{for(let x=0;x<16;x++){const ch=r[x];if(ch!=='.'){c.fillStyle=ch==='o'?'#181018':ch==='e'?'#000':'#a06838';c.fillRect(x,y,1,1)}}});
   return CCACHE[key]=dir==='right'?mirror(cvs):cvs}
+function drawPortal(c,x,y){
+  const t=frame;
+  // light pillar
+  const grd=c.createLinearGradient(0,y-34,0,y+6);grd.addColorStop(0,'rgba(200,170,255,0)');grd.addColorStop(.6,'rgba(190,150,255,.22)');grd.addColorStop(1,'rgba(230,210,255,.38)');
+  c.fillStyle=grd;c.fillRect(x-9,y-34,18,40);
+  ell(c,x,y+4,12,4,'rgba(120,70,200,.35)');
+  for(let ring=0;ring<3;ring++){
+    c.save();c.strokeStyle=['rgba(220,180,255,.9)','rgba(150,190,255,.75)','rgba(255,255,255,.6)'][ring];c.lineWidth=1.6;
+    c.setLineDash([5,7]);c.lineDashOffset=(t*(ring%2?1.5:-1.2))%12;
+    c.beginPath();c.ellipse(x,y-6,11-ring*2.6,14-ring*3.2,Math.sin(t/40+ring)*.25,0,6.283);c.stroke();c.restore()}
+  ell(c,x,y-6,3.5,6,'rgba(240,228,255,.9)');ell(c,x,y-6,1.8,3.4,'#ffffff');
+  for(let k=0;k<8;k++){const a=t/14+k*.785;R(c,Math.round(x+Math.cos(a)*13),Math.round(y-6+Math.sin(a)*15),2,2,k%2?'#e8d0ff':'#9ad0ff')}
+  if(t%50<4)ell(c,x,y-6,15,18,'rgba(255,255,255,.18)');
+}
 function drawNgen(c,x,y,s,t,v){
   const name=v==='mawida'?'ngen_mawida':v==='pewen'?'ngen_pewen':v==='kuruf'?'ngen_kuruf':v==='lelfun'?'ngen_lelfun':'ngen_lafken',au={ngen_lafken:'160,220,255',ngen_mawida:'200,240,140',ngen_pewen:'255,220,140',ngen_kuruf:'200,250,255',ngen_lelfun:'255,236,150'}[name];
   const k0=Math.max(1,Math.round(s)),fr=Math.floor(t/20)%2,hb=typeof SPR2!=='undefined'&&SPR2[name+'@b'];

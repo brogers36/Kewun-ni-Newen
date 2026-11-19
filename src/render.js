@@ -114,6 +114,14 @@ function renderMap(){
   c.drawImage(LAYERS[wf],-cx,VY-cy);
   const x0=Math.max(0,Math.floor(cx/T)-1),y0=Math.max(0,Math.floor(cy/T)-1),x1=Math.min(M.w-1,Math.ceil((cx+LW)/T)),y1=Math.min(M.h-1,Math.ceil((cy+VH)/T)+1);
   const glows=[];
+  // pulsing markers on real map exits, so openings read through the scenery
+  {const pulse=.45+.3*Math.sin(frame/14);c.fillStyle='rgba(255,236,140,'+pulse+')';
+   const tri=(tx2,ty2,d)=>{const X=tx2*T-cx+8,Y=ty2*T-cy+VY+8;c.save();c.translate(X,Y);
+     c.rotate(d==='left'?Math.PI:d==='up'?-Math.PI/2:d==='down'?Math.PI/2:0);
+     const o2=5+Math.sin(frame/9)*1.5;c.beginPath();c.moveTo(o2+3,0);c.lineTo(o2-2,-4);c.lineTo(o2-2,4);c.closePath();c.fill();c.restore()};
+   if(M.edges)for(const d in M.edges){
+     if(d==='left'||d==='right'){const x2=d==='left'?0:M.w-1;for(let y2=0;y2<M.h;y2++)if(WALK.has(grid[y2][x2]))tri(x2,y2,d)}
+     else{const y2=d==='up'?0:M.h-1;for(let x2=0;x2<M.w;x2++)if(WALK.has(grid[y2][x2]))tri(x2,y2,d)}}}
   const sbA=M.sbt&&!S.flags[M.sbt.flag]&&(!M.sbt.req||S.flags[M.sbt.req]);
   if(sbA)for(const k of M.sbt.t){const [tx,ty]=k.split(',');const X=tx*T-cx,Y=ty*T-cy+VY;
     if(X>-T&&X<LW&&Y>VY-T&&Y<VY+VH)c.drawImage(sbtCanvas(Math.floor(frame/14)%2),X,Y)}
@@ -123,6 +131,7 @@ function renderMap(){
       c.drawImage(dynCanvas(ch,ch==='N'?(lit?1:0):t.col+'|'+(lit?1:0)),X,Y);if(lit)glows.push([X+8,Y+6]);
       if(Math.abs(x-P.x)+Math.abs(y-P.y)<7)OV.push(()=>txt(t.lab,X+8,Y-2,ch==='J'?t.col:'#e0f4ff',12,'center'));continue}}
     if(ch==='A'){drawWarpRing(c,X+8,Y+9);continue}
+    if(ch==='@'){drawPortal(c,X+8,Y+9);continue}
     if(BOB.has(ch)){const b=Math.round(Math.sin(frame/10+x)*1.5);ell(c,X+8,Y+14,4,1.5,'rgba(0,0,0,.25)');c.drawImage(dynCanvas(ch,0),X,Y-3+b);if(frame%40<6)R(c,X+13,Y+1+b,1,1,'#ffffff')}
     else{if('CIK'.includes(ch))ell(c,X+8,Y+15,7,2,'rgba(0,0,0,.28)');c.drawImage(dynCanvas(ch,anim?f4:0),X,Y)}
     if(ch==='F')glows.push([X+8,Y+8])}

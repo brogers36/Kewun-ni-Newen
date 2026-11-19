@@ -1146,7 +1146,8 @@ for k,st in {'u_grotto':(4,2),'u_garden':(0,7),'u_deep':(0,7),'u_throne':(0,7)}.
 # s_plaza: a plaza in the city
 c=C(34,14)
 c.r(0,9,34,1,'=')
-c.r(16,0,2,14,'=')
+c.p(0,9,'T')
+c.r(16,1,2,12,'=')
 c.r(4,1,8,4,'%');c.r(22,1,8,4,'%')
 c.r(14,6,6,2,'~');c.r(13,5,8,4,',');c.r(14,6,6,2,'~')
 c.p(3,10,'@')
@@ -1157,6 +1158,7 @@ E_['s_plaza']=c.rows()
 # s_poblacion: the neighborhood with the urban ruka
 c=C(32,13)
 c.r(0,7,32,1,'=')
+c.p(31,7,'T')
 for (x,y) in [(3,2),(9,2),(15,2),(21,2)]:c.r(x,y,4,3,'%')
 for (x,y) in [(3,9),(9,9)]:c.r(x,y,4,3,'%')
 c.r(25,8,3,2,'R')
@@ -1168,6 +1170,7 @@ g=[['%']*16 for _ in range(10)]
 carve0(g,1,1,14,7)
 g[2][3]='Z';g[2][12]='V';g[5][11]='U';g[1][7]='F'
 carve0(g,7,8,2,1)
+carve0(g,7,9,2,1)
 E_['s_centro']=[''.join(r) for r in g]
 for k,st in {'s_plaza':(0,9),'s_poblacion':(0,7),'s_centro':(7,8)}.items():
     rows=[r.replace('@',',') for r in E_[k]];R2=bfs2(rows,st)

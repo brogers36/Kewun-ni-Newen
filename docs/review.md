@@ -190,3 +190,10 @@ Mapudungun y referentes culturales que conviene verificar:
 - **Corazones**: tope subido de 2 a 4 filas (40 piwke) en ambos HUD.
 - Música ngoyman extendida: más compases y solos de guitarra sintetizada (sierra distorsionada) en ngoy, ngoyBattle, ngoyBoss y ngoyFinal (solo armonizado a dos voces).
 - Arreglo de diseño: al caer un jefe final o el Llufü Filu, sus invocados se desvanecen con él (antes la pelea seguía contra los esbirros).
+
+## Tanda 9 · Correcciones tuyas
+
+- **wüñotreka-** reemplaza a wiñotu- en todo el juego ("vuelve atrás" = wüñotrekange), por tu indicación. Las partidas guardadas migran la raíz automáticamente al continuar. Los sellos que la usaban ahora piden wüñotreka / wüñotrekakil.
+- Salidas de mapa ahora marcadas con flechas de luz pulsantes en cada abertura real (los árboles las tapaban).
+- Portal a Santiago mucho más grande: columna de luz, anillos y chispas, de dos tiles de alto.
+- Santiago: arreglada la salida sur de la ruka urbana (la fila de abajo estaba sellada) y cerrados los extremos falsos de las calles que parecían salidas sin serlo.

@@ -181,11 +181,11 @@ function resolve(r,kil,tg,ei){
       if(e.dreaming){e.dreaming=0;e.dreamT=4;e.stun=1;fx.push(e.label+' abre los ojos: su sueño gris se deshace y pierde el turno. ¡Ahora tus golpes sí le llegan!');fxe.push(e.label+' opens its eyes: its grey dream falls apart and it loses its turn. Now your blows can reach it!');continue}
       fx.push(e.label+' no dormía: te mira extrañado.');fxe.push(e.label+' was not asleep: it gives you a puzzled look.')}}
   else if(r==='nepe'){fx.push('Les dijiste que no despertaran. Nada cambia.');fxe.push('You told them not to wake up. Nothing changes.')}
-  else if(r==='wiñotu'&&!kil){for(const e of targets){const T=ET[e.t];
+  else if(r==='wüñotreka'&&!kil){for(const e of targets){const T=ET[e.t];
       if(e.tall){e.tall=0;e.low=3;e.stun=1;fx.push(e.label+' retrocede, se encoge y queda a tu alcance.');fxe.push(e.label+' steps back, shrinks down and is within your reach.');continue}
       if(T.boss&&B.tele){B.tele=false;fx.push(e.label+' retrocede y pierde el impulso: ya no se lanza.');fxe.push(e.label+' steps back and loses its momentum: it no longer lunges.');continue}
       if(!T.boss&&Math.random()<(coll?.6:.85)){e.stun=1;fx.push(e.label+' retrocede y pierde su turno.');fxe.push(e.label+' steps back and loses its turn.')}else{fx.push(e.label+' se tambalea, pero sigue ahí.');fxe.push(e.label+' staggers, but stays put.')}}}
-  else if(r==='wiñotu'){fx.push('Les dijiste que no retrocedieran. Se quedan firmes.');fxe.push('You told them not to go back. They hold their ground.')}
+  else if(r==='wüñotreka'){fx.push('Les dijiste que no retrocedieran. Se quedan firmes.');fxe.push('You told them not to go back. They hold their ground.')}
   if(burnT){S.hp=Math.max(1,S.hp-burnT);fx.push('¡Te quemas con su fuego! (−'+burnT+')');fxe.push('You get burned by its fire! (−'+burnT+')')}
   const eff=L('',pr.m+(S.sp>=2?'  ✦'+S.sp:''),fx.join(' '),fxe.join(' '));
   eff.fx=()=>{for(const e of targets){const p=epos(e);spark(p.x,p.y,r==='amutu'?'#fff6a0':r==='umawtu'?'#a0c8ff':r==='nag'?'#ffe080':'#ffffff',10);

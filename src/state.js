@@ -20,7 +20,7 @@ const ROOTS={
   umawtu:{m:'umawtu-',es:'dormir',en:'sleep'},
   nag:{m:'nag-',es:'bajar',en:'come down'},
   'llüka':{m:'llüka-',es:'tener miedo',en:'be afraid'},
-  'wiñotu':{m:'wiñotu-',es:'volver, regresar',en:'go back'},
+  'wüñotreka':{m:'wüñotreka-',es:'volver atrás, retroceder',en:'step back'},
   trafo:{m:'trafo-',es:'quebrarse, romperse',en:'break'},
   'wütre':{m:'wütre-',es:'tener frío',en:'be cold'},
   lef:{m:'lef-',es:'correr, huir',en:'run away'},
@@ -55,7 +55,7 @@ const VG={
        nes:['¡No te caigas!','¡No se caigan (ustedes dos)!','¡No se caigan (todos)!'],nen:["Don't fall!","Don't fall, you two!","Don't fall, all of you!"]},
   nepe:{es:['¡Despierta!','¡Despierten (ustedes dos)!','¡Despierten (todos)!'],en:['Wake up!','Wake up, you two!','Wake up, all of you!'],
        nes:['¡No despiertes!','¡No despierten (ustedes dos)!','¡No despierten (todos)!'],nen:["Don't wake up!","Don't wake up, you two!","Don't wake up, all of you!"]},
-  'wiñotu':{es:['¡Vuelve atrás!','¡Vuelvan atrás (ustedes dos)!','¡Vuelvan atrás (todos)!'],en:['Go back!','Go back, you two!','Go back, all of you!'],
+  'wüñotreka':{es:['¡Vuelve atrás!','¡Vuelvan atrás (ustedes dos)!','¡Vuelvan atrás (todos)!'],en:['Go back!','Go back, you two!','Go back, all of you!'],
        nes:['¡No vuelvas atrás!','¡No vuelvan (ustedes dos)!','¡No vuelvan (todos)!'],nen:["Don't go back!","Don't go back, you two!","Don't go back, all of you!"]}};
 
 /* ---------- enemies ---------- */
@@ -90,10 +90,10 @@ const ET={
   fmewlen:{name:'fütra mewlen',hp:62,atk:11,xp:34,gold:[22,26],bs:70,fly:true,mini:1},
   kurutoro:{name:'kurü toro',hp:66,atk:11,xp:36,gold:[22,26],bs:72,armor:1,mini:1},
   walichu:{name:'Walichu',hp:150,atk:11,xp:130,gold:[120,120],boss:true,bs:112,dream:1},
-  chadikura:{name:'Chadikura',hp:175,atk:12,xp:200,gold:[250,250],boss:true,bs:96,spres:1,armor:1,seals:['nepe','trafo','wiñotukil']},
+  chadikura:{name:'Chadikura',hp:175,atk:12,xp:200,gold:[250,250],boss:true,bs:96,spres:1,armor:1,seals:['nepe','trafo','wüñotrekakil']},
   epunamun:{name:'Epunamun',hp:190,atk:12,xp:220,gold:[300,300],boss:true,bs:100,spres:1,seals:['umawtu','nepe','tranakil']},
   ngoyam:{name:'ngoyman am',hp:34,atk:12,xp:22,gold:[12,16],bs:46},
-  kalku:{name:'Fütra Kalku',hp:200,atk:13,xp:260,gold:[350,350],boss:true,bs:92,spres:1,seals:['llüka','wiñotu','ñamkil']},
+  kalku:{name:'Fütra Kalku',hp:200,atk:13,xp:260,gold:[350,350],boss:true,bs:92,spres:1,seals:['llüka','wüñotreka','ñamkil']},
   ngoyman1:{name:'Ti Fütra Ngoyman',hp:150,atk:12,xp:0,gold:[0,0],boss:true,bs:120},
   ngoyman2:{name:'Ngoyman ñi piwke',hp:160,atk:13,xp:0,gold:[0,0],boss:true,bs:110,armor:1,spres:1},
   ngoyman3:{name:'Rüf Fütra Ngoyman',hp:185,atk:16,xp:400,gold:[500,500],boss:true,bs:116,spres:1,thick:1},
