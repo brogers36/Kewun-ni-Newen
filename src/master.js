@@ -51,7 +51,7 @@ const MCHK=[
   {m:'Ngoyman · jefe final',es:'El corazón de la niebla: Ti Fütra Ngoyman (tres formas)',en:'The heart of the fog: Ti Fütra Ngoyman (three forms)',lvl:28,at:['g_ngoyman',8,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','sbosses']},
   {m:'Münche lafken · jardines',es:'Bajo el lago: los chumpall y sus problemas',en:'Under the lake: the chumpall and their troubles',lvl:28,at:['u_garden',3,7],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','finalwon']},
   {m:'Münche lafken · jefe (5 formas)',es:'El salón de los chumpall: el Llufü Filu (cinco formas)',en:'The chumpall hall: the Llufü Filu (five forms)',lvl:29,at:['u_throne',8,5],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','finalwon','chq']},
-  {m:'Santiago · retorno',es:'Todos los secretos completos; el portal a la waria',en:'All secrets complete; the portal to the city',lvl:30,at:['ngoyman',4,3],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','finalwon','sbosses','epuwon','chq','chdone']}];
+  {m:'Santiago · retorno',es:'Todos los secretos completos; el portal a la waria',en:'All secrets complete; the portal to the city',lvl:30,at:['ngoyman',4,3],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','finalwon','sbosses','kalkudone','epuwon','chq','chdone']}];
 const MSET={
   intro:s=>{s.flags.intro=1;s.roots.push('küpa')},
   pentu:s=>{Object.assign(s.flags,{pentu_prac:1,pentukun:1});s.roots.push('umawtu','nag');s.items.kulon+=2},
@@ -74,7 +74,8 @@ const MSET={
   finalwon:s=>{Object.assign(s.flags,{won:1,bossF:1})},
   chq:s=>{Object.assign(s.flags,{ch1:1,ch2:1,ch3:1,ch2q:1,ch_pearl:1})},
   chdone:s=>{Object.assign(s.flags,{chboss:1});s.gear.lafkenkura=1},
-  epuwon:s=>{Object.assign(s.flags,{epu_won:1});s.gear.waiki=1}};
+  epuwon:s=>{Object.assign(s.flags,{epu_won:1});s.gear.waiki=1},
+  kalkudone:s=>{Object.assign(s.flags,{sb6:1})}};
 function mBuild(c){
   const s=newState(HERO);s.pieces=[];
   for(const k of c.set)MSET[k](s);
