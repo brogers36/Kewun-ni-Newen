@@ -7,7 +7,7 @@ const LO=document.createElement('canvas');LO.width=LW;LO.height=LH;const lx=LO.g
 const $=id=>document.getElementById(id);
 const CT=true;
 const SAVE_KEY='ngen_ni_dungun_lafkenche_v2'+(window.KEWUN_MASTER?'_maestro':''),MUTE_KEY='ngen_ni_dungun_mute';
-let LANG='es',S=null,mode='title',frame=0,active=null,grace=0,fade=0,HERO='llanka';
+let LANG='es',S=null,mode='title',frame=0,active=null,grace=0,fade=0,HERO='millaray';
 const rnd=n=>Math.floor(Math.random()*n);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function G(o){if(!o)return'';const l=S?S.gloss:LANG;return o[l]!==undefined?o[l]:(o.es||'')}
