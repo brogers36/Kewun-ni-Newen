@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noai, noimageai">
+<meta name="theme-color" content="#0d0b10">
+<link rel="icon" type="image/png" sizes="192x192" href="../www/icon-192.png">
+<link rel="apple-touch-icon" href="../www/apple-touch-icon.png">
+<meta property="og:title" content="Kewün ñi Newen">
+<meta property="og:description" content="Un RPG gratuito para aprender mapudungun: las batallas se ganan conjugando. En español y en inglés, funciona sin conexión.">
+<meta property="og:image" content="https://brogers36.github.io/Kewun-ni-Newen/acerca/img/battle.jpg">
+<title>Acerca de Kewün ñi Newen, el RPG para aprender mapudungun</title>
+<link rel="canonical" href="https://brogers36.github.io/Kewun-ni-Newen/acerca/">
+<meta name="description" content="Un RPG gratuito al estilo de los clásicos de 16 bits donde la gramática del mapudungun es el sistema de batalla: 5 regiones, 76 mapas, 42 criaturas del folclor mapuche y 52 melodías originales. Funciona sin conexión.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Same family as the pages for the learning game and the dictionary: one long
+   night scroll cut by the woven red band, but on the RPG's own night palette,
+   with landscape game screens instead of phone frames. */
+:root{
+  --night:#0d0b10; --panel:#1a1733; --panel2:#2b2443;
+  --ink:#f4ecd8; --muted:#b4acce; --gold:#e8b53a; --bright:#ffe9b0; --red:#c8322f; --blue:#7880d0;
+  --display:"Alfa Slab One", "Rockwell", "Roboto Slab", Georgia, serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  color-scheme:dark;
+}
+body{background:var(--night);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.band{height:22px;background-color:var(--red);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='22'%3E%3Cpath d='M22 2 L34 11 L22 20 L10 11Z' fill='%230d0b10'/%3E%3Cpath d='M22 7 L28 11 L22 15 L16 11Z' fill='%23f4ecd8'/%3E%3Cpath d='M0 11 h6 M38 11 h6' stroke='%230d0b10' stroke-width='2'/%3E%3C/svg%3E");background-repeat:repeat-x;background-position:center}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0;line-height:1.1}
+h2{font-size:clamp(1.7rem,4vw,2.4rem)}
+h3{font-size:1.2rem;letter-spacing:.01em}
+p{margin:0}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+.eyebrow{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.lead{font-size:1.15rem;color:var(--ink);max-width:60ch}
+.muted{color:var(--muted)}
+section{padding-block:clamp(48px,8vw,88px)}
+.lang{display:inline-flex;border:1.5px solid var(--panel2);border-radius:999px;overflow:hidden}
+.lang button{all:unset;cursor:pointer;padding:6px 14px;font-weight:700;font-size:.85rem;color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--night)}
+html[data-l="en"] .es, html:not([data-l="en"]) .en{display:none}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:18px}
+.brand{font-family:var(--display);font-size:1.05rem}
+/* hero */
+.hero{display:grid;grid-template-columns:1fr;gap:clamp(24px,5vw,48px);align-items:center;padding-block:clamp(28px,6vw,64px) clamp(40px,7vw,80px)}
+.hero h1{font-size:clamp(2.6rem,7.4vw,4.9rem);letter-spacing:-.01em}
+.hero h1 span{color:var(--bright)}
+.hero .copy{display:flex;flex-direction:column;gap:20px;min-width:0}
+.cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{display:inline-block;text-decoration:none;font-weight:700;padding:13px 22px;border-radius:999px;background:var(--red);color:var(--ink)}
+.btn.ghost{background:transparent;border:2px solid var(--panel2);color:var(--ink)}
+.btn:hover{filter:brightness(1.08)}
+.facts{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:.95rem;color:var(--muted)}
+.facts b{font-family:var(--display);font-weight:400;color:var(--ink);font-size:1.3rem;margin-right:4px;font-variant-numeric:tabular-nums}
+/* landscape game screens in a dark console frame */
+.shot{border-radius:14px;border:6px solid #06050b;box-shadow:0 0 0 2px var(--panel2),0 24px 60px rgba(0,0,0,.55);overflow:hidden;background:var(--panel);max-width:100%}
+.shot img{display:block;width:100%;height:auto;image-rendering:auto}
+.hero .shot{max-width:760px;justify-self:center;width:100%}
+/* features: alternating screen + copy */
+.feat{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(20px,4vw,48px);align-items:center}
+.feat + .feat{margin-top:clamp(40px,6vw,64px)}
+.feat:nth-child(even) .shot{order:2}
+.feat .copy{display:flex;flex-direction:column;gap:12px;min-width:0}
+.feat ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;color:var(--muted)}
+.feat ul b{color:var(--ink)}
+.mapu{font-style:italic;color:var(--bright)}
+/* regions */
+.path{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:22px}
+.stage{background:var(--panel);border:1.5px solid var(--panel2);border-radius:8px;padding:12px 10px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.stage b{font-size:.95rem}
+.stage span{font-size:.82rem;color:var(--muted)}
+.stage:last-child{border-color:var(--gold)}
+/* how built */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px);margin-top:24px}
+.split > div{display:flex;flex-direction:column;gap:14px;min-width:0}
+.checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.checks li{display:grid;grid-template-columns:22px 1fr;gap:10px;color:var(--muted)}
+.checks li::before{content:"";width:12px;height:12px;margin-top:7px;background:var(--gold);transform:rotate(45deg)}
+.checks b{color:var(--ink)}
+/* uses */
+.uses{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.use{background:var(--panel);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.use h3{color:var(--bright)}
+.use p{color:var(--muted);font-size:.95rem}
+/* install */
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px}
+.step{border:1.5px solid var(--panel2);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0;overflow-wrap:anywhere}
+.step ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px;color:var(--muted)}
+.step ol b{color:var(--ink)}
+.note{background:var(--panel);border-left:4px solid var(--gold);border-radius:6px;padding:14px 16px;color:var(--muted);max-width:70ch}
+.note b{color:var(--ink)}
+.refs{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:8px;color:var(--muted);font-size:.93rem;max-width:80ch}
+.refs i{color:var(--ink)}
+footer{padding-block:28px 40px;color:var(--muted);font-size:.9rem;display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+@media (max-width:860px){
+  .path{grid-template-columns:repeat(3,1fr)}
+  .uses{grid-template-columns:1fr 1fr}
+  .split,.steps{grid-template-columns:1fr}
+  .feat{grid-template-columns:1fr}
+  .feat:nth-child(even) .shot{order:0}
+}
+@media (max-width:620px){
+  .path{grid-template-columns:1fr 1fr}
+  .uses{grid-template-columns:1fr}
+}
+</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+<div class="band" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="top">
+    <span class="brand">Kewün ñi Newen</span>
+    <div class="lang" role="group" aria-label="Idioma / Language">
+      <button id="l-es" type="button" aria-pressed="true">ES</button><button id="l-en" type="button" aria-pressed="false">EN</button>
+    </div>
+  </header>
+
+  <main>
+  <section class="hero" aria-labelledby="t">
+    <div class="copy">
+      <p class="eyebrow"><span class="es">Un RPG para aprender mapudungun</span><span class="en">An RPG for learning Mapudungun</span></p>
+      <h1 id="t">Kewün <span>ñi Newen</span></h1>
+      <p class="lead"><span class="es">«La fuerza de la lengua.» Un RPG gratuito al estilo de los clásicos de 16 bits: el olvido avanza por el Wallmapu y Llanka, o Millaray, sale a despertar a los ngen. Aquí las batallas se ganan conjugando: cada orden que das en combate es un verbo en mapudungun. En español y en inglés, en el teléfono y sin conexión.</span><span class="en">“The strength of the language.” A free RPG in the style of the 16-bit classics: forgetting is creeping across Wallmapu, and Llanka, or Millaray, sets out to wake the ngen. Battles here are won by conjugating: every order you give in combat is a Mapudungun verb. In Spanish and English, on your phone, and offline.</span></p>
+      <div class="cta">
+        <a class="btn" href="https://brogers36.github.io/Kewun-ni-Newen/" target="_blank" rel="noopener"><span class="es">Jugar ahora</span><span class="en">Play now</span></a>
+        <a class="btn ghost" href="#instalar"><span class="es">Instalar en el teléfono</span><span class="en">Install on your phone</span></a>
+        <a class="btn ghost" href="https://brogers36.github.io/Mapudungukeain/acerca/"><span class="es">El juego para aprender</span><span class="en">The learning game</span></a>
+        <a class="btn ghost" href="https://brogers36.github.io/Mapudungukeain/diccionario/acerca/"><span class="es">El diccionario</span><span class="en">The dictionary</span></a>
+      </div>
+      <div class="facts" aria-label="En cifras">
+        <span><b>5</b><span class="es">regiones</span><span class="en">regions</span></span>
+        <span><b>76</b><span class="es">mapas</span><span class="en">maps</span></span>
+        <span><b>42</b><span class="es">criaturas y jefes</span><span class="en">creatures and bosses</span></span>
+        <span><b>18</b>konew</span>
+        <span><b>52</b><span class="es">melodías originales</span><span class="en">original tunes</span></span>
+      </div>
+    </div>
+    <div class="shot"><img src="img/battle.jpg" alt="Batalla contra un chonchon y un laftrache en la costa: el menú pide armar una orden en mapudungun" width="960" height="644"></div>
+  </section>
+  </main>
+</div>
+
+<div class="band" aria-hidden="true"></div>
+<div class="wrap">
+  <section aria-labelledby="h-batalla">
+    <p class="eyebrow"><span class="es">Cómo se juega</span><span class="en">How it plays</span></p>
+    <h2 id="h-batalla"><span class="es">La gramática es el sistema de batalla</span><span class="en">The grammar is the battle system</span></h2>
+
+    <div style="margin-top:clamp(40px,6vw,64px)">
+      <div class="feat">
+        <div class="shot"><img src="img/title.jpg" alt="Pantalla de inicio: Llanka y Millaray frente al mar, bajo el volcán" width="1024" height="896" loading="lazy"></div>
+        <div class="copy">
+          <h3><span class="es">Órdenes que se arman, no que se aprietan</span><span class="en">Orders you build, not buttons you press</span></h3>
+          <p class="muted"><span class="es">En cada combate eliges una raíz verbal y la conjugas: la terminación decide a quién va la orden (a uno, a dos o a todos) y <span class="mapu">-kil-</span> la vuelve negativa. <span class="mapu">Amutunge</span>, «¡vete!», espanta a un enemigo; <span class="mapu">amutukilmün</span>, «¡no se vayan!», es otra historia. El juego enseña trece raíces, y cada jefe exige usarlas con cabeza.</span><span class="en">In every battle you pick a verb root and conjugate it: the ending decides who the order goes to (one, two or everyone), and <span class="mapu">-kil-</span> makes it negative. <span class="mapu">Amutunge</span>, “go away!”, drives an enemy off; <span class="mapu">amutukilmün</span>, “don't you all leave!”, is a different story. The game teaches thirteen roots, and every boss makes you use them wisely.</span></p>
+          <ul>
+            <li><span class="es"><b>Habilidades especiales</b> que se recargan, y <span class="mapu">newen</span> que se recupera en el kütral, no solo.</span><span class="en"><b>Special abilities</b> that recharge, and <span class="mapu">newen</span> recovered at the kütral, not automatically.</span></li>
+            <li><span class="es"><b>Objetos con historia:</b> diweñ, trutruka, plumas de mañke y más, comprados con <span class="mapu">ngülliw</span>.</span><span class="en"><b>Items with a story:</b> diweñ, trutruka, mañke feathers and more, bought with <span class="mapu">ngülliw</span>.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feat">
+        <div class="shot"><img src="img/pewen.jpg" alt="Bosque de pewen en la cordillera, con araucarias y un cherrufe rondando" width="960" height="644" loading="lazy"></div>
+        <div class="copy">
+          <h3><span class="es">Un viaje por el Wallmapu</span><span class="en">A journey across Wallmapu</span></h3>
+          <p class="muted"><span class="es">Cinco regiones, cada una con sus colores, sus árboles, su música propia y su ngen dormido: la costa lafkenche, los valles nagche, la cordillera pewenche con sus pewen, el sur williche y la pampa del Puelmapu. En el camino esperan criaturas del folclor mapuche: el chonchon, el witranalwe, el cherrufe, el Kaleuche, el walichu.</span><span class="en">Five regions, each with its own colours, trees, music and sleeping ngen: the Lafkenche coast, the Nagche valleys, the Pewenche cordillera with its pewen, the Williche south and the Puelmapu pampa. Along the way wait creatures from Mapuche folklore: the chonchon, the witranalwe, the cherrufe, the Kaleuche, the walichu.</span></p>
+          <ul>
+            <li><span class="es"><b>El trariwe antiguo:</b> cada jefe de región suelta un trokiñ; completo, abre el camino al final.</span><span class="en"><b>The ancient trariwe:</b> each region's boss drops a trokiñ; complete, it opens the way to the finale.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feat">
+        <div class="shot"><img src="img/lof.jpg" alt="Un lof lafkenche con ruka, cancha de palin y gente conversando en mapudungun" width="960" height="644" loading="lazy"></div>
+        <div class="copy">
+          <h3><span class="es">Pueblos vivos, konew y mini misiones</span><span class="en">Living villages, konew and side quests</span></h3>
+          <p class="muted"><span class="es">En los lof la gente juega al palin, teje en el witral, cocina y estudia; el pentukuwün con el lonko se hace como corresponde. Hay dieciocho konew (adivinanzas) que terminan con «Chem am ta tatey?», tiendas donde se responde en mapudungun, y secretos que premian con gramática nueva que después sirve en combate.</span><span class="en">In the lof people play palin, weave at the witral, cook and study; the pentukuwün with the lonko is done properly. There are eighteen konew (riddles) ending in “Chem am ta tatey?”, shops answered in Mapudungun, and secrets that reward you with new grammar you then use in battle.</span></p>
+        </div>
+      </div>
+
+      <div class="feat">
+        <div class="shot"><img src="img/dungeon.jpg" alt="Una caverna con antorchas, piedras para empujar y puertas con reja" width="960" height="644" loading="lazy"></div>
+        <div class="copy">
+          <h3><span class="es">Cavernas, puzzles y minijefes</span><span class="en">Dungeons, puzzles and minibosses</span></h3>
+          <p class="muted"><span class="es">Cada región tiene su caverna, y ninguna se parece a otra: piedras que se empujan y se devuelven, acertijos de mapudungun que se resuelven pensando (la chillka de conjugación ayuda, pero no regala la respuesta), minijefes y un kütral donde recuperar fuerzas.</span><span class="en">Every region has its dungeon, and no two are alike: stones you push and pull back, Mapudungun puzzles you solve by thinking (the conjugation chillka helps, but gives nothing away), minibosses, and a kütral to recover your strength.</span></p>
+        </div>
+      </div>
+
+      <div class="feat">
+        <div class="shot"><img src="img/boss.jpg" alt="Un jefe secreto de sal en el salitral, rodeado de barreras de luz" width="960" height="644" loading="lazy"></div>
+        <div class="copy">
+          <h3><span class="es">Y más allá de la niebla...</span><span class="en">And beyond the fog...</span></h3>
+          <p class="muted"><span class="es">Despertados los cinco ngen, queda lo que la niebla esconde: Ti Fütra Ngoyman, el gran olvido. Jefes secretos que se encuentran explorando, barreras de luz que solo la gramática rompe, un final en varias etapas y, para quien busca de verdad, regiones enteras que no aparecen en ningún mapa. No contamos más.</span><span class="en">Once the five ngen are awake, what the fog hides remains: Ti Fütra Ngoyman, the great forgetting. Secret bosses found by exploring, light barriers only grammar can break, a multi-stage finale and, for those who truly search, whole regions that appear on no map. We'll say no more.</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="path" aria-label="Regiones">
+      <div class="stage"><b>Lafkenche</b><span class="es">la costa</span><span class="en">the coast</span></div>
+      <div class="stage"><b>Nagche</b><span class="es">los valles</span><span class="en">the valleys</span></div>
+      <div class="stage"><b>Pewenche</b><span class="es">la cordillera</span><span class="en">the cordillera</span></div>
+      <div class="stage"><b>Williche</b><span class="es">el sur</span><span class="en">the south</span></div>
+      <div class="stage"><b>Puelmapu</b><span class="es">la pampa</span><span class="en">the pampa</span></div>
+      <div class="stage"><b>¿...?</b><span class="es">la niebla</span><span class="en">the fog</span></div>
+    </div>
+  </section>
+</div>
+
+<div class="band" aria-hidden="true"></div>
+<div class="wrap">
+  <section aria-labelledby="h-hizo">
+    <p class="eyebrow"><span class="es">Cómo se hizo</span><span class="en">How it was made</span></p>
+    <h2 id="h-hizo"><span class="es">Cada forma, revisada contra el habla real</span><span class="en">Every form checked against real speech</span></h2>
+    <div class="split">
+      <div>
+        <p class="lead"><span class="es">El juego se construyó con herramientas de investigación entrenadas con el corpus AVENUE y con recursos gramaticales y léxicos reconocidos, y todo el mapudungun pasó por revisión a mano.</span><span class="en">The game was built with research tools trained on the AVENUE corpus and with established grammatical and lexical resources, and all the Mapudungun went through review by hand.</span></p>
+        <p class="muted"><span class="es">Todo el juego es un solo archivo web, sin cuentas, sin anuncios y sin compras. El avance queda guardado en el navegador de cada persona. Los dibujos son pixel art original y las 52 melodías, incluida la música propia de cada región, se compusieron para el juego.</span><span class="en">The whole game is a single web file, with no accounts, no ads and no purchases. Progress is saved in each player's own browser. The drawings are original pixel art, and the 52 tunes, including each region's own music, were composed for the game.</span></p>
+      </div>
+      <div>
+        <ul class="checks">
+          <li><span><span class="es"><b>Formas atestiguadas.</b> Las raíces, los sufijos y las frases se comprobaron contra el corpus AVENUE, unas 142 horas de habla mapuche transcrita, y el diccionario de Augusta (1916).</span><span class="en"><b>Attested forms.</b> Roots, suffixes and sentences were checked against the AVENUE corpus, about 142 hours of transcribed Mapudungun speech, and Augusta's 1916 dictionary.</span></span></li>
+          <li><span><span class="es"><b>Un analizador propio.</b> Un analizador morfológico del mapudungun, hecho para la investigación, separa cada palabra en raíz y sufijos para verificar las formas.</span><span class="en"><b>A purpose-built parser.</b> A Mapudungun morphological parser built for research splits each word into root and suffixes to verify the forms.</span></span></li>
+          <li><span><span class="es"><b>Diálogos revisados uno por uno.</b> Las conversaciones, los konew y los nombres pasaron por una lista de revisión y se corrigieron donde hacía falta.</span><span class="en"><b>Dialogue reviewed line by line.</b> Conversations, konew and names went through a review list and were corrected where needed.</span></span></li>
+          <li><span><span class="es"><b>Con respeto por el folclor.</b> Los ngen, los wekufü y los demás seres vienen de la tradición mapuche, y el juego los trata según lo que son: los protectores como protectores, los dañinos como adversarios.</span><span class="en"><b>With respect for the folklore.</b> The ngen, the wekufü and the other beings come from Mapuche tradition, and the game treats them as what they are: protectors as protectors, harmful ones as adversaries.</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="band" aria-hidden="true"></div>
+<div class="wrap">
+  <section aria-labelledby="h-para">
+    <p class="eyebrow"><span class="es">Para qué sirve</span><span class="en">What it's for</span></p>
+    <h2 id="h-para"><span class="es">Para jugar en serio y aprender de verdad</span><span class="en">For playing seriously and really learning</span></h2>
+    <div class="uses">
+      <div class="use"><h3><span class="es">Aprender jugando</span><span class="en">Learning by playing</span></h3><p><span class="es">Los imperativos, la negación y las personas del verbo se fijan usándolos contra un chonchon, no con planillas.</span><span class="en">Imperatives, negation and verb persons stick from using them against a chonchon, not from worksheets.</span></p></div>
+      <div class="use"><h3><span class="es">En familia</span><span class="en">At home</span></h3><p><span class="es">Un juego para turnarse con el teléfono, también lejos del Wallmapu y sin señal.</span><span class="en">A game to take turns with on the phone, including far from Wallmapu and with no signal.</span></p></div>
+      <div class="use"><h3><span class="es">En el aula</span><span class="en">In the classroom</span></h3><p><span class="es">Como práctica entre clases de mapudungun, o para ver morfología aglutinante funcionando como mecánica de juego.</span><span class="en">As practice between Mapudungun classes, or to watch agglutinative morphology working as a game mechanic.</span></p></div>
+      <div class="use"><h3><span class="es">Con los otros apps</span><span class="en">With the other apps</span></h3><p><span class="es">Compañero del juego de niveles y del diccionario Tañi Nemülkawe: lo que se aprende allá, aquí se usa en combate.</span><span class="en">A companion to the levels game and the Tañi Nemülkawe dictionary: what you learn there, you use here in battle.</span></p></div>
+    </div>
+    <p class="note" style="margin-top:28px"><span class="es"><b>Un complemento, no un reemplazo.</b> El mapudungun se aprende de verdad con su gente. El juego sirve para practicar, ganar confianza con el verbo y no perder el hilo entre una conversación y otra.</span><span class="en"><b>A companion, not a replacement.</b> Mapudungun is really learned from its people. The game is for practising, building confidence with the verb and keeping the thread between one conversation and the next.</span></p>
+  </section>
+</div>
+
+<div class="band" aria-hidden="true"></div>
+<div class="wrap">
+  <section id="instalar" aria-labelledby="h-inst">
+    <p class="eyebrow"><span class="es">Instalar</span><span class="en">Install</span></p>
+    <h2 id="h-inst"><span class="es">Llévalo en el teléfono</span><span class="en">Put it on your phone</span></h2>
+    <div class="steps">
+      <div class="step"><h3>Android</h3>
+        <ol><li><span class="es">Abre <b>brogers36.github.io/Kewun-ni-Newen</b> en Chrome.</span><span class="en">Open <b>brogers36.github.io/Kewun-ni-Newen</b> in Chrome.</span></li>
+            <li><span class="es">Toca <b>Instalar la app</b> (o el menú ⋮ → <b>Instalar app</b>).</span><span class="en">Tap <b>Install the app</b> (or the ⋮ menu → <b>Install app</b>).</span></li>
+            <li><span class="es">Ábrelo desde la pantalla de inicio. Se juega horizontal y funciona sin conexión.</span><span class="en">Open it from your home screen. It plays in landscape and works offline.</span></li></ol>
+        <p class="muted" style="font-size:.9rem"><span class="es">También hay un instalador APK en <a href="https://github.com/brogers36/Kewun-ni-Newen/releases/tag/android" target="_blank" rel="noopener">la página de descargas</a>.</span><span class="en">There is also an APK installer on <a href="https://github.com/brogers36/Kewun-ni-Newen/releases/tag/android" target="_blank" rel="noopener">the downloads page</a>.</span></p></div>
+      <div class="step"><h3>iPhone / iPad</h3>
+        <ol><li><span class="es">Abre <b>brogers36.github.io/Kewun-ni-Newen</b> en Safari.</span><span class="en">Open <b>brogers36.github.io/Kewun-ni-Newen</b> in Safari.</span></li>
+            <li><span class="es">Toca <b>Compartir</b> → <b>Añadir a pantalla de inicio</b>.</span><span class="en">Tap <b>Share</b> → <b>Add to Home Screen</b>.</span></li>
+            <li><span class="es">Ábrelo desde el ícono. Funciona sin conexión.</span><span class="en">Open it from the icon. It works offline.</span></li></ol></div>
+    </div>
+    <p class="muted" style="margin-top:18px;max-width:70ch"><span class="es">Sin botones en pantalla: un toque habla, el dedo guía el paso y los menús se deslizan. Cuando el juego se actualiza, la app instalada recibe la versión nueva la próxima vez que se abre con internet. El sitio público cuenta visitas de forma anónima, sin cookies ni datos personales.</span><span class="en">No buttons on screen: a tap talks, your finger guides your steps, and menus swipe. When the game is updated, the installed app gets the new version the next time it opens online. The public site counts visits anonymously, with no cookies and no personal data.</span></p>
+    <div class="cta" style="margin-top:22px"><a class="btn" href="https://brogers36.github.io/Kewun-ni-Newen/" target="_blank" rel="noopener"><span class="es">Abrir el juego</span><span class="en">Open the game</span></a></div>
+  </section>
+</div>
+
+<div class="band" aria-hidden="true"></div>
+<div class="wrap">
+  <section aria-labelledby="h-fuentes" style="padding-block:clamp(36px,6vw,56px)">
+    <p class="eyebrow" id="h-fuentes"><span class="es">Fuentes</span><span class="en">Sources</span></p>
+    <ol class="refs" style="margin-top:14px">
+      <li>Augusta, F. J. de. (1916). <i>Diccionario araucano-español y español-araucano</i>. Imprenta Universitaria.</li>
+      <li>Duan, M., Fasola, C., Rallabandi, S. K., Vega, R., Anastasopoulos, A., Levin, L., &amp; Black, A. W. (2020). A resource for computational experiments on Mapudungun. In <i>Proceedings of the Twelfth Language Resources and Evaluation Conference</i> (pp. 2872–2877). European Language Resources Association. <a href="https://aclanthology.org/2020.lrec-1.350/" target="_blank" rel="noopener">aclanthology.org/2020.lrec-1.350</a></li>
+      <li>Smeets, I. (2008). <i>A grammar of Mapuche</i>. Mouton de Gruyter.</li>
+    </ol>
+  </section>
+  <footer>
+    <span>Kewün ñi Newen · <span class="es">gratuito</span><span class="en">free</span></span>
+    <span>© 2026 Brandon M. A. Rogers · <span class="es">Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial</span><span class="en">All rights reserved. No use of this site to train artificial intelligence</span></span>
+  </footer>
+</div>
+<div class="band" aria-hidden="true"></div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  function set(l){ root.setAttribute("data-l",l); root.lang=l;
+    document.getElementById("l-es").setAttribute("aria-pressed",l==="es");
+    document.getElementById("l-en").setAttribute("aria-pressed",l==="en");
+    try{ localStorage.setItem("kewun_promo_lang",l); }catch(e){} }
+  var saved=null; try{ saved=localStorage.getItem("kewun_promo_lang"); }catch(e){}
+  set(saved==="en"?"en":"es");
+  document.getElementById("l-es").onclick=function(){ set("es"); };
+  document.getElementById("l-en").onclick=function(){ set("en"); };
+})();
+</script>
+<script>
+(function(){ if(location.protocol!=='https:'||location.hostname!=='brogers36.github.io') return;
+  try{ new Image().src='https://brogers36.goatcounter.com/count?p='+encodeURIComponent(location.pathname)+'&t='+encodeURIComponent(document.title)+'&r='+encodeURIComponent(document.referrer||'')+'&rnd='+Math.random().toString(36).slice(2); }catch(e){} })();
+</script>
+</body>
+</html>

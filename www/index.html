@@ -63,8 +63,8 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #ab{display:flex;gap:10px;align-items:center}
 #ab button{width:58px;height:58px;border-radius:50%}
 #ab .sm{width:46px;height:34px;border-radius:8px;font-size:11px}
-@media (hover:hover) and (pointer:fine){#pad{opacity:.55}}
-@media (hover:none),(pointer:coarse){#pad{display:none}}
+@media (hover:hover) and (pointer:fine){#pad{opacity:.55}.help .tc{display:none}}
+@media (hover:none),(pointer:coarse){#pad{display:none}.help .kb{display:none}}
 #menu{touch-action:pan-y}
 </style>
 </head>
@@ -91,7 +91,7 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
         </div>
         <div class="row"><button id="bLang">Glosa: Español</button><button id="bMus">♪ Música: sí</button></div>
         <div class="help" id="ioshint" style="display:none;border:2px solid #e8d49a">📲 Instala el juego en tu iPhone: toca <b>Compartir</b> y luego <b>«Añadir a pantalla de inicio»</b>. Se abre a pantalla completa y funciona sin internet.<br>Install on iPhone: tap <b>Share</b>, then <b>"Add to Home Screen"</b>. It opens fullscreen and works offline.</div>
-<div class="help">Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música.<br>Táctil: un toque = hablar / avanzar · mantén el dedo y arrastra = caminar (suéltalo para parar) · desliza = recorrer el menú · dos dedos = volver · mantener pulsado = menú.<br>Touch: tap = talk / advance · hold and drag = walk (lift to stop) · swipe = scroll a menu · two fingers = back · long press = menu.</div>
+<div class="help"><span class="kb">Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música.</span><span class="tc">Un toque: hablar / avanzar · mantén el dedo y arrastra: caminar (suéltalo para parar) · desliza: recorrer el menú · dos dedos: volver · mantener pulsado o ☰: menú.<br>Tap: talk / advance · hold and drag: walk (lift to stop) · swipe: scroll a menu · two fingers: back · long press or ☰: menu.</span></div>
         <div class="copy" id="copy">© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.</div>
       </div>
     </div>
