@@ -398,7 +398,7 @@ e_kura:{region:'puelmapu',name:'Kura mapu',g:{es:'El pedregal',en:'The stone bar
  ents:[{kind:'enemy',x:12,y:4,party:['kura','mewlen']},{kind:'enemy',x:22,y:9,party:['kurutrewa','kura']},{kind:'enemy',x:8,y:10,party:['mewlen','mewlen','kurutrewa']},{kind:'enemy',x:28,y:4,party:['kurutrewa','mewlen','kura']}]},
 e_salitral:{region:'puelmapu',name:'Chadi mapu',g:{es:'El salitral (zona difícil)',en:'The salt flat (hard area)'},floor:'.',bg:'pampa',song:'puel',pal:'salar',trees:'chacay',
  edges:{up:{to:'e_kura',x:24,y:11}},
- stones:{'12,3':'rke'},konew:{'26,10':K17},digs:{'20,3':{}},sbt:{t:['5,9','6,9','7,9','5,10','6,10','7,10'],boss:'epunamun',flag:'sb5',req:'ngen5'},
+ stones:{'12,3':'rke'},konew:{'26,10':K17},digs:{'20,3':{}},sbt:{t:['5,9','6,9','7,9','5,10','6,10','7,10'],boss:'chadikura',flag:'sb5',req:'ngen5'},
  ents:[{id:'chadife',kind:'npc',look:'gatherer',fem:1,x:16,y:6,dir:'down',fixed:1,talk:()=>chadifeTalk(),bub:['Chadi!']},
    {kind:'enemy',x:10,y:8,party:['fmewlen','mewlen']},{kind:'enemy',x:20,y:6,party:['kurutoro','kurutrewa']},{kind:'enemy',x:6,y:4,party:['kurutrewa','kurutrewa','mewlen']},{kind:'enemy',x:27,y:5,party:['fmewlen','kurutoro']}]},
 e_meseta:{region:'puelmapu',name:'Wingkul lelfün',g:{es:'El borde de la meseta',en:'The rim of the meseta'},floor:'.',bg:'pampa',song:'puel',pal:'puelmapu',trees:'chacay',
@@ -431,12 +431,13 @@ ngen5:{region:'puelmapu',ngenmap:1,name:'Ngen-lelfün',g:{es:'El círculo de pie
        L('','Müley Walichu!','¡Ahí está el Walichu!','There is the Walichu!'),
        N('Duerme caminando, y lo que duerme no siente tus golpes...','It sleeps as it walks, and what sleeps does not feel your blows...')]},
    {id:'ngen',kind:'npc',look:'ngen5',x:8,y:5,req:'ngen5',fixed:1,talk:()=>{const ls=[L('Ngen-lelfün','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")];
-   if(!S.flags.sb5)ls.push(N('«Una cosa más: en el salitral del sur duerme el más viejo de todos, el de las dos caras. Camina por la tierra blanda junto a las pozas blancas. Y lleva todas tus palabras: duérmelo, despiértalo, y no dejes que caiga sobre ti.»','"One more thing: in the southern salt flat sleeps the oldest of them all, the two-faced one. Walk the soft ground beside the white pools. And bring all your words: put him to sleep, wake him, and do not let him fall upon you."'));
+   if(!S.flags.sb5)ls.push(N('«Una cosa más: bajo el salitral del sur duerme algo que nació cuando el agua se fue: un wekufü de pura sal, duro como la piedra. Camina por la tierra blanda junto a las pozas blancas. Y lleva todas tus palabras: despiértalo, quiébralo, y no lo dejes volver a armarse.»','"One more thing: under the southern salt flat sleeps something born when the water left: a wekufü of pure salt, hard as stone. Walk the soft ground beside the white pools. And bring all your words: wake it, break it, and do not let it put itself back together."'));
    say(ls)}}]},
 ngoyman:{region:'puelmapu',name:'Ngoyman wülngiñ',g:{es:'El umbral de la niebla',en:'The threshold of the fog'},floor:',',bg:'fjord',song:'epew',pal:'niebla',trees:'mawida',
  edges:{right:{to:'rupu',x:1,y:10}},
  signs:{'8,5':[L('Kura','Faw müley Ti Fütra Ngoyman ñi wülngiñ.','Una piedra muy antigua: «Aquí está el umbral del gran olvido».','A very old stone: «Here is the threshold of the great forgetting».')]},
- ents:[{id:'ngoyku',kind:'npc',look:'elder2',fem:1,x:8,y:4,dir:'down',fixed:1,talk:()=>ngoymanTalk(),bub:['...']}]}
+ ents:[{id:'ngoyku',kind:'npc',look:'elder2',fem:1,x:8,y:4,dir:'down',fixed:1,talk:()=>ngoymanTalk(),bub:['...']},
+   {id:'epuwar',kind:'npc',look:'kona',x:4,y:8,dir:'right',fixed:1,req:'sb5',talk:()=>epunamunTalk(),bub:['Newen...','Epu ange...']}]}
 });
 for(const k in MAPS){const m=MAPS[k];if(!m.region)m.region='lafkenche';m.rows=MAPROWS[k];m.w=MAPROWS[k][0].length;m.h=MAPROWS[k].length}
 MAPS.inaltu.edges.right={to:'n_rupu',x:1,y:7,req:'ngen',reqMsg:[N('El camino hacia el este, a las tierras nagche, está cubierto de niebla. Primero despierta a Ngen-lafken.','The road east, to the Nagche lands, is covered in fog. First wake Ngen-lafken.')]};

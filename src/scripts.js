@@ -680,8 +680,8 @@ function sbossWake(sb){
       N('Tres sellos de luz lo protegen. El primero susurra: «¡Ten frío!»','Three seals of light protect it. The first whispers: «Be cold!»')],
     trawko:[N('Un hacha de piedra se clava en un tronco, a un palmo de tu cabeza. Del helecho sale un hombrecito retorcido con sombrero de fibra: ¡el Trawko!','A stone axe thuds into a trunk, a hand\'s width from your head. Out of the ferns steps a twisted little man in a fiber hat: the Trawko!'),
       N('Tres sellos de luz lo protegen. El primero susurra: «¡Sal!»','Three seals of light protect it. The first whispers: «Come out!»')],
-    epunamun:[N('La tierra blanda se hunde bajo tus pies... y de la sal se levanta un guerrero enorme de dos caras, con corona de plumas y una lanza en cada mano: ¡el Epunamun!','The soft ground sinks under your feet... and out of the salt rises a huge two-faced warrior, with a feather crown and a spear in each hand: the Epunamun!'),
-      N('Tres sellos de luz lo protegen. El primero susurra: «¡Duérmete!»','Three seals of light protect it. The first whispers: «Sleep!»')]}[sb.boss];
+    chadikura:[N('La tierra blanda cruje bajo tus pies... y la sal entera se levanta y se arma sola: un gigante de cristal blanco con grietas que brillan verdes. El wekufü del lago seco despierta a medias.','The soft ground crunches under your feet... and the salt itself rises and assembles: a giant of white crystal with cracks that glow green. The wekufü of the dried lake half-wakes.'),
+      N('Tres sellos de luz lo protegen. El primero susurra: «¡Despierta!»','Three seals of light protect it. The first whispers: «Wake up!»')]}[sb.boss];
   say(pre,()=>startBattle([sb.boss],{boss:1,sflag:sb.flag}));
 }
 
@@ -1043,9 +1043,27 @@ function kona5Talk(){
     N('El chenque baja entre las piedras, aquí al lado. Dicen que adentro hay piedras con números enormes, una puerta con llave, y otra piedra que pregunta de quién son las cosas. Y al fondo, el Walichu, envuelto en su sueño gris: a ese, dicen, primero hay que despertarlo.','The chenque goes down among the rocks, right here. They say inside there are stones with huge numbers, a locked door, and another stone that asks whose things are whose. And at the bottom, the Walichu, wrapped in its grey dream: that one, they say, must first be woken.')]);
 }
 function ngoymanTalk(){
+
   say([L('Kushe ñi am','Akuymi, pichi weche... Afpun rüpü mew akuymi.','Llegaste... Llegaste al final del camino.','You have come... You have come to the end of the road.'),
     N('La figura es apenas niebla con forma de persona. Pero te mira con un cariño muy viejo, y la niebla no se atreve a tocarla.','The figure is barely fog in the shape of a person. But it looks at you with a very old tenderness, and the fog does not dare touch it.'),
     L('Kushe ñi am','Kechu trokiñ, kechu mapu, kiñe trariwe.','Cinco trokiñ, cinco tierras, un solo trariwe.','Five trokiñ, five lands, one single trariwe.'),
     N('«Despertaste a los cinco ngen y tejiste de nuevo lo que el olvido había cortado. Detrás de mí duerme Ti Fütra Ngoyman, el gran olvido. Su puerta se abrirá pronto... y tus palabras serán tu única arma.»','"You woke the five ngen and wove back together what forgetting had cut apart. Behind me sleeps Ti Fütra Ngoyman, the great forgetting. Its door will open soon... and your words will be your only weapon."'),
-    N('(Fin del prototipo: la batalla final contra Ti Fütra Ngoyman llegará en la próxima versión. ¡Chaltu may por jugar!)','(End of the prototype: the final battle against Ti Fütra Ngoyman will come in the next version. Chaltu may for playing!)')]);
+    N('(Fin del prototipo: la batalla final contra Ti Fütra Ngoyman llegará en la próxima versión. ¡Chaltu may por jugar!)','(End of the prototype: the final battle against Ti Fütra Ngoyman will come in the next version. Chaltu may for playing!)')]
+    .concat(S.flags.sb5&&!S.flags.epu_won?[N('Antes de irte, la figura señala el pasto junto al kütral: «Alguien te mira desde hace rato. Un guerrero de dos caras. No es wekufü: no le temas... pero si te habla, escúchalo con respeto.»','Before you go, the figure points to the grass by the fire: "Someone has been watching you for a while. A warrior with two faces. He is no wekufü: do not fear him... but if he speaks to you, listen with respect."')]:[]));
+}
+
+function epunamunTalk(){
+  const en=S.gloss==='en';
+  if(S.flags.epu_won)return say([L('Epunamun','Newen nieymi, kimün nieymi. Amunge, weychafe.','Tienes fuerza y tienes conocimiento. Ve, guerrera o guerrero.','You have strength and you have knowledge. Go, warrior.'),
+    N('Las dos caras del Epunamun miran a la vez hacia la niebla y hacia ti. Ambas sonríen.','Both of the Epunamun\'s faces look at once toward the fog and toward you. Both are smiling.')]);
+  say([N('El kona se vuelve hacia ti... y por un momento ves que tiene dos caras: una mira hacia la niebla y la otra te mira a ti. No es un kona. Es un espíritu.','The warrior turns toward you... and for a moment you see that he has two faces: one looks toward the fog, and the other looks at you. He is no ordinary warrior. He is a spirit.'),
+    L('Epunamun','Iñche Epunamun. Weychan ñi ngünechen no, welu weychan ñi ngülam.','Yo soy el Epunamun. No soy dueño de la guerra, pero sí su consejo.','I am the Epunamun. I do not own war, but I am its counsel.'),
+    N('El Epunamun es un espíritu al que los lonko y los weychafe consultaban antes de pelear. No es un wekufü: viene a probarte. Detrás de la niebla te espera el gran olvido, y quiere saber si tus palabras y tu newen alcanzan.','The Epunamun is a spirit that lonko and warriors consulted before battle. He is no wekufü: he has come to test you. Behind the fog the great forgetting awaits you, and he wants to know whether your words and your newen are enough.'),
+    L('Epunamun','Weychayayu? Küla sello witrañpüramuan. Umawtulen, nepelen, ka tranakinolpe.','¿Peleamos tú y yo? Levantaré tres sellos. Duérmeme, despiértame, y que yo no caiga.','Shall we fight, you and I? I will raise three seals. Put me to sleep, wake me, and let me not fall.'),
+    N('Es una prueba, no una cacería: pelea con respeto y con todas tus palabras.','It is a trial, not a hunt: fight with respect and with all your words.')],()=>{
+    choose(L('Epunamun','Weychayayu?','¿Aceptas la prueba?','Do you accept the trial?'),
+      [{m:'May, weychayayu!',g:en?'Yes, let us fight!':'¡Sí, peleemos!',v:1},{m:'Petu pepikawlan',g:en?'I am not ready yet':'Todavía no estoy listo',v:0}],v=>{
+      if(!v)return say([L('Epunamun','Küme rakiduamnge. Faw müleken.','Piénsalo bien. Aquí estaré.','Think it over. I will be here.')]);
+      say([N('El Epunamun golpea el suelo con las dos lanzas a la vez. Tres sellos de luz se encienden a su alrededor. El primero susurra: «¡Duérmete!»','The Epunamun strikes the ground with both spears at once. Three seals of light kindle around him. The first whispers: «Sleep!»')],()=>startBattle(['epunamun'],{boss:1,sflag:'epu_won'}));
+    },true,true)});
 }

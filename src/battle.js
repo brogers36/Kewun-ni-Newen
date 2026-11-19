@@ -285,6 +285,12 @@ function endBattle(how){
   if(how==='win'&&o.ent){ents=ents.filter(e=>e!==o.ent);if(o.ent.flag)S.flags[o.ent.flag]=1}
   B=null;persist();
   if(how!=='win'||!AU.song||AU.name!=='win')playSong(mapSong());
+  if(how==='win'&&o.sflag==='epu_won'){S.flags.epu_won=1;S.gear.waiki=1;persist();sfx('lvl');
+    return say([N('El Epunamun baja las dos lanzas a la vez. No se deshace, no huye: te saluda, con las dos caras sonriendo.','The Epunamun lowers both spears at once. He does not break apart, he does not flee: he salutes you, both faces smiling.'),
+      L('Epunamun','Tuteymi! Newen nieymi, kimün nieymi.','¡Lo lograste! Tienes fuerza y tienes conocimiento.','You did it! You have strength and you have knowledge.'),
+      L('Epunamun','Tüfa tañi waiki. Yenge.','Esta es mi lanza. Llévala.','This is my spear. Carry it.'),
+      Object.assign(L('','Epunamun ñi waiki!','El Epunamun te regala una de sus lanzas: tu fuerza sube +2 para siempre. Dice que la otra la guardará para pelear a tu lado, algún día, al otro lado de la niebla.','The Epunamun gives you one of his spears: your strength rises +2 for good. He says he will keep the other, to fight at your side one day, on the far side of the fog.'),{fx:()=>sfx('lvl')})],
+      ()=>gainPiwke([N('Donde golpearon sus lanzas, algo rojo brilla en el suelo...','Where his spears struck, something red glints on the ground...')]));}
   if(how==='win'&&o.sflag){S.flags[o.sflag]=1;persist();sfx('lvl');
     return say([N('El wekufü secreto se deshace en jirones de sombra que el viento se lleva.','The secret wekufü breaks apart into shreds of shadow that the wind carries away.'),
       L('','Newen!','Venciste a uno de los wekufü escondidos. Pocos pueden contarlo.','You defeated one of the hidden wekufü. Few can say the same.')],()=>gainPiwke([N('Donde estaba, algo rojo brilla en el suelo...','Where it stood, something red glints on the ground...')]));}

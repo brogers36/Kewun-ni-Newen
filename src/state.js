@@ -3,7 +3,7 @@
    ============================================================ */
 const HPQ=4,SPMAX=3;
 function maxHP(){return S.baseMax+(S.gear.trariwe?4:0)+Math.floor(S.piwke/4)*4+(S.flags.ngen?4:0)+(S.flags.ngen2?4:0)+(S.flags.ngen3?4:0)+(S.flags.ngen4?4:0)+(S.flags.ngen5?4:0)}
-function atk(){return S.baseAtk+(S.gear.futrawino?3:0)-(S.curse?2:0)}
+function atk(){return S.baseAtk+(S.gear.futrawino?3:0)+(S.gear.waiki?2:0)-(S.curse?2:0)}
 function def(){return S.baseDef+(S.gear.makun?2:0)}
 function xpNeed(){return 10+S.lvl*10}
 function newState(hero){const fem=hero==='millaray';return{hero,fem,name:fem?'Millaray':'Llanka',gloss:LANG,map:'rupu',x:1,y:6,hp:24,baseMax:24,baseAtk:5,baseDef:1,lvl:1,xp:0,gold:0,
@@ -90,7 +90,8 @@ const ET={
   fmewlen:{name:'fütra mewlen',hp:62,atk:11,xp:34,gold:[22,26],bs:70,fly:true,mini:1},
   kurutoro:{name:'kurü toro',hp:66,atk:11,xp:36,gold:[22,26],bs:72,armor:1,mini:1},
   walichu:{name:'Walichu',hp:150,atk:11,xp:130,gold:[120,120],boss:true,bs:112,dream:1},
-  epunamun:{name:'Epunamun',hp:180,atk:12,xp:200,gold:[250,250],boss:true,bs:100,spres:1,seals:['umawtu','nepe','tranakil']}};
+  chadikura:{name:'Chadikura',hp:175,atk:12,xp:200,gold:[250,250],boss:true,bs:96,spres:1,armor:1,seals:['nepe','trafo','wiñotukil']},
+  epunamun:{name:'Epunamun',hp:190,atk:12,xp:220,gold:[300,300],boss:true,bs:100,spres:1,seals:['umawtu','nepe','tranakil']}};
 
 /* ---------- items ---------- */
 const ITEMS={
@@ -102,7 +103,8 @@ const GEAR={
   trutruka:{m:'trutruka',es:'corneta de coligüe: su sonido aturde a todos los wekufü (1 vez por pelea)',en:'colihue horn: its blast stuns all the wekufü (once per battle)',p:0,hide:1},
   makun:{m:'makuñ',es:'poncho: defensa +2',en:'poncho: defense +2',p:30},
   trariwe:{m:'trariwe',es:'faja tejida: +1 piwke máximo',en:'woven sash: +1 max heart',p:40},
-  futrawino:{m:'fütra wiño',es:'wiño grande: fuerza +3',en:'big palin stick: strength +3',p:50}};
+  futrawino:{m:'fütra wiño',es:'wiño grande: fuerza +3',en:'big palin stick: strength +3',p:50},
+  waiki:{m:'Epunamun ñi waiki',es:'la lanza del Epunamun: fuerza +2',en:"Epunamun's spear: strength +2",p:0,hide:1}};
 function useItem(id){
   const it=ITEMS[id];if(!S.items[id])return null;S.items[id]--;const mx=maxHP();
   if(id==='kulon')S.hp=Math.min(mx,S.hp+8);
