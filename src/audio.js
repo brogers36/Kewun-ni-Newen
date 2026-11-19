@@ -26,6 +26,12 @@ function parseTrack(str){const toks=str.replace(/\|/g,' ').trim().split(/\s+/);c
 function mkSong(o){o.ch=o.ch.map(c=>Object.assign(c,parseTrack(c.t)));o.len=Math.max(...o.ch.map(c=>c.len));return o}
 const DR1='k . h . s . h . | k . h k s . h h';
 const SONGS={
+ epew:mkSong({bpm:58,loop:1,ch:[
+  {w:'triangle',v:.55,t:'A2 - - - - - - - | A2 - - - - - - - | F2 - - - - - - - | E2 - - - - - - - | A2 - - - - - - - | G2 - - - - - - - | F2 - - - - - - - | E2 - - - E2 - - - | A2 - - - - - - - | A2 - - - - - - - | F2 - - - - - - - | G2 - - - - - - - | A2 - - - - - - - | F2 - - - - - - - | E2 - - - - - - - | A2 - - - - - - -'},
+  {w:'triangle',v:.5,t:'A3 - - - - - - - | C4 - - - B3 - A3 - | F3 - - - A3 - - - | E3 - - - - - - - | A3 - - - C4 - D4 - | E4 - - - D4 - B3 - | C4 - - - A3 - - - | B3 - - - - - - - | A3 - - - E4 - - - | F4 - - - E4 - C4 - | D4 - - - C4 - A3 - | B3 - - - - - - - | A4 - - - G4 - E4 - | F4 - - - D4 - C4 - | B3 - - - E4 - - - | A3 - - - - - - -'},
+  {w:'square',v:.045,t:'. - - - - - - - | . - - - - - - - | . - - - - - - - | . - - - - - - - | A4 - E4 - A4 - E4 - | G4 - D4 - G4 - D4 - | F4 - C4 - F4 - C4 - | E4 - B3 - E4 - B3 - | A4 - E4 - A4 - E4 - | F4 - C4 - F4 - C4 - | D4 - A3 - D4 - A3 - | E4 - B3 - E4 - B3 - | A4 - E5 - A4 - E5 - | F4 - C5 - F4 - C5 - | E4 - B4 - E4 - B4 - | A4 - E4 - A4 - - -'},
+  {w:'sine',v:.3,t:'. - - - - - - - | . - - - - - - - | . - - - - - - - | . - - - - - - - | . - - - - - - - | . - - - - - - - | . - - - - - - - | . - - - - - - - | E5 - - - - - - - | C5 - - - - - - - | A4 - - - - - - - | B4 - - - - - - - | C5 - - - - - - - | D5 - - - - - - - | E5 - - - - - - - | E5 - - - - - - -'},
+  {d:1,v:.5,t:'k . . . . . . . | k . . . k . . . | k . . . . . . . | k . . k . . k . | k . . . k . . . | k . . . k . . . | k . . . k . k . | k . k . k . k . | k . . . k . . . | k . . . k . . . | k . . . k . k . | k . k . k . k . | k . . h k . . h | k . . h k . . h | k . k . k . k k | k . . . . . . .'}]}),
  intro:mkSong({bpm:66,loop:1,ch:[
   {w:'triangle',v:.5,t:'E5 - - - D5 - C5 - | A4 - - - - - - - | G4 - - - A4 - C5 - | D5 - - - E5 - - - | E5 - - - G5 - E5 - | D5 - C5 - A4 - - - | C5 - D5 - E5 - G5 - | A5 - - - - - - -'},
   {w:'square',v:.06,t:'A3 - E4 - A4 - E4 - | F3 - C4 - F4 - C4 - | G3 - D4 - G4 - D4 - | E3 - B3 - E4 - B3 - | A3 - E4 - A4 - E4 - | F3 - C4 - F4 - C4 - | G3 - D4 - G4 - D4 - | A3 - E4 - A4 - - -'},

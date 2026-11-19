@@ -119,3 +119,15 @@ Left unchanged: *Pun mew kintukefuy kulliñ* (habitual past in the story, "used 
 
 ## Ngen rediseñados (humanoides, nov 2026)
 - Los cuatro ngen ahora son figuras humanoides altas de "hebras" elementales (agua, corteza, pewen, viento), con cara, brazos y base fluida, al estilo de la referencia del usuario.
+
+## Misiones de lof, zonas difíciles y konew nuevos (nov 2026, 3ª tanda)
+- "Ñami ñi pali!" (niña del lof lafkenche); pali 'bola de palin'.
+- "Ngillañmakelen kal"? (tejedora nagche, '¿me ayudas con la lana?'): forma dudosa, revisar; quizá "kellumukelen"/"kelluen".
+- "Epu kofke nielmi, eluen!" (condicional -l- + imperativo eluen 'dame').
+- "May, eluayu!" (te los doy; -ayu 1→2 futuro? revisar eluayu vs eluaeyu).
+- "Pütunge!" (¡toma/bebe!); mushay; "Dewmayan mushay".
+- Piedras nuevas: -fu- (ngefun/kimfuy/mülefuiñ), -ke adjetival (pichike/fütrake/kümeke), números grandes (pataka/warangka).
+- Konew K13: "Antü mew iñche engu trekakey..." (llawfeñ 'sombra'); revisar "iñche engu" como 'conmigo'.
+- Konew K14: "Rumel witrukey, rumel dungukey, welu chumkawnorume amulay" (trayen); witru- 'caer agua/vaciarse'; chumkawnorume 'nunca'.
+- Lugares: Külakura wapi, Winkul mapu, Lil mapu (lil 'risco/peñasco'), Trayen mapu.
+- Canción nueva del epew de apertura (tema dramático en la menor).

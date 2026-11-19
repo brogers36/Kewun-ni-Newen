@@ -230,6 +230,21 @@ const STONES={
     qs:[{q:L('Kura','Challwa + -fe: ___','La persona que pesca.','The person who fishes.'),o:['challwawe','challwafe','challwan'],a:'challwafe'},
         {q:L('Kura','Ngillaka- («comprar y vender») + -fe: ___','La persona que vende.','The person who sells.'),o:['ngillakafe','ngillakan','ngillakawe'],a:'ngillakafe'},
         {q:L('Kura','Trutruka + -tu- + -fe: ___','La persona que toca la trutruka.','The person who plays the trutruka.'),o:['trutrukawe','trutrukan','trutrukatufe'],a:'trutrukatufe'}]},
+  fu:{intro:[L('Kura','Mari mari! Kimimi -fu-?','¡Hola! ¿Conoces -fu-?','Hello! Do you know -fu-?'),
+    N('-fu- habla de lo que era antes y ya no es: kümelen «estoy bien» → kümelefun «estaba bien». Tu chillka lo explica en «Kuyfi · -fu-».','-fu- talks about what used to be: kümelen «I am well» → kümelefun «I was well». Your chillka explains it under «Kuyfi · -fu-».')],
+    qs:[{q:L('Kura','Kuyfi iñche pichiche nge___','Antes yo era niño.','Long ago I was a child.'),o:['ngen','ngefun','ngefuy'],a:'ngefun'},
+        {q:L('Kura','Fey kim___','Ella sabía.','She used to know.'),o:['kimfuy','kimi','kimfun'],a:'kimfuy'},
+        {q:L('Kura','Iñchiñ lof mew müle___','Nosotros vivíamos en el lof.','We used to live in the lof.'),o:['müleiñ','mülefuy','mülefuiñ'],a:'mülefuiñ'}]},
+  kead:{intro:[L('Kura','Mari mari! Epu pichi ruka? Pichike ruka!','¡Hola! ¿Dos casas chicas? ¡Pichike ruka!','Hello! Two little houses? Pichike ruka!'),
+    N('Cuando hay varios, el adjetivo lleva -ke: pichi ruka «casa chica» → pichike ruka «casas chicas».','When there are several, the adjective takes -ke: pichi ruka «small house» → pichike ruka «small houses».')],
+    qs:[{q:L('Kura','Epu ___ trewa','Dos perros chicos.','Two small dogs.'),o:['pichike','pichi','pichiñma'],a:'pichike'},
+        {q:L('Kura','Pu ___ pewen','Los pewenes grandes.','The big pewen trees.'),o:['fütra','fütrake','fütralen'],a:'fütrake'},
+        {q:L('Kura','Küla ___ che','Tres buenas personas.','Three good people.'),o:['kümeke','küme','kümen'],a:'kümeke'}]},
+  num2:{intro:[L('Kura','Mari mari! Fütake rakin kimimi?','¡Hola! ¿Conoces los números grandes?','Hello! Do you know the big numbers?'),
+    N('pataka = cien; warangka = mil. Se combinan igual que los chicos: epu pataka = 200.','pataka = one hundred; warangka = one thousand. They combine like the small ones: epu pataka = 200.')],
+    qs:[{q:N('¿Cómo se dice «cien»?','How do you say «one hundred»?'),o:['pataka','warangka','mari mari'],a:'pataka'},
+        {q:N('¿Cómo se dice «mil»?','How do you say «one thousand»?'),o:['pataka mari','warangka','mari pataka'],a:'warangka'},
+        {q:L('Kura','Epu pataka kechu mari = ?','¿Qué número es?','Which number is it?'),o:['250','205','2050'],a:'250'}]},
   plur:{intro:[L('Kura','Mari mari! Kimimi pu?','¡Hola! ¿Conoces pu?','Hello! Do you know pu?'),N('Cuando son dos o muchos, el verbo también cambia. Completa los verbos.','When there are two or many, the verb changes too. Complete the verbs.')],
     qs:[{q:L('Kura','Pu wentru amu___','Los hombres van.','The men go.'),o:['amuy','amuyngu','amuyngün'],a:'amuyngün'},
         {q:L('Kura','Epu domo küpa___','Dos mujeres vienen.','Two women come.'),o:['küpayngu','küpay','küpayngün'],a:'küpayngu'},
@@ -451,6 +466,58 @@ function kona2Talk(){
     L('Kona','Iñche wiñotuan lof mew.','Yo voy a volver al lof.','I am going back to the lof.')]);
 }
 
+/* ---------- lof mini-quests ---------- */
+function paliTalk(){
+  if(S.flags.laf_palid)return say([L('Pichi domo','Palin! Palin!','¡A jugar palin!','Palin time!')]);
+  if(S.flags.laf_paliq)return say([L('Pichi domo','Ñami ñi pali!','¡Se me perdió la pali (la bola)!','My pali (the ball) is lost!'),
+    N('«Se me fue botando hasta las dunas... quedó entre el pasto alto, al oeste, cerca del agua. Escarba ahí.»','"It went bouncing off to the dunes... it ended up in the tall grass, to the west, near the water. Dig around there."')]);
+  S.flags.laf_paliq=1;persist();
+  say([L('Pichi domo','Mari mari! Ñami ñi pali!','¡Hola! ¡Se me perdió la pali!','Hello! My pali is lost!'),
+    N('La pali es la bola de madera del palin. «Se me fue botando hasta las dunas, al pasto alto del oeste. ¿Me la buscas?»','The pali is the wooden palin ball. "It went bouncing off to the dunes, into the tall grass in the west. Will you find it for me?"')]);
+}
+function nweavTalk(){
+  const en=S.gloss==='en';
+  if(S.flags.n_weavd)return say([L('Domo','Makuñ ngürekalen. Chaltu may!','Estoy tejiendo un makuñ. ¡Gracias por la ayuda!','I am weaving a makuñ. Thanks for the help!')]);
+  const qs=[{q:L('Domo','Chem antü tüfa? Kelü kal.','Lana de color rojo.','Wool of the red color.'),o:['kelü','kallfü','lig'],a:'kelü'},
+    {q:L('Domo','Tüfa kay? Kallfü kal.','Y esta: lana azul.','And this: blue wool.'),o:['kurü','kallfü','chod'],a:'kallfü'},
+    {q:L('Domo','Ka tüfa? Lig kal.','Y esta: lana blanca.','And this one: white wool.'),o:['lig','karü','kelü'],a:'lig'}];
+  say([L('Domo','Mari mari! Makuñ ngürekalen, welu ngillañmakelen kal.','¡Hola! Estoy tejiendo un makuñ, pero ayúdame a ordenar la lana.','Hello! I am weaving a makuñ, but help me sort the wool.'),
+    N('Te muestra ovillos de colores. Dile el color de cada uno. Tu chillka tiene los colores.','She shows you balls of dyed wool. Name each color. Your chillka has the colors.')],()=>ask(0));
+  function ask(i){
+    if(i>=qs.length){S.flags.n_weavd=1;S.gold+=20;S.items.lawen++;S.xp+=3;persist();sfx('lvl');
+      return say([praise(),L('Domo','Küme nge, chaltu may!','¡Qué buen ojo! ¡Gracias!','What a good eye! Thank you!'),
+        N('Te da epu mari (20) ngülliw y un lawen. +3 kimün.','She gives you epu mari (20) ngülliw and a lawen. +3 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+    const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_b'}]),v=>{
+      if(v==='_b')return openBook(()=>ask(i));
+      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Domo','Fey no...','Eso no...','Not that one...')],()=>ask(0))}},false,false)}
+}
+function pewKidsTalk(){
+  const en=S.gloss==='en';
+  if(S.flags.pew_kidd)return say([L('Pichiche','Kümey kofke! Chaltu may!','¡Qué rico el pan! ¡Gracias!','The bread was so good! Thank you!')]);
+  if(S.items.kofke>=2)return choose(L('Pichiche','Ngülliw kofke nieymi? Epu?','¿Tienes pan de piñón? ¿Dos? (para mi hermana y para mí)','Do you have pewen-nut bread? Two? (for my sister and me)'),
+    [{m:'May, eluayu!',g:en?'Yes, I will give them to you':'Sí, te los doy',v:1},{m:'Petu no',g:en?'Not yet':'Todavía no',v:0}],v=>{
+      if(!v)return;
+      S.items.kofke-=2;S.flags.pew_kidd=1;persist();sfx('lvl');
+      say([L('Pichiche','Chaltu may!','¡Gracias!','Thank you!'),
+        N('Los dos niños comen felices. Después, en secreto: «Al lado de la ruka grande del este enterramos un tesoro. ¡Escarba ahí!»','The two children eat happily. Then, in a whisper: "Beside the big ruka in the east we buried a treasure. Dig there!"')])},true,true);
+  say([L('Pichiche','Ngülliw ayüken! Kofke kay!','¡Me gustan los piñones! ¡Y el pan!','I love pewen nuts! And bread!'),
+    L('Pichiche','Epu kofke nielmi, eluen!','Si tienes dos panes, ¡dame!','If you have two breads, give them to us!'),
+    N('Los kofke se compran donde el ngillakafe, o te los regala quien hace pan.','Kofke can be bought from the trader, or given by whoever is baking.')]);
+}
+function mushayTalk(){
+  const en=S.gloss==='en';
+  if(S.flags.w_mushd)return say([L('Papay','Kümey mushay! Ka antü ka dewmayan.','¡Qué rico el mushay! Otro día haré más.','The mushay was so good! Another day I will make more.')]);
+  if(S.items.kulon>=2)return choose(L('Papay','Epu külon nieymi! Dewmayan mushay. Eluen?','¡Tienes dos külon! Haré mushay. ¿Me los das?','You have two külon! I will make mushay. Will you give them to me?'),
+    [{m:'May, eluayu!',g:en?'Yes, here you are':'Sí, aquí tiene',v:1},{m:'Petu no',g:en?'Not yet':'Todavía no',v:0}],v=>{
+      if(!v)return;
+      S.items.kulon-=2;S.flags.w_mushd=1;S.gold+=30;S.hp=maxHP();persist();sfx('lvl');
+      say([N('La papay machaca los külon y prepara mushay, el jugo fermentado dulce del maqui.','The papay crushes the külon and makes mushay, the sweet fermented maqui drink.'),
+        L('Papay','Pütunge! Kümey!','¡Toma! ¡Está rico!','Drink! It is good!'),
+        N('Te recuperas por completo y te regala küla mari (30) ngülliw.','You fully recover and she gives you küla mari (30) ngülliw.')])},true,true);
+  say([L('Papay','Mari mari, '+addr(true)+'. Mushay dewmayan, welu külon nielan.','Hola. Quiero hacer mushay, pero no tengo külon.','Hello. I want to make mushay, but I have no külon.'),
+    N('El mushay se hace con külon (maqui). «Tráeme epu (2) külon y habrá mushay para las dos.» El ngillakafe los vende.','Mushay is made from külon (maqui). "Bring me epu (2) külon and there will be mushay for us both." The trader sells them.')]);
+}
+
 /* ---------- side quests: marsh, menoko, island, interiors ---------- */
 const pickCount=m=>Object.keys(S.flags).filter(f=>f.indexOf('pick:'+m+':')===0).length;
 function pickSpot(x,y){
@@ -588,6 +655,9 @@ function kulonBush(x,y){
 /* ---------- Nagche overworld puzzles ---------- */
 function digFind(dk,dv){
   S.flags['dig:'+CUR+':'+dk]=1;
+  if(dv&&dv.what==='pali'){S.flags.laf_palid=1;S.gold+=20;persist();sfx('lvl');
+    return say([N('Entre el pasto alto aparece una bola de madera pulida: ¡la pali!','In the tall grass you find a polished wooden ball: the pali!'),
+      L('','Pali!','La pali de la niña del lof. Te dará las gracias... y encuentras epu mari (20) ngülliw enterrados con ella.','The girl\'s pali. She will thank you... and you find epu mari (20) ngülliw buried with it.')]);}
   if(dv&&dv.what==='trutruka'){S.gear.trutruka=1;persist();sfx('lvl');
     return say([N('Entre los juncos mojados aparece una larga corneta de coligüe con un cuerno en la punta...','Among the wet reeds appears a long colihue horn with a cow horn at its tip...'),
       L('','Trutruka!','¡Encontraste la trutruka! En las peleas podrás tocarla: su sonido aturde a todos los wekufü (una vez por pelea). Cuéntale al trutrukatufe.','You found the trutruka! In battle you can blow it: its blast stuns all the wekufü (once per fight). Tell the trutrukatufe.')]);}

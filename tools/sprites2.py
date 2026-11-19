@@ -422,92 +422,150 @@ def basilisko(fr):
     g.outline();return g.rows()
 def kaleuche(fr):
     W=62;g=G(W,54);import math
-    # hull
+    # rotting hull with gaps
     for y in range(32,46):
         x0=6+int((y-32)*.9);x1=56-int((y-32)*.6)
-        for x in range(x0,x1):g.p(x,y,'h' if y<40 else 'H')
+        for x in range(x0,x1):
+            if 34<y<44 and (x*7+y*5)%23<2:continue
+            g.p(x,y,'h' if y<40 else 'H')
     g.r(4,30,54,2,'H');g.r(2,28,8,4,'h');g.r(50,26,9,6,'h')
-    for x in range(10,52,6):g.r(x,35,3,2,'y')
-    for y in range(32,46,3):
+    # plank shadow lines
+    for y in range(33,46,3):
         for x in range(8,54):
             if g.get(x,y)=='h':g.p(x,y,'k')
-    # masts
+    # exposed pale ribs along the hull
+    for rx in range(10,54,7):
+        for i in range(11):
+            x=rx+int(i*.35);y=33+i
+            if g.get(x,y) in ('h','H','k'):g.p(x,y,'b')
+    # slime dripping from the rail
+    for x in range(8,56,5):
+        ln=2+((x*13)%4)
+        for i in range(ln):g.p(x,32+i,'Q')
+    # skull figurehead at the prow
+    g.r(1,23,5,5,'b');g.p(2,25,'k');g.p(4,25,'k');g.r(2,27,3,1,'k');g.p(3,22,'b')
+    # masts, one splintered
     for mx,top in [(16,6),(30,2),(44,8)]:g.r(mx,top,2,28-top,'m')
-    # sails (tattered, glowing pale)
+    g.p(43,16,'m');g.p(42,17,'m');g.p(45,15,'k')
+    # tattered sails: ragged holes and hanging shreds
     for mx,top,w,h in [(16,8,8,16),(30,4,9,20),(44,10,7,14)]:
         for y in range(top,top+h):
             bulge=int(1.4*math.sin((y-top)/h*math.pi))
             for x in range(mx-w//2-bulge,mx+w//2+2+bulge):
                 if g.a[y][x]=='.':g.p(x,y,'s')
         for y in range(top,top+h,4):g.r(mx-w//2,y,w+2,1,'S')
-        for k in range(4):
-            x=mx-w//2+k*3+fr;yy=top+h-1-(k%2)
+        for k in range(7):
+            x=mx-w//2+((k*5+fr*2)%(w+1));yy=top+h-2-(k%3)*2
             for y in range(yy,top+h):g.p(x,y,'.')
+        for k in range(3):
+            hx=mx-w//2+2+k*3;hy=top+3+(k*5+fr)% (h-6)
+            g.p(hx,hy,'.');g.p(hx+1,hy,'.');g.p(hx,hy+1,'.')
+        for x in range(mx-w//2,mx+w//2+2,3):
+            ln=1+((x*7+fr)%3)
+            for i in range(ln):
+                if g.get(x,top+h+i)=='.':g.p(x,top+h+i,'S')
         for x in range(mx-w//2,mx+w//2+2,4):g.p(x,top+h//2,'S')
-    g.r(30,0,1,3,'m');g.r(31,0,4,2,'r')
-    # lanterns
-    for (x,y) in [(4,26),(58,22)]:g.r(x,y,2,3,'y');g.p(x,y-1,'k')
-    # fog at waterline
+    # black tattered flag
+    g.r(30,0,1,3,'m')
+    for i in range(4-fr):g.p(31+i,0,'k');g.p(31+i,1,'k')
+    # ghost flames on mast tops and lanterns
+    for (x,y) in [(16,4),(30,0),(44,6)]:
+        g.p(x,y+fr,'y');g.p(x+1,y+1,'y');g.p(x,y-1+fr,'e')
+    for (x,y) in [(4,26),(58,22)]:g.r(x,y,2,3,'y');g.p(x,y-1,'e');g.p(x+1,y+3,'y')
+    # shadow crew at the rail, eyes glowing
+    for (cx2,cy2) in [(12,25),(24,24),(38,25),(49,23)]:
+        g.r(cx2,cy2,2,5,'q');g.e(cx2+1,cy2-1,1.4,1.4,'q')
+        g.p(cx2,cy2-1,'e')
+    # thick green fog at the waterline
     for x in range(0,W):
-        y=46+int(1.5*math.sin(x*.4+fr*1.5))
-        for yy in range(y,min(54,y+3)):g.p(x,yy,'f' if (x+yy)%3 else 'F')
+        y=45+int(1.8*math.sin(x*.4+fr*1.5))
+        for yy in range(y,min(54,y+4)):g.p(x,yy,'f' if (x+yy)%3 else 'F')
     g.outline();return g.rows()
-# ---------- ngen: tall humanoid elementals (flowing-strand bodies) ----------
+# ---------- ngen: hand-drawn humanoid master, skinned per element ----------
+NGEN_BODY={
+ 1:[(11,"444443")],
+ 2:[(10,"44555443")],
+ 3:[(10,"45555443")],
+ 4:[(10,"45555432")],
+ 5:[(10,"42252232")],
+ 6:[(10,"3kE4Ek32")],
+ 7:[(10,"32434232")],
+ 8:[(11,"344432")],
+ 9:[(11,"311132")],
+ 10:[(12,"3332")],
+ 11:[(12,"2332")],
+ 12:[(9,"2344443332")],
+ 13:[(6,"3445544444433332")],
+ 14:[(4,"34455444444444333322")],
+ 15:[(4,"34454444444444333332")],
+ 16:[(4,"454"),(9,"3455224332"),(21,"432")],
+ 17:[(4,"454"),(9,"3455224332"),(21,"432")],
+ 18:[(4,"454"),(9,"2344223322"),(21,"432")],
+ 19:[(4,"454"),(10,"34322332"),(21,"432")],
+ 20:[(4,"453"),(10,"34322332"),(21,"432")],
+ 21:[(4,"453"),(10,"32322322"),(21,"432")],
+ 22:[(4,"443"),(10,"34322332"),(21,"332")],
+ 23:[(4,"443"),(10,"32322322"),(21,"332")],
+ 24:[(5,"443"),(10,"23422322"),(20,"332")],
+ 25:[(5,"443"),(10,"34322332"),(20,"332")],
+ 26:[(5,"443"),(9,"3443223322"),(20,"332")],
+ 27:[(5,"443"),(9,"3443223322"),(20,"332")],
+ 28:[(5,"43"),(8,"344432233322"),(20,"32")],
+ 29:[(6,"43"),(8,"344432233322"),(20,"32")],
+ 30:[(7,"34444322333322")],
+ 31:[(7,"34444322333322")],
+ 32:[(6,"3444443223333322")],
+ 33:[(6,"3444443223333322")],
+ 34:[(6,"3444443223333322")],
+ 35:[(6,"3444443223333322")],
+ 36:[(5,"344444432233333322")],
+ 37:[(5,"344444432233333322")],
+ 38:[(5,"344444432233333322")],
+ 39:[(5,"344444432233333322")],
+ 40:[(4,"34444444322333333322")],
+ 41:[(4,"34444444322333333322")],
+ 42:[(4,"34444444322333333322")],
+ 43:[(4,"34444444322333333322")],
+ 44:[(4,"23333333222233333222")],
+ 45:[(3,"2233333322222333332222")],
+ 46:[(4,"222"),(10,"2222"),(18,"222")],
+}
+NGEN_HANDS={
+ 30:[(6,"43"),(20,"32")],
+ 31:[(6,"443"),(19,"332")],
+ 32:[(6,"443"),(19,"332")],
+ 33:[(6,"432"),(19,"232")],
+}
 def ngen_body(fr,ramp,head,eye='k',glow='E',emblem=None):
     import math
-    W,H=30,48;g=G(W,H);c=W/2
-    n=len(ramp)
-    def strand(x,y,half,ph=0):
-        t=math.sin(x*1.9+y*0.2+fr*3.14+ph+math.sin(x*0.7+y*0.05)*1.1)*0.45
-        lat=(x+0.5-c)/max(1.0,half)
-        round3d=1.0-((lat+0.28)**2)*1.25
-        v=t+round3d
-        i=int(v/1.45*n)
-        return ramp[max(0,min(n-1,i))]
-    def hw(y):
-        if y<13:return 0
-        if y<16:return 8.4-(16-y)*2.2
-        if y<27:return 5.2-(y-16)*0.11
-        if y<42:return 4.0+(y-27)*0.27
-        return 8.0+(y-42)*0.15
-    for y in range(13,H-1):
-        half=hw(y)+(math.sin(y*0.45+fr*2.2)*0.35 if y>29 else 0)
-        for x in range(int(c-half),int(c+half)+1):g.p(x,y,strand(x,y,half))
-        if y==16:
-            for x in range(int(c-half)+1,int(c+half)):
-                if (x+y)%2:g.p(x,y,ramp[0])
-    # leg seam: two flowing masses below the waist
-    for y in range(30,44):
-        sx=int(c)+ (0 if (y%2) else -1)
-        g.p(sx,y,ramp[0])
-    # arms: separated by a clear gap, rounding of their own
-    for i in range(20):
-        y=15+i;off=8.0-max(0,i-6)*0.14+(0.5 if i<3 else 0)
-        for sd in (-1,1):
-            ax=int(c+sd*off)
-            for dx in (0,1):
-                x=ax+sd*dx
-                t=math.sin(y*0.5+fr*3.14+sd)*0.4
-                g.p(x,y,ramp[max(0,min(n-1,int((t+(0.9 if dx==0 else 0.35))/1.45*n)))])
-    for sd in (-1,1):
-        hx=int(c+sd*6.3)
-        g.r(hx,35,2,3,ramp[1]);g.p(hx,36,ramp[2]);g.p(hx,38,ramp[0])
-        g.p(int(c+sd*8.3),14,ramp[1])
-    # neck + head
-    g.r(int(c)-1,11,3,2,ramp[1])
-    g.p(int(c)-2,12,ramp[0]);g.p(int(c)+1,12,ramp[0])
-    g.e(c,6.5,4.2,5.0,head)
-    g.e(c-1.9,3.9,1.9,1.7,ramp[n-1])
-    for x in range(int(c-3),int(c+4)):g.p(x,2,ramp[1])
-    for yy in range(4,10):g.p(int(c+3.8),yy,ramp[1])
-    # face
-    g.r(int(c)-4,6,3,2,eye);g.r(int(c)+2,6,3,2,eye)
-    g.p(int(c)-3,6,glow);g.p(int(c)+3,6,glow)
-    g.r(int(c)-4,4,3,1,ramp[0]);g.r(int(c)+2,4,3,1,ramp[0])
-    g.p(int(c),8,ramp[1]);g.p(int(c),9,ramp[0]);g.r(int(c)-1,10,3,1,ramp[0])
+    W,H=28,48;g=G(W,H);c=W/2
+    dk=eye
+    mp={'1':dk,'2':ramp[0],'3':ramp[1],'4':ramp[2],'5':ramp[3],'k':eye,'E':glow}
+    def paint(d):
+        for y,segs in d.items():
+            for (x0,st) in segs:
+                for i,ch in enumerate(st):
+                    if ch=='.':continue
+                    g.p(x0+i,y,mp[ch])
+    paint(NGEN_BODY)
+    # elemental strand shimmer on the lower flow (hand-drawn base, animated weave)
+    for y in range(30,46):
+        for x in range(3,26):
+            cur=g.get(x,y)
+            if cur==ramp[1] or cur==ramp[2]:
+                t=math.sin(x*1.8+y*0.25+fr*3.14)
+                if t>0.75 and cur==ramp[1]:g.p(x,y,ramp[2])
+                elif t<-0.75 and cur==ramp[2]:g.p(x,y,ramp[1])
+    # subtle muscle-strand striping on the torso
+    for y in range(16,28):
+        for x in range(9,19):
+            cur=g.get(x,y)
+            if cur==ramp[1] and (x*3+y)%7==0:g.p(x,y,ramp[0])
+    paint(NGEN_HANDS)
     if emblem:
-        ex,ey=int(c),19
-        g.p(ex,ey,emblem);g.p(ex,ey-1,glow);g.p(ex-1,ey,emblem);g.p(ex+1,ey,emblem);g.p(ex,ey+1,emblem)
+        ex,ey=13,19
+        g.p(ex,ey,emblem);g.p(ex+1,ey,emblem);g.p(ex,ey+1,emblem);g.p(ex+1,ey+1,emblem)
+        g.p(ex,ey-1,glow);g.p(ex+1,ey-1,glow)
     return g,c
 def ngen_lafken(fr):
     import math
@@ -586,7 +644,7 @@ PAL={
  'mawek':{'c':'#8a8a9a','C':'#5a5a6a','k':'#1a1a24','y':'#f8f080','d':'#7ab8f0','o':'#14141c'},
  'kamawetu':{'b':'#b0783a','B':'#7a5226','m':'#e0a890','k':'#1a1008','e':'#ffffff','y':'#ffe050','Y':'#c8a020','f':'#e8f6ff','o':'#140c06'},
  'basilisko':{'s':'#4a7a3a','S':'#2a4a22','w':'#f0e8d8','r':'#d82828','y':'#f0c020','e':'#ffe040','k':'#000000','o':'#0e140a'},
- 'kaleuche':{'h':'#3a2a22','H':'#241812','k':'#1a100c','m':'#4a3a2a','s':'#c8d8c8','S':'#8aa08a','y':'#ffe070','r':'#a82020','f':'#c8ccd8','F':'#9aa0b0','o':'#080606'},
+ 'kaleuche':{'h':'#352c26','H':'#1d1814','k':'#120d0a','m':'#443a2c','s':'#c4dcca','S':'#7e9e88','y':'#8affb6','e':'#d6ffe4','b':'#cfc8ae','Q':'#3e7a52','q':'#101713','f':'#b9c8bd','F':'#89a090','o':'#070807'},
  'ngen_kuruf':{'B':'#8fb4c8','b':'#bedcec','w':'#e4f4fc','R':'#ffffff','r':'#58c8e0','k':'#17384a','E':'#d8fbff','o':'#2a4a5e'},
  'trelke':{'h':'#6a5a34','H':'#463a20','u':'#8a7a4c','m':'#9a4a48','M':'#6a2a2e','W':'#e8c8c0','w':'#f4f0e0','r':'#a8503a','R':'#7a3424','e':'#ffd040','o':'#140e08'},
  'witranalwe':{'H':'#16161e','h':'#4a4a3a','q':'#0e0e14','F':'#c8ccc0','f':'#7a8274','k':'#0a0a0a','E':'#7aff9a','w':'#e8e8d8','P':'#24242c','p':'#34343e','A':'#3a3a46','K':'#9a9a90','c':'#d8d8c8','g':'#b8b8ac','G':'#808078','L':'#101014','o':'#040406'}}

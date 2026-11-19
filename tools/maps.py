@@ -225,6 +225,24 @@ c.p(22,6,'H');c.p(22,7,'.');c.p(22,5,'.')
 c.r(2,9,3,2,'.');c.p(3,9,'F')
 c.p(10,5,'.');c.p(14,9,'.')
 L_['l_wapi']=c.rows()
+# --- l_islote: the sea stacks (advanced Lafkenche) ---
+c=C(32,13,'.')
+c.p(5,0,'.')
+c.r(1,1,30,2,'~');c.p(5,1,'.');c.p(5,2,'.')
+c.r(1,8,10,4,'~');c.r(20,9,11,3,'~')
+for y in range(3,8):
+    for x in range(1,31):
+        if hh(x,y,71)<.10:c.g[y][x]='#'
+c.r(12,8,6,4,'.')
+c.r(24,3,6,4,'#');c.r(25,4,4,2,'.');c.p(27,4,'C');c.p(26,6,'E');c.p(26,7,'.')
+c.p(21,6,'H');c.p(21,7,'.');c.p(21,5,'.')
+c.r(2,4,3,2,'.');c.p(3,5,'F')
+c.p(14,10,'.');c.p(8,6,'.')
+L_['l_islote']=c.rows()
+M['l_islote']=L_['l_islote']
+# inaltu: south opening to the stacks
+M['inaltu'][11]=M['inaltu'][11][:5]+','+M['inaltu'][11][6:]
+M['inaltu'][12]=M['inaltu'][12][:5]+'.'+M['inaltu'][12][6:]
 # kuyum: south opening to the marsh
 M['kuyum'][11]=M['kuyum'][11][:8]+'.'+M['kuyum'][11][9:]
 M['kuyum'][12]=M['kuyum'][12][:8]+'.'+M['kuyum'][12][9:]
@@ -322,6 +340,23 @@ N['n_mawida']=[
 "T,,##"+","*11+"\"\""+","*7+"TTT,,gT",
 "T"+","*7+"TT"+","*21+"T",
 "T"*32]
+# --- n_winkul: the hill country (advanced Nagche) ---
+c=C(32,13)
+c.p(16,0,',')
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]==',' and hh(x,y,81)<.13:c.g[y][x]='#'
+        elif c.g[y][x]==',' and hh(x,y,82)<.12:c.g[y][x]='T'
+        elif c.g[y][x]==',' and hh(x,y,83)<.10:c.g[y][x]='"'
+c.r(15,1,3,3,',');c.r(5,4,4,3,',')
+c.r(23,7,7,5,'T');c.r(24,8,5,3,',');c.p(26,9,'C');c.p(24,10,'E');c.p(23,10,',')
+c.p(20,10,'H');c.r(19,9,3,3,',')
+c.p(20,10,'H')
+c.r(3,9,3,2,',');c.p(4,9,'F')
+c.r(5,5,3,2,',');c.p(6,6,',');c.p(6,5,'K');c.r(5,2,3,2,'#');c.r(6,3,1,2,',');c.p(6,2,'P')
+c.p(12,7,',');c.p(28,3,',')
+N['n_winkul']=c.rows()
+setr(N['n_mawida'],16,11,1,1,',');setr(N['n_mawida'],16,12,1,1,',')
 def carve0(g,x,y,w,h,ch='_'):
     for yy in range(y,y+h):
         for xx in range(x,x+w):g[yy][xx]=ch
@@ -503,6 +538,22 @@ rkW[3][7]='F';rkW[5][2]='C';rkW[2][11]='Z'
 P_['l_ruka1']=[''.join(r) for r in rkL]
 P_['n_ruka1']=[''.join(r) for r in rkN]
 P_['w_ruka1']=[''.join(r) for r in rkW]
+# --- p_lil: the lava crags (advanced Pewenche) ---
+c=C(32,13,'.')
+c.p(16,0,'.')
+for y in range(1,12):
+    for x in range(1,31):
+        if hh(x,y,91)<.14:c.g[y][x]='#'
+c.r(15,1,3,3,'.')
+c.r(3,3,4,2,'~');c.r(24,8,5,2,'~');c.r(12,9,4,2,'~')
+c.r(6,7,5,4,'.');c.p(8,9,'F')
+c.r(23,2,7,4,'#');c.r(24,3,5,2,'.');c.p(26,3,'C');c.p(25,5,'E');c.p(25,6,'.')
+c.r(19,4,3,3,'.');c.p(20,5,'H')
+c.p(3,10,'P');c.r(2,9,3,3,'.');c.p(3,10,'P')
+c.p(17,6,'.');c.p(10,4,'.')
+P_['p_lil']=c.rows()
+P_['p_pillan'][11]=P_['p_pillan'][11][:16]+'.'+P_['p_pillan'][11][17:]
+P_['p_pillan'][12]=P_['p_pillan'][12][:16]+'.'+P_['p_pillan'][12][17:]
 # --- lair: Cherrufe ñi ruka, three unique branching floors ---
 g=[['%']*26 for _ in range(12)]
 carve(g,1,1,6,5)
@@ -667,6 +718,21 @@ c.p(12,8,',');c.p(10,5,'U')
 W_['w_wapi']=c.rows()
 # w_lof: bridge continues south off the map
 r=W_['w_lof'];r[12]=r[12][:14]+'bbb'+r[12][17:];r[13]=r[13][:15]+'b'+r[13][16:]
+# --- w_trayen: the waterfall gorge (advanced Williche) ---
+c=C(32,13)
+c.p(16,0,',')
+c.r(10,1,3,11,'~');c.p(16,1,',');c.r(10,6,3,1,'b')
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]==',' and hh(x,y,95)<.16 and x not in (16,):c.g[y][x]='T'
+        elif c.g[y][x]==',' and hh(x,y,96)<.10:c.g[y][x]='"'
+c.r(14,1,5,4,',');c.r(4,5,4,3,',')
+c.r(2,8,7,4,'#');c.r(3,9,5,2,',');c.p(4,10,'P');c.p(6,10,'g');c.p(5,8,'K');c.p(5,7,',')
+c.r(23,3,4,3,',');c.p(24,4,'F')
+c.r(22,8,6,3,',');c.p(24,9,'m')
+c.p(20,6,',');c.p(28,6,',')
+W_['w_trayen']=c.rows()
+setr(W_['w_mawida'],16,11,1,1,',');setr(W_['w_mawida'],16,12,1,1,',')
 # wd1: sea cave with a channel; brazier pz, locked shortcut and a konew gate
 g=[['%']*24 for _ in range(12)]
 carve0(g,16,1,6,5)
@@ -733,8 +799,8 @@ for k in ['w_rupu','w_lof','w_mawida','w_lafken','w_inaltu']:
     v=W_[k];sy=7 if k!='w_lof' else 9;start=(4,0) if k=='w_rupu' else (0,sy);R=bfs(v,start)
     right=[(len(v[0])-1,y) for y in range(len(v)) if (len(v[0])-1,y) in R]
     print(k,'reach',len(R),'right',right)
-for k,st in {'l_wapi':(8,1),'n_menoko':(5,1),'w_wapi':(15,1),'nd1':(22,4),'nd2':(23,2),'nd3':(21,4),'wd1':(22,3),'wd2':(23,2),'wd3':(21,3)}.items():
-    rows=(L_ if k=='l_wapi' else N if k.startswith('n') else W_)[k];R2=bfs2(rows,st)
+for k,st in {'l_wapi':(8,1),'n_menoko':(5,1),'w_wapi':(15,1),'nd1':(22,4),'nd2':(23,2),'nd3':(21,4),'wd1':(22,3),'wd2':(23,2),'wd3':(21,3),'l_islote':(5,1),'n_winkul':(16,1),'p_lil':(16,1),'w_trayen':(16,1)}.items():
+    rows=(L_ if k.startswith('l_') else N if k.startswith('n') else P_ if k.startswith('p_') else W_)[k];R2=bfs2(rows,st)
     missing=[(x,y,rows[y][x]) for y in range(len(rows)) for x in range(len(rows[0])) if rows[y][x] in set('PCKSFMNIkgHBOExJ') and (x,y) not in R2]
     print(k,'reach',len(R2),'MISSING' if missing else 'ok',missing)
 N.update(W_)

@@ -252,13 +252,16 @@ function endBattle(how){
   if(how!=='win'||!AU.song||AU.name!=='win')playSong(mapSong());
   if(how==='win'&&o.boss)postBoss();
 }
+function stepBackFromNgen(){
+  const [sx2,sy2]=placeNear(8,9);P.x=sx2;P.y=sy2;P.fx=sx2;P.fy=sy2;P.ox=sx2;P.oy=sy2;P.moving=false;P.dir='up';
+}
 function postBoss(){
   if(CUR==='ngen2')return postBoss2();
   if(CUR==='ngen3')return postBoss3();
   if(CUR==='ngen4')return postBoss4();
   say([N('El cuero de Trelke-wekufü se hunde y el agua se aclara. Una figura de espuma y luz se levanta de la laguna.','Trelke-wekufü\'s hide sinks and the water clears. A figure of foam and light rises from the lagoon.')],()=>{
     S.flags.ngen=1;S.flags.dive=1;S.pieces=S.pieces||[];if(!S.pieces.includes('lafkenche'))S.pieces.push('lafkenche');S.flags.awake_lafkenche=1;if(CUR==='ngen')grid[7][8]='A';S.hp=Math.min(maxHP(),S.hp+HPQ);AU.name=null;playSong('ngen');
-    const e=Object.assign({},MAPS.ngen.ents[1]);e.fx=e.x;e.fy=e.y;ents.push(e);persist();sfx('lvl');
+    stepBackFromNgen();const e=Object.assign({},MAPS.ngen.ents[1]);e.fx=e.x;e.fy=e.y;ents.push(e);persist();sfx('lvl');
     say([L('Ngen-lafken','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.'),
       N('Hacía mucho tiempo que nadie me hablaba en mapudungun.','It had been a long time since anyone spoke to me in Mapudungun.'),
       L('Ngen-lafken','Chaltu may.','Gracias.','Thank you.'),
@@ -277,7 +280,7 @@ function postBoss2(){
     S.flags.ngen2=1;S.flags.bramble=1;S.pieces=S.pieces||[];if(!S.pieces.includes('nagche'))S.pieces.push('nagche');
     grid[7][8]='A';for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++)if(grid[y][x]==='Ñ')grid[y][x]=M.floor;
     S.hp=Math.min(maxHP(),S.hp+HPQ);AU.name=null;playSong(rsong('ngen'));
-    const e=Object.assign({},MAPS.ngen2.ents[1]);e.fx=e.x;e.fy=e.y;ents.push(e);persist();sfx('lvl');
+    stepBackFromNgen();const e=Object.assign({},MAPS.ngen2.ents[1]);e.fx=e.x;e.fy=e.y;ents.push(e);persist();sfx('lvl');
     say([L('Ngen-mawida','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.'),
       L('Ngen-mawida','Alün umawtun. Tami dungun mew nepen.','Dormí mucho tiempo. Con tus palabras desperté.','I slept a long time. With your words I woke up.'),
       N('Ngen-mawida es el ngen del monte: cuida los árboles, el lawen y los animales que viven entre ellos.','Ngen-mawida is the ngen of the forest: it looks after the trees, the medicine plants, and the animals that live among them.'),
@@ -293,7 +296,7 @@ function postBoss3(){
     S.flags.ngen3=1;S.flags.snow=1;S.pieces=S.pieces||[];if(!S.pieces.includes('pewenche'))S.pieces.push('pewenche');
     grid[7][8]='A';for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++)if(grid[y][x]==='^')grid[y][x]=M.floor;
     S.hp=Math.min(maxHP(),S.hp+HPQ);AU.name=null;playSong(rsong('ngen'));
-    const e=Object.assign({},MAPS.ngen3.ents[1]);e.fx=e.x;e.fy=e.y;ents.push(e);persist();sfx('lvl');
+    stepBackFromNgen();const e=Object.assign({},MAPS.ngen3.ents[1]);e.fx=e.x;e.fy=e.y;ents.push(e);persist();sfx('lvl');
     say([L('Ngen-pewen','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.'),
       L('Ngen-pewen','Tami dungun mew nepen.','Con tus palabras desperté.','With your words I woke up.'),
       N('Ngen-pewen es el ngen de los pewenes: cuida los árboles, sus ngülliw y a la gente que vive de ellos.','Ngen-pewen is the ngen of the pewen trees: it looks after the trees, their nuts, and the people who live from them.'),
@@ -309,7 +312,7 @@ function postBoss4(){
     S.flags.ngen4=1;S.flags.wind=1;S.pieces=S.pieces||[];if(!S.pieces.includes('williche'))S.pieces.push('williche');
     grid[7][8]='A';for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++)if(grid[y][x]==='X')grid[y][x]=M.floor;
     S.hp=Math.min(maxHP(),S.hp+HPQ);AU.name=null;playSong(rsong('ngen'));
-    const e=Object.assign({},MAPS.ngen4.ents[1]);e.fx=e.x;e.fy=e.y;ents.push(e);persist();sfx('lvl');
+    stepBackFromNgen();const e=Object.assign({},MAPS.ngen4.ents[1]);e.fx=e.x;e.fy=e.y;ents.push(e);persist();sfx('lvl');
     say([L('Ngen-kürüf','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.'),
       L('Ngen-kürüf','Tami dungun mew nepen.','Con tus palabras desperté.','With your words I woke up.'),
       N('Ngen-kürüf es el ngen del viento: lleva la lluvia, mueve el mar y despeja la niebla.','Ngen-kürüf is the ngen of the wind: it carries the rain, moves the sea and clears away the fog.'),

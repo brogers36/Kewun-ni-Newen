@@ -13,7 +13,7 @@ function cutLines(){const n=S.name;return[
   [L('Kuku','Küpange, '+n+'!','"¡Ven, '+n+'!" Tu kuku te llama desde la costa lafkenche. (küpa- es "venir"; -nge le habla a una persona.)','"Come, '+n+'!" Your kuku calls you from the Lafkenche coast. (küpa- means "come"; -nge speaks to one person.)'),
    N('Es hora de volver. Aprende la lengua, despierta a los ngen uno por uno y devuélvele la voz a tu pueblo: a su lengua y a su cultura.','It is time to go back. Learn the language, wake the ngen one by one, and give your people back their voice: their language and their culture.')]
 ];}
-function startCut(){mode='cut';CUT={i:0,t:0,L:cutLines()};$('skip').style.display='block';playSong('intro');nextCut()}
+function startCut(){mode='cut';CUT={i:0,t:0,L:cutLines()};$('skip').style.display='block';playSong('epew');nextCut()}
 function nextCut(){if(!CUT)return;if(CUT.i>=CUT.L.length)return endCut();CUT.t=0;const ls=CUT.L[CUT.i];say(ls,()=>{if(!CUT)return;CUT.i++;nextCut()})}
 function skipCut(){if(!CUT)return;dlg.style.display='none';active=null;endCut()}
 function endCut(){CUT=null;$('skip').style.display='none';mode='map';loadMap('rupu',1,6,true);showBanner(M.name,G(M.g));setTimeout(()=>{if(!active)introScript()},400)}
