@@ -194,6 +194,36 @@ const SONGS={
   {w:'square',v:.028,t:'F4 A4 C5 A4 F4 A4 C5 A4 | D4 F4 Bb4 F4 D4 F4 Bb4 F4 | F4 A4 C5 A4 F4 A4 C5 A4 | E4 G4 C5 G4 E4 G4 C5 G4'},
   {w:'triangle',v:.36,t:'F2 - - - C3 - - - | Bb2 - - - F2 - - - | F2 - - - A2 - - - | Bb2 - - - C3 - - - | Bb2 - - - F2 - - - | C3 - - - C3 - - - | D3 - - - C3 - - - | F2 - - - - - - -'},
   {d:1,v:.16,t:'k . h . . . h . | k . h . . . h h'}]}),
+ nagLof:mkSong({bpm:96,loop:1,ch:[
+  {w:'triangle',v:.55,t:'D5 - F#5 - A5 - | B5 - A5 - F#5 - | G5 - F#5 - E5 - | F#5 - - - - - | D5 - F#5 - A5 - | D6 - B5 - A5 - | G5 - E5 - C#5 - | D5 - - - - -'},
+  {w:'square',v:.05,t:'A3 D4 F#4 D4 A3 D4 | G3 B3 D4 B3 G3 B3 | A3 C#4 E4 C#4 A3 C#4 | A3 D4 F#4 D4 A3 D4'},
+  {w:'triangle',v:.4,t:'D3 - - A2 - - | G2 - - D3 - - | A2 - - E3 - - | D3 - - A2 - -'},
+  {d:1,v:.35,t:'k . . k . h'}]}),
+ nagLofG:mkSong({bpm:72,loop:1,ch:[
+  {w:'triangle',v:.5,t:'E5 - - D5 C5 - | D5 - - - - - | C5 - - B4 A4 - | B4 - - - - - | A4 - C5 - E5 - | D5 - C5 - B4 - | C5 - - B4 - - | A4 - - - - -'},
+  {w:'square',v:.04,t:'A3 C4 E4 C4 A3 C4 | G3 B3 D4 B3 G3 B3 | F3 A3 C4 A3 F3 A3 | E3 G#3 B3 G#3 E3 G#3'},
+  {w:'triangle',v:.4,t:'A2 - - - - - | G2 - - - - - | F2 - - - - - | E2 - - - - -'},
+  {d:1,v:.22,t:'k . . . . .'}]}),
+ nagCave:mkSong({bpm:72,loop:1,ch:[
+  {w:'triangle',v:.42,t:'D5 - - - F5 - E5 - | D5 - - - A4 - - - | C5 - - - D5 - E5 - | F5 - E5 - D5 - - - | A5 - - - G5 - F5 - | E5 - - - D5 - - - | C#5 - - - E5 - - - | D5 - - - - - - -'},
+  {w:'square',v:.04,t:'D4 A4 F4 A4 D4 A4 F4 A4 | C4 G4 E4 G4 C4 G4 E4 G4 | Bb3 F4 D4 F4 Bb3 F4 D4 F4 | A3 E4 C#4 E4 A3 E4 C#4 E4'},
+  {w:'triangle',v:.45,t:'D2 - - - - - - - | C2 - - - - - - - | Bb1 - - - - - - - | A1 - - - - - - -'},
+  {d:1,v:.25,t:'k . . . . . h . | . . k . . . . .'}]}),
+ nagBattle:mkSong({bpm:168,loop:1,ch:[
+  {w:'square',v:.12,t:'A5 - E5 A5 - C6 | B5 - G5 E5 - - | A5 - E5 A5 - C6 | D6 - C6 B5 - - | C6 - B5 A5 - G5 | F5 - E5 D5 - - | E5 - G#5 B5 - D6 | E6 - - E5 - -'},
+  {w:'triangle',v:.55,t:'A2 A3 A2 A2 A3 A2 | G2 G3 G2 G2 G3 G2 | F2 F3 F2 F2 F3 F2 | E2 E3 E2 E2 E3 E2'},
+  {w:'square',v:.04,t:'A4 C5 E5 A4 C5 E5 | G4 B4 D5 G4 B4 D5 | F4 A4 C5 F4 A4 C5 | E4 G#4 B4 E4 G#4 B4'},
+  {d:1,v:.55,t:'k . h k s h | k . h k s s'}]}),
+ nagBoss:mkSong({bpm:138,loop:1,ch:[
+  {w:'sawtooth',v:.06,t:'E5 - F5 - E5 - D5 - | E5 - - - B4 - - - | E5 - F5 - G5 - F5 - | E5 - D5 - C5 - B4 - | C5 - D5 - E5 - F5 - | G5 - F5 - E5 - D5 - | F5 - - - E5 - - - | E5 - - - - - - -'},
+  {w:'triangle',v:.55,t:'E2 E2 E3 E2 F2 F2 F3 F2 | E2 E2 E3 E2 D2 D2 D3 D2 | C2 C2 C3 C2 D2 D2 D3 D2 | E2 E2 E3 E2 F2 E2 D2 E2'},
+  {w:'square',v:.05,t:'E4 . . G4 . . B4 . | F4 . . A4 . . C5 .'},
+  {d:1,v:.55,t:'k h s h k k s h | k h s h k s s s'}]}),
+ nagNgen:mkSong({bpm:88,loop:1,ch:[
+  {w:'triangle',v:.5,t:'G5 - D5 - B4 - D5 - | E5 - - - D5 - - - | C5 - E5 - G5 - E5 - | D5 - - - - - - - | G5 - A5 - B5 - G5 - | A5 - - - F#5 - D5 - | E5 - F#5 - G5 - A5 - | G5 - - - - - - -'},
+  {w:'square',v:.05,t:'B3 D4 G4 D4 B3 D4 G4 D4 | C4 E4 G4 E4 C4 E4 G4 E4 | A3 C4 E4 C4 A3 C4 E4 C4 | D4 F#4 A4 F#4 D4 F#4 A4 F#4'},
+  {w:'triangle',v:.4,t:'G2 - - - D3 - - - | C3 - - - G2 - - - | A2 - - - E3 - - - | D3 - - - A2 - - -'},
+  {d:1,v:.3,t:'k . h . s . h . | k . h k s . h h'}]}),
  win:mkSong({bpm:150,loop:0,ch:[
   {w:'square',v:.14,t:'C5 E5 G5 C6 - - G5 C6 - - - - . . . .'},
   {w:'triangle',v:.5,t:'C3 - - - G2 - - - C3 - - - . . . .'},
@@ -940,7 +970,9 @@ function placeNear(x,y,isEnt){
 }
 const RFLAG={lafkenche:'ngen',nagche:'ngen2'};
 const awake=r=>!!S.flags[RFLAG[r]];
-function mapSong(){const m=MAPS[CUR];if(m.ngenmap)return awake(m.region)?'ngen':'cave';const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'))return s+'G';return s}
+const SONGSET={nagche:{lof:'nagLof',lofG:'nagLofG',cave:'nagCave',battle:'nagBattle',boss:'nagBoss',ngen:'nagNgen'}};
+const rsong=n=>{const r=M&&M.region;return (SONGSET[r]&&SONGSET[r][n])||n};
+function mapSong(){const m=MAPS[CUR];if(m.ngenmap)return rsong(awake(m.region)?'ngen':'cave');const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'))return rsong(s+'G');return rsong(s)}
 function loadMap(id,x,y,quiet){
   CUR=id;M=MAPS[id];
   grid=M.rows.map(r=>r.split(''));
@@ -1696,7 +1728,7 @@ function mkEnemy(t){return{t,hp:ET[t].hp,max:ET[t].hp,gr:0,sl:0,hit:0,dead:false
 function startBattle(party,o){
   mode='battle';banner.style.display='none';held.up=held.down=held.left=held.right=0;
   B={en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
-  relabel();sfx('enc');playSong(o.boss?'boss':'battle');
+  relabel();sfx('enc');playSong(rsong(o.boss?'boss':'battle'));
   const alive=B.en.length,same=party.every(t=>t===party[0]),nameL=same?ET[party[0]].name:'wekufü';
   const lst=same?nameL:'wekufü ('+party.map(t=>ET[t].name).join(', ')+')';
   say([L('','Müley '+numW(alive)+' '+nameL+'!','¡Hay '+alive+' '+lst+'!','There '+(alive>1?'are ':'is ')+alive+' '+lst+'!')],battleMenu);
@@ -1907,7 +1939,7 @@ function postBoss2(){
   say([N('El Witranalwe se deshace en una luz fría que se apaga entre los árboles. El claro se llena de olor a tierra mojada, y del tronco más viejo sale una figura verde y dorada.','The Witranalwe breaks apart into a cold light that fades among the trees. The clearing fills with the smell of wet earth, and a green and golden figure steps out of the oldest trunk.')],()=>{
     S.flags.ngen2=1;S.flags.bramble=1;S.pieces=S.pieces||[];if(!S.pieces.includes('nagche'))S.pieces.push('nagche');
     grid[7][8]='A';for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++)if(grid[y][x]==='Ñ')grid[y][x]=M.floor;
-    S.hp=Math.min(maxHP(),S.hp+HPQ);AU.name=null;playSong('ngen');
+    S.hp=Math.min(maxHP(),S.hp+HPQ);AU.name=null;playSong(rsong('ngen'));
     const e=Object.assign({},MAPS.ngen2.ents[1]);e.fx=e.x;e.fy=e.y;ents.push(e);persist();sfx('lvl');
     say([L('Ngen-mawida','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.'),
       L('Ngen-mawida','Alün umawtun. Tami dungun mew nepen.','Dormí mucho tiempo. Con tus palabras desperté.','I slept a long time. With your words I woke up.'),

@@ -136,7 +136,9 @@ function placeNear(x,y,isEnt){
 }
 const RFLAG={lafkenche:'ngen',nagche:'ngen2'};
 const awake=r=>!!S.flags[RFLAG[r]];
-function mapSong(){const m=MAPS[CUR];if(m.ngenmap)return awake(m.region)?'ngen':'cave';const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'))return s+'G';return s}
+const SONGSET={nagche:{lof:'nagLof',lofG:'nagLofG',cave:'nagCave',battle:'nagBattle',boss:'nagBoss',ngen:'nagNgen'}};
+const rsong=n=>{const r=M&&M.region;return (SONGSET[r]&&SONGSET[r][n])||n};
+function mapSong(){const m=MAPS[CUR];if(m.ngenmap)return rsong(awake(m.region)?'ngen':'cave');const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'))return rsong(s+'G');return rsong(s)}
 function loadMap(id,x,y,quiet){
   CUR=id;M=MAPS[id];
   grid=M.rows.map(r=>r.split(''));
