@@ -54,7 +54,7 @@ const BOOK={
     L('','epu wentru peyngu · pu wentru peyngün','dos hombres ven · los hombres ven','two men see · the men see')]},
   dir:{m:'Pikun, puel...',es:'Los rumbos',en:'Directions',lines:[
     N('Los cuatro rumbos. Con püle se dice «hacia»: pikun püle, «hacia el norte».','The four directions. With püle you say «toward»: pikun püle, «toward the north».'),
-    L('','pikun · willi · puel · lafken','norte · sur · este · oeste (hacia el mar)','north · south · east · west (toward the sea)'),
+    L('','pikun · willi · puel · ngulu','norte · sur · este · oeste','north · south · east · west'),
     N('Por eso la gente del sur es williche y la tierra del este es Puelmapu.','That is why the people of the south are williche and the land of the east is Puelmapu.')]},
   fu:{m:'Kuyfi · -fu-',es:'Lo que pasaba antes',en:'What used to happen',lines:[
     N('En los relatos, -fu- marca algo que pasaba o que había antes, y que ya no es así.','In stories, -fu- marks something that happened or existed before, and is no longer so.'),

@@ -417,7 +417,7 @@ function digFind(dk){
 function shepTalk(){
   const en=S.gloss==='en';
   if(S.flags.sheep)return say([L('Pichi domo','Kayu ofisa nien. Chaltu may!','Tengo seis ovejas. ¡Gracias!','I have six sheep. Thank you!')]);
-  say([L('Pichi domo','Mari mari, '+addr(true)+'! Ofisafe ngen.','¡Hola! Cuido ovejas.','Hello! I look after sheep.'),
+  say([L('Pichi domo','Mari mari, '+addr(true)+'! Ofisa weñimkülelu ngen.','¡Hola! Soy la que cuida las ovejas.','Hello! I am the one who looks after the sheep.'),
     N('Desde que llegó el Witranalwe no me salen las cuentas. ¿Me ayudas a contarlas? Están todas en el corral.','Since the Witranalwe came I keep losing count. Will you help me count them? They are all in the pen.')],ask);
   function ask(){const o=['kechu','kayu','regle','pura'].map(m=>({m,v:m}));for(let a=3;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
     choose(L('Pichi domo','Chumten ofisa nien?','¿Cuántas ovejas tengo?','How many sheep do I have?'),o.concat([{m:'Pewkayal',g:en?'(count first)':'(contar primero)',v:'x'}]),v=>{
