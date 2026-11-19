@@ -173,7 +173,7 @@ Mapudungun y referentes culturales que conviene verificar:
 - **Cautivos**: "Kellumuchi" como '¡ayúdenme/ayúdame!' (kellu- + -mu- + -chi, imperativo 1sg con agente 2): verificar la forma; quizás mejor "Kellumuchi!" → "Kelluen!" (ayúdame tú).
 - **Formas de los cautivos**: challwatuan/amuaymi/umawtuay (futuro), kintumen/kellupay (AM), amuturkey (-rke-). "Ñi dungu ñamyawi" (mis mensajes andan perdidos, ñam- + -yaw- andativo): verificar.
 - **Fütra Kalku** (jefe secreto): un kalku genérico al servicio del olvido, con manto de plumas negras y bastón de hueso. Línea: "Ngoyman ñi duam mew küdawken. Eymi... ngoyaymi." (trabajo para el olvido; tú serás olvidado): verificar ngoya- como verbo 'olvidar' (¿ngoyma-? ¿upe-?) y la pasiva implícita.
-- **Ti Fütra Ngoyman** (jefe final, tres formas): velo de niebla (tripange lo revela), "Ngoyman ñi piwke" (trafonge quiebra la coraza), y la forma verdadera. Si el jugador venció al Epunamun, este interviene al empezar la tercera forma.
+- **Ti Fütra Ngoyman** (jefe final, tres formas): velo de niebla (tripange lo revela), "Ngoyman ñi piwke" (trafonge quiebra la coraza), y la forma verdadera, "Rüf Fütra Ngoyman" (rüf = verdadero). Si el jugador venció al Epunamun, este interviene al empezar la tercera forma.
 - **Epílogo**: "Kom mapu konümpatuy" (toda la tierra vuelve a recordar; konümpa- recordar + -tu- restaurativo): verificar. "AFPUY · FIN" (afpuy = llegó a su fin): ¿mejor "Afi"?
 - **K18**: respuesta dungun (la palabra) con pista "Ngoyman ñi kayñe" (enemiga del olvido).
 - Música de la región en estilo épico/metal (sierra distorsionada); los nombres internos: ngoy, ngoyBattle, ngoyBoss, ngoyFinal.

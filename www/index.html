@@ -590,7 +590,7 @@ const ET={
   kalku:{name:'Fütra Kalku',hp:200,atk:13,xp:260,gold:[350,350],boss:true,bs:92,spres:1,seals:['llüka','wiñotu','ñamkil']},
   ngoyman1:{name:'Ti Fütra Ngoyman',hp:150,atk:12,xp:0,gold:[0,0],boss:true,bs:120},
   ngoyman2:{name:'Ngoyman ñi piwke',hp:160,atk:13,xp:0,gold:[0,0],boss:true,bs:110,armor:1,spres:1},
-  ngoyman3:{name:'Ti Fütra Ngoyman',hp:170,atk:14,xp:400,gold:[500,500],boss:true,bs:116,spres:1}};
+  ngoyman3:{name:'Rüf Fütra Ngoyman',hp:170,atk:14,xp:400,gold:[500,500],boss:true,bs:116,spres:1}};
 
 /* ---------- items ---------- */
 const ITEMS={
@@ -3490,7 +3490,7 @@ function ngoyStage(n){
   const e=mkEnemy(n===2?'ngoyman2':'ngoyman3');B.en=[e];relabel();B.tele=false;B.blocked=null;B.rush=null;sfx('lvl');B.flash=16;B.shake=10;
   const ls=n===2?[N('El velo de niebla se rasga de arriba abajo... y detrás no hay cuerpo: hay un piwke enorme de piedra gris, envuelto en una coraza de olvido, latiendo despacio.','The veil of fog tears from top to bottom... and behind it there is no body: there is a huge heart of grey stone, wrapped in a crust of forgetting, beating slowly.'),
       N('Es el corazón del gran olvido. Cada latido borra una palabra en alguna parte.','It is the heart of the great forgetting. Every beat erases a word somewhere.')]
-    :[N('¡El piwke de piedra se parte en dos! De la grieta sale todo lo que el olvido se ha tragado: un coloso de niebla y silencio, con dos ojos como lunas apagadas: la forma verdadera de Ti Fütra Ngoyman.','The stone heart splits in two! Out of the crack pours everything the forgetting has swallowed: a colossus of fog and silence, with two eyes like burnt-out moons: the true form of Ti Fütra Ngoyman.')];
+    :[N('¡El piwke de piedra se parte en dos! De la grieta sale todo lo que el olvido se ha tragado: un coloso de niebla y silencio, con dos ojos como lunas apagadas. Esto es Rüf Fütra Ngoyman: el verdadero gran olvido.','The stone heart splits in two! Out of the crack pours everything the forgetting has swallowed: a colossus of fog and silence, with two eyes like burnt-out moons. This is Rüf Fütra Ngoyman: the true great forgetting.')];
   if(n===3&&S.flags.epu_won){S.hp=maxHP();S.sp=SPMAX;e.hp-=15;
     ls.push(N('Entonces una lanza cruza la niebla y se clava en el coloso (−15). El Epunamun aparece a tu lado, con las dos caras de frente al olvido: «¡Feypin! ¡Pelearía a tu lado!». Su newen te llena de nuevo: piwke y palabras al máximo.','Then a spear crosses the fog and sinks into the colossus (−15). The Epunamun appears at your side, both faces turned to the forgetting: "I said it! I would fight at your side!" His newen fills you again: hearts and words restored.'))}
   say(ls,battleMenu);

@@ -96,7 +96,7 @@ const ET={
   kalku:{name:'Fütra Kalku',hp:200,atk:13,xp:260,gold:[350,350],boss:true,bs:92,spres:1,seals:['llüka','wiñotu','ñamkil']},
   ngoyman1:{name:'Ti Fütra Ngoyman',hp:150,atk:12,xp:0,gold:[0,0],boss:true,bs:120},
   ngoyman2:{name:'Ngoyman ñi piwke',hp:160,atk:13,xp:0,gold:[0,0],boss:true,bs:110,armor:1,spres:1},
-  ngoyman3:{name:'Ti Fütra Ngoyman',hp:170,atk:14,xp:400,gold:[500,500],boss:true,bs:116,spres:1}};
+  ngoyman3:{name:'Rüf Fütra Ngoyman',hp:170,atk:14,xp:400,gold:[500,500],boss:true,bs:116,spres:1}};
 
 /* ---------- items ---------- */
 const ITEMS={
