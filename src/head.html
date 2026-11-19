@@ -61,6 +61,8 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #ab button{width:58px;height:58px;border-radius:50%}
 #ab .sm{width:46px;height:34px;border-radius:8px;font-size:11px}
 @media (hover:hover) and (pointer:fine){#pad{opacity:.55}}
+@media (hover:none),(pointer:coarse){#pad{display:none}}
+#menu{touch-action:pan-y}
 </style>
 </head>
 <body>
@@ -84,7 +86,7 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
           <button id="bCont" style="display:none">Continuar · Continue</button>
         </div>
         <div class="row"><button id="bLang">Glosa: Español</button><button id="bMus">♪ Música: sí</button></div>
-        <div class="help">Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música.<br>Arrows / WASD: move · Z, Enter or Space: talk / confirm (A) · X or Esc: back / menu (B) · N: music.</div>
+        <div class="help">Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música.<br>Táctil: un toque = hablar / avanzar · mantén el dedo y arrastra = caminar (suéltalo para parar) · desliza = recorrer el menú · dos dedos = volver · mantener pulsado = menú.<br>Touch: tap = talk / advance · hold and drag = walk (lift to stop) · swipe = scroll a menu · two fingers = back · long press = menu.</div>
         <div class="copy" id="copy">© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.</div>
       </div>
     </div>

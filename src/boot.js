@@ -2,7 +2,7 @@
    BOOT
    ============================================================ */
 function fit(){
-  const pad=matchMedia('(hover:hover) and (pointer:fine)').matches?60:190;
+  const pad=matchMedia('(hover:hover) and (pointer:fine)').matches?60:14;
   const s=Math.max(1,Math.min((innerWidth-12)/256,(innerHeight-pad)/224));
   const si=s>=2?Math.floor(s*2)/2:s;$('screen').style.setProperty('--s',si);
 }

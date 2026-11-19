@@ -21,7 +21,7 @@ The player is a young wariache, Llanka or Millaray. They travel the Mapuche land
 
 Open `www/index.html` in any modern browser. It is one self-contained file and needs no server or internet connection. Progress is saved in the browser's localStorage.
 
-Controls: arrow keys or WASD to move; Z, Space or Enter for A (talk, confirm); X, Escape or Backspace for B (back); M for the menu; N to mute. On a phone, use the on-screen pad.
+Controls: arrow keys or WASD to move; Z, Space or Enter for A (talk, confirm); X, Escape or Backspace for B (back); M for the menu; N to mute. On a phone there are no on-screen buttons: tap to talk, confirm or advance speech; hold a finger down and drag to walk (keep holding to keep walking, lift to stop); swipe to scroll a menu; two-finger tap to go back; long-press for the pause menu. The phone app runs in landscape.
 
 ## Repository layout
 

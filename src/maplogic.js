@@ -175,3 +175,48 @@ function updateMap(){
     sc.pl.forEach((p,i)=>{const tx=sc.bx+(i<2?-1:1)*(CT?16:10)+Math.sin(frame/30+i)*6,ty=sc.by+(i%2?1:-1)*(CT?11:8);const dx=tx-p.x,dy=ty-p.y;p.x+=dx*.035;p.y+=dy*.035;p.mv=Math.abs(dx)+Math.abs(dy)>3;if(Math.abs(dx)>1)p.dir=dx>0?'right':'left'});
   }
 }
+
+/* ---- touch controls (phone): no on-screen buttons ----
+   tap = talk / confirm / advance speech
+   hold + drag = walk (keep holding to keep walking; release to stop)
+   swipe on a menu = scroll it (native)   two-finger tap = back (B)
+   long press = pause menu */
+(function(){
+  const wrap=$('wrap');
+  const onUI=e=>e.target.closest&&e.target.closest('#menu,#dlg,#title,#skip,#pad,button');
+  let tid=null,x0=0,y0=0,t0=0,moved=0,two=0,lp=null;
+  const stop=()=>{held.up=held.down=held.left=held.right=0};
+  wrap.addEventListener('touchstart',e=>{
+    auInit();
+    if(e.touches.length>=2){two=1;stop();if(lp){clearTimeout(lp);lp=null}return}
+    if(onUI(e))return;
+    e.preventDefault();
+    const t=e.changedTouches[0];tid=t.identifier;x0=t.clientX;y0=t.clientY;t0=Date.now();moved=0;two=0;
+    lp=setTimeout(()=>{lp=null;if(!moved&&!two&&mode==='map'&&!active){tid=null;stop();openPause()}},600);
+  },{passive:false});
+  wrap.addEventListener('touchmove',e=>{
+    if(tid===null)return;
+    let t=null;for(const u of e.changedTouches)if(u.identifier===tid)t=u;
+    if(!t)return;
+    e.preventDefault();
+    const dx=t.clientX-x0,dy=t.clientY-y0,dist=Math.hypot(dx,dy);
+    if(dist>14){moved=1;if(lp){clearTimeout(lp);lp=null}
+      if(mode==='map'&&!active){const d=Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up');stop();held[d]=1}
+      if(dist>56){const k=40/dist;x0=t.clientX-dx*k;y0=t.clientY-dy*k}}
+  },{passive:false});
+  const end=e=>{
+    let fin=null;for(const u of e.changedTouches)if(u.identifier===tid)fin=u;
+    if(e.touches.length===0){
+      if(lp){clearTimeout(lp);lp=null}
+      const dt=Date.now()-t0;
+      if(two){two=0;tid=null;stop();if(dt<500)pressB();return}
+      if(fin&&tid!==null&&!moved&&dt<350){
+        if(active){if(active.kind==='say')active.a()}
+        else if(mode==='map')interact();
+      }
+      tid=null;stop();moved=0;
+    }else if(fin){tid=null;stop()}
+  };
+  wrap.addEventListener('touchend',end);
+  wrap.addEventListener('touchcancel',end);
+})();

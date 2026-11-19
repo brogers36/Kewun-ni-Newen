@@ -61,6 +61,8 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #ab button{width:58px;height:58px;border-radius:50%}
 #ab .sm{width:46px;height:34px;border-radius:8px;font-size:11px}
 @media (hover:hover) and (pointer:fine){#pad{opacity:.55}}
+@media (hover:none),(pointer:coarse){#pad{display:none}}
+#menu{touch-action:pan-y}
 </style>
 </head>
 <body>
@@ -84,7 +86,7 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
           <button id="bCont" style="display:none">Continuar · Continue</button>
         </div>
         <div class="row"><button id="bLang">Glosa: Español</button><button id="bMus">♪ Música: sí</button></div>
-        <div class="help">Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música.<br>Arrows / WASD: move · Z, Enter or Space: talk / confirm (A) · X or Esc: back / menu (B) · N: music.</div>
+        <div class="help">Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música.<br>Táctil: un toque = hablar / avanzar · mantén el dedo y arrastra = caminar (suéltalo para parar) · desliza = recorrer el menú · dos dedos = volver · mantener pulsado = menú.<br>Touch: tap = talk / advance · hold and drag = walk (lift to stop) · swipe = scroll a menu · two fingers = back · long press = menu.</div>
         <div class="copy" id="copy">© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.</div>
       </div>
     </div>
@@ -2022,6 +2024,51 @@ function updateMap(){
     sc.pl.forEach((p,i)=>{const tx=sc.bx+(i<2?-1:1)*(CT?16:10)+Math.sin(frame/30+i)*6,ty=sc.by+(i%2?1:-1)*(CT?11:8);const dx=tx-p.x,dy=ty-p.y;p.x+=dx*.035;p.y+=dy*.035;p.mv=Math.abs(dx)+Math.abs(dy)>3;if(Math.abs(dx)>1)p.dir=dx>0?'right':'left'});
   }
 }
+
+/* ---- touch controls (phone): no on-screen buttons ----
+   tap = talk / confirm / advance speech
+   hold + drag = walk (keep holding to keep walking; release to stop)
+   swipe on a menu = scroll it (native)   two-finger tap = back (B)
+   long press = pause menu */
+(function(){
+  const wrap=$('wrap');
+  const onUI=e=>e.target.closest&&e.target.closest('#menu,#dlg,#title,#skip,#pad,button');
+  let tid=null,x0=0,y0=0,t0=0,moved=0,two=0,lp=null;
+  const stop=()=>{held.up=held.down=held.left=held.right=0};
+  wrap.addEventListener('touchstart',e=>{
+    auInit();
+    if(e.touches.length>=2){two=1;stop();if(lp){clearTimeout(lp);lp=null}return}
+    if(onUI(e))return;
+    e.preventDefault();
+    const t=e.changedTouches[0];tid=t.identifier;x0=t.clientX;y0=t.clientY;t0=Date.now();moved=0;two=0;
+    lp=setTimeout(()=>{lp=null;if(!moved&&!two&&mode==='map'&&!active){tid=null;stop();openPause()}},600);
+  },{passive:false});
+  wrap.addEventListener('touchmove',e=>{
+    if(tid===null)return;
+    let t=null;for(const u of e.changedTouches)if(u.identifier===tid)t=u;
+    if(!t)return;
+    e.preventDefault();
+    const dx=t.clientX-x0,dy=t.clientY-y0,dist=Math.hypot(dx,dy);
+    if(dist>14){moved=1;if(lp){clearTimeout(lp);lp=null}
+      if(mode==='map'&&!active){const d=Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up');stop();held[d]=1}
+      if(dist>56){const k=40/dist;x0=t.clientX-dx*k;y0=t.clientY-dy*k}}
+  },{passive:false});
+  const end=e=>{
+    let fin=null;for(const u of e.changedTouches)if(u.identifier===tid)fin=u;
+    if(e.touches.length===0){
+      if(lp){clearTimeout(lp);lp=null}
+      const dt=Date.now()-t0;
+      if(two){two=0;tid=null;stop();if(dt<500)pressB();return}
+      if(fin&&tid!==null&&!moved&&dt<350){
+        if(active){if(active.kind==='say')active.a()}
+        else if(mode==='map')interact();
+      }
+      tid=null;stop();moved=0;
+    }else if(fin){tid=null;stop()}
+  };
+  wrap.addEventListener('touchend',end);
+  wrap.addEventListener('touchcancel',end);
+})();
 
 /* ============================================================
    INTRO CUTSCENE
@@ -4446,7 +4493,7 @@ function loopBody(){
    BOOT
    ============================================================ */
 function fit(){
-  const pad=matchMedia('(hover:hover) and (pointer:fine)').matches?60:190;
+  const pad=matchMedia('(hover:hover) and (pointer:fine)').matches?60:14;
   const s=Math.max(1,Math.min((innerWidth-12)/256,(innerHeight-pad)/224));
   const si=s>=2?Math.floor(s*2)/2:s;$('screen').style.setProperty('--s',si);
 }
