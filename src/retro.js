@@ -60,7 +60,78 @@ function charSprite(look,dir,fr){
   rows.forEach((r,y)=>{for(let x=0;x<16;x++){const ch=r[x];if(ch!=='.'){c.fillStyle=pal[ch]||'#ff00ff';c.fillRect(x,y,1,1)}}});
   return CCACHE[key]=cvs;
 }
+/* ---------- Chrono Trigger-style characters (CT preview only) ---------- */
+function ctShade(hex,t){const [r,g,b]=hexRGB(hex);const f=v=>Math.max(0,Math.min(255,Math.round(t<0?v*(1+t):v+(255-v)*t)));return 'rgb('+f(r)+','+f(g)+','+f(b)+')'}
+function ctCharSprite(look,dir,fr){
+  const key='ct'+look+dir+fr;if(CCACHE[key])return CCACHE[key];
+  if(dir==='left')return CCACHE[key]=mirror(ctCharSprite(look,'right',fr));
+  const L0=LOOKS[look],pal=Object.assign({},BASEP,L0),F=L0.t==='F',small=!!L0.small;
+  const W=18,H=small?26:32,g=[...Array(H)].map(()=>Array(W).fill(null));
+  const P=(x,y,m)=>{x=Math.round(x);y=Math.round(y);if(x>=0&&x<W&&y>=0&&y<H)g[y][x]=m};
+  const E=(cx,cy,rx,ry,m)=>{for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(((x+.5-cx)/rx)**2+((y+.5-cy)/ry)**2<=1)g[y][x]=m};
+  const Rr=(x,y,w,h,m)=>{for(let yy=y;yy<y+h;yy++)for(let xx=x;xx<x+w;xx++)P(xx,yy,m)};
+  const st=[0,1,0,2][fr%4];               // 0 stand, 1 left step, 2 right step
+  const tY=14,tH=small?6:9,lY=tY+tH,lH=small?4:7;   // torso top/height, legs top/height
+  const R=dir==='right',U=dir==='up';
+  // ---- legs / feet ----
+  if(!F||U||R){
+    if(R){const a=st===1?-1:st===2?1:0;Rr(7+a,lY,3,lH-1,'l');Rr(9-a,lY,3,lH-1,'L');Rr(6+a*2,lY+lH-1,4,1,'f');Rr(9-a*2,lY+lH-1,4,1,'f')}
+    else{const a=st===1?1:0,b=st===2?1:0;Rr(5,lY,3,lH-1-a,'l');Rr(10,lY,3,lH-1-b,'l');Rr(4,lY+lH-1-a,4,1,'f');Rr(10,lY+lH-1-b,4,1,'f')}
+  } else {Rr(5,lY+lH-2,3,2,'f');Rr(10,lY+lH-2,3,2,'f')}
+  // ---- torso ----
+  const tc=F?'c':'p';
+  if(R){Rr(6,tY,7,tH,tc);if(F)for(let y=0;y<lH-1;y++)Rr(6-(y>>1),lY+y,7+(y>>1)+(y>>2),1,tc)}
+  else{E(9,tY+2,5.2,2.6,tc);Rr(4,tY+1,10,tH-1,tc);if(F)for(let y=0;y<lH-1;y++)Rr(4-(y>>2),lY+y,10+((y>>2)*2),1,tc)}
+  // pattern band / belt
+  const by=tY+tH-3;
+  if(!U||F){if(R)Rr(6,by,7,1,'r');else Rr(4,by,10,1,'r');for(let x=(R?6:4);x<(R?13:14);x+=2)P(x,by+1,'w')}
+  if(F&&!U){Rr(7,tY+1,4,1,'x');P(8,tY+2,'x');P(9,tY+2,'X')}   // trapelakucha
+  // ---- arms & hands ----
+  if(R){const a=st===1?-1:st===2?1:0;Rr(9+a,tY+1,2,tH-2,tc==='c'?'C':'P');Rr(9+a*2,tY+tH-1,2,2,'s')}
+  else{const a=st===1?-1:st===2?1:0;Rr(2,tY+1+a,2,tH-2,tc==='c'?'C':'P');Rr(14,tY+1-a,2,tH-2,tc==='c'?'C':'P');Rr(2,tY+tH-1+a,2,2,'s');Rr(14,tY+tH-1-a,2,2,'s')}
+  // ---- head ----
+  const hx=R?8:9;
+  if(U){E(9,7.4,7.4,7,'h');if(F){E(9,15,6.2,8,'h')}else E(9,12,5,2.6,'h')}
+  else if(R){
+    if(F)E(hx-2,14,4.2,7,'h');
+    E(hx-.5,7.4,7,6.8,'h');E(hx+2.6,10.2,4.4,4.6,'s');P(hx+7,11,'s');P(hx+7,10,'s');
+    Rr(hx,4,6,2,'h');Rr(hx+1,6,5,1,'h');P(hx+6,6,'h');P(hx+3,7,'h');
+    Rr(hx-1,8,2,6,'h');P(hx+1,10,'S');P(hx+1,11,'S');
+  } else {
+    if(F){Rr(2,8,3,11,'h');Rr(13,8,3,11,'h');P(2,19,'.');P(15,19,'.')}
+    E(9,7.4,7.4,6.8,'h');E(9,10.4,5.4,5,'s');
+    for(let x=4;x<14;x++){const fy=6+(x%3===1?2:x%3===2?1:0);for(let y=4;y<=fy;y++)P(x,y,'h')}
+    Rr(3,8,2,5,'h');Rr(13,8,2,5,'h');
+  }
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(g[y][x]==='.')g[y][x]=null;
+  // headband (trarilonko) for men, band for women
+  if(!small){if(!F){if(R)Rr(hx-6,5,13,1,'b');else if(!U)Rr(2,5,14,1,'b');else Rr(2,6,14,1,'b');for(let x=(R?hx-5:3);x<(R?hx+6:15);x+=3)P(x,U?6:5,'B')}
+    else if(!U)Rr(R?hx-4:3,4,R?9:12,1,'b')}
+  // ---- face ----
+  if(!U){
+    if(R){P(hx+4,8,'h');P(hx+5,8,'h');P(hx+4,9,'e');P(hx+5,9,'e');P(hx+4,10,'e');P(hx+5,10,'W');P(hx+4,11,'e');P(hx+5,11,'e');P(hx+6,13,'m');P(hx+3,12,'q')}
+    else{P(6,8,'h');P(7,8,'h');P(11,8,'h');P(12,8,'h');
+      for(const ex of [6,11]){P(ex,9,'e');P(ex+1,9,'e');P(ex,10,'e');P(ex+1,10,'e');P(ex,11,'e');P(ex+1,11,'e')}
+      P(7,9,'W');P(12,9,'W');P(9,12,'S');P(8,13,'m');P(9,13,'m');P(5,12,'q');P(13,12,'q')}
+  }
+  // ---- render with shading + selective outline ----
+  const [cvs,c]=mk(W,H),lit=(x,y,m)=>{const n=(xx,yy)=>xx<0||yy<0||xx>=W||yy>=H?null:g[yy][xx];return [n(x-1,y)!==m||n(x,y-1)!==m,n(x+1,y)!==m||n(x,y+1)!==m]};
+  const base=m=>({h:pal.h,s:pal.s,S:pal.S,p:pal.p,P:pal.P,c:pal.c,C:pal.C,b:pal.b,B:pal.B,r:pal.r,w:pal.w,l:pal.l,L:pal.L,f:pal.f,e:pal.e,W:'#ffffff',m:pal.m,q:pal.q,x:pal.x,X:pal.X})[m]||'#ff00ff';
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const m=g[y][x];if(!m)continue;let col=base(m);
+    if('hspPcCl'.includes(m)){const [tl,br]=lit(x,y,m);if(tl&&!br)col=ctShade(col,.22);else if(br&&!tl)col=ctShade(col,-.3);else if(br&&tl)col=ctShade(col,-.1)}
+    if(m==='h'&&!U&&((x+y)%5===0)&&y<6)col=ctShade(pal.H||pal.h,.15);
+    if(m==='h'&&y>=1&&y<=3&&x>=(R?hx-3:6)&&x<=(R?hx+1:10)&&(x+y)%2===0)col=ctShade(pal.H||pal.h,.25);
+    if(m==='s'&&x>(R?hx+3:11)&&y>11)col=ctShade(pal.S,0);
+    c.fillStyle=col;c.fillRect(x,y,1,1)}
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){if(g[y][x])continue;let nb=null;for(const [dx,dy] of [[0,1],[1,0],[-1,0],[0,-1]]){const xx=x+dx,yy=y+dy;if(xx>=0&&yy>=0&&xx<W&&yy<H&&g[yy][xx]){nb=g[yy][xx];break}}
+    if(nb){c.fillStyle=ctShade(base(nb),-.72);c.fillRect(x,y,1,1)}}
+  return CCACHE[key]=cvs;
+}
 function drawChar(c,look,x,y,dir,fr,seated){
+  if(CT){const L0=LOOKS[look],s=ctCharSprite(look,dir,[0,1,0,2][fr%4]===0?0:fr%4),Hh=s.height;
+    ell(c,x+9,y+15,7,2.4,'rgba(0,10,20,.3)');
+    if(seated){c.drawImage(s,0,0,18,Hh-8,x-1,y+16-(Hh-8)+2,18,Hh-8);return}
+    c.drawImage(s,x-1,y+16-Hh);return}
   ell(c,x+8,y+14,6,2,'rgba(0,0,0,.3)');
   const s=charSprite(look,dir,fr);
   if(seated){c.drawImage(s,0,0,16,19,x,y-5,16,19);return}
