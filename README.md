@@ -41,8 +41,9 @@ src/            game source (edit these)
   battle.js     battle system, specials, bosses
   render.js     map, HUD and battle rendering
   boot.js       title screen and startup
+  master.js     testing tools, only in the master copy
 tools/maps.py   map editor source: edit the tile grids here, then run it
-build.py        builds www/index.html from src/
+build.py        builds www/index.html from src/ (or master/index.html with --master)
 www/index.html  the built game (commit it after every build)
 index.html      opens www/ (so the GitHub Pages address goes straight to the game)
 ```
@@ -55,6 +56,14 @@ Python 3 is the only requirement.
 python3 tools/maps.py   # only if you changed the maps; regenerates src/maprows.js
 python3 build.py        # writes www/index.html
 ```
+
+### Master copy (for testing)
+
+```
+python3 build.py --master   # writes master/index.html (not committed)
+```
+
+The master copy has a «Maestro · Elegir región» button on the title screen that starts the game at any checkpoint (the start of a region, its lof, its dungeon entrance, its boss, or the region finished), with the earlier regions already completed and the hero at a matching level. In the game, G (or the MAE button on the phone pad) opens the master menu: jump to any map, heal, add ngülliw, turn ordinary battles off, or win the current battle. It saves separately from the player version, so testing never touches a real save. When a new region is added, add its checkpoints to `MCHK` and `MSET` in `src/master.js`.
 
 ### Map tile key
 
