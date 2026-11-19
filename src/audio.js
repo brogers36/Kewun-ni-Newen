@@ -194,6 +194,46 @@ const SONGS={
   {w:'square',v:.05,t:'C#4 E4 A4 E4 C#4 E4 A4 E4 | D4 F#4 A4 F#4 D4 F#4 A4 F#4 | E4 G#4 B4 G#4 E4 G#4 B4 G#4 | C#4 E4 A4 E4 E4 G#4 B4 G#4'},
   {w:'triangle',v:.4,t:'A2 - - - E3 - - - | D3 - - - A2 - - - | E3 - - - B2 - - - | A2 - - - E2 - - -'},
   {d:1,v:.3,t:'k . h . s . h . | k . h k s . h h'}]}),
+ puel:mkSong({bpm:96,loop:1,ch:[
+  {w:'triangle',v:.5,t:'D5 - - A4 - - | C5 - D5 - E5 - | D5 - - A4 - - | G4 - - - - - | D5 - - E5 - G5 | A5 - G5 - E5 - | D5 - C5 - E5 - | D5 - - - - -'},
+  {w:'square',v:.04,t:'D4 F#4 A4 D4 F#4 A4 | C4 E4 G4 C4 E4 G4 | D4 F#4 A4 D4 F#4 A4 | G3 B3 D4 G3 B3 D4'},
+  {w:'triangle',v:.42,t:'D3 - - A2 - - | C3 - - G2 - - | D3 - - A2 - - | G2 - - D3 - -'},
+  {d:1,v:.3,t:'k . h . h .'}]}),
+ puelG:mkSong({bpm:62,loop:1,ch:[
+  {w:'triangle',v:.5,t:'D5 - - C5 A4 - | A#4 - - - G4 - | A4 - - G4 F4 - | E4 - - - - - | D5 - - C5 - A4 | A#4 - - A4 G4 - | F4 - E4 - C#4 - | D4 - - - - -'},
+  {w:'square',v:.04,t:'D4 F4 A4 D4 F4 A4 | A#3 D4 F4 A#3 D4 F4 | A3 C#4 E4 A3 C#4 E4 | D4 F4 A4 D4 F4 A4'},
+  {w:'triangle',v:.4,t:'D2 - - - - - | A#1 - - - - - | A1 - - - - - | D2 - - - - -'},
+  {d:1,v:.2,t:'k . . . . .'}]}),
+ puelLof:mkSong({bpm:104,loop:1,ch:[
+  {w:'triangle',v:.55,t:'G4 - B4 D5 - B4 | G5 - A5 G5 - - | E5 - C5 A4 - C5 | E5 - D5 C5 - - | D5 - B4 G4 - B4 | D5 - E5 G5 - A5 | G5 - E5 D5 - B4 | G4 - - - - -'},
+  {w:'square',v:.05,t:'G3 B3 D4 G3 B3 D4 | C4 E4 G4 C4 E4 G4 | A3 D4 F#4 A3 D4 F#4 | G3 B3 D4 G3 B3 D4'},
+  {w:'triangle',v:.4,t:'G2 - - D3 - - | C3 - - G2 - - | D2 - - A2 - - | G2 - - D3 - -'},
+  {d:1,v:.32,t:'k . h k h .'}]}),
+ puelLofG:mkSong({bpm:72,loop:1,ch:[
+  {w:'triangle',v:.5,t:'E5 - - D5 B4 - | C5 - - B4 A4 - | B4 - - A4 G4 - | F#4 - - - - - | E5 - - G5 - F#5 | E5 - - D5 - B4 | C5 - B4 - F#4 - | E4 - - - - -'},
+  {w:'square',v:.04,t:'E4 G4 B4 E4 G4 B4 | A3 C4 E4 A3 C4 E4 | B3 D#4 F#4 B3 D#4 F#4 | E4 G4 B4 E4 G4 B4'},
+  {w:'triangle',v:.4,t:'E2 - - - - - | A1 - - - - - | B1 - - - - - | E2 - - - - -'},
+  {d:1,v:.2,t:'k . . h . .'}]}),
+ puelCave:mkSong({bpm:74,loop:1,ch:[
+  {w:'triangle',v:.42,t:'D5 - - - D#5 - D5 - | C5 - - - A4 - - - | A#4 - - - C5 - D5 - | A4 - - - - - - - | D5 - F5 - D#5 - D5 - | C5 - - - A#4 - - - | A4 - - - C5 - - - | D5 - - - - - - -'},
+  {w:'square',v:.04,t:'D3 A3 D4 A3 D3 A3 D4 A3 | A#2 F3 A#3 F3 A#2 F3 A#3 F3 | C3 G3 C4 G3 C3 G3 C4 G3 | D3 A3 D4 A3 D3 A3 D4 A3'},
+  {w:'sawtooth',v:.04,t:'D1 - - - - - - - | A#1 - - - - - - - | C2 - - - - - - - | D1 - - - - - - -'},
+  {d:1,v:.25,t:'k . . . h . . . | . . k . . . h .'}]}),
+ puelBattle:mkSong({bpm:166,loop:1,ch:[
+  {w:'square',v:.12,t:'D6 - A5 D6 - F6 | E6 - C6 A5 - - | D6 - A5 D6 - F6 | G6 - F6 E6 - - | F6 - E6 D6 - C6 | A#5 - A5 G5 - - | A5 - C#6 E6 - G6 | A6 - - A5 - -'},
+  {w:'triangle',v:.55,t:'D3 D4 D3 D3 D4 D3 | C3 C4 C3 C3 C4 C3 | A#2 A#3 A#2 A#2 A#3 A#2 | A2 A3 A2 A2 A3 A2'},
+  {w:'square',v:.04,t:'D5 F5 A5 D5 F5 A5 | C5 E5 G5 C5 E5 G5 | A#4 D5 F5 A#4 D5 F5 | A4 C#5 E5 A4 C#5 E5'},
+  {d:1,v:.55,t:'k . h k s h | k . h k s s'}]}),
+ puelBoss:mkSong({bpm:148,loop:1,ch:[
+  {w:'sawtooth',v:.06,t:'D5 - F5 - G#5 - B5 - | A5 - - - G5 - - - | C5 - D#5 - F#5 - A5 - | G#5 - - - G5 - - - | D5 - D#5 - F5 - F#5 - | G#5 - - - G5 - F5 - | D#5 - D5 - B4 - A#4 - | D5 - - - - - - -'},
+  {w:'triangle',v:.55,t:'D2 D2 D3 D2 D2 D2 D3 D2 | A#1 A#1 A#2 A#1 A#1 A#1 A#2 A#1 | C2 C2 C3 C2 C2 C2 C3 C2 | A1 A1 A2 A1 G#1 G#1 G#2 G#1'},
+  {w:'square',v:.05,t:'F4 . . G#4 . . B4 . | D#4 . . F#4 . . A4 .'},
+  {d:1,v:.55,t:'k h s h k k s h | k h s h k s s c'}]}),
+ puelNgen:mkSong({bpm:88,loop:1,ch:[
+  {w:'triangle',v:.5,t:'D5 - G5 - B5 - A5 - | G5 - - - D5 - - - | E5 - G5 - C6 - B5 - | A5 - - - - - - - | D5 - G5 - B5 - D6 - | C6 - - - B5 - A5 - | G5 - A5 - B5 - A5 - | G5 - - - - - - -'},
+  {w:'square',v:.05,t:'B3 D4 G4 D4 B3 D4 G4 D4 | C4 E4 G4 E4 C4 E4 G4 E4 | D4 F#4 A4 F#4 D4 F#4 A4 F#4 | B3 D4 G4 D4 D4 F#4 A4 F#4'},
+  {w:'triangle',v:.4,t:'G2 - - - D3 - - - | C3 - - - G2 - - - | D3 - - - A2 - - - | G2 - - - D2 - - -'},
+  {d:1,v:.3,t:'k . h . s . h . | k . h k s . h h'}]}),
  win:mkSong({bpm:176,loop:0,ch:[
   {w:'sawtooth',v:.09,dist:1,t:'E3 E3 . E3 E3 . G3 - | A3 A3 . A3 A3 . C4 - | D4 - - - C4 - - - | B3 - - - B3 B3 B3 B3 | E4 - - - - - - - | . . . .'},
   {w:'sawtooth',v:.08,dist:1,t:'B3 B3 . B3 B3 . D4 - | E4 E4 . E4 E4 . G4 - | A4 - - - G4 - - - | F#4 - - - F#4 F#4 F#4 F#4 | B4 - - - - - - - | . . . .'},

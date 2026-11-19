@@ -2,7 +2,7 @@
    STATE
    ============================================================ */
 const HPQ=4,SPMAX=3;
-function maxHP(){return S.baseMax+(S.gear.trariwe?4:0)+Math.floor(S.piwke/4)*4+(S.flags.ngen?4:0)+(S.flags.ngen2?4:0)+(S.flags.ngen3?4:0)+(S.flags.ngen4?4:0)}
+function maxHP(){return S.baseMax+(S.gear.trariwe?4:0)+Math.floor(S.piwke/4)*4+(S.flags.ngen?4:0)+(S.flags.ngen2?4:0)+(S.flags.ngen3?4:0)+(S.flags.ngen4?4:0)+(S.flags.ngen5?4:0)}
 function atk(){return S.baseAtk+(S.gear.futrawino?3:0)-(S.curse?2:0)}
 function def(){return S.baseDef+(S.gear.makun?2:0)}
 function xpNeed(){return 10+S.lvl*10}
@@ -25,6 +25,8 @@ const ROOTS={
   'wütre':{m:'wütre-',es:'tener frío',en:'be cold'},
   lef:{m:'lef-',es:'correr, huir',en:'run away'},
   tripa:{m:'tripa-',es:'salir',en:'come out'},
+  trana:{m:'trana-',es:'caerse',en:'fall down'},
+  nepe:{m:'nepe-',es:'despertar',en:'wake up'},
   'ñam':{m:'ñam-',es:'perderse, desaparecer',en:'get lost, vanish'}};
 const ENDS=['nge','mu','mün'];
 const endFor=n=>n<=1?0:n===2?1:2;
@@ -49,6 +51,10 @@ const VG={
        nes:['¡No te quiebres!','¡No se quiebren (ustedes dos)!','¡No se quiebren (todos)!'],nen:["Don't break!","Don't break, you two!","Don't break, all of you!"]},
   'wütre':{es:['¡Ten frío!','¡Tengan frío (ustedes dos)!','¡Tengan frío (todos)!'],en:['Be cold!','Be cold, you two!','Be cold, all of you!'],
        nes:['¡No tengas frío!','¡No tengan frío (ustedes dos)!','¡No tengan frío (todos)!'],nen:["Don't be cold!","Don't be cold, you two!","Don't be cold, all of you!"]},
+  trana:{es:['¡Cáete!','¡Cáiganse (ustedes dos)!','¡Cáiganse (todos)!'],en:['Fall down!','Fall down, you two!','Fall down, all of you!'],
+       nes:['¡No te caigas!','¡No se caigan (ustedes dos)!','¡No se caigan (todos)!'],nen:["Don't fall!","Don't fall, you two!","Don't fall, all of you!"]},
+  nepe:{es:['¡Despierta!','¡Despierten (ustedes dos)!','¡Despierten (todos)!'],en:['Wake up!','Wake up, you two!','Wake up, all of you!'],
+       nes:['¡No despiertes!','¡No despierten (ustedes dos)!','¡No despierten (todos)!'],nen:["Don't wake up!","Don't wake up, you two!","Don't wake up, all of you!"]},
   'wiñotu':{es:['¡Vuelve atrás!','¡Vuelvan atrás (ustedes dos)!','¡Vuelvan atrás (todos)!'],en:['Go back!','Go back, you two!','Go back, all of you!'],
        nes:['¡No vuelvas atrás!','¡No vuelvan (ustedes dos)!','¡No vuelvan (todos)!'],nen:["Don't go back!","Don't go back, you two!","Don't go back, all of you!"]}};
 
@@ -78,7 +84,13 @@ const ET={
   chinifilu:{name:'Chiñifilu',hp:120,atk:9,xp:120,gold:[150,150],boss:true,bs:96,spres:1,seals:['umawtu','küpakil','amutu']},
   piwuchen:{name:'Piwüchen',hp:135,atk:10,xp:140,gold:[170,170],boss:true,bs:100,fly:true,spres:1,seals:['nag','llüka','küpakil']},
   wallipen:{name:'Waillepeñ',hp:150,atk:10,xp:160,gold:[190,190],boss:true,bs:92,spres:1,armor:1,seals:['wütre','trafo','umawtu']},
-  trawko:{name:'Trawko',hp:160,atk:11,xp:180,gold:[220,220],boss:true,bs:88,spres:1,seals:['tripa','lef','amutukil']}};
+  trawko:{name:'Trawko',hp:160,atk:11,xp:180,gold:[220,220],boss:true,bs:88,spres:1,seals:['tripa','lef','amutukil']},
+  mewlen:{name:'mewlen wekufü',hp:22,atk:8,xp:12,gold:[8,12],bs:44,fly:true},
+  kurutrewa:{name:'kurü trewa',hp:26,atk:8,xp:12,gold:[8,12],bs:44},
+  fmewlen:{name:'fütra mewlen',hp:62,atk:11,xp:34,gold:[22,26],bs:70,fly:true,mini:1},
+  kurutoro:{name:'kurü toro',hp:66,atk:11,xp:36,gold:[22,26],bs:72,armor:1,mini:1},
+  walichu:{name:'Walichu',hp:150,atk:11,xp:130,gold:[120,120],boss:true,bs:112,dream:1},
+  epunamun:{name:'Epunamun',hp:180,atk:12,xp:200,gold:[250,250],boss:true,bs:100,spres:1,seals:['umawtu','nepe','tranakil']}};
 
 /* ---------- items ---------- */
 const ITEMS={

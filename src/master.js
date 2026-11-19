@@ -34,7 +34,16 @@ const MCHK=[
   {m:'Williche · isla',es:'Wapi: el kurantu y la piedra dual',en:'The island: the kurantu and the dual stone',lvl:18,at:['w_wapi',15,1],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave']},
   {m:'Williche · cascada (difícil)',es:'Trayen mapu: zona difícil, el konew de la cascada',en:'The waterfall gorge: hard area, the waterfall konew',lvl:20,at:['w_trayen',16,1],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone']},
   {m:'Williche · wekufü secreto',es:'Junto al puente del Trawko (cascada): camina un paso al oeste para despertarlo',en:'Beside the Trawko\'s bridge (waterfall gorge): walk one step west to wake it',lvl:21,at:['w_trayen',16,7],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone']},
-  {m:'Williche · completa',es:'Cuatro trokiñ; listo para la próxima región',en:'Four trokiñ; ready for the next region',lvl:21,at:['w_lof',17,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone']}];
+  {m:'Williche · completa',es:'Cuatro trokiñ; listo para Puelmapu',en:'Four trokiñ; ready for Puelmapu',lvl:21,at:['w_lof',17,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone']},
+  {m:'Puelmapu · inicio',es:'Williche completa; la bajada al este de la cordillera',en:'Williche complete; the way down the east side',lvl:21,at:['e_rupu',1,7],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone']},
+  {m:'Puelmapu · lof',es:'En el lof puelche, antes de hablar con el lonko',en:'In the Puelche lof, before talking to the lonko',lvl:21,at:['e_lof',17,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone']},
+  {m:'Puelmapu · mallín',es:'El humedal de la pampa: -me- y -pa-',en:'The wet meadow: -me- and -pa-',lvl:22,at:['e_mallin',16,1],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof']},
+  {m:'Puelmapu · chenque',es:'Entrada del chenque del Walichu (meseta)',en:"Entrance of the Walichu's chenque (meseta)",lvl:22,at:['e_meseta',20,6],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof']},
+  {m:'Puelmapu · jefe',es:'Frente al Walichu (lleva nepe-)',en:'Facing the Walichu (bring nepe-)',lvl:24,at:['ngen5',8,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave']},
+  {m:'Puelmapu · salitral (difícil)',es:'Chadi mapu: zona difícil, la piedra -rke-',en:'The salt flat: hard area, the -rke- stone',lvl:24,at:['e_salitral',24,1],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone']},
+  {m:'Puelmapu · wekufü secreto',es:'Junto a las pozas del Epunamun (salitral): camina un paso al oeste para despertarlo',en:"Beside the Epunamun's pools (salt flat): walk one step west to wake it",lvl:25,at:['e_salitral',8,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone']},
+  {m:'Puelmapu · completa',es:'Kechu trokiñ: el trariwe COMPLETO',en:'Five trokiñ: the trariwe COMPLETE',lvl:25,at:['e_lof',17,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone']},
+  {m:'Ngoyman · umbral',es:'Con el trariwe completo, junto a la niebla del oeste',en:'With the complete trariwe, beside the western fog',lvl:26,at:['rupu',2,10],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone']}];
 const MSET={
   intro:s=>{s.flags.intro=1;s.roots.push('küpa')},
   pentu:s=>{Object.assign(s.flags,{pentu_prac:1,pentukun:1});s.roots.push('umawtu','nag');s.items.kulon+=2},
@@ -48,7 +57,10 @@ const MSET={
   pewlof:s=>{Object.assign(s.flags,{laku:1,pew_lonko:1,pew_ke:1,'pz:p_pewen':1});s.roots.push('trafo')},
   pewcave:s=>{Object.assign(s.flags,{root_wutre:1,pmini1:1,pmini2:1,pmini3:1,'pz:pd1':1,'pz:pd2':1,pew_ngu1:1,pew_ngu2:1,pew_chaiwe:1,pew_basket:1,pew_llawe:1});s.roots.push('wütre');s.items.lawen+=2},
   pewdone:s=>{Object.assign(s.flags,{ngen3:1,snow:1,boss3:1});s.pieces.push('pewenche')},
-  nagdone:s=>{Object.assign(s.flags,{ngen2:1,bramble:1,boss2:1});s.pieces.push('nagche')}};
+  nagdone:s=>{Object.assign(s.flags,{ngen2:1,bramble:1,boss2:1});s.pieces.push('nagche')},
+  puellof:s=>{Object.assign(s.flags,{weku:1,puel_lonko:1,puel_dir:1,'pz:e_lelfun':1});s.roots.push('trana')},
+  puelcave:s=>{Object.assign(s.flags,{root_nepe:1,emini1:1,emini2:1,emini3:1,'pz:ed1':1,'pz:ed2':1});s.roots.push('nepe');s.items.lawen+=2},
+  pueldone:s=>{Object.assign(s.flags,{ngen5:1,lelfun:1,boss5:1});s.pieces.push('puelche')}};
 function mBuild(c){
   const s=newState(HERO);s.pieces=[];
   for(const k of c.set)MSET[k](s);

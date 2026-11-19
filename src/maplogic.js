@@ -69,9 +69,12 @@ function unlock(x,y){
 }
 function edge(d){
   const E=M.edges&&M.edges[d];if(!E)return;
-  if(E.need){const n=(S.pieces||[]).length;if(P.bump)return;P.bump=1;
-    return say([N('Una niebla gris y espesa cubre el camino hacia el oeste. Ahí las palabras se borran: es la niebla de Ti Fütra Ngoyman, el gran olvido.','A thick grey fog covers the road west. Words fade inside it: it is the fog of Ti Fütra Ngoyman, the great forgetting.'),
-      L('','Trariwe trokiñ: '+n+'/'+E.need,'Solo un trariwe completo puede atravesarla. Tienes '+n+' de '+E.need+' trokiñ: uno por cada tierra (Lafkenche, Nagche, Pewenche, Williche, Puelmapu).','Only a complete trariwe can pass through it. You have '+n+' of '+E.need+' trokiñ: one for each land (Lafkenche, Nagche, Pewenche, Williche, Puelmapu).')])}
+  if(E.need){const n=(S.pieces||[]).length;
+    if(n<E.need){if(P.bump)return;P.bump=1;
+      return say([N('Una niebla gris y espesa cubre el camino hacia el oeste. Ahí las palabras se borran: es la niebla de Ti Fütra Ngoyman, el gran olvido.','A thick grey fog covers the road west. Words fade inside it: it is the fog of Ti Fütra Ngoyman, the great forgetting.'),
+        L('','Trariwe trokiñ: '+n+'/'+E.need,'Solo un trariwe completo puede atravesarla. Tienes '+n+' de '+E.need+' trokiñ: uno por cada tierra (Lafkenche, Nagche, Pewenche, Williche, Puelmapu).','Only a complete trariwe can pass through it. You have '+n+' of '+E.need+' trokiñ: one for each land (Lafkenche, Nagche, Pewenche, Williche, Puelmapu).')])}
+    if(!S.flags.ngoy_open){S.flags.ngoy_open=1;persist();
+      return say([N('Te pones el trariwe completo. Los cinco trokiñ brillan a la vez... y la niebla gris se abre ante ti como una cortina.','You put on the completed trariwe. The five trokiñ glow all at once... and the grey fog parts before you like a curtain.')],()=>loadMap(E.to,E.x,E.y))}}
   if(E.req&&!S.flags[E.req]){say(E.reqMsg);return}
   loadMap(E.to,E.x,E.y);
 }
@@ -117,6 +120,7 @@ function interact(){
   if(c==='U')return say([L('','Iyael','La olla hierve sobre el fuego. Huele a comida.','The pot simmers over the fire. It smells like food.')]);
   if(c==='^')return say([N('Un montón de nieve dura te cierra el paso. Necesitas el newen de Ngen-pewen.','A heap of hard snow blocks your way. You need the newen of Ngen-pewen.')]);
   if(c==='Ñ')return say([N('Un zarzal lleno de espinas te cierra el paso. Necesitas el newen de Ngen-mawida.','A bramble full of thorns blocks your way. You need the newen of Ngen-mawida.')]);
+  if(c==='D')return say([N('Un cerco de espino seco, duro como el fierro, te cierra el paso. Necesitas el newen de Ngen-lelfün.','A fence of dry thorn, hard as iron, blocks your way. You need the newen of Ngen-lelfün.')]);
   if(c==='M')return kulonBush(tx,ty);
   if(c==='x')return pickSpot(tx,ty);
   if(c==='W')return say([L('','Kachilla','Un campo de kachilla (trigo) dorado, listo para cosechar.','A field of golden kachilla (wheat), ready for harvest.')]);

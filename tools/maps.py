@@ -804,6 +804,191 @@ for k,st in {'l_wapi':(8,1),'n_menoko':(5,1),'w_wapi':(15,1),'nd1':(22,4),'nd2':
     missing=[(x,y,rows[y][x]) for y in range(len(rows)) for x in range(len(rows[0])) if rows[y][x] in set('PCKSFMNIkgHBOExJ') and (x,y) not in R2]
     print(k,'reach',len(R2),'MISSING' if missing else 'ok',missing)
 N.update(W_)
+# ================= PUELMAPU =================
+E_={}
+# p_degin gets an east exit down the far side of the cordillera
+setr(P_['p_degin'],31,9,1,1,'.')
+# --- e_rupu: the eastern slopes, down from the ridge into the pampa ---
+c=C(32,13)
+c.r(0,7,32,1,'=')
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]==',' and abs(y-7)>1:
+            if x<15 and hh(x,y,101)<.26:c.g[y][x]='#'
+            elif x>=15 and hh(x,y,102)<.24:c.g[y][x]='"'
+            elif x<15 and hh(x,y,103)<.10:c.g[y][x]='T'
+c.r(3,2,3,3,',');c.p(4,3,'F')
+c.r(24,1,7,4,'#');c.r(25,1,5,3,',');c.p(27,1,'P');c.p(29,2,'C')
+c.p(27,4,'D');c.p(27,5,',');c.p(27,6,',')
+c.r(10,9,4,2,',');c.p(25,9,',')
+E_['e_rupu']=c.rows()
+# --- e_lof: the Puelche community on the open plain ---
+c=C(34,14)
+c.r(0,9,34,1,'=')
+for (x,y) in [(2,2),(9,5),(27,7),(14,1),(2,6),(3,11),(26,11)]:c.r(x,y,3,2,'R')
+c.r(20,2,10,4,'f');c.r(21,3,8,2,',');c.p(24,5,',')
+c.p(17,7,'F');c.p(32,1,'P');c.p(7,3,'Z');c.p(24,7,'U');c.p(13,11,'V')
+for (x,y) in [(31,4),(18,2),(12,6)]:c.p(x,y,'T')
+E_['e_lof']=c.rows()
+# --- e_lelfun: the open grassland ---
+c=C(32,13)
+c.r(0,7,32,1,'=')
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]==',' and abs(y-7)>0:
+            if hh(x,y,104)<.30:c.g[y][x]='"'
+            elif hh(x,y,105)<.045:c.g[y][x]='T'
+c.r(7,2,3,3,',');c.p(8,3,'H')
+c.r(24,1,7,5,'#');c.r(25,2,5,2,',');c.r(27,4,1,2,',');c.p(27,2,'C');c.p(27,5,'E');c.p(27,6,',')
+c.r(20,9,4,3,',');c.p(22,10,'K')
+c.r(11,8,4,2,',')
+c.r(3,9,3,2,',');c.p(4,9,'F')
+c.p(16,12,',')
+E_['e_lelfun']=c.rows()
+# --- e_mallin: the wet meadow ---
+c=C(32,13)
+c.p(16,0,',')
+c.r(5,3,4,2,'~');c.r(20,6,5,2,'~');c.r(12,8,3,2,'~')
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]==',' and hh(x,y,106)<.26:c.g[y][x]='"'
+        elif c.g[y][x]==',' and hh(x,y,107)<.05:c.g[y][x]='T'
+c.r(11,4,5,3,',')
+c.r(2,8,5,4,'#');c.r(3,9,3,2,',');c.p(4,10,'C');c.p(5,9,'D');c.r(6,9,1,1,',')
+c.r(26,1,4,3,',');c.p(27,2,'F')
+c.p(24,9,'m');c.r(23,9,4,2,',')
+c.r(7,9,3,2,',')
+E_['e_mallin']=c.rows()
+# --- e_kura: the stone badlands ---
+c=C(32,13,'.')
+c.r(0,7,32,1,'=')
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]=='.' and abs(y-7)>1 and hh(x,y,108)<.30:c.g[y][x]='#'
+        elif c.g[y][x]=='.' and hh(x,y,109)<.10:c.g[y][x]=','
+c.r(4,2,6,4,'#')
+c.r(5,3,2,2,'.');c.p(7,3,'.');c.p(7,4,'B');c.p(7,5,'.')
+c.p(5,3,'C')
+c.r(18,1,4,3,'.');c.p(20,2,'C')
+c.r(12,9,4,2,'.');c.r(24,9,3,3,'.');c.p(24,12,'.')
+c.r(2,9,3,2,'.');c.p(3,10,'F')
+E_['e_kura']=c.rows()
+# --- e_salitral: the salt flat (hard area) ---
+c=C(32,13,'.')
+c.p(24,0,'.')
+c.r(8,4,5,2,'~');c.r(17,8,4,2,'~')
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]=='.' and hh(x,y,110)<.08:c.g[y][x]='#'
+c.r(11,2,3,3,'.');c.p(12,3,'H')
+c.r(24,9,5,3,'#');c.r(25,10,3,2,'.');c.p(26,10,'K');c.p(24,11,'.')
+c.r(4,8,5,4,'.')
+c.r(27,1,4,3,'.');c.p(28,2,'F')
+c.p(20,3,'.')
+E_['e_salitral']=c.rows()
+# --- e_meseta: the rim of the meseta, with the Walichu's chenque ---
+c=C(32,13,'.')
+c.r(0,7,24,1,'=')
+c.r(22,1,9,11,'#')
+c.r(22,5,4,3,'.');c.r(24,6,2,1,'.');c.p(25,6,'S')
+for y in range(1,12):
+    for x in range(1,22):
+        if c.g[y][x]=='.' and y!=7 and hh(x,y,111)<.14:c.g[y][x]='#'
+        elif c.g[y][x]=='.' and y!=7 and hh(x,y,112)<.20:c.g[y][x]=','
+c.r(4,9,3,2,'.');c.p(5,10,'F')
+c.r(2,2,4,3,'.');c.p(3,3,'P')
+E_['e_meseta']=c.rows()
+# ed1: the chenque, a ring burrow around a central chamber
+g=[['%']*24 for _ in range(12)]
+carve0(g,2,2,20,8)
+carve0(g,5,4,14,4,'%')
+carve0(g,7,5,10,2)
+carve0(g,5,5,2,1);carve0(g,17,6,2,1)
+carve0(g,22,6,2,1)
+carve0(g,10,5,2,2,'~')
+g[2][3]='F'
+g[2][8]='N';g[2][12]='N';g[2][16]='N'
+g[3][6]='I'
+g[9][3]='C';g[9][19]='C'
+g[5][8]='K'
+g[6][14]='k'
+carve0(g,2,10,2,1);g[10][2]='E';g[10][3]='S'
+E_['ed1']=[''.join(r) for r in g]
+# ed2: the flooded gallery, two halls joined by a locked corridor
+g=[['%']*24 for _ in range(10)]
+carve0(g,1,1,9,8)
+carve0(g,3,3,2,4,'~');carve0(g,6,1,2,3,'~')
+carve0(g,10,4,4,1);g[4][11]='L'
+carve0(g,14,1,9,8)
+carve0(g,16,3,3,2,'~');carve0(g,20,6,2,2,'~')
+carve0(g,0,2,1,1)
+g[1][2]='F'
+g[1][8]='C'
+g[7][8]='k'
+g[6][2]='H'
+g[1][15]='C'
+g[1][21]='C'
+g[7][22]='S'
+E_['ed2']=[''.join(r) for r in g]
+# ed3: the spiral down to the open pampa
+g=[['%']*22 for _ in range(11)]
+carve0(g,1,1,20,2)
+carve0(g,19,3,2,6)
+carve0(g,5,7,16,2)
+carve0(g,5,3,2,5)
+carve0(g,7,4,9,1)
+carve0(g,15,4,1,2)
+carve0(g,10,7,2,1,'~');carve0(g,13,1,2,2,'~')
+carve0(g,0,1,1,1)
+g[1][2]='F'
+g[4][9]='g'
+g[8][6]='C'
+g[7][19]='S'
+E_['ed3']=[''.join(r) for r in g]
+E_['ngen5']=[
+"TTTTTTTTTTTTTTTTTT",
+"TT\"\",,,,,,,,,,\"\"TT",
+"T\",,,#,,,,,,#,,,\"T",
+"T,,,,,,,,,,,,,,,,T",
+"T,#,,,,,,,,,,,,#,T",
+"T,,,,,,,,,,,,,,,,T",
+"T\",#,,,,,,,,,#,,\"T",
+"TT\",,,,,,,,,,,\"TTT",
+"TTT,,#,,,,,#,,TTTT",
+"TTTT,,,,,,,,,TTTTT",
+"TTTT,,,,F,,,,TTTTT",
+"TTTTT,,,S,,,TTTTTT",
+"TTTTTTTTTTTTTTTTTT"]
+E_['ngoyman']=[
+"TTTTTTTTTTTTTTTTTT",
+"TT\"\"\",,,\"\"\",,,\"\"TT",
+"T\",,,,,,,,,,,,,\"\"T",
+"T,,\"\",,,,,,,\"\",,,T",
+"T,,,,,,,,,,,,,,,,T",
+"T\",,,,,,I,,,,,,\",T",
+"T,,,,,,,,,,,,,,,,,",
+"T,,\",,,,,,,,,\",,,T",
+"T,,,,,,,,,F,,,,,,T",
+"T\",,,,,,,,,,,,,\",T",
+"TT\",,\"\",,,,\"\",,\"TT",
+"TTTTTTTTTTTTTTTTTT",
+"TTTTTTTTTTTTTTTTTT"]
+# --- e_ruka1 interior ---
+E_['e_ruka1']=[
+"%%%%%%%%%%%%%%",
+"%____________%",
+"%__Z_______C_%",
+"%______F_____%",
+"%____________%",
+"%________U___%",
+"%____________%",
+"%____________%",
+"%%%%%%__%%%%%%"]
+for k,st in {'e_rupu':(0,7),'e_lof':(0,9),'e_lelfun':(0,7),'e_mallin':(16,1),'e_kura':(0,7),'e_salitral':(24,1),'e_meseta':(0,7),'ed1':(22,6),'ed2':(22,7),'ed3':(19,7),'e_ruka1':(6,7)}.items():
+    rows=[r.replace('D',',') for r in E_[k]];R2=bfs2(rows,st)
+    missing=[(x,y,rows[y][x]) for y in range(len(rows)) for x in range(len(rows[0])) if rows[y][x] in set('PCKSFMNIkgHBOExJDm') and (x,y) not in R2]
+    print(k,'reach',len(R2),'MISSING' if missing else 'ok',missing)
+N.update(E_)
 for k,v in N.items():
     w=len(v[0])
     for i,r in enumerate(v): assert len(r)==w,(k,i,len(r),w,r)

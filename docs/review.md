@@ -140,3 +140,28 @@ Left unchanged: *Pun mew kintukefuy kulliñ* (habitual past in the story, "used 
   - Waillepeñ (oveja-ternero deforme; huallepén): sellos wütrenge → trafonge → umawtunge; además tiene coraza (trafonge otra vez tras los sellos).
   - Trawko (El Trauco; ¿trawko/trauko?): sellos tripange → lefnge → amutukilnge.
 - Mecánica: con sellos activos todo daño queda en 1-2; todos resisten el newen especial (mitad de daño). Pistas en los diálogos de los ngen despiertos.
+
+## Tanda 6 · Puelmapu (región nueva)
+
+Mapudungun y referentes culturales que conviene verificar:
+
+- **Nombres de la región**: "Puel rüpü", "Puelche lof", "Lelfün mapu", "Malliñ mapu" (¿malliñ con -ñ?), "Kura mapu", "Chadi mapu" (salitral), "Wingkul lelfün" (meseta). ¿Mejor "wingkul" o "winkul" para el borde de meseta?
+- **Walichu**: adopté la forma Walichu (gualicho); en el juego es un wekufü de la pampa que roba palabras y pelea dormido. ¿Grafía preferida: walichu / walichü / gualicho?
+- **Epunamun** como wekufü secreto de dos caras: en las fuentes es más bien un espíritu de la guerra (a veces consejero del ngillatun); aquí lo uso como guerrero bicéfalo hostil. ¿Te parece aceptable para el juego o prefieres otro ser?
+- **Chenque** (chenke): uso "Walichu ñi chenke" para su cueva; la palabra es de origen tehuelche adoptada en la zona. ¿Grafía chenke/chenque en mapudungun del juego?
+- **mewlen**: remolino de viento/polvo (meulen). En el juego "mewlen wekufü" (enemigo). ¿Grafía mewlen/meulen?
+- **kurü trewa / kurü toro**: perro negro y toro negro como wekufü de la pampa. "kurutoro" mezcla mapudungun + préstamo (toro); ¿aceptable o mejor otra bestia?
+- **Raíces nuevas**: trana- "caerse" (tranange '¡cáete!'); nepe- "despertar(se)" (nepenge '¡despierta!'). Verificar que nepe- funcione bien como orden transitiva ("despiértalo" sería nepelfinge); en el juego la orden se le grita al wekufü dormido, intransitiva.
+- **-me- / -pa-** (piedra dirmo y challwafe del mallín): formas usadas: challwatumen "fui a pescar (allá)", umawtupay "vino a dormir (acá)", kintumean "iré a buscar (allá)", yepan "vine a buscar/traer (acá)" (¿ye- + -pa- da 'vine a traer' o mejor yemepan?). Revisar glosas.
+- **-rke-** (piedra rke y kushe Millaray): amurkey, mülerkey, kimürkeymi ("¡resulta que sabías!"); mülerkefuy ("dicen que había"). Verificar ortografía con ü epentética (kimürkeymi vs kimrkeymi).
+- **meli witran mapu** (quiz de direcciones): puel = este, pikun = norte, willi = sur, lafken = oeste/mar. En rigor el oeste es ngulu/lafken mapu; usé "lafken" por continuidad con el juego.
+- **weku** = hermano de la madre (tío materno). Presentado como "casi un segundo papá".
+- **kushe** = anciana (Kushe Millaray; ojo: el nombre coincide con la heroína Millaray si se elige ese personaje).
+- **charki / angkümka ilo**: "carne secada al sol"; verificar "angkümka" (¿angkün ilo?).
+- **chadi** = sal; konew del salitral: "Lafken mew mülekey; ko amutuy, fey mülewey. Lig ngey." Verificar "mülewey" (queda) y "lig ngey".
+- **choyke purun** (baile del ñandú) mencionado en la misión de la pluma; **choyke pichuñ** = pluma de ñandú (¿pichuñ o pichun?).
+- **werken** = mensajero.
+- **Konew nuevos**: K15 (choyke: "Müpükelay, welu lefkey; fütrake namun niey"), K16 (pun: "Antü amuy, fey akuy; kom takukefi, welu küdawkelay"), K17 (chadi). Verificar sintaxis.
+- **Afpun mapu** ("el fin de la tierra", saludo de Ngen-lelfün): verificar.
+- **Ngen-lelfün** como ngen de la pampa abierta: elegido por el paralelo lafken/mawida/pewen/kürüf/lelfün.
+- Lonko puelche enseña con "Chumngelu küpaymi faw?" → respuesta "Ngen kintupan" ("vine a buscar al ngen"): verificar kintu- + -pa- + -n.

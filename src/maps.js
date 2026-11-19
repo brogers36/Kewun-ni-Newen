@@ -349,6 +349,95 @@ ngen4:{region:'williche',ngenmap:1,name:'Ngen-kürüf',g:{es:'El muelle en la ni
    if(!S.flags.sb4)ls.push(N('«Una última cosa: en la garganta de la cascada vive un hombrecito que odia las visitas. Cruza la tierra junto al puente del río. Y cuida tus palabras: dile que salga, y no dejes que se vaya.»','"One last thing: in the waterfall gorge lives a little man who hates visitors. Cross the ground beside the river bridge. And mind your words: tell him to come out, and do not let him leave."'));
    say(ls)}}]}
 });
+/* ---------- PUELMAPU ---------- */
+const K15={q:L('Konew','Müpükelay, welu lefkey; fütrake namun niey. Chem am ta tatey?','No vuela, pero corre; tiene patas grandes. ¿Qué será?','It does not fly, but it runs; it has big legs. What could it be?'),
+  opts:[{m:'choyke',es:'ñandú',en:'rhea',ok:1},{m:'luan',es:'guanaco',en:'guanaco'},{m:'mañke',es:'cóndor',en:'condor'},{m:'trewa',es:'perro',en:'dog'}]};
+const K16={reward:'piwke',q:L('Konew','Antü amuy, fey akuy; kom takukefi, welu küdawkelay. Chem am ta tatey?','Se va el sol, y él llega; todo lo cubre, pero no trabaja. ¿Qué será?','The sun leaves, and it arrives; it covers everything, but it does no work. What could it be?'),
+  opts:[{m:'pun',es:'noche',en:'night',ok:1},{m:'antü',es:'sol',en:'sun'},{m:'küyen',es:'luna',en:'moon'},{m:'tromü',es:'nube',en:'cloud'}]};
+const K17={reward:'piwke',q:L('Konew','Lafken mew mülekey; ko amutuy, fey mülewey. Lig ngey. Chem am ta tatey?','Vive en el mar; el agua se va, y él se queda. Es blanco. ¿Qué será?','It lives in the sea; the water leaves, and it stays. It is white. What could it be?'),
+  opts:[{m:'chadi',es:'sal',en:'salt',ok:1},{m:'pire',es:'nieve',en:'snow'},{m:'kuyum',es:'arena',en:'sand'},{m:'challwa',es:'pescado',en:'fish'}]};
+Object.assign(MAPS,{
+e_rupu:{region:'puelmapu',name:'Puel rüpü',g:{es:'La bajada al este de la cordillera',en:'The way down the east side of the mountains'},floor:',',bg:'pampa',song:'puel',pal:'puelmapu',trees:'chacay',
+ edges:{left:{to:'p_degin',x:30,y:9},right:{to:'e_lof',x:1,y:9}},chests:{'29,2':'puelgift'},digs:{'12,9':{}},
+ ents:[{id:'werken',kind:'npc',look:'walker',x:25,y:9,dir:'left',fixed:1,talk:()=>werkenTalk(),bub:['Puelmapu!']},
+   {kind:'enemy',x:8,y:3,party:['pire','kura']},{kind:'enemy',x:18,y:3,party:['mewlen']},{kind:'enemy',x:12,y:10,party:['kura','kura','pire']},{kind:'enemy',x:24,y:10,party:['mewlen','pire']}]},
+e_lof:{region:'puelmapu',name:'Puelche lof',g:{es:'La comunidad del este',en:'The community of the east'},floor:',',bg:'pampa',song:'lof',pal:'puelmapu',trees:'chacay',
+ doors:{'3,3':{to:'e_ruka1',x:6,y:7}},
+ edges:{left:{to:'e_rupu',x:30,y:7},right:{to:'e_lelfun',x:1,y:7,req:'puel_lonko',reqMsg:[N('Antes de seguir, habla con el lonko de este lof. Está junto al kütral.','Before you go on, speak with the lonko of this lof. He is by the fire.')]}},
+ ents:[{id:'weku',kind:'npc',look:'elder',x:5,y:10,talk:()=>wekuTalk(),bub:['Mari mari!']},
+   {id:'elonko',kind:'npc',look:'lonko5',x:18,y:7,talk:()=>eLonkoTalk(),bub:['Mari mari!']},
+   {id:'enutram',kind:'npc',look:'elder2',x:16,y:8,dir:'up',fixed:1,act:'teach',talk:()=>eNutramTalk(),bub:['Kuyfi...','Walichu...']},
+   {id:'ek1',kind:'npc',look:'child',x:15,y:6,dir:'down',seated:1,fixed:1,talk:()=>choykeKidTalk(),bub:['Choyke!']},
+   {id:'ek2',kind:'npc',look:'childf',fem:1,x:17,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichi domo','Luan ayüfiñ! Müna kümeke ngey.','¡Me gustan los luan! Son muy buenos.','I love the guanacos! They are so gentle.')]),bub:['Luan!']},
+   {id:'emalen',kind:'npc',look:'weaver',fem:1,x:7,y:4,dir:'up',act:'weave',fixed:1,talk:()=>malenTalk(),bub:['Meli witran mapu...']},
+   {id:'charkife',kind:'npc',look:'cook',fem:1,x:24,y:8,dir:'up',act:'weave',fixed:1,talk:()=>charkiTalk(),bub:['Charki!','Ilo!']},
+   {id:'eherd',kind:'npc',look:'gatherer',fem:1,x:22,y:6,dir:'up',fixed:1,talk:()=>say([L('Domo','Luan kintuken. Pichike kullin reke ngeyngün.','Cuido los luan. Son como animales de la casa.','I look after the guanacos. They are like animals of the household.')]),bub:['Luan!']},
+   {id:'ewood',kind:'npc',look:'walker',x:2,y:10,act:'wood',path:[[2,10],[9,10]],pause:80,talk:()=>walkerTalk(),bub:['Mamüll yelen.']},
+   {id:'erun',kind:'npc',look:'child',x:11,y:10,path:[[11,10],[13,10],[13,10],[11,10]],pause:20,spd:10,talk:()=>runnerTalk(),bub:['Ayüwün!']},
+   {id:'edog',kind:'npc',look:'dog',x:25,y:10,path:[[25,10],[30,10]],pause:40,talk:()=>dogTalk()},
+   {id:'epapay',kind:'npc',look:'kuku',fem:1,x:19,y:8,dir:'left',seated:1,fixed:1,talk:()=>papayTalk(),bub:['Mari mari!','Chumleymi?']},
+   {kind:'animal',look:'luan',x:23,y:3,pen:[21,3,28,4],home:1},{kind:'animal',look:'luan',x:26,y:4,pen:[21,3,28,4],home:1},{kind:'animal',look:'choyke',x:24,y:4,pen:[21,3,28,4],home:1},
+   {id:'eseller',kind:'npc',look:'seller',x:31,y:10,talk:()=>shop('e_lof')}]},
+e_ruka1:{region:'puelmapu',name:'Kushe ñi ruka',g:{es:'La ruka de la kushe Millaray',en:"Old Millaray's ruka"},floor:'_',bg:'pampa',song:'lof',pal:'rukain',wall:'ruka',interior:1,
+ edges:{down:{to:'e_lof',x:3,y:4}},chests:{'11,2':'rukagift'},
+ ents:[{id:'kushe',kind:'npc',look:'kuku',fem:1,x:8,y:4,dir:'left',seated:1,fixed:1,talk:()=>kusheTalk(),bub:['Mülerkey...','Konpange!']}]},
+e_lelfun:{region:'puelmapu',name:'Lelfün mapu',g:{es:'La pampa abierta',en:'The open grassland'},floor:',',bg:'pampa',song:'puel',pal:'puelmapu',trees:'chacay',
+ edges:{left:{to:'e_lof',x:32,y:9},right:{to:'e_kura',x:1,y:7},down:{to:'e_mallin',x:16,y:1}},
+ chests:{'27,2':'piwke'},stones:{'8,3':'dirmo'},konew:{'22,10':K15},digs:{'12,8':{what:'pichun',req:'puel_kidq'},'4,10':{}},
+ ents:[{kind:'animal',look:'luan',x:18,y:4},{kind:'animal',look:'choyke',x:7,y:9},
+   {kind:'enemy',x:10,y:4,party:['mewlen','mewlen']},{kind:'enemy',x:20,y:5,party:['kurutrewa']},{kind:'enemy',x:6,y:10,party:['mewlen','kurutrewa']},{kind:'enemy',x:25,y:9,party:['kurutrewa','kurutrewa','mewlen']}]},
+e_mallin:{region:'puelmapu',name:'Malliñ mapu',g:{es:'El mallín, el humedal de la pampa',en:'The mallín, the wet meadow of the plains'},floor:',',bg:'pampa',song:'puel',pal:'puelmapu',trees:'chacay',
+ edges:{up:{to:'e_lelfun',x:16,y:11}},
+ chests:{'4,10':'puelgift'},digs:{'8,9':{what:'piwke'},'24,10':{}},
+ ents:[{id:'mallinfe',kind:'npc',look:'fisher',x:13,y:5,dir:'down',fixed:1,talk:()=>mallinTalk(),bub:['-me-... -pa-...']},
+   {kind:'animal',look:'choyke',x:22,y:3},
+   {kind:'enemy',x:9,y:6,party:['kurutrewa','mewlen']},{kind:'enemy',x:18,y:9,party:['mewlen','mewlen','mewlen']},{kind:'enemy',x:26,y:6,party:['kurutrewa','kurutrewa']}]},
+e_kura:{region:'puelmapu',name:'Kura mapu',g:{es:'El pedregal',en:'The stone barrens'},floor:'.',bg:'pampa',song:'puel',pal:'puelmapu',trees:'chacay',
+ edges:{left:{to:'e_lelfun',x:30,y:7},right:{to:'e_meseta',x:1,y:7},down:{to:'e_salitral',x:24,y:1}},
+ chests:{'5,3':'mawgift','20,2':'piwke'},digs:{'14,9':{}},
+ ents:[{kind:'enemy',x:12,y:4,party:['kura','mewlen']},{kind:'enemy',x:22,y:9,party:['kurutrewa','kura']},{kind:'enemy',x:8,y:10,party:['mewlen','mewlen','kurutrewa']},{kind:'enemy',x:28,y:4,party:['kurutrewa','mewlen','kura']}]},
+e_salitral:{region:'puelmapu',name:'Chadi mapu',g:{es:'El salitral (zona difícil)',en:'The salt flat (hard area)'},floor:'.',bg:'pampa',song:'puel',pal:'salar',trees:'chacay',
+ edges:{up:{to:'e_kura',x:24,y:11}},
+ stones:{'12,3':'rke'},konew:{'26,10':K17},digs:{'20,3':{}},sbt:{t:['5,9','6,9','7,9','5,10','6,10','7,10'],boss:'epunamun',flag:'sb5',req:'ngen5'},
+ ents:[{id:'chadife',kind:'npc',look:'gatherer',fem:1,x:16,y:6,dir:'down',fixed:1,talk:()=>chadifeTalk(),bub:['Chadi!']},
+   {kind:'enemy',x:10,y:8,party:['fmewlen','mewlen']},{kind:'enemy',x:20,y:6,party:['kurutoro','kurutrewa']},{kind:'enemy',x:6,y:4,party:['kurutrewa','kurutrewa','mewlen']},{kind:'enemy',x:27,y:5,party:['fmewlen','kurutoro']}]},
+e_meseta:{region:'puelmapu',name:'Wingkul lelfün',g:{es:'El borde de la meseta',en:'The rim of the meseta'},floor:'.',bg:'pampa',song:'puel',pal:'puelmapu',trees:'chacay',
+ edges:{left:{to:'e_kura',x:30,y:7}},stairs:{to:'ed1',x:23,y:6},chests:{},digs:{'6,9':{}},
+ ents:[{id:'kona5',kind:'npc',look:'kona',x:19,y:8,talk:()=>kona5Talk(),bub:['Walichu...']},
+   {kind:'enemy',x:8,y:3,party:['mewlen','kurutrewa','mewlen']},{kind:'enemy',x:14,y:10,party:['kurutrewa','kurutrewa']},{kind:'enemy',x:11,y:5,party:['kura','mewlen','mewlen']}]},
+ed1:{region:'puelmapu',name:'Walichu ñi chenke · 1',g:{es:'El chenque del Walichu (piso 1)',en:"The Walichu's chenque (floor 1)"},floor:'_',bg:'cave5',song:'cave',dungeon:1,pal:'puelcave',
+ edges:{right:{to:'e_meseta',x:24,y:6}},stairs:{to:'ed2',x:2,y:2},
+ chests:{'3,9':'piwke','19,9':'lawen1'},konew:{'8,5':K16},
+ pz:{kind:'N',tiles:{'8,2':{lab:'pataka',i:0},'12,2':{lab:'kechu pataka',i:1},'16,2':{lab:'warangka',i:2}}},
+ signs:{'6,3':[N('Una piedra tallada: «de lo menor a lo mayor». Tres piedras con números muy grandes esperan.','A carved stone: «from the smallest to the largest». Three stones with very big numbers wait.')]},
+ ents:[{kind:'enemy',x:14,y:3,party:['mewlen','kurutrewa']},{kind:'enemy',x:20,y:4,party:['kurutrewa']},{kind:'enemy',x:9,y:8,party:['mewlen','mewlen']},
+   {id:'emini1',kind:'enemy',x:16,y:9,party:['kurutoro','mewlen'],fixed:1,mini:1,flag:'emini1',
+     pre:[N('De la oscuridad sale un toro negro con los ojos como brasas: el kurü toro, el guardián del Walichu.','Out of the dark comes a black bull with eyes like embers: the kurü toro, the Walichu\'s guardian.')]}]},
+ed2:{region:'puelmapu',name:'Walichu ñi chenke · 2',g:{es:'El chenque del Walichu (piso 2)',en:"The Walichu's chenque (floor 2)"},floor:'_',bg:'cave5',song:'cave',dungeon:1,pal:'puelcave',
+ edges:{left:{to:'ed1',x:2,y:9}},stairs:{to:'ed3',x:3,y:1,req:'root_nepe',reqMsg:[N('Algo te dice que todavía falta algo en este piso.','Something tells you there is still something missing on this floor.')]},
+ chests:{'8,1':'piwke','15,1':'nepe','21,1':'numgift'},stones:{'2,6':'poss'},
+ ents:[{kind:'enemy',x:4,y:2,party:['kurutrewa','kurutrewa']},{kind:'enemy',x:16,y:6,party:['mewlen','kurutrewa']},{kind:'enemy',x:20,y:2,party:['mewlen','mewlen','kurutrewa']},
+   {id:'emini2',kind:'enemy',x:17,y:7,party:['fmewlen','kurutrewa'],fixed:1,mini:1,flag:'emini2',
+     pre:[N('El polvo del piso se levanta y gira: un remolino enorme, con dientes de arena, te cierra el paso.','The dust on the floor rises and spins: a huge whirlwind with teeth of sand blocks your way.')]}]},
+ed3:{region:'puelmapu',name:'Walichu ñi chenke · 3',g:{es:'El chenque del Walichu (piso 3)',en:"The Walichu's chenque (floor 3)"},floor:'_',bg:'cave5',song:'cave',dungeon:1,pal:'puelcave',
+ edges:{left:{to:'ed2',x:19,y:7}},stairs:{to:'ngen5',x:8,y:9},chests:{'6,8':'piwke'},
+ ents:[{kind:'enemy',x:8,y:1,party:['kurutrewa','mewlen']},{kind:'enemy',x:16,y:8,party:['mewlen','mewlen']},
+   {id:'emini3',kind:'enemy',x:18,y:8,party:['kurutoro','mewlen','kurutrewa'],fixed:1,mini:1,flag:'emini3',
+     pre:[N('Un aire frío sube desde la salida. Tres wekufü cuidan el paso a la pampa abierta.','A cold air rises from the way out. Three wekufü guard the passage to the open plain.')]}]},
+ngen5:{region:'puelmapu',ngenmap:1,name:'Ngen-lelfün',g:{es:'El círculo de piedras',en:'The circle of stones'},floor:',',bg:'pampa',song:'cave',pal:'puelmapu',trees:'chacay',
+ stairs:{to:'ed3',x:18,y:7},
+ ents:[{id:'boss',kind:'enemy',x:8,y:4,party:['walichu'],fixed:1,boss:1,flag:'boss5',
+     pre:[N('El pasto se seca a tu alrededor y el aire se llena de polvo. En medio del círculo de piedras se levanta una figura flaca y gris, con cabeza de calavera de luan, envuelta en un sueño que no es suyo: el Walichu.','The grass withers around you and the air fills with dust. In the middle of the stone circle rises a gaunt grey figure with a guanaco-skull head, wrapped in a dream that is not its own: the Walichu.'),
+       L('','Müley Walichu!','¡Ahí está el Walichu!','There is the Walichu!'),
+       N('Duerme caminando, y lo que duerme no siente tus golpes...','It sleeps as it walks, and what sleeps does not feel your blows...')]},
+   {id:'ngen',kind:'npc',look:'ngen5',x:8,y:5,req:'ngen5',fixed:1,talk:()=>{const ls=[L('Ngen-lelfün','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")];
+   if(!S.flags.sb5)ls.push(N('«Una cosa más: en el salitral del sur duerme el más viejo de todos, el de las dos caras. Camina por la tierra blanda junto a las pozas blancas. Y lleva todas tus palabras: duérmelo, despiértalo, y no dejes que caiga sobre ti.»','"One more thing: in the southern salt flat sleeps the oldest of them all, the two-faced one. Walk the soft ground beside the white pools. And bring all your words: put him to sleep, wake him, and do not let him fall upon you."'));
+   say(ls)}}]},
+ngoyman:{region:'puelmapu',name:'Ngoyman wülngiñ',g:{es:'El umbral de la niebla',en:'The threshold of the fog'},floor:',',bg:'fjord',song:'epew',pal:'niebla',trees:'mawida',
+ edges:{right:{to:'rupu',x:1,y:10}},
+ signs:{'8,5':[L('Kura','Faw müley Ti Fütra Ngoyman ñi wülngiñ.','Una piedra muy antigua: «Aquí está el umbral del gran olvido».','A very old stone: «Here is the threshold of the great forgetting».')]},
+ ents:[{id:'ngoyku',kind:'npc',look:'elder2',fem:1,x:8,y:4,dir:'down',fixed:1,talk:()=>ngoymanTalk(),bub:['...']}]}
+});
 for(const k in MAPS){const m=MAPS[k];if(!m.region)m.region='lafkenche';m.rows=MAPROWS[k];m.w=MAPROWS[k][0].length;m.h=MAPROWS[k].length}
 MAPS.inaltu.edges.right={to:'n_rupu',x:1,y:7,req:'ngen',reqMsg:[N('El camino hacia el este, a las tierras nagche, está cubierto de niebla. Primero despierta a Ngen-lafken.','The road east, to the Nagche lands, is covered in fog. First wake Ngen-lafken.')]};
 MAPS.ngen.ngenmap=1;
@@ -363,3 +452,6 @@ MAPS.p_pewen.pz.hint=N('Pista: pewü (primavera), walüng (verano), rimü (otoñ
 MAPS.n_kullin.ents.forEach(e=>{if(e.herd&&e.look!=='ofisa')e.flag='hd_'+e.id});
 MAPS.nd1.pz.hint=N('Pista: de lo menor a lo mayor. meli (4), mari kechu (15), epu mari meli (24).','Hint: from smallest to largest. meli (4), mari kechu (15), epu mari meli (24).');
 
+MAPS.p_degin.edges.right={to:'e_rupu',x:1,y:7,req:'ngen4',reqMsg:[N('Hacia el este, el camino baja al otro lado de la cordillera: Puelmapu. Pero una niebla espesa lo cubre. Primero despierta a Ngen-kürüf.','To the east the road goes down the far side of the mountains: Puelmapu. But a thick fog covers it. First wake Ngen-kürüf.')]};
+MAPS.rupu.edges.left={to:'ngoyman',x:16,y:6,need:5};
+MAPS.ed1.pz.hint=N('Pista: de lo menor a lo mayor. pataka (100), kechu pataka (500), warangka (1000).','Hint: from smallest to largest. pataka (100), kechu pataka (500), warangka (1000).');
