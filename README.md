@@ -44,6 +44,7 @@ src/            game source (edit these)
 tools/maps.py   map editor source: edit the tile grids here, then run it
 build.py        builds www/index.html from src/
 www/index.html  the built game (commit it after every build)
+index.html      opens www/ (so the GitHub Pages address goes straight to the game)
 ```
 
 ## Building
