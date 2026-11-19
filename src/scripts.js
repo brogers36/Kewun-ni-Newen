@@ -126,7 +126,7 @@ function shop(where){
   }
 }
 function ngenTalk(){const ls=[L('Ngen-lafken','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")];
-  if(!S.flags.sb1)ls.push(N('«Una cosa más... En los pantanos del sur de las dunas duerme una fütra filu (una culebra gigante) peluda, con crin de kawellu (caballo). Donde el barro burbujea, junto al agua del este, escarba. Pero ve preparado: solo las palabras justas rompen sus sellos.»','"One more thing... In the marshes south of the dunes sleeps a hairy futra filu (a giant snake) with a kawellu (horse) mane. Where the mud bubbles, by the eastern water, dig. But go prepared: only the right words break its seals."'));
+  if(!S.flags.sb1)ls.push(N('«Una cosa más... En los pantanos del sur de las dunas duerme una fütra filu (una culebra gigante) peluda, con crin de kawellu (caballo). Camina por donde el barro burbujea, junto al agua del este. Pero ve preparado: solo las palabras justas rompen sus sellos.»','"One more thing... In the marshes south of the dunes sleeps a hairy futra filu (a giant snake) with a kawellu (horse) mane. Walk where the mud bubbles, by the eastern water. But go prepared: only the right words break its seals."'));
   say(ls)}
 function fireSave(){
   S.hp=maxHP();S.sp=SPMAX;S.save={map:CUR,x:P.x,y:P.y};persist();sfx('heal');
@@ -654,20 +654,21 @@ function kulonBush(x,y){
   say([L('','Külon','Un külon (maqui) cargado de frutitos morados. Con sus frutos se hace remedio y mushay.','A külon (maqui) loaded with little purple berries. Its fruit makes medicine and mushay.')]);
 }
 
+/* ---------- Secret wekufü (step on their ground to wake them) ---------- */
+function sbossWake(sb){
+  const pre={chinifilu:[N('El barro empieza a burbujear bajo tus pies... y una filu (culebra) gigantesca emerge chorreando lodo, cubierta de pelo áspero y con crin de kawellu: ¡el Chiñifilu!','The mud starts to bubble under your feet... and a gigantic filu (snake) rises dripping slime, covered in coarse hair, with a horse\'s mane: the Chiñifilu!'),
+      N('Tres sellos de luz lo protegen. El primero susurra: «¡Duérmete!»','Three seals of light protect it. The first whispers: «Sleep!»')],
+    piwuchen:[N('La loma tiembla bajo tus pasos y de la cima baja un silbido agudo. Una culebra con alas de murciélago cae del cielo: ¡el Piwüchen!','The knoll trembles under your steps and a shrill whistle comes down from the summit. A snake with bat wings drops from the sky: the Piwüchen!'),
+      N('Tres sellos de luz lo protegen. El primero susurra: «¡Baja!»','Three seals of light protect it. The first whispers: «Come down!»')],
+    wallipen:[N('Pisas la orilla helada y el agua del ojo de agua se agita. Una criatura deforme, mitad oveja y mitad ternero, sale arrastrando las patas: ¡el Waillepeñ!','You tread the icy edge and the pool stirs. A misshapen creature, half sheep and half calf, drags itself out: the Waillepeñ!'),
+      N('Tres sellos de luz lo protegen. El primero susurra: «¡Ten frío!»','Three seals of light protect it. The first whispers: «Be cold!»')],
+    trawko:[N('Un hacha de piedra se clava en un tronco, a un palmo de tu cabeza. Del helecho sale un hombrecito retorcido con sombrero de fibra: ¡el Trawko!','A stone axe thuds into a trunk, a hand\'s width from your head. Out of the ferns steps a twisted little man in a fiber hat: the Trawko!'),
+      N('Tres sellos de luz lo protegen. El primero susurra: «¡Sal!»','Three seals of light protect it. The first whispers: «Come out!»')]}[sb.boss];
+  say(pre,()=>startBattle([sb.boss],{boss:1,sflag:sb.flag}));
+}
+
 /* ---------- Nagche overworld puzzles ---------- */
 function digFind(dk,dv){
-  if(dv&&dv.what==='sboss'){
-    if(S.flags[dv.flag])return say([N('Aquí ya no se mueve nada. La tierra está tranquila.','Nothing stirs here any more. The earth is at peace.')]);
-    const pre={chinifilu:[N('El barro empieza a burbujear... y una filu (culebra) gigantesca emerge chorreando lodo, cubierta de pelo áspero y con crin de kawellu: ¡el Chiñifilu!','The mud starts to bubble... and a gigantic filu (snake) rises dripping slime, covered in coarse hair, with a horse\'s mane: the Chiñifilu!'),
-        N('Tres sellos de luz lo protegen. El primero susurra: «¡Duérmete!»','Three seals of light protect it. The first whispers: «Sleep!»')],
-      piwuchen:[N('De la cima baja un silbido agudo. Una culebra con alas de murciélago cae del cielo: ¡el Piwüchen!','A shrill whistle comes down from the summit. A snake with bat wings drops from the sky: the Piwüchen!'),
-        N('Tres sellos de luz lo protegen. El primero susurra: «¡Baja!»','Three seals of light protect it. The first whispers: «Come down!»')],
-      wallipen:[N('El agua helada del ojo de agua se agita. Una criatura deforme, mitad oveja y mitad ternero, sale arrastrando las patas: ¡el Waillepeñ!','The icy pool stirs. A misshapen creature, half sheep and half calf, drags itself out: the Waillepeñ!'),
-        N('Tres sellos de luz lo protegen. El primero susurra: «¡Ten frío!»','Three seals of light protect it. The first whispers: «Be cold!»')],
-      trawko:[N('Un hacha de piedra se clava en un tronco, a un palmo de tu cabeza. Del helecho sale un hombrecito retorcido con sombrero de fibra: ¡el Trawko!','A stone axe thuds into a trunk, a hand\'s width from your head. Out of the ferns steps a twisted little man in a fiber hat: the Trawko!'),
-        N('Tres sellos de luz lo protegen. El primero susurra: «¡Sal!»','Three seals of light protect it. The first whispers: «Come out!»')]}[dv.boss];
-    return say(pre,()=>startBattle([dv.boss],{boss:1,sflag:dv.flag}));
-  }
   S.flags['dig:'+CUR+':'+dk]=1;
   if(dv&&dv.what==='pali'){S.flags.laf_palid=1;S.gold+=20;persist();sfx('lvl');
     return say([N('Entre el pasto alto aparece una bola de madera pulida: ¡la pali!','In the tall grass you find a polished wooden ball: the pali!'),

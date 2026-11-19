@@ -77,6 +77,8 @@ function edge(d){
 }
 function setTileFlag(x,y){S.flags['t:'+CUR+':'+x+','+y]=1;grid[y][x]=M.floor}
 function onStep(){
+  const sb=M.sbt;
+  if(sb&&!S.flags[sb.flag]&&!(sb.req&&!S.flags[sb.req])&&sb.t.indexOf(P.x+','+P.y)>=0)return sbossWake(sb);
   const c=grid[P.y][P.x];P.bump=0;
   if(c==='A'){warpMenu();return}
   if(c==='S'){const st=M.stairs;if(!st)return;if(st.req&&!S.flags[st.req]){say(st.reqMsg);return}sfx('door');loadMap(st.to,st.x,st.y);return}
