@@ -11,7 +11,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}</script><!--/PWA-->
+<script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}
+addEventListener('load',()=>{const iOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);const inst=navigator.standalone||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches;const h=document.getElementById('ioshint');if(h&&iOS&&!inst)h.style.display='block'})</script><!--/PWA-->
 <title>Kewün ñi Newen · Prototipo</title>
 <style>
 *{box-sizing:border-box}
@@ -86,7 +87,8 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
           <button id="bCont" style="display:none">Continuar · Continue</button>
         </div>
         <div class="row"><button id="bLang">Glosa: Español</button><button id="bMus">♪ Música: sí</button></div>
-        <div class="help">Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música.<br>Táctil: un toque = hablar / avanzar · mantén el dedo y arrastra = caminar (suéltalo para parar) · desliza = recorrer el menú · dos dedos = volver · mantener pulsado = menú.<br>Touch: tap = talk / advance · hold and drag = walk (lift to stop) · swipe = scroll a menu · two fingers = back · long press = menu.</div>
+        <div class="help" id="ioshint" style="display:none;border:2px solid #e8d49a">📲 Instala el juego en tu iPhone: toca <b>Compartir</b> y luego <b>«Añadir a pantalla de inicio»</b>. Se abre a pantalla completa y funciona sin internet.<br>Install on iPhone: tap <b>Share</b>, then <b>"Add to Home Screen"</b>. It opens fullscreen and works offline.</div>
+<div class="help">Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música.<br>Táctil: un toque = hablar / avanzar · mantén el dedo y arrastra = caminar (suéltalo para parar) · desliza = recorrer el menú · dos dedos = volver · mantener pulsado = menú.<br>Touch: tap = talk / advance · hold and drag = walk (lift to stop) · swipe = scroll a menu · two fingers = back · long press = menu.</div>
         <div class="copy" id="copy">© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.</div>
       </div>
     </div>

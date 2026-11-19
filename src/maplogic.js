@@ -185,6 +185,7 @@ function updateMap(){
   const wrap=$('wrap');
   const onUI=e=>e.target.closest&&e.target.closest('#menu,#dlg,#title,#skip,#pad,button');
   let tid=null,x0=0,y0=0,t0=0,moved=0,two=0,lp=null;
+  let lastA=0;
   const stop=()=>{held.up=held.down=held.left=held.right=0};
   wrap.addEventListener('touchstart',e=>{
     auInit();
@@ -194,15 +195,24 @@ function updateMap(){
     const t=e.changedTouches[0];tid=t.identifier;x0=t.clientX;y0=t.clientY;t0=Date.now();moved=0;two=0;
     lp=setTimeout(()=>{lp=null;if(!moved&&!two&&mode==='map'&&!active){tid=null;stop();openPause()}},600);
   },{passive:false});
+  const DEAD=24,SWITCH=1.4;   // bigger dead zone + hysteresis so small wobbles don't steer
   wrap.addEventListener('touchmove',e=>{
     if(tid===null)return;
     let t=null;for(const u of e.changedTouches)if(u.identifier===tid)t=u;
     if(!t)return;
     e.preventDefault();
     const dx=t.clientX-x0,dy=t.clientY-y0,dist=Math.hypot(dx,dy);
-    if(dist>14){moved=1;if(lp){clearTimeout(lp);lp=null}
-      if(mode==='map'&&!active){const d=Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up');stop();held[d]=1}
-      if(dist>56){const k=40/dist;x0=t.clientX-dx*k;y0=t.clientY-dy*k}}
+    if(dist>DEAD){moved=1;if(lp){clearTimeout(lp);lp=null}
+      if(mode==='map'&&!active){
+        const ax=Math.abs(dx),ay=Math.abs(dy);
+        let d=ax>ay?(dx>0?'right':'left'):(dy>0?'down':'up');
+        const cur=heldDir();
+        if(cur&&d!==cur){
+          const curH=(cur==='left'||cur==='right'),dH=(d==='left'||d==='right');
+          if(dH!==curH&&!((dH?ax:ay)>(dH?ay:ax)*SWITCH))d=cur; // switching axis takes a clear move
+        }
+        stop();held[d]=1}
+      if(dist>80){const k=48/dist;x0=t.clientX-dx*k;y0=t.clientY-dy*k}}
   },{passive:false});
   const end=e=>{
     let fin=null;for(const u of e.changedTouches)if(u.identifier===tid)fin=u;
@@ -210,7 +220,8 @@ function updateMap(){
       if(lp){clearTimeout(lp);lp=null}
       const dt=Date.now()-t0;
       if(two){two=0;tid=null;stop();if(dt<500)pressB();return}
-      if(fin&&tid!==null&&!moved&&dt<350){
+      if(fin&&tid!==null&&!moved&&dt<350&&Date.now()-lastA>150){
+        lastA=Date.now();
         if(active){if(active.kind==='say')active.a()}
         else if(mode==='map')interact();
       }
