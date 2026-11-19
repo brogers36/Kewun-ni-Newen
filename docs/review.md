@@ -135,7 +135,7 @@ Left unchanged: *Pun mew kintukefuy kulliñ* (habitual past in the story, "used 
 ## Jefes secretos y corrección K14 (nov 2026, 4ª tanda)
 - K14 corregido: "Rumel tranapukey..." (tranapu- 'caer'; witru- era 'correr/fluir el agua'). Gracias por la corrección.
 - Jefes secretos (dibujados a mano, con sellos que se rompen con la orden justa):
-  - Küchifilu (sañwe-filu de los pantanos; grafía de cuchivilu, ¿küchifilu/kuchifilu?): sellos umawtunge → küpakilnge → amutunge. Vocabulario en texto: sañwe 'chancho', filu 'culebra'.
+  - Chiñifilu (culebra gigante de crin áspera, por indicación de Brandon; grafía ¿chiñifilu/kiñifilu según dialecto?): sellos umawtunge → küpakilnge → amutunge. Vocabulario en texto: filu 'culebra', kawellu 'caballo', fütra 'grande'.
   - Piwüchen (culebra voladora; piwüchen/piwychen): sellos nagnge → llükange → küpakilnge; vuela: tras los sellos hay que bajarlo de nuevo con nagnge.
   - Waillepeñ (oveja-ternero deforme; huallepén): sellos wütrenge → trafonge → umawtunge; además tiene coraza (trafonge otra vez tras los sellos).
   - Trawko (El Trauco; ¿trawko/trauko?): sellos tripange → lefnge → amutukilnge.

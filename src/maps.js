@@ -89,7 +89,7 @@ const K4={reward:'piwke',q:L('Konew','Wenu mew tripakey, mapu mew ñamkey. Chem 
   opts:[{m:'mawün',es:'lluvia',en:'rain',ok:1},{m:'antü',es:'sol',en:'sun'},{m:'kürüf',es:'viento',en:'wind'},{m:'küyen',es:'luna',en:'moon'}]};
 Object.assign(MAPS,{
 l_wapi:{name:'Fotra mapu',g:{es:'Los pantanos de la costa',en:'The coastal marshes'},floor:'.',bg:'coast',song:'coast',pickStyle:'diwen',
- edges:{up:{to:'kuyum',x:8,y:11}},chests:{'28,4':'piwke'},stones:{'22,6':'fe'},digs:{'14,9':{},'21,11':{what:'sboss',boss:'kuchifilu',flag:'sb1',req:'ngen'}},
+ edges:{up:{to:'kuyum',x:8,y:11}},chests:{'28,4':'piwke'},stones:{'22,6':'fe'},digs:{'14,9':{},'21,11':{what:'sboss',boss:'chinifilu',flag:'sb1',req:'ngen'}},
  ents:[{id:'diwfe',kind:'npc',look:'gatherer',fem:1,x:10,y:5,dir:'down',fixed:1,talk:()=>diwenfeTalk(),bub:['Diweñ!','Mari mari!']},
    {kind:'enemy',x:12,y:7,party:['laftrache','laftrache']},{kind:'enemy',x:18,y:10,party:['nidol','laftrache']},{kind:'enemy',x:28,y:11,party:['laftrache','laftrache','nidol']}]},
 l_ruka1:{name:'Kallfüray ñi ruka',g:{es:'La ruka de la papay Kallfüray',en:"Papay Kallfüray's ruka"},floor:'_',bg:'coast',song:'lof',pal:'rukain',wall:'ruka',interior:1,
