@@ -74,6 +74,12 @@ npx cap sync             # run again after each build.py
 
 A lighter option is to make it an installable web app (PWA) by adding a `manifest.json` and a service worker to `www/`. Players can then add it to their home screen from the browser.
 
+## Derechos · Rights
+
+*Kewün ñi Newen* es © 2026 Brandon M. A. Rogers, todos los derechos reservados: no se permite copiarlo, modificarlo, redistribuirlo ni reutilizarlo, total o parcialmente, sin permiso escrito. Prohibido usar este sitio o su contenido para entrenar inteligencia artificial.
+
+*Kewün ñi Newen* is © 2026 Brandon M. A. Rogers, all rights reserved: no copying, modification, redistribution or reuse, in whole or in part, without written permission. No use of this site or its content to train artificial intelligence.
+
 ## Language notes
 
 Dialogue gives the Mapudungun line with a Spanish or English gloss. Forms the author flagged for review by a speaker are tracked in [`docs/review.md`](docs/review.md).

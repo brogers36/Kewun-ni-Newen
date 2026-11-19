@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noai, noimageai">
 <title>Kewün ñi Newen · Prototipo</title>
 <style>
 *{box-sizing:border-box}
@@ -42,7 +43,7 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 .hero.on{border-color:#ffcf6a!important;background:#3d3050!important}
 .hero canvas{width:calc(32px*var(--s)/1.5);height:calc(48px*var(--s)/1.5);image-rendering:pixelated}
 #title .help{font-size:.75em;color:#d8d0e4;max-width:36em;line-height:1.4;background:#0d0b10aa;padding:.4em .6em;border-radius:4px}
-#title .copy{font-size:.7em;color:#a99fb8;position:absolute;bottom:.6em}
+#title .copy{font-size:.7em;color:#cfc6dc;position:absolute;bottom:.5em;left:1.5em;right:1.5em;text-align:center;line-height:1.35;text-shadow:0 0 3px #000}
 #skip{position:absolute;right:.6em;top:.6em;font:inherit;font-size:.85em;padding:.25em .7em;border-radius:4px;border:2px solid #e8d49a;background:#2a2238cc;color:#fff;cursor:pointer;display:none}
 #pad{display:flex;gap:28px;align-items:center;justify-content:center}
 #dpad{display:grid;grid-template-columns:repeat(3,48px);grid-template-rows:repeat(3,48px);gap:3px}
@@ -76,7 +77,7 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
         </div>
         <div class="row"><button id="bLang">Glosa: Español</button><button id="bMus">♪ Música: sí</button></div>
         <div class="help">Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música.<br>Arrows / WASD: move · Z, Enter or Space: talk / confirm (A) · X or Esc: back / menu (B) · N: music.</div>
-        <div class="copy">© 2026. Todos los derechos reservados · All rights reserved.</div>
+        <div class="copy" id="copy">© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.</div>
       </div>
     </div>
   </div>
@@ -95,4 +96,6 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
   </div>
 </div>
 <script>
+/* Kewün ñi Newen · © 2026 Brandon M. A. Rogers. Todos los derechos reservados. All rights reserved.
+   Prohibido usar este sitio o su contenido para entrenar inteligencia artificial. No use of this site or its content to train artificial intelligence. */
 'use strict';

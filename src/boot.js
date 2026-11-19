@@ -8,7 +8,7 @@ function fit(){
 }
 addEventListener('resize',fit);fit();
 const sv=loadSave();if(sv)$('bCont').style.display='';
-function updLang(){$('bLang').textContent=LANG==='es'?'Glosa: Español':'Gloss: English';$('skip').textContent=LANG==='es'?'Saltar ▶▶':'Skip ▶▶'}
+function updLang(){$('copy').textContent=LANG==='es'?'© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.':'© 2026 Brandon M. A. Rogers · All rights reserved. No use of this site to train artificial intelligence.';$('bLang').textContent=LANG==='es'?'Glosa: Español':'Gloss: English';$('skip').textContent=LANG==='es'?'Saltar ▶▶':'Skip ▶▶'}
 $('bLang').onclick=()=>{LANG=LANG==='es'?'en':'es';updLang()};
 $('bMus').onclick=()=>toggleMute();
 $('bMus').textContent=AU.muted?'♪ Música: no':'♪ Música: sí';$('pN').textContent=AU.muted?'♪×':'♪';
