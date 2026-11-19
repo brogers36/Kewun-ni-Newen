@@ -110,14 +110,60 @@ def witranalwe(fr):
     sym(8,53,3,1,'L')
     g.outline();return g.rows()
 
+def line(g,x0,y0,x1,y1,c):
+    n=max(abs(x1-x0),abs(y1-y0),1)
+    for i in range(n+1):g.p(round(x0+(x1-x0)*i/n),round(y0+(y1-y0)*i/n),c)
+def chonchon(fr):
+    W=32;g=G(W,22);cx=W/2
+    A=(11,10)
+    T=[(2,0),(0,8),(4,15)] if fr==0 else [(1,5),(1,13),(6,19)]
+    def tri(a,b,c,x,y):
+        d=lambda p,q,r:(p[0]-r[0])*(q[1]-r[1])-(q[0]-r[0])*(p[1]-r[1])
+        P=(x+.5,y+.5);d1,d2,d3=d(P,a,b),d(P,b,c),d(P,c,a)
+        return not((d1<0 or d2<0 or d3<0) and (d1>0 or d2>0 or d3>0))
+    for y in range(g.h):
+        for x in range(0,12):
+            if tri(A,T[0],T[1],x,y) or tri(A,T[1],T[2],x,y):
+                g.p(x,y,'v' if abs(x-A[0])+abs(y-A[1])<5 else 'w')
+    for a,b in [(T[0],T[1]),(T[1],T[2])]:
+        mx,my=(a[0]+b[0])/2,(a[1]+b[1])/2;ox,oy=mx-A[0],my-A[1];L=(ox*ox+oy*oy)**.5
+        r=((a[0]-b[0])**2+(a[1]-b[1])**2)**.5*.5;ccx,ccy=mx+ox/L*r*.55,my+oy/L*r*.55
+        for y in range(g.h):
+            for x in range(0,12):
+                if (x+.5-ccx)**2+(y+.5-ccy)**2<r*r and g.a[y][x] in 'wv':g.a[y][x]='.'
+    for t in T:line(g,A[0],A[1],t[0],t[1],'b')
+    line(g,A[0],A[1]-1,T[0][0],T[0][1],'b')
+    g.p(T[0][0],T[0][1],'c');g.p(T[0][0]+1,T[0][1],'c')
+    for y in range(g.h):
+        for x in range(0,12):g.a[y][W-1-x]=g.a[y][x]
+    # head
+    g.e(cx,11.5,5.6,6.6,'s')
+    for y in range(4,19):
+        for x in range(10,23):
+            if g.a[y][x]=='s' and x>=cx+2:g.a[y][x]='S'
+    g.e(cx,6.2,5.8,2.6,'h');g.r(10,6,2,5,'h');g.r(20,6,2,5,'h');g.r(15,7,2,1,'s')
+    # brows
+    for x,y in [(12,9),(13,9),(14,10),(17,10),(18,9),(19,9)]:g.p(x,y,'h')
+    # eyes 2x2
+    for x,c in [(12,'W'),(13,'r'),(18,'r'),(19,'W')]:g.p(x,11,c)
+    for x,c in [(12,'W'),(13,'k'),(18,'k'),(19,'W')]:g.p(x,12,c)
+    # nose, cheeks, mouth, fangs
+    g.p(15,12,'S');g.p(15,13,'S');g.p(16,14,'S');g.p(15,14,'S')
+    g.p(11,14,'q');g.p(20,14,'q')
+    g.r(13,16,6,1,'m');g.p(13,15,'S');g.p(18,15,'S');g.p(14,17,'W');g.p(17,17,'W');g.r(15,17,2,1,'m')
+    g.r(14,18,4,1,'S')
+    g.outline();return g.rows()
+
 PAL={
  'kawellu':{'b':'#9a5a2a','B':'#6e3a18','h':'#c27c40','m':'#2a1a10','e':'#000000','w':'#f2e6d0','n':'#4a2a14','k':'#2a2020','o':'#1a1008'},
  'waka':{'w':'#f6f4ee','W':'#c8c4bc','k':'#26221e','u':'#e6a0a0','n':'#8a4a4a','e':'#000000','c':'#e8dcc0','K':'#3a3430','o':'#1a1612'},
  'ofisa':{'w':'#f4f0e4','W':'#ffffff','s':'#d4ccb8','f':'#3a3434','e':'#e8e0d0','n':'#1a1414','o':'#1a1614'},
+ 'chonchon':{'s':'#d6a27a','S':'#a06a48','h':'#1c1418','W':'#f4f0e6','r':'#ff2a2a','k':'#5a0a0a','q':'#c87860','m':'#3a0e0e','w':'#5a3a5c','v':'#82587c','b':'#24142a','c':'#e8e0d0','o':'#0e060e'},
  'witranalwe':{'H':'#1c1c2e','h':'#7a6a9a','q':'#141428','F':'#d0e0f8','f':'#8aa0c8','E':'#40f0ff','e':'#1a6a90','P':'#2c2c50','p':'#46467a','s':'#d0dcf0','A':'#26264a','K':'#d0e0f8','L':'#121220','o':'#06060e'}}
 D={}
-for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe)]:
-    D[name]={'pal':PAL[name],'f':[fn(0),fn(1)]}
+BIG={'witranalwe':2,'chonchon':2}
+for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe),('chonchon',chonchon)]:
+    D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':1 if name=='witranalwe' else 0}
 open(OUT,'w').write('const SPR2='+json.dumps(D,ensure_ascii=False)+';\n')
 if __name__=='__main__':
     for n in D:
