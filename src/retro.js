@@ -290,6 +290,23 @@ function kulonCanvas(v){
     R(c,x,y,2,2,'#3a1448');R(c,x,y,1,1,'#6a2a88');R(c,x+1,y+1,1,1,'#200830')}
   outline(cvs,'#122414');
   return PCACHE[k]=cvs}
+function pickCanvas(style,v){
+  const k='pk'+style+v;if(PCACHE[k])return PCACHE[k];const [cvs,c]=mk(20,26);
+  if(style==='diwen'){
+    R(c,9,16,2,9,'#5a4028');R(c,8,18,1,3,'#785838');
+    R(c,5,10,5,1,'#5a4028');R(c,11,8,5,1,'#5a4028');R(c,6,13,4,1,'#5a4028');
+    const L=[[10,8,7,6,'#3a5e30'],[6,6,4,4,'#4a7440'],[14,7,4,4,'#4a7440'],[10,4,5,3,'#5a8a4e']];
+    for(const [x,y,rx,ry,col] of L)ell(c,x,y,rx,ry,col);
+    for(let i=0;i<8;i++){const x=4+Math.floor(h2(i,v,11)*12),y=6+Math.floor(h2(i,v,12)*10);
+      ell(c,x,y,1.6,1.6,'#f0a030');R(c,x-1,y-1,1,1,'#ffd880');R(c,x,y,1,1,'#c87818')}
+    outline(cvs,'#1a2414');
+  } else {
+    for(let i=0;i<7;i++){const x=4+i*2,hh2=8+Math.floor(h2(i,v,13)*6);
+      for(let y2=0;y2<hh2;y2++)R(c,x+(y2>hh2-4?(i%2?1:-1):0),24-y2,1,1,y2>hh2-3?'#8ac860':'#3e7e36')}
+    for(let i=0;i<4;i++){const x=5+i*3+Math.floor(h2(i,v,14)*2);R(c,x,12-Math.floor(h2(i,v,15)*4),2,2,'#f8f8f0');R(c,x,11-Math.floor(h2(i,v,15)*4),1,1,'#ffe878')}
+    outline(cvs,'#14240f');
+  }
+  return PCACHE[k]=cvs}
 function doorwayCanvas(f){
   const k='dw'+f;if(PCACHE[k])return PCACHE[k];const [cvs,c]=mk(10,13);
   for(let y=0;y<12;y++)for(let x=1;x<9;x++){const d=Math.abs(x-4.5)/4+ (12-y)/14;

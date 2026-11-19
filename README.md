@@ -70,7 +70,7 @@ The master copy has a «Maestro · Elegir región» button on the title screen t
 ### Chrono Trigger-style preview
 
 ```
-python3 build.py --ct       # writes ct/index.html (not committed)
+python3 build.py --master       # writes ct/index.html (not committed)
 ```
 
 An experimental look switched on by the `CT` flag: painterly dithered grass, sand and paths; leafy canopy trees; soft shadows; warm light around fires and a vignette; battles fought on the field itself with blue gradient windows. It includes the master tools. The player build is unchanged.

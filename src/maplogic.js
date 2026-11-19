@@ -50,11 +50,18 @@ function tryMove(d){
 function pushBlock(bx,by,dx,dy){
   const tx=bx+dx,ty=by+dy;if(!inB(tx,ty)||entAt(tx,ty))return;const t=grid[ty][tx];
   if(!(t===M.floor||t==='O'))return;
-  grid[by][bx]=M.floor;grid[ty][tx]=t==='O'?'Q':'B';sfx('step');noiseBurst(.15,.3,200);
+  grid[by][bx]=M.floor;grid[ty][tx]=t==='O'?'Q':'B';sfx('drag');
   if(t==='O'){sfx('door');let left=0;for(const r of grid)for(const ch of r)if(ch==='O')left++;
     if(!left){S.flags['gate:'+CUR]=1;for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++)if(grid[y][x]==='G')grid[y][x]=M.floor;sfx('lvl');persist();
       say([N('¡Clac! Se oye cómo se levanta una reja de hierro.','Clack! You hear an iron gate rising.')])}
     else say([N('La losa se hunde con un ruido sordo. Falta otra.','The plate sinks with a dull thud. Another one is still missing.')])}
+}
+function pullBlock(bx,by,dx,dy){
+  const px2=P.x-dx,py2=P.y-dy;
+  if(!inB(px2,py2)||!walk(px2,py2)||entAt(px2,py2)||grid[P.y][P.x]!==M.floor)
+    return say([N('Un bloque de piedra. Puedes empujarlo caminando contra él, o tirar de él con (A) si tienes espacio detrás de ti.','A stone block. Push it by walking into it, or pull it with (A) if there is room behind you.')]);
+  grid[by][bx]=M.floor;grid[P.y][P.x]='B';sfx('drag');
+  P.ox=P.x;P.oy=P.y;P.x=px2;P.y=py2;P.t=0;P.moving=true;P.spd=.125;
 }
 function unlock(x,y){
   if(S.keys>0){S.keys--;setTileFlag(x,y);sfx('door');persist();say([N('Usas una llave. La puerta se abre.','You use a key. The door opens.')])}
@@ -102,13 +109,14 @@ function interact(){
   if((c==='N'||c==='J')&&M.pz&&M.pz.tiles[k])return pzTouch(tx,ty);
   if(c==='H'&&M.stones&&M.stones[k])return stoneTalk(M.stones[k]);
   if(c==='E')return say([N('Una puerta de piedra tallada. Algo cerca debe abrirla.','A carved stone door. Something nearby must open it.')]);
-  if(c==='B')return say([N('Un bloque de piedra. Se puede empujar caminando contra él.','A stone block. You can push it by walking into it.')]);
+  if(c==='B')return pullBlock(tx,ty,dx,dy);
   if(c==='V')return say([L('','Mari mari · Kiñe, epu, küla','Una pizarra con palabras en mapudungun: "hola" y "uno, dos, tres".','A board with words in Mapudungun: "hello" and "one, two, three".')]);
   if(c==='Z')return say([L('','Witral','Un witral, el telar mapuche. El tejido muestra figuras escalonadas en rojo, negro y blanco.','A witral, the Mapuche loom. The weaving shows stepped figures in red, black and white.')]);
   if(c==='U')return say([L('','Iyael','La olla hierve sobre el fuego. Huele a comida.','The pot simmers over the fire. It smells like food.')]);
   if(c==='^')return say([N('Un montón de nieve dura te cierra el paso. Necesitas el newen de Ngen-pewen.','A heap of hard snow blocks your way. You need the newen of Ngen-pewen.')]);
   if(c==='Ñ')return say([N('Un zarzal lleno de espinas te cierra el paso. Necesitas el newen de Ngen-mawida.','A bramble full of thorns blocks your way. You need the newen of Ngen-mawida.')]);
   if(c==='M')return kulonBush(tx,ty);
+  if(c==='x')return pickSpot(tx,ty);
   if(c==='W')return say([L('','Kachilla','Un campo de kachilla (trigo) dorado, listo para cosechar.','A field of golden kachilla (wheat), ready for harvest.')]);
   if(c==='f')return say([N('Una cerca de palos.','A wooden fence.')]);
   if(c==='Y')return say([N('El paliwe, la cancha de palin. Mejor no interrumpir el partido.','The paliwe, the palin field. Better not interrupt the game.')]);

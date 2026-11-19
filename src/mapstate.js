@@ -125,6 +125,7 @@ function buildLayers(){
     else if(ch==='Z')PROPS.push({y:y+.9,loom:1,dx:x*T,dy:y*T-6,sh:[x*T+8,y*T+15,8,2]});
     else if(ch==='U')PROPS.push({y:y+.9,pot:1,dx:x*T,dy:y*T,sh:[x*T+8,y*T+14,7,2]});
     else if(ch==='M')PROPS.push({y:y+.9,cvs:kulonCanvas(Math.floor(h2(x,y,7)*2)),dx:x*T-2,dy:y*T-8,sh:[x*T+8,y*T+14,8,2]});
+    else if(ch==='x')PROPS.push({y:y+.9,cvs:pickCanvas(M.pickStyle||'diwen',Math.floor(h2(x,y,7)*2)),dx:x*T-2,dy:y*T-10,sh:[x*T+8,y*T+14,7,2]});
     else if(ch==='R'&&(x===0||grid[y][x-1]!=='R')&&(y===0||grid[y-1][x]!=='R')){
       let bw=0,bh=0;while(x+bw<M.w&&grid[y][x+bw]==='R')bw++;while(y+bh<M.h&&grid[y+bh][x]==='R')bh++;
       const rk=rukaCanvas(bw,bh);PROPS.push({y:y+bh-.1,cvs:rk.cvs,dx:x*T-rk.ox,dy:y*T-rk.oy,sh:[x*T+bw*8+3,y*T+bh*16-1,bw*8+2,3]});
@@ -170,7 +171,7 @@ function loadMap(id,x,y,quiet){
   CUR=id;M=MAPS[id];
   grid=M.rows.map(r=>r.split(''));
   for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++){const c=grid[yy][xx];
-    if((c==='P'||c==='C'||c==='K'||c==='k'||c==='L')&&S.flags['t:'+id+':'+xx+','+yy])grid[yy][xx]=M.floor;}
+    if((c==='P'||c==='C'||c==='K'||c==='k'||c==='L'||c==='x')&&S.flags['t:'+id+':'+xx+','+yy])grid[yy][xx]=M.floor;}
   if(S.flags['gate:'+id])for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++){if(grid[yy][xx]==='G')grid[yy][xx]=M.floor;if(grid[yy][xx]==='O')grid[yy][xx]='q'}
   PZ={n:0,lit:new Set()};
   if(S.flags['pz:'+id]){for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='E')grid[yy][xx]=M.floor;if(M.pz)for(const k in M.pz.tiles)PZ.lit.add(k)}

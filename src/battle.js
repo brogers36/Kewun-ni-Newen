@@ -24,11 +24,16 @@ function battleMenu(){
   choose({es:'¿Qué haces? (Hay '+aliveE().length+')',en:'What do you do? ('+aliveE().length+' left)'},[
     {m:'Dungun',g:en?'Speak (build a command)':'Hablar (armar una orden)',v:'d'},
     {m:'Newen ('+(S.sp||0)+'/'+SPMAX+')',g:en?'Special ability':'Habilidad especial',v:'s',dis:(S.sp||0)<2},
-    {m:'Chemkün',g:en?'Items':'Cosas',v:'i'},
-    {m:'Lef',g:en?'Run away':'Huir',v:'r'}].concat(B.last?[{m:'Ka kiñe rupa: '+ROOTS[B.last.r].m.replace('-','')+(B.last.k?'kil':'')+'-',g:en?'Once more (same verb)':'Otra vez (el mismo verbo)',v:'again'}]:[]),v=>{
+    {m:'Chemkün',g:en?'Items':'Cosas',v:'i'}].concat(S.gear.trutruka?[{m:'Trutruka',g:en?'Blow the horn: stuns all (once per fight)':'Tocar la trutruka: aturde a todos (1 vez por pelea)',v:'t',dis:!!B.trut}]:[]).concat([
+    {m:'Lef',g:en?'Run away':'Huir',v:'r'}]).concat(B.last?[{m:'Ka kiñe rupa: '+ROOTS[B.last.r].m.replace('-','')+(B.last.k?'kil':'')+'-',g:en?'Once more (same verb)':'Otra vez (el mismo verbo)',v:'again'}]:[]),v=>{
     if(v==='d')pickRoot();
     else if(v==='again')pickTarget(B.last.r,B.last.k);
     else if(v==='s')pickSpecial();
+    else if(v==='t'){B.trut=1;sfx('trut');
+      const ls=[L('','Trutruka!','¡El sonido largo de la trutruka retumba por todas partes!','The long blast of the trutruka booms all around!')];
+      for(const e of aliveE()){const T=ET[e.t];e.fear=Math.max(e.fear,2);if(!T.boss)e.stun=1}
+      ls.push(N('Los wekufü se tapan los oídos: pierden su turno y quedan asustados. Los más grandes solo se asustan.','The wekufü cover their ears: they lose their turn and are left scared. The biggest ones are only scared.'));
+      return say(ls,enemyPhase)}
     else if(v==='i')choose({es:'Chemkün',en:'Items'},itemOpts().concat([{m:en?'Back':'Volver',v:'x'}]),k=>{if(!k||k==='x')return battleMenu();const l=useItem(k);say([l],enemyPhase)},true);
     else if(v==='r'){if(B.o.boss||B.o.mini){sfx('bad');return say([N('¡No puedes huir de esta pelea!','You cannot run from this fight!')],battleMenu)}
       if(Math.random()<.65)return say([L('','Lef!','Huyes corriendo.','You run away.')],()=>endBattle('flee'));
@@ -129,6 +134,11 @@ function resolve(r,kil,tg,ei){
       if(e.hp<=e.max*.5){e.hp=0;e.pend=0;e.dead=true;e.fadeT=20;fx.push(e.label+' sale corriendo y no vuelve.');fxe.push(e.label+' runs off and does not come back.')}
       else{fx.push(e.label+' todavía tiene fuerzas: no quiere correr.');fxe.push(e.label+' still has strength: it does not want to run.')}}}
   else if(r==='lef'){fx.push('Les dijiste que no corrieran. Se quedan.');fxe.push('You told them not to run. They stay.')}
+  else if(r==='ñam'&&!kil){for(const e of targets){const T=ET[e.t];
+      if(T.boss){fx.push(e.label+' es demasiado fuerte para perderse.');fxe.push(e.label+' is too strong to get lost.');continue}
+      if(e.hp<=Math.ceil(e.max/3)){e.hp=0;e.pend=0;e.dead=true;e.fadeT=20;fx.push(e.label+' se desvanece en el aire... ¡y no vuelve!');fxe.push(e.label+' fades into the air... and does not come back!')}
+      else{fx.push(e.label+' todavía tiene fuerzas: no se pierde.');fxe.push(e.label+' still has strength: it does not get lost.')}}}
+  else if(r==='ñam'){fx.push('Les dijiste que no se perdieran. Ahí siguen.');fxe.push('You told them not to get lost. There they stay.')}
   else if(r==='tripa'&&!kil){for(const e of targets){if(e.hidden){e.hidden=0;e.hideT=3;fx.push(e.label+' sale de la niebla: ¡ahora sí lo ves!');fxe.push(e.label+' comes out of the fog: now you can see it!')}else{fx.push(e.label+' ya está a la vista.');fxe.push(e.label+' is already in sight.')}}}
   else if(r==='tripa'){fx.push('Les dijiste que no salieran. Nada cambia.');fxe.push('You told them not to come out. Nothing changes.')}
   else if(r==='trafo'&&!kil){for(const e of targets){if(e.armor){e.armor=0;e.armorT=ET[e.t].boss?4:0;fx.push(e.label+': ¡se le quiebra la coraza de piedra!');fxe.push(e.label+': its stone crust cracks apart!')}else{fx.push(e.label+' no tiene coraza que quebrar.');fxe.push(e.label+' has no crust to break.')}}}

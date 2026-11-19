@@ -244,6 +244,13 @@ function sfx(n){
   case 'door':tone('triangle',nf('G4'),nf('G4'),.12,.35);tone('triangle',nf('C5'),nf('C5'),.2,.35,.1);break;
   case 'sleep':tone('sine',800,300,.5,.25);break;
   case 'step':noiseBurst(.03,.06,3000);break;
+  case 'drag':{if(!AU.c||AU.muted)break;const c=AU.c,t=c.currentTime;
+    const sN=c.createBufferSource();sN.buffer=AU.noise;sN.loop=true;
+    const f=c.createBiquadFilter();f.type='lowpass';f.frequency.setValueAtTime(420,t);f.frequency.linearRampToValueAtTime(180,t+.3);
+    const g=c.createGain();g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.5,t+.04);g.gain.setValueAtTime(.5,t+.2);g.gain.exponentialRampToValueAtTime(.001,t+.34);
+    sN.connect(f);f.connect(g);g.connect(AU.sfx);sN.start(t,Math.random()*.4);sN.stop(t+.4);
+    tone('sawtooth',70,52,.3,.22);tone('square',46,40,.3,.12);break}
+  case 'trut':{['G3','G3','D4'].forEach((x,i)=>{tone('sawtooth',nf(x)*.99,nf(x),.3,.3,i*.22);tone('sawtooth',nf(x)*1.008,nf(x)*1.01,.3,.2,i*.22)});tone('sawtooth',nf('G4'),nf('G4')*1.01,.55,.3,.66);noiseBurst(.1,.12,900,.66);break}
   }
 }
 

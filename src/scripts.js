@@ -112,7 +112,7 @@ function shop(where){
   function list(){
     const opts=[];
     for(const k in ITEMS)opts.push({m:ITEMS[k].m+'  ·  '+ITEMS[k].p,g:numW(ITEMS[k].p)+' ngülliw · '+G(ITEMS[k]),v:'i:'+k});
-    for(const k in GEAR)opts.push({m:GEAR[k].m+'  ·  '+GEAR[k].p,g:S.gear[k]?(S.gloss==='en'?'(already yours)':'(ya lo tienes)'):numW(GEAR[k].p)+' ngülliw · '+G(GEAR[k]),v:'g:'+k,dis:!!S.gear[k]});
+    for(const k in GEAR){if(GEAR[k].hide)continue;opts.push({m:GEAR[k].m+'  ·  '+GEAR[k].p,g:S.gear[k]?(S.gloss==='en'?'(already yours)':'(ya lo tienes)'):numW(GEAR[k].p)+' ngülliw · '+G(GEAR[k]),v:'g:'+k,dis:!!S.gear[k]})}
     opts.push({m:'Pewkayal',g:S.gloss==='en'?'See you later (leave)':'Hasta luego (salir)',v:'x'});
     choose({es:'Tienes '+numP(S.gold)+' ngülliw.',en:'You have '+numP(S.gold)+' ngülliw.'},opts,v=>{
       if(v===null||v==='x')return say([L('Ngillakafe','Pewkayal!','¡Hasta luego!','See you later!')]);
@@ -150,6 +150,10 @@ function openChest(x,y,what){
     N('El frío apaga el fuego de los wekufü de fuego, y hace tiritar a los demás. Pero a los wekufü de nieve... les encanta.','The cold puts out the fire of fire wekufü, and makes the others shiver. But snow wekufü... love it.')])}
   if(what==='pewgift'){S.gold+=60;S.items.lawen++;persist();return say([L('','Kayu mari ngülliw!','Dentro hay kayu mari (60) ngülliw y un lawen.','Inside are kayu mari (60) ngülliw and a lawen.')])}
   if(what==='lawen1'){S.items.lawen++;persist();return say([L('','Lawen!','Encontraste un lawen (remedio).','You found a lawen (medicine).')])}
+  if(what==='nam'){learnRoot('ñam');S.flags.root_nam=1;persist();sfx('lvl');return say([
+    L('','ñam-','Encontraste una raíz nueva: ñam-, «perderse, desaparecer».','You found a new root: ñam-, «get lost, vanish».'),
+    L('','ñamnge · ñammu · ñammün','¡Piérdete! (a uno) · (a dos) · (a tres o más)','Get lost! (to one) · (to two) · (to three or more)'),
+    N('Un wekufü muy herido (con un tercio de su fuerza o menos) que oye esta orden se desvanece para siempre... y hasta los wekufü grandes obedecen.','A badly hurt wekufü (a third of its strength or less) that hears this command fades away for good... and even the big wekufü obey.')])}
   if(what==='rukagift'){S.gold+=30;persist();return say([L('','Küla mari ngülliw!','Un saquito de ngülliw tostados: küla mari (30).','A little bag of toasted pewen nuts: küla mari (30).')])}
   if(what==='kulongift'){S.items.kulon+=2;persist();return say([L('','Epu külon!','Dentro hay dos külon (maqui).','Inside are two külon (maqui berries).')])}
   if(what==='piwke')return gainPiwke([N('Dentro del cofre brilla algo rojo...','Something red glows inside the chest...')]);
@@ -162,6 +166,7 @@ function konew(x,y,K){
   say([K.q],()=>ask());
   function ask(){
     const opts=K.opts.map((o,k)=>({m:o.m,g:G(o),v:k}));
+    for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
     choose(L('','Chem am ta tatey?','¿Qué será?','What could it be?'),opts,v=>{
       if(v===null)return;
       if(K.opts[v].ok){setTileFlag(x,y);sfx('door');const ls=[praise(),N('La puerta del konew se abre.','The konew door opens.')];
@@ -215,6 +220,16 @@ const STONES={
         {q:L('Kura','___ tuwimi?','¿De dónde eres?','Where are you from?'),o:['Chew','Chumül','Iney'],a:'Chew'},
         {q:L('Kura','___ nieymi?','¿Qué tienes?','What do you have?'),o:['Chumten','Chem','Chew'],a:'Chem'},
         {q:L('Kura','___ ngülliw nieymi?','¿Cuántos piñones tienes?','How many pewen nuts do you have?'),o:['Chumten','Chumül','Iney'],a:'Chumten'}]},
+  du:{intro:[L('Kura','Mari mari! Kimimi iñchiw, eymu, fey engu?','¡Hola! ¿Conoces iñchiw, eymu, fey engu?','Hello! Do you know iñchiw, eymu, fey engu?'),
+    N('El mapudungun tiene formas especiales para DOS personas: iñchiw (nosotros dos), eymu (ustedes dos), fey engu (ellos dos). Tu chillka las muestra en «Iñche, eymi, fey...».','Mapudungun has special forms for TWO people: iñchiw (we two), eymu (you two), fey engu (they two). Your chillka shows them under «Iñche, eymi, fey...».')],
+    qs:[{q:L('Kura','Iñchiw amu___','Nosotros dos vamos.','We two go.'),o:['amuyu','amuiñ','amuymu'],a:'amuyu'},
+        {q:L('Kura','Eymu küpa___','Ustedes dos vienen.','You two come.'),o:['küpaymün','küpaymu','küpayu'],a:'küpaymu'},
+        {q:L('Kura','Fey engu kim___','Ellos dos saben.','They two know.'),o:['kimingün','kimi','kimingu'],a:'kimingu'}]},
+  fe:{intro:[L('Kura','Mari mari! Kimimi -fe?','¡Hola! ¿Conoces -fe?','Hello! Do you know -fe?'),
+    N('-fe hace nombres de oficio: challwan «pescar» → challwafe «pescador». Responde bien y te abro el paso.','-fe makes names of trades: challwan «to fish» → challwafe «fisher». Answer well and I will open the way.')],
+    qs:[{q:L('Kura','Challwa + -fe: ___','La persona que pesca.','The person who fishes.'),o:['challwawe','challwafe','challwan'],a:'challwafe'},
+        {q:L('Kura','Ngillaka- («comprar y vender») + -fe: ___','La persona que vende.','The person who sells.'),o:['ngillakafe','ngillakan','ngillakawe'],a:'ngillakafe'},
+        {q:L('Kura','Trutruka + -tu- + -fe: ___','La persona que toca la trutruka.','The person who plays the trutruka.'),o:['trutrukawe','trutrukan','trutrukatufe'],a:'trutrukatufe'}]},
   plur:{intro:[L('Kura','Mari mari! Kimimi pu?','¡Hola! ¿Conoces pu?','Hello! Do you know pu?'),N('Cuando son dos o muchos, el verbo también cambia. Completa los verbos.','When there are two or many, the verb changes too. Complete the verbs.')],
     qs:[{q:L('Kura','Pu wentru amu___','Los hombres van.','The men go.'),o:['amuy','amuyngu','amuyngün'],a:'amuyngün'},
         {q:L('Kura','Epu domo küpa___','Dos mujeres vienen.','Two women come.'),o:['küpayngu','küpay','küpayngün'],a:'küpayngu'},
@@ -436,6 +451,100 @@ function kona2Talk(){
     L('Kona','Iñche wiñotuan lof mew.','Yo voy a volver al lof.','I am going back to the lof.')]);
 }
 
+/* ---------- side quests: marsh, menoko, island, interiors ---------- */
+const pickCount=m=>Object.keys(S.flags).filter(f=>f.indexOf('pick:'+m+':')===0).length;
+function pickSpot(x,y){
+  const st=M.pickStyle||'diwen',k='pick:'+CUR+':'+x+','+y;
+  if(st==='diwen'){
+    if(!S.flags.l_diwq)return say([L('','Diweñ','Un ñirre con diweñ: hongos redondos y anaranjados que crecen en sus ramas.','A ñirre tree with diweñ: round orange fungi growing on its branches.')]);
+    setTileFlag(x,y);S.flags[k]=1;persist();sfx('pick');
+    const n=pickCount('l_wapi');
+    if(n>=3)return say([L('','Küla diweñ!','¡Juntaste los tres diweñ! Vuelve con la diweñfe.','You gathered all three diweñ! Go back to the diweñfe.')]);
+    return say([L('',(n===1?'Kiñe':'Epu')+' diweñ!','Sacas diweñ de las ramas ('+n+'/3).','You pick diweñ from the branches ('+n+'/3).')]);
+  }
+  if(!S.flags.n_lawq)return say([L('','Lawen kachu','Hierbas de lawen crecen en el borde del agua. La lawentuchefe sabrá cuáles sirven.','Lawen herbs grow at the water\'s edge. The healer will know which ones are good.')]);
+  setTileFlag(x,y);S.flags[k]=1;persist();sfx('pick');
+  const n=pickCount('n_menoko');
+  if(n>=3)return say([L('','Küla lawen!','¡Juntaste las tres hierbas! Vuelve con la lawentuchefe.','You gathered all three herbs! Go back to the healer.')]);
+  say([L('',(n===1?'Kiñe':'Epu')+' lawen!','Cortas las hierbas con cuidado ('+n+'/3).','You carefully cut the herbs ('+n+'/3).')]);
+}
+function diwenfeTalk(){
+  if(S.flags.l_diwd)return say([L('Diweñfe','Chaltu may, '+addr(true)+'! Kümey diweñ!','¡Gracias! ¡Qué ricos diweñes!','Thank you! What good diweñ!'),
+    N('¿Ya hablaste con la piedra del este? Pregunta por los oficios en -fe: challwafe, diweñfe...','Have you talked with the stone to the east? It asks about the -fe trades: challwafe, diweñfe...')]);
+  if(S.flags.l_diwq&&pickCount('l_wapi')>=3){S.flags.l_diwd=1;S.items.diwen+=2;S.gold+=30;persist();sfx('lvl');
+    return say([L('Diweñfe','Küla diweñ! Chaltu may!','¡Tres diweñes! ¡Gracias!','Three diweñ! Thank you!'),
+      N('Te regala dos diweñ para el camino y küla mari (30) ngülliw.','She gives you two diweñ for the road and küla mari (30) ngülliw.'),
+      L('Diweñfe','Iñche diweñfe: diweñ kintuken. Eymi kay? Challwafe? Ngürekafe?','Yo soy diweñfe: busco digüeñes. ¿Y tú? ¿Pescador? ¿Tejedora?','I am a diweñfe: I gather diweñ. And you? A fisher? A weaver?'),
+      N('-fe convierte un trabajo en la persona que lo hace. La piedra tallada del este pregunta justo por eso... y guarda algo rojo.','-fe turns a trade into the person who does it. The carved stone to the east asks exactly that... and it guards something red.')]);}
+  if(S.flags.l_diwq)return say([L('Diweñfe','Küla diweñ kintulen!','¡Búscame tres diweñes!','Find me three diweñ!'),
+    N('Crecen en los ñirres del pantano: bolitas anaranjadas en las ramas.','They grow on the marsh ñirre trees: little orange balls on the branches.')]);
+  S.flags.l_diwq=1;persist();
+  say([L('Diweñfe','Mari mari, '+addr(true)+'! Iñche diweñfe.','¡Hola! Yo soy recolectora de digüeñes.','Hello! I am a diweñ gatherer.'),
+    N('El diweñ es un hongo redondo y dulce que crece en los ñirres. Se come crudo, en ensalada... ¡o en kurantu!','The diweñ is a round, sweet fungus that grows on ñirre trees. People eat it raw, in salads... or in kurantu!'),
+    L('Diweñfe','Kintulen küla diweñ! Kushe iñche.','¡Búscame tres diweñes! Ya estoy vieja para trepar.','Find me three diweñ! I am too old to climb.'),
+    N('Hay tres ñirres con diweñ en este pantano. Interactúa con ellos para sacarlos.','There are three ñirre trees with diweñ in this marsh. Interact with them to pick the fungi.')]);
+}
+function lawenfeTalk(){
+  if(S.flags.n_lawd)return say([L('Lawentuchefe','Chaltu may! Kümelkaleaymi.','¡Gracias! Que estés bien.','Thank you! Be well.')]);
+  if(S.flags.n_lawq&&pickCount('n_menoko')>=3){S.flags.n_lawd=1;S.items.lawen+=2;persist();sfx('lvl');
+    return say([L('Lawentuchefe','Küme lawen! Chaltu may!','¡Buenas hierbas! ¡Gracias!','Good herbs! Thank you!'),
+      N('Prepara dos lawen y te los regala.','She prepares two lawen and gives them to you.')],()=>gainPiwke([N('Y del fondo de su chaiwe saca algo rojo que encontró en el menoko...','And from the bottom of her basket she takes something red she found in the menoko...')]));}
+  if(S.flags.n_lawq)return say([L('Lawentuchefe','Küla lawen kachu kintulen!','¡Búscame tres matas de lawen!','Find me three lawen plants!'),
+    N('Crecen al borde de las aguas del menoko.','They grow at the edge of the menoko waters.')]);
+  S.flags.n_lawq=1;persist();
+  say([L('Lawentuchefe','Mari mari. Iñche lawentuchefe.','Hola. Yo sano con lawen (remedios de plantas).','Hello. I heal with lawen (plant remedies).'),
+    N('El menoko es un humedal sagrado: aquí crecen los lawen más fuertes. Se entra con respeto y se saca solo lo necesario.','The menoko is a sacred wetland: the strongest healing plants grow here. One enters with respect and takes only what is needed.'),
+    L('Lawentuchefe','Kintulen küla lawen kachu, chaltu may.','Búscame tres matas de lawen, por favor.','Find me three lawen plants, please.')]);
+}
+function trutfeTalk(){
+  if(S.gear.trutruka)return say([L('Trutrukatufe','Pefimi ñi trutruka! Niekaymi: iñche ka kiñe nien.','¡La encontraste! Quédatela: yo tengo otra.','You found it! Keep it: I have another one.'),
+    L('Trutrukatufe','Trutrukatufe ngeaymi!','¡Vas a ser trutruquero!','You are going to be a trutruka player!'),
+    N('En las peleas, tócala: su sonido largo aturde a todos los wekufü una vez por pelea. Trutruka + -tu- + -fe = trutrukatufe, quien la toca.','In battle, blow it: its long blast stuns all the wekufü once per fight. Trutruka + -tu- + -fe = trutrukatufe, the one who plays it.')]);
+  if(S.flags.n_trut_q)return say([L('Trutrukatufe','Ñami ñi trutruka kürüf mew!','¡El viento me botó la trutruka!','The wind knocked my trutruka away!'),
+    N('«Cayó entre los juncos, al lado del agua del medio del menoko. Busca bien, pegado al agua.»','"It fell among the reeds, beside the pool in the middle of the menoko. Search carefully, right by the water."')]);
+  S.flags.n_trut_q=1;persist();
+  say([L('Trutrukatufe','Mari mari... Iñche trutrukatufe, welu...','Hola... Yo soy trutruquero, pero...','Hello... I am a trutruka player, but...'),
+    L('Trutrukatufe','Ñami ñi trutruka!','¡Se me perdió la trutruka!','I lost my trutruka!'),
+    N('La trutruka es una corneta larga de coligüe con un cuerno en la punta. «El viento la botó entre los juncos, al lado del agua del medio. ¿Me la buscas?»','The trutruka is a long colihue horn with a cow horn at the tip. "The wind knocked it into the reeds, beside the middle pool. Will you look for it?"')]);
+}
+function kurantuTalk(){
+  const en=S.gloss==='en';
+  if(S.flags.w_kur)return say([L('Kurantufe','Ka antü ka dewmayan kurantu. Küpatuaymi!','Otro día haré otro kurantu. ¡Vuelve!','Another day I will make another kurantu. Come back!')]);
+  if(S.items.diwen>=2&&S.items.kofke>=1){
+    return choose(L('Kurantufe','Epu diweñ ka kiñe kofke nieymi! Dewmayu kurantu?','¡Tienes dos diweñes y un kofke! ¿Hacemos el kurantu?','You have two diweñ and a kofke! Shall we make the kurantu?'),
+      [{m:'May!',g:en?'Yes! (hand over the food)':'¡Sí! (entregar la comida)',v:1},{m:'Petu no',g:en?'Not yet':'Todavía no',v:0}],v=>{
+        if(!v)return;
+        S.items.diwen-=2;S.items.kofke-=1;S.flags.w_kur=1;S.gold+=40;S.hp=maxHP();S.sp=SPMAX;persist();sfx('lvl');
+        say([N('Sobre piedras calientes, entre hojas de pangue, se cocinan mariscos, papas, kofke y tus diweñes: ¡kurantu!','Over hot stones, wrapped in pangue leaves, shellfish, potatoes, kofke and your diweñ steam away: kurantu!'),
+          L('Kurantufe','Kümey kurantu! Inge, inge!','¡Qué rico kurantu! ¡Come, come!','What a good kurantu! Eat, eat!'),
+          N('Comes hasta quedar satisfecho: tus piwke y tu newen se recuperan por completo. Te regala meli mari (40) ngülliw por la ayuda.','You eat until you are full: your hearts and newen fully recover. She gives you meli mari (40) ngülliw for the help.')],()=>gainPiwke([N('Y envuelto en un paño, algo rojo que encontró en la arena de la isla...','And wrapped in a cloth, something red she found in the island sand...')]));
+      },true,true);
+  }
+  say([L('Kurantufe','Mari mari, '+addr(true)+'! Kurantu dewmayan, welu...','¡Hola! Voy a hacer un kurantu, pero...','Hello! I am going to make a kurantu, but...'),
+    L('Kurantufe','Epu diweñ ka kiñe kofke duamnien.','Necesito dos diweñes y un kofke.','I need two diweñ and one kofke.'),
+    N('El kurantu se cocina en un hoyo con piedras calientes. Los diweñes crecen en los ñirres del norte (y a veces los venden los ngillakafe). Vuelve con ellos y habrá fiesta.','Kurantu is cooked in a pit over hot stones. Diweñ grow on ñirre trees up north (and traders sometimes sell them). Come back with everything and there will be a feast.')]);
+}
+function kallfurayTalk(){
+  const first=!S.flags.l_kall;S.flags.l_kall=1;if(first)persist();
+  say([L('Papay Kallfüray','Mari mari, '+addr(true)+'! Konpange.','¡Hola! Pasa.','Hello! Come in.'),
+    L('Papay Kallfüray','Ngürekafe iñche: witral mew ngüreken.','Soy tejedora: tejo en el witral.','I am a weaver: I weave on the witral.'),
+    N('Teje fajas y makuñ con figuras escalonadas. Ngüren «tejer» + -ke- + -fe = ngürekafe, la que teje.','She weaves sashes and ponchos with stepped patterns. Ngüren «to weave» + -ke- + -fe = ngürekafe, the one who weaves.'),
+    N('«Cuando era niña, mi hermano enterró algo rojo en las dunas: donde el pasto crece entre la arena, cerca de la entrada del oeste. Nunca lo fue a buscar.»','"When I was a girl, my brother buried something red in the dunes: where the grass grows out of the sand, near the western entrance. He never went back for it."')]);
+}
+function sayenTalk(){
+  if(S.flags.n_sayen)return say([L('Ñaña Sayen','Mültrün dewmaken. Inge!','Estoy haciendo mültrün (catutos). ¡Come!','I am making mültrün. Eat!'),
+    N('«¿Ya escarbaste en los campos de los animales? Justo al medio del pasto, lejos de los corrales, los niños esconden cántaros.»','"Did you dig in the animal fields yet? Right in the middle of the grass, away from the pens, the children hide little jars."')]);
+  S.flags.n_sayen=1;S.items.kofke+=2;persist();sfx('pick');
+  say([L('Ñaña Sayen','Mari mari, '+addr(true)+'! Konpange, inge!','¡Hola! ¡Pasa, come!','Hello! Come in, eat!'),
+    N('Está moliendo trigo cocido para hacer mültrün, los catutos alargados. Te regala dos kofke calientes.','She is grinding boiled wheat to make mültrün. She gives you two warm kofke.'),
+    N('«Y un secreto: en los campos de los animales, justo al medio del pasto, los niños esconden cántaros con sorpresas. Lleva algo para escarbar.»','"And a secret: in the animal fields, right in the middle of the grass, the children hide jars with surprises. Bring something to dig with."')]);
+}
+function kintulTalk(){
+  say([L('Chachay Kintul','Mari mari. Challwafe iñche, kuyfi mew.','Hola. Fui pescador, hace tiempo.','Hello. I was a fisher, long ago.'),
+    N('«He visto al Kaleuche dos veces, con mis propios ojos: un barco con música y luces, navegando bajo el agua.»','"I have seen the Kaleuche twice, with my own eyes: a ship with music and lights, sailing under the water."'),
+    N('«En la costa del sur enterré mi vieja caja de anzuelos, al bajar a la playa, en medio de la arena. Si la encuentras, es tuya. Y en la isla del lago, dicen que la kurantufe paga bien la ayuda.»','"On the southern coast I buried my old hook box, down on the beach, in the middle of the sand. If you find it, it is yours. And on the island in the lake, they say the kurantufe pays well for help."')]);
+}
+
 /* ---------- Pewenche rukas ---------- */
 function rayenTalk(){
   if(!S.flags.pew_ngu1){S.flags.pew_ngu1=1;S.gold+=10;persist();sfx('pick');
@@ -479,6 +588,9 @@ function kulonBush(x,y){
 /* ---------- Nagche overworld puzzles ---------- */
 function digFind(dk,dv){
   S.flags['dig:'+CUR+':'+dk]=1;
+  if(dv&&dv.what==='trutruka'){S.gear.trutruka=1;persist();sfx('lvl');
+    return say([N('Entre los juncos mojados aparece una larga corneta de coligüe con un cuerno en la punta...','Among the wet reeds appears a long colihue horn with a cow horn at its tip...'),
+      L('','Trutruka!','¡Encontraste la trutruka! En las peleas podrás tocarla: su sonido aturde a todos los wekufü (una vez por pelea). Cuéntale al trutrukatufe.','You found the trutruka! In battle you can blow it: its blast stuns all the wekufü (once per fight). Tell the trutrukatufe.')]);}
   if(dv&&dv.what==='piwke'){persist();sfx('lvl');
     return gainPiwke([N('Escarbas la tierra justo aquí... ¡hay algo enterrado!','You dig right here... something is buried!'),praise()]);}
   S.gold+=50;S.items.kofke++;persist();sfx('lvl');

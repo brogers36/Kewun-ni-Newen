@@ -67,6 +67,13 @@ const BOOK={
   quest:{m:'Chem, iney, chew...',es:'Preguntas',en:'Questions',lines:[
     L('','chem · iney · chew · chumül · chumten','qué · quién · dónde · cuándo · cuánto','what · who · where · when · how much'),
     L('','Chem pimi? · Iney eymi? · Chew amuaymi?','¿Qué dijiste? · ¿Quién eres? · ¿A dónde irás?','What did you say? · Who are you? · Where will you go?')]},
+  fe:{m:'-fe',es:'Los oficios',en:'Trades and doers',lines:[
+    N('-fe convierte una acción en la persona que la hace, como «-dor» en español:','-fe turns an action into the person who does it, like "-er" in English:'),
+    L('','challwan → challwafe','pescar → pescador(a)','to fish → fisher'),
+    L('','ngillakan → ngillakafe','comprar y vender → comerciante','to trade → trader'),
+    L('','ngüren → ngürekafe','tejer → tejedor(a)','to weave → weaver'),
+    L('','trutrukatun → trutrukatufe','tocar la trutruka → trutruquero',"to play the trutruka → trutruka player"),
+    L('','lawentun → lawentuchefe','dar remedios → persona que sana con lawen','to heal with remedies → healer')]},
   ke:{m:'-ke-',es:'Lo que se hace siempre',en:'What is always done',lines:[
     N('-ke- va antes de la terminación de persona y dice lo que se hace siempre, por costumbre. Ejemplo con pe- ("ver"):','-ke- goes before the person ending and says what is always done, as a habit. Example with pe- ("see"):'),
     L('','peken · pekeymi · pekey','yo veo siempre · tú ves siempre · él/ella ve siempre','I always see · you always see · he/she always sees'),

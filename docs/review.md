@@ -104,3 +104,15 @@ Left unchanged: *Pun mew kintukefuy kulliñ* (habitual past in the story, "used 
 - "Fewla kümelkalen" (ahora estoy mejor).
 - Konew K11: "Lig makuñ mew takukefi kom mapu" (taku- 'cubrir/tapar', -ke- habitual, -fi 3ª obj.); respuesta: pire.
 - Nombres: papay Rayen, chachay Nawel (¿apropiados?).
+
+## Nuevas áreas, items y gramática (nov 2026, 2ª tanda)
+- Raíz nueva ñam- 'perderse/desaparecer' como orden de combate: ñamnge / ñammu / ñammün (¿natural como "¡piérdete!"?).
+- "Kintulen küla diweñ" (búscame tres diweñes): kintu- + -l- benefactivo + -en 1ª obj.
+- "Kushe iñche" (diweñfe); "Lawentuchefe iñche"; "Trutrukatufe iñche".
+- "Ñami ñi trutruka"; "Pefimi ñi trutruka!"; "Niekaymi" (quédatela, ¿nie-ka-ymi?).
+- "Dewmayu kurantu?" (¿lo hacemos entre los dos?; ¿mejor dewmayu vs dewmaayu futuro dual?).
+- "Epu diweñ ka kiñe kofke duamnien"; "Inge, inge!"; "Ka antü ka dewmayan kurantu. Küpatuaymi!"
+- Konew K12: "Pengelay, welu nengümkefi kom pu aliwen" (kürüf); nengüm- 'mover'.
+- Piedras nuevas: dual (amuyu/küpaymu/kimingu) y -fe (challwafe/ngillakafe/trutrukatufe).
+- Nombres nuevos: papay Kallfüray (tejedora), ñaña Sayen (mültrün), chachay Kintul (pescador); diweñfe, lawentuchefe, trutrukatufe, kurantufe como oficios sin nombre propio.
+- "Fotra mapu" (pantanos), "Wente degiñ" (filo de la cordillera), "Menoko", "Wapi": ¿nombres adecuados?

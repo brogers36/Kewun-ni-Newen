@@ -197,6 +197,39 @@ for m,ps in paths.items():
 print('paths ok')
 open(OUT,'w',encoding='utf-8').write('const MAPROWS='+json.dumps(M,ensure_ascii=False)+';\n')
 
+class C:
+    def __init__(s,w,h,fill=','):
+        s.w,s.h=w,h;s.g=[[fill]*w for _ in range(h)]
+        for x in range(w):s.g[0][x]=s.g[h-1][x]='T'
+        for y in range(h):s.g[y][0]=s.g[y][w-1]='T'
+    def p(s,x,y,c):s.g[y][x]=c
+    def r(s,x,y,w,h,c):
+        for yy in range(y,y+h):
+            for xx in range(x,x+w):s.g[yy][xx]=c
+    def rows(s):return[''.join(r) for r in s.g]
+def hh(x,y,k):
+    import math;v=math.sin(x*12.9898+y*78.233+k*37.719)*43758.5453;return v-math.floor(v)
+# --- l_wapi: marsh islets south of the dunes (Lafkenche) ---
+L_={}
+c=C(32,13,'.')
+c.p(8,0,'.')
+c.r(1,1,30,1,'~');c.p(8,1,'.')
+c.r(2,4,4,2,'~');c.r(13,2,5,2,'~');c.r(22,8,4,2,'~');c.r(7,8,3,2,'~')
+for y in range(2,12):
+    for x in range(1,31):
+        if c.g[y][x]=='.' and hh(x,y,31)<.16:c.g[y][x]='"'
+        elif c.g[y][x]=='.' and hh(x,y,32)<.06:c.g[y][x]='T'
+c.p(5,6,'x');c.p(19,3,'x');c.p(26,8,'x')
+c.r(25,3,6,4,'T');c.r(26,4,4,2,'.');c.p(28,4,'C');c.p(27,6,'E');c.p(27,7,'.')
+c.p(22,6,'H');c.p(22,7,'.');c.p(22,5,'.')
+c.r(2,9,3,2,'.');c.p(3,9,'F')
+c.p(10,5,'.');c.p(14,9,'.')
+L_['l_wapi']=c.rows()
+# kuyum: south opening to the marsh
+M['kuyum'][11]=M['kuyum'][11][:8]+'.'+M['kuyum'][11][9:]
+M['kuyum'][12]=M['kuyum'][12][:8]+'.'+M['kuyum'][12][9:]
+M.update(L_)
+
 # ================= NAGCHE =================
 def mirror(rows): return [r[::-1] for r in rows]
 N={}
@@ -247,6 +280,20 @@ N['n_kullin']=[
 "T,,TT"+","*7+"\"\""+",f"+","*6+"f,"+"##"+","*5+"T",
 "T"+","*14+"f"*8+","*6+"P,T",
 "T"*32]
+# --- n_menoko: the sacred wetland south of the animal fields ---
+c=C(32,13)
+c.p(5,0,',')
+c.r(3,3,4,2,'~');c.r(12,5,5,3,'~');c.r(22,2,4,2,'~');c.r(25,8,4,2,'~')
+for y in range(1,12):
+    for x in range(1,31):
+        if c.g[y][x]==',' and hh(x,y,41)<.22:c.g[y][x]='"'
+        elif c.g[y][x]==',' and hh(x,y,42)<.08:c.g[y][x]='T'
+c.p(7,7,'x');c.p(17,3,'x');c.p(28,6,'x')
+c.p(9,4,',');c.p(20,9,',');c.r(19,9,3,2,',')
+c.p(13,9,',');c.p(2,10,'P');c.p(2,9,',')
+c.r(28,10,3,2,',');c.p(29,10,'F')
+N['n_menoko']=c.rows()
+setr(N['n_kullin'],5,12,1,1,',')
 N['n_lewfu']=[
 "T"*32,
 "T"+","*12+"~~~~"+","*9+"T,C,,T",
@@ -275,9 +322,56 @@ N['n_mawida']=[
 "T,,##"+","*11+"\"\""+","*7+"TTT,,gT",
 "T"+","*7+"TT"+","*21+"T",
 "T"*32]
-N['nd1']=mirror(M['d1']); N['nd1']=[r.replace('J','N') for r in N['nd1']]
-N['nd2']=mirror(M['d2'])
-N['nd3']=mirror(M['d3'])
+def carve0(g,x,y,w,h,ch='_'):
+    for yy in range(y,y+h):
+        for xx in range(x,x+w):g[yy][xx]=ch
+# nd1: burrow with a flooded room; pz + E route and key + L route to the same pocket
+g=[['%']*24 for _ in range(12)]
+carve0(g,17,2,5,6)
+carve0(g,22,4,2,1)
+carve0(g,9,1,6,5)
+carve0(g,11,2,2,2,'~')
+carve0(g,1,1,6,5)
+carve0(g,15,3,2,1)
+carve0(g,7,3,2,1);g[3][8]='K'
+carve0(g,1,7,5,3)
+g[6][3]='E'
+carve0(g,6,9,12,1);g[9][6]='L'
+carve0(g,18,8,1,2)
+g[2][18]='F'
+g[1][10]='C';g[1][13]='k'
+g[2][2]='N';g[2][4]='N';g[2][6]='N'
+g[4][5]='I'
+g[8][2]='C'
+carve0(g,2,10,1,1);g[10][2]='S'
+N['nd1']=[''.join(r) for r in g]
+# nd2: hall with pond; stone quiz opens the west wing; konew side pocket; south corridor loop
+g=[['%']*24 for _ in range(10)]
+carve0(g,18,1,5,4)
+carve0(g,23,2,1,1)
+g[1][19]='F'
+carve0(g,8,1,8,7)
+carve0(g,10,3,3,3,'~')
+carve0(g,16,2,2,1)
+carve0(g,1,1,5,7)
+g[4][6]='E';carve0(g,7,4,1,1)
+g[7][14]='H'
+g[2][2]='C'
+g[5][19]='K';carve0(g,18,6,4,3);g[7][20]='C'
+carve0(g,2,8,11,1)
+g[8][4]='J'
+carve0(g,2,8,1,1);g[8][2]='S'
+N['nd2']=[''.join(r) for r in g]
+# nd3: pillared hall before the clearing
+g=[['%']*22 for _ in range(9)]
+carve0(g,1,1,20,7)
+carve0(g,8,2,2,2,'~')
+for (x,y) in [(5,3),(6,3),(12,5),(13,5),(16,2),(16,3)]:g[y][x]='%'
+carve0(g,21,4,1,1)
+g[1][2]='F';g[1][12]='g'
+carve0(g,2,7,1,1);g[7][2]='S'
+N['nd3']=[''.join(r) for r in g]
+N['nd2']=[r.replace('J','_') for r in N['nd2']]
 N['ngen2']=[
 "T"*18,
 "TTTTT,,,,,,,,TTTTT",
@@ -294,18 +388,6 @@ N['ngen2']=[
 "T"*18]
 
 # ================= PEWENCHE =================
-class C:
-    def __init__(s,w,h,fill=','):
-        s.w,s.h=w,h;s.g=[[fill]*w for _ in range(h)]
-        for x in range(w):s.g[0][x]=s.g[h-1][x]='T'
-        for y in range(h):s.g[y][0]=s.g[y][w-1]='T'
-    def p(s,x,y,c):s.g[y][x]=c
-    def r(s,x,y,w,h,c):
-        for yy in range(y,y+h):
-            for xx in range(x,x+w):s.g[yy][xx]=c
-    def rows(s):return[''.join(r) for r in s.g]
-def hh(x,y,k):
-    import math;v=math.sin(x*12.9898+y*78.233+k*37.719)*43758.5453;return v-math.floor(v)
 P_={}
 # --- p_rupu: foothills road with a stream ---
 c=C(32,13)
@@ -399,6 +481,28 @@ rk1[3][7]='F';rk1[2][3]='Z';rk1[5][4]='U';rk1[2][11]='C'
 rk2[3][7]='F';rk2[5][11]='C';rk2[2][3]='V'
 P_['p_ruka1']=[''.join(r) for r in rk1]
 P_['p_ruka2']=[''.join(r) for r in rk2]
+# --- p_degin: the windy high rim above the snowfields ---
+c=C(32,13,'.')
+c.p(6,12,'.')
+for y in range(1,12):
+    for x in range(1,31):
+        if hh(x,y,51)<.10 and y not in (10,11):c.g[y][x]='#'
+        elif hh(x,y,52)<.05:c.g[y][x]='T'
+c.r(5,9,3,3,'.');c.r(6,1,2,11,'.')
+c.r(10,4,12,1,'#');c.r(10,5,1,3,'#');c.r(15,2,1,3,'#')
+c.r(22,3,7,5,'#');c.r(23,4,5,3,'.');c.p(25,4,'C');c.p(25,7,'K');c.p(25,8,'.')
+c.p(3,2,'P');c.r(2,2,3,2,'.');c.p(3,2,'P')
+c.p(16,9,'.');c.r(2,8,3,2,'.');c.p(2,9,'F')
+P_['p_degin']=c.rows()
+P_['p_pire'][0]=P_['p_pire'][0][:6]+'.'+P_['p_pire'][0][7:]
+P_['p_pire'][1]=P_['p_pire'][1][:6]+'.'+P_['p_pire'][1][7:]
+rkL=[r[:] for r in rk];rkN=[r[:] for r in rk];rkW=[r[:] for r in rk]
+rkL[3][7]='F';rkL[2][3]='Z';rkL[5][4]='U';rkL[2][11]='C'
+rkN[3][7]='F';rkN[4][4]='U';rkN[5][11]='C';rkN[2][11]='V'
+rkW[3][7]='F';rkW[5][2]='C';rkW[2][11]='Z'
+P_['l_ruka1']=[''.join(r) for r in rkL]
+P_['n_ruka1']=[''.join(r) for r in rkN]
+P_['w_ruka1']=[''.join(r) for r in rkW]
 # --- lair: Cherrufe ñi ruka, three unique branching floors ---
 g=[['%']*26 for _ in range(12)]
 carve(g,1,1,6,5)
@@ -471,7 +575,7 @@ def bfs(rows,start):
             X,Y=x+dx,y+dy
             if 0<=X<W and 0<=Y<H and (X,Y) not in seen and rows[Y][X] in OPEN:seen.add((X,Y));st.append((X,Y))
     return seen
-OPEN2=set('.,"=_PmgpSqkAbKLEGBONJHCFSIMZUV^')
+OPEN2=set('.,"=_PmgpSqkAbKLEGBONJHCFSIMZUVx^')
 def bfs2(rows,start):
     H=len(rows);W=len(rows[0]);seen={start};st=[start]
     while st:
@@ -480,11 +584,13 @@ def bfs2(rows,start):
             X,Y=x+dx,y+dy
             if 0<=X<W and 0<=Y<H and (X,Y) not in seen and rows[Y][X] in OPEN2:seen.add((X,Y));st.append((X,Y))
     return seen
-STARTS={'p_rupu':(0,7),'p_lof':(0,9),'p_pewen':(0,7),'p_pire':(0,7),'p_pillan':(3,1),'p_ruka1':(6,7),'p_ruka2':(6,7),'pd1':(1,4),'pd2':(1,2),'pd3':(1,1)}
+STARTS={'p_rupu':(0,7),'p_lof':(0,9),'p_pewen':(0,7),'p_pire':(0,7),'p_pillan':(3,1),'p_ruka1':(6,7),'p_ruka2':(6,7),'pd1':(1,4),'pd2':(1,2),'pd3':(1,1),'p_degin':(6,11),'l_ruka1':(6,7),'n_ruka1':(6,7),'w_ruka1':(6,7)}
+ALL=dict(P_);ALL['l_wapi']=L_['l_wapi']
 for k,st in STARTS.items():
-    v=P_[k];R2=bfs2(v,st)
+    v=ALL[k];R2=bfs2(v,st)
     missing=[(x,y,v[y][x]) for y in range(len(v)) for x in range(len(v[0])) if v[y][x] in set('PCKSFMNIkgHBOE') and (x,y) not in R2]
     print(k,'reach',len(R2),'MISSING' if missing else 'ok',missing)
+
 N.update(P_)
 
 # ================= WILLICHE =================
@@ -545,10 +651,70 @@ for y in range(1,12):
         elif c.g[y][x]=='.' and y!=7 and hh(x,y,17)<.25:c.g[y][x]=','
 c.r(4,9,3,2,'.');c.p(5,10,'F')
 W_['w_inaltu']=c.rows()
-rot=lambda rows:[r[::-1] for r in rows[::-1]]
-W_['wd1']=rot(M['d1'])
-W_['wd2']=rot(M['d2'])
-W_['wd3']=rot(M['d3'])
+# --- w_wapi: the island in the lake (Williche) ---
+c=C(32,13)
+c.r(1,1,30,11,'~')
+c.r(6,3,20,7,',')
+c.p(15,0,'b');c.r(15,1,1,2,'b')
+for y in range(3,10):
+    for x in range(6,26):
+        if c.g[y][x]==',' and hh(x,y,61)<.14:c.g[y][x]='"'
+        elif c.g[y][x]==',' and hh(x,y,62)<.07:c.g[y][x]='T'
+c.r(9,4,4,3,',');c.p(8,4,'F');c.p(8,5,',');c.p(10,5,'U')
+c.p(20,4,'H');c.p(20,5,',');c.p(20,3,',')
+c.r(21,5,5,4,'T');c.r(22,6,3,2,',');c.p(23,6,'C');c.p(23,8,'E');c.p(23,9,',')
+c.p(12,8,',');c.p(10,5,'U')
+W_['w_wapi']=c.rows()
+# w_lof: bridge continues south off the map
+r=W_['w_lof'];r[12]=r[12][:14]+'bbb'+r[12][17:];r[13]=r[13][:15]+'b'+r[13][16:]
+# wd1: sea cave with a channel; brazier pz, locked shortcut and a konew gate
+g=[['%']*24 for _ in range(12)]
+carve0(g,16,1,6,5)
+carve0(g,22,3,2,1)
+carve0(g,8,2,6,8)
+carve0(g,10,4,2,4,'~')
+carve0(g,14,3,2,1)
+carve0(g,1,1,6,5)
+carve0(g,7,3,1,1)
+carve0(g,2,7,4,2)
+g[6][3]='E'
+carve0(g,15,7,7,4)
+carve0(g,17,6,1,1);g[6][17]='L'
+carve0(g,14,8,1,1);g[8][14]='K'
+g[1][17]='F'
+g[2][2]='J';g[2][4]='J';g[4][2]='J'
+g[4][5]='I'
+g[8][3]='C'
+g[8][20]='C'
+g[5][13]='k'
+g[10][20]='S'
+W_['wd1']=[''.join(r) for r in g]
+# wd2: hall with two pools; stone quiz opens the tripa wing, konew the treasure wing
+g=[['%']*24 for _ in range(10)]
+carve0(g,17,1,6,5)
+carve0(g,23,2,1,1)
+g[1][18]='F'
+carve0(g,7,1,8,8)
+carve0(g,9,4,2,2,'~');carve0(g,12,2,2,2,'~')
+carve0(g,15,2,2,1)
+carve0(g,1,1,4,3)
+carve0(g,5,2,2,1);g[2][6]='E'
+carve0(g,1,5,4,4)
+carve0(g,5,6,2,1);g[6][6]='K'
+g[7][11]='H'
+g[2][2]='C'
+g[7][2]='C'
+g[8][13]='S'
+W_['wd2']=[''.join(r) for r in g]
+# wd3: tidal hall with pools before the pier
+g=[['%']*22 for _ in range(9)]
+carve0(g,1,1,20,7)
+carve0(g,4,3,3,2,'~');carve0(g,9,1,2,3,'~');carve0(g,13,4,3,2,'~');carve0(g,17,2,2,2,'~')
+for (x,y) in [(7,6),(12,2)]:g[y][x]='%'
+carve0(g,21,3,1,1)
+g[1][19]='F';g[6][10]='g'
+g[7][2]='S'
+W_['wd3']=[''.join(r) for r in g]
 W_['ngen4']=[
 "~"*18,
 "~"*18,
@@ -567,6 +733,10 @@ for k in ['w_rupu','w_lof','w_mawida','w_lafken','w_inaltu']:
     v=W_[k];sy=7 if k!='w_lof' else 9;start=(4,0) if k=='w_rupu' else (0,sy);R=bfs(v,start)
     right=[(len(v[0])-1,y) for y in range(len(v)) if (len(v[0])-1,y) in R]
     print(k,'reach',len(R),'right',right)
+for k,st in {'l_wapi':(8,1),'n_menoko':(5,1),'w_wapi':(15,1),'nd1':(22,4),'nd2':(23,2),'nd3':(21,4),'wd1':(22,3),'wd2':(23,2),'wd3':(21,3)}.items():
+    rows=(L_ if k=='l_wapi' else N if k.startswith('n') else W_)[k];R2=bfs2(rows,st)
+    missing=[(x,y,rows[y][x]) for y in range(len(rows)) for x in range(len(rows[0])) if rows[y][x] in set('PCKSFMNIkgHBOExJ') and (x,y) not in R2]
+    print(k,'reach',len(R2),'MISSING' if missing else 'ok',missing)
 N.update(W_)
 for k,v in N.items():
     w=len(v[0])
