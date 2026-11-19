@@ -54,6 +54,8 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #title .help{font-size:.75em;color:#d8d0e4;max-width:36em;line-height:1.4;background:#0d0b10aa;padding:.4em .6em;border-radius:4px}
 #title .copy{font-size:.7em;color:#cfc6dc;position:absolute;bottom:.5em;left:1.5em;right:1.5em;text-align:center;line-height:1.35;text-shadow:0 0 3px #000}
 #skip{position:absolute;right:.6em;top:.6em;font:inherit;font-size:.85em;padding:.25em .7em;border-radius:4px;border:2px solid #e8d49a;background:#2a2238cc;color:#fff;cursor:pointer;display:none}
+#mbtn{position:absolute;left:.6em;top:.6em;font:inherit;font-size:1em;padding:.15em .5em;border-radius:4px;border:2px solid #4a3d5c;background:#2a223880;color:#f4ecd8cc;cursor:pointer;display:none}
+@media (hover:none),(pointer:coarse){#mbtn{display:block}}
 #pad{display:flex;gap:28px;align-items:center;justify-content:center}
 #dpad{display:grid;grid-template-columns:repeat(3,48px);grid-template-rows:repeat(3,48px);gap:3px}
 #dpad button,#ab button{font:bold 16px ui-monospace,monospace;color:#f4ecd8;background:#2a2238;border:2px solid #4a3d5c;border-radius:8px;touch-action:none}
@@ -75,6 +77,7 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
       <div id="dlg" class="box"><div class="who"></div><div class="m"></div><div class="g"></div><div class="more">▼</div></div>
       <div id="menu" class="box"><div class="p"></div><div class="list"></div></div>
       <button id="skip">Saltar ▶▶</button>
+      <button id="mbtn">☰</button>
       <div id="title">
         <h1>Kewün ñi Newen</h1>
         <div class="sub">Prototipo · Lafkenche, Nagche, Pewenche y Williche</div>
@@ -481,6 +484,10 @@ function sfx(n){
   }
 }
 
+
+/* stop the music when the app goes to the background (phone home button, app switch) */
+document.addEventListener('visibilitychange',()=>{try{if(!AU.c)return;if(document.hidden)AU.c.suspend();else if(!AU.muted)AU.c.resume()}catch(e){}});
+addEventListener('pagehide',()=>{try{AU.c&&AU.c.suspend()}catch(e){}});
 
 /* ============================================================
    NUMERALS, TEXT, UI
@@ -1876,6 +1883,7 @@ $('pA').addEventListener('pointerdown',e=>{e.preventDefault();pressA()});
 $('pB').addEventListener('pointerdown',e=>{e.preventDefault();pressB()});
 $('pM').addEventListener('pointerdown',e=>{e.preventDefault();if(mode==='map'&&!active)openPause()});
 $('pN').addEventListener('pointerdown',e=>{e.preventDefault();toggleMute()});
+$('mbtn').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();auInit();if(mode==='map'&&!active)openPause()});
 function heldDir(){for(const d of ['up','down','left','right'])if(held[d])return d;return null}
 const DV={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
 const OPP={up:'down',down:'up',left:'right',right:'left'};

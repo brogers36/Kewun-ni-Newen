@@ -350,3 +350,7 @@ function sfx(n){
   }
 }
 
+
+/* stop the music when the app goes to the background (phone home button, app switch) */
+document.addEventListener('visibilitychange',()=>{try{if(!AU.c)return;if(document.hidden)AU.c.suspend();else if(!AU.muted)AU.c.resume()}catch(e){}});
+addEventListener('pagehide',()=>{try{AU.c&&AU.c.suspend()}catch(e){}});

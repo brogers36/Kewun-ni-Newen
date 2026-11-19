@@ -92,7 +92,7 @@ The game is installable on phones two ways, both fed by this repo:
 
 > <https://github.com/brogers36/Kewun-ni-Newen/releases/download/android/KewunNiNewen.apk>
 
-Android users download it from the [Releases page](https://github.com/brogers36/Kewun-ni-Newen/releases/tag/android), allow installing from that source once, and later versions install over the old one without losing saves. The signing keystore (`android-signing/`) is committed so the signature stays stable; if the app ever goes to Google Play, generate a new private key there instead of reusing this public one.
+Android users download it from the [Releases page](https://github.com/brogers36/Kewun-ni-Newen/releases/tag/android) and allow installing from that source once. The APK is a thin shell that loads the live GitHub Pages build, so installed copies pick up every pushed update automatically on their next online launch (first launch needs internet; after that the service worker keeps it playable offline). Re-downloading the APK is only needed if the shell itself changes. The signing keystore (`android-signing/`) is committed so the signature stays stable; if the app ever goes to Google Play, generate a new private key there instead of reusing this public one.
 
 The build master strips the PWA tags (`build.py --master`), so only the player copy registers the service worker.
 

@@ -25,6 +25,7 @@ $('pA').addEventListener('pointerdown',e=>{e.preventDefault();pressA()});
 $('pB').addEventListener('pointerdown',e=>{e.preventDefault();pressB()});
 $('pM').addEventListener('pointerdown',e=>{e.preventDefault();if(mode==='map'&&!active)openPause()});
 $('pN').addEventListener('pointerdown',e=>{e.preventDefault();toggleMute()});
+$('mbtn').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();auInit();if(mode==='map'&&!active)openPause()});
 function heldDir(){for(const d of ['up','down','left','right'])if(held[d])return d;return null}
 const DV={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
 const OPP={up:'down',down:'up',left:'right',right:'left'};
