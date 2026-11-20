@@ -1,9 +1,21 @@
 /* ============================================================
    Kewün ñi Newen (working title) · Lafkenche region
    ============================================================ */
-const W=512,H=448,LW=256,LH=224,T=16,VY=0,VH=LH;
+let W=512,H=448,LW=256;const LH=224,T=16,VY=0,VH=LH;
 const cv=document.getElementById('cv'),ctx=cv.getContext('2d');ctx.imageSmoothingEnabled=false;
 const LO=document.createElement('canvas');LO.width=LW;LO.height=LH;const lx=LO.getContext('2d');lx.imageSmoothingEnabled=false;
+function setView(lw){
+  lw=Math.max(256,Math.min(400,Math.round(lw/2)*2));
+  if(lw===LW)return false;
+  LW=lw;W=LW*2;
+  LO.width=LW;LO.height=LH;lx.imageSmoothingEnabled=false;
+  cv.width=W;cv.height=H;ctx.imageSmoothingEnabled=false;
+  document.getElementById('screen').style.setProperty('--lw',LW);
+  if(typeof VIGNC!=='undefined'&&VIGNC)VIGNC=null;
+  if(typeof BG!=='undefined')for(const k in BG)delete BG[k];
+  if(typeof FG!=='undefined')for(const k in FG)delete FG[k];
+  return true;
+}
 const $=id=>document.getElementById(id);
 const CT=true;
 const SAVE_KEY='ngen_ni_dungun_lafkenche_v2'+(window.KEWUN_MASTER?'_maestro':''),MUTE_KEY='ngen_ni_dungun_mute';
