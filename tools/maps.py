@@ -1216,6 +1216,31 @@ for _mk,_cells in PZPATCH.items():
         assert _rows[_y][_x] not in 'S%',(_mk,_x,_y,_rows[_y][_x])
         _rows[_y][_x]=_ch
     M[_mk]=[''.join(r) for r in _rows]
+
+# Subtle landscape tells at the six secret-boss patches: a few region-true
+# scenery pieces (tufts or stones) ringing the trigger area with gaps.
+SECRING={
+ 'l_wapi':((20,22,10,11),'"','.'),
+ 'n_winkul':((27,28,2,4),'#',','),
+ 'p_pire':((4,6,14,15),'#','.'),
+ 'w_trayen':((13,15,7,8),'"',','),
+ 'e_salitral':((15,16,8,10),'#','.'),
+ 'g_puel':((22,24,8,9),'"',','),
+}
+for _mk,((_x0,_x1,_y0,_y1),_ch,_fl) in SECRING.items():
+    _rows=[list(r) for r in M[_mk]]
+    _h=len(_rows);_w=len(_rows[0])
+    _perim=[]
+    for _x in range(_x0-1,_x1+2):
+        _perim.append((_x,_y0-1));_perim.append((_x,_y1+1))
+    for _y in range(_y0,_y1+1):
+        _perim.append((_x0-1,_y));_perim.append((_x1+1,_y))
+    _ok=[(_x,_y) for (_x,_y) in _perim if 0<_x<_w-1 and 0<_y<_h-1 and _rows[_y][_x]==_fl]
+    _ok=sorted(set(_ok))
+    _pick=_ok[::max(1,len(_ok)//5)][:5]
+    for (_x,_y) in _pick:_rows[_y][_x]=_ch
+    M[_mk]=[''.join(r) for r in _rows]
+    print('SECRING',_mk,_pick)
 open(OUT,'w',encoding='utf-8').write('const MAPROWS='+json.dumps(M,ensure_ascii=False)+';\n')
 for k in ['nd1','nd2','nd3']:
     print(k);[print(i,r) for i,r in enumerate(N[k])]
