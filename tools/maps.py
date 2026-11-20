@@ -1186,6 +1186,36 @@ for k,v in N.items():
     print(k,w,len(v))
 M.update(N)
 # inaltu right exit
+
+# Floor-3 puzzles: ordered rune stones (N) and the rock (E) they move aside
+PZPATCH={
+ 'd3':{(19,3):'E',(4,1):'N',(8,4):'N',(13,5):'N'},
+ 'nd3':{(3,7):'E',(2,6):'E',(1,7):'E',(16,1):'N',(5,5):'N',(19,6):'N'},
+ 'pd3':{(20,7):'E',(21,6):'E',(22,7):'E',(21,8):'E',(3,2):'N',(14,2):'N',(10,6):'N'},
+ 'wd3':{(3,7):'E',(2,6):'E',(1,7):'E',(6,2):'N',(12,4):'N',(18,6):'N'},
+ 'ed3':{(18,7):'E',(19,6):'E',(19,8):'E',(20,7):'E',(2,2):'N',(7,4):'N',(14,7):'N'},
+}
+for _mk,_cells in PZPATCH.items():
+    _rows=[list(r) for r in M[_mk]]
+    for (_x,_y),_ch in _cells.items():
+        assert _rows[_y][_x] not in 'S%',(_mk,_x,_y,_rows[_y][_x])
+        _rows[_y][_x]=_ch
+    M[_mk]=[''.join(r) for r in _rows]
+
+# Floor-3 puzzles: ordered rune stones (N) and the rock (E) they move aside
+PZPATCH={
+ 'd3':{(19,3):'E',(4,1):'N',(8,4):'N',(13,5):'N'},
+ 'nd3':{(3,7):'E',(2,6):'E',(1,7):'E',(16,1):'N',(5,5):'N',(19,6):'N'},
+ 'pd3':{(20,7):'E',(21,6):'E',(22,7):'E',(21,8):'E',(3,2):'N',(14,2):'N',(10,6):'N'},
+ 'wd3':{(3,7):'E',(2,6):'E',(1,7):'E',(6,2):'N',(12,4):'N',(18,6):'N'},
+ 'ed3':{(18,7):'E',(19,6):'E',(19,8):'E',(20,7):'E',(2,2):'N',(7,4):'N',(14,7):'N'},
+}
+for _mk,_cells in PZPATCH.items():
+    _rows=[list(r) for r in M[_mk]]
+    for (_x,_y),_ch in _cells.items():
+        assert _rows[_y][_x] not in 'S%',(_mk,_x,_y,_rows[_y][_x])
+        _rows[_y][_x]=_ch
+    M[_mk]=[''.join(r) for r in _rows]
 open(OUT,'w',encoding='utf-8').write('const MAPROWS='+json.dumps(M,ensure_ascii=False)+';\n')
 for k in ['nd1','nd2','nd3']:
     print(k);[print(i,r) for i,r in enumerate(N[k])]
