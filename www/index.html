@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='48a3a32-202611192229';
+window.KEWUN_BUILD='b9fcd95-202611201058';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -75,6 +75,7 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #skip{position:absolute;right:.6em;top:.6em;font:inherit;font-size:.85em;padding:.25em .7em;border-radius:4px;border:2px solid #e8d49a;background:#2a2238cc;color:#fff;cursor:pointer;display:none}
 #mbtn{position:absolute;left:.6em;top:.6em;font:inherit;font-size:1em;padding:.15em .5em;border-radius:4px;border:2px solid #4a3d5c;background:#2a223880;color:#f4ecd8cc;cursor:pointer;display:none}
 @media (hover:none),(pointer:coarse){#mbtn{display:block}}
+#fsbtn{position:absolute;right:.6em;top:.6em;z-index:9;font:inherit;font-size:1em;padding:.15em .5em;border-radius:4px;border:2px solid #4a3d5c;background:#2a223880;color:#f4ecd8cc;cursor:pointer;display:none}
 #pad{display:flex;gap:28px;align-items:center;justify-content:center}
 #dpad{display:grid;grid-template-columns:repeat(3,48px);grid-template-rows:repeat(3,48px);gap:3px}
 #dpad button,#ab button{font:bold 16px ui-monospace,monospace;color:#f4ecd8;background:#2a2238;border:2px solid #4a3d5c;border-radius:8px;touch-action:none}
@@ -97,6 +98,7 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
       <div id="menu" class="box"><div class="p"></div><div class="list"></div></div>
       <button id="skip">Saltar ▶▶</button>
       <button id="mbtn">☰</button>
+      <button id="fsbtn" title="Pantalla completa / Fullscreen (F)">⛶</button>
       <div id="title">
         <h1>Kewün ñi Newen</h1>
         <div class="sub">Prototipo · Lafkenche, Nagche, Pewenche y Williche</div>
@@ -4699,6 +4701,19 @@ function fit(){
   const si=s>=2?Math.floor(s*2)/2:s;$('screen').style.setProperty('--s',si);
 }
 addEventListener('resize',fit);fit();
+(function(){
+  const d=document.documentElement,b=$('fsbtn');if(!b)return;
+  const can=d.requestFullscreen||d.webkitRequestFullscreen;
+  const standalone=navigator.standalone||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches;
+  if(!can||standalone)return;
+  b.style.display='block';
+  const on=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
+  const tog=()=>{try{if(on()){(document.exitFullscreen||document.webkitExitFullscreen).call(document)}else{can.call(d)}}catch(e){}};
+  b.onclick=tog;
+  const ch=()=>{b.textContent=on()?'⊡':'⛶';setTimeout(fit,60)};
+  document.addEventListener('fullscreenchange',ch);document.addEventListener('webkitfullscreenchange',ch);
+  addEventListener('keydown',e=>{if((e.key==='f'||e.key==='F')&&!e.repeat)tog()});
+})();
 const sv=loadSave();if(sv)$('bCont').style.display='';
 function updLang(){$('copy').textContent=LANG==='es'?'© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.':'© 2026 Brandon M. A. Rogers · All rights reserved. No use of this site to train artificial intelligence.';$('bLang').textContent=LANG==='es'?'Glosa: Español':'Gloss: English';$('skip').textContent=LANG==='es'?'Saltar ▶▶':'Skip ▶▶'}
 $('bLang').onclick=()=>{LANG=LANG==='es'?'en':'es';updLang()};

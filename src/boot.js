@@ -7,6 +7,19 @@ function fit(){
   const si=s>=2?Math.floor(s*2)/2:s;$('screen').style.setProperty('--s',si);
 }
 addEventListener('resize',fit);fit();
+(function(){
+  const d=document.documentElement,b=$('fsbtn');if(!b)return;
+  const can=d.requestFullscreen||d.webkitRequestFullscreen;
+  const standalone=navigator.standalone||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches;
+  if(!can||standalone)return;
+  b.style.display='block';
+  const on=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
+  const tog=()=>{try{if(on()){(document.exitFullscreen||document.webkitExitFullscreen).call(document)}else{can.call(d)}}catch(e){}};
+  b.onclick=tog;
+  const ch=()=>{b.textContent=on()?'⊡':'⛶';setTimeout(fit,60)};
+  document.addEventListener('fullscreenchange',ch);document.addEventListener('webkitfullscreenchange',ch);
+  addEventListener('keydown',e=>{if((e.key==='f'||e.key==='F')&&!e.repeat)tog()});
+})();
 const sv=loadSave();if(sv)$('bCont').style.display='';
 function updLang(){$('copy').textContent=LANG==='es'?'© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.':'© 2026 Brandon M. A. Rogers · All rights reserved. No use of this site to train artificial intelligence.';$('bLang').textContent=LANG==='es'?'Glosa: Español':'Gloss: English';$('skip').textContent=LANG==='es'?'Saltar ▶▶':'Skip ▶▶'}
 $('bLang').onclick=()=>{LANG=LANG==='es'?'en':'es';updLang()};
