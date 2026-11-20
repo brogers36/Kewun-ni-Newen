@@ -422,20 +422,37 @@ function smithTalk(){
 const AWN=['kiñe','epu','küla','meli','kechu','kayu'];
 function awarTalk(){
   const en=S.gloss==='en';
+  const bean=k=>'<span style="display:inline-block;width:.9em;height:.9em;border-radius:50%;margin:0 .12em;vertical-align:-.1em;'+(k?'background:#241a10;border:2px solid #e8d8b8':'background:#f4ecd8;border:2px solid #241a10')+'"></span>';
   say([L('Pichiche','Awarkuden! Awarkudeaiñ?','¡Awarkuden! ¿Jugamos?','Awarkuden! Shall we play?'),
-    N('El awarkuden se juega con seis habas pintadas de negro por un lado. Se lanzan y se cuentan las que caen negras.','Awarkuden is played with six beans painted black on one side. You throw them and count how many land black.')],()=>
-    choose({es:'¿Juegas?',en:'Play?'},[{m:'May',g:en?'Yes':'Sí',v:1},{m:'Mülekan faw',g:en?'Not now (stay here)':'Ahora no',v:0}],v=>{if(v)round()},true,true));
-  function round(){
-    const n=1+rnd(6),beans=[];for(let i=0;i<6;i++)beans.push(i<n?'●':'○');for(let a=5;a>0;a--){const b=rnd(a+1);[beans[a],beans[b]]=[beans[b],beans[a]]}
-    const pool=[n-1];while(pool.length<4){const k=rnd(6);if(!pool.includes(k))pool.push(k)}
-    const opts=pool.map(k=>({m:AWN[k],v:k}));for(let a=3;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
-    sfx('ok');choose(L('Pichiche',beans.join(' ')+'   Chumten kurü?','Lanzas las habas. ¿Cuántas cayeron negras? (kurü = negro)','You throw the beans. How many landed black? (kurü = black)'),opts,v=>{
-      if(v===n-1){const ls=[praise(),L('Pichiche',AWN[n-1]+'! Kümey!','¡'+AWN[n-1]+'! ¡Bien!','¡'+AWN[n-1]+'! Good!')];
-        if(!S.flags.awar){S.flags.awar=1;S.gold+=10;persist();sfx('pick');ls.push(L('','Mari ngülliw!','Los niños te regalan mari (10) ngülliw por jugar.','The children give you mari (10) ngülliw for playing.'))}
-        say(ls,again)}
-      else{sfx('bad');say([L('Pichiche','Fey no!','¡Eso no!','Not that!'),N('Cuenta otra vez las habas negras (●).','Count the black beans (●) again.')],again)}},false,true);
+    N('El awarkuden se juega con seis habas pintadas de negro por un lado. Se lanzan y se cuentan las que caen negras (kurü) y las blancas (lüq). Si todas caen iguales, ¡es Paro!','Awarkuden is played with six beans painted black on one side. You throw them and count how many land black (kurü) and how many white (lüq). If they all land the same, it is Paro!'),
+    N('Jugaremos meli (4) lanzadas. Cada respuesta buena vale un punto; un Paro vale dos.','We will play meli (4) throws. Each right answer is worth a point; a Paro is worth two.')],()=>
+    choose({es:'¿Juegas?',en:'Play?'},[{m:'May',g:en?'Yes':'Sí',v:1},{m:'Mülekan faw',g:en?'Not now (stay here)':'Ahora no',v:0}],v=>{if(v)game()},true,true));
+  function game(){let pts=0,t=0;toss();
+    function toss(){
+      if(t>=4)return fin();
+      t++;
+      const n=rnd(7),beans=[];for(let i=0;i<6;i++)beans.push(i<n?1:0);for(let a=5;a>0;a--){const b=rnd(a+1);[beans[a],beans[b]]=[beans[b],beans[a]]}
+      const mh=beans.map(bean).join('');
+      if(n===0||n===6){pts+=2;sfx('lvl');
+        return say([L('Pichiche','Paro! Kom '+(n?'kurü':'lüq')+'!','¡Paro! Cayeron todas '+(n?'negras (kom kurü)':'blancas (kom lüq)')+': ¡dos puntos!','Paro! They all landed '+(n?'black (kom kurü)':'white (kom lüq)')+': two points!',)],toss);}
+      const askK=rnd(2)===0,c=askK?n:6-n;
+      const pool=[c];while(pool.length<4){const k=1+rnd(6);if(!pool.includes(k))pool.push(k)}
+      const opts=pool.map(k=>({m:AWN[k-1],v:k}));for(let a=3;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
+      sfx('ok');
+      const pr={mh:mh,m:'Mufü '+(askK?'kurü':'lüq')+'?',es:'Lanzada '+t+' de 4. ¿Cuántas cayeron '+(askK?'negras (kurü)':'blancas (lüq)')+'?',en:'Throw '+t+' of 4. How many landed '+(askK?'black (kurü)':'white (lüq)')+'?'};
+      choose(pr,opts,v=>{
+        if(v===c){pts++;say([praise(),L('Pichiche',AWN[c-1]+'! Feley!','¡'+AWN[c-1]+'! ¡Así es!','¡'+AWN[c-1]+'! That is right!')],toss)}
+        else{sfx('bad');say([L('Pichiche','Fey no! '+AWN[c-1]+' '+(askK?'kurü':'lüq')+'.','¡Eso no! Eran '+AWN[c-1]+' ('+c+') '+(askK?'negras':'blancas')+'.','Not that! There were '+AWN[c-1]+' ('+c+') '+(askK?'black':'white')+'.')],toss)}
+      },false,true);
+    }
+    function fin(){
+      const ls=[L('Pichiche',numW(Math.max(1,pts))+'!','Terminamos: hiciste '+pts+' punto'+(pts===1?'':'s')+'.','Done: you scored '+pts+' point'+(pts===1?'':'s')+'.')];
+      if(!S.flags.awar){S.flags.awar=1;S.gold+=10;sfx('pick');ls.push(L('','Mari ngülliw!','Los niños te regalan mari (10) ngülliw por jugar.','The children give you mari (10) ngülliw for playing.'))}
+      if(pts>=5&&!S.flags.awar2){S.flags.awar2=1;S.gold+=30;sfx('lvl');ls.push(L('Pichiche','Awarkudefe ngeymi!','¡Eres awarkudefe, campeón del awarkuden! Küla mari (30) ngülliw de premio.','You are an awarkudefe, an awarkuden champion! Küla mari (30) ngülliw as a prize.'))}
+      persist();
+      say(ls,()=>choose({es:'¿Otra vez?',en:'Again?'},[{m:'Ka kiñe rupa',g:en?'Once more':'Otra vez',v:1},{m:'Pewkayal',g:en?'See you later':'Hasta luego',v:0}],v=>{if(v)game()},true,true));
+    }
   }
-  function again(){choose({es:'¿Otra vez?',en:'Again?'},[{m:'Ka kiñe rupa',g:en?'Once more':'Otra vez',v:1},{m:'Pewkayal',g:en?'See you later':'Hasta luego',v:0}],v=>{if(v)round()},true,true)}
 }
 const herdN=t=>Object.keys(S.flags).filter(k=>k.startsWith('hd_')&&(MAPS.n_kullin.ents.find(e=>e.flag===k)||{}).look===t).length;
 function farmerTalk(){

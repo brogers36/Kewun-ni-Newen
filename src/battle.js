@@ -345,6 +345,50 @@ function ngoyStage(n){
 function bossSweep(){
   if((B.o.final||B.o.chain==='llufu')&&aliveE().length&&!aliveE().some(x=>ET[x.t].boss)){
     for(const x of aliveE()){x.hp=0;x.pend=0;x.dead=true;x.fadeT=20}}}
+
+/* La voz del ngen: pregunta final (no imperativa) antes de que caiga un jefe.
+   Bien respondida, el jefe cae; mal respondida, recupera fuerzas. */
+const NGENQ=[
+  {m:'Amun.',es:'¿Quién fue?',en:'Who went?',o:['iñche','eymi','fey'],a:0},
+  {m:'Amuymi.',es:'¿Quién fue?',en:'Who went?',o:['iñche','eymi','fey'],a:1},
+  {m:'Umawtuy.',es:'¿Quién durmió?',en:'Who slept?',o:['iñche','eymi','fey'],a:2},
+  {m:'Amuan.',es:'¿Qué dice?',en:'What does it say?',o:[['voy a ir','I will go'],['fui','I went'],['suelo ir','I usually go']],a:0},
+  {m:'Amuken.',es:'¿Qué dice?',en:'What does it say?',o:[['suelo ir','I usually go'],['voy a ir','I will go'],['no voy','I do not go']],a:0},
+  {m:'Umawtukefun.',es:'¿Qué dice?',en:'What does it say?',o:[['antes solía dormir','I used to sleep'],['voy a dormir','I will sleep'],['estoy durmiendo','I am sleeping']],a:0},
+  {m:'Amurkey.',es:'¿Qué dice el -rke-?',en:'What does -rke- say?',o:[['dicen que fue','they say it went'],['fue dos veces','it went twice'],['quiere ir','it wants to go']],a:0},
+  {m:'Amulan.',es:'¿Qué dice?',en:'What does it say?',o:[['no voy / no fui','I do not go / did not go'],['voy a ir','I will go'],['ve tú','you go']],a:0},
+  {m:'Küpalay.',es:'¿Qué dice?',en:'What does it say?',o:[['no viene / no vino','it does not come / did not come'],['ya viene','it is coming'],['ven tú','you come']],a:0},
+  {m:'ñi ruka',es:'¿Qué significa?',en:'What does it mean?',o:[['mi casa','my house'],['tu casa','your house'],['nuestra casa','our house']],a:0},
+  {m:'mi chaw',es:'¿Qué significa?',en:'What does it mean?',o:[['tu padre','your father'],['mi padre','my father'],['su padre','their father']],a:0},
+  {m:'taiñ mapu',es:'¿Qué significa?',en:'What does it mean?',o:[['nuestra tierra','our land'],['mi tierra','my land'],['tu tierra','your land']],a:0},
+  {m:'pu che',es:'¿Qué significa?',en:'What does it mean?',o:[['las personas','the people'],['una persona','one person'],['la tierra','the land']],a:0},
+  {m:'Chem am "challwa"?',es:'',en:'',o:[['el pez','fish'],['el fuego','fire'],['la lluvia','rain']],a:0},
+  {m:'Chem am "kütral"?',es:'',en:'',o:[['el fuego','fire'],['la piedra','stone'],['el viento','wind']],a:0},
+  {m:'Chem am "mawün"?',es:'',en:'',o:[['la lluvia','rain'],['la nieve','snow'],['el mar','the sea']],a:0},
+  {m:'Chem am "kürüf"?',es:'',en:'',o:[['el viento','wind'],['el sol','the sun'],['el canto','the song']],a:0},
+  {m:'Chem am "wangülen"?',es:'',en:'',o:[['la estrella','star'],['la luna','moon'],['la noche','night']],a:0},
+  {m:'Chem am "piwke"?',es:'',en:'',o:[['el corazón','the heart'],['la cabeza','the head'],['la mano','the hand']],a:0},
+  {m:'Chem am "newen"?',es:'',en:'',o:[['la fuerza','strength'],['el miedo','fear'],['el sueño','sleep']],a:0},
+  {m:'Chem am "kimün"?',es:'',en:'',o:[['el conocimiento','knowledge'],['el olvido','forgetting'],['la comida','food']],a:0},
+  {m:'epu mari kiñe',es:'¿Qué número es?',en:'Which number is it?',o:['21','12','31'],a:0},
+  {m:'küla mari',es:'¿Qué número es?',en:'Which number is it?',o:['30','13','33'],a:0},
+  {m:'kiñe pataka',es:'¿Qué número es?',en:'Which number is it?',o:['100','10','1000'],a:0}];
+function ngenQuiz(qb){
+  const en=S.gloss==='en';
+  const Q=NGENQ[rnd(NGENQ.length)];
+  const who=B.o.chain==='llufu'?['las voces de los chumpall',"the chumpall's voices"]:B.o.final?['las cinco voces de los ngen','the five voices of the ngen']:['la voz del ngen de esta tierra',"the voice of this land's ngen"];
+  say([N(qb.label+' se tambalea, a punto de caer... y el tiempo se detiene. En tu cabeza suena, honda como la tierra, '+who[0]+'.',qb.label+' staggers, about to fall... and time stops. Deep as the earth, '+who[1]+' sounds inside your head.'),
+    L('','Kiñe ramtun.','«Una pregunta. Si respondes bien, tu palabra será el golpe final.»','"One question. Answer well, and your word will be the final blow."')],()=>{
+    const opts=Q.o.map((o,i)=>({m:Array.isArray(o)?(en?o[1]:o[0]):o,v:i}));
+    for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
+    choose({m:'«'+Q.m+'»',es:Q.es,en:Q.en},opts,v=>{
+      if(v===Q.a){sfx('lvl');B.flash=16;B.shake=10;qb.hp=0;qb.dead=true;qb.fadeT=20;B.qok=1;
+        say([N('Respondes, y la palabra sale de ti como un golpe de luz. '+qb.label+' cae.','You answer, and the word leaves you like a blow of light. '+qb.label+' falls.')],victory);}
+      else{sfx('bad');const rg=Math.max(4,Math.round(ET[qb.t].hp*(.15+Math.random()*.25)));qb.hp=Math.min(ET[qb.t].hp,qb.hp+rg);
+        say([N('La palabra se te escapa... El tiempo vuelve a correr y '+qb.label+' se endereza, recuperando fuerzas (+'+rg+'). La respuesta era: '+(Array.isArray(Q.o[Q.a])?(en?Q.o[Q.a][1]:Q.o[Q.a][0]):Q.o[Q.a])+'.','The word slips away... Time runs again and '+qb.label+' straightens, recovering strength (+'+rg+'). The answer was: '+(Array.isArray(Q.o[Q.a])?(en?Q.o[Q.a][1]:Q.o[Q.a][0]):Q.o[Q.a])+'.')],battleMenu);}
+    },false,true);
+  });
+}
 function victory(){
   if(B.o.final){const st=B.en[0].t;
     if(st==='ngoyman1')return ngoyStage(2);
@@ -352,11 +396,13 @@ function victory(){
   if(B.o.chain==='llufu'){const st=B.en.find(e=>ET[e.t].boss);
     const nx={llufu1:'llufu2',llufu2:'llufu3',llufu3:'llufu4',llufu4:'llufu5'}[st&&st.t];
     if(nx)return llufuStage(nx);}
+  {const qb=B.en.find(e=>ET[e.t].boss);
+   if(qb&&!B.qok){qb.dead=false;qb.fadeT=0;qb.hit=0;qb.hp=1;return ngenQuiz(qb)}}
   const xp=B.en.reduce((a,e)=>a+ET[e.t].xp,0);let gold=B.en.reduce((a,e)=>{const g=ET[e.t].gold;return a+g[0]+rnd(g[1]-g[0]+1)},0);
   if(S.pw.gold){gold*=2;S.pw.gold=0}
   S.xp+=xp;S.gold+=gold;
   const after=SONGS.win;after.after=()=>mapSong();playSong('win');
-  const ls=[N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+xp+' de kimün.','You gain '+numP(gold)+' ngülliw and '+xp+' kimün.')];
+  const ls=[N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
   while(S.xp>=xpNeed()){S.xp-=xpNeed();S.lvl++;S.baseMax+=HPQ;S.hp+=HPQ;S.baseAtk+=1;if(S.lvl%2===0)S.baseDef+=1;
     const l=L('','Doy kimün!','¡Más conocimiento! Llegas a kimün '+S.lvl+': ganas un corazón y más fuerza.','More knowledge! You reach kimün '+S.lvl+': you gain a heart and more strength.');l.fx=()=>sfx('lvl');ls.push(l)}
   say(ls,()=>endBattle('win'));

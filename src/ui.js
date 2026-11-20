@@ -32,7 +32,8 @@ dlg.addEventListener('click',()=>{if(active&&active.kind==='say')active.a()});
 function choose(prompt,opts,cb,cancel,one,onSel){
   const pe=menu.querySelector('.p'),le=menu.querySelector('.list');
   pe.innerHTML='';le.innerHTML='';le.classList.toggle('one',!!one);
-  if(prompt){if(prompt.m){const d=document.createElement('div');d.className='m';d.textContent=prompt.m;pe.appendChild(d)}
+  if(prompt){if(prompt.mh){const d=document.createElement('div');d.innerHTML=prompt.mh;d.style.lineHeight='1.7';pe.appendChild(d)}
+    if(prompt.m){const d=document.createElement('div');d.className='m';d.textContent=prompt.m;pe.appendChild(d)}
     const g=G(prompt);if(g){const d=document.createElement('div');d.className='g';d.textContent=g;pe.appendChild(d)}}
   let idx=opts.findIndex(o=>!o.dis);if(idx<0)idx=0;
   const pick=k=>{menu.style.display='none';active=null;sfx('ok');cb(opts[k].v!==undefined?opts[k].v:k)};
