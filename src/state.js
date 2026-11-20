@@ -27,7 +27,8 @@ const ROOTS={
   tripa:{m:'tripa-',es:'salir',en:'come out'},
   trana:{m:'trana-',es:'caerse',en:'fall down'},
   nepe:{m:'nepe-',es:'despertar',en:'wake up'},
-  'ñam':{m:'ñam-',es:'perderse, desaparecer',en:'get lost, vanish'}};
+  'ñam':{m:'ñam-',es:'perderse, desaparecer',en:'get lost, vanish'},
+  llako:{m:'llako-',es:'calmarse, aplacarse',en:'calm down, settle'}};
 const ENDS=['nge','mu','mün'];
 const endFor=n=>n<=1?0:n===2?1:2;
 const VG={
@@ -56,7 +57,9 @@ const VG={
   nepe:{es:['¡Despierta!','¡Despierten (ustedes dos)!','¡Despierten (todos)!'],en:['Wake up!','Wake up, you two!','Wake up, all of you!'],
        nes:['¡No despiertes!','¡No despierten (ustedes dos)!','¡No despierten (todos)!'],nen:["Don't wake up!","Don't wake up, you two!","Don't wake up, all of you!"]},
   'wüñotreka':{es:['¡Vuelve atrás!','¡Vuelvan atrás (ustedes dos)!','¡Vuelvan atrás (todos)!'],en:['Go back!','Go back, you two!','Go back, all of you!'],
-       nes:['¡No vuelvas atrás!','¡No vuelvan (ustedes dos)!','¡No vuelvan (todos)!'],nen:["Don't go back!","Don't go back, you two!","Don't go back, all of you!"]}};
+       nes:['¡No vuelvas atrás!','¡No vuelvan (ustedes dos)!','¡No vuelvan (todos)!'],nen:["Don't go back!","Don't go back, you two!","Don't go back, all of you!"]},
+  llako:{es:['¡Cálmate!','¡Cálmense (ustedes dos)!','¡Cálmense (todos)!'],en:['Calm down!','Calm down, you two!','Calm down, all of you!'],
+       nes:['¡No te calmes!','¡No se calmen (ustedes dos)!','¡No se calmen (todos)!'],nen:["Don't calm down!","Don't calm down, you two!","Don't calm down, all of you!"]}};
 
 /* ---------- enemies ---------- */
 const ET={
@@ -90,7 +93,7 @@ const ET={
   fmewlen:{name:'fütra mewlen',hp:62,atk:11,xp:34,gold:[22,26],bs:70,fly:true,mini:1},
   kurutoro:{name:'kurü toro',hp:66,atk:11,xp:36,gold:[22,26],bs:72,armor:1,mini:1},
   walichu:{name:'Walichu',hp:150,atk:11,xp:130,gold:[120,120],boss:true,bs:112,dream:1},
-  chadikura:{name:'Elengassen',hp:175,atk:12,xp:200,gold:[250,250],boss:true,bs:96,spres:1,armor:1,seals:['nepe','trafo','wüñotrekakil']},
+  chadikura:{name:'Elëngasëm',hp:175,atk:12,xp:200,gold:[250,250],boss:true,bs:96,spres:1,armor:1,seals:['nepe','trafo','wüñotrekakil']},
   epunamun:{name:'Epunamun',hp:190,atk:12,xp:220,gold:[300,300],boss:true,bs:100,spres:1,seals:['umawtu','nepe','tranakil']},
   ngoyam:{name:'ngoyman am',hp:34,atk:12,xp:22,gold:[12,16],bs:46},
   kalku:{name:'Fütra Kalku',hp:200,atk:13,xp:260,gold:[350,350],boss:true,bs:92,spres:1,seals:['llüka','wüñotreka','ñamkil']},

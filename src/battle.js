@@ -176,6 +176,20 @@ function resolve(r,kil,tg,ei){
       if(T.boss){e.down=2;fx.push(e.label+' se tambalea e hinca una rodilla: el próximo golpe le dolerá más.');fxe.push(e.label+' staggers and drops to one knee: the next blow will hurt it more.');continue}
       e.stun=1;e.down=2;fx.push(e.label+' cae al suelo: pierde su turno, y el próximo golpe le dolerá más.');fxe.push(e.label+' falls to the ground: it loses its turn, and the next blow will hurt it more.')}}
   else if(r==='trana'){fx.push('Les dijiste que no se cayeran. Se quedan bien parados.');fxe.push('You told them not to fall. They stay firmly on their feet.')}
+  else if(r==='llako'&&!kil){for(const e of targets){const T=ET[e.t];
+      if(e.hidden){fx.push(e.label+' está escondido: tu canto se pierde en el agua oscura.');fxe.push(e.label+' is hidden: your song is lost in the dark water.');e.miss=1;continue}
+      const ulk=B.o.chain==='llufu'&&T.boss;
+      if(ulk){
+        let d=atk()+rnd(4)+3;
+        if(e.armor){d=Math.max(1,Math.round(d*.25));fx.push(e.label+': las placas apagan el canto.');fxe.push(e.label+': the plates muffle the song.')}
+        if(e.seals&&e.seals.length){d=Math.min(2,d);fx.push(e.label+': la barrera de luz apaga casi todo el canto.');fxe.push(e.label+': the barrier of light smothers most of the song.')}
+        if(e.down){d+=4;e.down=0}
+        e.pend=d;e.hp-=d;
+        fx.push('El ül envuelve a '+e.label+': sus anillos se aflojan, más cerca del sueño (−'+d+').');fxe.push('The ül wraps around '+e.label+': its coils loosen, closer to sleep (−'+d+').');
+      }else if(T.boss){fx.push(e.label+' no se aquieta con palabras.');fxe.push(e.label+' is not stilled by words.')}
+      else{const d=e.seals&&e.seals.length?Math.min(2,2):2;e.pend=d;e.hp-=d;if(!ET[e.t].fly&&Math.random()<.35)e.sl=1;
+        fx.push(e.label+' se aquieta un poco (−'+d+').');fxe.push(e.label+' settles a little (−'+d+').');}}}
+  else if(r==='llako'){fx.push('Les dijiste que no se calmaran. Se agitan, pero nada más pasa.');fxe.push('You told them not to calm down. They stir, but nothing more happens.')}
   else if(r==='nepe'&&!kil){for(const e of targets){
       if(e.sl){e.sl=0;const d=8;e.pend=d;e.hp-=d;fx.push(e.label+' despierta de golpe: ¡el susto lo sacude! (−'+d+')');fxe.push(e.label+' wakes with a start: the shock rattles it! (−'+d+')');continue}
       if(e.dreaming){e.dreaming=0;e.dreamT=4;e.stun=1;fx.push(e.label+' abre los ojos: su sueño gris se deshace y pierde el turno. ¡Ahora tus golpes sí le llegan!');fxe.push(e.label+' opens its eyes: its grey dream falls apart and it loses its turn. Now your blows can reach it!');continue}
