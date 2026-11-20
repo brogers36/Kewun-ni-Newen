@@ -212,20 +212,20 @@ function enemyPhase(){
     if(e.stun>0){e.stun--;fx.push(e.label+' todavía retrocede.');fxe.push(e.label+' is still backing away.');continue}
     if(e.t==='ngoyam'&&Math.random()<.3&&(S.sp||0)>0){S.sp--;fx.push(e.label+' te susurra el olvido: pierdes un punto de newen (✦).');fxe.push(e.label+' whispers forgetting to you: you lose one newen point (✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')});continue}
     if(e.t==='ngoyman1'||e.t==='llufu1'){const wat=e.t==='llufu1';
-      if(!e.hidden&&e.hideT>0){e.hideT--;if(e.hideT<=0){e.hidden=1;fx.push(wat?'El agua oscura vuelve a tragarse al Llufü Filu.':'La niebla vuelve a tragarse a Ti Fütra Ngoyman.');fxe.push(wat?'The dark water swallows the Llufü Filu again.':'The fog swallows Ti Fütra Ngoyman again.');continue}}
-      if(!e.hidden&&!e.hideT&&B.turn===0){e.hidden=1;fx.push(wat?'El Llufü Filu se hunde en el agua oscura: no ves dónde golpear.':'El velo de niebla se cierra sobre el gran olvido: no ves dónde golpear.');fxe.push(wat?'The Llufü Filu sinks into the dark water: you cannot see where to strike.':'The veil of fog closes over the great forgetting: you cannot see where to strike.');continue}
+      if(!e.hidden&&e.hideT>0){e.hideT--;if(e.hideT<=0){e.hidden=1;fx.push(wat?'El agua oscura vuelve a tragarse al Kaykayfilu.':'La niebla vuelve a tragarse a Ti Fütra Ngoyman.');fxe.push(wat?'The dark water swallows the Kaykayfilu again.':'The fog swallows Ti Fütra Ngoyman again.');continue}}
+      if(!e.hidden&&!e.hideT&&B.turn===0){e.hidden=1;fx.push(wat?'El Kaykayfilu se hunde en el agua oscura: no ves dónde golpear.':'El velo de niebla se cierra sobre el gran olvido: no ves dónde golpear.');fxe.push(wat?'The Kaykayfilu sinks into the dark water: you cannot see where to strike.':'The veil of fog closes over the great forgetting: you cannot see where to strike.');continue}
       hitP(e,e.hidden?1:1.3,wat?{es:' te golpea con la cola desde lo oscuro',en:' strikes you with its tail from the dark'}:{es:' te azota con un jirón de niebla',en:' lashes you with a shred of fog'});continue}
     if(e.t==='llufu2'){
-      if(!e.armor){e.armorT=(e.armorT||0)-1;if(e.armorT<=0){e.armor=1;fx.push('Las placas de la mandíbula del Llufü Filu vuelven a cerrarse.');fxe.push('The plates of the Llufü Filu\'s jaw lock shut again.');continue}}
+      if(!e.armor){e.armorT=(e.armorT||0)-1;if(e.armorT<=0){e.armor=1;fx.push('Las placas de la mandíbula del Kaykayfilu vuelven a cerrarse.');fxe.push('The plates of the Kaykayfilu\'s jaw lock shut again.');continue}}
       hitP(e,B.turn%3===2?1.5:1,{es:' muerde con sus mandíbulas de piedra',en:' bites with its stone jaws'});continue}
     if(e.t==='llufu4'){
       if(!e.seals)e.seals=[];
       if(!e.seals.length&&B.turn>0&&B.turn%3===0){const pool=S.roots.slice();let code=pool[rnd(pool.length)];if(Math.random()<.4)code+='kil';e.seals=[code];
-        fx.push('¡El piwke del Llufü Filu alza una barrera de luz! '+sealGloss(code,'es'));fxe.push('The Llufü Filu\'s heart raises a barrier of light! '+sealGloss(code,'en'));hitsFx.push(()=>{sfx('cast');B.flash=10});continue}
+        fx.push('¡El piwke del Kaykayfilu alza una barrera de luz! '+sealGloss(code,'es'));fxe.push('The Kaykayfilu\'s heart raises a barrier of light! '+sealGloss(code,'en'));hitsFx.push(()=>{sfx('cast');B.flash=10});continue}
       hitP(e,1.1,{es:' late con fuerza y el agua te golpea',en:' beats hard and the water slams you'});continue}
     if(e.t==='llufu5'){
       if(B.en.length<4&&Math.random()<.3){const t2=Math.random()<.5?'kowek':'mawek',ne=mkEnemy(t2);B.en.push(ne);relabel();
-        fx.push('El Llufü Filu llama a las aguas: ¡'+ne.label+' aparece!');fxe.push('The Llufü Filu calls the waters: '+ne.label+' appears!');continue}
+        fx.push('El Kaykayfilu llama a las aguas: ¡'+ne.label+' aparece!');fxe.push('The Kaykayfilu calls the waters: '+ne.label+' appears!');continue}
       if(B.turn%3===2){hitP(e,1.9,{es:' se deja caer entero sobre ti',en:' crashes its whole body down on you'});continue}
       hitP(e,.9);hitP(e,.9,{es:' barre con la cola',en:' sweeps with its tail'});continue}
     if(e.t==='ngoyman2'){
@@ -256,11 +256,11 @@ function enemyPhase(){
       hitP(e);continue}
     if(e.t==='cherrufe'){
       if(B.tele){B.tele=false;hitP(e,2.2,{es:' te cae encima como un río de lava',en:' falls on you like a river of lava'});continue}
-      if(!e.armor&&e.armorT>0){e.armorT--;if(e.armorT<=0){e.armor=1;fx.push('La lava se endurece: la coraza del Cherrufe vuelve.');fxe.push("The lava hardens: the Cherrufe's crust comes back.");continue}}
-      if(!e.burn&&e.cool>0){e.cool--;if(e.cool<=0){e.burn=1;fx.push('El Cherrufe vuelve a arder.');fxe.push('The Cherrufe bursts into flame again.');continue}}
+      if(!e.armor&&e.armorT>0){e.armorT--;if(e.armorT<=0){e.armor=1;fx.push('La lava se endurece: la coraza del Cherufe vuelve.');fxe.push("The lava hardens: the Cherufe's crust comes back.");continue}}
+      if(!e.burn&&e.cool>0){e.cool--;if(e.cool<=0){e.burn=1;fx.push('El Cherufe vuelve a arder.');fxe.push('The Cherufe bursts into flame again.');continue}}
       const roll=Math.random(),kc=aliveE().filter(x=>x.t==='kutral').length;
-      if(roll<.28&&B.turn>0&&B.turn-(e.lastTele||-9)>2){B.tele=true;e.lastTele=B.turn;fx.push('El Cherrufe levanta los brazos: la lava hierve a sus pies.');fxe.push('The Cherrufe raises its arms: the lava boils at its feet.');continue}
-      if(roll<.45&&kc<1&&B.en.length<5){const ne=mkEnemy('kutral');B.en.push(ne);relabel();fx.push('¡El Cherrufe lanza una chispa: aparece '+ne.label+'!');fxe.push('The Cherrufe throws a spark: '+ne.label+' appears!');continue}
+      if(roll<.28&&B.turn>0&&B.turn-(e.lastTele||-9)>2){B.tele=true;e.lastTele=B.turn;fx.push('El Cherufe levanta los brazos: la lava hierve a sus pies.');fxe.push('The Cherufe raises its arms: the lava boils at its feet.');continue}
+      if(roll<.45&&kc<1&&B.en.length<5){const ne=mkEnemy('kutral');B.en.push(ne);relabel();fx.push('¡El Cherufe lanza una chispa: aparece '+ne.label+'!');fxe.push('The Cherufe throws a spark: '+ne.label+' appears!');continue}
       hitP(e);continue}
     if(e.t==='witranalwe'){
       if(B.tele){B.tele=false;hitP(e,2.2,{es:' se lanza sobre ti',en:' lunges at you'});continue}
@@ -304,16 +304,16 @@ function llufuStage(nx){
   const e=mkEnemy(nx);B.en=[e];relabel();B.tele=false;B.blocked=null;B.rush=null;sfx('lvl');B.flash=16;B.shake=10;
   S.hp=maxHP();S.sp=SPMAX;e.hp-=12;
   const k={llufu2:0,llufu3:1,llufu4:2,llufu5:3}[nx],[snm,sd,sde]=LLSING[k];
-  const forms={llufu2:[N('¡Las aguas se abren! El Llufü Filu alza la cabeza: una mandíbula enorme de placas de piedra, llena de dientes.','The waters part! The Llufü Filu raises its head: a huge jaw of stone plates, full of teeth.')],
-    llufu3:[N('El Llufü Filu despliega una tormenta de aletas: el agua entera se vuelve un remolino de filos.','The Llufü Filu unfurls a storm of fins: the whole water becomes a whirl of blades.')],
+  const forms={llufu2:[N('¡Las aguas se abren! El Kaykayfilu alza la cabeza: una mandíbula enorme de placas de piedra, llena de dientes.','The waters part! The Kaykayfilu raises its head: a huge jaw of stone plates, full of teeth.')],
+    llufu3:[N('El Kaykayfilu despliega una tormenta de aletas: el agua entera se vuelve un remolino de filos.','The Kaykayfilu unfurls a storm of fins: the whole water becomes a whirl of blades.')],
     llufu4:[N('Entre sus anillos aparece su piwke: un corazón que late luz robada, protegido por barreras.','Within its coils appears its piwke: a heart beating with stolen light, guarded by barriers.')],
-    llufu5:[N('El Llufü Filu entero se alza desde el fondo, más grande que la ruka más grande: Rüf Llufü Filu, la serpiente de lo profundo.','The whole Llufü Filu rears up from the depths, bigger than the biggest ruka: Rüf Llufü Filu, the serpent of the deep.')]}[nx];
+    llufu5:[N('El Kaykayfilu entero se alza desde el fondo, más grande que la ruka más grande: Rüf Kaykayfilu, la gran serpiente de las aguas.','The whole Kaykayfilu rears up from the depths, bigger than the biggest ruka: Rüf Kaykayfilu, the great serpent of the waters.')]}[nx];
   forms.push(N('El chumpall '+snm+', '+sd+', canta a tu lado: tu piwke y tu newen se llenan de nuevo, y su ül golpea a la serpiente (−12).','The chumpall '+snm+', '+sde+', sings at your side: your hearts and your newen fill again, and their ül strikes the serpent (−12).'));
   say(forms,battleMenu);
 }
 function postLlufu(){
   S.flags.chboss=1;S.gear.lafkenkura=1;persist();sfx('lvl');
-  say([N('El Rüf Llufü Filu se hunde despacio, vencido, hacia una fosa tan honda que ni los chumpall la conocen. El agua queda limpia y quieta.','The Rüf Llufü Filu sinks slowly, defeated, into a trench so deep not even the chumpall know it. The water is left clean and still.'),
+  say([N('El Rüf Kaykayfilu deja de luchar: el ül de los chumpall lo envuelve y lo aquieta. En paz, se hunde despacio hacia una fosa tan honda que ni los chumpall la conocen. El agua queda limpia y quieta.','The Rüf Kaykayfilu stops fighting: the chumpall\'s ül wraps around it and stills it. At peace, it sinks slowly into a trench so deep not even the chumpall know it. The water is left clean and still.'),
     L('Ñidol chumpall','Chaltu may, '+nm()+'. Taiñ lafken montuy.','Gracias, '+nm()+'. Nuestro mar está a salvo.','Thank you, '+nm()+'. Our sea is safe.'),
     N('Los cinco cantores chumpall te rodean y cantan juntos una sola vez. El agua entera brilla.','The five chumpall singers surround you and sing together, just once. The whole water glows.'),
     Object.assign(L('','Lafkenkura!','La ñidol chumpall te regala una lafkenkura, una piedra del mar: desde ahora recuperas 2 de newen en cada turno de pelea.','The chumpall leader gives you a lafkenkura, a sea stone: from now on you recover 2 newen every battle turn.'),{fx:()=>sfx('lvl')})],
@@ -412,7 +412,7 @@ function postBoss2(){
 }
 
 function postBoss3(){
-  say([N('La coraza del Cherrufe se parte en mil pedazos y su fuego se hunde en la lava, que se enfría y se vuelve piedra. Desde una grieta brota una semilla, y en un instante crece un pewen joven y dorado.','The Cherrufe\'s crust splits into a thousand pieces and its fire sinks into the lava, which cools and turns to stone. A seed sprouts from a crack, and in an instant a young golden pewen grows.')],()=>{
+  say([N('La coraza del Cherufe se parte en mil pedazos y su fuego se hunde en la lava, que se enfría y se vuelve piedra. Desde una grieta brota una semilla, y en un instante crece un pewen joven y dorado.','The Cherufe\'s crust splits into a thousand pieces and its fire sinks into the lava, which cools and turns to stone. A seed sprouts from a crack, and in an instant a young golden pewen grows.')],()=>{
     S.flags.ngen3=1;S.flags.snow=1;S.pieces=S.pieces||[];if(!S.pieces.includes('pewenche'))S.pieces.push('pewenche');
     grid[7][8]='A';for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++)if(grid[y][x]==='^')grid[y][x]=M.floor;
     S.hp=Math.min(maxHP(),S.hp+HPQ);AU.name=null;playSong(rsong('ngen'));

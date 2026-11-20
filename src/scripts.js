@@ -91,10 +91,10 @@ function childTalk(){
 function pescadoraTalk(){
   if(!S.roots.includes('nag')){
     say([L('Challwafe','Mari mari, '+addr(true)+'.','Hola, '+addr(true)+'.','Hello, '+addr(true)+'.'),
-      L('Challwafe','Müley chon chon!','¡Hay chon chon!','There are chon chon!'),
-      N('Los chon chon vuelan alto: amutu- no los alcanza. Primero diles nag- ("bajar"): nagnge, nagmu, nagmün. Ya en el suelo, échalos.','Chon chon fly high: amutu- cannot reach them. First tell them nag- ("come down"): nagnge, nagmu, nagmün. Once they are on the ground, drive them off.'),
+      L('Challwafe','Müley chonchon!','¡Hay chonchon!','There are chonchon!'),
+      N('Los chonchon vuelan alto: amutu- no los alcanza. Primero diles nag- ("bajar"): nagnge, nagmu, nagmün. Ya en el suelo, échalos.','Chonchon fly high: amutu- cannot reach them. First tell them nag- ("come down"): nagnge, nagmu, nagmün. Once they are on the ground, drive them off.'),
       N('Aprendiste nag- (bajar).','You learned nag- (come down).')],()=>{learnRoot('nag');sfx('lvl');persist()});
-  }else say([L('Challwafe','Newentunge!','¡Ánimo!','Be strong!'),N('Los anchimallén brillan y curan a otros wekufü. Si los haces dormir con umawtu-, dejan de molestar.','The anchimallén glow and heal other wekufü. If you make them sleep with umawtu-, they stop helping.')]);
+  }else say([L('Challwafe','Newentunge!','¡Ánimo!','Be strong!'),N('Los anchümalleñ brillan y curan a otros wekufü. Si los haces dormir con umawtu-, dejan de molestar.','The anchümalleñ glow and heal other wekufü. If you make them sleep with umawtu-, they stop helping.')]);
 }
 function gathererTalk(){
   const ls=[L('Domo','Mari mari, '+addr(true)+'!','¡Hola, '+addr(true)+'!','Hello, '+addr(true)+'!'),L('Domo','Külon kintulen.','Ando buscando maqui.','I am looking for maqui.')];
@@ -676,11 +676,11 @@ function sbossWake(sb){
       N('Tres sellos de luz lo protegen. El primero susurra: «¡Duérmete!»','Three seals of light protect it. The first whispers: «Sleep!»')],
     piwuchen:[N('La loma tiembla bajo tus pasos y de la cima baja un silbido agudo. Una culebra con alas de murciélago cae del cielo: ¡el Piwüchen!','The knoll trembles under your steps and a shrill whistle comes down from the summit. A snake with bat wings drops from the sky: the Piwüchen!'),
       N('Tres sellos de luz lo protegen. El primero susurra: «¡Baja!»','Three seals of light protect it. The first whispers: «Come down!»')],
-    wallipen:[N('Pisas la orilla helada y el agua del ojo de agua se agita. Una criatura deforme, mitad oveja y mitad ternero, sale arrastrando las patas: ¡el Waillepeñ!','You tread the icy edge and the pool stirs. A misshapen creature, half sheep and half calf, drags itself out: the Waillepeñ!'),
+    wallipen:[N('Pisas la orilla helada y el agua del ojo de agua se agita. Una criatura deforme, mitad oveja y mitad ternero, sale arrastrando las patas: ¡el Wallepeñ!','You tread the icy edge and the pool stirs. A misshapen creature, half sheep and half calf, drags itself out: the Wallepeñ!'),
       N('Tres sellos de luz lo protegen. El primero susurra: «¡Ten frío!»','Three seals of light protect it. The first whispers: «Be cold!»')],
     trawko:[N('Un hacha de piedra se clava en un tronco, a un palmo de tu cabeza. Del helecho sale un hombrecito retorcido con sombrero de fibra: ¡el Trawko!','A stone axe thuds into a trunk, a hand\'s width from your head. Out of the ferns steps a twisted little man in a fiber hat: the Trawko!'),
       N('Tres sellos de luz lo protegen. El primero susurra: «¡Sal!»','Three seals of light protect it. The first whispers: «Come out!»')],
-    chadikura:[N('La tierra blanda cruje bajo tus pies... y la sal entera se levanta y se arma sola: un gigante de cristal blanco con grietas que brillan verdes. El wekufü del lago seco despierta a medias.','The soft ground crunches under your feet... and the salt itself rises and assembles: a giant of white crystal with cracks that glow green. The wekufü of the dried lake half-wakes.'),
+    chadikura:[N('La tierra blanda cruje bajo tus pies... y la sal entera se levanta y se arma sola: un gigante de cristal blanco con grietas que brillan verdes. El Elengassen, el gigante acorazado de las llanuras del este, despierta a medias.','The soft ground crunches under your feet... and the salt itself rises and assembles: a giant of white crystal with cracks that glow green. The Elengassen, the armored giant of the eastern plains, half-wakes.'),
       N('Tres sellos de luz lo protegen. El primero susurra: «¡Despierta!»','Three seals of light protect it. The first whispers: «Wake up!»')],
     kalku:[N('El pasto gris se abre y una figura flaca sale de la tierra agrietada, envuelta en un manto de plumas negras, con un bastón de hueso: el Fütra Kalku, el que vendió las tierras a la niebla.','The grey grass parts and a gaunt figure rises from the cracked earth, wrapped in a cloak of black feathers, carrying a bone staff: the Fütra Kalku, the one who sold the lands to the fog.'),
       L('Fütra Kalku','Ngoyman ñi duam mew küdawken. Eymi... ngoyaymi.','Trabajo para el olvido. Y tú... serás olvidado.','I work for the forgetting. And you... will be forgotten.'),
@@ -761,7 +761,7 @@ function pLonkoTalk(){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen3)ls.push(L('Lonko','Ngen-pewen nepey. Chaltu may!','Ngen-pewen despertó. ¡Gracias!','Ngen-pewen has woken up. Thank you!'),
       N('Ya llevas tres trariwe trokiñ. Dicen que en el sur, en tierras williche, y al otro lado de la cordillera, en Puelmapu, esperan los últimos.','You now carry three trariwe trokiñ. They say the last ones wait in the south, in Williche lands, and across the mountains, in Puelmapu.'));
-    else ls.push(L('Lonko','Pillañ mew amunge.','Ve al volcán.','Go to the volcano.'),N('Pasando el bosque de pewenes y los campos de nieve está el pillañ. La morada del Cherrufe está adentro.','Past the pewen forest and the snowfields is the pillañ. The Cherrufe\'s lair is inside.'),
+    else ls.push(L('Lonko','Pillañ mew amunge.','Ve al volcán.','Go to the volcano.'),N('Pasando el bosque de pewenes y los campos de nieve está el pillañ. La morada del Cherufe está adentro.','Past the pewen forest and the snowfields is the pillañ. The Cherufe\'s lair is inside.'),
       N('Y en este lof las puertas están abiertas: entra en las rukas. La papay Rayen y el chachay Nawel siempre reciben visitas.','And in this lof the doors are open: go into the rukas. Papay Rayen and chachay Nawel always welcome visitors.'));
     return say(ls);
   }
@@ -783,7 +783,7 @@ function pLonkoTalk(){
     S.flags.pew_lonko=1;learnRoot('trafo');S.items.kulon++;persist();sfx('lvl');
     say([L('Lonko','Kümey! Ngen-lafken ka Ngen-mawida nepeyngu, pikeyngün.','¡Bien! Dicen que Ngen-lafken y Ngen-mawida despertaron.','Good! They say Ngen-lafken and Ngen-mawida have woken up.'),
       L('Lonko','Welu Ngen-pewen umawtuley.','Pero Ngen-pewen está dormido.','But Ngen-pewen is asleep.'),
-      N('Un Cherrufe, un gigante de roca y lava, salió del pillañ. Su calor seca los pewenes y la nieve se vuelve dura como piedra. Desde entonces hay menos ngülliw y la gente olvida las palabras.','A Cherrufe, a giant of rock and lava, came out of the pillañ. Its heat dries the pewen trees and the snow turns hard as stone. Since then there are fewer ngülliw and people forget the words.'),
+      N('Un Cherufe, un gigante de roca y lava, salió del pillañ. Su calor seca los pewenes y la nieve se vuelve dura como piedra. Desde entonces hay menos ngülliw y la gente olvida las palabras.','A Cherufe, a giant of rock and lava, came out of the pillañ. Its heat dries the pewen trees and the snow turns hard as stone. Since then there are fewer ngülliw and people forget the words.'),
       L('Lonko','Trafo- kimeltueyu.','Te enseño trafo- ("quebrarse").','I teach you trafo- ("break").'),
       N('Con trafonge, trafomu o trafomün se quiebra la coraza de piedra de los wekufü. Recibiste trafo- y un külon.','With trafonge, trafomu or trafomün the stone crust of the wekufü cracks. You received trafo- and a külon.'),
       L('Lonko','Pillañ mew amunge, '+nm()+'.','Ve al volcán, '+nm()+'.','Go to the volcano, '+nm()+'.')]);
@@ -791,14 +791,14 @@ function pLonkoTalk(){
 }
 function pNutramTalk(){
   say([L('Nütramkafe','Mari mari, '+addr(true)+'. Nütramkayaiñ?','Hola. ¿Conversamos?','Hello. Shall we talk?'),
-    L('Nütramkafe','Kuyfi, pillañ mew mülefuy kiñe Cherrufe.','Hace mucho tiempo, en el volcán había un Cherrufe.','Long ago, in the volcano, there was a Cherrufe.'),
+    L('Nütramkafe','Kuyfi, pillañ mew mülefuy kiñe Cherufe.','Hace mucho tiempo, en el volcán había un Cherufe.','Long ago, in the volcano, there was a Cherufe.'),
     L('Nütramkafe','Kütral ka kura ngefuy.','Era de fuego y de piedra.','It was made of fire and stone.'),
     L('Nütramkafe','Pu che llükakefuy.','La gente le tenía miedo.','People used to fear it.'),
     N('Dicen que los golpes rebotan en su piedra, y que su fuego quema a quien lo toca. Pero la piedra se quiebra, y el fuego se apaga con el frío.','They say blows bounce off its stone, and its fire burns whoever touches it. But stone cracks, and fire goes out in the cold.')]);
 }
 function gathTalk(){
   say([L('Domo','Fentren ngülliw müley!','¡Hay muchos piñones!','There are lots of pewen nuts!'),
-    N('Las mujeres juntan los ngülliw que caen de los pewenes. Este año caen pocos: el calor del Cherrufe seca los árboles.','The women gather the nuts that fall from the pewen trees. This year few are falling: the Cherrufe\'s heat dries the trees.')]);
+    N('Las mujeres juntan los ngülliw que caen de los pewenes. Este año caen pocos: el calor del Cherufe seca los árboles.','The women gather the nuts that fall from the pewen trees. This year few are falling: the Cherufe\'s heat dries the trees.')]);
 }
 function arrieroTalk(){
   const en=S.gloss==='en';
@@ -827,8 +827,8 @@ function trutTalk(){
   say([L('Weche wentru','Trutruka ayüken.','Me gusta la trutruka.','I love the trutruka.'),N('La trutruka es un instrumento largo de colihue con un cuerno en la punta. Suena en las ceremonias y en las fiestas.','The trutruka is a long instrument made of colihue cane with a horn at the end. It sounds at ceremonies and celebrations.')]);
 }
 function kona3Talk(){
-  if(S.flags.ngen3)return say([L('Kona','Cherrufe ngelay! Ayüwün!','¡Ya no está el Cherrufe! ¡Qué feliz estoy!','The Cherrufe is gone! I am so happy!')]);
-  say([L('Kona','Cherrufe müley pillañ mew. Kütralngey ka kurangey!','El Cherrufe está en el volcán. ¡Es fuego y es piedra!','The Cherrufe is in the volcano. It is fire and it is stone!'),
+  if(S.flags.ngen3)return say([L('Kona','Cherufe ngelay! Ayüwün!','¡Ya no está el Cherufe! ¡Qué feliz estoy!','The Cherufe is gone! I am so happy!')]);
+  say([L('Kona','Cherufe müley pillañ mew. Kütralngey ka kurangey!','El Cherufe está en el volcán. ¡Es fuego y es piedra!','The Cherufe is in the volcano. It is fire and it is stone!'),
     N('La entrada está entre las rocas, subiendo al este. Dicen que adentro hay piedras con números muy grandes y otra que hace preguntas.','The entrance is among the rocks, up to the east. They say inside there are stones with very big numbers and another one that asks questions.')]);
 }
 
@@ -1164,7 +1164,7 @@ function chGardenTalk(){
     {q:L('Chumpall','Chem am "challwa"?','¿Qué es "challwa"?','What is "challwa"?'),o:[en?'bird':'pájaro',en?'fish':'pescado',en?'wave':'ola'],a:en?'fish':'pescado'},
     {q:L('Chumpall','Chem am "lafken"?','¿Qué es "lafken"?','What is "lafken"?'),o:[en?'the sea, the lake':'el mar, el lago',en?'the rain':'la lluvia',en?'the river':'el río'],a:en?'the sea, the lake':'el mar, el lago'}];
   say([L('Chumpall','Mari mari, wenüy. Iñche chumpall ngen.','Hola, amiga o amigo. Yo soy chumpall.','Hello, friend. I am a chumpall.'),
-    N('La chumpall jardinera cuida huertas de algas y corales. Desde que llegó el Llufü Filu, sus plantas olvidan sus nombres... y sin nombre, se marchitan. Devuélveselos.','The chumpall gardener tends beds of kelp and coral. Since the Llufü Filu came, her plants forget their names... and without a name, they wither. Give the names back.')],()=>ask(0));
+    N('La chumpall jardinera cuida huertas de algas y corales. Desde que llegó el Kaykayfilu, sus plantas olvidan sus nombres... y sin nombre, se marchitan. Devuélveselos.','The chumpall gardener tends beds of kelp and coral. Since the Kaykayfilu came, her plants forget their names... and without a name, they wither. Give the names back.')],()=>ask(0));
   function ask(i){
     if(i>=qs.length){S.flags.ch1=1;S.items.lawen++;S.gold+=40;persist();sfx('lvl');
       return say([praise(),L('Chumpall','Kom mongetuy!','¡Todo revive!','Everything comes back to life!'),N('Las algas se enderezan y los corales vuelven a brillar. Te da un lawen y meli mari (40) ngülliw.','The kelp straightens and the coral glows again. She gives you a lawen and meli mari (40) ngülliw.')])}
@@ -1180,7 +1180,7 @@ function chChildTalk(){
     N('«Donde la arena está blanda, entre los dos abismos. Escarba y la encontrarás.»','"Where the sand is soft, between the two chasms. Dig and you will find it."')]);
   S.flags.ch2q=1;persist();
   say([L('Pichi chumpall','Ngümaley... Ñi lüq kura ñami.','(Está llorando.) Se me perdió mi lüq kura, mi piedra blanca.','(He is crying.) I lost my lüq kura, my white stone.'),
-    N('Es una perla que canta. Cuando el Llufü Filu pasó, la onda se la llevó a la fosa profunda, al este. Quedó enterrada en la arena blanda.','It is a pearl that sings. When the Llufü Filu passed, the wave carried it to the deep trench, to the east. It lies buried in the soft sand.'),
+    N('Es una perla que canta. Cuando el Kaykayfilu pasó, la onda se la llevó a la fosa profunda, al este. Quedó enterrada en la arena blanda.','It is a pearl that sings. When the Kaykayfilu passed, the wave carried it to the deep trench, to the east. It lies buried in the soft sand.'),
     L('Pichi chumpall','Kintulelen, chaltu!','¡Búscamela, porfa!','Please find it for me!')]);
 }
 function chSingerTalk(){
@@ -1190,7 +1190,7 @@ function chSingerTalk(){
     {q:N('La ola tiene que IRSE de las huertas. Díselo:','The wave must GO AWAY from the gardens. Tell it:'),o:['küpange','amutunge','nepenge'],a:'amutunge'},
     {q:N('El agua brava tiene que DORMIRSE. Díselo:','The rough water must SLEEP. Tell it:'),o:['tripange','lefnge','umawtunge'],a:'umawtunge'}];
   say([L('Chumpall ülkantufe','Mari mari. Taiñ lafken ül ñamkiawi.','Hola. El canto de nuestro mar anda perdido.','Hello. The song of our sea has gone astray.'),
-    N('Los chumpall gobiernan el agua cantándole órdenes. Pero el Llufü Filu desordenó el ül, el canto. Ayúdala a ordenar las palabras del agua.','The chumpall govern the water by singing commands to it. But the Llufü Filu scrambled the ül, the song. Help her put the water\'s words back in order.')],()=>ask(0));
+    N('Los chumpall gobiernan el agua cantándole órdenes. Pero el Kaykayfilu desordenó el ül, el canto. Ayúdala a ordenar las palabras del agua.','The chumpall govern the water by singing commands to it. But the Kaykayfilu scrambled the ül, the song. Help her put the water\'s words back in order.')],()=>ask(0));
   function ask(i){
     if(i>=qs.length){S.flags.ch3=1;S.items.kofke++;S.gold+=40;S.xp+=4;persist();sfx('lvl');
       return say([praise(),L('Chumpall ülkantufe','Taiñ ül wüñotrekay!','¡Nuestro canto volvió!','Our song has returned!'),N('El agua de la fosa se aquieta un momento, escuchando. Te da un kofke y meli mari (40) ngülliw. +4 kimün.','The water of the trench goes still for a moment, listening. She gives you a kofke and meli mari (40) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
@@ -1204,15 +1204,15 @@ function chQueenTalk(){
   const ready=S.flags.ch1&&S.flags.ch2&&S.flags.ch3;
   const ls=[L('Ñidol chumpall','Mari mari, wenüy. Iñche ñidol chumpall ngen.','Hola. Yo guío a los chumpall.','Hello. I lead the chumpall.'),
     N('La ñidol de los chumpall tiene el pelo largo como corriente de agua. Habla despacio, con pena.','The chumpall leader has hair long as a water current. She speaks slowly, with sorrow.'),
-    L('Ñidol chumpall','Llufü Filu akuy. Taiñ challwa, taiñ tukukawe, taiñ ül: kom apümnieyew.','Llegó el Llufü Filu. Nuestros peces, nuestras huertas, nuestro canto: lo está destruyendo todo.','The Llufü Filu has come. Our fish, our gardens, our song: it is destroying everything.')];
+    L('Ñidol chumpall','Kaykayfilu nepey. Taiñ challwa, taiñ tukukawe, taiñ ül: kom apümnieyew.','Despertó el Kaykayfilu, agitado por el olvido. Nuestros peces, nuestras huertas, nuestro canto: lo está destruyendo todo.','The Kaykayfilu has woken, stirred by the forgetting. Our fish, our gardens, our song: it is destroying everything.')];
   if(!ready){ls.push(N('«Antes de enfrentarlo, ayuda a mi gente: la jardinera de las huertas, el pequeño de la perla y la cantora de la fosa. Cuando los tres estén bien, cantaremos contigo.»','"Before facing it, help my people: the gardener of the beds, the little one of the pearl, and the singer of the trench. When all three are well, we will sing with you."'));
     return say(ls);}
-  ls.push(N('«Ayudaste a los tres. Ahora los chumpall cantaremos contigo. El Llufü Filu duerme bajo este salón: tiene cinco formas, y con cada una que caiga, uno de nuestros cantores te levantará. ¿Lo despertamos?»','"You helped all three. Now we chumpall will sing with you. The Llufü Filu sleeps beneath this hall: it has five forms, and as each one falls, one of our singers will lift you up. Shall we wake it?"'));
+  ls.push(N('«Ayudaste a los tres. Ahora los chumpall cantaremos contigo. El olvido le quitó al Kaykayfilu el ül que lo aquietaba, y se agita bajo este salón: tiene cinco formas, y con cada una que se aquiete, uno de nuestros cantores te levantará. No se le puede matar; hay que devolverle la calma. ¿Bajamos a cantarle?»','"You helped all three. Now we chumpall will sing with you. The forgetting took from the Kaykayfilu the ül that kept it calm, and it stirs beneath this hall: it has five forms, and as each one is stilled, one of our singers will lift you up. It cannot be killed; its calm must be given back. Shall we go down and sing to it?"'));
   say(ls,()=>choose(L('Ñidol chumpall','Weychayaiñ?','¿Peleamos juntos?','Shall we fight together?'),
     [{m:'May, weychayaiñ!',g:en?'Yes, together!':'¡Sí, juntos!',v:1},{m:'Petu pepikawlan',g:en?'Not yet':'Todavía no',v:0}],v=>{
     if(!v)return say([L('Ñidol chumpall','Küme rakiduamnge. Faw müleiñ.','Piénsalo. Aquí estaremos.','Think it over. We will be here.')]);
     say([N('Los chumpall forman un círculo y golpean el agua con las palmas, todos a la vez. El suelo del salón tiembla... y de la fosa sube algo enorme, anillo tras anillo.','The chumpall form a circle and strike the water with their palms, all at once. The floor of the hall trembles... and out of the trench rises something enormous, coil after coil.'),
-      N('El Llufü Filu se esconde en el agua oscura. Lo que se esconde... sale cuando se le dice.','The Llufü Filu hides in the dark water. What hides... comes out when it is told to.')],
+      N('El Kaykayfilu se esconde en el agua oscura. Lo que se esconde... sale cuando se le dice.','The Kaykayfilu hides in the dark water. What hides... comes out when it is told to.')],
       ()=>startBattle(['llufu1'],{boss:1,chain:'llufu'}));
   },true,true));
 }
