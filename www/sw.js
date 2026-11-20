@@ -1,5 +1,5 @@
 /* Kewün ñi Newen · service worker: offline play + fresh updates when online. */
-const CACHE = 'kewun-v1';
+const CACHE = 'kewun-v2';
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
@@ -11,10 +11,11 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
-  const nav = req.mode === 'navigate' || req.url.endsWith('/index.html');
+  if (req.url.indexOf('version.txt') >= 0) return; // always straight to the network
+  const nav = req.mode === 'navigate' || req.url.indexOf('/index.html') >= 0;
   if (nav) {
-    // network first, so a new build is picked up on the next online launch
-    e.respondWith(fetch(req).then(r => {
+    // network first with forced revalidation, so a new build is picked up on the next online launch
+    e.respondWith(fetch(req, { cache: 'no-cache' }).then(r => {
       const copy = r.clone();
       caches.open(CACHE).then(c => { c.put('./', copy.clone()); c.put('index.html', copy); });
       return r;

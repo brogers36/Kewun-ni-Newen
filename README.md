@@ -86,7 +86,7 @@ An experimental look switched on by the `CT` flag: painterly dithered grass, san
 
 The game is installable on phones two ways, both fed by this repo:
 
-**Installable web app (PWA), iPhone and Android.** `www/` now carries `manifest.webmanifest`, a service worker (`sw.js`) and icons, so the GitHub Pages site is installable: open <https://brogers36.github.io/Kewun-ni-Newen/> on the phone, then *Add to Home Screen* (Safari: Share menu; Android Chrome offers an install prompt). It launches fullscreen with its own kultrung icon and keeps working offline after the first load; when online again it picks up the latest build automatically. Saves live in the installed app's own localStorage.
+**Installable web app (PWA), iPhone and Android.** `www/` now carries `manifest.webmanifest`, a service worker (`sw.js`) and icons, so the GitHub Pages site is installable: open <https://brogers36.github.io/Kewun-ni-Newen/> on the phone, then *Add to Home Screen* (Safari: Share menu; Android Chrome offers an install prompt). It launches fullscreen with its own kultrung icon and keeps working offline after the first load; when online again it picks up the latest build automatically: each build carries an id, the game compares it against `www/version.txt` on launch and on returning to the app, reloads itself at the title screen when a newer build exists, and shows a tap-to-update notice if a game is in progress. Saves live in the installed app's own localStorage.
 
 **Downloadable Android APK.** `.github/workflows/android.yml` wraps `www/` with [Capacitor](https://capacitorjs.com/) on every push and publishes a signed APK to the rolling release, always at the same link:
 
