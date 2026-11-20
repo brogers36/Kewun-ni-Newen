@@ -1275,94 +1275,148 @@ def ngoyman3(fr):
     g.outline();return g.rows()
 
 
-def _serp_coil(g,cx,cy,rx,ry,fr):
+def _sresample(pts,step=1.1):
     import math
-    for i in range(26):
-        a=i/26.0*6.28+fr*.3
-        x=int(cx+math.cos(a)*rx);y=int(cy+math.sin(a)*ry)
-        g.e(x,y,3.2,2.6,'b')
-    for i in range(26):
-        a=i/26.0*6.28+fr*.3
-        x=int(cx+math.cos(a)*rx);y=int(cy+math.sin(a)*ry)
-        if i%2:g.p(x,y-2,'s')
-        if i%3==0:g.p(x,y,'B')
+    P=[]
+    for i in range(len(pts)-1):
+        x0,y0=pts[i];x1,y1=pts[i+1]
+        d=math.hypot(x1-x0,y1-y0);n=max(1,int(d/step))
+        for k in range(n):
+            t=k/n;P.append((x0+(x1-x0)*t,y0+(y1-y0)*t))
+    P.append((float(pts[-1][0]),float(pts[-1][1])))
+    out=[]
+    for i,(x,y) in enumerate(P):
+        xa,ya=P[max(i-1,0)];xb,yb=P[min(i+1,len(P)-1)]
+        tx,ty=xb-xa,yb-ya;d=math.hypot(tx,ty) or 1.0
+        out.append((x,y,tx/d,ty/d))
+    return out
+def _serp(g,pts,r0,r1,fr,fin=1,belly=1,band=1):
+    P=_sresample(pts)
+    n=max(1,len(P)-1)
+    for i,(x,y,tx,ty) in enumerate(P):
+        t=i/float(n);r=r0+(r1-r0)*t
+        g.e(x,y,max(1.1,r),max(1.0,r*.92),'b')
+    for i,(x,y,tx,ty) in enumerate(P):
+        t=i/float(n);r=r0+(r1-r0)*t
+        nx,ny=-ty,tx
+        if ny<0:nx,ny=-nx,-ny
+        g.p(int(x-nx*r*.5),int(y-ny*r*.5),'s')
+        if belly and i%2==0 and r>1.5:g.p(int(x+nx*r*.55),int(y+ny*r*.55),'w')
+        if band and i%6==3:
+            g.p(int(x),int(y),'B');g.p(int(x+tx),int(y+ty),'B');g.p(int(x-tx),int(y-ty),'B')
+        if fin and i%3==(fr%2) and r>1.6:
+            h=2+(1 if (i//3+fr)%2 else 0)
+            g.p(int(x-nx*(r+1)),int(y-ny*(r+1)),'f')
+            g.p(int(x-nx*(r+h)),int(y-ny*(r+h)),'F')
+    return P
+def _scoil(g,cx,cy,R,fr,turns=2.2,r0=4.0,r1=1.6,squash=.5):
+    import math
+    pts=[];N=int(22*turns)
+    for i in range(N):
+        a=i/float(N)*turns*6.283+3.6+fr*.22
+        rad=R*(1-.78*i/float(N))
+        pts.append((cx+math.cos(a)*rad,cy+math.sin(a)*rad*squash))
+    _serp(g,pts,r0,r1,fr,fin=0)
+    return pts
 def _serp_head(g,hx,hy,fr,openjaw=0):
-    g.e(hx,hy,6,4.5,'b');g.e(hx-1,hy-1,4.5,3,'s')
-    g.r(hx-7,hy-1,3,2,'b')
-    g.p(hx-2,hy-3,'e');g.p(hx+2,hy-3,'e')
-    g.p(hx-2,hy-4,'k');g.p(hx+2,hy-4,'k')
+    # sea-serpent head facing left: long snout, stone-plate brow and jaw, swept crest
+    g.e(hx+2,hy-1,5,3.8,'b')
+    g.r(hx-8,hy-2,10,3,'b')
+    g.e(hx-6,hy-1,2.4,1.4,'s')
+    for k in range(5):
+        g.p(hx-8+k*2,hy-3,'r');g.p(hx-7+k*2,hy-3+(k%2),'R')
+    g.p(hx-9,hy-1,'R')
+    for k in range(4):
+        g.p(hx+4+k,hy-4-k,'f');g.p(hx+5+k,hy-4-k,'F')
+        if k<2:g.p(hx+6+k,hy-2-k,'f')
+    g.p(hx+1,hy-2,'e');g.p(hx+2,hy-2,'e');g.p(hx+2,hy-3,'k')
+    g.p(hx-7,hy-2,'k')
     if openjaw:
-        g.r(hx-8,hy+2,9,2,'B')
-        for k in range(4):g.p(hx-7+k*2,hy+1,'t');g.p(hx-6+k*2,hy+4,'t')
-        g.e(hx-3,hy+3,3,1.2,'g')
-    for k in range(3):g.p(hx+3+k,hy-5+k%2,'f')
+        g.r(hx-9,hy+3,10,2,'B')
+        g.r(hx-9,hy+5,8,1,'R')
+        for k in range(4):g.p(hx-8+k*2,hy+1,'t')
+        for k in range(4):g.p(hx-7+k*2,hy+3,'t')
+        g.e(hx-4,hy+2,3.4,1.4,'g')
+        g.p(hx-10,hy+5,'f');g.p(hx-11,hy+6,'F')
+    else:
+        g.r(hx-8,hy+1,9,1,'B')
+        g.p(hx-9,hy+2,'f');g.p(hx-10,hy+3,'F')
 def llufu1(fr):
-    g=G(52,40)
-    g.e(26,30,22,8,'k')
-    _serp_coil(g,26,26,16,8,fr)
-    _serp_coil(g,26,30,10,5,fr+1)
-    for y in range(18,38):
-        for x in range(6,46):
-            if g.get(x,y)!='.' and ((x*3+y*5)%7)<3:g.p(x,y,'k')
-    g.e(20,14,2.2,2.6,'e');g.e(32,14,2.2,2.6,'e')
-    g.p(20,14,'k');g.p(32,14,'k')
-    for (x,y) in [(10,20),(42,22),(26,34)]:g.p(x,y,'s')
+    # the waters stir: a coiled pile at the surface, head resting on top
+    g=G(52,40);import math
+    g.e(26,33,23,6,'k')
+    _scoil(g,26,27,17,fr,turns=2.6,r0=4.4,r1=2.0,squash=.52)
+    g.e(26,25,4,2.6,'b');g.p(25,24,'s')
+    _serp_head(g,25,17+ (fr%2),fr,openjaw=0)
+    for y in range(31,40):
+        for x in range(2,50):
+            if g.get(x,y)!='.' and ((x*3+y*5)%7)<4:g.p(x,y,'k')
+    for (x,y) in [(6,31),(12,33),(40,31),(46,33),(30,35)]:g.p(x,y+(fr%2),'w')
+    for (x,y) in [(4,28),(48,27)]:g.p(x,y,'g')
     g.outline();return g.rows()
 def llufu2(fr):
-    g=G(52,46)
-    _serp_coil(g,26,38,18,6,fr)
-    g.r(22,16,8,18,'b');g.r(23,16,3,18,'s')
+    # the head rises: submerged base, neck in an S up to an open jaw
+    g=G(52,48);import math
+    g.e(26,43,22,5,'k')
+    base=[(6,42),(14,44),(24,45),(34,44),(44,41)]
+    _serp(g,base,4.2,3.6,fr,fin=0)
+    neck=[(40,42),(42,34),(38,26),(30,20),(27,15)]
+    _serp(g,neck,3.8,2.6,fr,fin=1)
     _serp_head(g,27,12,fr,openjaw=1)
-    for k in range(5):
-        g.r(20+k*3,8-(k%2),2,3,'F');g.p(20+k*3,7-(k%2),'f')
+    for y in range(41,48):
+        for x in range(2,50):
+            if g.get(x,y)!='.' and ((x*3+y*5)%7)<4:g.p(x,y,'k')
+    for (x,y) in [(5,40),(16,42),(34,42),(47,39)]:g.p(x,y+(fr%2),'w')
     g.outline();return g.rows()
 def llufu3(fr):
-    g=G(56,42);import math
-    for i in range(14):
-        x=6+i*3.2
-        y=26+math.sin(i*.8+fr*1.2)*6
-        g.e(int(x),int(y),4,3.4,'b');g.p(int(x),int(y)-2,'s')
-    for i in range(12):
-        x=8+i*3.6
-        y=20+math.sin(i*.8+fr*1.2)*6
-        h0=5+(i%3)+(1 if (i+fr)%2 else 0)
-        for k2 in range(h0):
-            g.p(int(x)+(1 if k2>h0-3 else 0),int(y)-6-k2,'f' if k2<h0-1 else 'F')
-    _serp_head(g,48,22,fr)
-    for i in range(8):
-        x=4+i*6
-        g.p(int(x),36+((i+fr)%2),'w')
+    # the long body: humps crossing the water, head raised at the right
+    g=G(60,42);import math
+    pts=[]
+    for i in range(40):
+        x=2+i*1.35
+        pts.append((x,27+math.sin(i*.42+fr*.8)*7))
+    _serp(g,pts,2.6,3.8,fr,fin=1)
+    neck=[(54,26),(56,20),(54,15)]
+    _serp(g,neck,3.6,3.0,fr,fin=1)
+    _serp_head(g,53,12,fr,openjaw=0)
+    g.r(0,33,60,5,'k')
+    for x in range(0,60,3):
+        if g.get(x,32)=='b' or g.get(x+1,32)=='b':g.p(x,32,'w');g.p(x+1,33,'w')
+    for (x,y) in [(4,34),(20,35),(36,34),(50,35)]:g.p(x,y+(fr%2),'w')
     g.outline();return g.rows()
 def llufu4(fr):
-    g=G(48,50)
-    _serp_coil(g,24,16,16,7,fr)
-    _serp_coil(g,24,34,16,7,fr+1)
+    # the knot: the serpent winds a figure-eight around the glowing ül
+    g=G(50,54);import math
+    pts=[]
+    for i in range(52):
+        t=i/51.0*6.283
+        a=t+fr*.25
+        pts.append((25+math.sin(2*a)*15,27+math.sin(a)*21*.8))
+    _serp(g,pts,3.6,2.0,fr,fin=0)
     gl='g' if fr else 'G'
-    g.e(24,25,6.5,7,'G');g.e(24,24,5,5.5,gl);g.e(23,22,2.2,2.6,'w')
+    g.e(25,27,6.5,7,'G');g.e(25,26,5,5.5,gl);g.e(24,24,2.2,2.6,'w')
+    _serp_head(g,20,6,fr,openjaw=0)
     for k in range(6):
-        import math
         a=k/6.0*6.28+fr*.8
-        g.p(int(24+math.cos(a)*10),int(25+math.sin(a)*9),'w')
+        g.p(int(25+math.cos(a)*11),int(27+math.sin(a)*10),'w')
     g.outline();return g.rows()
 def llufu5(fr):
-    g=G(54,62);import math
-    _serp_coil(g,27,52,22,7,fr)
-    _serp_coil(g,27,44,15,6,fr+1)
-    for i in range(16):
-        t=i/16.0
-        x=int(27+math.sin(t*2.4+fr*.4)*8*(1-t))
-        y=40-int(t*28)
-        g.e(x,y,5-t*1.5,4-t*1.2,'b')
-        if i%2:g.p(x-1,y-2,'s')
-        if i%3==0:
-            g.p(x+4,y,'f');g.p(x+5,y-1,'F')
-            g.p(x-5,y,'f');g.p(x-6,y-1,'F')
-    _serp_head(g,25,9,fr,openjaw=1)
-    for k in range(6):
-        g.r(18+k*3,3-(k%2),2,3,'F')
-    for (x,y) in [(6,20),(48,24),(4,40),(50,44)]:g.p(x,y+(fr%2),'w')
+    # the full rise: coiled base, towering S-curve, stone-plated jaw open
+    g=G(56,64);import math
+    g.e(28,58,25,5,'k')
+    _scoil(g,28,53,19,fr,turns=1.9,r0=4.6,r1=3.4,squash=.42)
+    spine=[]
+    for i in range(30):
+        t=i/29.0
+        spine.append((28+math.sin(t*5.0+fr*.4)*9*(1-.55*t),50-t*36))
+    _serp(g,spine,4.4,2.6,fr,fin=1)
+    _serp_head(g,27,11,fr,openjaw=1)
+    for y in range(56,64):
+        for x in range(2,54):
+            if g.get(x,y)!='.' and ((x*3+y*5)%7)<4:g.p(x,y,'k')
+    for (x,y) in [(5,55),(14,58),(42,57),(50,55)]:g.p(x,y+(fr%2),'w')
+    for (x,y) in [(6,20),(48,24),(4,40),(50,44)]:g.p(x,y+(fr%2),'g')
     g.outline();return g.rows()
-
 NGEN_BODY={
  1:[(11,"444443")],
  2:[(10,"44555443")],
@@ -1565,11 +1619,11 @@ PAL={
  'fmewlen':{'s':'#d0b25c','S':'#9a7a34','y':'#eed488','d':'#7a6028','D':'#5a4618','k':'#2e2208','e':'#ffdf50','o':'#241c06'},
  'kurutoro':{'h':'#2a2226','H':'#161014','w':'#e8ddc8','u':'#3e343a','n':'#584048','r':'#c83020','e':'#ff4a28','k':'#0a0608','o':'#060406'},
  'walichu':{'m':'#565042','M':'#332f26','u':'#6e6856','f':'#e8e0ca','F':'#b6ae96','w':'#d8d0b8','k':'#16120c','E':'#ffd548','d':'#c0a868','o':'#0d0b07'},
- 'llufu1':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
- 'llufu2':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
- 'llufu3':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
- 'llufu4':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
- 'llufu5':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
+ 'llufu1':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
+ 'llufu2':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
+ 'llufu3':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
+ 'llufu4':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
+ 'llufu5':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
  'ngoyam':{'w':'#cfd4da','s':'#9aa2ac','d':'#5e6670','k':'#1a1e26','e':'#9ad8ff','o':'#141820'},
  'kalku':{'f':'#23262e','F':'#111318','h':'#b8bcc2','H':'#8a8e96','p':'#d8cfc0','P':'#a89c8a','b':'#d8d0ba','B':'#a89e86','k':'#07080c','e':'#c080ff','o':'#060608'},
  'ngoyman1':{'w':'#d6dde6','s':'#9fa9b6','d':'#5c6674','k':'#161a22','E':'#cfe8ff','o':'#10141c'},
@@ -1613,11 +1667,11 @@ HI={
  'fmewlen':{'s':'#d0b25c','S':'#9a7a34','y':'#eed488','d':'#7a6028','D':'#5a4618','k':'#2e2208','e':'#ffdf50','o':'#241c06'},
  'kurutoro':{'h':'#2a2226','H':'#161014','w':'#e8ddc8','u':'#3e343a','n':'#584048','r':'#c83020','e':'#ff4a28','k':'#0a0608','o':'#060406'},
  'walichu':{'m':'#565042','M':'#332f26','u':'#6e6856','f':'#e8e0ca','F':'#b6ae96','w':'#d8d0b8','k':'#16120c','E':'#ffd548','d':'#c0a868','o':'#0d0b07'},
- 'llufu1':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
- 'llufu2':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
- 'llufu3':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
- 'llufu4':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
- 'llufu5':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
+ 'llufu1':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
+ 'llufu2':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
+ 'llufu3':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
+ 'llufu4':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
+ 'llufu5':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
  'ngoyam':{'w':'#cfd4da','s':'#9aa2ac','d':'#5e6670','k':'#1a1e26','e':'#9ad8ff','o':'#141820'},
  'kalku':{'f':'#23262e','F':'#111318','h':'#b8bcc2','H':'#8a8e96','p':'#d8cfc0','P':'#a89c8a','b':'#d8d0ba','B':'#a89e86','k':'#07080c','e':'#c080ff','o':'#060608'},
  'ngoyman1':{'w':'#d6dde6','s':'#9fa9b6','d':'#5c6674','k':'#161a22','E':'#cfe8ff','o':'#10141c'},
@@ -1634,11 +1688,11 @@ HI={
  'wallipen':{'glow':'e','tex':{'w':'pore','W':'pore','h':'pore'}},
  'trawko':{'glow':'e','tex':{'c':'strand','C':'strand','h':'pore','b':'speck'}},
  'walichu':{'glow':'E','tex':{'m':'strand','M':'strand','u':'strand','f':'pore','F':'pore'}},
- 'llufu1':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
- 'llufu2':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
- 'llufu3':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
- 'llufu4':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
- 'llufu5':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
+ 'llufu1':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
+ 'llufu2':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
+ 'llufu3':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
+ 'llufu4':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
+ 'llufu5':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
  'ngoyam':{'w':'#cfd4da','s':'#9aa2ac','d':'#5e6670','k':'#1a1e26','e':'#9ad8ff','o':'#141820'},
  'kalku':{'f':'#23262e','F':'#111318','h':'#b8bcc2','H':'#8a8e96','p':'#d8cfc0','P':'#a89c8a','b':'#d8d0ba','B':'#a89e86','k':'#07080c','e':'#c080ff','o':'#060608'},
  'ngoyman1':{'w':'#d6dde6','s':'#9fa9b6','d':'#5c6674','k':'#161a22','E':'#cfe8ff','o':'#10141c'},
@@ -1646,11 +1700,11 @@ HI={
  'ngoyman3':{'w':'#e2e8f0','s':'#a6b0bc','d':'#4e5866','k':'#0c0e14','E':'#fff2c0','o':'#0a0c12'},
  'chadikura':{'w':'#fdfbf2','W':'#d8d2c0','s':'#b0a89a','S':'#6e685c','p':'#ecc4ba','g':'#7affd0','G':'#2a9a74','k':'#141210','o':'#262420'},
  'epunamun':{'glow':'e','tex':{'s':'pore','S':'pore','c':'strand','C':'strand','r':'strand'}},
- 'llufu1':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
- 'llufu2':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
- 'llufu3':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
- 'llufu4':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
- 'llufu5':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f'},
+ 'llufu1':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
+ 'llufu2':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
+ 'llufu3':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
+ 'llufu4':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
+ 'llufu5':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
  'ngoyam':{'w':'#cfd4da','s':'#9aa2ac','d':'#5e6670','k':'#1a1e26','e':'#9ad8ff','o':'#141820'},
  'kalku':{'f':'#23262e','F':'#111318','h':'#b8bcc2','H':'#8a8e96','p':'#d8cfc0','P':'#a89c8a','b':'#d8d0ba','B':'#a89e86','k':'#07080c','e':'#c080ff','o':'#060608'},
  'ngoyman1':{'w':'#d6dde6','s':'#9fa9b6','d':'#5c6674','k':'#161a22','E':'#cfe8ff','o':'#10141c'},
