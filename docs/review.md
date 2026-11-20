@@ -197,3 +197,47 @@ Mapudungun y referentes culturales que conviene verificar:
 - Salidas de mapa ahora marcadas con flechas de luz pulsantes en cada abertura real (los árboles las tapaban).
 - Portal a Santiago mucho más grande: columna de luz, anillos y chispas, de dos tiles de alto.
 - Santiago: arreglada la salida sur de la ruka urbana (la fila de abajo estaba sellada) y cerrados los extremos falsos de las calles que parecían salidas sin serlo.
+
+## Tanda 10 · Auditoría de enemigos y jefes: cultura, lengua, pertinencia (Nov 2026)
+
+Revisión ser por ser de los 42 enemigos/jefes y los aliados. "Atestiguado" = figura en la tradición documentada; las notas de grafía comparan con la ortografía que el juego usa en todo lo demás (ü, f, ng).
+
+### A. Hallazgos que piden decisión tuya
+
+1. **nguruvilu / ñirivilu son el MISMO ser con dos variantes del nombre.** Las fuentes (Lenz, Guevara, etc., vía las listas de variantes) dan Guirivilo, Ñirivilu, Ñirivilo, Nirivilo, ngürüvilu como nombres del mismo zorro-serpiente de los ríos. El juego los tiene como dos enemigos distintos (agua en lafkenche/nagche, fuego en pewenche). Además el ser atestiguado es estrictamente ACUÁTICO (remolinos, vados); la versión de fuego en la cordillera es invención nuestra. Opciones: (a) renombrar el de pewenche como ser inventado transparente (p. ej. kütralfilu) y dejarlo como "pariente de montaña"; (b) mantener ambos y explicar en el juego que son el mismo ser visto por distintas comunidades; (c) otra bestia para pewenche.
+2. **Grafía del nombre: "nguruvilu" → ¿Ngürüfilu?** El display actual es la forma hispanizada (sin ü, con v). El juego escribe wekufü, filu, ngürü en los diálogos; lo consecuente sería **Ngürüfilu** (ngürü 'zorro' + filu 'culebra', así lo compone Augusta). Igual para el otro si sobrevive: Ñürüfilu / Ñirifilu (¿cuál prefieres?).
+3. **piwichén (lafkenche, menor) y Piwüchen (williche, jefe) también son el mismo ser** (piwychen/piuchén, la culebra voladora que silba y chupa sangre) bajo dos grafías. Dos enemigos distintos con el mismo nombre confunde al que aprende. Opciones: unificar grafía y presentarlos como joven/adulto del mismo ser, o renombrar el menor.
+4. **"chon chon" en dos palabras** → lo usual es una sola: chonchon (chonchón). ¿Unifico?
+5. **anchimallén** con tilde es la forma hispanizada; Augusta trae anchümalleñ (⚠ cita de memoria, verifícala). Si el juego usa ortografía mapuche en todo lo demás, ¿paso a anchümalleñ / anchimalleñ?
+6. **Chiñifilu (sub-jefe williche) no lo encuentro atestiguado**: trátalo como inventado. ¿Qué querías que significara chiñi-? Si no tiene lectura clara, candidato a renombrar (p. ej. con un primer miembro real: wütrefilu, lafkenfilu...).
+7. **"ngoyman am"**: la intención es 'espíritu del olvido'. ¿Funciona la aposición N+N así, o sería mejor "ngoyman ñi am" (y entonces es 'el am del Ngoyman')? Tu llamada.
+8. **Waillepeñ**: el ser es el huallepén (oveja-ternero deforme de las aguas; atestiguado). La grafía mapuche varía en las fuentes (huallepén en Lenz; he visto wallepen). ¿"Waillepeñ" con -ai- es la que quieres?
+9. **Cherrufe**: atestiguado (cherufe/cherruve, ser de fuego de los volcanes; pertinencia perfecta). Las fuentes dudan entre cherufe y cherruve; el juego mezcla rr + f. ¿Confirmas "Cherrufe" o prefieres "Cherufe"?
+
+### B. Estado de todos los demás (sin acción, salvo que tú digas)
+
+| Ser (región) | Estado | Nota |
+|---|---|---|
+| laftrache, ñidol laftrache (laf.) | Atestiguado | "Gente pequeña" subterránea (laftrache/caftranche), seres ambivalentes más que malignos; como mobs traviesos funciona. ñidol 'jefe' atestiguado. |
+| chonchon (laf./nag.) | Atestiguado | Transformación del kalku; enemigo apropiado. Ver A4 (grafía). |
+| Trelke-wekufü (jefe laf.) | Atestiguado | El Cuero / Trelquehuecuve; trelke 'cuero' + wekufü calca bien el nombre tradicional. Lago/costa: pertinencia correcta. |
+| kolokolo, fütra kolokolo (nag.) | Atestiguado + variante inventada | El colocolo que bebe la saliva de los durmientes; "fütra" como variante de tamaño es construcción del juego, transparente. |
+| Witranalwe (jefe nag.) | Atestiguado | Jinete espectral creado por kalku; coherente con que el Fütra Kalku del final crea sirvientes. |
+| kütral/pire/kura/fütra kura wekufü (pew.) | Inventados descriptivos | Ya flaggeados en tanda anterior; lingüísticamente transparentes. |
+| ko wekufü, mawün wekufü (wil.) | Inventados descriptivos | Ídem. |
+| kamawetu (wil.) | Atestiguado (chilote) | El camahueto; pertinencia williche/chilote razonada en tanda anterior. |
+| basilisko (wil.) | Atestiguado (chilote, origen europeo) | El basilisco chilote es adaptación del basilisco europeo; el nombre es préstamo castellano sin forma mapuche. Si te incomoda el único nombre castellano del bestiario, se puede renombrar o dejar como marca de la capa chilota. |
+| Kaleuche (jefe wil.) | Atestiguado (chilote) | Barco fantasma; etimología usual kalew- 'transformarse' + che. Pertinencia ya razonada. |
+| Trawko (sec. wil.) | Atestiguado (chilote) | El Trauco; en el juego solo pelea, sin el costado sexual del mito (bien así). Grafía ya preguntada en tanda 6. |
+| mewlen wekufü, fütra mewlen (puel.) | Atestiguado como fenómeno | El remolino (meulen) asociado a wekufü está en la creencia; preguntado en tanda 8. |
+| kurü trewa, kurü toro (puel.) | Folclor genérico sureño | Ya flaggeados (toro = préstamo). |
+| Walichu (jefe puel.) | Atestiguado (pampa, vía tehuelche) | Gualicho; adopción pampeana documentada, pertinencia perfecta para Puelmapu. Grafía preguntada en tanda 8. |
+| Epunamun (prueba puel.) | Atestiguado | Espíritu de guerra consultado; ya corregido a prueba consensuada, trato respetuoso. epu namun 'dos piernas' correcto. |
+| Chadikura (sec. puel.) | Inventado | Ya flaggeado (chadi + kura transparente). |
+| Fütra Kalku (sec. ngoy.) | Atestiguado (figura) | El kalku como hechicero maligno es tradicional; como villano mítico es estándar y no apunta a nadie real. |
+| ngoyman am, Ti Fütra Ngoyman 1-3 (ngoy.) | Inventados | Nombres ya en revisión (tandas 8-9). Ver A7 para "ngoyman am". |
+| Llufü Filu 1-5 (chumpall) | Inventado | Ya flaggeado; llufü 'profundo' + filu transparente. |
+| Ngen-lafken/mawida/pewen/kürüf/lelfün (aliados) | Atestiguados como categoría | Los ngen dueños de dominios naturales están documentados (ngen-lafken, ngen-mawida, ngen-kürüf, etc.); ngen-pewen y ngen-lelfün son extensiones razonables de la categoría (⚠ no tengo a mano si Grebe lista exactamente esos dos). Tratarlos como protectores a despertar es coherente con su rol de dueños cuidadores. |
+| chumpall (aliados) | Atestiguado | Shumpall/sumpall, gente del agua; el juego usa ch- (¿shumpall en Augusta? verifica la grafía que prefieras). Ayudarlos en vez de pelearles respeta su ambivalencia tradicional. |
+
+Fuente principal de verificación en línea de variantes de nguruvilu: la entrada Nguruvilu de Wikipedia (con sus citas a Lenz 1904, Guevara, Augusta 1916); laftrache: entrada Laftrache de Wikipedia en español. El resto va de mi conocimiento del corpus folclórico; donde dudo lo marqué con ⚠.
