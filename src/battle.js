@@ -90,7 +90,7 @@ function doSpecial(k,tgt){
   if(k==='lawen'){S.hp=Math.min(maxHP(),S.hp+8);S.curse=0;fx.push('Recuperas dos piwke.');fxe.push('You recover two hearts.');head.fx=()=>{sfx('heal');spark(60,30,'#80ff90',16)}}
   else{targets=k==='wino'?[tgt]:aliveE();
     let burnT=0;for(const e of targets){if(e.hidden){fx.push(e.label+' está escondido en la niebla: no lo alcanzas.');fxe.push(e.label+' is hidden in the fog: you cannot reach it.');continue}if(bossBlock(e)){fx.push(e.label+' se cubre: ¡bloquea tu newen!');fxe.push(e.label+' guards: it blocks your newen!');continue}let d=k==='wino'?atk()*3+rnd(3):Math.round(atk()*1.5)+rnd(3);if(e.tall)d=Math.max(1,Math.round(d/3));if(e.armor)d=Math.max(1,Math.round(d/2));if(ET[e.t].spres){d=Math.max(1,Math.round(d/2));fx.push(e.label+' resiste tu newen.');fxe.push(e.label+' resists your newen.')}if(ET[e.t].thick)d=Math.max(1,Math.round(d/2));if(e.seals&&e.seals.length)d=Math.min(2,d);if(e.dreaming){d=Math.min(1,d);fx.push(e.label+' duerme caminando: hay que despertarlo.');fxe.push(e.label+' sleeps as it walks: it must be woken.')}if(e.down){d+=4;e.down=0}if(e.burn)burnT+=2;if(k==='kuruf'&&ET[e.t].fly)e.gr=3;e.pend=d;e.hp-=d;
-      fx.push(e.label+' −'+d+(e.hp<=0?(quizPend(e)?' (se tambalea)':' (se va)'):'')+'.');fxe.push(e.label+' −'+d+(e.hp<=0?(quizPend(e)?' (staggers)':' (gone)'):'')+'.')}
+      fx.push(e.label+' −'+d+(e.hp<=0?(quizPend(e)?' (se tambalea)':(B.o.chain==='llufu'&&ET[e.t].boss?' (cambia de forma)':' (se va)')):'')+'.');fxe.push(e.label+' −'+d+(e.hp<=0?(quizPend(e)?' (staggers)':(B.o.chain==='llufu'&&ET[e.t].boss?' (shifts form)':' (gone)')):'')+'.')}
     if(burnT){S.hp=Math.max(1,S.hp-burnT);fx.push('¡Te quemas! (−'+burnT+')');fxe.push('You get burned! (−'+burnT+')')}}
   const eff=N(fx.join(' '),fxe.join(' '));
   eff.fx=()=>{for(const e of targets){const p=epos(e);spark(p.x,p.y,k==='kuruf'?'#e8f4ff':'#ffd060',16);if(e.pend){e.hit=14;pop(p.x,p.y-10,'-'+e.pend,'#ffffff');sfx('hit');if(e.hp<=0&&!quizPend(e)){e.dead=true;e.fadeT=20}e.pend=0}}};
@@ -142,7 +142,7 @@ function resolve(r,kil,tg,ei){
       if(e.dreaming){d=Math.min(1,d);fx.push(e.label+' duerme caminando: tus golpes se pierden en su sueño gris. Algo te dice que hay que despertarlo.');fxe.push(e.label+' sleeps as it walks: your blows are lost in its grey dream. Something tells you it must be woken.')}
       if(e.down){d+=4;e.down=0;fx.push(e.label+' está en el suelo: el golpe entra con todo (+4).');fxe.push(e.label+' is on the ground: the blow lands full force (+4).')}
       e.pend=d;e.hp-=d;
-      if(e.hp<=0&&quizPend(e)){fx.push(e.label+' se tambalea (−'+d+')...');fxe.push(e.label+' staggers (−'+d+')...')}else if(e.hp<=0){fx.push(e.label+' se va (−'+d+').');fxe.push(e.label+' goes away (−'+d+').')}else{fx.push(e.label+' −'+d+'.');fxe.push(e.label+' −'+d+'.')}}
+      if(e.hp<=0&&quizPend(e)){fx.push(e.label+' se tambalea (−'+d+')...');fxe.push(e.label+' staggers (−'+d+')...')}else if(e.hp<=0){const sh=B.o.chain==='llufu'&&ET[e.t].boss;fx.push(e.label+(sh?' cambia de forma (−':' se va (−')+d+(sh?')...':').'));fxe.push(e.label+(sh?' shifts form (−':' goes away (−')+d+(sh?')...':').'))}else{fx.push(e.label+' −'+d+'.');fxe.push(e.label+' −'+d+'.')}}
   }else if(r==='amutu'){fx.push('Les dijiste que no se fueran... y se quedan, felices.');fxe.push('You told them not to leave... so they stay, happily.')}
   else if(r==='küpa'&&!kil){fx.push('¡Les dijiste que vinieran! Se lanzan sobre ti.');fxe.push('You told them to come! They rush at you.');B.rush=new Set(targets)}
   else if(r==='küpa'){B.blocked=new Set(targets);fx.push(coll?'Los wekufü se detienen: este turno no pueden alcanzarte.':targets[0].label+' se detiene: este turno no puede alcanzarte.');fxe.push(coll?'The wekufü stop: this turn they cannot reach you.':targets[0].label+' stops: this turn it cannot reach you.')}
@@ -437,7 +437,7 @@ function victory(){
   if(S.pw.gold){gold*=2;S.pw.gold=0}
   S.xp+=xp;S.gold+=gold;
   const after=SONGS.win;after.after=()=>mapSong();playSong('win');
-  const ls=[N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
+  const ls=[B.o.chain==='llufu'?N('El ül se cierra como una marea mansa: Kaykayfilu se aquieta y vuelve a su sueño en el fondo del mar.','The ül closes like a gentle tide: Kaykayfilu grows calm and returns to his sleep at the bottom of the sea.'):N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
   while(S.xp>=xpNeed()){S.xp-=xpNeed();S.lvl++;S.baseMax+=HPQ;S.hp+=HPQ;S.baseAtk+=1;if(S.lvl%2===0)S.baseDef+=1;
     const l=L('','Doy kimün!','¡Más conocimiento! Llegas a kimün '+S.lvl+': ganas un corazón y más fuerza.','More knowledge! You reach kimün '+S.lvl+': you gain a heart and more strength.');l.fx=()=>sfx('lvl');ls.push(l)}
   say(ls,()=>endBattle('win'));
