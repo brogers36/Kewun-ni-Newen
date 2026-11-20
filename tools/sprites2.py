@@ -184,22 +184,70 @@ def kura(fr):
     for (x,y) in [(7,9),(8,10),(8,11),(13,6),(12,7),(11,12),(12,13),(5,6)]:g.p(x,y,'k')
     g.r(7,5,2,1,'e');g.r(12,5,2,1,'e');g.p(10,3,'h');g.p(9,4,'h');g.p(6,8,'h')
     g.outline();return g.rows()
-def nirivilu(fr):
-    g=G(32,18)
-    # snake tail (right) with curl
-    pts=[(14,12),(17,13),(20,13),(23,12),(25,10),(26,7),(28,5),(30,6)] if fr==0 else [(14,12),(17,14),(20,14),(23,13),(26,12),(28,9),(29,6),(30,4)]
+def ngurufilu(fr):
+    g=G(40,26)
+    sw=fr
+    # thin tail sweeping along the ground to the right
+    tail=[(16,21.2),(19.5,22.4),(23.5,22.8),(27.5,22.2),(30.8,20.8)]
+    for i,(x,y) in enumerate(tail):
+        rr=2.0-i*.14;g.e(x,y,rr,rr*.9,'B')
+    # bushy black tail tip, flicking up
+    tip=[(33.2,19.0),(35.2,17.0),(36.6,14.8),(37.6,12.8)] if sw else [(33.4,19.6),(35.6,18.2),(37.2,16.4),(38.2,14.6)]
+    for i,(x,y) in enumerate(tip):
+        g.e(x,y,2.4-i*.35,2.0-i*.3,'k')
+        g.p(int(x)-1,int(y)-1,'K')
+    # body coil (spine points, neck side first)
+    pts=[(12,10.6),(14.6,8.4),(17.8,7.2),(21,7.0),(24.2,8.0),(26.6,10.2),(27.8,13.2),(27.2,16.2),(24.6,18.4),(21.2,19.3),(17.8,18.9),(15.2,17.2)]
     for i,(x,y) in enumerate(pts):
-        rr=2.4-i*.22;g.e(x,y,rr,rr,'s')
-    for i,(x,y) in enumerate(pts[:-1]):
-        if i%2==0:g.p(x,y-1,'S')
-    for (x,y) in pts[1::2]:g.p(x,y+1,'S')
-    # fox body
-    g.e(10,10,5,3.6,'o');g.r(6,12,2,4,'O');g.r(12,12,2,4,'O');g.r(6,15,2,1,'k');g.r(12,15,2,1,'k')
-    g.e(10,11.5,3,1.5,'w')
-    # head
-    g.e(4.5,7,3.6,3,'o');g.r(0,7,3,2,'o');g.p(0,7,'k');g.e(3,8.6,2.2,1,'w')
-    g.r(3,2,2,3,'o');g.r(6,2,2,3,'o');g.p(3,2,'O');g.p(6,2,'O');g.p(4,3,'k');g.p(7,3,'k')
-    g.p(4,6,'y');g.p(4,7,'k')
+        rr=3.2 if i<8 else 3.2-(i-7)*.25
+        g.e(x,y,rr,rr*.92,'b')
+    # pale belly along the lower arc
+    for (x,y) in pts[7:]:
+        g.e(x-.2,y+1.0,1.9,1.0,'w')
+    for (x,y) in pts[8:]:
+        g.p(int(x),int(y)+2,'W')
+    # dark-edged patches with light centres and glints
+    for i,(x,y) in enumerate(pts):
+        if i%2==0:
+            g.e(x,y-.4,2.1,1.6,'B')
+            g.e(x,y-.5,1.3,1.0,'g')
+            g.p(int(x),int(y)-1,'y')
+        else:
+            g.p(int(x)+1,int(y),'B')
+    # black spiked crest along the outer edge of the coil (clear of the head)
+    crest={2:(0,-1),3:(0,-1),4:(.5,-.9),5:(.9,-.5),6:(1,0),7:(.9,.5),8:(.4,.9)}
+    for i,(nx,ny) in crest.items():
+        x,y=pts[i]
+        bx,by=x+nx*3.1,y+ny*3.0
+        ln=2+((i+sw)%2)
+        for k in range(ln+1):
+            g.p(int(bx+nx*k),int(by+ny*k),'k')
+            g.p(int(bx+nx*k+(1 if abs(ny)>abs(nx) else 0)),int(by+ny*k+(1 if abs(nx)>=abs(ny) else 0)),'k')
+        g.p(int(bx),int(by),'K')
+    # neck joining head to coil
+    g.e(10,11.6,2.8,2.6,'b')
+    # black forelegs with claws
+    for (lx,ph) in [(9,0),(12,1)]:
+        dy=(ph+sw)%2
+        g.r(lx,16+dy,2,7-dy,'k')
+        g.p(lx-1,23,'k');g.p(lx,23,'k');g.p(lx+2,23,'k')
+        g.p(lx-1,24,'k');g.p(lx+2,24,'k')
+        g.p(lx,17+dy,'K')
+    # head: long-snouted fox, low and watchful
+    g.e(6.5,10.8,3.4,3.0,'b')
+    g.r(2,9,4,2,'b')
+    g.r(0,10,5,2,'b')
+    g.r(0,12,3,1,'w')
+    g.r(0,10,2,1,'B')
+    g.r(0,12,1,1,'k');g.p(0,11,'k')
+    g.e(6.4,12.8,2.8,1.2,'w')
+    # tall dark ears, inner russet
+    for ex in (4,8):
+        g.p(ex+1,3,'k');g.r(ex,4,2,3,'k');g.r(ex,7,3,2,'k')
+        g.p(ex+1,6,'r')
+    # brow + eye: amber with dark pupil
+    g.r(6,8,3,1,'B')
+    g.p(6,10,'e');g.p(7,10,'e');g.p(7,11,'n')
     g.outline();return g.rows()
 def cherrufe(fr):
     W=44;g=G(W,46);c=W/2
@@ -1493,7 +1541,8 @@ PAL={
  'kutral':{'r':'#d82818','O':'#f87818','y':'#f8d040','w':'#fff8d0','k':'#3a0808','o':'#2a0806'},
  'pire':{'w':'#f4faff','b':'#a8c8f0','c':'#60e0ff','k':'#1a3a7a','o':'#203060'},
  'kura':{'g':'#8a8a90','G':'#5a5a64','k':'#2a2a30','e':'#ff8a20','h':'#c0c0c8','o':'#16161c'},
- 'nirivilu':{'o':'#d8742a','O':'#a85018','w':'#f4e8d8','k':'#1a1010','y':'#f8e040','s':'#3a8a5a','S':'#1e5a38'},
+ 'nirivilu':{'o':'#200c08','b':'#d8742a','B':'#a04a14','g':'#f09a40','y':'#ffe040','w':'#f4e0b8','W':'#d0b080','k':'#241018','K':'#50242e','e':'#ffd040','n':'#180808','r':'#a82818'},
+ 'nguruvilu':{'o':'#1c1208','b':'#b06a28','B':'#774416','g':'#d89040','y':'#ffe9a0','w':'#ecd9a8','W':'#c0a468','k':'#17121c','K':'#363046','e':'#ffb830','n':'#0a0808','r':'#8a3420'},
  'cherrufe':{'b':'#3a2c2c','B':'#241a1c','h':'#6a5450','r':'#e83018','O':'#f89020','y':'#ffe880','l':'#e8401c','L':'#ffa030','o':'#0e0608'},
  'ngen_lafken':{'d':'#1d4c84','m':'#3a7ab8','l':'#6ab4e8','w':'#d8f2ff','f':'#ffffff','k':'#06182e','E':'#aef4ff','o':'#071a30'},
  'ngen_mawida':{'B':'#4a3418','b':'#6e5228','h':'#9c7c46','m':'#5a8a3c','G':'#2c5424','L':'#4a8a38','l':'#7ab858','y':'#ffd84a','k':'#1c1208','E':'#ffe878','o':'#120c04'},
@@ -1549,6 +1598,8 @@ def mix(a,b,t):return tuple(int(round(a[i]+(b[i]-a[i])*t)) for i in range(3))
 def hhash(x,y,k):
     import math;v=math.sin(x*12.9898+y*78.233+k*37.7)*43758.5453;return v-math.floor(v)
 HI={
+ 'nguruvilu':{'glow':'yne','tex':{'k':'strand','K':'strand','b':'speck','w':'speck'}},
+ 'nirivilu':{'glow':'yne','tex':{'k':'strand','K':'strand','b':'speck','w':'speck'}},
  'witranalwe':{'glow':'EwFc','tex':{'P':'streak','q':'streak','A':'streak','g':'strand','G':'strand','H':'speck'}},
  'ngen_lafken':{'glow':'fE','tex':{'d':'streak','m':'streak','l':'streak','w':'speck'}},
  'ngen_mawida':{'glow':'yE','tex':{'b':'strand','B':'strand','h':'strand','m':'speck','L':'speck','G':'speck','l':'speck'}},
@@ -1672,10 +1723,10 @@ def hires(name,rows,pal):
         out.append(r)
     return {v:k for k,v in cols.items()},out
 D={}
-BIG={'llufu1':2,'llufu2':2,'llufu3':2,'llufu4':2,'llufu5':2,'walichu':2,'epunamun':2,'chadikura':2,'ngoyam':2,'kalku':2,'ngoyman1':2,'ngoyman2':2,'ngoyman3':2,'mewlen':2,'kurutrewa':2,'fmewlen':2,'kurutoro':2,'chinifilu':2,'piwuchen':2,'wallipen':2,'trawko':2,'kowek':2,'mawek':2,'kamawetu':2,'basilisko':2,'kaleuche':2,'trelke':2,'witranalwe':2,'chonchon':2,'kutral':2,'pire':2,'kura':2,'nirivilu':2,'cherrufe':2}
-for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe2),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('nirivilu',nirivilu),('cherrufe',cherrufe2),('trelke',trelke),('ngen_lafken',ngen_lafken),('ngen_mawida',ngen_mawida),('ngen_pewen',ngen_pewen),('kowek',kowek),('mawek',mawek),('kamawetu',kamawetu),('basilisko',basilisko),('kaleuche',kaleuche),('ngen_kuruf',ngen_kuruf),('chinifilu',chinifilu),('piwuchen',piwuchen),('wallipen',wallipen),('trawko',trawko),('luan',luan),('choyke',choyke),('mewlen',mewlen),('kurutrewa',kurutrewa),('fmewlen',fmewlen),('kurutoro',kurutoro),('walichu',walichu),('epunamun',epunamun),('chadikura',chadikura),('ngoyam',ngoyam),('kalku',kalku),('ngoyman1',ngoyman1),('ngoyman2',ngoyman2),('ngoyman3',ngoyman3),('llufu1',llufu1),('llufu2',llufu2),('llufu3',llufu3),('llufu4',llufu4),('llufu5',llufu5),('ngen_lelfun',ngen_lelfun)]:
+BIG={'llufu1':2,'llufu2':2,'llufu3':2,'llufu4':2,'llufu5':2,'walichu':2,'epunamun':2,'chadikura':2,'ngoyam':2,'kalku':2,'ngoyman1':2,'ngoyman2':2,'ngoyman3':2,'mewlen':2,'kurutrewa':2,'fmewlen':2,'kurutoro':2,'chinifilu':2,'piwuchen':2,'wallipen':2,'trawko':2,'kowek':2,'mawek':2,'kamawetu':2,'basilisko':2,'kaleuche':2,'trelke':2,'witranalwe':2,'chonchon':2,'kutral':2,'pire':2,'kura':2,'nirivilu':2,'nguruvilu':2,'cherrufe':2}
+for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe2),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('nirivilu',ngurufilu),('nguruvilu',ngurufilu),('cherrufe',cherrufe2),('trelke',trelke),('ngen_lafken',ngen_lafken),('ngen_mawida',ngen_mawida),('ngen_pewen',ngen_pewen),('kowek',kowek),('mawek',mawek),('kamawetu',kamawetu),('basilisko',basilisko),('kaleuche',kaleuche),('ngen_kuruf',ngen_kuruf),('chinifilu',chinifilu),('piwuchen',piwuchen),('wallipen',wallipen),('trawko',trawko),('luan',luan),('choyke',choyke),('mewlen',mewlen),('kurutrewa',kurutrewa),('fmewlen',fmewlen),('kurutoro',kurutoro),('walichu',walichu),('epunamun',epunamun),('chadikura',chadikura),('ngoyam',ngoyam),('kalku',kalku),('ngoyman1',ngoyman1),('ngoyman2',ngoyman2),('ngoyman3',ngoyman3),('llufu1',llufu1),('llufu2',llufu2),('llufu3',llufu3),('llufu4',llufu4),('llufu5',llufu5),('ngen_lelfun',ngen_lelfun)]:
     D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':{'witranalwe':'150,230,170','cherrufe':'255,130,50','trelke':'150,200,120','kaleuche':'190,220,200','chinifilu':'170,180,130','piwuchen':'230,120,140','wallipen':'170,200,240','trawko':'190,220,140','walichu':'210,200,160','epunamun':'255,170,90','chadikura':'150,255,210','kalku':'170,110,230','ngoyman1':'190,210,230','ngoyman2':'130,230,190','ngoyman3':'220,230,245','llufu1':'80,200,190','llufu2':'80,200,190','llufu3':'80,200,190','llufu4':'120,255,215','llufu5':'110,230,210'}.get(name,0)}
-for name in ['witranalwe','trelke','cherrufe','kaleuche','ngen_lafken','ngen_mawida','ngen_pewen','ngen_kuruf','chinifilu','piwuchen','wallipen','trawko','walichu','epunamun','chadikura','kalku','ngoyman1','ngoyman2','ngoyman3','llufu1','llufu2','llufu3','llufu4','llufu5','ngen_lelfun']:
+for name in ['nguruvilu','nirivilu','witranalwe','trelke','cherrufe','kaleuche','ngen_lafken','ngen_mawida','ngen_pewen','ngen_kuruf','chinifilu','piwuchen','wallipen','trawko','walichu','epunamun','chadikura','kalku','ngoyman1','ngoyman2','ngoyman3','llufu1','llufu2','llufu3','llufu4','llufu5','ngen_lelfun']:
     fr=[];pal=None
     for f in D[name]['f']:
         p,rows=hires(name,f,PAL[name]);fr.append((p,rows))
