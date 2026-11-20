@@ -171,6 +171,15 @@ function renderMap(){
       if(e.party.length>1)OV.push(()=>txt('×'+e.party.length,sx+13,sy+3,'#ffffff',12))}}});
   list.push({y:P.fy+.5,d:()=>drawChar(c,heroLook(),Math.round(P.fx*T-cx),Math.round(P.fy*T-cy+VY),P.dir,P.moving?Math.floor(frame/6)%4:0)});
   list.sort((a,b)=>a.y-b.y).forEach(o=>o.d());
+  // enemies behind a tree canopy stay faintly visible
+  for(const e of ents){if(e.kind!=='enemy'||!e.party)continue;
+    const bx=e.x,by=e.y+1;
+    if(by<M.h&&grid[by][bx]==='T'){
+      const t=e.party[0],sz=e.boss?30:e.mini?22:16,cvs=enemyCanvas(t,sz,Math.floor(frame/10)%2);
+      const sx=Math.round(e.fx*T-cx),sy=Math.round(e.fy*T-cy+VY);
+      const fly=ET[t].fly?6+Math.round(Math.sin(frame/8)*1.5):0;
+      c.globalAlpha=.5;c.drawImage(cvs,Math.round(sx+8-cvs.width/2),Math.round(sy+16-cvs.height-fly+2));c.globalAlpha=1;
+    }}
   for(const [rx,ry] of RUKAS)for(let k=0;k<5;k++){const ph=((frame+k*28)%140)/140;ell(c,rx-cx+Math.sin(ph*6+k)*3*ph,ry-cy+VY-ph*28,2+ph*5,(2+ph*5)*.8,'rgba(225,225,235,'+(.4*(1-ph))+')')}
   for(let k=0;k<26;k++){const wx=Math.floor(h2(k,frame>>3,91)*LW),wy=Math.floor(h2(k,frame>>3,92)*LH),mx=Math.floor((wx+cx)/T),my=Math.floor((wy-VY+cy)/T);
     if(inB(mx,my)&&grid[my][mx]==='~'&&WD[my][mx]>1){const a=(frame%8)<4;R(c,wx,wy,1,1,M.lava?'#fff0a0':'#f4faff');if(a){R(c,wx-1,wy,1,1,'rgba(220,240,255,.7)');R(c,wx+1,wy,1,1,'rgba(220,240,255,.7)')}}}
