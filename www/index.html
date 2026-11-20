@@ -2581,7 +2581,7 @@ function awarTalk(){
       const pool=[c];while(pool.length<4){const k=1+rnd(6);if(!pool.includes(k))pool.push(k)}
       const opts=pool.map(k=>({m:AWN[k-1],v:k}));for(let a=3;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
       sfx('ok');
-      const pr={mh:mh,m:'Mufü '+(askK?'kurü':'lüq')+'?',es:'Lanzada '+t+' de 4. ¿Cuántas cayeron '+(askK?'negras (kurü)':'blancas (lüq)')+'?',en:'Throw '+t+' of 4. How many landed '+(askK?'black (kurü)':'white (lüq)')+'?'};
+      const pr={mh:mh,m:'Chumten '+(askK?'kurü':'lüq')+'?',es:'Lanzada '+t+' de 4. ¿Cuántas cayeron '+(askK?'negras (kurü)':'blancas (lüq)')+'?',en:'Throw '+t+' of 4. How many landed '+(askK?'black (kurü)':'white (lüq)')+'?'};
       choose(pr,opts,v=>{
         if(v===c){pts++;say([praise(),L('Pichiche',AWN[c-1]+'! Feley!','¡'+AWN[c-1]+'! ¡Así es!','¡'+AWN[c-1]+'! That is right!')],toss)}
         else{sfx('bad');say([L('Pichiche','Fey no! '+AWN[c-1]+' '+(askK?'kurü':'lüq')+'.','¡Eso no! Eran '+AWN[c-1]+' ('+c+') '+(askK?'negras':'blancas')+'.','Not that! There were '+AWN[c-1]+' ('+c+') '+(askK?'black':'white')+'.')],toss)}
