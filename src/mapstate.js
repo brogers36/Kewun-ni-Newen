@@ -4,7 +4,7 @@
 const PENSPOT=[[10,2],[12,3],[14,2],[11,3],[15,3]];
 let CUR='rupu',M=null,grid=null,ents=[],LAYERS=[],GT=null,PROPS=[],RUKAS=[],SCN=[];
 const P={x:1,y:6,fx:1,fy:6,ox:1,oy:6,t:0,moving:false,dir:'down',spd:.125};
-const WALK=new Set(['.',',','"','=','_','P','m','g','p','S','q','k','A','b','@']);
+const WALK=new Set(['.',',','"','=','_','P','m','g','p','S','q','k','A','b','@','j']);
 function inB(x,y){return x>=0&&y>=0&&x<M.w&&y<M.h}
 function walk(x,y){return inB(x,y)&&WALK.has(grid[y][x])}
 function entAt(x,y,skip){return ents.find(e=>e!==skip&&e.x===x&&e.y===y)}

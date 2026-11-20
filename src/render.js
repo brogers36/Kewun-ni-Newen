@@ -100,7 +100,7 @@ function renderCut(){
   cutFx(c,i===2||i===3);
 }
 /* ---------- map ---------- */
-const DYN=new Set(['@','^','Ñ','D','F','C','K','S','I','X','v','P','m','g','p','k','L','G','B','O','q','Q','N','J','H','E','A']);
+const DYN=new Set(['@','^','Ñ','D','F','C','K','S','I','X','v','P','m','g','p','k','L','G','B','O','q','Q','N','J','H','E','A','j']);
 const BOB=new Set(['P','m','g','p','k']);
 function bubble(x,y,text){OV.push(()=>{ctx.font='bold 13px ui-monospace,Menlo,Consolas,monospace';const w=ctx.measureText(text).width+12,bx=Math.round(x*2-w/2),by=Math.round(y*2-26);
   ctx.fillStyle='#181018';ctx.fillRect(bx-2,by-2,w+4,24);ctx.fillStyle='#fffaf0';ctx.fillRect(bx,by,w,20);ctx.fillStyle='#181018';ctx.fillRect(x*2-3,by+20,6,4);ctx.fillStyle='#fffaf0';ctx.fillRect(x*2-1,by+20,2,2);

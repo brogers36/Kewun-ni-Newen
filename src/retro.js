@@ -408,6 +408,14 @@ function dynCanvas(ch,f){
     outline(cvs,'#181018');{const fl=[[0,0],[1,-1],[-1,0],[0,1]][f];ell(c,8+fl[0]*.5,7+fl[1]*.5,3.2,4.6,'#e04818');ell(c,8,7.6,2.2,3.4,'#ff9a2a');ell(c,8,9,1.2,1.8,'#fff2a0');R(c,7+fl[0],2+fl[1],1,1,'#ffb43a');}return DCACHE[k]=cvs;
   case 'N':{R(c,3,2,10,13,'#7a7a8a');R(c,3,2,10,2,'#a8a8b8');R(c,3,2,2,13,'#9898a8');R(c,11,3,2,12,'#5a5a6a');R(c,2,14,12,2,'#5a5a6a');
     const g=f?'#80e0ff':'#4a4a5a';R(c,6,5,4,1,g);R(c,7,6,2,4,g);R(c,6,10,4,1,g);if(f){R(c,5,4,6,1,'#c0f0ff')}break}
+  case 'j':{const sw=f?1:0;
+    const stalks=[[3,6,sw],[5,4,1-sw],[7,7,sw],[9,3,1-sw],[11,6,sw],[13,5,1-sw]];
+    for(const [x,h,o] of stalks){
+      R(c,x,16-h-4,1,h+4,'#5aa848');R(c,x+o,16-h-6,1,2,'#7cc45e');
+      R(c,x+o,16-h-10,2,4,'#8a5426');R(c,x+o,16-h-10,2,1,'#b4803c');
+    }
+    R(c,2,14,13,2,'#3c7a30');R(c,4,15,3,1,'#2c5a22');R(c,10,15,3,1,'#2c5a22');
+    break;}
   case 'J':{const [col,lit]=String(f).split('|');R(c,3,9,10,3,'#6a6a7a');R(c,4,12,2,4,'#4a4a5a');R(c,10,12,2,4,'#4a4a5a');R(c,3,9,10,1,'#9a9aaa');R(c,4,8,8,2,'#2a1a10');
     if(lit==='1'){outline(cvs,'#181018');ell(c,8,5,3.2,4.4,col);ell(c,8,6,2,2.6,'#ffffff');R(c,7,0,2,2,col);return DCACHE[k]=cvs}
     R(c,6,7,4,1,'#4a3a2a');break}

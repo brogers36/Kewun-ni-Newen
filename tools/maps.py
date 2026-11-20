@@ -309,6 +309,8 @@ for y in range(1,12):
 c.p(7,7,'x');c.p(17,3,'x');c.p(28,6,'x')
 c.p(9,4,',');c.p(20,9,',');c.r(19,9,3,2,',')
 c.p(13,9,',');c.p(2,10,'P');c.p(2,9,',')
+# juncos (reeds) ring the trutruka dig spot south of the middle pool
+for (jx,jy) in [(12,8),(13,8),(14,8),(11,9),(15,9),(12,10),(13,10),(14,10)]:c.p(jx,jy,'j')
 c.r(28,10,3,2,',');c.p(29,10,'F')
 N['n_menoko']=c.rows()
 setr(N['n_kullin'],5,12,1,1,',')
@@ -626,7 +628,7 @@ def bfs(rows,start):
             X,Y=x+dx,y+dy
             if 0<=X<W and 0<=Y<H and (X,Y) not in seen and rows[Y][X] in OPEN:seen.add((X,Y));st.append((X,Y))
     return seen
-OPEN2=set('.,"=_PmgpSqkAbKLEGBONJHCFSIMZUVx^')
+OPEN2=set('.,"=_PmgpSqkAbKLEGBONJHCFSIMZUVx^j')
 def bfs2(rows,start):
     H=len(rows);W=len(rows[0]);seen={start};st=[start]
     while st:
