@@ -1181,39 +1181,49 @@ def kalku(fr):
         g.p(x,y+((i+fr)%2),'k');g.p(x+1,y+1+((i+fr)%2),'F')
     g.outline();return g.rows()
 def ngoyman1(fr):
-    g=G(60,40);import math
-    for y in range(6,38):
-        t=(y-6)/32.0
-        rr=12+t*17+math.sin(y*0.45+fr*3.14)*2.2
+    # the veil: a hunched fog wraith - head, shoulders, long reaching arms, fog skirt
+    g=G(60,44);import math
+    CX=30
+    for y in range(26,42):
+        t=(y-26)/16.0
+        rr=13+t*15+math.sin(y*0.5+fr*3.14)*2
         off=math.sin(y*0.3+fr*0.9)*2
-        x0=int(30-rr+off);x1=int(30+rr+off)
+        x0=int(CX-rr+off);x1=int(CX+rr+off)
         for x in range(x0,x1+1):
             n=math.sin(x*0.5+y*0.8)+math.sin(x*0.23-y*0.4+fr*2)
-            c='w' if n>0.7 else ('d' if n<-1.0 else 's')
+            c='w' if n>1.2 else ('d' if n<-0.8 else 's')
             if x<=x0+1 or x>=x1-1:c='d'
             g.p(x,y,c)
-    # billow tops, dark
-    for (cx,cy,rx,ry) in [(14,10,7,4),(30,6,9,4.5),(46,10,7,4),(22,8,6,3),(38,8,6,3)]:
-        g.e(cx,cy,rx,ry,'s');g.e(cx,cy+1,rx*.7,ry*.6,'d')
-    # one furious glare in the heart of the bank, lesser eyes scattered
-    for sgn in (-1,1):
-        ex=30+sgn*8
-        g.e(ex,17,4,2.6,'k')                                       # deep socket
-        g.p(ex,17,'E');g.p(ex+sgn,17,'E');g.p(ex-sgn,18,'E')       # burning slit
-        for i in range(7):                                          # heavy brow, steep slant
-            bx2=ex-sgn*3+sgn*i;byy=12+(6-i)//2
-            g.p(bx2,byy,'k');g.p(bx2,byy+1,'k')
-    g.e(30,26,6,1.6,'k')                                            # snarling rift
-    g.p(23,27,'k');g.p(22,28,'k');g.p(37,27,'k');g.p(38,28,'k')     # corners dragged down
-    for (fx2,fy2) in [(26,28),(30,28),(34,28)]:                     # fangs hanging from the rift
-        g.p(fx2,fy2,'w');g.p(fx2,fy2+1,'w')
-    eyes=[(12,22),(48,21),(10,30),(50,31)] if fr==0 else [(12,22),(48,21),(10,30),(50,31),(20,32),(40,31)]
-    for (x,y) in eyes:
-        g.r(x,y,2,1,'k');g.p(x,y,'E')
-    # trailing wisps at base
+    g.e(CX,22,10,7,'s');g.e(CX,23,8,5,'d')                    # torso
+    for sgn in (-1,1):                                         # shoulders
+        g.e(CX+sgn*9,17,5,3.5,'s');g.e(CX+sgn*10,18,4,2.5,'d')
+    for sgn in (-1,1):                                         # long arms, claw fingers
+        for i in range(10):
+            x=CX+sgn*(12+int(i*0.9));y=19+i
+            g.p(x,y,'s');g.p(x+sgn,y,'d')
+        hx,hy=CX+sgn*21,30+(fr%2)
+        g.e(hx,hy,2,1.6,'d')
+        for j in (-1,0,1):g.p(hx+j,hy+2,'w')
+        g.p(hx,hy+3,'w')
+    g.e(CX,9,8,6.5,'s');g.e(CX,10,6.5,5,'d')                  # head
+    for sgn in (-1,1):                                         # angry brows and slit eyes
+        ex=CX+sgn*3
+        for i in range(4):
+            g.p(ex+sgn*i,6+(3-i)//2,'k');g.p(ex+sgn*i,7+(3-i)//2,'k')
+        g.r(ex-1,9,3,2,'k');g.p(ex,9,'E');g.p(ex+sgn,10,'E')
+    g.e(CX,13,3.5,1.2,'k')                                     # snarl
+    g.p(CX-3,14,'k');g.p(CX+3,14,'k')
+    g.p(CX-1,14,'w');g.p(CX+1,14,'w')
+    for (cx2,cy2,rx,ry) in [(CX-9,4,4,2.5),(CX,2,5,2.5),(CX+9,4,4,2.5)]:
+        g.e(cx2,cy2,rx,ry,'s')                                 # wisp crown
+    for y in range(4,30):                                      # fog texture
+        for x in range(CX-20,CX+21):
+            if g.get(x,y)=='s' and (x*3+y*5)%11<2:g.p(x,y,'d')
     for i in range(8):
         x=6+i*7
-        g.p(x+fr,38,'s');g.p(x+1+fr,39,'d')
+        g.p(x+fr,42,'s');g.p(x+1+fr,43,'d')
+    for (x,y) in ([(14,30),(46,31)] if fr==0 else [(14,30),(46,31),(24,34)]):
+        g.r(x,y,2,1,'k');g.p(x,y,'E')                          # lesser eyes in the skirt
     g.outline();return g.rows()
 def ngoyman2(fr):
     g=G(40,50);import math
@@ -1249,9 +1259,9 @@ def ngoyman3(fr):
     # towering mist body
     for y in range(4,58):
         t=(y-4)/54.0
-        if y<14:rr=7+ (y-4)*0.5
-        elif y<24:rr=12+(y-14)*0.9
-        else:rr=20-(abs(y-40))*0.12
+        if y<14:rr=7+ (y-4)*0.4
+        elif y<24:rr=10+(y-14)*0.55
+        else:rr=15-(abs(y-44))*0.08
         rr+=math.sin(y*0.5+fr*3.14)*1.4
         off=math.sin(y*0.22+fr*0.8)*1.6
         x0=int(24-rr+off);x1=int(24+rr+off)
@@ -1277,14 +1287,16 @@ def ngoyman3(fr):
     for k in range(5):g.p(19+k*2,18,'w')
     g.p(18,22,'k');g.p(28,22,'k')
     g.p(19,21,'w');g.p(27,21,'w')
-    # arms dissolving into fog
-    sw=fr
-    for (sx,dx) in [(6,-1),(42,1)]:
-        for i in range(10):
-            y=24+i
-            x=sx+dx*int(i*0.5)
-            g.p(x,y,'s');g.p(x-dx,y,'d')
-        g.p(sx+dx*5,34+sw,'s');g.p(sx+dx*6,36-sw,'d')
+    # shoulders and heavy arms ending in clawed hands
+    for sgn in (-1,1):
+        g.e(24+sgn*15,24,5,3.5,'s');g.e(24+sgn*16,25,4,2.5,'d')
+        for i in range(12):
+            x=24+sgn*(17+int(i*0.45));y=26+i
+            g.p(x,y,'s');g.p(x+sgn,y,'d');g.p(x-sgn,y,'d')
+        hx,hy=24+sgn*22,39+(fr%2)
+        g.e(hx,hy,2.2,1.8,'d')
+        for j in (-1,0,1):g.p(hx+j,hy+2,'w')
+        g.p(hx,hy+3,'w')
     # drifting shreds
     for i,(x,y) in enumerate([(2,10),(45,8),(1,30),(46,34),(4,50),(44,52)]):
         g.p(x,y+((i+fr)%2),'s');g.p(x+1,y+1,'d')
@@ -1296,9 +1308,9 @@ def ngoyman4(fr):
     g=G(56,72);import math
     for y in range(4,68):
         t=(y-4)/64.0
-        if y<16:rr=9+(y-4)*0.7
-        elif y<28:rr=16+(y-16)*0.8
-        else:rr=25-(abs(y-48))*0.10
+        if y<16:rr=8+(y-4)*0.5
+        elif y<28:rr=13+(y-16)*0.5
+        else:rr=19-(abs(y-50))*0.07
         rr+=math.sin(y*0.45+fr*3.14)*1.6
         off=math.sin(y*0.2+fr*0.8)*1.8
         x0=int(28-rr+off);x1=int(28+rr+off)
@@ -1328,14 +1340,19 @@ def ngoyman4(fr):
     g.e(28,31,7,3,'k')
     for k in range(7):g.p(22+k*2,28,'w')
     g.p(21,33,'k');g.p(35,33,'k');g.p(22,32,'w');g.p(34,32,'w')
-    # arms of smoke raised
-    sw=fr
-    for (sx,dx) in [(5,-1),(51,1)]:
-        for i in range(14):
-            y=30+i
-            x=sx+dx*int(i*0.4)
-            g.p(x,y,'s');g.p(x-dx,y,'d')
-        g.p(sx+dx*3,26+sw,'s');g.p(sx+dx*4,24-sw,'d');g.p(sx+dx*5,22+sw,'s')
+    # shoulders and raised arms with claws
+    for sgn in (-1,1):
+        g.e(28+sgn*17,30,6,4,'s');g.e(28+sgn*19,31,4,3,'d')
+        for i in range(10):
+            x=28+sgn*(21+int(i*0.5));y=32+i
+            g.p(x,y,'s');g.p(x+sgn,y,'d')
+        ex3,ey3=28+sgn*26,42
+        for i in range(9):
+            x=ex3+sgn*int(i*0.2);y=ey3-i
+            g.p(x,y,'s');g.p(x+sgn,y,'d')
+        hx,hy=28+sgn*27,31+(fr%2)
+        g.e(hx,hy,2.2,1.8,'d')
+        g.p(hx-1,hy-2,'w');g.p(hx,hy-3,'w');g.p(hx+1,hy-2,'w')
     for i,(x,y) in enumerate([(2,12),(53,10),(1,36),(54,40),(4,60),(52,62),(27,2)]):
         g.p(x,y+((i+fr)%2),'s');g.p(x+1,y+1,'d')
     g.outline();return g.rows()
@@ -1413,43 +1430,44 @@ def ngoyman5(fr):
     for k in range(3):
         g.e(CX,40+k*7,8-k,1.2,'k')
     # ---------------- the five lands and their people, half-swallowed
-    def figura(x,y,torso,sgn):
-        # a small person buried to the waist, one arm straining upward
-        g.e(x,y+1,3.2,2.4,'k')            # the hollow it struggles out of
-        g.p(x,y,'f')                      # head
-        g.p(x,y+1,torso);g.p(x+sgn,y+1,torso)
+    def persona(x,y,torso,sgn):
+        # a person buried to the waist: 2px head, 2x2 torso, both arms straining
+        g.e(x,y+2,4.2,3,'k')                                   # the hollow
+        g.p(x,y-1,'f');g.p(x+1,y-1,'f')                        # head
+        for (tx2,ty2) in [(x,y),(x+1,y),(x,y+1),(x+1,y+1)]:g.p(tx2,ty2,torso)
         up=(fr%2)
-        g.p(x-sgn,y-up,'f');g.p(x-sgn*2,y-1-up,'f')   # reaching arm
-    # lafkenche: a wave curling out, a fish mid-leap
-    wy=64
-    for i in range(7):g.p(CX-14+i,wy-int(math.sin(i*0.55)*3),'c')
-    g.p(CX-15,wy-1,'w');g.p(CX-16,wy,'c')
-    g.p(CX-18,wy-3+(fr%2),'c');g.p(CX-17,wy-3+(fr%2),'w')   # fish
-    figura(CX-10,wy-4,'c',-1)
-    # nagche: a foye branch forcing its way out
-    by=56
-    for i in range(7):g.p(CX+8+i,by-int(i*0.5),'g')
-    for (lx,ly) in [(CX+12,by-4),(CX+14,by-5),(CX+15,by-3)]:
-        g.p(lx,ly,'g');g.p(lx+1,ly,'v')
-    figura(CX+9,by-2,'g',1)
-    # pewenche: a bent pewen and one live ember
-    py2=48
-    for i in range(4):
-        for xx in range(CX-9-i,CX-9+i+1):g.p(xx,py2-3+i,'g')
-    g.p(CX-9,py2-5,'g');g.p(CX-13,py2+1,'r')
-    if fr:g.p(CX-14,py2,'r')
-    figura(CX-5,py2-1,'r',-1)
-    # williche: slanted rain and a storm bird
-    ry2=40
-    for i in range(3):
-        for j in range(3):g.p(CX+10+i*3-j,ry2-2+j,'c')
-    g.p(CX+8,ry2-4,'w');g.p(CX+9,ry2-5,'w');g.p(CX+10,ry2-4,'w')  # bird
-    figura(CX+6,ry2,'w',1)
-    # puelmapu: pampa grass and a fleeing choyke
-    gy=32
-    for i in range(5):g.p(CX-8+i,gy+(i%2),'y')
-    g.p(CX-11,gy-1,'y');g.p(CX-11,gy,'y');g.p(CX-12,gy+1-(fr%2),'y')  # choyke
-    figura(CX-4,gy-2,'y',-1)
+        g.p(x-1,y-up,'f');g.p(x-2,y-1-up,'f');g.p(x-2,y-2-up,'f')   # arm straining out
+        g.p(x+2,y+1,'f')                                       # bracing hand
+    # lafkenche: a person and a kultrung being dragged under
+    ky=63;kx=CX-7
+    persona(kx,ky,'c',-1)
+    g.e(kx-6,ky+1,2.6,2.6,'y')                                 # kultrung skin
+    g.p(kx-6,ky,'k');g.p(kx-6,ky+1,'k');g.p(kx-6,ky+2,'k')     # painted cross
+    g.p(kx-7,ky+1,'k');g.p(kx-5,ky+1,'k')
+    g.p(kx-7,ky,'r');g.p(kx-5,ky+2,'r')
+    # nagche: a person and a trutruka
+    ty=55;tx=CX+7
+    persona(tx,ty,'g',1)
+    for i in range(7):g.p(tx+3+i,ty+1-i//3,'y')                # the long cane
+    g.p(tx+10,ty-1,'y');g.p(tx+10,ty,'y');g.p(tx+11,ty-1,'w')  # the flared horn
+    # pewenche: a person and a metawe (clay vessel)
+    my=47;mx=CX-7
+    persona(mx,my,'r',-1)
+    g.e(mx-5,my+1,2,2.2,'r')                                   # vessel body
+    g.p(mx-5,my-1,'k');g.p(mx-6,my,'k')                        # mouth and handle
+    g.p(mx-5,my+1,'k')
+    # williche: a person and a chemamull (carved ancestor post)
+    cy2=39;cx2=CX+7
+    persona(cx2,cy2,'w',1)
+    for j in range(6):g.p(cx2+4,cy2-2+j,'y')                   # the post
+    g.p(cx2+5,cy2-2,'y');g.p(cx2+5,cy2-1,'y')
+    g.p(cx2+4,cy2-1,'k');g.p(cx2+5,cy2,'k')                    # carved face
+    # puelmapu: a person and a woven trariwe
+    wy2=31;wx2=CX-7
+    persona(wx2,wy2,'y',-1)
+    for i in range(6):g.p(wx2-7+i,wy2+1,'r')                   # the sash
+    for i in range(6):g.p(wx2-7+i,wy2+2,'r')
+    g.p(wx2-6,wy2+1,'y');g.p(wx2-4,wy2+2,'y');g.p(wx2-2,wy2+1,'y')  # woven diamonds
     # ---------------- the furious demon head
     g.e(CX,15,13,10,'s');g.e(CX,16,11,8,'d')
     for sgn in (-1,1):                                            # brow ledges slanting down-in
