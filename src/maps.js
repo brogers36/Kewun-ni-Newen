@@ -310,7 +310,7 @@ w_lof:{region:'williche',name:'Williche lof',g:{es:'La comunidad del lago',en:'T
    {id:'wpapay',kind:'npc',look:'kuku',fem:1,x:19,y:8,dir:'left',seated:1,fixed:1,talk:()=>mushayTalk(),bub:['Mushay...','Mari mari!']},
    {id:'wseller',kind:'npc',look:'seller',x:31,y:10,talk:()=>shop('w_lof')}]},
 w_mawida:{region:'williche',name:'Lawal mawida',g:{es:'El bosque de alerces',en:'The alerce forest'},floor:',',bg:'rainforest',song:'wil',pal:'williche',trees:'lawal',
- edges:{left:{to:'w_lof',x:32,y:9},right:{to:'w_lafken',x:1,y:7},down:{to:'w_trayen',x:16,y:1}},stones:{'14,3':'kin'},chests:{'27,2':'piwke'},konew:{'22,10':K8},
+ marks:['16,10','16,11','16,12'],edges:{left:{to:'w_lof',x:32,y:9},right:{to:'w_lafken',x:1,y:7},down:{to:'w_trayen',x:16,y:1}},stones:{'14,3':'kin'},chests:{'27,2':'piwke'},konew:{'22,10':K8},
  ents:[{kind:'enemy',x:10,y:3,party:['kowek','mawek']},{kind:'enemy',x:17,y:7,party:['mawek','mawek','kowek']},{kind:'enemy',x:5,y:6,party:['kowek','kowek']}]},
 w_lafken:{region:'williche',name:'Willi lafken',g:{es:'La costa del sur',en:'The southern coast'},floor:'.',bg:'rainforest',song:'wil',pal:'williche',trees:'lawal',
  edges:{left:{to:'w_mawida',x:30,y:7},right:{to:'w_inaltu',x:1,y:7}},digs:{'12,6':{}},

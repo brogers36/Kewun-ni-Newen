@@ -137,6 +137,8 @@ function renderMap(){
   const sbA=M.sbt&&!S.flags[M.sbt.flag]&&(!M.sbt.req||S.flags[M.sbt.req]);
   if(sbA)for(const k of M.sbt.t){const [tx,ty]=k.split(',');const X=tx*T-cx,Y=ty*T-cy+VY;
     if(X>-T&&X<LW&&Y>VY-T&&Y<VY+VH)c.drawImage(sbtCanvas(Math.floor(frame/14)%2),X,Y)}
+  if(M.marks)for(const k of M.marks){const [tx,ty]=k.split(',');const X=tx*T-cx,Y=ty*T-cy+VY;
+    if(X>-T&&X<LW&&Y>VY-T&&Y<VY+VH)c.drawImage(sbtCanvas(Math.floor(frame/14)%2),X,Y)}
   for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const ch=grid[y][x];if(!DYN.has(ch))continue;
     const X=x*T-cx,Y=y*T-cy+VY,anim=ch==='F'||ch==='X'||ch==='v'||ch==='A';
     if((ch==='N'||ch==='J')&&M.pz){const kk=x+','+y,t=M.pz.tiles[kk];if(t){const lit=PZ.lit.has(kk);ell(c,X+8,Y+15,6,2,'rgba(0,0,0,.28)');
@@ -212,6 +214,28 @@ function renderMap(){
   for(let k=0;k<26;k++){const wx=Math.floor(h2(k,frame>>3,91)*LW),wy=Math.floor(h2(k,frame>>3,92)*LH),mx=Math.floor((wx+cx)/T),my=Math.floor((wy-VY+cy)/T);
     if(inB(mx,my)&&grid[my][mx]==='~'&&WD[my][mx]>1){const a=(frame%8)<4;R(c,wx,wy,1,1,M.lava?'#fff0a0':'#f4faff');if(a){R(c,wx-1,wy,1,1,'rgba(220,240,255,.7)');R(c,wx+1,wy,1,1,'rgba(220,240,255,.7)')}}}
   for(const [gx,gy] of glows)for(const [r,a] of [[24,.05],[16,.07],[10,.08]])ell(c,gx,gy,r,r*.8,'rgba(255,170,80,'+a+')');
+  if(CUR==='w_trayen'){ // the trayen: water falling down the gorge, not a river
+    for(let ty=0;ty<grid.length;ty++)for(let tx=9;tx<=13;tx++){if(grid[ty][tx]!=='~')continue;
+      const X=tx*T-cx,Y=ty*T-cy+VY;if(X<-T||X>LW||Y<VY-T||Y>VY+VH)continue;
+      const lower=ty>=9;
+      if(!lower){ // falling sheet: fast streaks, pale spray edges
+        c.fillStyle='rgba(225,240,255,.18)';c.fillRect(X,Y,T,T);
+        for(let k=0;k<5;k++){const sx=X+1+((k*3+tx*2)%14),ph=((frame*3+k*17+tx*5)%24);
+          R(c,sx,Y+((ph)%16),1,5,'rgba(255,255,255,'+(k%2?.75:.5)+')');
+          if(ph<6)R(c,sx,Y,1,2,'rgba(255,255,255,.35)')}
+        if(grid[ty][tx-1]!=='~'){R(c,X,Y,1,T,'rgba(255,255,255,.45)');R(c,X-3,Y,3,T,'rgba(20,28,24,.45)');R(c,X-5,Y,2,T,'rgba(20,28,24,.2)');for(let k=0;k<3;k++)R(c,X-4+(k%2),Y+2+k*5,2,1,'rgba(120,130,120,.5)')}
+        if(grid[ty][tx+1]!=='~'){R(c,X+T-1,Y,1,T,'rgba(255,255,255,.45)');R(c,X+T,Y,3,T,'rgba(20,28,24,.45)');R(c,X+T+3,Y,2,T,'rgba(20,28,24,.2)');for(let k=0;k<3;k++)R(c,X+T+1+(k%2),Y+4+k*5,2,1,'rgba(120,130,120,.5)')}
+      }else{ // plunge: churning foam and rising spray
+        c.fillStyle='rgba(235,245,255,.14)';c.fillRect(X,Y,T,T);
+        for(let k=0;k<4;k++){const ph=((frame*2+k*23+tx*7+ty*11)%40)/40;
+          ell(c,X+3+((k*5+ty)%11),Y+2+((k*7+tx)%12),2+ph*2,1.2+ph,'rgba(255,255,255,'+(.55*(1-ph)).toFixed(2)+')')}
+        if(ty===9){for(let k=0;k<3;k++){const ph=((frame*2+k*29+tx*3)%60)/60;
+          ell(c,X+8+Math.sin(ph*6+k)*6,Y-ph*14,1.5+ph*2,1+ph,'rgba(230,245,255,'+(.35*(1-ph)).toFixed(2)+')')}}
+      }
+    }
+    // the lip of the fall at the top of the gorge
+    {const X=10*T-cx,Y=1*T-cy+VY;c.fillStyle='rgba(255,255,255,.5)';c.fillRect(X,Y-1,3*T,2)}
+  }
   // machi-quest landmarks: quiet environmental cues at the five dig spots
   {const MQC={l_wapi:[12,9,'foye'],n_menoko:[22,3,'pool'],p_pewen:[16,13,'pewen'],w_trayen:[12,9,'mist'],e_lelfun:[10,11,'salt']}[CUR];
    if(MQC){const [qx,qy,kind]=MQC,ox=qx*T+8-cx,oy=qy*T+8-cy+VY;
