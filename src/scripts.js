@@ -187,13 +187,18 @@ function konew(x,y,K){
 /* ---------- Mapudungun puzzles ---------- */
 let PZ={n:0,lit:new Set()};
 function pzSolved(){return !!S.flags['pz:'+CUR]}
+function wapiReveal(){grid[10][16]='v';S.flags.wapiNpz=1;persist();
+  say([N('Las tres piedras del agua cantan juntas: ko... lafken... münche... El lago tiembla frente a la playa del sur y el agua empieza a girar.','The three water stones sing together: ko... lafken... münche... The lake trembles off the southern beach and the water begins to turn.'),
+    N('Un remolino hondo se abre entre las olas, cantando bajito. ¡La entrada al Münche lafken, el mundo bajo el lago, apareció!','A deep whirlpool opens among the waves, softly singing. The entrance to Münche lafken, the world beneath the lake, has appeared!'),praise()])}
 function pzOpen(){for(let y=0;y<M.h;y++)for(let x=0;x<M.w;x++)if(grid[y][x]==='E')grid[y][x]=M.floor}
 function pzTouch(tx,ty){
   const k=tx+','+ty,t=M.pz.tiles[k],tot=Object.keys(M.pz.tiles).length;
   if(pzSolved())return say([L('',t.lab,M.pz.kind==='N'?'La piedra brilla en silencio.':'El brasero sigue encendido.',M.pz.kind==='N'?'The stone glows quietly.':'The brazier keeps burning.')]);
   if(PZ.lit.has(k))return;
   if(t.i===PZ.n){PZ.lit.add(k);PZ.n++;sfx('ok');
-    if(PZ.n>=tot){S.flags['pz:'+CUR]=1;pzOpen();sfx('lvl');persist();
+    if(PZ.n>=tot){S.flags['pz:'+CUR]=1;sfx('lvl');persist();
+      if(M.pz.done)return M.pz.done();
+      pzOpen();
       return say([L('',t.lab+'!',M.pz.kind==='N'?'La última piedra se enciende. ¡Se oye cómo se corre una roca!':'El último brasero se enciende. ¡La puerta de piedra se abre!',M.pz.kind==='N'?'The last stone lights up. You hear a rock sliding away!':'The last brazier lights up. The stone door opens!'),praise()])}
     return say([L('',t.lab,M.pz.kind==='N'?'La piedra se ilumina.':'El brasero se enciende.',M.pz.kind==='N'?'The stone lights up.':'The brazier lights up.')])}
   PZ.n=0;PZ.lit.clear();sfx('bad');
@@ -267,11 +272,11 @@ const STONES={
         {q:L('Kura','Epu domo küpa___','Dos mujeres vienen.','Two women come.'),o:['küpayngu','küpay','küpayngün'],a:'küpayngu'},
         {q:L('Kura','Pu pichikeche kim___','Los niños saben.','The children know.'),o:['kimi','kimingün','kimingu'],a:'kimingün'}]}};
 function stoneTalk(id){
-  const st=STONES[id];
-  if(pzSolved())return say([L('Kura','Kümey! Amunge.','¡Bien! Pasa.','Good! Go on through.')]);
+  const st=STONES[id],sf=M.pz?'pz:'+CUR+':st':'pz:'+CUR;
+  if(S.flags[sf])return say([L('Kura','Kümey! Amunge.','¡Bien! Pasa.','Good! Go on through.')]);
   say(st.intro,()=>ask(0));
   function ask(i){
-    if(i>=st.qs.length){S.flags['pz:'+CUR]=1;pzOpen();sfx('lvl');S.xp+=4;persist();return say([praise(),L('Kura','Tuteley! Amunge.','¡Muy bien! Pasa.','Well done! Go on through.'),N('La puerta de piedra se abre. +4 kimün.','The stone door opens. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+    if(i>=st.qs.length){S.flags[sf]=1;pzOpen();sfx('lvl');S.xp+=4;persist();return say([praise(),L('Kura','Tuteley! Amunge.','¡Muy bien! Pasa.','Well done! Go on through.'),N('La puerta de piedra se abre. +4 kimün.','The stone door opens. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=st.qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:S.gloss==='en'?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
       if(v==='_book')return openBook(()=>ask(i));
       if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Kura','Fey no...','Eso no...','Not that...'),N('Vuelve a intentarlo desde el principio.','Try again from the beginning.')],()=>ask(0))}},false,false)}

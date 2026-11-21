@@ -3,8 +3,8 @@
    ============================================================ */
 const HPQ=4,SPMAX=3;
 function maxHP(){return S.baseMax+(S.gear.trariwe?4:0)+Math.floor(S.piwke/4)*4+(S.flags.ngen?4:0)+(S.flags.ngen2?4:0)+(S.flags.ngen3?4:0)+(S.flags.ngen4?4:0)+(S.flags.ngen5?4:0)}
-function atk(){return Math.max(1,S.baseAtk+(S.gear.futrawino?3:0)+(S.gear.waiki?2:0)-(S.curse?2:0)-(S.chill>0?2:0))}
-function def(){return S.baseDef+(S.gear.makun?2:0)}
+function atk(){return Math.max(1,S.baseAtk+(S.gear.futrawino?3:0)+(S.gear.waiki?2:0)-(S.curse?2:0)-(S.kutran?3:0)-(S.chill>0?2:0))}
+function def(){return Math.max(0,S.baseDef+(S.gear.makun?2:0)-(S.kutran?2:0))}
 function xpNeed(){return 10+S.lvl*10}
 function newState(hero){const fem=hero==='millaray';return{hero,fem,name:fem?'Millaray':'Llanka',gloss:LANG,map:'rupu',x:1,y:6,hp:24,baseMax:24,baseAtk:5,baseDef:1,lvl:1,xp:0,gold:0,
   items:{kulon:2,diwen:0,kofke:0,lawen:0},gear:{},roots:['amutu'],runes:[],flags:{},piwke:0,keys:0,sp:0,curse:0,hints:true,
@@ -84,19 +84,19 @@ const ET={
   basilisko:{name:'basilisko',hp:60,atk:10,xp:32,gold:[20,24],bs:70,drain:true,mini:1},
   kaleuche:{name:'Kaleuche',hp:175,atk:12,xp:110,gold:[100,100],boss:true,bs:112,hide:1},
   witranalwe:{name:'Witranalwe',hp:135,atk:10,xp:70,gold:[60,60],boss:true,bs:110},
-  chinifilu:{name:'Chiñifilu',hp:150,atk:11,xp:120,gold:[150,150],boss:true,bs:96,spres:1,seals:['umawtu','küpakil','amutu']},
-  piwuchen:{name:'Piwüchen',hp:170,atk:12,xp:140,gold:[170,170],boss:true,bs:100,fly:true,spres:1,seals:['nag','llüka','küpakil']},
-  wallipen:{name:'Wallepeñ',hp:190,atk:12,xp:160,gold:[190,190],boss:true,bs:92,spres:1,armor:1,seals:['wütre','trafo','umawtu']},
-  trawko:{name:'Trawko',hp:200,atk:13,xp:180,gold:[220,220],boss:true,bs:88,spres:1,seals:['tripa','lef','amutukil']},
+  chinifilu:{name:'Chiñifilu',hp:150,atk:14,xp:120,gold:[150,150],boss:true,bs:96,spres:1,seals:['umawtu','küpakil','amutu']},
+  piwuchen:{name:'Piwüchen',hp:170,atk:15,xp:140,gold:[170,170],boss:true,bs:100,fly:true,spres:1,seals:['nag','llüka','küpakil']},
+  wallipen:{name:'Wallepeñ',hp:190,atk:15,xp:160,gold:[190,190],boss:true,bs:92,spres:1,armor:1,seals:['wütre','trafo','umawtu']},
+  trawko:{name:'Trawko',hp:200,atk:16,xp:180,gold:[220,220],boss:true,bs:88,spres:1,seals:['tripa','lef','amutukil']},
   mewlen:{name:'mewlen wekufü',hp:22,atk:8,xp:12,gold:[8,12],bs:44,fly:true},
   kurutrewa:{name:'kurü trewa',hp:26,atk:8,xp:12,gold:[8,12],bs:44},
   fmewlen:{name:'fütra mewlen',hp:62,atk:11,xp:34,gold:[22,26],bs:70,fly:true,mini:1},
   kurutoro:{name:'kurü toro',hp:66,atk:11,xp:36,gold:[22,26],bs:72,armor:1,mini:1},
   walichu:{name:'Walichu',hp:200,atk:13,xp:130,gold:[120,120],boss:true,bs:112,dream:1},
-  chadikura:{name:'Elëngasëm',hp:220,atk:14,xp:200,gold:[250,250],boss:true,bs:96,spres:1,armor:1,seals:['nepe','trafo','wüñotrekakil']},
+  chadikura:{name:'Elëngasëm',hp:220,atk:17,xp:200,gold:[250,250],boss:true,bs:96,spres:1,armor:1,seals:['nepe','trafo','wüñotrekakil']},
   epunamun:{name:'Epunamun',hp:240,atk:14,xp:220,gold:[300,300],boss:true,bs:100,spres:1,seals:['umawtu','nepe','tranakil']},
   ngoyam:{name:'ngoyman am',hp:34,atk:12,xp:22,gold:[12,16],bs:46},
-  kalku:{name:'Fütra Kalku',hp:250,atk:15,xp:260,gold:[350,350],boss:true,bs:92,spres:1,seals:['llüka','wüñotreka','ñamkil']},
+  kalku:{name:'Fütra Kalku',hp:250,atk:18,xp:260,gold:[350,350],boss:true,bs:92,spres:1,seals:['llüka','wüñotreka','ñamkil']},
   ngoyman1:{name:'Ti Fütra Ngoyman',hp:175,atk:13,xp:0,gold:[0,0],boss:true,bs:120},
   ngoyman2:{name:'Ngoyman ñi piwke',hp:185,atk:14,xp:0,gold:[0,0],boss:true,bs:110,armor:1,spres:1},
   ngoyman3:{name:'Rüf Fütra Ngoyman',hp:215,atk:17,xp:400,gold:[500,500],boss:true,bs:116,spres:1,thick:1},

@@ -252,7 +252,7 @@ function drawHUD(c){
   OV.push(()=>{txt(String(S.gold).padStart(3,'0'),31,25,'#ffffff',14,'center');txt(String(S.items.kulon||0).padStart(2,'0'),58,25,'#ffffff',14,'center');
     if(M&&M.dungeon)txt(String(S.keys||0).padStart(2,'0'),84,25,'#ffffff',14,'center');
     txt('- PIWKE -',LW-48,10,'#ffffff',12,'center');txt('kimün '+S.lvl,100,25,'#bfe3d0',12);
-    if(S.curse)txt('☠',140,25,'#d0a0ff',13);const pw=[];if(S.pw.speed>0)pw.push('mañke');if(S.pw.pewen>0)pw.push('pewen');if(S.pw.gold)pw.push('milla');if(pw.length)txt(pw.join(' '),LW-6,40,'#ffe27a',11,'right')});
+    if(S.curse)txt('☠',140,25,'#d0a0ff',13);if(S.kutran)txt('✖',154,25,'#9fe870',13);const pw=[];if(S.pw.speed>0)pw.push('mañke');if(S.pw.pewen>0)pw.push('pewen');if(S.pw.gold)pw.push('milla');if(pw.length)txt(pw.join(' '),LW-6,40,'#ffe27a',11,'right')});
 }
 /* ---------- battle ---------- */
 const BG={},FG={};
@@ -501,6 +501,29 @@ function renderBattle(){
   B.pops=B.pops.filter(p=>p.t>0);for(const p of B.pops){p.t--;const pp=p;OV.push(()=>txt(pp.txt,pp.x,pp.y-(50-pp.t)*.45,pp.col,20,'center'))}
   if(B.flash>0){c.fillStyle='rgba(255,255,255,'+(B.flash/16)+')';c.fillRect(0,0,LW,LH);B.flash--}
   if(B.red>0){c.fillStyle='rgba(255,0,0,'+(B.red/30)+')';c.fillRect(0,0,LW,LH);B.red--}
+  if(B.ngenA&&!B.ngenA.done){const A=B.ngenA;A.t++;
+    const p=Math.min(1,A.t/40),q=Math.max(0,Math.min(1,(A.t-55)/70));
+    c.fillStyle='rgba(0,0,12,'+(.5*p).toFixed(2)+')';c.fillRect(0,0,LW,LH);
+    const nx=Math.round(LW*.38),ny=168;
+    c.save();c.globalAlpha=.25*p;c.globalCompositeOperation='lighter';
+    for(let k=0;k<7;k++){const a=k/7*6.283+frame/40;c.beginPath();c.moveTo(nx,ny-40);
+      c.lineTo(nx+Math.cos(a)*LW,ny-40+Math.sin(a)*LW);c.lineTo(nx+Math.cos(a+.16)*LW,ny-40+Math.sin(a+.16)*LW);
+      c.closePath();c.fillStyle='rgba(190,255,220,.5)';c.fill()}
+    c.restore();
+    const rise=Math.round((1-p)*46);
+    c.save();c.globalAlpha=p;
+    const sc=1+p*.55;c.translate(nx,ny+rise);c.scale(sc,sc);
+    drawNgen(c,0,0,1,frame,A.v==='lafken'?undefined:A.v);
+    c.restore();c.globalAlpha=1;
+    const e=A.e,cvs=enemyCanvas(e.t,30,Math.floor(frame/10)%2);
+    const x=A.px+(nx-A.px)*q,y=A.py+(ny-60-A.py)*q,ss=1-q*.88,wob=Math.sin(frame/3)*2*q;
+    c.save();c.globalAlpha=Math.max(0,1-q*q);c.translate(x+wob,y);c.scale(ss,ss);
+    c.drawImage(cvs,-cvs.width/2,-cvs.height/2);c.restore();c.globalAlpha=1;
+    for(let k=0;k<10;k++){const a=k/10*6.283+frame/9,rr=34*(1-q)+8;
+      ell(c,x+Math.cos(a)*rr,y+Math.sin(a)*rr*.6,1.5,1.5,'rgba(170,255,210,'+(.5*q).toFixed(2)+')')}
+    if(A.t===56)sfx('lvl');
+    if(A.t>150){A.done=1;victory()}
+  }
 }
 /* fixed 60 Hz timestep: game speed is the same at any frame rate.
    A slow phone catches up (up to 4 updates per paint, so it gets choppy,

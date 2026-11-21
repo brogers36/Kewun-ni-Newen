@@ -271,3 +271,10 @@ Fuente principal de verificación en línea de variantes de nguruvilu: la entrad
 ### Tanda 12b · enemigos invisibles y señas de los secretos (Nov 2026)
 - 15 puntos de aparición de enemigos errantes quedaban justo encima de un árbol (la copa los tapaba al cargar el mapa): reubicados a casillas despejadas en kuyum, mawida, l_wapi, p_pewen, p_degin, w_rupu, w_mawida, w_trayen, g_nag, g_wil, u_garden y u_deep.
 - Señas de paisaje, discretas, en los seis sitios de jefes secretos: un anillo incompleto (4-5 piezas) de vegetación o piedras propias de la región rodea cada zona de activación (matas en l_wapi, w_trayen y g_puel; rocas en n_winkul, p_pire y e_salitral). No se anuncia nada; solo el arreglo poco natural del terreno.
+
+## Tanda 13 (jefes secretos, piedras del agua, ngen)
+- **weda kutran**: nombre del nuevo estado alterado que infligen los seis jefes secretos (fuerza −3, defensa −2; solo lo cura el comando Lawentun). ⚠ Confirmar: ¿"weda kutran" es la frase natural (weda + kutran), o preferirías "wedake kutran", "kutran" a secas, u otro término (p. ej. algo derivado de kalkutun para el caso del Fütra Kalku)?
+- Texto de cura: "El weda kutran te suelta." / EN "The weda kutran lets you go."
+- **Piedras del agua (w_wapi)**: puzzle que revela el remolino de entrada al Münche lafken. Las tres piedras dicen: **ko** → **lafken** → **münche**, "de lo chico a lo hondo". ⚠ Confirmar: ¿"münche" funciona solo como etiqueta de piedra ("lo de abajo"), o mejor "münche lafken" / "münchetu"?
+- Línea de victoria con ngen: "¡Ngen-lafken despierta, se alza sobre el wekufü y se lo traga entero! La tierra respira de nuevo." (variantes Ngen-mawida / Ngen-pewen / Ngen-kürüf / Ngen-lelfün según región). ⚠ ¿"se lo traga" es el marco correcto, o preferirías "lo devora" / "lo disuelve en la niebla"?
+- Epunamun ahora aparece al vencer a los seis jefes secretos (sb1–sb6), ya no solo al quinto.

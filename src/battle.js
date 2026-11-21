@@ -25,6 +25,7 @@ function bossBlock(e){const T=ET[e.t];if(!T.boss)return false;if(e.down||e.sl||e
   return Math.random()<(T.blk||.22)}
 const quizPend=e=>!!B&&ET[e.t].boss&&!B.qok&&!(e.t==='ngoyman1'||e.t==='ngoyman2')&&!(B.o.chain==='llufu'&&e.t!=='llufu5');
 function battleMenu(){
+  if(B&&B.ngenA&&!B.ngenA.done)return;
   const en=S.gloss==='en';B.cursor=null;
   choose({es:'¿Qué haces? (Hay '+aliveE().length+')',en:'What do you do? ('+aliveE().length+' left)'},[
     {m:'Dungun',g:en?'Speak (build a command)':'Hablar (armar una orden)',v:'d'},
@@ -87,7 +88,7 @@ function pickSpecial(){
 function doSpecial(k,tgt){
   const sp=SPECIALS[k];S.sp-=sp.cost;B.cursor=null;const fx=[],fxe=[];let targets=[];
   const head=L(S.name,sp.m+'!',G(sp),G(sp));head.fx=()=>{sfx('cast');B.flash=12;B.shake=8};
-  if(k==='lawen'){S.hp=Math.min(maxHP(),S.hp+8);S.curse=0;fx.push('Recuperas dos piwke.');fxe.push('You recover two hearts.');head.fx=()=>{sfx('heal');spark(60,30,'#80ff90',16)}}
+  if(k==='lawen'){const hadK=S.kutran;S.hp=Math.min(maxHP(),S.hp+8);S.curse=0;S.kutran=0;fx.push('Recuperas dos piwke.'+(hadK?' El weda kutran te suelta.':''));fxe.push('You recover two hearts.'+(hadK?' The weda kutran lets you go.':''));head.fx=()=>{sfx('heal');spark(60,30,'#80ff90',16)}}
   else{targets=k==='wino'?[tgt]:aliveE();
     let burnT=0;for(const e of targets){if(e.hidden){fx.push(e.label+' está escondido en la niebla: no lo alcanzas.');fxe.push(e.label+' is hidden in the fog: you cannot reach it.');continue}if(bossBlock(e)){fx.push(e.label+' se cubre: ¡bloquea tu newen!');fxe.push(e.label+' guards: it blocks your newen!');continue}let d=k==='wino'?atk()*3+rnd(3):Math.round(atk()*1.5)+rnd(3);if(e.tall)d=Math.max(1,Math.round(d/3));if(e.armor)d=Math.max(1,Math.round(d/2));if(ET[e.t].spres){d=Math.max(1,Math.round(d/2));fx.push(e.label+' resiste tu newen.');fxe.push(e.label+' resists your newen.')}if(ET[e.t].thick)d=Math.max(1,Math.round(d/2));if(e.seals&&e.seals.length)d=Math.min(2,d);if(e.dreaming){d=Math.min(1,d);fx.push(e.label+' duerme caminando: hay que despertarlo.');fxe.push(e.label+' sleeps as it walks: it must be woken.')}if(e.down){d+=4;e.down=0}if(e.burn)burnT+=2;if(k==='kuruf'&&ET[e.t].fly)e.gr=3;e.pend=d;e.hp-=d;
       fx.push(e.label+' −'+d+(e.hp<=0?(quizPend(e)?' (se tambalea)':(B.o.chain==='llufu'&&ET[e.t].boss?' (cambia de forma)':' (se va)')):'')+'.');fxe.push(e.label+' −'+d+(e.hp<=0?(quizPend(e)?' (staggers)':(B.o.chain==='llufu'&&ET[e.t].boss?' (shifts form)':' (gone)')):'')+'.')}
@@ -295,23 +296,34 @@ function enemyPhase(){
       if(roll<.32&&B.turn>0){B.tele=true;fx.push('Trelke-wekufü se estira, listo para envolverte.');fxe.push('Trelke-wekufü stretches out, ready to wrap you up.');continue}
       if(roll<.52&&laf<1&&B.en.length<5){const ne=mkEnemy('laftrache');B.en.push(ne);relabel();fx.push('¡Trelke-wekufü llama a '+ne.label+'!');fxe.push('Trelke-wekufü calls up '+ne.label+'!');continue}
       hitP(e);continue}
+    const SBK={chinifilu:['El Chiñifilu te salpica con el barro podrido del fondo','The Chiñifilu splashes you with the rotten mud of the deep'],
+      piwuchen:['El Piwüchen alcanza a rozarte el cuello con su boca de aguja','The Piwüchen grazes your neck with its needle mouth'],
+      wallipen:['La sombra torcida del Wallepeñ te pasa por encima','The Wallepeñ\'s crooked shadow passes over you'],
+      trawko:['El Trawko te lanza un puñado de astillas envenenadas','The Trawko flings a handful of poisoned splinters at you'],
+      chadikura:['El polvo de sal del Elëngasëm te entra en la boca y los ojos','The Elëngasëm\'s salt dust gets into your mouth and eyes'],
+      kalku:['El Fütra Kalku sopla un aliento de enfermedad sobre ti','The Fütra Kalku breathes a sickness over you']};
+    if(SBK[e.t]&&!S.kutran&&B.turn>0&&Math.random()<.22){S.kutran=1;
+      fx.push(SBK[e.t][0]+': te entra un weda kutran (fuerza −3, defensa −2). Solo el Lawentun lo cura.');
+      fxe.push(SBK[e.t][1]+': a weda kutran takes hold of you (strength −3, defense −2). Only Lawentun can cure it.');
+      hitsFx.push(()=>sfx('bad'));continue}
     if(e.t==='chinifilu'){
-      if(B.turn>0&&B.turn%3===0){hitP(e,1.6,{es:' te envuelve en sus anillos y aprieta',en:' wraps you in its coils and squeezes'});continue}
+      if(B.turn>0&&B.turn%3===0){hitP(e,2.1,{es:' te envuelve en sus anillos y aprieta hasta crujir',en:' wraps you in its coils and squeezes until something creaks'});continue}
       if(!S.curse&&Math.random()<.3){S.curse=1;fx.push('El Chiñifilu escupe un chorro de agua helada: quedas con maldición (fuerza −2). El lawen la quita.');fxe.push('The Chiñifilu spits a jet of icy water: you are cursed (strength −2). Lawen lifts it.');hitsFx.push(()=>sfx('bad'));continue}
       hitP(e);continue}
     if(e.t==='piwuchen'){
       if(B.turn>0&&B.turn%3===0&&(S.sp||0)>0){S.sp--;fx.push('El silbido agudo del Piwüchen te aturde: pierdes un punto de newen (✦).');fxe.push('The Piwüchen\'s shrill whistle rattles you: you lose one newen point (✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')});continue}
-      hitP(e,Math.random()<.35?1.4:1,{es:' baja en picada y te muerde',en:' dives and bites you'});continue}
+      hitP(e,Math.random()<.35?1.8:1,{es:' baja en picada y te muerde',en:' dives and bites you'});continue}
     if(e.t==='wallipen'){
+      if(B.turn>0&&B.turn%3===0){hitP(e,1.8,{es:' exhala un aliento de escarcha que te golpea como una ola',en:' breathes out a frost that slams into you like a wave'});hitsFx.push(()=>B.shake=8);continue}
       if(!S.chill&&Math.random()<.3){S.chill=3;fx.push('El Wallepeñ te clava su mirada torcida: te tiemblan las manos (fuerza −2 por unos turnos).');fxe.push('The Wallepeñ fixes you with its crooked gaze: your hands shake (strength −2 for a few turns).');hitsFx.push(()=>sfx('bad'));continue}
       if(!e.armor&&e.armorT>0){e.armorT--;if(e.armorT<=0){e.armor=1;fx.push('El agua se congela sobre el Wallepeñ: su coraza de hielo vuelve.');fxe.push('Water freezes over the Wallepeñ: its ice crust returns.');continue}}
       hitP(e);continue}
     if(e.t==='trawko'){
-      if(B.tele){B.tele=false;hitP(e,2.2,{es:' descarga su hacha con las dos manos',en:' brings its axe down with both hands'});continue}
+      if(B.tele){B.tele=false;hitP(e,2.6,{es:' descarga su hacha con las dos manos',en:' brings its axe down with both hands'});continue}
       if(Math.random()<.3&&B.turn>0&&B.turn-(e.lastTele||-9)>2){B.tele=true;e.lastTele=B.turn;fx.push('El Trawko levanta su hacha sobre la cabeza...');fxe.push('The Trawko raises its axe over its head...');continue}
       hitP(e);continue}
     if(e.t==='chadikura'){
-      if(B.turn>0&&B.turn%3===0){hitP(e,1.7,{es:' golpea el suelo: una ola de sal te sacude',en:' pounds the ground: a wave of salt rocks you'});hitsFx.push(()=>{B.shake=10});continue}
+      if(B.turn>0&&B.turn%3===0){hitP(e,2.1,{es:' golpea el suelo: una ola de sal te sacude',en:' pounds the ground: a wave of salt rocks you'});hitsFx.push(()=>{B.shake=10});continue}
       if(!e.armor&&e.armorT>0){e.armorT--;if(e.armorT<=0){e.armor=1;fx.push('La sal vuelve a cristalizar: la coraza del Elëngasëm se rehace.');fxe.push('The salt crystallizes again: the Elëngasëm\'s crust reforms.');continue}}
       hitP(e);continue}
     if(e.t==='epunamun'){
@@ -321,7 +333,7 @@ function enemyPhase(){
       const ac=aliveE().filter(x=>x.t==='anchi').length;
       if(ac<1&&B.en.length<5&&Math.random()<.35){const ne=mkEnemy('anchi');B.en.push(ne);relabel();fx.push('El Fütra Kalku llama a su creación: ¡aparece '+ne.label+'!');fxe.push('The Fütra Kalku calls his creation: '+ne.label+' appears!');continue}
       if(!S.curse&&Math.random()<.3){S.curse=1;fx.push('El Fütra Kalku te apunta con el dedo y susurra: quedas con maldición (fuerza −2). El lawen la quita.');fxe.push('The Fütra Kalku points at you and whispers: you are cursed (strength −2). Lawen lifts it.');hitsFx.push(()=>sfx('bad'));continue}
-      if(B.turn>0&&B.turn%3===0){hitP(e,1.6,{es:' descarga un latigazo de sombra',en:' lashes you with a whip of shadow'});continue}
+      if(B.turn>0&&B.turn%3===0){hitP(e,2.0,{es:' descarga un latigazo de sombra',en:' lashes you with a whip of shadow'});continue}
       hitP(e);continue}
     if(T.boss){
       if(B.turn>0&&B.turn%3===0)hitP(e,1.6,{es:' te embiste con todas sus fuerzas',en:' charges you with all its strength'});
@@ -433,11 +445,17 @@ function victory(){
     if(nx)return llufuStage(nx);}
   {const qb=B.en.find(e=>ET[e.t].boss);
    if(qb&&!B.qok){qb.dead=false;qb.fadeT=0;qb.hit=0;qb.hp=1;qb.stag=1;return ngenQuiz(qb)}}
+  {const vb=B.en.find(e=>ET[e.t].boss);
+   if(vb&&!B.ngenA&&B.o.chain!=='llufu'&&vb.t!=='epunamun'&&!/^ngoyman/.test(vb.t)){
+     const v={lafkenche:'lafken',nagche:'mawida',pewenche:'pewen',williche:'kuruf',puelmapu:'lelfun',ngoyman:'lelfun'}[M.region];
+     if(v){vb.fadeT=1;B.ngenA={t:0,e:vb,v,px:vb.px||LW-72,py:vb.py||100};sfx('cast');return}}}
+  if(B.ngenA&&!B.ngenA.done)return;
   const xp=B.en.reduce((a,e)=>a+ET[e.t].xp,0);let gold=B.en.reduce((a,e)=>{const g=ET[e.t].gold;return a+g[0]+rnd(g[1]-g[0]+1)},0);
   if(S.pw.gold){gold*=2;S.pw.gold=0}
   S.xp+=xp;S.gold+=gold;
   const after=SONGS.win;after.after=()=>mapSong();playSong('win');
-  const ls=[B.o.chain==='llufu'?N('El ül se cierra como una marea mansa: Kaykayfilu se aquieta y vuelve a su sueño en el fondo del mar.','The ül closes like a gentle tide: Kaykayfilu grows calm and returns to his sleep at the bottom of the sea.'):N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
+  const NGN={lafken:'Ngen-lafken',mawida:'Ngen-mawida',pewen:'Ngen-pewen',kuruf:'Ngen-kürüf',lelfun:'Ngen-lelfün'};
+  const ls=[B.o.chain==='llufu'?N('El ül se cierra como una marea mansa: Kaykayfilu se aquieta y vuelve a su sueño en el fondo del mar.','The ül closes like a gentle tide: Kaykayfilu grows calm and returns to his sleep at the bottom of the sea.'):B.ngenA?N('¡'+NGN[B.ngenA.v]+' despierta, se alza sobre el wekufü y se lo traga entero! La tierra respira de nuevo.',NGN[B.ngenA.v]+' awakens, rises over the wekufü and swallows it whole! The land breathes again.'):N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
   while(S.xp>=xpNeed()){S.xp-=xpNeed();S.lvl++;S.baseMax+=HPQ;S.hp+=HPQ;S.baseAtk+=1;if(S.lvl%2===0)S.baseDef+=1;
     const l=L('','Doy kimün!','¡Más conocimiento! Llegas a kimün '+S.lvl+': ganas un corazón y más fuerza.','More knowledge! You reach kimün '+S.lvl+': you gain a heart and more strength.');l.fx=()=>sfx('lvl');ls.push(l)}
   say(ls,()=>endBattle('win'));

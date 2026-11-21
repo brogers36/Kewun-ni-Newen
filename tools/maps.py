@@ -718,6 +718,12 @@ c.p(20,4,'H');c.p(20,5,',');c.p(20,3,',')
 c.r(21,5,5,4,'T');c.r(22,6,3,2,',');c.p(23,6,'C');c.p(23,8,'E');c.p(23,9,',')
 c.p(12,8,',');c.p(10,5,'U')
 W_['w_wapi']=c.rows()
+# water-stone puzzle: three carved stones; the whirlpool stays hidden until they are touched in order
+_r=[list(r) for r in W_['w_wapi']]
+for (_x,_y),_ch in {(8,6):'N',(18,4):'N',(12,8):'N',(16,10):'~'}.items():
+    assert _r[_y][_x] in ',~',(_x,_y,_r[_y][_x])
+    _r[_y][_x]=_ch
+W_['w_wapi']=[''.join(r) for r in _r]
 # w_lof: bridge continues south off the map
 r=W_['w_lof'];r[12]=r[12][:14]+'bbb'+r[12][17:];r[13]=r[13][:15]+'b'+r[13][16:]
 # --- w_trayen: the waterfall gorge (advanced Williche) ---
@@ -1093,7 +1099,7 @@ for k,st in {'g_lafken':(0,7),'g_nag':(0,7),'g_pewen':(0,7),'g_wil':(0,7),'g_pue
 
 # ================= MÜNCHE LAFKEN: under the lake =================
 # secret whirlpool on the Williche island
-setr(W_['w_wapi'],16,10,1,1,'v')
+# whirlpool hidden until the water-stone puzzle (loadMap restores 'v' when pz:w_wapi is set)
 # u_grotto: the entry grotto
 g=[['%']*20 for _ in range(11)]
 carve0(g,2,2,16,7)

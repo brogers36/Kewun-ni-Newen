@@ -17,8 +17,8 @@ function openPause(){
     if(v==='title')return goTitle();
     if(v==='items'){choose({es:'Chemkün',en:'Items'},itemOpts().concat([{m:en?'Back':'Volver',v:'x'}]),k=>{if(!k||k==='x')return;const l=useItem(k);persist();say([l])},true)}
     else if(v==='stats'){const g=Object.keys(GEAR).filter(k=>S.gear[k]).map(k=>GEAR[k].m).join(', ')||'∅';
-      say([N(`${S.name} · kimün ${S.lvl} (${S.xp}/${xpNeed()}) · newen ${S.hp}/${maxHP()} · fuerza ${atk()} · defensa ${def()} · ngülliw ${numP(S.gold)} · piwke ${S.piwke%4}/4 · llaves ${S.keys||0}`+(S.curse?' · MALDICIÓN':''),
-        `${S.name} · kimün ${S.lvl} (${S.xp}/${xpNeed()}) · newen ${S.hp}/${maxHP()} · strength ${atk()} · defense ${def()} · ngülliw ${numP(S.gold)} · piwke ${S.piwke%4}/4 · keys ${S.keys||0}`+(S.curse?' · CURSED':'')),
+      say([N(`${S.name} · kimün ${S.lvl} (${S.xp}/${xpNeed()}) · newen ${S.hp}/${maxHP()} · fuerza ${atk()} · defensa ${def()} · ngülliw ${numP(S.gold)} · piwke ${S.piwke%4}/4 · llaves ${S.keys||0}`+(S.curse?' · MALDICIÓN':'')+(S.kutran?' · WEDA KUTRAN':''),
+        `${S.name} · kimün ${S.lvl} (${S.xp}/${xpNeed()}) · newen ${S.hp}/${maxHP()} · strength ${atk()} · defense ${def()} · ngülliw ${numP(S.gold)} · piwke ${S.piwke%4}/4 · keys ${S.keys||0}`+(S.curse?' · CURSED':'')+(S.kutran?' · WEDA KUTRAN':'')),
         N('Equipo: '+g,'Gear: '+g)])}
     else if(v==='words'){const ls=S.roots.map(r=>L('',ROOTS[r].m,ROOTS[r].es,ROOTS[r].en));
       ls.push(L('','-nge · -mu · -mün','a uno · a dos · a tres o más','to one · to two · to three or more'));
