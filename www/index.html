@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='0cad7df-202611201951';
+window.KEWUN_BUILD='7d7be61-202611202019';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -451,13 +451,13 @@ const SONGS={
   {w:'sawtooth',v:.055,dist:1,t:'. . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . | G5 B5 D6 G6 B6 G6 D6 B5 | A5 C6 F6 A6 C7 A6 F6 C6 | C6 E6 G6 C7 B6 G6 E6 C6 | D#6 F#6 B6 D#7 C7 B6 F#6 D#6 | G6 - F#6 G6 B6 - A6 B6 | D7 - C7 B6 A6 - G6 F6 | E6 F6 G6 B6 C7 D7 E7 G7 | D#7 - - - - - - -'},
   {w:'triangle',v:.4,t:'E3 - - - C3 - - - | D3 - - - B2 - - - | A2 - - - C3 - - - | D3 - - - B2 - - -'},
   {d:1,v:.6,t:'k k h k s k h k | k k h k s k s s | k k h k s k h k | k s s k s s k s'}]}),
-  win:mkSong({bpm:176,loop:0,ch:[
-  {w:'sawtooth',v:.09,dist:1,t:'E3 E3 . E3 E3 . G3 - | A3 A3 . A3 A3 . C4 - | D4 - - - C4 - - - | B3 - - - B3 B3 B3 B3 | E4 - - - - - - - | . . . .'},
-  {w:'sawtooth',v:.08,dist:1,t:'B3 B3 . B3 B3 . D4 - | E4 E4 . E4 E4 . G4 - | A4 - - - G4 - - - | F#4 - - - F#4 F#4 F#4 F#4 | B4 - - - - - - - | . . . .'},
-  {w:'sawtooth',v:.06,dist:1,t:'E4 E4 . E4 E4 . G4 - | A4 A4 . A4 A4 . C5 - | D5 - - - C5 - - - | B4 - - - B4 B4 B4 B4 | G#4 - - - - - - - | . . . .'},
-  {w:'square',v:.1,t:'. . . . . . . . | . . . . . . . . | D6 C6 B5 A5 G5 F#5 G5 A5 | B5 - D6 - F#6 - B6 - | E6 - - - - - - - | . . . .'},
-  {w:'triangle',v:.55,t:'E2 E2 E2 E2 E2 E2 G2 G2 | A2 A2 A2 A2 A2 A2 C3 C3 | D3 D3 D3 D3 C3 C3 C3 C3 | B2 B2 B2 B2 B2 B2 B2 B2 | E2 - - - - - - - | . . . .'},
-  {d:1,v:.6,t:'c k s k k k s k | k k s k k k s k | k k s k k s s s | k k k k s s s s | c . . . k . . . | . . . .'}]})
+  win:mkSong({bpm:190,loop:0,ch:[
+  {w:'sawtooth',v:.09,dist:1,t:'E3 E3 E3 E3 E3 E3 G3 A3 | C4 C4 C4 C4 B3 B3 A3 B3 | E3 E3 E3 E3 E3 E3 G3 A3 | D4 D4 D4 D4 C4 C4 B3 C4 | A3 A3 B3 B3 C4 C4 D4 D4 | E4 - C4 - D4 - B3 - | E4 - - - - - - - | . . . .'},
+  {w:'sawtooth',v:.08,dist:1,t:'B3 B3 B3 B3 B3 B3 D4 E4 | G4 G4 G4 G4 F#4 F#4 E4 F#4 | B3 B3 B3 B3 B3 B3 D4 E4 | A4 A4 A4 A4 G4 G4 F#4 G4 | E4 E4 F#4 F#4 G4 G4 A4 A4 | B4 - G4 - A4 - F#4 - | B4 - - - - - - - | . . . .'},
+  {w:'sawtooth',v:.06,dist:1,t:'. . . . . . . . | E5 - D5 E5 G5 - E5 - | B4 - - - C5 D5 E5 G5 | A5 - G5 A5 B5 - A5 G5 | E5 F#5 G5 A5 B5 C6 D6 B5 | E6 - C6 - D6 - B5 - | E6 - - - - - - - | . . . .'},
+  {w:'square',v:.1,t:'E6 - - - . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . E6 F#6 G6 A6 | B6 - G6 - A6 - F#6 - | B6 - - - - - - - | . . . .'},
+  {w:'triangle',v:.55,t:'E2 E2 E2 E2 E2 E2 G2 A2 | C3 C3 C3 C3 B2 B2 A2 B2 | E2 E2 E2 E2 E2 E2 G2 A2 | D3 D3 D3 D3 C3 C3 B2 C3 | A2 A2 B2 B2 C3 C3 D3 D3 | E3 - C3 - D3 - B2 - | E2 - - - - - - - | . . . .'},
+  {d:1,v:.6,t:'c k s k k k s k | c k s k k k s s | c k s k k k s k | c k s k s k s s | c s k s k s k s | c k s k c k s k | c . . . k . k k | . . . .'}]})
 };
 function playSong(name){
   if(AU.name===name)return;AU.name=name;AU.song=SONGS[name]||null;AU.step=0;
@@ -4083,9 +4083,11 @@ function victory(){
   {const qb=B.en.find(e=>ET[e.t].boss);
    if(qb&&!B.qok){qb.dead=false;qb.fadeT=0;qb.hit=0;qb.hp=1;qb.stag=1;return ngenQuiz(qb)}}
   {const vb=B.en.find(e=>ET[e.t].boss);
-   if(vb&&!B.ngenA&&B.o.chain!=='llufu'&&vb.t!=='epunamun'&&!/^ngoyman/.test(vb.t)){
-     const v={lafkenche:'lafken',nagche:'mawida',pewenche:'pewen',williche:'kuruf',puelmapu:'lelfun',ngoyman:'lelfun'}[M.region];
-     if(v){vb.stag=1;B.ngenA={t:0,e:vb,v};sfx('cast');return}}
+   if(vb&&!B.ngenA&&B.o.chain!=='llufu'&&vb.t!=='epunamun'){
+     if(vb.t==='ngoyman3'){vb.stag=1;B.ngenA={t:0,e:vb,kind:'final'};sfx('cast');return}
+     if(!/^ngoyman/.test(vb.t)){
+       const v={lafkenche:'lafken',nagche:'mawida',pewenche:'pewen',williche:'kuruf',puelmapu:'lelfun',ngoyman:'lelfun'}[M.region];
+       if(v){vb.stag=1;B.ngenA={t:0,e:vb,v};sfx('cast');return}}}
    if(vb&&vb.hp<=0&&!vb.dead){vb.dead=true;vb.fadeT=20}}
   if(B.ngenA&&!B.ngenA.done)return;
   const xp=B.en.reduce((a,e)=>a+ET[e.t].xp,0);let gold=B.en.reduce((a,e)=>{const g=ET[e.t].gold;return a+g[0]+rnd(g[1]-g[0]+1)},0);
@@ -4093,7 +4095,7 @@ function victory(){
   S.xp+=xp;S.gold+=gold;
   const after=SONGS.win;after.after=()=>mapSong();playSong('win');
   const NGN={lafken:'Ngen-lafken',mawida:'Ngen-mawida',pewen:'Ngen-pewen',kuruf:'Ngen-kürüf',lelfun:'Ngen-lelfün'};
-  const ls=[B.o.chain==='llufu'?N('El ül se cierra como una marea mansa: Kaykayfilu se aquieta y vuelve a su sueño en el fondo del mar.','The ül closes like a gentle tide: Kaykayfilu grows calm and returns to his sleep at the bottom of the sea.'):B.ngenA?N('¡'+NGN[B.ngenA.v]+' despierta, se alza sobre el wekufü y se lo traga entero! La tierra respira de nuevo.',NGN[B.ngenA.v]+' awakens, rises over the wekufü and swallows it whole! The land breathes again.'):(B.en.some(e=>e.t==='epunamun'))?N('El Epunamun baja sus dos lanzas y asiente con las dos caras: la prueba terminó, y la pasaste.','The Epunamun lowers his two spears and nods with both faces: the trial is over, and you have passed it.'):N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
+  const ls=[(B.ngenA&&B.ngenA.kind==='final')?N('¡Los cinco ngen del mapu responden a la vez! Mar, monte, pewen, viento y pampa descargan su newen, uno tras otro... y Ti Fütra Ngoyman se quiebra en mil pedazos que la luz deshace.','The five ngen of the land answer as one! Sea, forest, pewen, wind and plain unleash their newen, one after another... and Ti Fütra Ngoyman shatters into a thousand pieces that the light unmakes.'):B.o.chain==='llufu'?N('El ül se cierra como una marea mansa: Kaykayfilu se aquieta y vuelve a su sueño en el fondo del mar.','The ül closes like a gentle tide: Kaykayfilu grows calm and returns to his sleep at the bottom of the sea.'):(B.ngenA&&B.ngenA.v)?N('¡'+NGN[B.ngenA.v]+' despierta, se alza sobre el wekufü y se lo traga entero! La tierra respira de nuevo.',NGN[B.ngenA.v]+' awakens, rises over the wekufü and swallows it whole! The land breathes again.'):(B.en.some(e=>e.t==='epunamun'))?N('El Epunamun baja sus dos lanzas y asiente con las dos caras: la prueba terminó, y la pasaste.','The Epunamun lowers his two spears and nods with both faces: the trial is over, and you have passed it.'):N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
   while(S.xp>=xpNeed()){S.xp-=xpNeed();S.lvl++;S.baseMax+=HPQ;S.hp+=HPQ;S.baseAtk+=1;if(S.lvl%2===0)S.baseDef+=1;
     const l=L('','Doy kimün!','¡Más conocimiento! Llegas a kimün '+S.lvl+': ganas un corazón y más fuerza.','More knowledge! You reach kimün '+S.lvl+': you gain a heart and more strength.');l.fx=()=>sfx('lvl');ls.push(l)}
   say(ls,()=>endBattle('win'));
@@ -4213,7 +4215,8 @@ function postBoss5(){
 
 function postFinal(){
   S.flags.won=1;persist();
-  say([N('El coloso se detiene... y suspira. La niebla entera tiembla, se afina, se deshace en hilos de plata que el viento se lleva hacia arriba.','The colossus stops... and sighs. The whole fog trembles, thins, and comes apart into silver threads that the wind carries upward.')],
+  say([N('El coloso se detiene... y suspira. La niebla entera tiembla, se afina, se deshace en hilos de plata que el viento se lleva hacia arriba.','The colossus stops... and sighs. The whole fog trembles, thins, and comes apart into silver threads that the wind carries upward.'),
+    N('Y en el silencio nuevo te llega algo más: una voz muy bajita, como un canto bajo el agua, que te llama desde abajo de la isla del lago williche...','And in the new silence something else reaches you: a faint voice, like a song beneath the water, calling you from under the island in the williche lake...')],
     ()=>startEndCut());
 }
 
@@ -4725,7 +4728,58 @@ function renderBattle(){
   B.pops=B.pops.filter(p=>p.t>0);for(const p of B.pops){p.t--;const pp=p;OV.push(()=>txt(pp.txt,pp.x,pp.y-(50-pp.t)*.45,pp.col,20,'center'))}
   if(B.flash>0){c.fillStyle='rgba(255,255,255,'+(B.flash/16)+')';c.fillRect(0,0,LW,LH);B.flash--}
   if(B.red>0){c.fillStyle='rgba(255,0,0,'+(B.red/30)+')';c.fillRect(0,0,LW,LH);B.red--}
-  if(B.ngenA&&!B.ngenA.done){const A=B.ngenA;A.t++;
+  if(B.ngenA&&!B.ngenA.done&&B.ngenA.kind==='final'){const A=B.ngenA;A.t++;
+    const NG=[[undefined,'120,220,255'],['mawida','120,255,150'],['pewen','255,200,110'],['kuruf','225,240,255'],['lelfun','255,230,120']];
+    const SEG=52,T0=24,e=A.e;
+    const seg=Math.floor((A.t-T0)/SEG),st=(A.t-T0)%SEG;
+    const dark=Math.min(1,A.t/30),SH=T0+SEG*5;
+    c.fillStyle='rgba(0,0,14,'+(.55*dark*(A.t>SH+55?Math.max(0,(SH+85-A.t)/30):1)).toFixed(2)+')';c.fillRect(0,0,LW,LH);
+    const bx=e.px||LW-72,by=e.py||100;
+    if(A.t>=T0&&seg<5){
+      const vr=NG[seg][0],col=NG[seg][1];
+      const nx=Math.round(LW*.30),ny=170;
+      const ap=Math.min(1,st/14),strike=st>=26&&st<36;
+      if(st===1)sfx('cast');
+      if(st===26){B.shake=12;e.hit=12;sfx('hurt')}
+      const rise=Math.round((1-ap)*40);
+      c.save();c.beginPath();c.rect(0,0,LW,ny+9);c.clip();
+      c.globalAlpha=ap*(st>44?Math.max(0,(SEG-st)/8):1);
+      c.translate(nx,ny+rise);const s2=1.08+ap*.3+(strike?.1:0);c.scale(s2,s2);
+      drawNgen(c,0,0,1,frame,vr);c.restore();c.globalAlpha=1;
+      if(strike){const t2=(st-26)/10,gy=ny-72;
+        c.save();c.globalCompositeOperation='lighter';
+        const grad=c.createLinearGradient(nx,gy,bx,by);
+        grad.addColorStop(0,'rgba('+col+',.9)');grad.addColorStop(1,'rgba('+col+',.25)');
+        c.strokeStyle=grad;c.lineWidth=Math.max(2,8-t2*6);c.beginPath();c.moveTo(nx+10,gy);c.lineTo(bx,by);c.stroke();
+        c.lineWidth=1.5;c.strokeStyle='rgba(255,255,255,.9)';c.beginPath();c.moveTo(nx+10,gy);c.lineTo(bx,by);c.stroke();
+        for(let k=0;k<7;k++){const a=k/7*6.283+st;ell(c,bx+Math.cos(a)*(st-26)*2.2,by+Math.sin(a)*(st-26)*1.5,2,2,'rgba('+col+','+(1-t2).toFixed(2)+')')}
+        c.restore()}
+      if(st>=26&&st<44){c.strokeStyle='rgba('+col+','+((44-st)/18*.7).toFixed(2)+')';c.lineWidth=2;
+        c.beginPath();c.ellipse(bx,by,(st-26)*2.6,(st-26)*1.4,0,0,6.283);c.stroke();c.lineWidth=1}
+    }
+    if(A.t>=SH){
+      if(!A.shards){A.shards=[];e.dead=true;e.fadeT=0;B.flash=14;B.shake=16;sfx('lvl');
+        const cvs=enemyCanvas(e.t,ET[e.t].bs,0),topy=by-Math.round(cvs.height/3);
+        try{const tc2=document.createElement('canvas');tc2.width=cvs.width;tc2.height=cvs.height;
+          const tg2=tc2.getContext('2d');tg2.drawImage(cvs,0,0);
+          const d=tg2.getImageData(0,0,tc2.width,tc2.height).data;
+          for(let k=0;k<140;k++){const sx2=rnd(tc2.width),sy2=rnd(tc2.height),i4=(sy2*tc2.width+sx2)*4;
+            if(d[i4+3]<60)continue;
+            const a=Math.random()*6.283,sp=.8+Math.random()*2.8;
+            A.shards.push({x:bx+sx2-Math.round(tc2.width/2),y:topy+sy2,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-1.6,col:'rgb('+d[i4]+','+d[i4+1]+','+d[i4+2]+')',sz:1+rnd(2)})}
+        }catch(err){}
+        if(!A.shards.length)for(let k=0;k<48;k++){const a=Math.random()*6.283,sp=1+Math.random()*2.6;
+          A.shards.push({x:bx,y:by,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-1.6,col:'#cfd8e8',sz:2})}}
+      const sf=Math.max(0,1-(A.t-SH)/70);
+      for(const sh2 of A.shards){sh2.x+=sh2.vx;sh2.y+=sh2.vy;sh2.vy+=.07;
+        c.globalAlpha=sf;R(c,Math.round(sh2.x),Math.round(sh2.y),sh2.sz,sh2.sz,sh2.col)}
+      c.globalAlpha=1;
+      if(A.t-SH<24){c.strokeStyle='rgba(235,245,255,'+((24-(A.t-SH))/24*.8).toFixed(2)+')';c.lineWidth=3;
+        c.beginPath();c.ellipse(bx,by,(A.t-SH)*4,(A.t-SH)*2.4,0,0,6.283);c.stroke();c.lineWidth=1}
+    }
+    if(A.t>SH+85){A.done=1;victory()}
+  }
+  else if(B.ngenA&&!B.ngenA.done){const A=B.ngenA;A.t++;
     const SS=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
     const p=SS(A.t/50),q=SS((A.t-62)/58),gu=A.t>=124;
     if(A.t===2)B.shake=10;

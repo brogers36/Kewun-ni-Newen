@@ -284,13 +284,13 @@ const SONGS={
   {w:'sawtooth',v:.055,dist:1,t:'. . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . | G5 B5 D6 G6 B6 G6 D6 B5 | A5 C6 F6 A6 C7 A6 F6 C6 | C6 E6 G6 C7 B6 G6 E6 C6 | D#6 F#6 B6 D#7 C7 B6 F#6 D#6 | G6 - F#6 G6 B6 - A6 B6 | D7 - C7 B6 A6 - G6 F6 | E6 F6 G6 B6 C7 D7 E7 G7 | D#7 - - - - - - -'},
   {w:'triangle',v:.4,t:'E3 - - - C3 - - - | D3 - - - B2 - - - | A2 - - - C3 - - - | D3 - - - B2 - - -'},
   {d:1,v:.6,t:'k k h k s k h k | k k h k s k s s | k k h k s k h k | k s s k s s k s'}]}),
-  win:mkSong({bpm:176,loop:0,ch:[
-  {w:'sawtooth',v:.09,dist:1,t:'E3 E3 . E3 E3 . G3 - | A3 A3 . A3 A3 . C4 - | D4 - - - C4 - - - | B3 - - - B3 B3 B3 B3 | E4 - - - - - - - | . . . .'},
-  {w:'sawtooth',v:.08,dist:1,t:'B3 B3 . B3 B3 . D4 - | E4 E4 . E4 E4 . G4 - | A4 - - - G4 - - - | F#4 - - - F#4 F#4 F#4 F#4 | B4 - - - - - - - | . . . .'},
-  {w:'sawtooth',v:.06,dist:1,t:'E4 E4 . E4 E4 . G4 - | A4 A4 . A4 A4 . C5 - | D5 - - - C5 - - - | B4 - - - B4 B4 B4 B4 | G#4 - - - - - - - | . . . .'},
-  {w:'square',v:.1,t:'. . . . . . . . | . . . . . . . . | D6 C6 B5 A5 G5 F#5 G5 A5 | B5 - D6 - F#6 - B6 - | E6 - - - - - - - | . . . .'},
-  {w:'triangle',v:.55,t:'E2 E2 E2 E2 E2 E2 G2 G2 | A2 A2 A2 A2 A2 A2 C3 C3 | D3 D3 D3 D3 C3 C3 C3 C3 | B2 B2 B2 B2 B2 B2 B2 B2 | E2 - - - - - - - | . . . .'},
-  {d:1,v:.6,t:'c k s k k k s k | k k s k k k s k | k k s k k s s s | k k k k s s s s | c . . . k . . . | . . . .'}]})
+  win:mkSong({bpm:190,loop:0,ch:[
+  {w:'sawtooth',v:.09,dist:1,t:'E3 E3 E3 E3 E3 E3 G3 A3 | C4 C4 C4 C4 B3 B3 A3 B3 | E3 E3 E3 E3 E3 E3 G3 A3 | D4 D4 D4 D4 C4 C4 B3 C4 | A3 A3 B3 B3 C4 C4 D4 D4 | E4 - C4 - D4 - B3 - | E4 - - - - - - - | . . . .'},
+  {w:'sawtooth',v:.08,dist:1,t:'B3 B3 B3 B3 B3 B3 D4 E4 | G4 G4 G4 G4 F#4 F#4 E4 F#4 | B3 B3 B3 B3 B3 B3 D4 E4 | A4 A4 A4 A4 G4 G4 F#4 G4 | E4 E4 F#4 F#4 G4 G4 A4 A4 | B4 - G4 - A4 - F#4 - | B4 - - - - - - - | . . . .'},
+  {w:'sawtooth',v:.06,dist:1,t:'. . . . . . . . | E5 - D5 E5 G5 - E5 - | B4 - - - C5 D5 E5 G5 | A5 - G5 A5 B5 - A5 G5 | E5 F#5 G5 A5 B5 C6 D6 B5 | E6 - C6 - D6 - B5 - | E6 - - - - - - - | . . . .'},
+  {w:'square',v:.1,t:'E6 - - - . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . E6 F#6 G6 A6 | B6 - G6 - A6 - F#6 - | B6 - - - - - - - | . . . .'},
+  {w:'triangle',v:.55,t:'E2 E2 E2 E2 E2 E2 G2 A2 | C3 C3 C3 C3 B2 B2 A2 B2 | E2 E2 E2 E2 E2 E2 G2 A2 | D3 D3 D3 D3 C3 C3 B2 C3 | A2 A2 B2 B2 C3 C3 D3 D3 | E3 - C3 - D3 - B2 - | E2 - - - - - - - | . . . .'},
+  {d:1,v:.6,t:'c k s k k k s k | c k s k k k s s | c k s k k k s k | c k s k s k s s | c s k s k s k s | c k s k c k s k | c . . . k . k k | . . . .'}]})
 };
 function playSong(name){
   if(AU.name===name)return;AU.name=name;AU.song=SONGS[name]||null;AU.step=0;

@@ -446,9 +446,11 @@ function victory(){
   {const qb=B.en.find(e=>ET[e.t].boss);
    if(qb&&!B.qok){qb.dead=false;qb.fadeT=0;qb.hit=0;qb.hp=1;qb.stag=1;return ngenQuiz(qb)}}
   {const vb=B.en.find(e=>ET[e.t].boss);
-   if(vb&&!B.ngenA&&B.o.chain!=='llufu'&&vb.t!=='epunamun'&&!/^ngoyman/.test(vb.t)){
-     const v={lafkenche:'lafken',nagche:'mawida',pewenche:'pewen',williche:'kuruf',puelmapu:'lelfun',ngoyman:'lelfun'}[M.region];
-     if(v){vb.stag=1;B.ngenA={t:0,e:vb,v};sfx('cast');return}}
+   if(vb&&!B.ngenA&&B.o.chain!=='llufu'&&vb.t!=='epunamun'){
+     if(vb.t==='ngoyman3'){vb.stag=1;B.ngenA={t:0,e:vb,kind:'final'};sfx('cast');return}
+     if(!/^ngoyman/.test(vb.t)){
+       const v={lafkenche:'lafken',nagche:'mawida',pewenche:'pewen',williche:'kuruf',puelmapu:'lelfun',ngoyman:'lelfun'}[M.region];
+       if(v){vb.stag=1;B.ngenA={t:0,e:vb,v};sfx('cast');return}}}
    if(vb&&vb.hp<=0&&!vb.dead){vb.dead=true;vb.fadeT=20}}
   if(B.ngenA&&!B.ngenA.done)return;
   const xp=B.en.reduce((a,e)=>a+ET[e.t].xp,0);let gold=B.en.reduce((a,e)=>{const g=ET[e.t].gold;return a+g[0]+rnd(g[1]-g[0]+1)},0);
@@ -456,7 +458,7 @@ function victory(){
   S.xp+=xp;S.gold+=gold;
   const after=SONGS.win;after.after=()=>mapSong();playSong('win');
   const NGN={lafken:'Ngen-lafken',mawida:'Ngen-mawida',pewen:'Ngen-pewen',kuruf:'Ngen-kürüf',lelfun:'Ngen-lelfün'};
-  const ls=[B.o.chain==='llufu'?N('El ül se cierra como una marea mansa: Kaykayfilu se aquieta y vuelve a su sueño en el fondo del mar.','The ül closes like a gentle tide: Kaykayfilu grows calm and returns to his sleep at the bottom of the sea.'):B.ngenA?N('¡'+NGN[B.ngenA.v]+' despierta, se alza sobre el wekufü y se lo traga entero! La tierra respira de nuevo.',NGN[B.ngenA.v]+' awakens, rises over the wekufü and swallows it whole! The land breathes again.'):(B.en.some(e=>e.t==='epunamun'))?N('El Epunamun baja sus dos lanzas y asiente con las dos caras: la prueba terminó, y la pasaste.','The Epunamun lowers his two spears and nods with both faces: the trial is over, and you have passed it.'):N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
+  const ls=[(B.ngenA&&B.ngenA.kind==='final')?N('¡Los cinco ngen del mapu responden a la vez! Mar, monte, pewen, viento y pampa descargan su newen, uno tras otro... y Ti Fütra Ngoyman se quiebra en mil pedazos que la luz deshace.','The five ngen of the land answer as one! Sea, forest, pewen, wind and plain unleash their newen, one after another... and Ti Fütra Ngoyman shatters into a thousand pieces that the light unmakes.'):B.o.chain==='llufu'?N('El ül se cierra como una marea mansa: Kaykayfilu se aquieta y vuelve a su sueño en el fondo del mar.','The ül closes like a gentle tide: Kaykayfilu grows calm and returns to his sleep at the bottom of the sea.'):(B.ngenA&&B.ngenA.v)?N('¡'+NGN[B.ngenA.v]+' despierta, se alza sobre el wekufü y se lo traga entero! La tierra respira de nuevo.',NGN[B.ngenA.v]+' awakens, rises over the wekufü and swallows it whole! The land breathes again.'):(B.en.some(e=>e.t==='epunamun'))?N('El Epunamun baja sus dos lanzas y asiente con las dos caras: la prueba terminó, y la pasaste.','The Epunamun lowers his two spears and nods with both faces: the trial is over, and you have passed it.'):N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
   while(S.xp>=xpNeed()){S.xp-=xpNeed();S.lvl++;S.baseMax+=HPQ;S.hp+=HPQ;S.baseAtk+=1;if(S.lvl%2===0)S.baseDef+=1;
     const l=L('','Doy kimün!','¡Más conocimiento! Llegas a kimün '+S.lvl+': ganas un corazón y más fuerza.','More knowledge! You reach kimün '+S.lvl+': you gain a heart and more strength.');l.fx=()=>sfx('lvl');ls.push(l)}
   say(ls,()=>endBattle('win'));
@@ -576,6 +578,7 @@ function postBoss5(){
 
 function postFinal(){
   S.flags.won=1;persist();
-  say([N('El coloso se detiene... y suspira. La niebla entera tiembla, se afina, se deshace en hilos de plata que el viento se lleva hacia arriba.','The colossus stops... and sighs. The whole fog trembles, thins, and comes apart into silver threads that the wind carries upward.')],
+  say([N('El coloso se detiene... y suspira. La niebla entera tiembla, se afina, se deshace en hilos de plata que el viento se lleva hacia arriba.','The colossus stops... and sighs. The whole fog trembles, thins, and comes apart into silver threads that the wind carries upward.'),
+    N('Y en el silencio nuevo te llega algo más: una voz muy bajita, como un canto bajo el agua, que te llama desde abajo de la isla del lago williche...','And in the new silence something else reaches you: a faint voice, like a song beneath the water, calling you from under the island in the williche lake...')],
     ()=>startEndCut());
 }
