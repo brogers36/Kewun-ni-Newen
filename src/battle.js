@@ -16,7 +16,7 @@ function startBattle(party,o){
   if(typeof stopAmb==='function')stopAmb();
   mode='battle';banner.style.display='none';held.up=held.down=held.left=held.right=0;
   B={snap,wipe:snap?22:0,en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(M.fog&&M.bg!=='fjord'?'fog:':'')+M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
-  relabel();sfx('enc');playSong(o.final?'ngoyFinal':rsong(o.boss?'boss':'battle'));
+  relabel();sfx('enc');if(snap)sfx('swirl');playSong(o.final?'ngoyFinal':rsong(o.boss?'boss':'battle'));
   const alive=B.en.length,same=party.every(t=>t===party[0]),nameL=same?ET[party[0]].name:'wekufü';
   const lst=same?nameL:'wekufü ('+party.map(t=>ET[t].name).join(', ')+')';
   say([L('','Müley '+numW(alive)+' '+nameL+'!','¡Hay '+alive+' '+lst+'!','There '+(alive>1?'are ':'is ')+alive+' '+lst+'!')],battleMenu);

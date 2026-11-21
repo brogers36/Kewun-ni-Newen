@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='72c3826-202611211027';
+window.KEWUN_BUILD='004af85-202611211033';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -550,6 +550,15 @@ function sfx(n){
   case 'lvl':['C5','E5','G5','C6','E6','G6'].forEach((x,i)=>tone('square',nf(x),nf(x),.1,.16,i*.07));break;
   case 'cast':tone('square',300,1200,.22,.14);tone('triangle',600,2400,.22,.2,.02);break;
   case 'enc':noiseBurst(.35,.3,2000);['A5','E5','A4','E4'].forEach((x,i)=>tone('square',nf(x),nf(x),.07,.15,i*.06));break;
+  case 'swirl':
+    // the world is pulled away: rising whoosh, spinning wobble, then a deep slam
+    noiseBurst(.5,.22,500);noiseBurst(.42,.2,1200,.08);noiseBurst(.3,.16,2600,.2);
+    tone('sawtooth',110,980,.46,.12);tone('square',165,1400,.44,.08,.02);
+    tone('sine',70,340,.4,.16,.04);
+    for(let i=0;i<6;i++)tone('triangle',500+i*140,340+i*90,.08,.1,.05+i*.065);
+    tone('sine',200,42,.3,.22,.4);tone('sawtooth',120,30,.28,.1,.42);
+    noiseBurst(.22,.26,150,.42);
+    break;
   case 'door':tone('triangle',nf('G4'),nf('G4'),.12,.35);tone('triangle',nf('C5'),nf('C5'),.2,.35,.1);break;
   case 'sleep':tone('sine',800,300,.5,.25);break;
   case 'step':noiseBurst(.03,.06,3000);break;
@@ -3970,7 +3979,7 @@ function startBattle(party,o){
   if(typeof stopAmb==='function')stopAmb();
   mode='battle';banner.style.display='none';held.up=held.down=held.left=held.right=0;
   B={snap,wipe:snap?22:0,en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(M.fog&&M.bg!=='fjord'?'fog:':'')+M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
-  relabel();sfx('enc');playSong(o.final?'ngoyFinal':rsong(o.boss?'boss':'battle'));
+  relabel();sfx('enc');if(snap)sfx('swirl');playSong(o.final?'ngoyFinal':rsong(o.boss?'boss':'battle'));
   const alive=B.en.length,same=party.every(t=>t===party[0]),nameL=same?ET[party[0]].name:'wekufü';
   const lst=same?nameL:'wekufü ('+party.map(t=>ET[t].name).join(', ')+')';
   say([L('','Müley '+numW(alive)+' '+nameL+'!','¡Hay '+alive+' '+lst+'!','There '+(alive>1?'are ':'is ')+alive+' '+lst+'!')],battleMenu);

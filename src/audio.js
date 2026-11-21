@@ -383,6 +383,15 @@ function sfx(n){
   case 'lvl':['C5','E5','G5','C6','E6','G6'].forEach((x,i)=>tone('square',nf(x),nf(x),.1,.16,i*.07));break;
   case 'cast':tone('square',300,1200,.22,.14);tone('triangle',600,2400,.22,.2,.02);break;
   case 'enc':noiseBurst(.35,.3,2000);['A5','E5','A4','E4'].forEach((x,i)=>tone('square',nf(x),nf(x),.07,.15,i*.06));break;
+  case 'swirl':
+    // the world is pulled away: rising whoosh, spinning wobble, then a deep slam
+    noiseBurst(.5,.22,500);noiseBurst(.42,.2,1200,.08);noiseBurst(.3,.16,2600,.2);
+    tone('sawtooth',110,980,.46,.12);tone('square',165,1400,.44,.08,.02);
+    tone('sine',70,340,.4,.16,.04);
+    for(let i=0;i<6;i++)tone('triangle',500+i*140,340+i*90,.08,.1,.05+i*.065);
+    tone('sine',200,42,.3,.22,.4);tone('sawtooth',120,30,.28,.1,.42);
+    noiseBurst(.22,.26,150,.42);
+    break;
   case 'door':tone('triangle',nf('G4'),nf('G4'),.12,.35);tone('triangle',nf('C5'),nf('C5'),.2,.35,.1);break;
   case 'sleep':tone('sine',800,300,.5,.25);break;
   case 'step':noiseBurst(.03,.06,3000);break;
