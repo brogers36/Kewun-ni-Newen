@@ -346,6 +346,14 @@ function sfx(n){
     const g=c.createGain();g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.5,t+.04);g.gain.setValueAtTime(.5,t+.2);g.gain.exponentialRampToValueAtTime(.001,t+.34);
     sN.connect(f);f.connect(g);g.connect(AU.sfx);sN.start(t,Math.random()*.4);sN.stop(t+.4);
     tone('sawtooth',70,52,.3,.22);tone('square',46,40,.3,.12);break}
+  case 'shatter':{
+    // crack, deep detonation, long rumble, and a rain of glassy shards
+    noiseBurst(.18,.65,2600);
+    tone('sine',95,24,1.3,.7);tone('sawtooth',64,20,1.1,.45,.02);tone('sine',42,16,.7,.6,.06);
+    noiseBurst(.9,.55,1400,.04);noiseBurst(1.4,.32,380,.1);
+    for(let i=0;i<12;i++){const f=1950-i*130+Math.random()*90;tone('square',f,f*.5,.09,.11,.12+i*.055)}
+    tone('sine',30,14,.9,.4,.5);
+    break}
   case 'trut':{['G3','G3','D4'].forEach((x,i)=>{tone('sawtooth',nf(x)*.99,nf(x),.3,.3,i*.22);tone('sawtooth',nf(x)*1.008,nf(x)*1.01,.3,.2,i*.22)});tone('sawtooth',nf('G4'),nf('G4')*1.01,.55,.3,.66);noiseBurst(.1,.12,900,.66);break}
   }
 }

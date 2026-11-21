@@ -566,7 +566,7 @@ function renderBattle(){
         c.beginPath();c.ellipse(bx,by,(st-26)*2.2,(st-26)*1.2,0,0,6.283);c.stroke();c.lineWidth=1}
     }
     if(A.t>=SH){
-      if(!A.shards){A.shards=[];e.dead=true;e.fadeT=0;B.flash=14;B.shake=16;sfx('lvl');
+      if(!A.shards){A.shards=[];e.dead=true;e.fadeT=0;B.flash=14;B.shake=22;sfx('shatter');
         const cvs=enemyCanvas(e.t,ET[e.t].bs,0),topy=by-Math.round(cvs.height/3);
         try{const tc2=document.createElement('canvas');tc2.width=cvs.width;tc2.height=cvs.height;
           const tg2=tc2.getContext('2d');tg2.drawImage(cvs,0,0);

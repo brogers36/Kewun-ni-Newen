@@ -1343,60 +1343,72 @@ def ngoyman3(fr):
 
 
 def ngoyman4(fr):
-    # the night of the forgetting: vaster, six dim eyes, horns of smoke
+    # Ngoyman ni pun: the night itself. A gaunt floating specter, body of
+    # starless dark rimmed in pale vapor, full of dying stars; crescent
+    # horns, six ember eyes in an arc, a screaming rift, overlong claws.
     g=G(56,72);import math
-    for y in range(4,68):
-        t=(y-4)/64.0
-        if y<16:rr=8+(y-4)*0.5
-        elif y<28:rr=13+(y-16)*0.5
-        else:rr=19-(abs(y-50))*0.07
-        rr+=math.sin(y*0.45+fr*3.14)*1.6
-        off=math.sin(y*0.2+fr*0.8)*1.8
-        x0=int(28-rr+off);x1=int(28+rr+off)
+    CX=28
+    for i in range(7):                                         # detached wisps: it floats
+        x=8+i*6+(fr%2)
+        g.p(x,66,'d');g.p(x+1,67,'s');g.p(x,68,'d')
+    # tall gaunt body: black core with a pale spectral rim
+    for y in range(14,64):
+        if y<22:rr=6+(y-14)*0.5
+        elif y<50:rr=9+math.sin(y*0.25)*1.2
+        else:rr=9+(y-50)*0.55
+        rr+=math.sin(y*0.6+fr*3.14)*1.1
+        off=math.sin(y*0.15+fr*0.8)*1.4
+        x0=int(CX-rr+off);x1=int(CX+rr+off)
         for x in range(x0,x1+1):
-            n=math.sin(x*0.42+y*0.65)+math.sin(x*0.19-y*0.3+fr*2)
-            c='w' if n>1.05 else ('d' if n<-0.75 else 's')
-            if x<=x0+1 or x>=x1-1:c='d'
+            if x==x0 or x==x1:c='s'
+            elif x==x0+1 or x==x1-1:c='d'
+            else:c='k'
             g.p(x,y,c)
-    for y in range(20,64):
-        rr=5+math.sin(y*0.3)*1.4
-        for x in range(int(28-rr),int(28+rr)+1):
-            if (x+y)%3:g.p(x,y,'d')
-    # horns of smoke
+    for i in range(9):                                         # ragged hem
+        hx=CX-14+i*3+(1 if (i+fr)%2 else 0);hy=62+(i%3)
+        g.p(hx,hy,'d');g.p(hx,hy+1,'k')
+    # dying stars inside the night
+    for (sx2,sy2) in [(22,26),(33,30),(25,36),(31,42),(21,47),(34,52),(27,57),(24,31),(30,24),(29,49)]:
+        on=((sx2+sy2+fr)%2==0)
+        g.p(sx2,sy2,'w' if on else 's')
+        if on and (sx2+sy2)%3==0:g.p(sx2+1,sy2,'s')
+    if fr:g.p(23,40,'E')
+    else:g.p(32,34,'E')
+    # thin shoulders; long arms spread wide, four overlong claw fingers
     for sgn in (-1,1):
-        for i in range(12):
-            x=28+sgn*(9+int(i*0.9));y=8-int(i*0.55)+ (fr if i%4==0 else 0)
-            g.p(x,y,'d');g.p(x,y+1,'s')
-            if i>7:g.p(x,y-1,'d')
-    # six burnt-out eyes, the two great ones under brows slanting down in fury
-    for (x,y,r) in [(21,14,2.4),(35,14,2.4),(16,20,1.7),(40,20,1.7),(24,24,1.3),(32,24,1.3)]:
-        g.e(x,y,r,r*.85,'k');g.e(x,y,r*.55,r*.5,'E')
-        if fr:g.p(x,int(y-r-1),'E')
-    for i in range(6):
-        g.p(24-i,10+(5-i)//2,'k');g.p(24-i,11+(5-i)//2,'k')
-        g.p(32+i,10+(5-i)//2,'k');g.p(32+i,11+(5-i)//2,'k')
-    # wide snarl, fangs, corners dragged down
-    g.e(28,31,7,3,'k')
-    for k in range(7):g.p(22+k*2,28,'w')
-    g.p(21,33,'k');g.p(35,33,'k');g.p(22,32,'w');g.p(34,32,'w')
-    # shoulders and raised arms with claws
-    for sgn in (-1,1):
-        g.e(28+sgn*17,30,6,4,'s');g.e(28+sgn*19,31,4,3,'d')
+        g.e(CX+sgn*8,21,4,2.5,'d');g.e(CX+sgn*8,20,3,1.5,'s')
         for i in range(10):
-            x=28+sgn*(21+int(i*0.5));y=32+i
-            g.p(x,y,'s');g.p(x+sgn,y,'d')
-        ex3,ey3=28+sgn*26,42
-        for i in range(9):
-            x=ex3+sgn*int(i*0.2);y=ey3-i
-            g.p(x,y,'s');g.p(x+sgn,y,'d')
-        hx,hy=28+sgn*27,31+(fr%2)
-        g.e(hx,hy,2.2,1.8,'d')
-        g.p(hx-1,hy-2,'w');g.p(hx,hy-3,'w');g.p(hx+1,hy-2,'w')
-    for i,(x,y) in enumerate([(2,12),(53,10),(1,36),(54,40),(4,60),(52,62),(27,2)]):
-        g.p(x,y+((i+fr)%2),'s');g.p(x+1,y+1,'d')
+            x=CX+sgn*(10+int(i*1.5));y=22+int(i*0.7)
+            g.p(x,y,'d');g.p(x,y+1,'k');g.p(x,y-1,'s')
+        hx=CX+sgn*25
+        for j in range(4):
+            fl=3+(j%2)
+            for L in range(fl):
+                g.p(hx+sgn*(j-1),30+j+L,'w' if L<fl-1 else 's')
+    # void face
+    g.e(CX,12,7,6,'d');g.e(CX,13,5.5,4.8,'k')
+    # crescent horns curving inward like a dark moon
+    for sgn in (-1,1):
+        px,py=CX+sgn*6,8
+        for i in range(8):
+            px+=sgn*(1 if i<5 else 0);py-=1
+            g.p(px,py,'d');g.p(px+sgn,py+1,'d')
+            if i>4:g.p(px-sgn,py,'s')
+    # six ember eyes in an arc; the two central ones large, under angry brows
+    for (dx2,dy2) in [(-5,12),(-4,12),(4,12),(5,12)]:
+        g.p(CX+dx2,dy2,'E')
+    g.p(CX-6,14,'E');g.p(CX+6,14,'E')
+    for sgn in (-1,1):
+        g.p(CX+sgn,9,'E');g.p(CX+sgn*2,9,'E');g.p(CX+sgn,10,'E');g.p(CX+sgn*2,10,'E')
+        g.p(CX,7,'k');g.p(CX+sgn,7,'k');g.p(CX+sgn*2,8,'k');g.p(CX+sgn*3,8,'k')
+    # tall screaming rift
+    for yy in range(13,19):
+        g.p(CX,yy,'o')
+        g.p(CX-1,yy+1,'o') if False else None
+    for yy in range(14,18):
+        g.p(CX-1,yy,'o');g.p(CX+1,yy,'o')
+    g.p(CX-2,14,'w');g.p(CX+2,14,'w');g.p(CX,18,'w')
     g.outline();return g.rows()
-
-
 def ngoyman5(fr):
     # Ruf Futra Ngoyman: a tower of everything swallowed. Hulking rotten base,
     # two braided fog columns, and in them the five lands and their people
