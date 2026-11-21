@@ -524,14 +524,20 @@ function renderBattle(){
       c.globalAlpha=ap*(st>44?Math.max(0,(SEG-st)/8):1);
       c.translate(nx,ny+rise);const s2=1.08+ap*.3+(strike?.1:0);c.scale(s2,s2);
       drawNgen(c,0,0,1,frame,vr);c.restore();c.globalAlpha=1;
-      if(strike){const t2=(st-26)/10,gy=ny-72;
+      {const eyY=ny+rise-80*s2,mY=ny+rise-71*s2,ex1=nx-3*s2,ex2=nx+3*s2;
+       if(st>=18&&st<26){const gl=(st-18)/8;  // the eyes kindle before the blast
+         ell(c,ex1,eyY,1.5+gl*1.5,1.5+gl*1.5,'rgba('+col+','+(.9*gl).toFixed(2)+')');
+         ell(c,ex2,eyY,1.5+gl*1.5,1.5+gl*1.5,'rgba('+col+','+(.9*gl).toFixed(2)+')')}
+       if(strike){const t2=(st-26)/10;
         c.save();c.globalCompositeOperation='lighter';
-        const grad=c.createLinearGradient(nx,gy,bx,by);
-        grad.addColorStop(0,'rgba('+col+',.9)');grad.addColorStop(1,'rgba('+col+',.25)');
-        c.strokeStyle=grad;c.lineWidth=Math.max(2,8-t2*6);c.beginPath();c.moveTo(nx+10,gy);c.lineTo(bx,by);c.stroke();
-        c.lineWidth=1.5;c.strokeStyle='rgba(255,255,255,.9)';c.beginPath();c.moveTo(nx+10,gy);c.lineTo(bx,by);c.stroke();
+        for(const [gx,gy,lw] of [[ex1,eyY,3],[ex2,eyY,3],[nx,mY,6]]){
+          const grad=c.createLinearGradient(gx,gy,bx,by);
+          grad.addColorStop(0,'rgba('+col+',.95)');grad.addColorStop(1,'rgba('+col+',.25)');
+          c.strokeStyle=grad;c.lineWidth=Math.max(1.5,lw-t2*(lw-1));c.beginPath();c.moveTo(gx,gy);c.lineTo(bx,by);c.stroke()}
+        c.lineWidth=1;c.strokeStyle='rgba(255,255,255,.9)';c.beginPath();c.moveTo(nx,mY);c.lineTo(bx,by);c.stroke();
+        ell(c,ex1,eyY,2.5,2.5,'rgba(255,255,255,.9)');ell(c,ex2,eyY,2.5,2.5,'rgba(255,255,255,.9)');
         for(let k=0;k<7;k++){const a=k/7*6.283+st;ell(c,bx+Math.cos(a)*(st-26)*2.2,by+Math.sin(a)*(st-26)*1.5,2,2,'rgba('+col+','+(1-t2).toFixed(2)+')')}
-        c.restore()}
+        c.restore()}}
       if(st>=26&&st<44){c.strokeStyle='rgba('+col+','+((44-st)/18*.7).toFixed(2)+')';c.lineWidth=2;
         c.beginPath();c.ellipse(bx,by,(st-26)*2.6,(st-26)*1.4,0,0,6.283);c.stroke();c.lineWidth=1}
     }

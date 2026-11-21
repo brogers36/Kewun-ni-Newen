@@ -1275,6 +1275,109 @@ def ngoyman3(fr):
     g.outline();return g.rows()
 
 
+def ngoyman4(fr):
+    # the night of the forgetting: vaster, six dim eyes, horns of smoke
+    g=G(56,72);import math
+    for y in range(4,68):
+        t=(y-4)/64.0
+        if y<16:rr=9+(y-4)*0.7
+        elif y<28:rr=16+(y-16)*0.8
+        else:rr=25-(abs(y-48))*0.10
+        rr+=math.sin(y*0.45+fr*3.14)*1.6
+        off=math.sin(y*0.2+fr*0.8)*1.8
+        x0=int(28-rr+off);x1=int(28+rr+off)
+        for x in range(x0,x1+1):
+            n=math.sin(x*0.42+y*0.65)+math.sin(x*0.19-y*0.3+fr*2)
+            c='w' if n>1.05 else ('d' if n<-0.75 else 's')
+            if x<=x0+1 or x>=x1-1:c='d'
+            g.p(x,y,c)
+    for y in range(20,64):
+        rr=5+math.sin(y*0.3)*1.4
+        for x in range(int(28-rr),int(28+rr)+1):
+            if (x+y)%3:g.p(x,y,'d')
+    # horns of smoke
+    for sgn in (-1,1):
+        for i in range(12):
+            x=28+sgn*(9+int(i*0.9));y=8-int(i*0.55)+ (fr if i%4==0 else 0)
+            g.p(x,y,'d');g.p(x,y+1,'s')
+            if i>7:g.p(x,y-1,'d')
+    # six burnt-out eyes
+    for (x,y,r) in [(21,14,2.4),(35,14,2.4),(16,20,1.7),(40,20,1.7),(24,24,1.3),(32,24,1.3)]:
+        g.e(x,y,r,r*.85,'k');g.e(x,y,r*.55,r*.5,'E')
+        if fr:g.p(x,int(y-r-1),'E')
+    # wide maw
+    g.e(28,31,7,3,'k')
+    for k in range(7):g.p(22+k*2,28,'w')
+    # arms of smoke raised
+    sw=fr
+    for (sx,dx) in [(5,-1),(51,1)]:
+        for i in range(14):
+            y=30+i
+            x=sx+dx*int(i*0.4)
+            g.p(x,y,'s');g.p(x-dx,y,'d')
+        g.p(sx+dx*3,26+sw,'s');g.p(sx+dx*4,24-sw,'d');g.p(sx+dx*5,22+sw,'s')
+    for i,(x,y) in enumerate([(2,12),(53,10),(1,36),(54,40),(4,60),(52,62),(27,2)]):
+        g.p(x,y+((i+fr)%2),'s');g.p(x+1,y+1,'d')
+    g.outline();return g.rows()
+
+
+def ngoyman5(fr):
+    # the true great forgetting: antler crown, bottomless mouth, one great eye
+    g=G(64,80);import math
+    for y in range(10,76):
+        t=(y-10)/66.0
+        if y<24:rr=10+(y-10)*0.9
+        elif y<36:rr=20+(y-24)*0.7
+        else:rr=29-(abs(y-54))*0.09
+        rr+=math.sin(y*0.4+fr*3.14)*1.8
+        off=math.sin(y*0.18+fr*0.8)*2.0
+        x0=int(32-rr+off);x1=int(32+rr+off)
+        for x in range(x0,x1+1):
+            n=math.sin(x*0.4+y*0.6)+math.sin(x*0.18-y*0.28+fr*2)
+            c='w' if n>1.1 else ('d' if n<-0.7 else 's')
+            if x<=x0+1 or x>=x1-1:c='d'
+            g.p(x,y,c)
+    for y in range(26,72):
+        rr=6+math.sin(y*0.28)*1.6
+        for x in range(int(32-rr),int(32+rr)+1):
+            if (x+y)%3:g.p(x,y,'d')
+    # antler crown of fog
+    for sgn in (-1,1):
+        px,py=32+sgn*8,13
+        for i in range(15):
+            px+=sgn*(1 if i%3 else 2);py-=1
+            b=fr if i%5==0 else 0
+            g.p(px,py+b,'d');g.p(px,py+1+b,'d');g.p(px-sgn,py+1,'s');g.p(px-sgn,py+2,'d')
+            if i in (4,8,12):
+                for j in range(1,5):
+                    g.p(px,py-j-1,'d')
+                    if j>2:g.p(px+sgn,py-j-1,'d')
+                g.p(px+sgn,py-6,'s')
+    # one great eye that no longer remembers the light
+    g.e(32,22,5,4,'k');g.e(32,22,3,2.4,'E');g.e(31,21,1,1,'w')
+    if fr:
+        g.p(32,16,'E');g.p(28,24,'E');g.p(36,24,'E')
+    # four small dim eyes
+    for (x,y) in [(21,18),(43,18),(18,28),(46,28)]:
+        g.e(x,y,1.6,1.4,'k');g.p(x,y,'E')
+    # the bottomless mouth
+    g.e(32,40,10,5,'k');g.e(32,42,7,3,'o')
+    for k in range(9):g.p(24+k*2,36,'w')
+    for k in range(7):g.p(26+k*2,44,'s')
+    # shoulders and arms
+    sw=fr
+    for (sx,dx) in [(3,-1),(60,1)]:
+        for i in range(18):
+            y=34+i
+            x=sx+dx*int(i*0.35)
+            g.p(x,y,'s');g.p(x-dx,y,'d');g.p(x-dx*2,y,'d')
+        g.p(sx+dx*2,30+sw,'s');g.p(sx+dx*3,28-sw,'d')
+    for i,(x,y) in enumerate([(2,16),(61,14),(1,44),(62,48),(5,70),(58,72),(31,4),(20,6),(44,6)]):
+        g.p(x,y+((i+fr)%2),'s');g.p(x+1,y+1,'d')
+    g.outline();return g.rows()
+
+
+
 def _sresample(pts,step=1.1):
     import math
     P=[]
@@ -1629,6 +1732,8 @@ PAL={
  'ngoyman1':{'w':'#d6dde6','s':'#9fa9b6','d':'#5c6674','k':'#161a22','E':'#cfe8ff','o':'#10141c'},
  'ngoyman2':{'s':'#8a909c','S':'#5a606c','d':'#aeb6c2','g':'#7affd0','G':'#2a9a74','k':'#14161c','o':'#0e1016'},
  'ngoyman3':{'w':'#e2e8f0','s':'#a6b0bc','d':'#4e5866','k':'#0c0e14','E':'#fff2c0','o':'#0a0c12'},
+ 'ngoyman4':{'w':'#c8d2e4','s':'#8a94ac','d':'#38405a','k':'#07090f','E':'#ffb9a0','o':'#060810'},
+ 'ngoyman5':{'w':'#f2f5fa','s':'#b8c2d0','d':'#59647a','k':'#0a0c14','E':'#fff6d0','o':'#0a0c12'},
  'chadikura':{'w':'#fdfbf2','W':'#d8d2c0','s':'#b0a89a','S':'#6e685c','p':'#ecc4ba','g':'#7affd0','G':'#2a9a74','k':'#141210','o':'#262420'},
  'epunamun':{'s':'#b87848','S':'#965c32','c':'#6e4c26','C':'#4a3218','h':'#241a10','n':'#1c140c','r':'#d83030','w':'#f0ead2','a':'#7a5a2e','A':'#a0a0aa','e':'#ffd040','k':'#160e08','o':'#0f0905'},
  'ngen_lelfun':{'L':'#4c4414','l':'#8a7a28','g':'#d0b44c','w':'#f4ecc8','Y':'#ffd848','k':'#1a1404','E':'#fff2b0','o':'#141004'},
@@ -1677,6 +1782,8 @@ HI={
  'ngoyman1':{'w':'#d6dde6','s':'#9fa9b6','d':'#5c6674','k':'#161a22','E':'#cfe8ff','o':'#10141c'},
  'ngoyman2':{'s':'#8a909c','S':'#5a606c','d':'#aeb6c2','g':'#7affd0','G':'#2a9a74','k':'#14161c','o':'#0e1016'},
  'ngoyman3':{'w':'#e2e8f0','s':'#a6b0bc','d':'#4e5866','k':'#0c0e14','E':'#fff2c0','o':'#0a0c12'},
+ 'ngoyman4':{'w':'#c8d2e4','s':'#8a94ac','d':'#38405a','k':'#07090f','E':'#ffb9a0','o':'#060810'},
+ 'ngoyman5':{'w':'#f2f5fa','s':'#b8c2d0','d':'#59647a','k':'#0a0c14','E':'#fff6d0','o':'#0a0c12'},
  'chadikura':{'w':'#fdfbf2','W':'#d8d2c0','s':'#b0a89a','S':'#6e685c','p':'#ecc4ba','g':'#7affd0','G':'#2a9a74','k':'#141210','o':'#262420'},
  'epunamun':{'s':'#b87848','S':'#965c32','c':'#6e4c26','C':'#4a3218','h':'#241a10','n':'#1c140c','r':'#d83030','w':'#f0ead2','a':'#7a5a2e','A':'#a0a0aa','e':'#ffd040','k':'#160e08','o':'#0f0905'},
  'ngen_lelfun':{'L':'#4c4414','l':'#8a7a28','g':'#d0b44c','w':'#f4ecc8','Y':'#ffd848','k':'#1a1404','E':'#fff2b0','o':'#141004'},
@@ -1698,6 +1805,8 @@ HI={
  'ngoyman1':{'w':'#d6dde6','s':'#9fa9b6','d':'#5c6674','k':'#161a22','E':'#cfe8ff','o':'#10141c'},
  'ngoyman2':{'s':'#8a909c','S':'#5a606c','d':'#aeb6c2','g':'#7affd0','G':'#2a9a74','k':'#14161c','o':'#0e1016'},
  'ngoyman3':{'w':'#e2e8f0','s':'#a6b0bc','d':'#4e5866','k':'#0c0e14','E':'#fff2c0','o':'#0a0c12'},
+ 'ngoyman4':{'w':'#c8d2e4','s':'#8a94ac','d':'#38405a','k':'#07090f','E':'#ffb9a0','o':'#060810'},
+ 'ngoyman5':{'w':'#f2f5fa','s':'#b8c2d0','d':'#59647a','k':'#0a0c14','E':'#fff6d0','o':'#0a0c12'},
  'chadikura':{'w':'#fdfbf2','W':'#d8d2c0','s':'#b0a89a','S':'#6e685c','p':'#ecc4ba','g':'#7affd0','G':'#2a9a74','k':'#141210','o':'#262420'},
  'epunamun':{'glow':'e','tex':{'s':'pore','S':'pore','c':'strand','C':'strand','r':'strand'}},
  'llufu1':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
@@ -1710,6 +1819,8 @@ HI={
  'ngoyman1':{'w':'#d6dde6','s':'#9fa9b6','d':'#5c6674','k':'#161a22','E':'#cfe8ff','o':'#10141c'},
  'ngoyman2':{'s':'#8a909c','S':'#5a606c','d':'#aeb6c2','g':'#7affd0','G':'#2a9a74','k':'#14161c','o':'#0e1016'},
  'ngoyman3':{'w':'#e2e8f0','s':'#a6b0bc','d':'#4e5866','k':'#0c0e14','E':'#fff2c0','o':'#0a0c12'},
+ 'ngoyman4':{'w':'#c8d2e4','s':'#8a94ac','d':'#38405a','k':'#07090f','E':'#ffb9a0','o':'#060810'},
+ 'ngoyman5':{'w':'#f2f5fa','s':'#b8c2d0','d':'#59647a','k':'#0a0c14','E':'#fff6d0','o':'#0a0c12'},
  'chadikura':{'glow':'gG','tex':{'w':'crack','W':'crack','s':'speck'}},
  'llufu1':{'glow':'egG','tex':{'b':'pore','B':'pore','s':'speck','f':'streak','F':'streak'}},
  'llufu2':{'glow':'egG','tex':{'b':'pore','B':'pore','s':'speck','f':'streak','F':'streak'}},
@@ -1720,6 +1831,8 @@ HI={
  'ngoyman1':{'glow':'E','tex':{'s':'streak','w':'streak','d':'streak'}},
  'ngoyman2':{'glow':'gG','tex':{'s':'crack','S':'crack','d':'streak'}},
  'ngoyman3':{'glow':'E','tex':{'s':'streak','w':'streak','d':'streak'}},
+ 'ngoyman4':{'glow':'E','tex':{'s':'streak','w':'streak','d':'streak'}},
+ 'ngoyman5':{'glow':'E','tex':{'s':'streak','w':'streak','d':'streak'}},
  'ngen_lelfun':{'glow':'YE','tex':{'L':'strand','l':'strand','g':'pore','w':'speck'}}}
 def hires(name,rows,pal):
     big=scale2x(rows);h=len(big);w=len(big[0]);cfg=HI[name]
@@ -1778,10 +1891,10 @@ def hires(name,rows,pal):
         out.append(r)
     return {v:k for k,v in cols.items()},out
 D={}
-BIG={'llufu1':2,'llufu2':2,'llufu3':2,'llufu4':2,'llufu5':2,'walichu':2,'epunamun':2,'chadikura':2,'ngoyam':2,'kalku':2,'ngoyman1':2,'ngoyman2':2,'ngoyman3':2,'mewlen':2,'kurutrewa':2,'fmewlen':2,'kurutoro':2,'chinifilu':2,'piwuchen':2,'wallipen':2,'trawko':2,'kowek':2,'mawek':2,'kamawetu':2,'basilisko':2,'kaleuche':2,'trelke':2,'witranalwe':2,'chonchon':2,'kutral':2,'pire':2,'kura':2,'fkura':2,'nirivilu':2,'nguruvilu':2,'cherrufe':2}
-for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe2),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('fkura',kura),('nirivilu',ngurufilu),('nguruvilu',ngurufilu),('cherrufe',cherrufe2),('trelke',trelke),('ngen_lafken',ngen_lafken),('ngen_mawida',ngen_mawida),('ngen_pewen',ngen_pewen),('kowek',kowek),('mawek',mawek),('kamawetu',kamawetu),('basilisko',basilisko),('kaleuche',kaleuche),('ngen_kuruf',ngen_kuruf),('chinifilu',chinifilu),('piwuchen',piwuchen),('wallipen',wallipen),('trawko',trawko),('luan',luan),('choyke',choyke),('mewlen',mewlen),('kurutrewa',kurutrewa),('fmewlen',fmewlen),('kurutoro',kurutoro),('walichu',walichu),('epunamun',epunamun),('chadikura',chadikura),('ngoyam',ngoyam),('kalku',kalku),('ngoyman1',ngoyman1),('ngoyman2',ngoyman2),('ngoyman3',ngoyman3),('llufu1',llufu1),('llufu2',llufu2),('llufu3',llufu3),('llufu4',llufu4),('llufu5',llufu5),('ngen_lelfun',ngen_lelfun)]:
-    D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':{'witranalwe':'150,230,170','cherrufe':'255,130,50','trelke':'150,200,120','kaleuche':'190,220,200','chinifilu':'170,180,130','piwuchen':'230,120,140','wallipen':'60,70,100','trawko':'190,220,140','walichu':'210,200,160','epunamun':'255,170,90','chadikura':'150,255,210','kalku':'170,110,230','fkura':'255,120,50','mewlen':'70,55,25','fmewlen':'60,46,20','pire':'70,100,170','ngoyman1':'190,210,230','ngoyman2':'130,230,190','ngoyman3':'220,230,245','llufu1':'80,200,190','llufu2':'80,200,190','llufu3':'80,200,190','llufu4':'120,255,215','llufu5':'110,230,210'}.get(name,0)}
-for name in ['nguruvilu','nirivilu','witranalwe','trelke','cherrufe','kaleuche','ngen_lafken','ngen_mawida','ngen_pewen','ngen_kuruf','chinifilu','piwuchen','wallipen','trawko','walichu','epunamun','chadikura','kalku','ngoyman1','ngoyman2','ngoyman3','llufu1','llufu2','llufu3','llufu4','llufu5','ngen_lelfun']:
+BIG={'llufu1':2,'llufu2':2,'llufu3':2,'llufu4':2,'llufu5':2,'walichu':2,'epunamun':2,'chadikura':2,'ngoyam':2,'kalku':2,'ngoyman1':2,'ngoyman2':2,'ngoyman3':2,'ngoyman4':2,'ngoyman5':2,'mewlen':2,'kurutrewa':2,'fmewlen':2,'kurutoro':2,'chinifilu':2,'piwuchen':2,'wallipen':2,'trawko':2,'kowek':2,'mawek':2,'kamawetu':2,'basilisko':2,'kaleuche':2,'trelke':2,'witranalwe':2,'chonchon':2,'kutral':2,'pire':2,'kura':2,'fkura':2,'nirivilu':2,'nguruvilu':2,'cherrufe':2}
+for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe2),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('fkura',kura),('nirivilu',ngurufilu),('nguruvilu',ngurufilu),('cherrufe',cherrufe2),('trelke',trelke),('ngen_lafken',ngen_lafken),('ngen_mawida',ngen_mawida),('ngen_pewen',ngen_pewen),('kowek',kowek),('mawek',mawek),('kamawetu',kamawetu),('basilisko',basilisko),('kaleuche',kaleuche),('ngen_kuruf',ngen_kuruf),('chinifilu',chinifilu),('piwuchen',piwuchen),('wallipen',wallipen),('trawko',trawko),('luan',luan),('choyke',choyke),('mewlen',mewlen),('kurutrewa',kurutrewa),('fmewlen',fmewlen),('kurutoro',kurutoro),('walichu',walichu),('epunamun',epunamun),('chadikura',chadikura),('ngoyam',ngoyam),('kalku',kalku),('ngoyman1',ngoyman1),('ngoyman2',ngoyman2),('ngoyman3',ngoyman3),('ngoyman4',ngoyman4),('ngoyman5',ngoyman5),('llufu1',llufu1),('llufu2',llufu2),('llufu3',llufu3),('llufu4',llufu4),('llufu5',llufu5),('ngen_lelfun',ngen_lelfun)]:
+    D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':{'witranalwe':'150,230,170','cherrufe':'255,130,50','trelke':'150,200,120','kaleuche':'190,220,200','chinifilu':'170,180,130','piwuchen':'230,120,140','wallipen':'60,70,100','trawko':'190,220,140','walichu':'210,200,160','epunamun':'255,170,90','chadikura':'150,255,210','kalku':'170,110,230','fkura':'255,120,50','mewlen':'70,55,25','fmewlen':'60,46,20','pire':'70,100,170','ngoyman1':'190,210,230','ngoyman2':'130,230,190','ngoyman3':'220,230,245','ngoyman4':'130,140,190','ngoyman5':'235,240,255','llufu1':'80,200,190','llufu2':'80,200,190','llufu3':'80,200,190','llufu4':'120,255,215','llufu5':'110,230,210'}.get(name,0)}
+for name in ['nguruvilu','nirivilu','witranalwe','trelke','cherrufe','kaleuche','ngen_lafken','ngen_mawida','ngen_pewen','ngen_kuruf','chinifilu','piwuchen','wallipen','trawko','walichu','epunamun','chadikura','kalku','ngoyman1','ngoyman2','ngoyman3','ngoyman4','ngoyman5','llufu1','llufu2','llufu3','llufu4','llufu5','ngen_lelfun']:
     fr=[];pal=None
     for f in D[name]['f']:
         p,rows=hires(name,f,PAL[name]);fr.append((p,rows))

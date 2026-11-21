@@ -23,7 +23,7 @@ const aliveE=()=>B.en.filter(e=>!e.dead);
 function bossBlock(e){const T=ET[e.t];if(!T.boss)return false;if(e.down||e.sl||e.stag||e.dreaming||e.hidden||e.hp<=0)return false;
   if(e.parry){e.parry=0;return true}
   return Math.random()<(T.blk||.22)}
-const quizPend=e=>!!B&&ET[e.t].boss&&!B.qok&&!(e.t==='ngoyman1'||e.t==='ngoyman2')&&!(B.o.chain==='llufu'&&e.t!=='llufu5');
+const quizPend=e=>!!B&&ET[e.t].boss&&!B.qok&&!/^ngoyman[1-4]$/.test(e.t)&&!(B.o.chain==='llufu'&&e.t!=='llufu5');
 function battleMenu(){
   if(B&&B.ngenA&&!B.ngenA.done)return;
   const en=S.gloss==='en';B.cursor=null;
@@ -256,12 +256,26 @@ function enemyPhase(){
     if(e.t==='ngoyman3'){
       if(!e.seals)e.seals=[];
       if(!e.seals.length&&B.turn>0&&B.turn%4===0){const pool=S.roots.slice();let code=pool[rnd(pool.length)];if(Math.random()<.4)code+='kil';e.seals=[code];
-        fx.push('¡Rüf Fütra Ngoyman alza una barrera de luz robada! '+sealGloss(code,'es'));fxe.push('Rüf Fütra Ngoyman raises a barrier of stolen light! '+sealGloss(code,'en'));hitsFx.push(()=>{sfx('cast');B.flash=10});continue}
+        fx.push('¡Fütra Ngoyman alza una barrera de luz robada! '+sealGloss(code,'es'));fxe.push('Fütra Ngoyman raises a barrier of stolen light! '+sealGloss(code,'en'));hitsFx.push(()=>{sfx('cast');B.flash=10});continue}
       if(B.en.length<4&&Math.random()<.3){const t2=SUMMONP[rnd(SUMMONP.length)],ne=mkEnemy(t2);B.en.push(ne);relabel();
         fx.push('El olvido recuerda a tus enemigos: ¡'+ne.label+' sale de la niebla!');fxe.push('The forgetting remembers your enemies: '+ne.label+' steps out of the fog!');continue}
       if(B.turn%3===2){hitP(e,2.0,{es:' descarga el golpe del olvido',en:' brings down the blow of forgetting'});continue}
-      if(Math.random()<.25&&(S.sp||0)>0){S.sp--;fx.push('Rüf Fütra Ngoyman aspira tus palabras (−✦).');fxe.push('Rüf Fütra Ngoyman breathes in your words (−✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')})}
+      if(Math.random()<.25&&(S.sp||0)>0){S.sp--;fx.push('Fütra Ngoyman aspira tus palabras (−✦).');fxe.push('Fütra Ngoyman breathes in your words (−✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')})}
       hitP(e,.8);hitP(e,.8,{es:' golpea otra vez',en:' strikes again'});continue}
+    if(e.t==='ngoyman4'){
+      if(!e.armor){e.armorT=(e.armorT||0)-1;if(e.armorT<=0){e.armor=1;fx.push('La noche se espesa alrededor de Ngoyman ñi pun: su coraza de sombra se rehace.');fxe.push('The night thickens around Ngoyman ñi pun: its crust of shadow reforms.');continue}}
+      if(B.turn>0&&B.turn%3===0){hitP(e,2.0,{es:': la noche entera se te viene encima',en:': the whole night comes down on you'});hitsFx.push(()=>B.shake=10);continue}
+      if(Math.random()<.25&&(S.sp||0)>0){S.sp--;fx.push('Seis ojos apagados te miran a la vez: una palabra se te borra (−✦).');fxe.push('Six burnt-out eyes look at you at once: one of your words is erased (−✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')})}
+      hitP(e,.85);hitP(e,.85,{es:' golpea con un brazo de humo',en:' strikes with an arm of smoke'});continue}
+    if(e.t==='ngoyman5'){
+      if(!e.seals)e.seals=[];
+      if(!e.seals.length&&B.turn>0&&B.turn%3===0){const pool=S.roots.slice();let code=pool[rnd(pool.length)];if(Math.random()<.4)code+='kil';e.seals=[code];
+        fx.push('¡Rüf Fütra Ngoyman alza una barrera de luz robada! '+sealGloss(code,'es'));fxe.push('Rüf Fütra Ngoyman raises a barrier of stolen light! '+sealGloss(code,'en'));hitsFx.push(()=>{sfx('cast');B.flash=10});continue}
+      if(B.en.length<4&&Math.random()<.3){const t2=SUMMONP[rnd(SUMMONP.length)],ne=mkEnemy(t2);B.en.push(ne);relabel();
+        fx.push('El olvido recuerda a tus enemigos: ¡'+ne.label+' sale de la niebla!');fxe.push('The forgetting remembers your enemies: '+ne.label+' steps out of the fog!');continue}
+      if(B.turn%3===2){hitP(e,2.3,{es:': la boca sin fondo se cierra sobre ti',en:': the bottomless mouth closes over you'});hitsFx.push(()=>B.shake=12);continue}
+      if(Math.random()<.3&&(S.sp||0)>0){S.sp--;fx.push('Rüf Fütra Ngoyman aspira tus palabras (−✦).');fxe.push('Rüf Fütra Ngoyman breathes in your words (−✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')})}
+      hitP(e,.85);hitP(e,.85,{es:' golpea otra vez',en:' strikes again'});continue}
     if(e.t==='walichu'){
       if(!e.dreaming&&e.dreamT>0){e.dreamT--;
         if(e.dreamT<=0){e.dreaming=1;fx.push('El Walichu vuelve a envolverse en su sueño gris.');fxe.push('The Walichu wraps itself in its grey dream again.');continue}}
@@ -381,11 +395,15 @@ function postLlufu(){
     ()=>gainPiwke([N('Y entre las algas, algo rojo brilla...','And among the kelp, something red glints...')]));
 }
 function ngoyStage(n){
-  const e=mkEnemy(n===2?'ngoyman2':'ngoyman3');B.en=[e];relabel();B.tele=false;B.blocked=null;B.rush=null;sfx('lvl');B.flash=16;B.shake=10;
+  const e=mkEnemy('ngoyman'+n);B.en=[e];relabel();B.tele=false;B.blocked=null;B.rush=null;sfx('lvl');B.flash=16;B.shake=10;
   const ls=n===2?[N('El velo de niebla se rasga de arriba abajo... y detrás no hay cuerpo: hay un piwke enorme de piedra gris, envuelto en una coraza de olvido, latiendo despacio.','The veil of fog tears from top to bottom... and behind it there is no body: there is a huge heart of grey stone, wrapped in a crust of forgetting, beating slowly.'),
       N('Es el corazón del gran olvido. Cada latido borra una palabra en alguna parte.','It is the heart of the great forgetting. Every beat erases a word somewhere.')]
-    :[N('¡El piwke de piedra se parte en dos! De la grieta sale todo lo que el olvido se ha tragado: un coloso de niebla y silencio, con dos ojos como lunas apagadas. Esto es Rüf Fütra Ngoyman: el verdadero gran olvido.','The stone heart splits in two! Out of the crack pours everything the forgetting has swallowed: a colossus of fog and silence, with two eyes like burnt-out moons. This is Rüf Fütra Ngoyman: the true great forgetting.')];
-  if(n===3&&S.flags.epu_won){S.hp=maxHP();S.sp=SPMAX;e.hp-=15;
+    :n===3?[N('¡El piwke de piedra se parte en dos! De la grieta sale todo lo que el olvido se ha tragado: un coloso de niebla y silencio, con dos ojos como lunas apagadas. Fütra Ngoyman: el gran olvido tiene cuerpo.','The stone heart splits in two! Out of the crack pours everything the forgetting has swallowed: a colossus of fog and silence, with two eyes like burnt-out moons. Fütra Ngoyman: the great forgetting has a body.')]
+    :n===4?[N('El coloso se agrieta de arriba abajo... y no cae. Lo que sale de las grietas es noche pura: la niebla entera se dobla hacia adentro y se levanta una figura más vasta todavía, con seis ojos apagados y cuernos de humo.','The colossus cracks from top to bottom... and does not fall. What pours from the cracks is pure night: the whole fog folds inward and a vaster figure yet rises, with six burnt-out eyes and horns of smoke.'),
+      N('Ngoyman ñi pun: la noche del olvido. Hasta el suelo parece olvidar que existe.','Ngoyman ñi pun: the night of the forgetting. Even the ground seems to forget it exists.')]
+    :[N('La noche se parte como un telón podrido. Detrás estaba esperando lo que el olvido es de verdad: una corona de niebla como astas, una boca como cueva sin fondo, un ojo enorme que ya no recuerda la luz.','The night splits like a rotten curtain. Behind it waited what the forgetting truly is: a crown of fog like antlers, a mouth like a bottomless cave, one enormous eye that no longer remembers the light.'),
+      N('Rüf Fütra Ngoyman: el verdadero gran olvido. Ya no quedan velos.','Rüf Fütra Ngoyman: the true great forgetting. There are no veils left.')];
+  if(n===5&&S.flags.epu_won){S.hp=maxHP();S.sp=SPMAX;e.hp-=15;
     ls.push(N('Entonces una lanza cruza la niebla y se clava en el coloso (−15). El Epunamun aparece a tu lado, con las dos caras de frente al olvido: «¡Feypin! ¡Pelearía a tu lado!». Su newen te llena de nuevo: piwke y palabras al máximo.','Then a spear crosses the fog and sinks into the colossus (−15). The Epunamun appears at your side, both faces turned to the forgetting: "I said it! I would fight at your side!" His newen fills you again: hearts and words restored.'))}
   say(ls,battleMenu);
 }
@@ -439,7 +457,9 @@ function ngenQuiz(qb){
 function victory(){
   if(B.o.final){const st=B.en[0].t;
     if(st==='ngoyman1')return ngoyStage(2);
-    if(st==='ngoyman2')return ngoyStage(3);}
+    if(st==='ngoyman2')return ngoyStage(3);
+    if(st==='ngoyman3')return ngoyStage(4);
+    if(st==='ngoyman4')return ngoyStage(5);}
   if(B.o.chain==='llufu'){const st=B.en.find(e=>ET[e.t].boss);
     const nx={llufu1:'llufu2',llufu2:'llufu3',llufu3:'llufu4',llufu4:'llufu5'}[st&&st.t];
     if(nx)return llufuStage(nx);}
@@ -447,10 +467,10 @@ function victory(){
    if(qb&&!B.qok){qb.dead=false;qb.fadeT=0;qb.hit=0;qb.hp=1;qb.stag=1;return ngenQuiz(qb)}}
   {const vb=B.en.find(e=>ET[e.t].boss);
    if(vb&&!B.ngenA&&B.o.chain!=='llufu'&&vb.t!=='epunamun'){
-     if(vb.t==='ngoyman3'){vb.stag=1;B.ngenA={t:0,e:vb,kind:'final'};sfx('cast');return}
+     if(vb.t==='ngoyman5'){vb.stag=1;B.ngenA={t:0,e:vb,kind:'final'};document.getElementById('dlg').style.display='none';active=null;sfx('cast');return}
      if(!/^ngoyman/.test(vb.t)){
        const v={lafkenche:'lafken',nagche:'mawida',pewenche:'pewen',williche:'kuruf',puelmapu:'lelfun',ngoyman:'lelfun'}[M.region];
-       if(v){vb.stag=1;B.ngenA={t:0,e:vb,v};sfx('cast');return}}}
+       if(v){vb.stag=1;B.ngenA={t:0,e:vb,v};document.getElementById('dlg').style.display='none';active=null;sfx('cast');return}}}
    if(vb&&vb.hp<=0&&!vb.dead){vb.dead=true;vb.fadeT=20}}
   if(B.ngenA&&!B.ngenA.done)return;
   const xp=B.en.reduce((a,e)=>a+ET[e.t].xp,0);let gold=B.en.reduce((a,e)=>{const g=ET[e.t].gold;return a+g[0]+rnd(g[1]-g[0]+1)},0);
