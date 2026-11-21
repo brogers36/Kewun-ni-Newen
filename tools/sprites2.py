@@ -1192,11 +1192,22 @@ def ngoyman1(fr):
             c='w' if n>0.7 else ('d' if n<-1.0 else 's')
             if x<=x0+1 or x>=x1-1:c='d'
             g.p(x,y,c)
-    # billow tops
+    # billow tops, dark
     for (cx,cy,rx,ry) in [(14,10,7,4),(30,6,9,4.5),(46,10,7,4),(22,8,6,3),(38,8,6,3)]:
-        g.e(cx,cy,rx,ry,'w')
-    # faint eyes scattered in the bank
-    eyes=[(18,16),(42,15),(30,22),(12,26),(48,27)] if fr==0 else [(18,16),(42,15),(30,22),(12,26),(48,27),(24,30),(36,29)]
+        g.e(cx,cy,rx,ry,'s');g.e(cx,cy+1,rx*.7,ry*.6,'d')
+    # one furious glare in the heart of the bank, lesser eyes scattered
+    for sgn in (-1,1):
+        ex=30+sgn*8
+        g.e(ex,17,4,2.6,'k')                                       # deep socket
+        g.p(ex,17,'E');g.p(ex+sgn,17,'E');g.p(ex-sgn,18,'E')       # burning slit
+        for i in range(7):                                          # heavy brow, steep slant
+            bx2=ex-sgn*3+sgn*i;byy=12+(6-i)//2
+            g.p(bx2,byy,'k');g.p(bx2,byy+1,'k')
+    g.e(30,26,6,1.6,'k')                                            # snarling rift
+    g.p(23,27,'k');g.p(22,28,'k');g.p(37,27,'k');g.p(38,28,'k')     # corners dragged down
+    for (fx2,fy2) in [(26,28),(30,28),(34,28)]:                     # fangs hanging from the rift
+        g.p(fx2,fy2,'w');g.p(fx2,fy2+1,'w')
+    eyes=[(12,22),(48,21),(10,30),(50,31)] if fr==0 else [(12,22),(48,21),(10,30),(50,31),(20,32),(40,31)]
     for (x,y) in eyes:
         g.r(x,y,2,1,'k');g.p(x,y,'E')
     # trailing wisps at base
@@ -1254,13 +1265,18 @@ def ngoyman3(fr):
         rr=4+math.sin(y*0.3)*1.2
         for x in range(int(24-rr),int(24+rr)+1):
             if (x+y)%3:g.p(x,y,'d')
-    # two burnt-moon eyes
+    # two burnt-moon eyes under brows slanting down in anger
     for (x,y) in [(18,12),(28,12)]:
         g.e(x,y,2.6,2.2,'k');g.e(x,y,1.6,1.2,'E')
         if fr:g.p(x,y-3,'E')
-    # gaping maw
+    for i in range(5):
+        g.p(20-i,8+ (4-i)//2,'k');g.p(21-i,9+(4-i)//2,'k')
+        g.p(26+i,8+(4-i)//2,'k');g.p(25+i,9+(4-i)//2,'k')
+    # snarling maw, corners pulled down, fangs bared
     g.e(23,20,5,2.6,'k')
     for k in range(5):g.p(19+k*2,18,'w')
+    g.p(18,22,'k');g.p(28,22,'k')
+    g.p(19,21,'w');g.p(27,21,'w')
     # arms dissolving into fog
     sw=fr
     for (sx,dx) in [(6,-1),(42,1)]:
@@ -1301,13 +1317,17 @@ def ngoyman4(fr):
             x=28+sgn*(9+int(i*0.9));y=8-int(i*0.55)+ (fr if i%4==0 else 0)
             g.p(x,y,'d');g.p(x,y+1,'s')
             if i>7:g.p(x,y-1,'d')
-    # six burnt-out eyes
+    # six burnt-out eyes, the two great ones under brows slanting down in fury
     for (x,y,r) in [(21,14,2.4),(35,14,2.4),(16,20,1.7),(40,20,1.7),(24,24,1.3),(32,24,1.3)]:
         g.e(x,y,r,r*.85,'k');g.e(x,y,r*.55,r*.5,'E')
         if fr:g.p(x,int(y-r-1),'E')
-    # wide maw
+    for i in range(6):
+        g.p(24-i,10+(5-i)//2,'k');g.p(24-i,11+(5-i)//2,'k')
+        g.p(32+i,10+(5-i)//2,'k');g.p(32+i,11+(5-i)//2,'k')
+    # wide snarl, fangs, corners dragged down
     g.e(28,31,7,3,'k')
     for k in range(7):g.p(22+k*2,28,'w')
+    g.p(21,33,'k');g.p(35,33,'k');g.p(22,32,'w');g.p(34,32,'w')
     # arms of smoke raised
     sw=fr
     for (sx,dx) in [(5,-1),(51,1)]:
@@ -1370,8 +1390,28 @@ def ngoyman5(fr):
                 elif (x+y*2)%9<2:col='d'
                 g.p(x,y,col)
             if (y*7)%17<2:g.p(x0,y,'v')
-    column(1.57,4,4.0)          # central strand first, behind
-    column(0,8,6.5);column(3.14,8,6.5)
+    column(1.57,3,4.0)          # central strand first, behind
+    column(0,6,6.0);column(3.14,6,6.0)
+    # ---------------- shoulders and raised clawed arms (demon stance)
+    for sgn in (-1,1):
+        g.e(CX+sgn*13,30,8,5,'s');g.e(CX+sgn*15,31,6,4,'d')
+        for j in range(3):g.p(CX+sgn*(10+j*3),25-(j%2),'d')
+    for sgn in (-1,1):
+        for i in range(13):
+            x=CX+sgn*(17+int(i*0.75));y=32+i
+            g.p(x,y,'s');g.p(x+sgn,y,'d');g.p(x-sgn,y,'d')
+        ex2,ey2=CX+sgn*27,45
+        for i in range(10):
+            x=ex2+sgn*int(i*0.3);y=ey2-i
+            g.p(x,y,'s');g.p(x+sgn,y,'d')
+        hx2,hy2=CX+sgn*30,34+(fr%2)
+        g.e(hx2,hy2,2.6,2.2,'d')
+        g.p(hx2-1,hy2-3,'w');g.p(hx2-1,hy2-4,'w')
+        g.p(hx2,hy2-4,'w');g.p(hx2,hy2-5,'w')
+        g.p(hx2+1,hy2-3,'w');g.p(hx2+1,hy2-4,'w')
+    # ribcage arcs over the torso
+    for k in range(3):
+        g.e(CX,40+k*7,8-k,1.2,'k')
     # ---------------- the five lands and their people, half-swallowed
     def figura(x,y,torso,sgn):
         # a small person buried to the waist, one arm straining upward
@@ -1410,19 +1450,28 @@ def ngoyman5(fr):
     for i in range(5):g.p(CX-8+i,gy+(i%2),'y')
     g.p(CX-11,gy-1,'y');g.p(CX-11,gy,'y');g.p(CX-12,gy+1-(fr%2),'y')  # choyke
     figura(CX-4,gy-2,'y',-1)
-    # ---------------- crown head with the great eye
-    g.e(CX,16,13,10,'s');g.e(CX,17,11,8,'d')
-    g.e(CX,11,10,3,'d')                                           # heavy brow
-    for x in range(CX-12,CX+13):
-        if (x*5)%7<2:g.p(x,8,'d')
-    g.e(CX,17,6,4.4,'k');g.e(CX,17,3.6,2.4,'E');g.p(CX-1,16,'w') # the great eye
-    g.e(CX,24,6,1.6,'k')                                          # grim shut mouth
-    for k in range(5):g.p(CX-4+k*2,24,'d')
-    for sgn in (-1,1):                                            # gaunt cheek shading
-        g.p(CX+sgn*8,20,'k');g.p(CX+sgn*9,19,'k')
+    # ---------------- the furious demon head
+    g.e(CX,15,13,10,'s');g.e(CX,16,11,8,'d')
+    for sgn in (-1,1):                                            # brow ledges slanting down-in
+        for i in range(7):
+            bx2=CX+sgn*(2+i);byy=13-i//2
+            g.p(bx2,byy,'k');g.p(bx2,byy+1,'k');g.p(bx2,byy-1,'d')
+    g.e(CX,17,6,2.6,'k');g.e(CX,17,3.6,1.5,'E');g.p(CX-1,17,'w') # eye narrowed in fury
+    g.e(CX,23,7,3,'k');g.e(CX,24,5,1.8,'o')                       # open snarl
+    for k in range(5):g.p(CX-4+k*2,21,'w')
+    for k in range(4):g.p(CX-3+k*2,25,'w')
+    g.p(CX-6,22,'w');g.p(CX-6,23,'w');g.p(CX+6,22,'w');g.p(CX+6,23,'w')
+    for sgn in (-1,1):                                            # gaunt cheeks
+        g.p(CX+sgn*9,20,'k');g.p(CX+sgn*10,19,'k')
+    for sgn in (-1,1):                                            # forward demon horns
+        hx3,hy3=CX+sgn*9,8
+        for i in range(6):
+            hx3+=(0 if i%2 else sgn);hy3-=1
+            g.p(hx3,hy3,'d');g.p(hx3-sgn,hy3,'s')
+        g.p(hx3,hy3-1,'w')
     # antlers: thick beams with tines
     for sgn in (-1,1):
-        px,py=CX+sgn*10,8
+        px,py=CX+sgn*11,7
         for i in range(13):
             px+=sgn*(1 if i%3 else 2);py-=1
             b=fr if i%6==0 else 0
