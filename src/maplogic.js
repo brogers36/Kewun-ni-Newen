@@ -101,6 +101,7 @@ function gainPiwke(pre){
     full?'You gathered four piwke pieces! You gain a new heart.':'You found a piwke piece ('+(S.piwke%4)+'/4). Four make a new heart.')]));
 }
 function interact(){
+  if(typeof PAL!=='undefined'&&PAL&&PAL.on&&palKick())return;
   const [dx,dy]=DV[P.dir],tx=P.x+dx,ty=P.y+dy;
   const e=entAt(tx,ty);
   if(e){if(e.kind==='npc'){e.dir=OPP[P.dir];e.wait=Math.max(e.wait,90);sfx('ok');e.talk()}else if(e.kind==='animal'){e.wait=120;sfx('ok');animalTalk(e)}else engage(e);return}
@@ -152,6 +153,9 @@ function npcStep(e){
   e.x=nx;e.y=ny;e.mv=true;
 }
 function updateMap(){
+  S.wtime=(S.wtime||0)+1;
+  if(S.wtime%150===0&&typeof playAmb==='function'){
+    const d=dayPhase();playAmb(OUTBG[M.bg]&&d.name==='night'?'night':ambFor(M.bg))}
   if(S.pw.speed>0)S.pw.speed--;if(S.pw.pewen>0)S.pw.pewen--;if(grace>0)grace--;
   if(P.moving){P.t+=P.spd;if(P.t>=1){P.moving=false;P.fx=P.x;P.fy=P.y;onStep()}else{P.fx=P.ox+(P.x-P.ox)*P.t;P.fy=P.oy+(P.y-P.oy)*P.t}}
   if(!P.moving&&!active&&mode==='map'){const d=heldDir();if(d)tryMove(d)}
@@ -171,9 +175,85 @@ function updateMap(){
     if(walk(nx,ny)&&!entAt(nx,ny,e)&&grid[ny][nx]!=='S'&&!(P.moving&&nx===P.x&&ny===P.y)){e.x=nx;e.y=ny}
   }
   for(const sc of SCN)if(sc.type==='palin'){
+    if(PAL&&PAL.on){palUpdate(sc);continue}
     const X=sc.x*T,Y=sc.y*T,w=sc.w*T,h=sc.h*T;
     sc.bx=X+w/2+Math.sin(frame/70)*(w/2-14)+Math.sin(frame/23)*8;sc.by=Y+h/2+Math.sin(frame/41)*(h/2-8);
     sc.pl.forEach((p,i)=>{const tx=sc.bx+(i<2?-1:1)*(CT?16:10)+Math.sin(frame/30+i)*6,ty=sc.by+(i%2?1:-1)*(CT?11:8);const dx=tx-p.x,dy=ty-p.y;p.x+=dx*.035;p.y+=dy*.035;p.mv=Math.abs(dx)+Math.abs(dy)>3;if(Math.abs(dx)>1)p.dir=dx>0?'right':'left'});
+  }
+}
+
+/* ================= PALIN MATCH ================= */
+let PAL=null;
+function palStart(){
+  const sc=SCN.find(s2=>s2.type==='palin');if(!sc)return;
+  PAL={on:1,s:[0,0],cool:40,kc:[0,0,0,0],endT:0};
+  const X=sc.x*T,Y=sc.y*T,w=sc.w*T,h=sc.h*T;
+  sc.bx=X+w/2;sc.by=Y+h/2;PAL.bvx=0;PAL.bvy=0;
+  P.x=sc.x+1;P.y=sc.y+1;P.fx=P.x;P.fy=P.y;P.px=P.x*T;P.py=P.y*T;P.dir='right';
+  sc.pl[0].x=X+w*.25;sc.pl[0].y=Y+h*.7;   // teammate
+  sc.pl[1].x=X+w*.4;sc.pl[1].y=Y+h*.3;    // teammate
+  sc.pl[2].x=X+w*.65;sc.pl[2].y=Y+h*.3;   // rival
+  sc.pl[3].x=X+w*.75;sc.pl[3].y=Y+h*.7;   // rival
+  sfx('enc');showBanner('Palin!',S.gloss==='en'?'First to 3. Kick the pali with A/Z!':'El primero a 3. ¡Golpea la pali con A/Z!');
+}
+function palUpdate(sc){
+  const X=sc.x*T,Y=sc.y*T,w=sc.w*T,h=sc.h*T;
+  if(PAL.cool>0){PAL.cool--;PAL.bvx=0;PAL.bvy=0}
+  // ball physics
+  sc.bx+=PAL.bvx;sc.by+=PAL.bvy;PAL.bvx*=.955;PAL.bvy*=.955;
+  if(sc.by<Y+5){sc.by=Y+5;PAL.bvy=Math.abs(PAL.bvy)*.7}
+  if(sc.by>Y+h-4){sc.by=Y+h-4;PAL.bvy=-Math.abs(PAL.bvy)*.7}
+  // dribble: walking into the ball nudges it
+  const hx=P.fx*T+8,hy=P.fy*T+8,hd=Math.hypot(hx-sc.bx,hy-sc.by);
+  if(hd<11&&PAL.cool<=0){const a=Math.atan2(sc.by-hy,sc.bx-hx);PAL.bvx=Math.cos(a)*1.5;PAL.bvy=Math.sin(a)*1.2}
+  // AI
+  sc.pl.forEach((p,i)=>{if(PAL.kc[i]>0)PAL.kc[i]--;
+    const atkR=i<2,gx=atkR?X+w:X; // teammates shoot right, rivals left
+    const behind=atkR?-7:7;
+    let tx=sc.bx+behind,ty=sc.by+(i%2?5:-5);
+    const dx=tx-p.x,dy=ty-p.y,dd=Math.hypot(dx,dy);
+    const sp=i<2?.75:.85;
+    if(dd>2){p.x+=dx/dd*sp;p.y+=dy/dd*sp;p.mv=1;if(Math.abs(dx)>1)p.dir=dx>0?'right':'left'}else p.mv=0;
+    const bd=Math.hypot(p.x-sc.bx,p.y-sc.by);
+    if(bd<12&&PAL.kc[i]<=0&&PAL.cool<=0){
+      const a=Math.atan2((Y+h/2+(Math.random()-.5)*h*.6)-sc.by,gx-sc.bx);
+      PAL.bvx=Math.cos(a)*2.1;PAL.bvy=Math.sin(a)*1.6;PAL.kc[i]=55+rnd(30);sfx('move')}
+  });
+  p_clampBall(sc,X,Y,w,h);
+  if(PAL.endT>0){PAL.endT--;if(PAL.endT<=0)palEnd()}
+}
+function p_clampBall(sc,X,Y,w,h){
+  if(PAL.endT>0)return;
+  if(sc.bx<X+3){palGoal(sc,1,X,Y,w,h)}
+  else if(sc.bx>X+w-3){palGoal(sc,0,X,Y,w,h)}
+}
+function palGoal(sc,team,X,Y,w,h){
+  PAL.s[team]++;sfx('lvl');
+  showBanner('Tripay pali!',(S.gloss==='en'?'Goal! ':'¡Gol! ')+'Eymi '+PAL.s[0]+' · '+PAL.s[1]+(S.gloss==='en'?' Them':' Ellos'));
+  sc.bx=X+w/2;sc.by=Y+h/2;PAL.bvx=0;PAL.bvy=0;PAL.cool=55;
+  if(PAL.s[team]>=3)PAL.endT=70;
+}
+function palKick(){
+  if(!PAL||!PAL.on)return false;
+  const sc=SCN.find(s2=>s2.type==='palin');if(!sc)return false;
+  const hx=P.fx*T+8,hy=P.fy*T+8;
+  if(Math.hypot(hx-sc.bx,hy-sc.by)>16)return false;
+  if(PAL.cool>0)return true;
+  const DV2={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]}[P.dir];
+  PAL.bvx=DV2[0]*3.1+(Math.random()-.5)*.6;PAL.bvy=DV2[1]*2.4+(Math.random()-.5)*.6;
+  sfx('hit');return true;
+}
+function palEnd(){
+  const won=PAL.s[0]>PAL.s[1];PAL=null;
+  if(won){
+    const first=!S.flags.palin_won;if(first)S.flags.palin_won=1;
+    const g=first?40:10;S.gold+=g;persist();sfx('lvl');
+    say([L('Kona','Kümey! Wewiñ!','¡Bien! ¡Ganamos!','Well done! We won!'),
+      praise(),
+      N('Los jugadores te golpean el hombro, riéndose. Ganas '+g+' ngülliw.'+(first?' «Palin püle, pu che püle»: el palin junta a la gente.':''),'The players clap you on the shoulder, laughing. You earn '+g+' ngülliw.'+(first?' Palin brings the people together.':''))]);
+  }else{
+    say([L('Kona','Küme awkantun! Ka antü wewaiñ.','¡Buen partido! Otro día ganaremos.','Good game! Another day we will win.'),
+      N('Los jugadores se despiden con el wiño en alto. Puedes pedir la revancha cuando quieras.','The players salute you with their wiños raised. You can ask for a rematch any time.')]);
   }
 }
 

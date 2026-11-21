@@ -22,8 +22,12 @@ function kukuRupu(){say([L('Kuku','Mari mari, '+nm()+'!','¡Hola, '+nm()+'!','He
   L('Kuku','Kiñe: amutunge. Epu: amutumu. Küla: amutumün.','Uno: amutunge. Dos: amutumu. Tres (o más): amutumün.','One: amutunge. Two: amutumu. Three (or more): amutumün.'),
   N('Cuenta los wekufü antes de hablarles. Si le hablas a uno solo, siempre es -nge.','Count the wekufü before you speak to them. If you speak to just one, it is always -nge.'),
   N('Y no olvides tu chillka: ahí están los patrones de los verbos (menú, M).','And do not forget your chillka: the verb patterns are in it (menu, M).')])}
+function rot(id,n){S.rotc=S.rotc||{};const i=(S.rotc[id]||0)%n;S.rotc[id]=i+1;return i}
 function weaverTalk(){
-  if(S.flags.weaver)return say([L('Ngürekafe','Ngürekan, '+addr(true)+'.','Estoy tejiendo, '+addr(true)+'.','I am weaving, '+addr(true)+'.'),L('Ngürekafe','Kümey tami trarilonko!','¡Qué lindo tu trarilonko!','Your trarilonko is lovely!')]);
+  if(S.flags.weaver)return say([
+    [L('Ngürekafe','Ngürekan, '+addr(true)+'.','Estoy tejiendo, '+addr(true)+'.','I am weaving, '+addr(true)+'.'),L('Ngürekafe','Kümey tami trarilonko!','¡Qué lindo tu trarilonko!','Your trarilonko is lovely!')],
+    [L('Ngürekafe','Kelü ka kallfü ayüfiñ.','Me gustan el rojo y el azul.','I like red and blue.'),N('Te muestra los hilos teñidos, colgados al sol como un arcoíris chico.','She shows you the dyed threads, hung in the sun like a small rainbow.')],
+    [L('Ngürekafe','Wüle ka ngürekayan.','Mañana sigo tejiendo.','Tomorrow I will keep weaving.'),L('Ngürekafe','Pichi küdaw, fütra küdaw!','¡Trabajo chico, trabajo grande!','Small work, big work!')]][rot('weaver',3)]);
   S.flags.weaver=1;
   say([L('Ngürekafe','Mari mari, '+addr(true)+'!','¡Hola, '+addr(true)+'!','Hello, '+addr(true)+'!'),
     L('Ngürekafe','Iñche ngürekan. Tüfa witral pingey.','Yo tejo. Esto se llama witral.','I weave. This is called a witral.'),
@@ -37,7 +41,10 @@ function cookTalk(){
   if(!S.flags.cook){S.flags.cook=1;S.items.kofke++;persist();
     lines.push(L('Papay','Iaymi? Kiñe kofke elueyu.','¿Vas a comer? Te doy un pan.','Will you eat? I give you a bread.'),
       L(nm(),'Chaltu may, papay!','¡Gracias, señora!','Thank you, ma\'am!'),N('Recibiste un kofke.','You received a kofke.'));sfx('pick')}
-  else lines.push(L('Papay','Kofke, ilo, poñü... Kümey!','Pan, carne, papas... ¡Qué rico!','Bread, meat, potatoes... Delicious!'));
+  else lines.push(...[
+    [L('Papay','Kofke, ilo, poñü... Kümey!','Pan, carne, papas... ¡Qué rico!','Bread, meat, potatoes... Delicious!')],
+    [L('Papay','Challwa dewmalen fachantü.','Hoy estoy preparando pescado.','Today I am making fish.')],
+    [L('Papay','Müna kümey ti korü!','¡Qué rica está la sopa!','The soup is so good!')]][rot('cook',3)]);
   say(lines);
 }
 const LESSON=[{q:{es:'(Señala el pan.)',en:'(She points at the bread.)'},a:'kofke',o:['kofke','ko','kütral']},
@@ -67,13 +74,34 @@ function kidTalk(i){
     [L('Pichiche','Iñche ka kimün: "kofke", "ko", "kütral"!','Yo también sé: "pan", "agua", "fuego".','I know too: "bread", "water", "fire"!')]][i];
   say(T);
 }
-function walkerTalk(){say([L('Wentru','Mari mari, '+addr(false)+'.','Hola, '+addr(false)+'.','Hello, '+addr(false)+'.'),L('Wentru','Mamüll yelen ruka mew.','Llevo leña a la casa.','I am carrying firewood home.'),L('Wentru','Mawünay.','Va a llover.','It is going to rain.')])}
+function walkerTalk(){say([
+  [L('Wentru','Mari mari, '+addr(false)+'.','Hola, '+addr(false)+'.','Hello, '+addr(false)+'.'),L('Wentru','Mamüll yelen ruka mew.','Llevo leña a la casa.','I am carrying firewood home.'),L('Wentru','Mawünay.','Va a llover.','It is going to rain.')],
+  [L('Wentru','Küdawken fachantü.','Hoy estoy trabajando.','Today I am working.'),L('Wentru','Pewkayal!','¡Hasta luego!','See you later!')],
+  [L('Wentru','Mawün ayülafiñ.','No me gusta la lluvia.','I do not like the rain.'),L('Wentru','Ruka mew amutuan.','Me voy a la casa.','I am heading home.')]][rot('walker',3)])}
 function runnerTalk(){say([L('Pichi domo','Ayüwün!','¡Qué contenta estoy!','I am so happy!'),N('La niña sigue corriendo en círculos, riéndose.','The girl keeps running in circles, laughing.')])}
 function dogTalk(){sfx('ok');say([L('','Trewa','Un trewa (perro) mueve la cola y te huele la mano.','A trewa (dog) wags its tail and sniffs your hand.')])}
-function konaTalk(){say([L('Kona','Mari mari, '+addr(false)+'! Palin müley.','¡Hola, '+addr(false)+'! Hay palin.','Hello, '+addr(false)+'! There is a palin game.'),
-  L('Kona','Iñche ka palin ayüken.','A mí también me gusta el palin.','I like palin too.'),
-  N('Dos equipos, cada jugador con su wiño (un palo curvo), buscan llevar la pali (la bola) hasta el final de la cancha, el paliwe.','Two teams, each player with a wiño (a curved stick), try to carry the pali (the ball) to the end of the field, the paliwe.')])}
-function fisherTalk(){say([L('Challwafe','Mari mari, '+addr(false)+'!','¡Hola, '+addr(false)+'! (challwafe: pescador)','Hello, '+addr(false)+'! (challwafe: fisherman)'),
+function konaTalk(){
+  if(typeof PAL!=='undefined'&&PAL&&PAL.on)return say([L('Kona','Awkantuaiñ! Pali mew amunge!','¡Estamos jugando! ¡Ve por la pali!','We are playing! Go for the pali!')]);
+  if(CUR==='lof')return choose(L('Kona','Palin awkantuayu?','¿Jugamos un palin?','Shall we play palin?'),
+    [{m:'May!',g:S.gloss==='en'?'Yes, let us play':'Sí, juguemos',v:1},
+     {m:'Ka antü.',g:S.gloss==='en'?'Another day':'Otro día',v:0}],v=>{
+      if(v)return say([N('Reglas: golpea la pali con A/Z (o tócala caminando) y llévala hasta el final derecho de la cancha. El primero a 3 gana.','Rules: strike the pali with A/Z (or nudge it by walking) and take it to the right end of the field. First to 3 wins.')],()=>palStart());
+      konaIdle()},true);
+  konaIdle()}
+function konaIdle(){say([
+  [L('Kona','Mari mari, '+addr(false)+'! Palin müley.','¡Hola, '+addr(false)+'! Hay palin.','Hello, '+addr(false)+'! There is a palin game.'),
+   L('Kona','Iñche ka palin ayüken.','A mí también me gusta el palin.','I like palin too.'),
+   N('Dos equipos, cada jugador con su wiño (un palo curvo), buscan llevar la pali (la bola) hasta el final de la cancha, el paliwe.','Two teams, each player with a wiño (a curved stick), try to carry the pali (the ball) to the end of the field, the paliwe.')],
+  [L('Kona','Küme wiño tüfa!','¡Buen wiño este!','This is a good wiño!'),
+   L('Kona','Wüle fütra palin müley.','Mañana hay un gran palin.','Tomorrow there is a big palin game.')],
+  [L('Kona','Lef amuken palin mew!','¡En el palin corro rápido!','In palin I run fast!'),
+   N('Hace girar el wiño en la mano y sonríe, desafiante.','He spins the wiño in his hand and grins, daring you.')]][rot('kona',3)])}
+function fisherTalk(){const fv=rot('fisher',3);
+  if(fv===1)return say([L('Challwafe','Fachantü müna challwa müley!','¡Hoy hay mucho pescado!','Today there is so much fish!'),
+    N('Te muestra el canasto: plateado y lleno hasta el borde.','He shows you the basket: silver and full to the brim.')]);
+  if(fv===2)return say([L('Challwafe','Lafken llükalafiñ.','No le temo al mar.','I do not fear the sea.'),
+    L('Challwafe','Kaykayfilu umawtuley.','Kaykayfilu duerme.','Kaykayfilu is asleep.')]);
+  say([L('Challwafe','Mari mari, '+addr(false)+'!','¡Hola, '+addr(false)+'! (challwafe: pescador)','Hello, '+addr(false)+'! (challwafe: fisherman)'),
   L('Challwafe','Challwatuken lafken mew.','Pesco en el mar.','I fish in the sea.'),
   N('Los ngülliw se cuentan en mapudungun. Escucha:','Ngülliw are counted in Mapudungun. Listen:'),
   L('Challwafe','Kiñe, epu, küla, meli, kechu.','Uno, dos, tres, cuatro, cinco.','One, two, three, four, five.'),
@@ -418,6 +446,16 @@ function nLonkoTalk(){
   }
 }
 function nutramTalk(){
+  const nv=rot('nutram',3);
+  if(nv===1)return say([L('Nütramkafe','Ka kiñe nütram nien.','Tengo otro relato.','I have another tale.'),
+    L('Nütramkafe','Pun mew mülefuy kiñe pichi kütral.','De noche había un fueguito.','At night there was a little fire.'),
+    L('Nütramkafe','Anchimalleñ pingey.','Se llama anchimalleñ.','It is called an anchimalleñ.'),
+    N('Una lucecita que salta por los campos de noche. Unos dicen que acompaña; otros, que extravía. Si la sigues, cuenta tus pasos para poder volver.','A little light that skips across the fields at night. Some say it keeps you company; others, that it leads you astray. If you follow it, count your steps so you can return.'),
+    N('Otra vez -fu-: mülefuy, «había». Así se cuenta lo de antes.','Again -fu-: mülefuy, «there was». That is how the past is told.')]);
+  if(nv===2)return say([L('Nütramkafe','Kuyfi, fütra ko küpafuy.','Hace mucho tiempo, venía una gran agua.','Long ago, a great water was coming.'),
+    L('Nütramkafe','Kaykayfilu ñi ko. Trengtrengfilu ñi winkul.','El agua de Kaykayfilu. El cerro de Trengtrengfilu.','Kaykayfilu\'s water. Trengtrengfilu\'s hill.'),
+    N('El mar subía y subía, y la serpiente de la tierra levantó los cerros para que la gente se salvara. Por eso, cuando el mar se enoja, los antiguos suben al winkul.','The sea rose and rose, and the serpent of the land lifted the hills so the people could be saved. That is why, when the sea grows angry, the old people climb the winkul.'),
+    N('Dos nombres que pelean desde el principio del mundo: Kaykayfilu, del agua, y Trengtrengfilu, de la tierra.','Two names that have fought since the beginning of the world: Kaykayfilu of the water and Trengtrengfilu of the land.')]);
   say([L('Nütramkafe','Mari mari, '+addr(false)+'. Nütramkayaiñ?','Hola. ¿Conversamos?','Hello. Shall we talk?'),
     N('Nütramkan es conversar y contar lo que pasó. El nütramkafe es quien cuenta.','Nütramkan means to converse and tell what happened. The nütramkafe is the one who tells.'),
     L('Nütramkafe','Kuyfi, mawida mew mülefuy kiñe Witranalwe.','Hace mucho tiempo, en el monte había un Witranalwe.','Long ago, in the forest, there was a Witranalwe.'),

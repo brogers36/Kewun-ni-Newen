@@ -22,7 +22,7 @@ addEventListener('resize',fit);fit();
   document.addEventListener('fullscreenchange',ch);document.addEventListener('webkitfullscreenchange',ch);
   addEventListener('keydown',e=>{if((e.key==='f'||e.key==='F')&&!e.repeat)tog()});
 })();
-const sv=loadSave();if(sv)$('bCont').style.display='';
+if([1,2,3].some(n=>loadSave(n)))$('bCont').style.display='';
 function updLang(){$('copy').textContent=LANG==='es'?'© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.':'© 2026 Brandon M. A. Rogers · All rights reserved. No use of this site to train artificial intelligence.';$('bLang').textContent=LANG==='es'?'Glosa: Español':'Gloss: English';$('skip').textContent=LANG==='es'?'Saltar ▶▶':'Skip ▶▶'}
 $('bLang').onclick=()=>{LANG=LANG==='es'?'en':'es';updLang()};
 $('bMus').onclick=()=>toggleMute();
@@ -32,11 +32,26 @@ for(const [id,lk] of [['hL','llanka'],['hM','millaray']]){const cvs=$(id).queryS
   $(id).onclick=()=>{HERO=lk;$('hL').classList.toggle('on',lk==='llanka');$('hM').classList.toggle('on',lk==='millaray');sfx('ok')}}
 $('title').addEventListener('pointerdown',()=>{auInit();if(!AU.name)playSong('intro')});
 playSong('intro');
-$('bNew').onclick=()=>{auInit();S=newState(HERO);$('title').style.display='none';startCut()};
-$('bCont').onclick=()=>{
-  auInit();const sv=loadSave();if(!sv)return;
+function slotLabel(n){const v=loadSave(n);if(!v)return LANG==='es'?'vacío':'empty';
+  const mp=(typeof MAPS!=='undefined'&&MAPS[v.map]&&MAPS[v.map].name)||'';
+  return (v.name||'')+' · kimün '+(v.lvl||1)+(mp?' · '+mp:'')}
+function slotPick(forNew,cb){
+  choose({es:forNew?'Nueva partida, ¿en qué espacio?':'¿Qué partida sigues?',en:forNew?'New game: which slot?':'Continue which save?'},
+    [1,2,3].map(n=>({m:(loadSave(n)?'■':'□')+' '+n,g:slotLabel(n),v:n,dis:!forNew&&!loadSave(n)}))
+    .concat([{m:LANG==='es'?'Volver':'Back',v:'x'}]),v=>{
+      if(!v||v==='x')return;
+      if(forNew&&loadSave(v)){
+        choose({es:'Ese espacio tiene una partida. ¿Borrarla y empezar de nuevo?',en:'That slot has a save. Erase it and start over?'},
+          [{m:LANG==='es'?'Sí, empezar de nuevo':'Yes, start over',v:1},{m:LANG==='es'?'No, volver':'No, go back',v:0}],
+          k=>{if(k)cb(v);else slotPick(forNew,cb)},true);
+        return}
+      cb(v)},true)}
+function contSlot(n){
+  setSlot(n);const sv=loadSave(n);if(!sv)return;
   S=Object.assign(newState(sv.hero||'llanka'),sv);S.items.diwen=S.items.diwen||0;S.gear=S.gear||{};S.gloss=LANG;S.pw={speed:0,pewen:0,gold:0};S.roots=S.roots.map(r=>r==='amu'?'amutu':r==='wiñotu'?'wüñotreka':r);if(S.last)S.last=null;$('title').style.display='none';mode='map';AU.name=null;loadMap(MAPS[S.map]?S.map:'rupu',S.x,S.y);
-};
+}
+$('bNew').onclick=()=>{auInit();slotPick(true,n=>{setSlot(n);S=newState(HERO);persist();$('title').style.display='none';startCut()})};
+$('bCont').onclick=()=>{auInit();if([1,2,3].filter(n=>loadSave(n)).length===1)return contSlot([1,2,3].find(n=>loadSave(n)));slotPick(false,contSlot)};
 if(CT){const st=document.createElement('style');st.textContent=`.box{background:linear-gradient(180deg,#5a6a9e 0%,#2a3468 50%,#141a3c 100%)!important;border:3px solid #e8ecf8!important;border-radius:4px!important;box-shadow:inset 0 0 0 1px #9aa2c8,inset -2px -2px 0 1px #5a5e74,0 0 0 2px #000!important}
 .opt{background:linear-gradient(#3a4680,#1e2652)!important;border:2px solid #8890b8!important}.opt.sel{border-color:#fff!important;background:linear-gradient(#5a68b0,#2e3a78)!important}.opt.sel .om::before{content:'▶ ';color:#ffe060}
 #dlg .who{color:#ffe890!important}`;document.head.appendChild(st);}

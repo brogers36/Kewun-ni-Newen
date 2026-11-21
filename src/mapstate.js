@@ -211,6 +211,7 @@ function loadMap(id,x,y,quiet){
       e.tn=h%5;e.ey2=[0,0,1,1,2,3,4,5][(h>>>3)%8];e.hr2=[0,0,0,1,1,2,3,4][(h>>>6)%8]}
     ents.push(e)}
   if(id==='n_kullin'){let i=0;for(const e0 of M.ents)if(e0.herd&&e0.flag&&S.flags[e0.flag]){const sp=PENSPOT[i++];ents.push({kind:'animal',look:e0.look,x:sp[0],y:sp[1],fx:sp[0],fy:sp[1],ox:sp[0],oy:sp[1],pen:[10,2,15,3],cd:30+rnd(60),wait:0,dir:i%2?'left':'right',home:1})}}
+  if(typeof PAL!=='undefined')PAL=null;
   SCN=(M.scenes||[]).map(s=>Object.assign({},s,{pl:[0,1,2,3].map(i=>({x:s.x*T+s.w*T*(i<2?.3:.7),y:s.y*T+s.h*T*(.3+.4*(i%2)),dir:'right'}))}));
   S.map=id;fade=16;grace=40;
   if(!quiet)showBanner(M.name,G(M.g));

@@ -9,8 +9,8 @@ function xpNeed(){return 10+S.lvl*10}
 function newState(hero){const fem=hero==='millaray';return{hero,fem,name:fem?'Millaray':'Llanka',gloss:LANG,map:'rupu',x:1,y:6,hp:24,baseMax:24,baseAtk:5,baseDef:1,lvl:1,xp:0,gold:0,
   items:{kulon:2,diwen:0,kofke:0,lawen:0,mate:0},gear:{},roots:['amutu'],runes:[],flags:{},piwke:0,keys:0,sp:0,curse:0,hints:true,
   pw:{speed:0,pewen:0,gold:0},save:{map:'rupu',x:1,y:6}}}
-function persist(){try{if(M){S.map=CUR;S.x=P.x;S.y=P.y}localStorage.setItem(SAVE_KEY,JSON.stringify(S))}catch(e){}}
-function loadSave(){try{const t=localStorage.getItem(SAVE_KEY);return t?JSON.parse(t):null}catch(e){return null}}
+function persist(){try{if(M){S.map=CUR;S.x=P.x;S.y=P.y}localStorage.setItem(slotKey(SLOT),JSON.stringify(S))}catch(e){}}
+function loadSave(n){try{const t=localStorage.getItem(slotKey(n||SLOT));return t?JSON.parse(t):null}catch(e){return null}}
 const heroLook=()=>S.hero==='millaray'?'millaray':'llanka';
 
 /* ---------- verbs ---------- */

@@ -302,3 +302,21 @@ Cada uno de los cinco lof tiene ahora una **machi** junto a su **rewe** (tronco 
 ### Tanda 14b · menú y modo sin glosa (Nov 21)
 - Nuevas etiquetas de menú/registro a revisar: **"Küdaw"** (registro de misiones; küdaw 'trabajo/tarea'), **"Mapa"** (avance por tierra; se usó la palabra castellana), **"Re mapudungun"** (modo que oculta la traducción de las líneas en mapudungun; re 'puro/solo'), encabezado **"Pu dungu"** (palabras aprendidas), y títulos de misión: **"Chalin"** (saludo/presentación), **"Pu llum wekufü"** (los wekufü escondidos; llum- 'oculto'), **"Kulliñ"**, **"Chaiwe"**, **"Choyke pichuñ"**. ⚠ Confirmar Küdaw, Re mapudungun, llum y pichuñ (vs pichun).
 - En modo Re mapudungun la narración (que no tiene versión en mapudungun) sigue en castellano/inglés; solo se ocultan las glosas de las líneas habladas.
+
+### Tanda 14c · palin jugable, rotación de diálogos (Nov 21)
+**Palin jugable** (cancha del lof lafkenche, vía el kona): nuevo mapudungun a revisar:
+- **"Palin awkantuayu?"** '¿jugamos palin?' ⚠ awkantu- 'jugar' + -a-yu (1 dual): ¿correcto para invitar entre dos?
+- **"Awkantuaiñ! Pali mew amunge!"** '¡estamos jugando! ¡ve por la pali!' ⚠ awkantu-a-iñ aquí usado como presente colectivo: probablemente mejor "Awkantuleiñ" (-le- progresivo).
+- **"Tripay pali!"** grito de gol ('¡salió la pali!') ⚠ ¿existe un grito tradicional de gol en palin que prefieras?
+- **"Kümey! Wewiñ!"** '¡ganamos!' (wew- 'ganar' + -iñ 1pl) y **"Ka antü wewaiñ."** 'otro día ganaremos' ⚠ confirmar wewaiñ (wew-a-iñ).
+- **"Küme awkantun!"** '¡buen partido!' (awkantun como sustantivo).
+- Marcador: "Eymi X · Y Ellos" (mezcla deliberada mapudungun/castellano para legibilidad) ⚠ ¿prefieres "Eymi X · Y Kakelu" u otra cosa?
+**Rotación de diálogos** (los vecinos ahora alternan 2-3 parlamentos). Líneas nuevas:
+- Ngürekafe: "Kelü ka kallfü ayüfiñ." / "Wüle ka ngürekayan." / "Pichi küdaw, fütra küdaw!"
+- Papay cocinera: "Challwa dewmalen fachantü." / "Müna kümey ti korü!" ⚠ korü 'sopa/caldo'.
+- Kona: "Küme wiño tüfa!" / "Wüle fütra palin müley." / "Lef amuken palin mew!" ⚠ lef 'rápido' como adverbio antepuesto.
+- Challwafe: "Fachantü müna challwa müley!" / "Lafken llükalafiñ." ⚠ llüka-la-fi-ñ 'no le temo' / "Kaykayfilu umawtuley."
+- Wentru: "Küdawken fachantü." / "Mawün ayülafiñ." / "Ruka mew amutuan."
+- Nütramkafe, dos epew nuevos: el anchimalleñ ("Pun mew mülefuy kiñe pichi kütral. Anchimalleñ pingey.") y **Trengtrengfilu y Kaykayfilu** ("Kuyfi, fütra ko küpafuy. Kaykayfilu ñi ko, Trengtrengfilu ñi winkul.") ⚠ primera mención de Trengtrengfilu en el juego: revisar ortografía (Trengtreng/Tenten) y el relato.
+- Niños: "Pire ayüfiñ!", "Trayen mew amuan!", "Choyke müna lefkey!" ⚠ lef-ke-y; cuidadora de luan: "Pichi luan choyüy!" ⚠ choyü- 'nacer/brotar' para crías.
+**Además**: 3 espacios de partida en la pantalla de inicio; ciclo día/noche (12 min) con atardecer/noche/amanecer en exteriores y grillos nocturnos; héroe visible en batalla (ataca y parpadea al recibir daño).
