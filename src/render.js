@@ -175,9 +175,15 @@ function renderMap(){
         if(e.act==='wood'){R(c,sx+(e.dir==='left'?9:1),sy-6,6,3,'#7a4a22');R(c,sx+(e.dir==='left'?9:1),sy-6,6,1,'#a87040')}}
       if(e.bub&&(frame+e.bt)%600<400&&Math.abs(e.x-P.x)+Math.abs(e.y-P.y)<9)bubble(sx+8,sy-(e.seated?2:8),e.bub[Math.floor((frame+e.bt)/600)%e.bub.length])}
     else if(e.kind==='animal'){const ac=animalCanvas(e.look,e.mv?Math.floor(frame/8)%2:0,e.dir==='right'?'right':'left');ell(c,sx+8,sy+15,ac.width*.36,2,'rgba(0,0,0,.3)');c.drawImage(ac,sx+8-(ac.width>>1),sy+17-ac.height)}
-    else{const t=e.party[0],sz=e.boss?30:e.mini?22:16,cvs=enemyCanvas(t,sz,Math.floor(frame/10)%2);
+    else{const t=e.party[0],sz=e.final?72:e.boss?30:e.mini?22:16,cvs=enemyCanvas(t,sz,Math.floor(frame/10)%2);
       const fly=ET[t].fly?6+Math.round(Math.sin(frame/8)*1.5):0;
       ell(c,sx+8,sy+14,sz/3,2,'rgba(0,0,0,.3)');
+      if(e.final){const cxp=sx+8,cyp=sy+16-Math.round(cvs.height/2),loom=Math.round(Math.sin(frame/34)*2);
+        for(const [r,a] of [[1.25,.26],[.95,.18],[.68,.12]])ell(c,cxp,cyp+loom,cvs.width*.72*r,cvs.height*.58*r,'rgba(6,8,16,'+a+')');
+        for(let k=0;k<8;k++){const a2=frame/44+k*.785,rr=cvs.width*.6+Math.sin(frame/18+k)*4;
+          ell(c,cxp+Math.cos(a2)*rr,cyp+loom+Math.sin(a2)*cvs.height*.46,2.5,1.5,'rgba(170,180,205,.32)')}
+        for(let k=0;k<5;k++){const ph=((frame+k*37)%150)/150;
+          ell(c,cxp-20+k*10+Math.sin(ph*5+k)*4,sy+14-ph*cvs.height,1.5+ph*2,1.2,'rgba(140,150,175,'+(.4*(1-ph)).toFixed(2)+')')}}
       if(S.pw.pewen>0&&frame%10<5)c.globalAlpha=.55;
       c.drawImage(cvs,Math.round(sx+8-cvs.width/2),Math.round(sy+16-cvs.height-fly+2));c.globalAlpha=1;
       if(e.party.length>1)OV.push(()=>txt('×'+e.party.length,sx+13,sy+3,'#ffffff',12))}}});
