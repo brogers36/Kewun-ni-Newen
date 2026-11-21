@@ -23,7 +23,7 @@ function say(lines,cb){
     const w=dlg.querySelector('.who'),m=dlg.querySelector('.m'),g=dlg.querySelector('.g');
     w.textContent=l.who||'';w.style.display=l.who?'':'none';
     m.textContent=l.m||'';m.style.display=l.m?'':'none';
-    g.textContent=G(l);g.style.display=G(l)?'':'none';
+    const gt=(S&&S.nogloss&&l.m)?'':G(l);g.textContent=gt;g.style.display=gt?'':'none';
     dlg.style.display='block';if(l.fx)l.fx();};
   active={kind:'say',a(){i++;if(i>=lines.length){dlg.style.display='none';active=null;cb&&cb()}else{sfx('move');show()}},b(){this.a()}};
   show();
@@ -47,5 +47,5 @@ function choose(prompt,opts,cb,cancel,one,onSel){
     mv(d){let n=idx;for(let t=0;t<opts.length;t++){n=(n+d+opts.length)%opts.length;if(!opts[n].dis)break}idx=n;sfx('move');hl();btns[idx].scrollIntoView({block:'nearest'})}};
   menu.style.display='block';hl();
 }
-function showBanner(m,g){banner.querySelector('b').textContent=m;banner.querySelector('span').textContent=g;banner.style.display='block';clearTimeout(showBanner.t);showBanner.t=setTimeout(()=>banner.style.display='none',2200)}
+function showBanner(m,g){if(S&&S.nogloss&&m)g='';banner.querySelector('b').textContent=m;banner.querySelector('span').textContent=g;banner.style.display='block';clearTimeout(showBanner.t);showBanner.t=setTimeout(()=>banner.style.display='none',2200)}
 

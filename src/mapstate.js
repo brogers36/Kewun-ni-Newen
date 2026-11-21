@@ -215,5 +215,6 @@ function loadMap(id,x,y,quiet){
   S.map=id;fade=16;grace=40;
   if(!quiet)showBanner(M.name,G(M.g));
   playSong(mapSong());
+  if(typeof playAmb==='function')playAmb(ambFor(M.bg));
   persist();
 }

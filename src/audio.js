@@ -284,7 +284,13 @@ const SONGS={
   {w:'sawtooth',v:.055,dist:1,t:'. . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . | G5 B5 D6 G6 B6 G6 D6 B5 | A5 C6 F6 A6 C7 A6 F6 C6 | C6 E6 G6 C7 B6 G6 E6 C6 | D#6 F#6 B6 D#7 C7 B6 F#6 D#6 | G6 - F#6 G6 B6 - A6 B6 | D7 - C7 B6 A6 - G6 F6 | E6 F6 G6 B6 C7 D7 E7 G7 | D#7 - - - - - - -'},
   {w:'triangle',v:.4,t:'E3 - - - C3 - - - | D3 - - - B2 - - - | A2 - - - C3 - - - | D3 - - - B2 - - -'},
   {d:1,v:.6,t:'k k h k s k h k | k k h k s k s s | k k h k s k h k | k s s k s s k s'}]}),
-  win:mkSong({bpm:190,loop:0,ch:[
+  winS:mkSong({bpm:190,loop:0,ch:[
+  {w:'sawtooth',v:.09,dist:1,t:'E4 - E4 - G4 A4 B4 - | E5 - B4 C5 E5 - - - | . . . .'},
+  {w:'sawtooth',v:.07,dist:1,t:'B3 - B3 - D4 E4 F#4 - | G4 - F#4 G4 B4 - - - | . . . .'},
+  {w:'square',v:.08,t:'. . . . . . . . | E6 - B5 C6 E6 - - - | . . . .'},
+  {w:'triangle',v:.5,t:'E2 - E2 - G2 A2 B2 - | E3 - B2 C3 E3 - - - | . . . .'},
+  {d:1,v:.6,t:'c k s k k k s s | c . k . c . . . | . . . .'}]}),
+ win:mkSong({bpm:190,loop:0,ch:[
   {w:'sawtooth',v:.09,dist:1,t:'E3 E3 E3 E3 E3 E3 G3 A3 | C4 C4 C4 C4 B3 B3 A3 B3 | E3 E3 E3 E3 E3 E3 G3 A3 | D4 D4 D4 D4 C4 C4 B3 C4 | A3 A3 B3 B3 C4 C4 D4 D4 | E4 - C4 - D4 - B3 - | E4 - - - - - - - | . . . .'},
   {w:'sawtooth',v:.08,dist:1,t:'B3 B3 B3 B3 B3 B3 D4 E4 | G4 G4 G4 G4 F#4 F#4 E4 F#4 | B3 B3 B3 B3 B3 B3 D4 E4 | A4 A4 A4 A4 G4 G4 F#4 G4 | E4 E4 F#4 F#4 G4 G4 A4 A4 | B4 - G4 - A4 - F#4 - | B4 - - - - - - - | . . . .'},
   {w:'sawtooth',v:.06,dist:1,t:'. . . . . . . . | E5 - D5 E5 G5 - E5 - | B4 - - - C5 D5 E5 G5 | A5 - G5 A5 B5 - A5 G5 | E5 F#5 G5 A5 B5 C6 D6 B5 | E6 - C6 - D6 - B5 - | E6 - - - - - - - | . . . .'},
@@ -292,6 +298,46 @@ const SONGS={
   {w:'triangle',v:.55,t:'E2 E2 E2 E2 E2 E2 G2 A2 | C3 C3 C3 C3 B2 B2 A2 B2 | E2 E2 E2 E2 E2 E2 G2 A2 | D3 D3 D3 D3 C3 C3 B2 C3 | A2 A2 B2 B2 C3 C3 D3 D3 | E3 - C3 - D3 - B2 - | E2 - - - - - - - | . . . .'},
   {d:1,v:.6,t:'c k s k k k s k | c k s k k k s s | c k s k k k s k | c k s k s k s s | c s k s k s k s | c k s k c k s k | c . . . k . k k | . . . .'}]})
 };
+
+/* ---------- region ambience: quiet loops under the music ---------- */
+const AMB={cur:null,nodes:[],timers:[]};
+function stopAmb(){for(const t of AMB.timers)clearInterval(t);AMB.timers=[];
+  for(const n of AMB.nodes){try{n.stop&&n.stop()}catch(e){}try{n.disconnect&&n.disconnect()}catch(e){}}
+  AMB.nodes=[];AMB.cur=null}
+function ambFor(bg){return({coast:'waves',field:'meadow',forest:'forest',rainforest:'forest',mawida:'forest',
+  mount:'wind',fjord:'wind',pampa:'pampa',deep:'under',cave:'cave',cave2:'cave',cave3:'cave',cave4:'cave',cave5:'cave'})[bg]||'night'}
+function playAmb(kind){
+  if(AMB.cur===kind)return;stopAmb();if(!kind)return;
+  if(!AU.c)return; // starts once audio is unlocked; next map change retries
+  AMB.cur=kind;const c=AU.c,g=c.createGain();g.connect(AU.m);AMB.nodes.push(g);
+  const noise=(fq,q,vol,lfoHz,lfoAmt)=>{const src=c.createBufferSource();src.buffer=AU.noise;src.loop=true;
+    const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=fq;f.Q.value=q;
+    const ng=c.createGain();ng.gain.value=vol;src.connect(f);f.connect(ng);ng.connect(g);
+    if(lfoHz){const lf=c.createOscillator(),lg=c.createGain();lf.frequency.value=lfoHz;lg.gain.value=vol*lfoAmt;
+      lf.connect(lg);lg.connect(ng.gain);lf.start();AMB.nodes.push(lf,lg)}
+    src.start();AMB.nodes.push(src,f,ng);return ng};
+  const chirp=(f0,f1,dur,vol)=>{try{const o=c.createOscillator(),og=c.createGain();o.type='sine';
+    const t=c.currentTime;o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f1,t+dur);
+    og.gain.setValueAtTime(0,t);og.gain.linearRampToValueAtTime(vol,t+dur*.3);og.gain.linearRampToValueAtTime(0,t+dur);
+    o.connect(og);og.connect(g);o.start(t);o.stop(t+dur+.02)}catch(e){}};
+  g.gain.value=.5;
+  if(kind==='waves'){noise(420,.6,.028,.11,.8);noise(1400,.8,.012,.07,.9)}
+  else if(kind==='wind'){noise(300,.9,.03,.05,.85);noise(900,1.4,.008,.13,.9)}
+  else if(kind==='meadow'){noise(1100,1.2,.006,.09,.7);
+    AMB.timers.push(setInterval(()=>{if(Math.random()<.5){const b=2200+Math.random()*1200;
+      chirp(b,b*1.3,.09,.05);setTimeout(()=>chirp(b*1.15,b*.9,.07,.04),120)}},1700))}
+  else if(kind==='forest'){noise(700,1.1,.012,.06,.8);
+    AMB.timers.push(setInterval(()=>{if(Math.random()<.4){const b=1800+Math.random()*1500;
+      chirp(b,b*1.25,.1,.045);setTimeout(()=>chirp(b*1.1,b*.85,.08,.035),140)}},2300))}
+  else if(kind==='pampa'){noise(380,.8,.022,.06,.85);
+    AMB.timers.push(setInterval(()=>{if(Math.random()<.3){const b=2400+Math.random()*900;chirp(b,b*1.2,.08,.035)}},2900))}
+  else if(kind==='under'){noise(260,1.6,.03,.05,.9);
+    AMB.timers.push(setInterval(()=>{if(Math.random()<.6){chirp(140+Math.random()*120,380+Math.random()*220,.25,.03)}},1400))}
+  else if(kind==='cave'){noise(140,1.2,.03,.04,.8);
+    AMB.timers.push(setInterval(()=>{if(Math.random()<.4){chirp(900+Math.random()*500,300,.12,.04)}},3100))}
+  else if(kind==='night'){AMB.timers.push(setInterval(()=>{if(Math.random()<.7){const b=3300+Math.random()*500;
+    chirp(b,b*1.04,.06,.03);setTimeout(()=>chirp(b,b*1.04,.06,.025),110);setTimeout(()=>chirp(b,b*1.04,.06,.02),220)}},900))}
+}
 function playSong(name){
   if(AU.name===name)return;AU.name=name;AU.song=SONGS[name]||null;AU.step=0;
   if(AU.c)AU.next=AU.c.currentTime+.06;

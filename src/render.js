@@ -556,6 +556,14 @@ function renderBattle(){
     let ly=0,ls=1;if(e.lunge>0){e.lunge--;ly=Math.round(Math.sin(e.lunge/16*Math.PI)*10);}
     c.drawImage(cvs,cx-Math.floor(cvs.width/2),y+ly);c.globalAlpha=1;
     if(e.sl>0){c.fillStyle='rgba(40,40,120,.25)';c.fillRect(cx-sz/2,y,sz,cvs.height)}
+    if(!B.ngenA&&e.hit>6&&e.hit<=14){const sp=(14-e.hit)/8,cyS=y+cvs.height/2;
+      c.save();c.globalCompositeOperation='lighter';c.globalAlpha=1-sp;
+      c.strokeStyle='#ffffff';c.lineWidth=2.5;
+      c.beginPath();c.moveTo(cx-sz*.55+sp*sz*.25,cyS-sz*.5+sp*sz*.2);c.lineTo(cx+sz*.45,cyS+sz*.42);c.stroke();
+      c.strokeStyle='rgba(255,240,180,.9)';c.lineWidth=1.5;
+      c.beginPath();c.moveTo(cx-sz*.5,cyS+sz*.3-sp*sz*.1);c.lineTo(cx+sz*.5-sp*sz*.2,cyS-sz*.35);c.stroke();
+      for(let k2=0;k2<4;k2++)R(c,Math.round(cx+Math.cos(k2*1.7+sp*5)*sz*.4),Math.round(cyS+Math.sin(k2*2.3+sp*4)*sz*.3),2,2,'#fff8d0');
+      c.restore()}
     if(!e.dead&&(e.stag||(e.hp<=0&&typeof quizPend==='function'&&quizPend(e)))){
       // staggered, waiting for the ngen's question: pulse red/orange
       const ph=Math.floor(frame/7)%2,[tcv,tg]=mk(cvs.width,cvs.height);
@@ -580,6 +588,17 @@ function renderBattle(){
   if(!FG[B.area])FG[B.area]=buildFG(B.area);c.drawImage(FG[B.area],0,0);
   c.restore();
   for(const p of B.parts){p.t--;p.x+=p.vx;p.y+=p.vy;p.vy+=.06;R(c,p.x,p.y,p.t>15?2:1,p.t>15?2:1,p.col)}B.parts=B.parts.filter(p=>p.t>0);
+  if(B.wipe>0&&B.snap){B.wipe--;
+    const k=1-(B.wipe/22),rr=k*k*Math.max(LW,LH)*0.85;
+    c.save();
+    c.beginPath();c.rect(0,0,LW,LH);c.ellipse(LW/2,LH/2,Math.max(.01,rr),Math.max(.01,rr*.78),0,0,6.283);
+    c.clip('evenodd');
+    c.translate(LW/2,LH/2);c.rotate(k*.22);c.scale(1+k*.3,1+k*.3);c.translate(-LW/2,-LH/2);
+    c.drawImage(B.snap,0,0);
+    c.restore();
+    c.strokeStyle='rgba(255,255,255,'+(.5*(1-k)).toFixed(2)+')';c.lineWidth=3;
+    c.beginPath();c.ellipse(LW/2,LH/2,Math.max(.01,rr),Math.max(.01,rr*.78),0,0,6.283);c.stroke();c.lineWidth=1;
+    if(B.wipe<=0)B.snap=null}
   // hero panel (LttP-style box)
   const hrows=Math.ceil(Math.min(40,Math.ceil(maxHP()/HPQ))/10);
   const px=4,py=4,pw=136,ph=36+Math.max(0,hrows-2)*8;

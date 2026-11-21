@@ -309,15 +309,15 @@ function treeCanvas(v,style){
     outline(cvs,'#1a2408');return PCACHE[k]=cvs}
   if(style==='lawal'){const [cvs,c]=mk(20,44);
     R(c,8,8,4,34,'#7a3a22');R(c,10,8,2,34,'#5a2414');for(let y=10;y<42;y+=2)R(c,8+(y%4?0:1),y,1,1,'#9a5a3a');R(c,6,41,8,2,'#4a2010');
-    for(let i=0;i<7;i++){const y=4+i*4,rx=3+i*.8+(i%2);ell(c,10,y+1,rx+.6,2.2,'#0e2a1c');ell(c,10,y,rx,1.8,'#1c4a30');R(c,10-Math.round(rx)+1,y-1,2,1,'#3a7a52')}
+    for(let i=0;i<7;i++){const y=4+i*4,rx=3+i*.8+(i%2);ell(c,10,y+1,rx+.6,2.2,'#0e2a1c');ell(c,10,y,rx,1.8,'#1c4a30');ell(c,10-rx*.32,y-.4,rx*.46,1.1,'#2e6a44');R(c,10-Math.round(rx)+1,y-1,2,1,'#3a7a52');R(c,10+Math.round(rx)-2,y+1,2,1,'#0e2a1c')}
     ell(c,10,2,2,2,'#1c4a30');
     for(let i=0;i<8;i++){const px=3+Math.floor(h2(i,v,91)*14),py=2+Math.floor(h2(i,v,92)*28);if(h2(i,v,93)<.5)R(c,px,py,1,1,'#5a9a6e')}
     outline(cvs,'#06120a');return PCACHE[k]=cvs}
   if(style==='pewen'){const [cvs,c]=mk(24,40);
     R(c,10,10,4,28,'#6a4a30');R(c,12,10,2,28,'#4a3020');for(let y=12;y<38;y+=3)R(c,10,y,4,1,'#5a3a24');R(c,8,37,8,2,'#4a3020');
     const tiers=[[12,4,11,2.4],[12,8,10,2.2],[12,12,8,2],[12,15,6,1.8]];
-    for(const [x,y,rx,ry] of tiers){ell(c,x,y+1,rx,ry,'#1c4428');ell(c,x,y,rx-.6,ry-.5,'#2e6a3a');R(c,x-rx,y-2,2,2,'#2e6a3a');R(c,x+rx-2,y-2,2,2,'#2e6a3a');R(c,x-rx+1,y-3,1,1,'#4a8a52');R(c,x+rx-2,y-3,1,1,'#4a8a52')}
-    ell(c,12,2,5,1.6,'#2e6a3a');R(c,9,1,6,1,'#4a8a52');
+    for(const [x,y,rx,ry] of tiers){ell(c,x,y+1,rx,ry,'#16381f');ell(c,x,y,rx-.6,ry-.5,'#2e6a3a');ell(c,x-rx*.34,y-.7,rx*.44,Math.max(.8,ry*.55),'#3f8a4a');ell(c,x-rx*.5,y-1.1,rx*.2,.7,'#59a85e');R(c,x+Math.round(rx*.4),y,Math.max(1,Math.round(rx*.5)),1,'#1c4428');R(c,x-rx,y-2,2,2,'#2e6a3a');R(c,x+rx-2,y-2,2,2,'#1c4428');R(c,x-rx+1,y-3,1,1,'#4a8a52');R(c,x+rx-2,y-3,1,1,'#2e6a3a')}
+    ell(c,12,2,5,1.6,'#2e6a3a');ell(c,10.5,1.6,2.4,.9,'#3f8a4a');R(c,9,1,6,1,'#4a8a52');
     for(let i=0;i<10;i++){const px=2+Math.floor(h2(i,v,81)*20),py=1+Math.floor(h2(i,v,82)*15);if(h2(i,v,83)<.5)R(c,px,py,1,1,'#5a9a5e')}
     outline(cvs,'#0a1a10');return PCACHE[k]=cvs}
   if(style==='mawida'){const [cvs,c]=mk(22,34);

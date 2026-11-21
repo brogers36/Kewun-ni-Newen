@@ -12,8 +12,10 @@ function relabel(){const cnt={},seen={};B.en.forEach(e=>cnt[e.t]=(cnt[e.t]||0)+1
   B.en.forEach(e=>{seen[e.t]=(seen[e.t]||0)+1;if(e.label)return;e.label=ET[e.t].name+(cnt[e.t]>1||ET[e.t].name==='laftrache'&&B.en.length>1?' '+'ABCDE'[seen[e.t]-1]:'')})}
 function mkEnemy(t){return{t,hp:ET[t].hp,max:ET[t].hp,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'?1:0,armor:ET[t].armor?1:0,burn:ET[t].fire?1:0,hidden:0,dreaming:ET[t].dream?1:0,dreamT:0,down:0,seals:ET[t].seals?ET[t].seals.slice():null}}
 function startBattle(party,o){
+  let snap=null;try{snap=document.createElement('canvas');snap.width=LW;snap.height=LH;const sg=snap.getContext('2d');sg.imageSmoothingEnabled=false;sg.drawImage(cv,0,0,LW,LH)}catch(e){snap=null}
+  if(typeof stopAmb==='function')stopAmb();
   mode='battle';banner.style.display='none';held.up=held.down=held.left=held.right=0;
-  B={en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(M.fog&&M.bg!=='fjord'?'fog:':'')+M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
+  B={snap,wipe:snap?22:0,en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(M.fog&&M.bg!=='fjord'?'fog:':'')+M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
   relabel();sfx('enc');playSong(o.final?'ngoyFinal':rsong(o.boss?'boss':'battle'));
   const alive=B.en.length,same=party.every(t=>t===party[0]),nameL=same?ET[party[0]].name:'wekufü';
   const lst=same?nameL:'wekufü ('+party.map(t=>ET[t].name).join(', ')+')';
@@ -490,7 +492,7 @@ function victory(){
   const xp=B.en.reduce((a,e)=>a+ET[e.t].xp,0);let gold=B.en.reduce((a,e)=>{const g=ET[e.t].gold;return a+g[0]+rnd(g[1]-g[0]+1)},0);
   if(S.pw.gold){gold*=2;S.pw.gold=0}
   S.xp+=xp;S.gold+=gold;
-  const after=SONGS.win;after.after=()=>mapSong();playSong('win');
+  const wn=(B.o.boss||B.o.final||B.o.chain)?'win':'winS';const after=SONGS[wn];after.after=()=>mapSong();playSong(wn);
   const NGN={lafken:'Ngen-lafken',mawida:'Ngen-mawida',pewen:'Ngen-pewen',kuruf:'Ngen-kürüf',lelfun:'Ngen-lelfün'};
   const ls=[(B.ngenA&&B.ngenA.kind==='final')?N('¡Los cinco ngen del mapu responden a la vez! Mar, monte, pewen, viento y pampa descargan su newen, uno tras otro... y Ti Fütra Ngoyman se quiebra en mil pedazos que la luz deshace.','The five ngen of the land answer as one! Sea, forest, pewen, wind and plain unleash their newen, one after another... and Ti Fütra Ngoyman shatters into a thousand pieces that the light unmakes.'):B.o.chain==='llufu'?N('El ül se cierra como una marea mansa: Kaykayfilu se aquieta y vuelve a su sueño en el fondo del mar.','The ül closes like a gentle tide: Kaykayfilu grows calm and returns to his sleep at the bottom of the sea.'):(B.ngenA&&B.ngenA.v)?N('¡'+NGN[B.ngenA.v]+' despierta y descarga su newen sobre el wekufü: el maligno estalla en mil pedazos que la luz deshace! La tierra respira de nuevo.',NGN[B.ngenA.v]+' awakens and unleashes its newen upon the wekufü: the evil one shatters into a thousand pieces that the light unmakes! The land breathes again.'):(B.en.some(e=>e.t==='epunamun'))?N('El Epunamun baja sus dos lanzas y asiente con las dos caras: la prueba terminó, y la pasaste.','The Epunamun lowers his two spears and nods with both faces: the trial is over, and you have passed it.'):N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
   while(S.xp>=xpNeed()){S.xp-=xpNeed();S.lvl++;S.baseMax+=HPQ;S.hp+=HPQ;S.baseAtk+=1;if(S.lvl%2===0)S.baseDef+=1;
@@ -507,7 +509,8 @@ function endBattle(how){
   const o=B.o;mode='map';grace=how==='flee'?90:30;
   if(how==='win'&&o.ent){ents=ents.filter(e=>e!==o.ent);if(o.ent.flag)S.flags[o.ent.flag]=1}
   B=null;persist();
-  if(how!=='win'||!AU.song||AU.name!=='win')playSong(mapSong());
+  if(how!=='win'||!AU.song||(AU.name!=='win'&&AU.name!=='winS'))playSong(mapSong());
+  if(typeof playAmb==='function')playAmb(ambFor(M.bg));
   if(how==='win'&&o.sflag==='epu_won'){S.flags.epu_won=1;S.gear.waiki=1;persist();sfx('lvl');
     return say([N('El Epunamun baja las dos lanzas a la vez. No se deshace, no huye: te saluda, con las dos caras sonriendo.','The Epunamun lowers both spears at once. He does not break apart, he does not flee: he salutes you, both faces smiling.'),
       L('Epunamun','Tuteymi! Newen nieymi, kimün nieymi.','¡Lo lograste! Tienes fuerza y tienes conocimiento.','You did it! You have strength and you have knowledge.'),

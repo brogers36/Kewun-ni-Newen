@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='0da24bd-202611210948';
+window.KEWUN_BUILD='72c3826-202611211027';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -451,7 +451,13 @@ const SONGS={
   {w:'sawtooth',v:.055,dist:1,t:'. . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . | G5 B5 D6 G6 B6 G6 D6 B5 | A5 C6 F6 A6 C7 A6 F6 C6 | C6 E6 G6 C7 B6 G6 E6 C6 | D#6 F#6 B6 D#7 C7 B6 F#6 D#6 | G6 - F#6 G6 B6 - A6 B6 | D7 - C7 B6 A6 - G6 F6 | E6 F6 G6 B6 C7 D7 E7 G7 | D#7 - - - - - - -'},
   {w:'triangle',v:.4,t:'E3 - - - C3 - - - | D3 - - - B2 - - - | A2 - - - C3 - - - | D3 - - - B2 - - -'},
   {d:1,v:.6,t:'k k h k s k h k | k k h k s k s s | k k h k s k h k | k s s k s s k s'}]}),
-  win:mkSong({bpm:190,loop:0,ch:[
+  winS:mkSong({bpm:190,loop:0,ch:[
+  {w:'sawtooth',v:.09,dist:1,t:'E4 - E4 - G4 A4 B4 - | E5 - B4 C5 E5 - - - | . . . .'},
+  {w:'sawtooth',v:.07,dist:1,t:'B3 - B3 - D4 E4 F#4 - | G4 - F#4 G4 B4 - - - | . . . .'},
+  {w:'square',v:.08,t:'. . . . . . . . | E6 - B5 C6 E6 - - - | . . . .'},
+  {w:'triangle',v:.5,t:'E2 - E2 - G2 A2 B2 - | E3 - B2 C3 E3 - - - | . . . .'},
+  {d:1,v:.6,t:'c k s k k k s s | c . k . c . . . | . . . .'}]}),
+ win:mkSong({bpm:190,loop:0,ch:[
   {w:'sawtooth',v:.09,dist:1,t:'E3 E3 E3 E3 E3 E3 G3 A3 | C4 C4 C4 C4 B3 B3 A3 B3 | E3 E3 E3 E3 E3 E3 G3 A3 | D4 D4 D4 D4 C4 C4 B3 C4 | A3 A3 B3 B3 C4 C4 D4 D4 | E4 - C4 - D4 - B3 - | E4 - - - - - - - | . . . .'},
   {w:'sawtooth',v:.08,dist:1,t:'B3 B3 B3 B3 B3 B3 D4 E4 | G4 G4 G4 G4 F#4 F#4 E4 F#4 | B3 B3 B3 B3 B3 B3 D4 E4 | A4 A4 A4 A4 G4 G4 F#4 G4 | E4 E4 F#4 F#4 G4 G4 A4 A4 | B4 - G4 - A4 - F#4 - | B4 - - - - - - - | . . . .'},
   {w:'sawtooth',v:.06,dist:1,t:'. . . . . . . . | E5 - D5 E5 G5 - E5 - | B4 - - - C5 D5 E5 G5 | A5 - G5 A5 B5 - A5 G5 | E5 F#5 G5 A5 B5 C6 D6 B5 | E6 - C6 - D6 - B5 - | E6 - - - - - - - | . . . .'},
@@ -459,6 +465,46 @@ const SONGS={
   {w:'triangle',v:.55,t:'E2 E2 E2 E2 E2 E2 G2 A2 | C3 C3 C3 C3 B2 B2 A2 B2 | E2 E2 E2 E2 E2 E2 G2 A2 | D3 D3 D3 D3 C3 C3 B2 C3 | A2 A2 B2 B2 C3 C3 D3 D3 | E3 - C3 - D3 - B2 - | E2 - - - - - - - | . . . .'},
   {d:1,v:.6,t:'c k s k k k s k | c k s k k k s s | c k s k k k s k | c k s k s k s s | c s k s k s k s | c k s k c k s k | c . . . k . k k | . . . .'}]})
 };
+
+/* ---------- region ambience: quiet loops under the music ---------- */
+const AMB={cur:null,nodes:[],timers:[]};
+function stopAmb(){for(const t of AMB.timers)clearInterval(t);AMB.timers=[];
+  for(const n of AMB.nodes){try{n.stop&&n.stop()}catch(e){}try{n.disconnect&&n.disconnect()}catch(e){}}
+  AMB.nodes=[];AMB.cur=null}
+function ambFor(bg){return({coast:'waves',field:'meadow',forest:'forest',rainforest:'forest',mawida:'forest',
+  mount:'wind',fjord:'wind',pampa:'pampa',deep:'under',cave:'cave',cave2:'cave',cave3:'cave',cave4:'cave',cave5:'cave'})[bg]||'night'}
+function playAmb(kind){
+  if(AMB.cur===kind)return;stopAmb();if(!kind)return;
+  if(!AU.c)return; // starts once audio is unlocked; next map change retries
+  AMB.cur=kind;const c=AU.c,g=c.createGain();g.connect(AU.m);AMB.nodes.push(g);
+  const noise=(fq,q,vol,lfoHz,lfoAmt)=>{const src=c.createBufferSource();src.buffer=AU.noise;src.loop=true;
+    const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=fq;f.Q.value=q;
+    const ng=c.createGain();ng.gain.value=vol;src.connect(f);f.connect(ng);ng.connect(g);
+    if(lfoHz){const lf=c.createOscillator(),lg=c.createGain();lf.frequency.value=lfoHz;lg.gain.value=vol*lfoAmt;
+      lf.connect(lg);lg.connect(ng.gain);lf.start();AMB.nodes.push(lf,lg)}
+    src.start();AMB.nodes.push(src,f,ng);return ng};
+  const chirp=(f0,f1,dur,vol)=>{try{const o=c.createOscillator(),og=c.createGain();o.type='sine';
+    const t=c.currentTime;o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f1,t+dur);
+    og.gain.setValueAtTime(0,t);og.gain.linearRampToValueAtTime(vol,t+dur*.3);og.gain.linearRampToValueAtTime(0,t+dur);
+    o.connect(og);og.connect(g);o.start(t);o.stop(t+dur+.02)}catch(e){}};
+  g.gain.value=.5;
+  if(kind==='waves'){noise(420,.6,.028,.11,.8);noise(1400,.8,.012,.07,.9)}
+  else if(kind==='wind'){noise(300,.9,.03,.05,.85);noise(900,1.4,.008,.13,.9)}
+  else if(kind==='meadow'){noise(1100,1.2,.006,.09,.7);
+    AMB.timers.push(setInterval(()=>{if(Math.random()<.5){const b=2200+Math.random()*1200;
+      chirp(b,b*1.3,.09,.05);setTimeout(()=>chirp(b*1.15,b*.9,.07,.04),120)}},1700))}
+  else if(kind==='forest'){noise(700,1.1,.012,.06,.8);
+    AMB.timers.push(setInterval(()=>{if(Math.random()<.4){const b=1800+Math.random()*1500;
+      chirp(b,b*1.25,.1,.045);setTimeout(()=>chirp(b*1.1,b*.85,.08,.035),140)}},2300))}
+  else if(kind==='pampa'){noise(380,.8,.022,.06,.85);
+    AMB.timers.push(setInterval(()=>{if(Math.random()<.3){const b=2400+Math.random()*900;chirp(b,b*1.2,.08,.035)}},2900))}
+  else if(kind==='under'){noise(260,1.6,.03,.05,.9);
+    AMB.timers.push(setInterval(()=>{if(Math.random()<.6){chirp(140+Math.random()*120,380+Math.random()*220,.25,.03)}},1400))}
+  else if(kind==='cave'){noise(140,1.2,.03,.04,.8);
+    AMB.timers.push(setInterval(()=>{if(Math.random()<.4){chirp(900+Math.random()*500,300,.12,.04)}},3100))}
+  else if(kind==='night'){AMB.timers.push(setInterval(()=>{if(Math.random()<.7){const b=3300+Math.random()*500;
+    chirp(b,b*1.04,.06,.03);setTimeout(()=>chirp(b,b*1.04,.06,.025),110);setTimeout(()=>chirp(b,b*1.04,.06,.02),220)}},900))}
+}
 function playSong(name){
   if(AU.name===name)return;AU.name=name;AU.song=SONGS[name]||null;AU.step=0;
   if(AU.c)AU.next=AU.c.currentTime+.06;
@@ -562,7 +608,7 @@ function say(lines,cb){
     const w=dlg.querySelector('.who'),m=dlg.querySelector('.m'),g=dlg.querySelector('.g');
     w.textContent=l.who||'';w.style.display=l.who?'':'none';
     m.textContent=l.m||'';m.style.display=l.m?'':'none';
-    g.textContent=G(l);g.style.display=G(l)?'':'none';
+    const gt=(S&&S.nogloss&&l.m)?'':G(l);g.textContent=gt;g.style.display=gt?'':'none';
     dlg.style.display='block';if(l.fx)l.fx();};
   active={kind:'say',a(){i++;if(i>=lines.length){dlg.style.display='none';active=null;cb&&cb()}else{sfx('move');show()}},b(){this.a()}};
   show();
@@ -586,7 +632,7 @@ function choose(prompt,opts,cb,cancel,one,onSel){
     mv(d){let n=idx;for(let t=0;t<opts.length;t++){n=(n+d+opts.length)%opts.length;if(!opts[n].dis)break}idx=n;sfx('move');hl();btns[idx].scrollIntoView({block:'nearest'})}};
   menu.style.display='block';hl();
 }
-function showBanner(m,g){banner.querySelector('b').textContent=m;banner.querySelector('span').textContent=g;banner.style.display='block';clearTimeout(showBanner.t);showBanner.t=setTimeout(()=>banner.style.display='none',2200)}
+function showBanner(m,g){if(S&&S.nogloss&&m)g='';banner.querySelector('b').textContent=m;banner.querySelector('span').textContent=g;banner.style.display='block';clearTimeout(showBanner.t);showBanner.t=setTimeout(()=>banner.style.display='none',2200)}
 
 
 /* ============================================================
@@ -1040,15 +1086,15 @@ function treeCanvas(v,style){
     outline(cvs,'#1a2408');return PCACHE[k]=cvs}
   if(style==='lawal'){const [cvs,c]=mk(20,44);
     R(c,8,8,4,34,'#7a3a22');R(c,10,8,2,34,'#5a2414');for(let y=10;y<42;y+=2)R(c,8+(y%4?0:1),y,1,1,'#9a5a3a');R(c,6,41,8,2,'#4a2010');
-    for(let i=0;i<7;i++){const y=4+i*4,rx=3+i*.8+(i%2);ell(c,10,y+1,rx+.6,2.2,'#0e2a1c');ell(c,10,y,rx,1.8,'#1c4a30');R(c,10-Math.round(rx)+1,y-1,2,1,'#3a7a52')}
+    for(let i=0;i<7;i++){const y=4+i*4,rx=3+i*.8+(i%2);ell(c,10,y+1,rx+.6,2.2,'#0e2a1c');ell(c,10,y,rx,1.8,'#1c4a30');ell(c,10-rx*.32,y-.4,rx*.46,1.1,'#2e6a44');R(c,10-Math.round(rx)+1,y-1,2,1,'#3a7a52');R(c,10+Math.round(rx)-2,y+1,2,1,'#0e2a1c')}
     ell(c,10,2,2,2,'#1c4a30');
     for(let i=0;i<8;i++){const px=3+Math.floor(h2(i,v,91)*14),py=2+Math.floor(h2(i,v,92)*28);if(h2(i,v,93)<.5)R(c,px,py,1,1,'#5a9a6e')}
     outline(cvs,'#06120a');return PCACHE[k]=cvs}
   if(style==='pewen'){const [cvs,c]=mk(24,40);
     R(c,10,10,4,28,'#6a4a30');R(c,12,10,2,28,'#4a3020');for(let y=12;y<38;y+=3)R(c,10,y,4,1,'#5a3a24');R(c,8,37,8,2,'#4a3020');
     const tiers=[[12,4,11,2.4],[12,8,10,2.2],[12,12,8,2],[12,15,6,1.8]];
-    for(const [x,y,rx,ry] of tiers){ell(c,x,y+1,rx,ry,'#1c4428');ell(c,x,y,rx-.6,ry-.5,'#2e6a3a');R(c,x-rx,y-2,2,2,'#2e6a3a');R(c,x+rx-2,y-2,2,2,'#2e6a3a');R(c,x-rx+1,y-3,1,1,'#4a8a52');R(c,x+rx-2,y-3,1,1,'#4a8a52')}
-    ell(c,12,2,5,1.6,'#2e6a3a');R(c,9,1,6,1,'#4a8a52');
+    for(const [x,y,rx,ry] of tiers){ell(c,x,y+1,rx,ry,'#16381f');ell(c,x,y,rx-.6,ry-.5,'#2e6a3a');ell(c,x-rx*.34,y-.7,rx*.44,Math.max(.8,ry*.55),'#3f8a4a');ell(c,x-rx*.5,y-1.1,rx*.2,.7,'#59a85e');R(c,x+Math.round(rx*.4),y,Math.max(1,Math.round(rx*.5)),1,'#1c4428');R(c,x-rx,y-2,2,2,'#2e6a3a');R(c,x+rx-2,y-2,2,2,'#1c4428');R(c,x-rx+1,y-3,1,1,'#4a8a52');R(c,x+rx-2,y-3,1,1,'#2e6a3a')}
+    ell(c,12,2,5,1.6,'#2e6a3a');ell(c,10.5,1.6,2.4,.9,'#3f8a4a');R(c,9,1,6,1,'#4a8a52');
     for(let i=0;i<10;i++){const px=2+Math.floor(h2(i,v,81)*20),py=1+Math.floor(h2(i,v,82)*15);if(h2(i,v,83)<.5)R(c,px,py,1,1,'#5a9a5e')}
     outline(cvs,'#0a1a10');return PCACHE[k]=cvs}
   if(style==='mawida'){const [cvs,c]=mk(22,34);
@@ -1985,6 +2031,7 @@ function loadMap(id,x,y,quiet){
   S.map=id;fade=16;grace=40;
   if(!quiet)showBanner(M.name,G(M.g));
   playSong(mapSong());
+  if(typeof playAmb==='function')playAmb(ambFor(M.bg));
   persist();
 }
 
@@ -3724,9 +3771,12 @@ function openPause(){
     {m:'Kimün',g:en?'Status':'Estado',v:'stats'},
     {m:'Chillka',g:en?'Conjugation book':'Libro de conjugación',v:'book'},
     {m:'Dungun',g:en?'Words learned':'Palabras aprendidas',v:'words'},
+    {m:'Küdaw',g:en?'Quest log':'Misiones y pistas',v:'kudaw'},
+    {m:'Mapa',g:en?'Progress by land':'Avance por tierra',v:'mapa'},
     {m:'Trariwe · '+(S.pieces||[]).length+'/5',g:en?'Pieces of the ancient sash':'Pedazos del trariwe antiguo',v:'trariwe'},
     {m:en?'Hints: '+(S.hints?'on':'off'):'Pistas: '+(S.hints?'sí':'no'),g:en?'Show how many each ending addresses':'Mostrar a cuántos se dirige cada terminación',v:'hints'},
     {m:en?'Gloss: English':'Glosa: Español',g:en?'Switch to Spanish':'Cambiar a inglés',v:'lang'},
+    {m:'Re mapudungun: '+(S.nogloss?(en?'yes':'sí'):'no'),g:en?'Hide the translation of Mapudungun lines':'Ocultar la traducción de las líneas en mapudungun',v:'nogloss'},
     {m:AU.muted?(en?'Music: off':'Música: no'):(en?'Music: on':'Música: sí'),g:'N',v:'mus'},
     {m:en?'Title screen':'Volver al inicio',g:en?'Your progress is saved':'Se guarda tu avance',v:'title'},
     {m:en?'Close':'Cerrar',v:'x'}],v=>{
@@ -3738,10 +3788,14 @@ function openPause(){
         N('Equipo: '+g,'Gear: '+g)])}
     else if(v==='words'){const ls=S.roots.map(r=>L('',ROOTS[r].m,ROOTS[r].es,ROOTS[r].en));
       ls.push(L('','-nge · -mu · -mün','a uno · a dos · a tres o más','to one · to two · to three or more'));
-      if(S.runes.includes('kil'))ls.push(L('','-kil-','prohibición: "¡no...!"','prohibition: "don\'t...!"'));say(ls)}
+      if(S.runes.includes('kil'))ls.push(L('','-kil-','prohibición: "¡no...!"','prohibition: "don\'t...!"'));
+      const vl=vocabLines();if(vl.length){ls.push(N('— Pu dungu —','— Words —'));ls.push(...vl)}say(ls)}
     else if(v==='trariwe'){const R5=[['lafkenche','Lafkenche'],['nagche','Nagche'],['pewenche','Pewenche'],['williche','Williche'],['puelche','Puelmapu']];
       say([L('','Trariwe trokiñ · '+(S.pieces||[]).length+'/5',R5.map(([k,n])=>((S.pieces||[]).includes(k)?'■ ':'□ ')+n).join('   '),R5.map(([k,n])=>((S.pieces||[]).includes(k)?'■ ':'□ ')+n).join('   ')),
         N('Con los cinco trokiñ, el trariwe completo podrá atravesar la niebla de Ti Fütra Ngoyman, al oeste del camino del mar.','With all five trokiñ, the complete trariwe will be able to pass through the fog of Ti Fütra Ngoyman, west of the sea road.')])}
+    else if(v==='kudaw')say(questLines());
+    else if(v==='mapa')say(mapaLines());
+    else if(v==='nogloss'){S.nogloss=S.nogloss?0:1;persist();openPause()}
     else if(v==='book')openBook(()=>openPause());
     else if(v==='hints'){S.hints=!S.hints;persist();openPause()}
     else if(v==='lang'){S.gloss=S.gloss==='en'?'es':'en';LANG=S.gloss;persist();openPause()}
@@ -3749,6 +3803,77 @@ function openPause(){
   },true);
 }
 
+
+/* ---------- Küdaw: quest log ---------- */
+function questLines(){
+  const F=S.flags,ls=[],pcs=(S.pieces||[]).length;
+  const Q=(t,done,es,en)=>ls.push(L('',(done?'■ ':'▶ ')+t,(done?'(hecho) ':'')+es,(done?'(done) ':'')+en));
+  if(!F.pentukun)Q('Chalin',0,'Preséntate con el lonko del lof lafkenche.','Introduce yourself to the lonko of the Lafkenche lof.');
+  else if(!F.won){
+    if(pcs<5)Q('Trariwe trokiñ '+pcs+'/5',0,'Reúne los cinco trokiñ del trariwe antiguo, uno por cada tierra.','Gather the five trokiñ of the ancient sash, one from each land.');
+    else Q('Ti Fütra Ngoyman',0,'Con el trariwe completo, cruza la niebla al oeste del camino del mar.','With the complete sash, cross the fog west of the sea road.');
+  }else{
+    const sbs=['sb1','sb2','sb3','sb4','sb5','sb6'].filter(k=>F[k]).length;
+    if(!F.chboss)Q('Münche lafken',0,'Una voz débil suena bajo el islote de las piedras del agua, en Willi mapu.','A faint voice sounds beneath the islet of the water stones, in Willi mapu.');
+    if(sbs<6)Q('Pu llum wekufü '+sbs+'/6',0,'Seis males antiguos siguen escondidos en los rincones del mapu; el terreno los delata.','Six ancient evils remain hidden in the corners of the land; the ground gives them away.');
+    else if(!F.epu_won)Q('Epunamun',0,'El Epunamun espera a quien venció a los seis males escondidos.','The Epunamun awaits the one who defeated all six hidden evils.');
+    if(F.epu_won&&F.chboss&&sbs>=6)Q('Mapu',1,'La tierra respira. Lo que queda es caminar y aprender.','The land breathes. What remains is to walk and to learn.');
+  }
+  const MQ=[['laf','Machi (Lafkenche)','pentukun','Saca hojas del foye solo de Fotra mapu, por el lado norte.','Take leaves from the lone foye of Fotra mapu, on the north side.'],
+    ['nag','Machi (Nagche)','nag_lonko','Llena el metawe en el ojo de agua del nororiente del menoko.','Fill the metawe at the north-east pool of the menoko.'],
+    ['pew','Machi (Pewenche)','pew_lonko','Recoge ngülliw bajo la abuela pewen, en lo más tupido del bosque de abajo.','Gather ngülliw under the grandmother pewen, in the thickest lower forest.'],
+    ['wil','Machi (Williche)','wil_lonko','Llena el yiwe al pie del salto de Trayen mapu, donde el agua golpea la piedra.','Fill the yiwe at the foot of the falls in Trayen mapu.'],
+    ['puel','Machi (Puelmapu)','puel_lonko','Escarba junto al chacay solo del lelfün de abajo, donde el suelo se pone blanco.','Dig beside the lone chacay of the lower lelfün, where the ground turns white.']];
+  for(const [r,t,gate,hes,hen] of MQ){
+    if(F['mq_done_'+r])Q(t,1,'La machi te sanará cuando la visites.','The machi will heal you when you visit.');
+    else if(F['mqd_'+r])Q(t,0,'Vuelve con la machi: ya tienes lo que pidió.','Return to the machi: you carry what she asked for.');
+    else if(F['mql_'+r])Q(t,0,hes,hen);
+    else if(F['mq_'+r])Q(t,0,'Habla con el lonko: él tiene su parte.','Speak with the lonko: he has his part.');
+  }
+  if(F.l_diwd)Q('Diweñ',1,'El diweñfe quedó contento.','The diweñ gatherer is happy.');
+  else if(F.l_diwq)Q('Diweñ',0,'Junta tres diweñes en Fotra mapu para el diweñfe.','Gather three diweñ in Fotra mapu for the diweñfe.');
+  if(F.n_lawd)Q('Lawen kachu',1,'La lawentuchefe tiene sus hierbas.','The healer has her herbs.');
+  else if(F.n_lawq)Q('Lawen kachu',0,'Junta tres matas de lawen en el borde del agua del menoko.','Gather three lawen plants at the water edge of the menoko.');
+  if(S.gear.trutruka)Q('Trutruka',1,'La trutruka es tuya: tócala en las peleas.','The trutruka is yours: blow it in battle.');
+  else if(F.n_trut_q)Q('Trutruka',0,'Cayó entre los juncos, junto al agua del medio del menoko.','It fell among the reeds, beside the middle pool of the menoko.');
+  if(F.herd)Q('Kulliñ',1,'Los animales volvieron al corral.','The animals are back in the pen.');
+  else if(F.herd_task)Q('Kulliñ',0,'Arrea las ovejas y la waka de vuelta al corral del campo.','Herd the sheep and the waka back to the field pen.');
+  if(F.pew_llawe)Q('Chaiwe',1,'El chachay Nawel tiene su canasto.','Chachay Nawel has his basket.');
+  else if(F.pew_basket)Q('Chaiwe',0,'Llévale el chaiwe al chachay Nawel.','Take the chaiwe back to chachay Nawel.');
+  else if(F.pew_chaiwe)Q('Chaiwe',0,'El chaiwe del chachay se perdió entre los árboles de Mawida mapu.','The chachay\'s basket was lost among the trees of Mawida mapu.');
+  if(F.puel_pichd)Q('Choyke pichuñ',1,'El niño recuperó su pluma.','The boy has his plume back.');
+  else if(F.puel_kidq)Q('Choyke pichuñ',0,'La pluma del niño anda perdida por el lelfün.','The boy\'s plume is lost somewhere on the lelfün.');
+  if(!ls.length)ls.push(N('No tienes küdaw pendientes.','You have no pending tasks.'));
+  return ls}
+/* ---------- Mapa: progress overview ---------- */
+function mapaLines(){
+  const F=S.flags,pcs=S.pieces||[];
+  const RG=[['Lafkenche','pentukun','laf','lafkenche'],['Nagche','nag_lonko','nag','nagche'],
+    ['Pewenche','pew_lonko','pew','pewenche'],['Williche','wil_lonko','wil','williche'],['Puelmapu','puel_lonko','puel','puelche']];
+  const bx=v=>v?'■':'□';
+  const ls=RG.map(([n,lk,mr,pk])=>L('',n,
+    bx(F[lk])+' lonko   '+bx(F['mq_done_'+mr])+' machi   '+bx(pcs.includes(pk))+' trokiñ',
+    bx(F[lk])+' lonko   '+bx(F['mq_done_'+mr])+' machi   '+bx(pcs.includes(pk))+' trokiñ'));
+  const ng=['ngen','ngen2','ngen3','ngen4','ngen5'].filter(k=>F[k]).length;
+  const sbs=['sb1','sb2','sb3','sb4','sb5','sb6'].filter(k=>F[k]).length;
+  ls.push(L('','Mapu',
+    'Ngen despiertos '+ng+'/5 · Llum wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoyman · '+(F.epu_won?'■':'□')+' Epunamun',
+    'Ngen awakened '+ng+'/5 · Hidden wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoyman · '+(F.epu_won?'■':'□')+' Epunamun'));
+  return ls}
+/* ---------- vocabulary unlocked outside battle roots ---------- */
+function vocabLines(){
+  const F=S.flags,ls=[];
+  const V=[[()=>F.lawW,'Lawentuwün','palabra de sanación: te cura en batalla','healing word: heals you in battle'],
+    [()=>S.gear.trutruka,'trutruka','corneta larga de colihue con cuerno','long colihue horn'],
+    [()=>F.mq_done_laf||F.mq_laf,'foye · tapül','canelo, árbol sagrado de la machi · hoja','canelo, the machi\'s sacred tree · leaf'],
+    [()=>F.mq_done_nag||F.mq_nag,'metawe · menoko','cántaro de greda · ojo de agua','clay jug · spring pool'],
+    [()=>F.mq_done_pew||F.mq_pew,'ngülliw · llellipun','piñón del pewen · rogativa','pewen nut · rogation ceremony'],
+    [()=>F.mq_done_wil||F.mq_wil,'trayen · yiwe','cascada · vaso de madera','waterfall · wooden cup'],
+    [()=>F.mq_done_puel||F.mq_puel,'chadi','sal de la tierra','salt of the earth'],
+    [()=>F.mq_done_laf,'rewe','el altar escalonado de la machi','the machi\'s stepped altar'],
+    [()=>S.items.mate>0||F.mq_done_nag,'mate','infusión caliente que repone newen','hot infusion that restores newen']];
+  for(const [cond,m,es,en] of V)if(cond())ls.push(L('',m,es,en));
+  return ls}
 /* ---------- Chillka: conjugation book ---------- */
 const BOOK={
   pers:{m:'Iñche, eymi, fey...',es:'Personas (presente)',en:'Persons (present)',lines:[
@@ -3841,8 +3966,10 @@ function relabel(){const cnt={},seen={};B.en.forEach(e=>cnt[e.t]=(cnt[e.t]||0)+1
   B.en.forEach(e=>{seen[e.t]=(seen[e.t]||0)+1;if(e.label)return;e.label=ET[e.t].name+(cnt[e.t]>1||ET[e.t].name==='laftrache'&&B.en.length>1?' '+'ABCDE'[seen[e.t]-1]:'')})}
 function mkEnemy(t){return{t,hp:ET[t].hp,max:ET[t].hp,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'?1:0,armor:ET[t].armor?1:0,burn:ET[t].fire?1:0,hidden:0,dreaming:ET[t].dream?1:0,dreamT:0,down:0,seals:ET[t].seals?ET[t].seals.slice():null}}
 function startBattle(party,o){
+  let snap=null;try{snap=document.createElement('canvas');snap.width=LW;snap.height=LH;const sg=snap.getContext('2d');sg.imageSmoothingEnabled=false;sg.drawImage(cv,0,0,LW,LH)}catch(e){snap=null}
+  if(typeof stopAmb==='function')stopAmb();
   mode='battle';banner.style.display='none';held.up=held.down=held.left=held.right=0;
-  B={en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(M.fog&&M.bg!=='fjord'?'fog:':'')+M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
+  B={snap,wipe:snap?22:0,en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(M.fog&&M.bg!=='fjord'?'fog:':'')+M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
   relabel();sfx('enc');playSong(o.final?'ngoyFinal':rsong(o.boss?'boss':'battle'));
   const alive=B.en.length,same=party.every(t=>t===party[0]),nameL=same?ET[party[0]].name:'wekufü';
   const lst=same?nameL:'wekufü ('+party.map(t=>ET[t].name).join(', ')+')';
@@ -4319,7 +4446,7 @@ function victory(){
   const xp=B.en.reduce((a,e)=>a+ET[e.t].xp,0);let gold=B.en.reduce((a,e)=>{const g=ET[e.t].gold;return a+g[0]+rnd(g[1]-g[0]+1)},0);
   if(S.pw.gold){gold*=2;S.pw.gold=0}
   S.xp+=xp;S.gold+=gold;
-  const after=SONGS.win;after.after=()=>mapSong();playSong('win');
+  const wn=(B.o.boss||B.o.final||B.o.chain)?'win':'winS';const after=SONGS[wn];after.after=()=>mapSong();playSong(wn);
   const NGN={lafken:'Ngen-lafken',mawida:'Ngen-mawida',pewen:'Ngen-pewen',kuruf:'Ngen-kürüf',lelfun:'Ngen-lelfün'};
   const ls=[(B.ngenA&&B.ngenA.kind==='final')?N('¡Los cinco ngen del mapu responden a la vez! Mar, monte, pewen, viento y pampa descargan su newen, uno tras otro... y Ti Fütra Ngoyman se quiebra en mil pedazos que la luz deshace.','The five ngen of the land answer as one! Sea, forest, pewen, wind and plain unleash their newen, one after another... and Ti Fütra Ngoyman shatters into a thousand pieces that the light unmakes.'):B.o.chain==='llufu'?N('El ül se cierra como una marea mansa: Kaykayfilu se aquieta y vuelve a su sueño en el fondo del mar.','The ül closes like a gentle tide: Kaykayfilu grows calm and returns to his sleep at the bottom of the sea.'):(B.ngenA&&B.ngenA.v)?N('¡'+NGN[B.ngenA.v]+' despierta y descarga su newen sobre el wekufü: el maligno estalla en mil pedazos que la luz deshace! La tierra respira de nuevo.',NGN[B.ngenA.v]+' awakens and unleashes its newen upon the wekufü: the evil one shatters into a thousand pieces that the light unmakes! The land breathes again.'):(B.en.some(e=>e.t==='epunamun'))?N('El Epunamun baja sus dos lanzas y asiente con las dos caras: la prueba terminó, y la pasaste.','The Epunamun lowers his two spears and nods with both faces: the trial is over, and you have passed it.'):N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
   while(S.xp>=xpNeed()){S.xp-=xpNeed();S.lvl++;S.baseMax+=HPQ;S.hp+=HPQ;S.baseAtk+=1;if(S.lvl%2===0)S.baseDef+=1;
@@ -4336,7 +4463,8 @@ function endBattle(how){
   const o=B.o;mode='map';grace=how==='flee'?90:30;
   if(how==='win'&&o.ent){ents=ents.filter(e=>e!==o.ent);if(o.ent.flag)S.flags[o.ent.flag]=1}
   B=null;persist();
-  if(how!=='win'||!AU.song||AU.name!=='win')playSong(mapSong());
+  if(how!=='win'||!AU.song||(AU.name!=='win'&&AU.name!=='winS'))playSong(mapSong());
+  if(typeof playAmb==='function')playAmb(ambFor(M.bg));
   if(how==='win'&&o.sflag==='epu_won'){S.flags.epu_won=1;S.gear.waiki=1;persist();sfx('lvl');
     return say([N('El Epunamun baja las dos lanzas a la vez. No se deshace, no huye: te saluda, con las dos caras sonriendo.','The Epunamun lowers both spears at once. He does not break apart, he does not flee: he salutes you, both faces smiling.'),
       L('Epunamun','Tuteymi! Newen nieymi, kimün nieymi.','¡Lo lograste! Tienes fuerza y tienes conocimiento.','You did it! You have strength and you have knowledge.'),
@@ -5004,6 +5132,14 @@ function renderBattle(){
     let ly=0,ls=1;if(e.lunge>0){e.lunge--;ly=Math.round(Math.sin(e.lunge/16*Math.PI)*10);}
     c.drawImage(cvs,cx-Math.floor(cvs.width/2),y+ly);c.globalAlpha=1;
     if(e.sl>0){c.fillStyle='rgba(40,40,120,.25)';c.fillRect(cx-sz/2,y,sz,cvs.height)}
+    if(!B.ngenA&&e.hit>6&&e.hit<=14){const sp=(14-e.hit)/8,cyS=y+cvs.height/2;
+      c.save();c.globalCompositeOperation='lighter';c.globalAlpha=1-sp;
+      c.strokeStyle='#ffffff';c.lineWidth=2.5;
+      c.beginPath();c.moveTo(cx-sz*.55+sp*sz*.25,cyS-sz*.5+sp*sz*.2);c.lineTo(cx+sz*.45,cyS+sz*.42);c.stroke();
+      c.strokeStyle='rgba(255,240,180,.9)';c.lineWidth=1.5;
+      c.beginPath();c.moveTo(cx-sz*.5,cyS+sz*.3-sp*sz*.1);c.lineTo(cx+sz*.5-sp*sz*.2,cyS-sz*.35);c.stroke();
+      for(let k2=0;k2<4;k2++)R(c,Math.round(cx+Math.cos(k2*1.7+sp*5)*sz*.4),Math.round(cyS+Math.sin(k2*2.3+sp*4)*sz*.3),2,2,'#fff8d0');
+      c.restore()}
     if(!e.dead&&(e.stag||(e.hp<=0&&typeof quizPend==='function'&&quizPend(e)))){
       // staggered, waiting for the ngen's question: pulse red/orange
       const ph=Math.floor(frame/7)%2,[tcv,tg]=mk(cvs.width,cvs.height);
@@ -5028,6 +5164,17 @@ function renderBattle(){
   if(!FG[B.area])FG[B.area]=buildFG(B.area);c.drawImage(FG[B.area],0,0);
   c.restore();
   for(const p of B.parts){p.t--;p.x+=p.vx;p.y+=p.vy;p.vy+=.06;R(c,p.x,p.y,p.t>15?2:1,p.t>15?2:1,p.col)}B.parts=B.parts.filter(p=>p.t>0);
+  if(B.wipe>0&&B.snap){B.wipe--;
+    const k=1-(B.wipe/22),rr=k*k*Math.max(LW,LH)*0.85;
+    c.save();
+    c.beginPath();c.rect(0,0,LW,LH);c.ellipse(LW/2,LH/2,Math.max(.01,rr),Math.max(.01,rr*.78),0,0,6.283);
+    c.clip('evenodd');
+    c.translate(LW/2,LH/2);c.rotate(k*.22);c.scale(1+k*.3,1+k*.3);c.translate(-LW/2,-LH/2);
+    c.drawImage(B.snap,0,0);
+    c.restore();
+    c.strokeStyle='rgba(255,255,255,'+(.5*(1-k)).toFixed(2)+')';c.lineWidth=3;
+    c.beginPath();c.ellipse(LW/2,LH/2,Math.max(.01,rr),Math.max(.01,rr*.78),0,0,6.283);c.stroke();c.lineWidth=1;
+    if(B.wipe<=0)B.snap=null}
   // hero panel (LttP-style box)
   const hrows=Math.ceil(Math.min(40,Math.ceil(maxHP()/HPQ))/10);
   const px=4,py=4,pw=136,ph=36+Math.max(0,hrows-2)*8;
