@@ -212,6 +212,29 @@ function renderMap(){
   for(let k=0;k<26;k++){const wx=Math.floor(h2(k,frame>>3,91)*LW),wy=Math.floor(h2(k,frame>>3,92)*LH),mx=Math.floor((wx+cx)/T),my=Math.floor((wy-VY+cy)/T);
     if(inB(mx,my)&&grid[my][mx]==='~'&&WD[my][mx]>1){const a=(frame%8)<4;R(c,wx,wy,1,1,M.lava?'#fff0a0':'#f4faff');if(a){R(c,wx-1,wy,1,1,'rgba(220,240,255,.7)');R(c,wx+1,wy,1,1,'rgba(220,240,255,.7)')}}}
   for(const [gx,gy] of glows)for(const [r,a] of [[24,.05],[16,.07],[10,.08]])ell(c,gx,gy,r,r*.8,'rgba(255,170,80,'+a+')');
+  // machi-quest landmarks: quiet environmental cues at the five dig spots
+  {const MQC={l_wapi:[12,9,'foye'],n_menoko:[22,3,'pool'],p_pewen:[16,13,'pewen'],w_trayen:[12,9,'mist'],e_lelfun:[10,11,'salt']}[CUR];
+   if(MQC){const [qx,qy,kind]=MQC,ox=qx*T+8-cx,oy=qy*T+8-cy+VY;
+    if(ox>-40&&ox<LW+40&&oy>-40&&oy<LH+40){
+      if(kind==='foye'){ // the canelo in bloom: pale blossoms drifting around the lone tree
+        for(let k=0;k<6;k++){const ph=((frame+k*23)%140)/140;const fx2=ox+Math.sin(ph*6.28+k*1.3)*11,fy2=oy-16-ph*18;
+          R(c,Math.round(fx2),Math.round(fy2),1,1,'rgba(255,250,240,'+(.75*(1-ph)).toFixed(2)+')')}
+        for(let k=0;k<5;k++)R(c,ox-7+((k*5)%15),oy-14+((k*3)%7),1,1,'#f4f0e4')}
+      else if(kind==='pool'){ // the stillest water: a slow, perfect ring of light
+        const ph=((frame)%180)/180;c.strokeStyle='rgba(225,248,255,'+(.7*(1-ph)).toFixed(2)+')';c.lineWidth=1;
+        c.beginPath();c.ellipse(ox+8,oy,3+ph*13,1.5+ph*5,0,0,6.283);c.stroke();
+        R(c,ox+8,oy-1,1,1,'rgba(255,255,255,'+(.5+.4*Math.sin(frame/15)).toFixed(2)+')')}
+      else if(kind==='pewen'){ // ngülliw scattered on the ground at the grandmother's feet
+        for(let k=0;k<9;k++){const sx2=ox-12+((k*7)%24),sy2=oy-14+((k*5)%9);R(c,sx2,sy2,2,1,'#7a4a22');R(c,sx2,sy2-1,1,1,'#b07a44')}
+        R(c,ox-9,oy-8,1,1,'#c89a60');R(c,ox+10,oy-5,1,1,'#c89a60')}
+      else if(kind==='mist'){ // spray at the foot of the fall catching the light
+        for(let k=0;k<7;k++){const ph=((frame*2+k*31)%110)/110;const fx2=ox+10+Math.sin(ph*5+k)*8,fy2=oy+6-ph*22;
+          ell(c,fx2,fy2,2+ph*2,1.2+ph,'rgba(235,248,255,'+(.5*(1-ph)).toFixed(2)+')')}
+        if(frame%90<45)R(c,ox+12,oy-10,1,1,'rgba(255,220,240,.8)');else R(c,ox+14,oy-12,1,1,'rgba(200,255,220,.8)')}
+      else if(kind==='salt'){ // the ground turns white beside the lone chacay
+        for(let k=0;k<10;k++){const sx2=ox-20+((k*9)%22),sy2=oy-6+((k*4)%11);R(c,sx2,sy2,3,1,'rgba(245,242,230,.75)');R(c,sx2+1,sy2+1,1,1,'rgba(255,255,250,.6)')}
+        for(let k=0;k<4;k++)R(c,ox-18+k*6,oy+2+(k%2),2,1,'rgba(250,248,240,.55)')}
+    }}}
   if(CUR==='w_wapi'&&grid[10]&&grid[10][16]==='v'){const wx=16*T+8-cx,wy=10*T+8-cy+VY;
     for(let k=0;k<3;k++){const ph=(frame/46+k/3)%1;ell(c,wx,wy,6+ph*17,(6+ph*17)*.45,'rgba(140,255,230,'+(.55*(1-ph)).toFixed(2)+')')}
     c.globalAlpha=.22+.1*Math.sin(frame/9);const wg=c.createLinearGradient(0,wy-44,0,wy);wg.addColorStop(0,'rgba(140,255,230,0)');wg.addColorStop(1,'rgba(140,255,230,.55)');c.fillStyle=wg;c.fillRect(wx-7,wy-44,14,44);c.globalAlpha=1;
