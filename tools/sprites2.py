@@ -1181,48 +1181,87 @@ def kalku(fr):
         g.p(x,y+((i+fr)%2),'k');g.p(x+1,y+1+((i+fr)%2),'F')
     g.outline();return g.rows()
 def ngoyman1(fr):
-    # the veil: a hunched fog wraith - head, shoulders, long reaching arms, fog skirt
-    g=G(60,44);import math
-    CX=30
-    for y in range(26,42):
-        t=(y-26)/16.0
-        rr=13+t*15+math.sin(y*0.5+fr*3.14)*2
+    # the veil: a vaporous shadow-demon - horned dark head with burning eyes,
+    # hunched mass, smoke-wing plumes, ember-cracked chest, claws, fog skirt
+    g=G(64,48);import math
+    CX=32
+    for y in range(30,46):                                     # fog skirt
+        t=(y-30)/16.0
+        rr=14+t*16+math.sin(y*0.5+fr*3.14)*2
         off=math.sin(y*0.3+fr*0.9)*2
         x0=int(CX-rr+off);x1=int(CX+rr+off)
         for x in range(x0,x1+1):
             n=math.sin(x*0.5+y*0.8)+math.sin(x*0.23-y*0.4+fr*2)
-            c='w' if n>1.2 else ('d' if n<-0.8 else 's')
+            c='w' if n>1.35 else ('d' if n<-0.6 else 's')
             if x<=x0+1 or x>=x1-1:c='d'
             g.p(x,y,c)
-    g.e(CX,22,10,7,'s');g.e(CX,23,8,5,'d')                    # torso
-    for sgn in (-1,1):                                         # shoulders
-        g.e(CX+sgn*9,17,5,3.5,'s');g.e(CX+sgn*10,18,4,2.5,'d')
-    for sgn in (-1,1):                                         # long arms, claw fingers
-        for i in range(10):
-            x=CX+sgn*(12+int(i*0.9));y=19+i
+    # broad smoke-wing plumes sweeping up and out from the shoulders
+    for sgn in (-1,1):
+        for i in range(16):
+            t=i/15.0
+            wx=CX+sgn*(9+int(t*20));wy=17-int((t**1.4)*14)+int(math.sin(i+fr*3)*1)
+            rw=5.5-t*3.4
+            g.e(wx,wy,max(1.0,rw),max(1.0,rw*.9),'d')
+        for i in range(16):
+            t=i/15.0
+            wx=CX+sgn*(9+int(t*20));wy=17-int((t**1.4)*14)
+            rw=3.6-t*2.6
+            g.e(wx-sgn,wy+1,max(.8,rw),max(.8,rw*.8),'s')
+        for i in range(5):
+            t=i/4.0
+            wx=CX+sgn*(12+int(t*14));wy=20-int((t**1.4)*10)
+            g.p(wx,wy+4,'d');g.p(wx,wy+5,'d' if i%2 else 's')  # ragged trailing edge
+    # hunched torso, dark core
+    g.e(CX,22,12,9,'s');g.e(CX,23,10,7,'d');g.e(CX,24,7,5,'k')
+    for sgn in (-1,1):                                         # massive shoulders
+        g.e(CX+sgn*10,15,6,4,'s');g.e(CX+sgn*11,16,5,3,'d')
+    # ember cracks across the chest, flickering
+    for i,(ex2,ey2) in enumerate([(CX-4,20),(CX-2,23),(CX+1,21),(CX+3,24),(CX-1,26),(CX+5,22)]):
+        if (i+fr)%2:
+            g.p(ex2,ey2,'r');g.p(ex2+1,ey2,'r')
+        else:
+            g.p(ex2,ey2,'r')
+    if fr:g.p(CX-3,22,'E')
+    else:g.p(CX+2,25,'E')
+    # long arms ending in claws
+    for sgn in (-1,1):
+        for i in range(11):
+            x=CX+sgn*(13+int(i*0.9));y=18+i
             g.p(x,y,'s');g.p(x+sgn,y,'d')
-        hx,hy=CX+sgn*21,30+(fr%2)
-        g.e(hx,hy,2,1.6,'d')
-        for j in (-1,0,1):g.p(hx+j,hy+2,'w')
-        g.p(hx,hy+3,'w')
-    g.e(CX,9,8,6.5,'s');g.e(CX,10,6.5,5,'d')                  # head
-    for sgn in (-1,1):                                         # angry brows and slit eyes
-        ex=CX+sgn*3
-        for i in range(4):
-            g.p(ex+sgn*i,6+(3-i)//2,'k');g.p(ex+sgn*i,7+(3-i)//2,'k')
-        g.r(ex-1,9,3,2,'k');g.p(ex,9,'E');g.p(ex+sgn,10,'E')
-    g.e(CX,13,3.5,1.2,'k')                                     # snarl
-    g.p(CX-3,14,'k');g.p(CX+3,14,'k')
-    g.p(CX-1,14,'w');g.p(CX+1,14,'w')
-    for (cx2,cy2,rx,ry) in [(CX-9,4,4,2.5),(CX,2,5,2.5),(CX+9,4,4,2.5)]:
-        g.e(cx2,cy2,rx,ry,'s')                                 # wisp crown
-    for y in range(4,30):                                      # fog texture
-        for x in range(CX-20,CX+21):
+        hx,hy=CX+sgn*24,31+(fr%2)
+        g.e(hx,hy,2.6,2,'d')
+        for j in (-1,0,1):
+            g.p(hx+j,hy+2,'w');g.p(hx+j,hy+3,'w')
+        g.p(hx,hy+4,'w')
+    # dark horned head
+    g.e(CX,9,7.5,6,'d');g.e(CX,10,5.5,4.2,'k')
+    for sgn in (-1,1):                                         # great horns, thick, curving up-back
+        px,py=CX+sgn*5,7
+        for i in range(12):
+            px+=sgn*(1 if i%3==2 else 2);py-=1
+            for (ax,ay) in ((0,0),(sgn,0),(0,1),(sgn,1)):
+                g.p(px+ax,py+ay,'d')
+            g.p(px-sgn,py+2,'s')
+        g.p(px+sgn,py-1,'w');g.p(px+sgn*2,py,'w')
+    for sgn in (-1,1):                                         # burning slit eyes, angled down-in
+        g.p(CX+sgn*2,9,'E');g.p(CX+sgn*3,8,'E');g.p(CX+sgn*3,9,'E');g.p(CX+sgn*4,8,'E')
+        g.p(CX+sgn*1,7,'k');g.p(CX+sgn*2,7,'k');g.p(CX+sgn*3,6,'k')
+    g.e(CX,13,3.6,1.8,'k')                                     # roaring maw, fire inside
+    g.p(CX-1,13,'r');g.p(CX,13,'E');g.p(CX+1,13,'r')
+    g.p(CX-3,12,'w');g.p(CX,11,'w');g.p(CX+3,12,'w')           # fangs
+    # mane of smoke-flame between the horns
+    for i in range(5):
+        mx2=CX-4+i*2
+        g.p(mx2,4-(i%2),'d')
+        if (i+fr)%2:g.p(mx2,3-(i%2),'r')
+    # texture pass
+    for y in range(4,32):
+        for x in range(CX-24,CX+25):
             if g.get(x,y)=='s' and (x*3+y*5)%11<2:g.p(x,y,'d')
-    for i in range(8):
-        x=6+i*7
-        g.p(x+fr,42,'s');g.p(x+1+fr,43,'d')
-    for (x,y) in ([(14,30),(46,31)] if fr==0 else [(14,30),(46,31),(24,34)]):
+    for i in range(8):                                         # trailing wisps
+        x=8+i*7
+        g.p(x+fr,46,'s');g.p(x+1+fr,47,'d')
+    for (x,y) in ([(12,34),(52,35)] if fr==0 else [(12,34),(52,35),(26,38)]):
         g.r(x,y,2,1,'k');g.p(x,y,'E')                          # lesser eyes in the skirt
     g.outline();return g.rows()
 def ngoyman2(fr):
@@ -1860,7 +1899,7 @@ PAL={
  'llufu5':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
  'ngoyam':{'w':'#cfd4da','s':'#9aa2ac','d':'#5e6670','k':'#1a1e26','e':'#9ad8ff','o':'#141820'},
  'kalku':{'f':'#23262e','F':'#111318','h':'#b8bcc2','H':'#8a8e96','p':'#d8cfc0','P':'#a89c8a','b':'#d8d0ba','B':'#a89e86','k':'#07080c','e':'#c080ff','o':'#060608'},
- 'ngoyman1':{'w':'#d6dde6','s':'#9fa9b6','d':'#5c6674','k':'#161a22','E':'#cfe8ff','o':'#10141c'},
+ 'ngoyman1':{'w':'#b8c0cc','s':'#7e8896','d':'#363e4c','k':'#0a0c12','E':'#ffb24a','o':'#080a0e','r':'#b4420f'},
  'ngoyman2':{'s':'#8a909c','S':'#5a606c','d':'#aeb6c2','g':'#7affd0','G':'#2a9a74','k':'#14161c','o':'#0e1016'},
  'ngoyman3':{'w':'#c6ccd8','s':'#848e9c','d':'#3a4250','k':'#090b10','E':'#ffe9a0','o':'#080a0e'},
  'ngoyman4':{'w':'#aab4c8','s':'#707a92','d':'#2a3146','k':'#06080d','E':'#ff9c80','o':'#050710'},
@@ -1910,7 +1949,7 @@ HI={
  'llufu5':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
  'ngoyam':{'w':'#cfd4da','s':'#9aa2ac','d':'#5e6670','k':'#1a1e26','e':'#9ad8ff','o':'#141820'},
  'kalku':{'f':'#23262e','F':'#111318','h':'#b8bcc2','H':'#8a8e96','p':'#d8cfc0','P':'#a89c8a','b':'#d8d0ba','B':'#a89e86','k':'#07080c','e':'#c080ff','o':'#060608'},
- 'ngoyman1':{'w':'#d6dde6','s':'#9fa9b6','d':'#5c6674','k':'#161a22','E':'#cfe8ff','o':'#10141c'},
+ 'ngoyman1':{'w':'#b8c0cc','s':'#7e8896','d':'#363e4c','k':'#0a0c12','E':'#ffb24a','o':'#080a0e','r':'#b4420f'},
  'ngoyman2':{'s':'#8a909c','S':'#5a606c','d':'#aeb6c2','g':'#7affd0','G':'#2a9a74','k':'#14161c','o':'#0e1016'},
  'ngoyman3':{'w':'#c6ccd8','s':'#848e9c','d':'#3a4250','k':'#090b10','E':'#ffe9a0','o':'#080a0e'},
  'ngoyman4':{'w':'#aab4c8','s':'#707a92','d':'#2a3146','k':'#06080d','E':'#ff9c80','o':'#050710'},
@@ -1933,7 +1972,7 @@ HI={
  'llufu5':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
  'ngoyam':{'w':'#cfd4da','s':'#9aa2ac','d':'#5e6670','k':'#1a1e26','e':'#9ad8ff','o':'#141820'},
  'kalku':{'f':'#23262e','F':'#111318','h':'#b8bcc2','H':'#8a8e96','p':'#d8cfc0','P':'#a89c8a','b':'#d8d0ba','B':'#a89e86','k':'#07080c','e':'#c080ff','o':'#060608'},
- 'ngoyman1':{'w':'#d6dde6','s':'#9fa9b6','d':'#5c6674','k':'#161a22','E':'#cfe8ff','o':'#10141c'},
+ 'ngoyman1':{'w':'#b8c0cc','s':'#7e8896','d':'#363e4c','k':'#0a0c12','E':'#ffb24a','o':'#080a0e','r':'#b4420f'},
  'ngoyman2':{'s':'#8a909c','S':'#5a606c','d':'#aeb6c2','g':'#7affd0','G':'#2a9a74','k':'#14161c','o':'#0e1016'},
  'ngoyman3':{'w':'#c6ccd8','s':'#848e9c','d':'#3a4250','k':'#090b10','E':'#ffe9a0','o':'#080a0e'},
  'ngoyman4':{'w':'#aab4c8','s':'#707a92','d':'#2a3146','k':'#06080d','E':'#ff9c80','o':'#050710'},
@@ -1947,7 +1986,7 @@ HI={
  'llufu5':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
  'ngoyam':{'w':'#cfd4da','s':'#9aa2ac','d':'#5e6670','k':'#1a1e26','e':'#9ad8ff','o':'#141820'},
  'kalku':{'f':'#23262e','F':'#111318','h':'#b8bcc2','H':'#8a8e96','p':'#d8cfc0','P':'#a89c8a','b':'#d8d0ba','B':'#a89e86','k':'#07080c','e':'#c080ff','o':'#060608'},
- 'ngoyman1':{'w':'#d6dde6','s':'#9fa9b6','d':'#5c6674','k':'#161a22','E':'#cfe8ff','o':'#10141c'},
+ 'ngoyman1':{'w':'#b8c0cc','s':'#7e8896','d':'#363e4c','k':'#0a0c12','E':'#ffb24a','o':'#080a0e','r':'#b4420f'},
  'ngoyman2':{'s':'#8a909c','S':'#5a606c','d':'#aeb6c2','g':'#7affd0','G':'#2a9a74','k':'#14161c','o':'#0e1016'},
  'ngoyman3':{'w':'#c6ccd8','s':'#848e9c','d':'#3a4250','k':'#090b10','E':'#ffe9a0','o':'#080a0e'},
  'ngoyman4':{'w':'#aab4c8','s':'#707a92','d':'#2a3146','k':'#06080d','E':'#ff9c80','o':'#050710'},
