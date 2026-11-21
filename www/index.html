@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='a36a2b4-202611211630';
+window.KEWUN_BUILD='078108a-202611211633';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -2783,8 +2783,8 @@ function runPentukun(practice){
      ex:N('Después, tu nombre. Se dice "Iñche ___ pingen": "yo me llamo ___".','Next, your name. You say "Iñche ___ pingen": "my name is ___".'),
      o:[{m:'Iñche '+nm()+' pingen.',es:'Me llamo '+nm()+'.',en:'My name is '+nm()+'.',ok:1},{m:nm()+' pingeymi.',es:'Tú te llamas '+nm()+'.',en:'Your name is '+nm()+'.'},{m:'Kümelen.',es:'Estoy bien.',en:'I am well.'}]},
     {q:L(sp,'Chew tuwimi?','¿De dónde eres?','Where are you from?'),
-     ex:N('Te preguntará de dónde vienes. Se contesta con el lugar y "tuwün": "Santiago tuwün", "vengo de Santiago".','You will be asked where you come from. You answer with the place and "tuwün": "Santiago tuwün", "I come from Santiago".'),
-     o:[{m:'Santiago tuwün.',es:'Vengo de Santiago.',en:'I come from Santiago.',ok:1},{m:'Chew tuwün?',es:'¿De dónde vengo?',en:'Where do I come from?'},{m:'Lafken mew amuan.',es:'Iré al mar.',en:'I will go to the sea.'}]},
+     ex:N('Te preguntará de dónde vienes. Se contesta con el lugar, "mew" y "tuwün": "Santiago waria mew tuwün", "vengo de la ciudad de Santiago". Ustedes son wariache, gente de la ciudad.','You will be asked where you come from. You answer with the place, "mew" and "tuwün": "Santiago waria mew tuwün", "I come from the city of Santiago". You are wariache, city people.'),
+     o:[{m:'Santiago waria mew tuwün.',es:'Vengo de la ciudad de Santiago.',en:'I come from the city of Santiago.',ok:1},{m:'Chew tuwün?',es:'¿De dónde vengo?',en:'Where do I come from?'},{m:'Lafken mew amuan.',es:'Iré al mar.',en:'I will go to the sea.'}]},
     {q:L(sp,'Chumleyngün tami pu che?','¿Cómo está tu gente (tu familia)?','How are your people (your family)?'),
      ex:N('Al final pregunta por tu familia: son ellos, varias personas, así que se contesta "Kümeleyngün", "ellos están bien".','Finally you are asked about your family: they are several people, so you answer "Kümeleyngün", "they are well".'),
      o:[{m:'Kümeleyngün.',es:'Ellos están bien.',en:'They are well.',ok:1},{m:'Kümelen.',es:'Yo estoy bien.',en:'I am well.'},{m:'Kümeleymi.',es:'Tú estás bien.',en:'You are well.'}]}];
@@ -2849,7 +2849,7 @@ function nLonkoTalk(){
     {q:L('Lonko','Mari mari, '+nm()+'. Chumleymi?','Hola, '+nm()+'. ¿Cómo estás?','Hello, '+nm()+'. How are you?'),
      o:[{m:'Kümelen. Eymi kay?',es:'Estoy bien. ¿Y tú?',en:'I am well. And you?',ok:1},{m:'Kümeleyngün.',es:'Ellos están bien.',en:'They are well.'},{m:'Amunge!',es:'¡Vete!',en:'Go away!'}]},
     {q:L('Lonko','Iñche ka kümelen. Chew tuwimi?','Yo también estoy bien. ¿De dónde eres?','I am well too. Where are you from?'),
-     o:[{m:'Lafken mapu tuwün.',es:'Vengo de la tierra del mar.',en:'I come from the land of the sea.',ok:1},{m:'Chew tuwimi?',es:'¿De dónde eres tú?',en:'Where are you from?'},{m:'Lafken mapu tuwimi.',es:'Tú vienes de la tierra del mar.',en:'You come from the land of the sea.'}]}];
+     o:[{m:'Santiago waria mew tuwün.',es:'Vengo de la ciudad de Santiago.',en:'I come from the city of Santiago.',ok:1},{m:'Chew tuwimi?',es:'¿De dónde eres tú?',en:'Where are you from?'},{m:'Santiago waria mew tuwimi.',es:'Tú vienes de la ciudad de Santiago.',en:'You come from the city of Santiago.'}]}];
   say([N('El lonko nagche se levanta para saludarte. Recuerda el pentukuwün que ensayaste con tu kuku.','The Nagche lonko stands up to greet you. Remember the pentukuwün you practiced with your kuku.')],()=>step(0));
   function step(i){
     if(i>=steps.length)return done();
@@ -3355,7 +3355,7 @@ function pLonkoTalk(){
     {q:L('Lonko','Mari mari, '+nm()+'. Chumleymi?','Hola, '+nm()+'. ¿Cómo estás?','Hello, '+nm()+'. How are you?'),
      o:[{m:'Kümelen. Eymi kay?',es:'Estoy bien. ¿Y tú?',en:'I am well. And you?',ok:1},{m:'Kümeleyngün.',es:'Ellos están bien.',en:'They are well.'},{m:'Chumleymi?',es:'¿Cómo estás?',en:'How are you?'}]},
     {q:L('Lonko','Iñche ka kümelen. Chew tuwimi?','Yo también estoy bien. ¿De dónde eres?','I am well too. Where are you from?'),
-     o:[{m:'Lafken mapu tuwün.',es:'Vengo de la tierra del mar.',en:'I come from the land of the sea.',ok:1},{m:'Chew tuwimi?',es:'¿De dónde eres tú?',en:'Where are you from?'},{m:'Pewen mapu tuwimi.',es:'Tú vienes de la tierra de los pewenes.',en:'You come from the land of the pewen trees.'}]},
+     o:[{m:'Santiago waria mew tuwün.',es:'Vengo de la ciudad de Santiago.',en:'I come from the city of Santiago.',ok:1},{m:'Chew tuwimi?',es:'¿De dónde eres tú?',en:'Where are you from?'},{m:'Pewen mapu tuwimi.',es:'Tú vienes de la tierra de los pewenes.',en:'You come from the land of the pewen trees.'}]},
     {q:L('Lonko','Chumleyngün tami pu che?','¿Cómo está tu gente?','How are your people?'),
      o:[{m:'Kümeleyngün.',es:'Ellos están bien.',en:'They are well.',ok:1},{m:'Kümelen.',es:'Yo estoy bien.',en:'I am well.'},{m:'Kümeleymi.',es:'Tú estás bien.',en:'You are well.'}]}];
   say([N('El lonko pewenche se levanta para saludarte. Recuerda el pentukuwün.','The Pewenche lonko stands up to greet you. Remember the pentukuwün.')],()=>step(0));
@@ -3450,7 +3450,7 @@ function wLonkoTalk(){
     {q:L('Lonko','Mari mari, '+nm()+'. Chumleymi?','Hola, '+nm()+'. ¿Cómo estás?','Hello, '+nm()+'. How are you?'),
      o:[{m:'Kümelen. Eymi kay?',es:'Estoy bien. ¿Y tú?',en:'I am well. And you?',ok:1},{m:'Kümeleyngün.',es:'Ellos están bien.',en:'They are well.'},{m:'Iney eymi?',es:'¿Quién eres tú?',en:'Who are you?'}]},
     {q:L('Lonko','Iñche ka kümelen. Chew tuwimi?','Yo también estoy bien. ¿De dónde eres?','I am well too. Where are you from?'),
-     o:[{m:'Lafken mapu tuwün.',es:'Vengo de la tierra del mar.',en:'I come from the land of the sea.',ok:1},{m:'Chumül tuwimi?',es:'¿Cuándo vienes?',en:'When do you come?'},{m:'Willi mapu tuwimi.',es:'Tú vienes del sur.',en:'You come from the south.'}]},
+     o:[{m:'Santiago waria mew tuwün.',es:'Vengo de la ciudad de Santiago.',en:'I come from the city of Santiago.',ok:1},{m:'Chumül tuwimi?',es:'¿Cuándo vienes?',en:'When do you come?'},{m:'Willi mapu tuwimi.',es:'Tú vienes del sur.',en:'You come from the south.'}]},
     {q:L('Lonko','Chumleyngün tami pu che?','¿Cómo está tu gente?','How are your people?'),
      o:[{m:'Kümeleyngün.',es:'Ellos están bien.',en:'They are well.',ok:1},{m:'Kümelen.',es:'Yo estoy bien.',en:'I am well.'},{m:'Kümeleymi.',es:'Tú estás bien.',en:'You are well.'}]}];
   say([N('El lonko williche se levanta para saludarte. Recuerda el pentukuwün.','The Williche lonko stands up to greet you. Remember the pentukuwün.')],()=>step(0));
