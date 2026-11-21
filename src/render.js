@@ -179,11 +179,13 @@ function renderMap(){
       const fly=ET[t].fly?6+Math.round(Math.sin(frame/8)*1.5):0;
       ell(c,sx+8,sy+14,sz/3,2,'rgba(0,0,0,.3)');
       if(e.final){const cxp=sx+8,cyp=sy+16-Math.round(cvs.height/2),loom=Math.round(Math.sin(frame/34)*2);
-        for(const [r,a] of [[1.25,.26],[.95,.18],[.68,.12]])ell(c,cxp,cyp+loom,cvs.width*.72*r,cvs.height*.58*r,'rgba(6,8,16,'+a+')');
+        ell(c,cxp,sy+15,cvs.width*.75,7,'rgba(14,18,8,.55)');ell(c,cxp,sy+15,cvs.width*.5,4,'rgba(26,32,14,.5)');
+        for(const [r,a] of [[1.35,.34],[1.0,.24],[.68,.16]])ell(c,cxp,cyp+loom,cvs.width*.72*r,cvs.height*.58*r,'rgba(3,5,2,'+a+')');
         for(let k=0;k<8;k++){const a2=frame/44+k*.785,rr=cvs.width*.6+Math.sin(frame/18+k)*4;
-          ell(c,cxp+Math.cos(a2)*rr,cyp+loom+Math.sin(a2)*cvs.height*.46,2.5,1.5,'rgba(170,180,205,.32)')}
-        for(let k=0;k<5;k++){const ph=((frame+k*37)%150)/150;
-          ell(c,cxp-20+k*10+Math.sin(ph*5+k)*4,sy+14-ph*cvs.height,1.5+ph*2,1.2,'rgba(140,150,175,'+(.4*(1-ph)).toFixed(2)+')')}}
+          ell(c,cxp+Math.cos(a2)*rr,cyp+loom+Math.sin(a2)*cvs.height*.46,2.5,1.5,'rgba(120,132,100,.38)')}
+        for(let k=0;k<6;k++){const ph=((frame+k*37)%150)/150;
+          ell(c,cxp-22+k*9+Math.sin(ph*5+k)*4,sy+14-ph*cvs.height,1.5+ph*2,1.2,'rgba(104,120,80,'+(.45*(1-ph)).toFixed(2)+')')}
+        for(let k=0;k<4;k++){R(c,Math.round(cxp+Math.sin(frame/7+k*3)*cvs.width*.4),Math.round(cyp+Math.cos(frame/9+k*2)*cvs.height*.3),1,1,'rgba(14,18,8,.85)')}}
       if(S.pw.pewen>0&&frame%10<5)c.globalAlpha=.55;
       c.drawImage(cvs,Math.round(sx+8-cvs.width/2),Math.round(sy+16-cvs.height-fly+2));c.globalAlpha=1;
       if(e.party.length>1)OV.push(()=>txt('×'+e.party.length,sx+13,sy+3,'#ffffff',12))}}});
@@ -461,6 +463,12 @@ function renderBattle(){
   const sh=B.shake>0?(B.shake--%2?2:-2):0;
   c.save();c.translate(sh,0);
   if(!BG[B.area])BG[B.area]=buildBG(B.area);c.drawImage(BG[B.area],0,0);animBG(B.area);
+  const ngoyUp=B.en.some(e=>/^ngoyman/.test(e.t)&&!e.dead);
+  if(ngoyUp){const br=.34+.07*Math.sin(frame/37);
+    c.fillStyle='rgba(4,6,4,'+br.toFixed(2)+')';c.fillRect(0,0,LW,LH);
+    const vg=c.createRadialGradient(LW/2,LH*.45,LH*.3,LW/2,LH*.45,LW*.7);
+    vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(10,14,8,.5)');
+    c.fillStyle=vg;c.fillRect(0,0,LW,LH)}
   if(B.intro>0)B.intro--;
   const al=B.en.filter(e=>!e.dead||e.fadeT>0),n=al.length,base=138;
   al.forEach((e,i)=>{const Tt=ET[e.t],sz=Tt.bs,cvs=enemyCanvas(e.t,sz,Math.floor(frame/12)%2);
@@ -469,6 +477,11 @@ function renderBattle(){
     if(Tt.fly&&e.gr<=0)y-=26+Math.round(Math.sin(frame/9+i)*3);
     if(B.intro>0)y+=Math.round(B.intro*1.5);
     e.px=cx;e.py=y+cvs.height/3;
+    if(/^ngoyman/.test(e.t)&&!e.dead){
+      ell(c,cx,base,sz/2.1,5,'rgba(16,20,10,.5)');ell(c,cx,base,sz/2.8,3,'rgba(30,38,18,.45)');
+      for(let k=0;k<9;k++){const ph=((frame+k*41)%170)/170;
+        ell(c,cx+Math.sin(k*5+frame/60)*sz*.55,base-4-ph*cvs.height*.95,1.5+ph,1.2,'rgba(110,128,86,'+(.42*(1-ph)).toFixed(2)+')')}
+      for(let k=0;k<4;k++){R(c,Math.round(cx+Math.sin(frame/7+k*3)*sz*.4),Math.round(y+20+Math.cos(frame/9+k*2)*14),1,1,'rgba(20,24,12,.8)')}}
     ell(c,cx,base,sz/2.6,3,'rgba(0,0,0,.32)');
     if(e.dead){e.fadeT--;c.globalAlpha=Math.max(0,e.fadeT/20)}
     if(e.hit>0&&e.hit--%4<2)c.globalAlpha=.25;
@@ -514,7 +527,7 @@ function renderBattle(){
   if(B.red>0){c.fillStyle='rgba(255,0,0,'+(B.red/30)+')';c.fillRect(0,0,LW,LH);B.red--}
   if(B.ngenA&&!B.ngenA.done&&B.ngenA.kind==='final'){const A=B.ngenA;A.t++;
     const NG=[[undefined,'120,220,255'],['mawida','120,255,150'],['pewen','255,200,110'],['kuruf','225,240,255'],['lelfun','255,230,120']];
-    const SEG=52,T0=24,e=A.e;
+    const SEG=68,T0=24,e=A.e;
     const seg=Math.floor((A.t-T0)/SEG),st=(A.t-T0)%SEG;
     const dark=Math.min(1,A.t/30),SH=T0+SEG*5;
     c.fillStyle='rgba(0,0,14,'+(.55*dark*(A.t>SH+55?Math.max(0,(SH+85-A.t)/30):1)).toFixed(2)+')';c.fillRect(0,0,LW,LH);
@@ -522,30 +535,31 @@ function renderBattle(){
     if(A.t>=T0&&seg<5){
       const vr=NG[seg][0],col=NG[seg][1];
       const nx=Math.round(LW*.30),ny=170;
-      const ap=Math.min(1,st/14),strike=st>=26&&st<36;
+      const ap=Math.min(1,st/14),strike=st>=26&&st<50;
       if(st===1)sfx('cast');
-      if(st===26){B.shake=12;e.hit=12;sfx('hurt')}
+      if(st===26){B.shake=12;e.hit=26;sfx('hurt')}
+      if(st===40)B.shake=8;
       const rise=Math.round((1-ap)*40);
       c.save();c.beginPath();c.rect(0,0,LW,ny+9);c.clip();
-      c.globalAlpha=ap*(st>44?Math.max(0,(SEG-st)/8):1);
+      c.globalAlpha=ap*(st>58?Math.max(0,(SEG-st)/10):1);
       c.translate(nx,ny+rise);const s2=1.08+ap*.3+(strike?.1:0);c.scale(s2,s2);
       drawNgen(c,0,0,1,frame,vr);c.restore();c.globalAlpha=1;
       {const eyY=ny+rise-80*s2,mY=ny+rise-71*s2,ex1=nx-3*s2,ex2=nx+3*s2;
        if(st>=18&&st<26){const gl=(st-18)/8;  // the eyes kindle before the blast
          ell(c,ex1,eyY,1.5+gl*1.5,1.5+gl*1.5,'rgba('+col+','+(.9*gl).toFixed(2)+')');
          ell(c,ex2,eyY,1.5+gl*1.5,1.5+gl*1.5,'rgba('+col+','+(.9*gl).toFixed(2)+')')}
-       if(strike){const t2=(st-26)/10;
+       if(strike){const t2=Math.min(1,(st-26)/20);
         c.save();c.globalCompositeOperation='lighter';
-        for(const [gx,gy,lw] of [[ex1,eyY,3],[ex2,eyY,3],[nx,mY,6]]){
+        for(const [gx,gy,lw] of [[ex1,eyY,5],[ex2,eyY,5],[nx,mY,9]]){
           const grad=c.createLinearGradient(gx,gy,bx,by);
           grad.addColorStop(0,'rgba('+col+',.95)');grad.addColorStop(1,'rgba('+col+',.25)');
-          c.strokeStyle=grad;c.lineWidth=Math.max(1.5,lw-t2*(lw-1));c.beginPath();c.moveTo(gx,gy);c.lineTo(bx,by);c.stroke()}
-        c.lineWidth=1;c.strokeStyle='rgba(255,255,255,.9)';c.beginPath();c.moveTo(nx,mY);c.lineTo(bx,by);c.stroke();
+          const wob=1+Math.sin(frame/2+gx)*.18;c.strokeStyle=grad;c.lineWidth=Math.max(2.5,lw*(1-t2*.45))*wob;c.beginPath();c.moveTo(gx,gy);c.lineTo(bx,by);c.stroke()}
+        c.lineWidth=2;c.strokeStyle='rgba(255,255,255,.9)';c.beginPath();c.moveTo(nx,mY);c.lineTo(bx,by);c.stroke();
         ell(c,ex1,eyY,2.5,2.5,'rgba(255,255,255,.9)');ell(c,ex2,eyY,2.5,2.5,'rgba(255,255,255,.9)');
         for(let k=0;k<7;k++){const a=k/7*6.283+st;ell(c,bx+Math.cos(a)*(st-26)*2.2,by+Math.sin(a)*(st-26)*1.5,2,2,'rgba('+col+','+(1-t2).toFixed(2)+')')}
         c.restore()}}
-      if(st>=26&&st<44){c.strokeStyle='rgba('+col+','+((44-st)/18*.7).toFixed(2)+')';c.lineWidth=2;
-        c.beginPath();c.ellipse(bx,by,(st-26)*2.6,(st-26)*1.4,0,0,6.283);c.stroke();c.lineWidth=1}
+      if(st>=26&&st<58){c.strokeStyle='rgba('+col+','+((58-st)/32*.7).toFixed(2)+')';c.lineWidth=2;
+        c.beginPath();c.ellipse(bx,by,(st-26)*2.2,(st-26)*1.2,0,0,6.283);c.stroke();c.lineWidth=1}
     }
     if(A.t>=SH){
       if(!A.shards){A.shards=[];e.dead=true;e.fadeT=0;B.flash=14;B.shake=16;sfx('lvl');
