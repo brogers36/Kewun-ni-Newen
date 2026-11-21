@@ -429,7 +429,7 @@ function ngenQuiz(qb){
     const opts=Q.o.map((o,i)=>({m:Array.isArray(o)?(en?o[1]:o[0]):o,v:i}));
     for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
     choose({m:'«'+Q.m+'»',es:Q.es,en:Q.en},opts,v=>{
-      if(v===Q.a){sfx('lvl');B.flash=16;B.shake=10;qb.stag=0;qb.hp=0;qb.dead=true;qb.fadeT=20;B.qok=1;
+      if(v===Q.a){sfx('lvl');B.flash=16;B.shake=10;qb.hp=0;B.qok=1;
         say([N('Respondes, y la palabra sale de ti como un golpe de luz. '+qb.label+' cae.','You answer, and the word leaves you like a blow of light. '+qb.label+' falls.')],victory);}
       else{sfx('bad');qb.stag=0;const rg=Math.max(4,Math.round(ET[qb.t].hp*(.15+Math.random()*.25)));qb.hp=Math.min(ET[qb.t].hp,qb.hp+rg);
         say([N('La palabra se te escapa... El tiempo vuelve a correr y '+qb.label+' se endereza, recuperando fuerzas (+'+rg+'). La respuesta era: '+(Array.isArray(Q.o[Q.a])?(en?Q.o[Q.a][1]:Q.o[Q.a][0]):Q.o[Q.a])+'.','The word slips away... Time runs again and '+qb.label+' straightens, recovering strength (+'+rg+'). The answer was: '+(Array.isArray(Q.o[Q.a])?(en?Q.o[Q.a][1]:Q.o[Q.a][0]):Q.o[Q.a])+'.')],battleMenu);}
@@ -448,14 +448,15 @@ function victory(){
   {const vb=B.en.find(e=>ET[e.t].boss);
    if(vb&&!B.ngenA&&B.o.chain!=='llufu'&&vb.t!=='epunamun'&&!/^ngoyman/.test(vb.t)){
      const v={lafkenche:'lafken',nagche:'mawida',pewenche:'pewen',williche:'kuruf',puelmapu:'lelfun',ngoyman:'lelfun'}[M.region];
-     if(v){vb.fadeT=1;B.ngenA={t:0,e:vb,v,px:vb.px||LW-72,py:vb.py||100};sfx('cast');return}}}
+     if(v){vb.stag=1;B.ngenA={t:0,e:vb,v};sfx('cast');return}}
+   if(vb&&vb.hp<=0&&!vb.dead){vb.dead=true;vb.fadeT=20}}
   if(B.ngenA&&!B.ngenA.done)return;
   const xp=B.en.reduce((a,e)=>a+ET[e.t].xp,0);let gold=B.en.reduce((a,e)=>{const g=ET[e.t].gold;return a+g[0]+rnd(g[1]-g[0]+1)},0);
   if(S.pw.gold){gold*=2;S.pw.gold=0}
   S.xp+=xp;S.gold+=gold;
   const after=SONGS.win;after.after=()=>mapSong();playSong('win');
   const NGN={lafken:'Ngen-lafken',mawida:'Ngen-mawida',pewen:'Ngen-pewen',kuruf:'Ngen-kürüf',lelfun:'Ngen-lelfün'};
-  const ls=[B.o.chain==='llufu'?N('El ül se cierra como una marea mansa: Kaykayfilu se aquieta y vuelve a su sueño en el fondo del mar.','The ül closes like a gentle tide: Kaykayfilu grows calm and returns to his sleep at the bottom of the sea.'):B.ngenA?N('¡'+NGN[B.ngenA.v]+' despierta, se alza sobre el wekufü y se lo traga entero! La tierra respira de nuevo.',NGN[B.ngenA.v]+' awakens, rises over the wekufü and swallows it whole! The land breathes again.'):N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
+  const ls=[B.o.chain==='llufu'?N('El ül se cierra como una marea mansa: Kaykayfilu se aquieta y vuelve a su sueño en el fondo del mar.','The ül closes like a gentle tide: Kaykayfilu grows calm and returns to his sleep at the bottom of the sea.'):B.ngenA?N('¡'+NGN[B.ngenA.v]+' despierta, se alza sobre el wekufü y se lo traga entero! La tierra respira de nuevo.',NGN[B.ngenA.v]+' awakens, rises over the wekufü and swallows it whole! The land breathes again.'):(B.en.some(e=>e.t==='epunamun'))?N('El Epunamun baja sus dos lanzas y asiente con las dos caras: la prueba terminó, y la pasaste.','The Epunamun lowers his two spears and nods with both faces: the trial is over, and you have passed it.'):N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
   while(S.xp>=xpNeed()){S.xp-=xpNeed();S.lvl++;S.baseMax+=HPQ;S.hp+=HPQ;S.baseAtk+=1;if(S.lvl%2===0)S.baseDef+=1;
     const l=L('','Doy kimün!','¡Más conocimiento! Llegas a kimün '+S.lvl+': ganas un corazón y más fuerza.','More knowledge! You reach kimün '+S.lvl+': you gain a heart and more strength.');l.fx=()=>sfx('lvl');ls.push(l)}
   say(ls,()=>endBattle('win'));

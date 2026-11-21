@@ -507,27 +507,57 @@ function renderBattle(){
   if(B.flash>0){c.fillStyle='rgba(255,255,255,'+(B.flash/16)+')';c.fillRect(0,0,LW,LH);B.flash--}
   if(B.red>0){c.fillStyle='rgba(255,0,0,'+(B.red/30)+')';c.fillRect(0,0,LW,LH);B.red--}
   if(B.ngenA&&!B.ngenA.done){const A=B.ngenA;A.t++;
-    const p=Math.min(1,A.t/40),q=Math.max(0,Math.min(1,(A.t-55)/70));
-    c.fillStyle='rgba(0,0,12,'+(.5*p).toFixed(2)+')';c.fillRect(0,0,LW,LH);
+    const SS=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
+    const p=SS(A.t/50),q=SS((A.t-62)/58),gu=A.t>=124;
+    if(A.t===2)B.shake=10;
+    const fadeOut=A.t>152?Math.max(0,(177-A.t)/25):1;
+    c.fillStyle='rgba(0,0,12,'+(.5*p*fadeOut).toFixed(2)+')';c.fillRect(0,0,LW,LH);
     const nx=Math.round(LW*.38),ny=168;
-    c.save();c.globalAlpha=.25*p;c.globalCompositeOperation='lighter';
-    for(let k=0;k<7;k++){const a=k/7*6.283+frame/40;c.beginPath();c.moveTo(nx,ny-40);
-      c.lineTo(nx+Math.cos(a)*LW,ny-40+Math.sin(a)*LW);c.lineTo(nx+Math.cos(a+.16)*LW,ny-40+Math.sin(a+.16)*LW);
+    c.save();c.globalAlpha=.26*p*fadeOut;c.globalCompositeOperation='lighter';
+    for(let k=0;k<9;k++){const a=k/9*6.283+frame/60;c.beginPath();c.moveTo(nx,ny-44);
+      c.lineTo(nx+Math.cos(a)*LW,ny-44+Math.sin(a)*LW);c.lineTo(nx+Math.cos(a+.09)*LW,ny-44+Math.sin(a+.09)*LW);
       c.closePath();c.fillStyle='rgba(190,255,220,.5)';c.fill()}
     c.restore();
-    const rise=Math.round((1-p)*46);
-    c.save();c.globalAlpha=p;
-    const sc=1+p*.55;c.translate(nx,ny+rise);c.scale(sc,sc);
+    // the ngen climbs out of the earth: clipped at the ground line, dust at its feet
+    const rise=Math.round((1-p)*58);
+    const breathe=1+Math.sin(frame/11)*.015+(gu&&A.t<138?Math.sin((A.t-124)/14*3.14)*.08:0);
+    const sc=(0.92+p*.6+Math.sin(Math.min(1,A.t/50)*3.14)*.05)*breathe;
+    c.save();c.beginPath();c.rect(0,0,LW,ny+9);c.clip();
+    c.globalAlpha=Math.min(1,p*1.4);c.translate(nx,ny+rise);c.scale(sc,sc);
     drawNgen(c,0,0,1,frame,A.v==='lafken'?undefined:A.v);
     c.restore();c.globalAlpha=1;
-    const e=A.e,cvs=enemyCanvas(e.t,30,Math.floor(frame/10)%2);
-    const x=A.px+(nx-A.px)*q,y=A.py+(ny-60-A.py)*q,ss=1-q*.88,wob=Math.sin(frame/3)*2*q;
-    c.save();c.globalAlpha=Math.max(0,1-q*q);c.translate(x+wob,y);c.scale(ss,ss);
-    c.drawImage(cvs,-cvs.width/2,-cvs.height/2);c.restore();c.globalAlpha=1;
-    for(let k=0;k<10;k++){const a=k/10*6.283+frame/9,rr=34*(1-q)+8;
-      ell(c,x+Math.cos(a)*rr,y+Math.sin(a)*rr*.6,1.5,1.5,'rgba(170,255,210,'+(.5*q).toFixed(2)+')')}
-    if(A.t===56)sfx('lvl');
-    if(A.t>150){A.done=1;victory()}
+    if(p<1)for(let k=0;k<7;k++){const ph=((frame*2+k*31)%60)/60;
+      ell(c,nx-20+k*7+Math.sin(k*5)*3,ny+6-ph*9,2.5*(1-ph)+1,1.5,'rgba(120,100,80,'+(.5*(1-ph)).toFixed(2)+')')}
+    const e=A.e,Tt=ET[e.t],cvs=enemyCanvas(e.t,Tt.bs,Math.floor(frame/12)%2);
+    if(A.t>=62&&!A.took){A.took=1;e.dead=true;e.fadeT=0;A.x0=e.px;A.y0=e.py-Math.round(cvs.height/3)}
+    if(A.took&&!gu){
+      // the boss is torn from its place and drawn into the ngen along an arc
+      const tx=nx+12,ty=ny-62,mx=(A.x0+tx)/2,my=Math.min(A.y0,ty)-36;
+      const bz=t=>[ (1-t)*(1-t)*A.x0+2*(1-t)*t*mx+t*t*tx, ((1-t)*(1-t)*(A.y0+cvs.height/2))+2*(1-t)*t*my+t*t*ty ];
+      for(const [dq,ga] of [[.14,.08],[.07,.16],[0,1]]){
+        const qq=Math.max(0,q-dq);if(ga<1&&qq<=0)continue;
+        const [bx,by]=bz(qq),sx=1-qq*.5,sy=1-qq*.8,rot=-qq*.55;
+        const [tcv,tg]=mk(cvs.width,cvs.height);tg.drawImage(cvs,0,0);
+        const tintA=.55*(1-qq);
+        if(tintA>0.02){tg.globalCompositeOperation='source-atop';
+          tg.fillStyle=(Math.floor(frame/7)%2)?'rgba(255,150,40,'+tintA.toFixed(2)+')':'rgba(255,55,25,'+tintA.toFixed(2)+')';
+          tg.fillRect(0,0,cvs.width,cvs.height)}
+        c.save();c.globalAlpha=ga*(1-qq*.35);c.translate(bx,by);c.rotate(rot);c.scale(sx,sy);
+        c.drawImage(tcv,-Math.floor(cvs.width/2),-Math.floor(cvs.height/2));c.restore()}
+      c.globalAlpha=1;
+      for(let k=0;k<8;k++){const ph=((frame*2+k*37)%80)/80;const [bx,by]=bz(q);
+        const sxp=bx+(tx-bx)*ph+Math.sin(ph*9+k)*5,syp=by+(ty-by)*ph;
+        R(c,Math.round(sxp),Math.round(syp),1,1,'rgba(190,255,230,'+(.8*q*(1-ph)).toFixed(2)+')')}
+    }
+    if(gu){
+      if(A.t===124){B.flash=12;B.shake=14;sfx('lvl')}
+      const rt=(A.t-124);
+      if(rt<30){c.strokeStyle='rgba(200,255,235,'+((1-rt/30)*.7).toFixed(2)+')';c.lineWidth=2;
+        c.beginPath();c.ellipse(nx+6,ny-58,rt*3.2,rt*1.6,0,0,6.283);c.stroke()}
+      for(let k=0;k<6;k++){const ph=((A.t*2+k*29)%70)/70;
+        ell(c,nx+6+Math.sin(k*7+A.t/9)*12,ny-58-ph*30,1.5,1.5,'rgba(210,255,240,'+((1-ph)*.6).toFixed(2)+')')}
+    }
+    if(A.t>176){A.done=1;victory()}
   }
 }
 /* fixed 60 Hz timestep: game speed is the same at any frame rate.
