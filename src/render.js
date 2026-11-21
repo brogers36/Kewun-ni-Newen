@@ -544,18 +544,26 @@ function renderBattle(){
   const al=B.en.filter(e=>!e.dead||e.fadeT>0),n=al.length,base=138;
   al.forEach((e,i)=>{const Tt=ET[e.t],sz=Tt.bs,cvs=enemyCanvas(e.t,sz,Math.floor(frame/12)%2);
     const bossI=al.findIndex(x=>ET[x.t].boss),others=al.filter(x=>!ET[x.t].boss),oi=others.indexOf(e);
-    const cx=bossI<0?Math.round(8+(LW-78)*(i+1)/(n+1)):ET[e.t].boss?72:Math.round(104+(oi+1)*(LW-184)/(others.length+1));let y=base-cvs.height+4+Math.round(Math.sin(frame/16+i));if(y<4)y=4+Math.round(Math.sin(frame/16+i));
+    // enemies line up in a diagonal column on the left, all facing the hero
+    let cx,bse;
+    const tall=al.some(x=>!ET[x.t].boss&&ET[x.t].bs>48);
+    if(bossI<0&&tall){cx=Math.round(8+(LW-78)*(i+1)/(n+1));bse=138}
+    else if(bossI<0){const m=Math.max(1,n-1),sp=Math.min(30,Math.round(52/m));cx=(n===1?60:40)+i*14;bse=(n===1?138:104)+i*sp}
+    else if(ET[e.t].boss){cx=72;bse=138}
+    else if(tall){cx=Math.round(104+(oi+1)*(LW-184)/(others.length+1));bse=138}
+    else{const m=Math.max(1,others.length-1),sp=Math.min(26,Math.round(46/m));cx=152+oi*12;bse=(others.length===1?136:108)+oi*sp}
+    let y=bse-cvs.height+4+Math.round(Math.sin(frame/16+i));if(y<4)y=4+Math.round(Math.sin(frame/16+i));
     if(Tt.fly&&e.gr<=0)y-=26+Math.round(Math.sin(frame/9+i)*3);
     if(B.intro>0)y+=Math.round(B.intro*1.5);
     e.px=cx;e.py=y+cvs.height/3;
     if(/^ngoyman/.test(e.t)&&!e.dead){
-      ell(c,cx,base,sz/2.1,5,'rgba(16,26,12,.5)');ell(c,cx,base,sz/2.8,3,'rgba(32,48,20,.45)');
+      ell(c,cx,bse,sz/2.1,5,'rgba(16,26,12,.5)');ell(c,cx,bse,sz/2.8,3,'rgba(32,48,20,.45)');
       for(let k=0;k<7;k++){const ph=((frame*.7+k*53)%200)/200;
-        const vx=cx+Math.sin(frame/50+k*2.1)*sz*.5+Math.sin(ph*6.28+k)*6,vy=base-2-ph*cvs.height*1.05,vr=(6+(k%3)*3)*(.6+ph*.8);
+        const vx=cx+Math.sin(frame/50+k*2.1)*sz*.5+Math.sin(ph*6.28+k)*6,vy=bse-2-ph*cvs.height*1.05,vr=(6+(k%3)*3)*(.6+ph*.8);
         ell(c,vx,vy,vr,vr*.55,'rgba(108,150,88,'+(.17*(1-ph)).toFixed(2)+')');
         ell(c,vx+2,vy+1,vr*.6,vr*.35,'rgba(140,184,108,'+(.11*(1-ph)).toFixed(2)+')')}
       for(let k=0;k<4;k++){R(c,Math.round(cx+Math.sin(frame/7+k*3)*sz*.4),Math.round(y+20+Math.cos(frame/9+k*2)*14),1,1,'rgba(16,24,10,.8)')}}
-    ell(c,cx,base+1,sz/1.95,4,'rgba(0,0,14,.22)');ell(c,cx,base+1,sz/2.6,2.6,'rgba(0,0,14,.3)');
+    ell(c,cx,bse+1,sz/1.95,4,'rgba(0,0,14,.22)');ell(c,cx,bse+1,sz/2.6,2.6,'rgba(0,0,14,.3)');
     if(e.dead){e.fadeT--;c.globalAlpha=Math.max(0,e.fadeT/20)}
     if(e.hit>0&&e.hit--%4<2)c.globalAlpha=.25;
     let ly=0,ls=1;if(e.lunge>0){e.lunge--;ly=Math.round(Math.sin(e.lunge/16*Math.PI)*10);}
@@ -585,9 +593,11 @@ function renderBattle(){
         c.beginPath();c.ellipse(cx,cyS,sz*.60+k*6,sz*.33+k*4,0,0,6.283);c.stroke();c.restore()}
       for(let k=0;k<6;k++){const a2=frame/16+k*1.047;R(c,Math.round(cx+Math.cos(a2)*(sz*.60)),Math.round(cyS+Math.sin(a2)*(sz*.33)),2,2,k%2?'#fff6c0':'#ffe060')}}
     if(e.sl>0)OV.push(()=>txt('z'+(frame%40<20?'Z':''),cx+sz/2-3,y+6,'#e0f0ff',16));
-    const bw=Math.max(32,Math.min(76,sz*.8)),bx=Math.round(cx-bw/2),by=base+4;
-    R(c,bx-1,by-1,bw+2,5,'#181018');R(c,bx,by,bw,3,'#4a1a1f');R(c,bx,by,Math.max(0,Math.round(bw*e.hp/e.max)),3,'#f07028');R(c,bx,by,Math.max(0,Math.round(bw*e.hp/e.max)),1,'#ffb070');
-    OV.push(()=>txt(e.label,cx,by+13,'#ffffff',13,'center'));
+    const bw=Math.max(32,Math.min(76,sz*.8)),bx=Math.round(cx-bw/2),by=bse+4;
+    const col=!tall&&!ET[e.t].boss&&(bossI<0?n>1:others.length>1);
+    const bw2=col?28:bw,bx2=col?Math.round(cx+sz/2+6):bx,by2=col?bse-10:by;
+    R(c,bx2-1,by2-1,bw2+2,5,'#181018');R(c,bx2,by2,bw2,3,'#4a1a1f');R(c,bx2,by2,Math.max(0,Math.round(bw2*e.hp/e.max)),3,'#f07028');R(c,bx2,by2,Math.max(0,Math.round(bw2*e.hp/e.max)),1,'#ffb070');
+    if(col)OV.push(()=>txt(e.label,bx2,by2-3,'#ffffff',12,'left'));else OV.push(()=>txt(e.label,cx,by2+13,'#ffffff',13,'center'));
     const tg=B.cursor==='all'||B.cursor===B.en.indexOf(e);
     if(tg&&frame%20<15){const ay=y-8+Math.round(Math.sin(frame/5)*2);for(let k=0;k<5;k++){R(c,cx-5+k,ay+k,11-k*2,1,'#ffe040');R(c,cx-6+k,ay+k,1,1,'#181018');R(c,cx+5-k,ay+k,1,1,'#181018')}R(c,cx-6,ay-1,13,1,'#181018')}
   });
