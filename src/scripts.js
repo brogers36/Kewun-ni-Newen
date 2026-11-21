@@ -332,6 +332,7 @@ function kukuLof(){
     N('Mira el lof: aquí se teje, se cocina, se juega palin y los niños aprenden mapudungun. Habla con todos.','Look around the lof: people weave, cook, play palin, and the children learn Mapudungun here. Talk to everyone.')]);
 }
 function lonkoTalk(){
+  if(S.flags.mql_laf&&!S.flags.mqd_laf)return say([L('Lonko','Machi ñi dungu.','Lo de la machi.','The machi\'s errand.'),N('«¿Las hojas? El foye viejo, en Fotra mapu: el árbol solo entre los dos brazos de agua, florecido. Párate a su pie por el norte y pídele permiso.»','"The leaves? The old foye, in Fotra mapu: the lone tree between the two arms of water, in bloom. Stand at its north foot and ask its leave."')]);
   if(S.flags.mq_laf&&!S.flags.mql_laf){S.flags.mql_laf=1;persist();sfx('lvl');
     return say([L('Lonko','Machi ñi dungu? Kümey.','¿Un encargo de la machi? Bien.','An errand from the machi? Good.'),
       N('«El foye viejo crece en Fotra mapu, los pantanos: un árbol solo, entre dos brazos de agua. Párate a su pie, por el lado norte, y pídele permiso antes de sacar una sola hoja. Llevas mi palabra.» La machi y el lonko cuidan juntos el lof: ella con el lawen, él con la palabra.','"The old foye grows in Fotra mapu, the marshes: a lone tree between two arms of water. Stand at its foot, on the north side, and ask its leave before taking a single leaf. You carry my word." The machi and the lonko look after the lof together: she with the remedies, he with the word.'),
@@ -340,6 +341,7 @@ function lonkoTalk(){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen)ls.push(L('Lonko','Ngen-lafken nepey. Chaltu may!','Ngen-lafken despertó. ¡Gracias!','Ngen-lafken has woken up. Thank you!'),
       N('La niebla se levantó del camino que sale al este de la laguna: lleva a las tierras nagche, los llanos. Allá vive tu chuchu.','The fog has lifted from the road leading east from the lagoon: it goes to the Nagche lands, the lowlands. Your chuchu lives there.'),
+      N('El camino: sal del lof hacia el este, cruza las dunas de Kuyüm y el camino del monte, bordea la laguna por Lafken inaltu y sigue al este por el Nagche rüpü hasta el lof nagche.','The way: leave the lof eastward, cross the Kuyüm dunes and the forest road, skirt the lagoon along Lafken inaltu and keep east along the Nagche rüpü to the Nagche lof.'),
       N('Ese trokiñ de trariwe que traes es muy antiguo. Dicen que el trariwe completo, con un trokiñ de cada tierra, es lo único que puede atravesar la niebla de Ti Fütra Ngoyman, el gran olvido.','That trokiñ of trariwe you carry is very old. They say the complete trariwe, with one trokiñ from each land, is the only thing that can pass through the fog of Ti Fütra Ngoyman, the great forgetting.'));
     else ls.push(L('Lonko','Ngen-lafken umawtuley. Trelke-wekufü müley lafken mew.','Ngen-lafken está dormido. Trelke-wekufü está en la laguna.','Ngen-lafken is asleep. Trelke-wekufü is in the lagoon.'),
       N('Sigue la costa hacia el este: las dunas, el monte y la orilla de la laguna.','Follow the coast east: the dunes, the forest, and the shore of the lagoon.'));
@@ -411,6 +413,7 @@ function chuchuTalk(){
   say(ls);
 }
 function nLonkoTalk(){
+  if(S.flags.mql_nag&&!S.flags.mqd_nag)return say([L('Lonko','Machi ñi dungu.','Lo de la machi.','The machi\'s errand.'),N('«¿El agua? Con el metawe, en el ojo de agua del rincón del amanecer, el del nororiente del menoko: verás la luz quieta sobre él.»','"The water? With the metawe, at the pool in the sunrise corner, the north-east of the menoko: you will see the still light upon it."')]);
   if(S.flags.mq_nag&&!S.flags.mql_nag){S.flags.mql_nag=1;persist();sfx('lvl');
     return say([L('Lonko','Machi ñi dungu? Kümey.','¿Un encargo de la machi? Bien.','An errand from the machi? Good.'),
       N('El lonko entra a su ruka y vuelve con un cántaro de greda oscura, brillante de viejo. «El metawe del lof. Con él se saca el agua del menoko: del ojo de agua del rincón del amanecer, el del nororiente, el más quieto. La machi sana y yo pongo lo que haga falta: así ha sido siempre.»','The lonko goes into his ruka and returns with a jug of dark clay, shiny with age. "The metawe of the lof. With it one draws water from the menoko: from the pool in the sunrise corner, the north-east one, the stillest. The machi heals and I provide what is needed: so it has always been."'),
@@ -418,7 +421,8 @@ function nLonkoTalk(){
   if(S.flags.nag_lonko){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen2)ls.push(L('Lonko','Ngen-mawida nepey. Chaltu may!','Ngen-mawida despertó. ¡Gracias!','Ngen-mawida has woken up. Thank you!'),
-      N('Ya llevas dos trokiñ del trariwe. Dicen que más allá de las montañas, en tierras pewenche, hay otro ngen dormido.','You now carry two trokiñ of the trariwe. They say that beyond the mountains, in Pewenche lands, another ngen is asleep.'));
+      N('Ya llevas dos trokiñ del trariwe. Dicen que más allá de las montañas, en tierras pewenche, hay otro ngen dormido.','You now carry two trokiñ of the trariwe. They say that beyond the mountains, in Pewenche lands, another ngen is asleep.'),
+      N('El camino: desde este lof ve al este por Kulliñ mapu, cruza el Lewfü y el Fütra mawida, y sube por el Pewenche rüpü hasta el lof pewenche.','The way: from this lof go east through Kulliñ mapu, cross the Lewfü and the Fütra mawida, and climb the Pewenche rüpü to the Pewenche lof.'));
     else ls.push(L('Lonko','Fütra mawida mew amunge.','Ve al monte grande.','Go to the great forest.'),N('Pasando los campos de los animales y el río está el monte. La guarida del Witranalwe está bajando por una escalera de piedra.','Past the animal fields and the river is the forest. The Witranalwe\'s lair is down a stone stairway.'));
     return say(ls);
   }
@@ -914,6 +918,7 @@ function lakuTalk(){
   say(ls);
 }
 function pLonkoTalk(){
+  if(S.flags.mql_pew&&!S.flags.mqd_pew)return say([L('Lonko','Machi ñi dungu.','Lo de la machi.','The machi\'s errand.'),N('«¿La abuela pewen? En el bosque de abajo de Pewen mapu, en lo más tupido: el único pewen con ngülliw regados a sus pies.»','"The grandmother pewen? In the lower forest of Pewen mapu, where it grows thickest: the only pewen with ngülliw scattered at its feet."')]);
   if(S.flags.mq_pew&&!S.flags.mql_pew){S.flags.mql_pew=1;persist();sfx('lvl');
     return say([L('Lonko','Machi ñi dungu? Kümey.','¿Un encargo de la machi? Bien.','An errand from the machi? Good.'),
       N('«La abuela pewen. Mi familia la ha cuidado por generaciones: está en el bosque de abajo de Pewen mapu, en lo más tupido, donde apenas entra la luz. Recoge solo los ngülliw caídos y dale las gracias. Llevas mi palabra.» La machi guía el llellipun y el lonko abre el camino: los dos sostienen el lof.','"The grandmother pewen. My family has watched over her for generations: she stands in the lower forest of Pewen mapu, where it grows thickest, where the light barely enters. Gather only the fallen ngülliw and thank her. You carry my word." The machi guides the llellipun and the lonko opens the way: the two of them hold up the lof.'),
@@ -921,7 +926,8 @@ function pLonkoTalk(){
   if(S.flags.pew_lonko){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen3)ls.push(L('Lonko','Ngen-pewen nepey. Chaltu may!','Ngen-pewen despertó. ¡Gracias!','Ngen-pewen has woken up. Thank you!'),
-      N('Ya llevas tres trariwe trokiñ. Dicen que en el sur, en tierras williche, y al otro lado de la cordillera, en Puelmapu, esperan los últimos.','You now carry three trariwe trokiñ. They say the last ones wait in the south, in Williche lands, and across the mountains, in Puelmapu.'));
+      N('Ya llevas tres trariwe trokiñ. Dicen que en el sur, en tierras williche, y al otro lado de la cordillera, en Puelmapu, esperan los últimos.','You now carry three trariwe trokiñ. They say the last ones wait in the south, in Williche lands, and across the mountains, in Puelmapu.'),
+      N('El camino al sur: baja de vuelta al oeste hasta el Lewfü, el río, y desde allí toma la salida del sur: el Williche rüpü lleva al este hasta el lof williche.','The way south: go back west down to the Lewfü, the river, and from there take the southern exit: the Williche rüpü leads east to the Williche lof.'));
     else ls.push(L('Lonko','Pillañ mew amunge.','Ve al volcán.','Go to the volcano.'),N('Pasando el bosque de pewenes y los campos de nieve está el pillañ. La morada del Cherufe está adentro.','Past the pewen forest and the snowfields is the pillañ. The Cherufe\'s lair is inside.'),
       N('Y en este lof las puertas están abiertas: entra en las rukas. La papay Rayen y el chachay Nawel siempre reciben visitas.','And in this lof the doors are open: go into the rukas. Papay Rayen and chachay Nawel always welcome visitors.'));
     return say(ls);
@@ -1008,6 +1014,7 @@ function checheTalk(){
   say(ls);
 }
 function wLonkoTalk(){
+  if(S.flags.mql_wil&&!S.flags.mqd_wil)return say([L('Lonko','Machi ñi dungu.','Lo de la machi.','The machi\'s errand.'),N('«¿El trayenko? Desde el Lawal mawida, la tierra agrietada del borde sur baja a la garganta. Llena el yiwe al pie del salto, por el lado derecho, donde el agua golpea la piedra.»','"The trayenko? From the Lawal mawida, the cracked ground at the southern edge leads down into the gorge. Fill the yiwe at the foot of the falls, on the right-hand side, where the water strikes the rock."')]);
   if(S.flags.mq_wil&&!S.flags.mql_wil){S.flags.mql_wil=1;persist();sfx('lvl');
     return say([L('Lonko','Machi ñi dungu? Kümey.','¿Un encargo de la machi? Bien.','An errand from the machi? Good.'),
       N('El lonko descuelga de su cinto un vaso de madera tallada, oscuro y liviano. «Mi yiwe. Llénalo al pie del salto de Trayen mapu, donde el agua golpea la piedra, por el lado derecho. La garganta es brava: ten cuidado. La machi pide y yo pongo: así cuidamos este lof entre los dos.»','The lonko unhooks from his belt a carved wooden cup, dark and light in the hand. "My yiwe. Fill it at the foot of the falls in Trayen mapu, where the water strikes the rock, on the right-hand side. The gorge is fierce: take care. The machi asks and I provide: that is how the two of us care for this lof."'),
@@ -1015,7 +1022,8 @@ function wLonkoTalk(){
   if(S.flags.wil_lonko){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen4)ls.push(L('Lonko','Ngen-kürüf nepey. Chaltu may!','Ngen-kürüf despertó. ¡Gracias!','Ngen-kürüf has woken up. Thank you!'),
-      N('Ya llevas cuatro trariwe trokiñ. El último está en Puelmapu, al otro lado de la cordillera.','You now carry four trariwe trokiñ. The last one is in Puelmapu, on the other side of the mountains.'));
+      N('Ya llevas cuatro trariwe trokiñ. El último está en Puelmapu, al otro lado de la cordillera.','You now carry four trariwe trokiñ. The last one is in Puelmapu, on the other side of the mountains.'),
+      N('El camino: vuelve al lof pewenche y sigue al este por Pewen mapu y Pire mapu; en los campos de nieve sube al norte hasta Wente degiñ, el paso, y baja al este por el Puel rüpü hasta el lof puelche.','The way: return to the Pewenche lof and keep east through Pewen mapu and Pire mapu; from the snowfields climb north to Wente degiñ, the pass, and descend east along the Puel rüpü to the Puelche lof.'));
     else ls.push(L('Lonko','Lafken inaltu mew amunge.','Ve a los acantilados de la costa.','Go to the cliffs by the sea.'),N('Pasando el bosque de alerces y la costa están los acantilados. La cueva del Kaleuche está bajando por las rocas.','Past the alerce forest and the coast are the cliffs. The Kaleuche\'s cave is down among the rocks.'));
     return say(ls);
   }
@@ -1095,6 +1103,7 @@ function wekuTalk(){
   say(ls);
 }
 function eLonkoTalk(){
+  if(S.flags.mql_puel&&!S.flags.mqd_puel)return say([L('Lonko','Machi ñi dungu.','Lo de la machi.','The machi\'s errand.'),N('«¿La chadi? En el lelfün de abajo, junto al chacay solo: donde el suelo se pone blanco. Escarba al lado del árbol.»','"The chadi? In the lower lelfün, by the lone chacay: where the ground turns white. Dig beside the tree."')]);
   if(S.flags.mq_puel&&!S.flags.mql_puel){S.flags.mql_puel=1;persist();sfx('lvl');
     return say([L('Lonko','Machi ñi dungu? Kümey.','¿Un encargo de la machi? Bien.','An errand from the machi? Good.'),
       N('El lonko mira hacia el oriente un momento. «El camino de la sal. Lo caminé de joven con mi chaw. En el lelfün de abajo, junto al chacay solo, el suelo se pone blanco: ahí se junta la chadi. Escarba junto al árbol. La machi pide por el lof y yo recuerdo por el lof: dile que la sal va en camino.»','The lonko looks east for a moment. "The salt path. I walked it as a young man with my father. In the lower lelfün, by the lone chacay, the ground turns white: that is where the chadi gathers. Dig beside the tree. The machi asks for the lof and I remember for the lof: tell her the salt is on its way."'),
