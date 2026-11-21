@@ -26,6 +26,18 @@ function paintLand(c,t,dim){
   if(!dim)for(let i=0;i<3;i++){const bx=Math.round((t*.25+i*85)%(LW+40)-20),by=Math.round(30+i*11+Math.sin(t/25+i)*3);condor(c,bx,by,Math.sin(t/12+i))}
 }
 let VIGNC=null;
+let DARKC=null;
+function darkMask(){
+  // cave darkness dither, prerendered once (player at the center) and blitted per frame
+  if(DARKC&&DARKC.width===LW*2&&DARKC.height===LH*2)return DARKC;
+  DARKC=document.createElement('canvas');DARKC.width=LW*2;DARKC.height=LH*2;
+  const d=DARKC.getContext('2d'),mx=LW,my=LH;
+  for(let y=0;y<DARKC.height;y+=2)for(let x=0;x<DARKC.width;x+=2){
+    const dist=Math.hypot(x-mx,y-my);
+    if(dist>70){const a=Math.min(.7,(dist-70)/140);if(a>.05){d.fillStyle='rgba(0,0,0,'+a.toFixed(2)+')';d.fillRect(x,y,2,2)}}
+  }
+  return DARKC;
+}
 function cutFx(c,dark){
   if(!VIGNC){VIGNC=document.createElement('canvas');VIGNC.width=LW;VIGNC.height=LH;const v=VIGNC.getContext('2d');
     const id=v.createImageData(LW,LH),d=id.data;
@@ -192,7 +204,7 @@ function renderMap(){
     for(let k=0;k<3;k++){const sx2=40+k*80+Math.sin(frame/90+k)*10;c.fillStyle='rgba(180,240,255,.05)';c.beginPath();c.moveTo(sx2,VY);c.lineTo(sx2+26,VY);c.lineTo(sx2+60,VY+VH);c.lineTo(sx2+20,VY+VH);c.closePath();c.fill()}}
   if(M.fog){c.fillStyle=S.flags.won?'rgba(255,244,210,.06)':'rgba(148,158,174,.16)';c.fillRect(0,VY,LW,VH);
     if(!S.flags.won)for(let k=0;k<5;k++){const wx=((k*83+frame)%(LW+80))-40,wy=24+k*((VH-30)/5);c.fillStyle='rgba(190,198,210,.08)';c.beginPath();c.ellipse(wx,VY+wy,46,8,0,0,6.283);c.fill()}}
-  if(M.bg==='cave'||M.bg==='cave2'||M.bg==='cave3'||M.bg==='cave4'){const px=Math.round(P.fx*T-cx+8),py=Math.round(P.fy*T-cy+VY+8);for(let y=VY;y<LH;y+=2)for(let x=0;x<LW;x+=2){const d=Math.hypot(x-px,y-py);if(d>70){const a=Math.min(.7,(d-70)/140);if(a>.05){c.fillStyle='rgba(0,0,0,'+a.toFixed(2)+')';c.fillRect(x,y,2,2)}}}}
+  if(M.bg==='cave'||M.bg==='cave2'||M.bg==='cave3'||M.bg==='cave4'){const px=Math.round(P.fx*T-cx+8),py=Math.round(P.fy*T-cy+VY+8);const dm=darkMask();c.drawImage(dm,px-dm.width/2,py-dm.height/2)}
   if(CUR==='rupu'){for(let k=0;k<7;k++){const fx=-cx+Math.round(Math.sin(frame/60+k)*6)+6,fy=k*30+((frame/3+k*17)%30)-cy+VY;for(const [rr,al] of [[26,.18],[16,.22],[9,.25]])ell(c,fx,fy,rr,rr*.7,'rgba(200,200,212,'+al+')')}}
   if(M.bg==='forest'){c.fillStyle=awake(M.region)?'rgba(255,240,160,.06)':'rgba(10,30,20,.3)';c.fillRect(0,VY,LW,VH)}
   if(M.bg==='lagoon'){c.fillStyle=S.flags.ngen?'rgba(120,200,255,.08)':'rgba(60,30,90,.22)';c.fillRect(0,VY,LW,VH)}
