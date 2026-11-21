@@ -235,6 +235,7 @@ function enemyPhase(){
     if(e.t==='ngoyman1'||e.t==='llufu1'){const wat=e.t==='llufu1';
       if(!e.hidden&&e.hideT>0){e.hideT--;if(e.hideT<=0){e.hidden=1;fx.push(wat?'El agua oscura vuelve a tragarse al Kaykayfilu.':'La niebla vuelve a tragarse a Ti Fütra Ngoyman.');fxe.push(wat?'The dark water swallows the Kaykayfilu again.':'The fog swallows Ti Fütra Ngoyman again.');continue}}
       if(!e.hidden&&!e.hideT&&B.turn===0){e.hidden=1;fx.push(wat?'El Kaykayfilu se hunde en el agua oscura: no ves dónde golpear.':'El velo de niebla se cierra sobre el gran olvido: no ves dónde golpear.');fxe.push(wat?'The Kaykayfilu sinks into the dark water: you cannot see where to strike.':'The veil of fog closes over the great forgetting: you cannot see where to strike.');continue}
+      if(!wat&&B.turn>0&&B.turn%3===2){hitP(e,2.0,{es:': dos garras de niebla salen del velo y te cruzan el pecho',en:': two claws of fog lash out of the veil and rake your chest'});hitsFx.push(()=>B.shake=10);continue}
       hitP(e,e.hidden?1:1.3,wat?{es:' te golpea con la cola desde lo oscuro',en:' strikes you with its tail from the dark'}:{es:' te azota con un jirón de niebla',en:' lashes you with a shred of fog'});continue}
     if(e.t==='llufu2'){
       if(!e.armor){e.armorT=(e.armorT||0)-1;if(e.armorT<=0){e.armor=1;fx.push('Las placas de la mandíbula del Kaykayfilu vuelven a cerrarse.');fxe.push('The plates of the Kaykayfilu\'s jaw lock shut again.');continue}}
@@ -250,10 +251,13 @@ function enemyPhase(){
       if(B.turn%3===2){hitP(e,1.9,{es:' se deja caer entero sobre ti',en:' crashes its whole body down on you'});continue}
       hitP(e,.9);hitP(e,.9,{es:' barre con la cola',en:' sweeps with its tail'});continue}
     if(e.t==='ngoyman2'){
+      if(B.turn>0&&B.turn%4===3){if((S.sp||0)>0)S.sp--;hitP(e,1.9,{es:': un latido de losa te aplasta contra el suelo (−✦)',en:': a stone-slab beat crushes you to the ground (−✦)'});hitsFx.push(()=>{B.shake=12;pop(60,30,'−✦','#c0b8ff');sfx('bad')});continue}
       if(!e.armor){e.armorT=(e.armorT||0)-1;if(e.armorT<=0){e.armor=1;fx.push('La coraza gris del piwke vuelve a cerrarse.');fxe.push('The grey crust of the heart closes again.');continue}}
       if(B.turn%2===1&&(S.sp||0)>0){S.sp--;fx.push('El piwke del olvido late: una palabra tuya se borra (−✦).');fxe.push('The heart of forgetting beats: one of your words is erased (−✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')});hitP(e,.7,{es:' te golpea con su latido',en:' strikes you with its beat'});continue}
       hitP(e);continue}
     if(e.t==='ngoyman3'){
+      if(B.tele){B.tele=false;hitP(e,2.6,{es:': el puño de niebla reunida cae entero sobre ti',en:': the fist of gathered fog comes down whole upon you'});hitsFx.push(()=>B.shake=14);continue}
+      if(B.turn>0&&B.turn-(e.lastTele||-9)>3&&Math.random()<.3){B.tele=true;e.lastTele=B.turn;fx.push('Fütra Ngoyman junta toda la niebla de la sala sobre su puño...');fxe.push('Fütra Ngoyman gathers all the fog in the hall over its fist...');continue}
       if(!e.seals)e.seals=[];
       if(!e.seals.length&&B.turn>0&&B.turn%4===0){const pool=S.roots.slice();let code=pool[rnd(pool.length)];if(Math.random()<.4)code+='kil';e.seals=[code];
         fx.push('¡Fütra Ngoyman alza una barrera de luz robada! '+sealGloss(code,'es'));fxe.push('Fütra Ngoyman raises a barrier of stolen light! '+sealGloss(code,'en'));hitsFx.push(()=>{sfx('cast');B.flash=10});continue}
@@ -263,11 +267,15 @@ function enemyPhase(){
       if(Math.random()<.25&&(S.sp||0)>0){S.sp--;fx.push('Fütra Ngoyman aspira tus palabras (−✦).');fxe.push('Fütra Ngoyman breathes in your words (−✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')})}
       hitP(e,.8);hitP(e,.8,{es:' golpea otra vez',en:' strikes again'});continue}
     if(e.t==='ngoyman4'){
+      if(B.turn>0&&B.turn%4===2&&!S.curse){S.curse=1;hitP(e,1.6,{es:': los seis ojos arden a la vez y su mirada te marca (maldición: fuerza −2)',en:': all six eyes blaze at once and their gaze marks you (curse: strength −2)'});hitsFx.push(()=>sfx('bad'));continue}
       if(!e.armor){e.armorT=(e.armorT||0)-1;if(e.armorT<=0){e.armor=1;fx.push('La noche se espesa alrededor de Ngoyman ñi pun: su coraza de sombra se rehace.');fxe.push('The night thickens around Ngoyman ñi pun: its crust of shadow reforms.');continue}}
       if(B.turn>0&&B.turn%3===0){hitP(e,2.0,{es:': la noche entera se te viene encima',en:': the whole night comes down on you'});hitsFx.push(()=>B.shake=10);continue}
       if(Math.random()<.25&&(S.sp||0)>0){S.sp--;fx.push('Seis ojos apagados te miran a la vez: una palabra se te borra (−✦).');fxe.push('Six burnt-out eyes look at you at once: one of your words is erased (−✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')})}
       hitP(e,.85);hitP(e,.85,{es:' golpea con un brazo de humo',en:' strikes with an arm of smoke'});continue}
     if(e.t==='ngoyman5'){
+      if(B.turn>0&&B.turn%4===2){const st2=Math.min(2,S.sp||0);S.sp-=st2;const hl=Math.min(e.max||ET[e.t].hp,e.hp+12)-e.hp;e.hp+=hl;
+        hitP(e,1.2,{es:': la boca sin fondo aspira: te roba palabras (−'+st2+'✦) y recupera fuerzas (+'+hl+')',en:': the bottomless mouth inhales: it steals your words (−'+st2+'✦) and recovers strength (+'+hl+')'});
+        hitsFx.push(()=>{sfx('bad');const p2=epos(e);pop(p2.x,p2.y-10,'+'+hl,'#80ff90')});continue}
       if(!e.seals)e.seals=[];
       if(!e.seals.length&&B.turn>0&&B.turn%3===0){const pool=S.roots.slice();let code=pool[rnd(pool.length)];if(Math.random()<.4)code+='kil';e.seals=[code];
         fx.push('¡Rüf Fütra Ngoyman alza una barrera de luz robada! '+sealGloss(code,'es'));fxe.push('Rüf Fütra Ngoyman raises a barrier of stolen light! '+sealGloss(code,'en'));hitsFx.push(()=>{sfx('cast');B.flash=10});continue}

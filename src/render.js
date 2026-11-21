@@ -182,9 +182,11 @@ function renderMap(){
         ell(c,cxp,sy+15,cvs.width*.75,7,'rgba(14,18,8,.55)');ell(c,cxp,sy+15,cvs.width*.5,4,'rgba(26,32,14,.5)');
         for(const [r,a] of [[1.35,.34],[1.0,.24],[.68,.16]])ell(c,cxp,cyp+loom,cvs.width*.72*r,cvs.height*.58*r,'rgba(3,5,2,'+a+')');
         for(let k=0;k<8;k++){const a2=frame/44+k*.785,rr=cvs.width*.6+Math.sin(frame/18+k)*4;
-          ell(c,cxp+Math.cos(a2)*rr,cyp+loom+Math.sin(a2)*cvs.height*.46,2.5,1.5,'rgba(120,132,100,.38)')}
-        for(let k=0;k<6;k++){const ph=((frame+k*37)%150)/150;
-          ell(c,cxp-22+k*9+Math.sin(ph*5+k)*4,sy+14-ph*cvs.height,1.5+ph*2,1.2,'rgba(104,120,80,'+(.45*(1-ph)).toFixed(2)+')')}
+          ell(c,cxp+Math.cos(a2)*rr,cyp+loom+Math.sin(a2)*cvs.height*.46,3.5,2,'rgba(112,152,92,.34)')}
+        for(let k=0;k<7;k++){const ph=((frame*.7+k*43)%180)/180;
+          const vx=cxp+Math.sin(frame/50+k*2.1)*cvs.width*.42+Math.sin(ph*6.28+k)*5,vy=sy+12-ph*cvs.height*1.05,vr=(5+(k%3)*3)*(.6+ph*.8);
+          ell(c,vx,vy,vr,vr*.55,'rgba(108,150,88,'+(.18*(1-ph)).toFixed(2)+')');
+          ell(c,vx+2,vy+1,vr*.6,vr*.35,'rgba(140,184,108,'+(.12*(1-ph)).toFixed(2)+')')}
         for(let k=0;k<4;k++){R(c,Math.round(cxp+Math.sin(frame/7+k*3)*cvs.width*.4),Math.round(cyp+Math.cos(frame/9+k*2)*cvs.height*.3),1,1,'rgba(14,18,8,.85)')}}
       if(S.pw.pewen>0&&frame%10<5)c.globalAlpha=.55;
       c.drawImage(cvs,Math.round(sx+8-cvs.width/2),Math.round(sy+16-cvs.height-fly+2));c.globalAlpha=1;
@@ -478,10 +480,12 @@ function renderBattle(){
     if(B.intro>0)y+=Math.round(B.intro*1.5);
     e.px=cx;e.py=y+cvs.height/3;
     if(/^ngoyman/.test(e.t)&&!e.dead){
-      ell(c,cx,base,sz/2.1,5,'rgba(16,20,10,.5)');ell(c,cx,base,sz/2.8,3,'rgba(30,38,18,.45)');
-      for(let k=0;k<9;k++){const ph=((frame+k*41)%170)/170;
-        ell(c,cx+Math.sin(k*5+frame/60)*sz*.55,base-4-ph*cvs.height*.95,1.5+ph,1.2,'rgba(110,128,86,'+(.42*(1-ph)).toFixed(2)+')')}
-      for(let k=0;k<4;k++){R(c,Math.round(cx+Math.sin(frame/7+k*3)*sz*.4),Math.round(y+20+Math.cos(frame/9+k*2)*14),1,1,'rgba(20,24,12,.8)')}}
+      ell(c,cx,base,sz/2.1,5,'rgba(16,26,12,.5)');ell(c,cx,base,sz/2.8,3,'rgba(32,48,20,.45)');
+      for(let k=0;k<7;k++){const ph=((frame*.7+k*53)%200)/200;
+        const vx=cx+Math.sin(frame/50+k*2.1)*sz*.5+Math.sin(ph*6.28+k)*6,vy=base-2-ph*cvs.height*1.05,vr=(6+(k%3)*3)*(.6+ph*.8);
+        ell(c,vx,vy,vr,vr*.55,'rgba(108,150,88,'+(.17*(1-ph)).toFixed(2)+')');
+        ell(c,vx+2,vy+1,vr*.6,vr*.35,'rgba(140,184,108,'+(.11*(1-ph)).toFixed(2)+')')}
+      for(let k=0;k<4;k++){R(c,Math.round(cx+Math.sin(frame/7+k*3)*sz*.4),Math.round(y+20+Math.cos(frame/9+k*2)*14),1,1,'rgba(16,24,10,.8)')}}
     ell(c,cx,base,sz/2.6,3,'rgba(0,0,0,.32)');
     if(e.dead){e.fadeT--;c.globalAlpha=Math.max(0,e.fadeT/20)}
     if(e.hit>0&&e.hit--%4<2)c.globalAlpha=.25;
