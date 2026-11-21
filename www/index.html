@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='74fa9e1-202611211201';
+window.KEWUN_BUILD='b173327-202611211205';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -5366,14 +5366,14 @@ function renderBattle(){
     c.beginPath();c.ellipse(LW/2,LH/2,Math.max(.01,rr),Math.max(.01,rr*.78),0,0,6.283);c.stroke();c.lineWidth=1;
     if(B.wipe<=0)B.snap=null}
   // hero panel (LttP-style box)
-  const hrows=Math.ceil(Math.min(40,Math.ceil(maxHP()/HPQ))/10);
-  const pw=136,ph=36+Math.max(0,hrows-2)*8,px=LW-pw-4,py=4; // top-right, above the hero
+  const hrows=Math.ceil(Math.min(40,Math.ceil(maxHP()/HPQ))/8);
+  const pw=100,ph=32+Math.max(0,hrows-2)*8,px=LW-pw-4,py=4; // compact, top-right above the hero
   R(c,px-1,py-1,pw+2,ph+2,'#000');R(c,px,py,pw,ph,'#e8e8f8');R(c,px+1,py+1,pw-2,ph-2,'#7880d0');R(c,px+2,py+2,pw-4,ph-4,'#18186a');
-  {const sp=S.sp||0;R(c,px+pw-12,py+4,7,28,'#f8f8f8');R(c,px+pw-11,py+5,5,26,'#000');const fh=Math.round(26*sp/SPMAX);if(fh)R(c,px+pw-11,py+31-fh,5,fh,'#30c030');}
-  R(c,px+3,py+3,28,28,'#2a2048');if(CT)c.drawImage(ctCharSprite(heroLook(),'down',0),0,1,18,18,px+3,py+3,28,28);else c.drawImage(charSprite(heroLook(),'down',0),0,0,16,14,px+3,py+3,28,24.5);
+  {const sp=S.sp||0;R(c,px+pw-10,py+4,6,ph-8,'#f8f8f8');R(c,px+pw-9,py+5,4,ph-10,'#000');const fh=Math.round((ph-10)*sp/SPMAX);if(fh)R(c,px+pw-9,py+ph-5-fh,4,fh,'#30c030');}
+  R(c,px+3,py+3,20,20,'#2a2048');if(CT)c.drawImage(ctCharSprite(heroLook(),'down',0),0,1,18,18,px+3,py+3,20,20);else c.drawImage(charSprite(heroLook(),'down',0),0,0,16,14,px+3,py+3,20,17.5);
   const mx=maxHP(),hearts=Math.min(40,Math.ceil(mx/HPQ));let hp=Math.max(0,S.hp);
-  for(let i=0;i<hearts;i++){const q=Math.max(0,Math.min(4,hp-i*HPQ)),col=i%10,row=Math.floor(i/10);drawHeart(c,px+34+col*8,py+14+row*8,q)}
-  OV.push(()=>{txt(S.name,px+34,py+11,'#ffffff',14);txt(Math.max(0,S.hp)+'/'+mx,px+pw-16,py+11,'#c8d0ff',12,'right')});
+  for(let i=0;i<hearts;i++){const q=Math.max(0,Math.min(4,hp-i*HPQ)),col=i%8,row=Math.floor(i/8);drawHeart(c,px+26+col*8,py+13+row*8,q)}
+  OV.push(()=>{txt(S.name,px+26,py+10,'#ffffff',11);txt(Math.max(0,S.hp)+'/'+mx,px+pw-13,py+10,'#c8d0ff',10,'right')});
   if(S.hp/mx<=.25&&frame%30<15){R(c,px,py,pw,1,'#ff4040');R(c,px,py+ph-1,pw,1,'#ff4040')}
   B.pops=B.pops.filter(p=>p.t>0);for(const p of B.pops){p.t--;const pp=p;OV.push(()=>txt(pp.txt,pp.x,pp.y-(50-pp.t)*.45,pp.col,20,'center'))}
   if(B.flash>0){c.fillStyle='rgba(255,255,255,'+(B.flash/16)+')';c.fillRect(0,0,LW,LH);B.flash--}
