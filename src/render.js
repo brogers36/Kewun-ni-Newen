@@ -654,7 +654,8 @@ function renderBattle(){
   }
   else if(B.ngenA&&!B.ngenA.done){const A=B.ngenA;A.t++;
     const SS=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
-    const p=SS(A.t/50),q=SS((A.t-62)/58),gu=A.t>=124;
+    const p=SS(A.t/50),SH=96;
+    const col=({mawida:'120,255,150',pewen:'255,200,110',kuruf:'225,240,255',lelfun:'255,230,120'})[A.v]||'120,220,255';
     if(A.t===2)B.shake=10;
     const fadeOut=A.t>152?Math.max(0,(177-A.t)/25):1;
     c.fillStyle='rgba(0,0,12,'+(.5*p*fadeOut).toFixed(2)+')';c.fillRect(0,0,LW,LH);
@@ -665,9 +666,10 @@ function renderBattle(){
       c.closePath();c.fillStyle='rgba(190,255,220,.5)';c.fill()}
     c.restore();
     // the ngen climbs out of the earth: clipped at the ground line, dust at its feet
+    const strike=A.t>=62&&A.t<94;
     const rise=Math.round((1-p)*58);
-    const breathe=1+Math.sin(frame/11)*.015+(gu&&A.t<138?Math.sin((A.t-124)/14*3.14)*.08:0);
-    const sc=(0.92+p*.6+Math.sin(Math.min(1,A.t/50)*3.14)*.05)*breathe;
+    const breathe=1+Math.sin(frame/11)*.015;
+    const sc=(0.92+p*.6+Math.sin(Math.min(1,A.t/50)*3.14)*.05)*breathe+(strike?.08:0);
     c.save();c.beginPath();c.rect(0,0,LW,ny+9);c.clip();
     c.globalAlpha=Math.min(1,p*1.4);c.translate(nx,ny+rise);c.scale(sc,sc);
     drawNgen(c,0,0,1,frame,A.v==='lafken'?undefined:A.v);
@@ -675,33 +677,47 @@ function renderBattle(){
     if(p<1)for(let k=0;k<7;k++){const ph=((frame*2+k*31)%60)/60;
       ell(c,nx-20+k*7+Math.sin(k*5)*3,ny+6-ph*9,2.5*(1-ph)+1,1.5,'rgba(120,100,80,'+(.5*(1-ph)).toFixed(2)+')')}
     const e=A.e,Tt=ET[e.t],cvs=enemyCanvas(e.t,Tt.bs,Math.floor(frame/12)%2);
-    if(A.t>=62&&!A.took){A.took=1;e.dead=true;e.fadeT=0;A.x0=e.px;A.y0=e.py-Math.round(cvs.height/3)}
-    if(A.took&&!gu){
-      // the boss is torn from its place and drawn into the ngen along an arc
-      const tx=nx+12,ty=ny-62,mx=(A.x0+tx)/2,my=Math.min(A.y0,ty)-36;
-      const bz=t=>[ (1-t)*(1-t)*A.x0+2*(1-t)*t*mx+t*t*tx, ((1-t)*(1-t)*(A.y0+cvs.height/2))+2*(1-t)*t*my+t*t*ty ];
-      for(const [dq,ga] of [[.14,.08],[.07,.16],[0,1]]){
-        const qq=Math.max(0,q-dq);if(ga<1&&qq<=0)continue;
-        const [bx,by]=bz(qq),sx=1-qq*.5,sy=1-qq*.8,rot=-qq*.55;
-        const [tcv,tg]=mk(cvs.width,cvs.height);tg.drawImage(cvs,0,0);
-        const tintA=.55*(1-qq);
-        if(tintA>0.02){tg.globalCompositeOperation='source-atop';
-          tg.fillStyle=(Math.floor(frame/7)%2)?'rgba(255,150,40,'+tintA.toFixed(2)+')':'rgba(255,55,25,'+tintA.toFixed(2)+')';
-          tg.fillRect(0,0,cvs.width,cvs.height)}
-        c.save();c.globalAlpha=ga*(1-qq*.35);c.translate(bx,by);c.rotate(rot);c.scale(sx,sy);
-        c.drawImage(tcv,-Math.floor(cvs.width/2),-Math.floor(cvs.height/2));c.restore()}
+    const bx=e.px||LW-72,by=e.py||100;
+    // eyes kindle, then the ngen strikes with beams from eyes and mouth
+    const eyY=ny+rise-80*sc,mY=ny+rise-71*sc,ex1=nx-3*sc,ex2=nx+3*sc;
+    if(A.t===52)sfx('charge');
+    if(A.t===62){B.shake=12;e.hit=26;sfx('beam')}
+    if(A.t===78)B.shake=8;
+    if(A.t>=52&&A.t<62){const gl=(A.t-52)/10;
+      ell(c,ex1,eyY,1.5+gl*1.5,1.5+gl*1.5,'rgba('+col+','+(.9*gl).toFixed(2)+')');
+      ell(c,ex2,eyY,1.5+gl*1.5,1.5+gl*1.5,'rgba('+col+','+(.9*gl).toFixed(2)+')')}
+    if(strike){const t2=Math.min(1,(A.t-62)/20);
+      c.save();c.globalCompositeOperation='lighter';
+      for(const [gx,gy,lw] of [[ex1,eyY,5],[ex2,eyY,5],[nx,mY,9]]){
+        const grad=c.createLinearGradient(gx,gy,bx,by);
+        grad.addColorStop(0,'rgba('+col+',.95)');grad.addColorStop(1,'rgba('+col+',.25)');
+        const wob=1+Math.sin(frame/2+gx)*.18;c.strokeStyle=grad;c.lineWidth=Math.max(2.5,lw*(1-t2*.45))*wob;c.beginPath();c.moveTo(gx,gy);c.lineTo(bx,by);c.stroke()}
+      c.lineWidth=2;c.strokeStyle='rgba(255,255,255,.9)';c.beginPath();c.moveTo(nx,mY);c.lineTo(bx,by);c.stroke();
+      ell(c,ex1,eyY,2.5,2.5,'rgba(255,255,255,.9)');ell(c,ex2,eyY,2.5,2.5,'rgba(255,255,255,.9)');
+      for(let k=0;k<7;k++){const a=k/7*6.283+A.t;ell(c,bx+Math.cos(a)*(A.t-62)*2.2,by+Math.sin(a)*(A.t-62)*1.5,2,2,'rgba('+col+','+(1-t2).toFixed(2)+')')}
+      c.restore()}
+    if(A.t>=62&&A.t<94){c.strokeStyle='rgba('+col+','+((94-A.t)/32*.7).toFixed(2)+')';c.lineWidth=2;
+      c.beginPath();c.ellipse(bx,by,(A.t-62)*2.2,(A.t-62)*1.2,0,0,6.283);c.stroke();c.lineWidth=1}
+    // the wekufü shatters
+    if(A.t>=SH){
+      if(!A.shards){A.shards=[];e.dead=true;e.fadeT=0;B.flash=14;B.shake=22;sfx('shatter');
+        const topy=by-Math.round(cvs.height/3);
+        try{const tc2=document.createElement('canvas');tc2.width=cvs.width;tc2.height=cvs.height;
+          const tg2=tc2.getContext('2d');tg2.drawImage(cvs,0,0);
+          const d=tg2.getImageData(0,0,tc2.width,tc2.height).data;
+          for(let k=0;k<120;k++){const sx2=rnd(tc2.width),sy2=rnd(tc2.height),i4=(sy2*tc2.width+sx2)*4;
+            if(d[i4+3]<60)continue;
+            const a=Math.random()*6.283,sp=.8+Math.random()*2.6;
+            A.shards.push({x:bx+sx2-Math.round(tc2.width/2),y:topy+sy2,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-1.5,col:'rgb('+d[i4]+','+d[i4+1]+','+d[i4+2]+')',sz:1+rnd(2)})}
+        }catch(err){}
+        if(!A.shards.length)for(let k=0;k<48;k++){const a=Math.random()*6.283,sp=1+Math.random()*2.4;
+          A.shards.push({x:bx,y:by,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-1.5,col:'#cfd8e8',sz:2})}}
+      const sf=Math.max(0,1-(A.t-SH)/64);
+      for(const sh2 of A.shards){sh2.x+=sh2.vx;sh2.y+=sh2.vy;sh2.vy+=.07;
+        c.globalAlpha=sf;R(c,Math.round(sh2.x),Math.round(sh2.y),sh2.sz,sh2.sz,sh2.col)}
       c.globalAlpha=1;
-      for(let k=0;k<8;k++){const ph=((frame*2+k*37)%80)/80;const [bx,by]=bz(q);
-        const sxp=bx+(tx-bx)*ph+Math.sin(ph*9+k)*5,syp=by+(ty-by)*ph;
-        R(c,Math.round(sxp),Math.round(syp),1,1,'rgba(190,255,230,'+(.8*q*(1-ph)).toFixed(2)+')')}
-    }
-    if(gu){
-      if(A.t===124){B.flash=12;B.shake=14;sfx('lvl')}
-      const rt=(A.t-124);
-      if(rt<30){c.strokeStyle='rgba(200,255,235,'+((1-rt/30)*.7).toFixed(2)+')';c.lineWidth=2;
-        c.beginPath();c.ellipse(nx+6,ny-58,rt*3.2,rt*1.6,0,0,6.283);c.stroke()}
-      for(let k=0;k<6;k++){const ph=((A.t*2+k*29)%70)/70;
-        ell(c,nx+6+Math.sin(k*7+A.t/9)*12,ny-58-ph*30,1.5,1.5,'rgba(210,255,240,'+((1-ph)*.6).toFixed(2)+')')}
+      if(A.t-SH<22){c.strokeStyle='rgba(235,245,255,'+((22-(A.t-SH))/22*.8).toFixed(2)+')';c.lineWidth=3;
+        c.beginPath();c.ellipse(bx,by,(A.t-SH)*4,(A.t-SH)*2.4,0,0,6.283);c.stroke();c.lineWidth=1}
     }
     if(A.t>176){A.done=1;victory()}
   }
