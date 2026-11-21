@@ -104,6 +104,7 @@ function mMenu(){
     {m:en?'Go to a map':'Ir a un mapa',v:'map'},
     {m:en?'Heal fully':'Sanar todo',v:'heal'},
     {m:'+100 ngülliw',v:'gold'},
+    {m:'Lawentuwün',g:en?'Learn the self-heal word (resets its uses)':'Aprender la palabra de autocuración (reinicia sus usos)',v:'laww'},
     {m:(en?'Battles: ':'Peleas: ')+(MNOENC?(en?'off':'no'):(en?'on':'sí')),g:en?'Off: only minibosses and bosses fight':'No: solo pelean minijefes y jefes',v:'enc'},
     {m:en?'Close':'Cerrar',v:'x'}],v=>{
     if(v==='chk')return mCheckpoints(mMenu);
@@ -111,6 +112,7 @@ function mMenu(){
       if(!k||k==='x')return mMenu();const m=MAPS[k];sfx('cast');loadMap(k,Math.floor(m.w/2),Math.floor(m.h/2))},true);
     if(v==='heal'){S.hp=maxHP();S.sp=SPMAX;S.curse=0;sfx('heal');persist();return mMenu()}
     if(v==='gold'){S.gold+=100;sfx('pick');persist();return mMenu()}
+    if(v==='laww'){S.flags.lawW=1;S.lawuses=0;sfx('lvl');persist();return mMenu()}
     if(v==='enc'){MNOENC=!MNOENC;return mMenu()}
   },true);
 }

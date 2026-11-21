@@ -541,7 +541,8 @@ function renderBattle(){
       const nx=Math.round(LW*.30),ny=170;
       const ap=Math.min(1,st/14),strike=st>=26&&st<50;
       if(st===1)sfx('cast');
-      if(st===26){B.shake=12;e.hit=26;sfx('hurt')}
+      if(st===18)sfx('charge');
+      if(st===26){B.shake=12;e.hit=26;sfx('beam')}
       if(st===40)B.shake=8;
       const rise=Math.round((1-ap)*40);
       c.save();c.beginPath();c.rect(0,0,LW,ny+9);c.clip();

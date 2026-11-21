@@ -346,6 +346,13 @@ function sfx(n){
     const g=c.createGain();g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.5,t+.04);g.gain.setValueAtTime(.5,t+.2);g.gain.exponentialRampToValueAtTime(.001,t+.34);
     sN.connect(f);f.connect(g);g.connect(AU.sfx);sN.start(t,Math.random()*.4);sN.stop(t+.4);
     tone('sawtooth',70,52,.3,.22);tone('square',46,40,.3,.12);break}
+  case 'charge':tone('sine',180,1500,.42,.22);tone('square',360,2300,.4,.1,.04);break;
+  case 'beam':{
+    // searing blast with a deep impact body
+    tone('sawtooth',1700,320,.55,.3);tone('square',2300,520,.5,.17,.02);
+    noiseBurst(.5,.45,2500);noiseBurst(.42,.3,900,.08);
+    tone('sine',72,32,.5,.5,.05);tone('sawtooth',130,58,.42,.3,.07);
+    break}
   case 'shatter':{
     // crack, deep detonation, long rumble, and a rain of glassy shards
     noiseBurst(.18,.65,2600);

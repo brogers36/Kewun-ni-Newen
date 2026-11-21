@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='e35b64b-202611202151';
+window.KEWUN_BUILD='4e330b4-202611202157';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -513,6 +513,13 @@ function sfx(n){
     const g=c.createGain();g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.5,t+.04);g.gain.setValueAtTime(.5,t+.2);g.gain.exponentialRampToValueAtTime(.001,t+.34);
     sN.connect(f);f.connect(g);g.connect(AU.sfx);sN.start(t,Math.random()*.4);sN.stop(t+.4);
     tone('sawtooth',70,52,.3,.22);tone('square',46,40,.3,.12);break}
+  case 'charge':tone('sine',180,1500,.42,.22);tone('square',360,2300,.4,.1,.04);break;
+  case 'beam':{
+    // searing blast with a deep impact body
+    tone('sawtooth',1700,320,.55,.3);tone('square',2300,520,.5,.17,.02);
+    noiseBurst(.5,.45,2500);noiseBurst(.42,.3,900,.08);
+    tone('sine',72,32,.5,.5,.05);tone('sawtooth',130,58,.42,.3,.07);
+    break}
   case 'shatter':{
     // crack, deep detonation, long rumble, and a rain of glassy shards
     noiseBurst(.18,.65,2600);
@@ -4813,7 +4820,8 @@ function renderBattle(){
       const nx=Math.round(LW*.30),ny=170;
       const ap=Math.min(1,st/14),strike=st>=26&&st<50;
       if(st===1)sfx('cast');
-      if(st===26){B.shake=12;e.hit=26;sfx('hurt')}
+      if(st===18)sfx('charge');
+      if(st===26){B.shake=12;e.hit=26;sfx('beam')}
       if(st===40)B.shake=8;
       const rise=Math.round((1-ap)*40);
       c.save();c.beginPath();c.rect(0,0,LW,ny+9);c.clip();
