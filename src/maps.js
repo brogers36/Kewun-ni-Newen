@@ -243,7 +243,7 @@ p_pire:{region:'pewenche',name:'Pire mapu',g:{es:'Los campos de nieve',en:'The s
  ents:[{kind:'enemy',x:6,y:4,party:['pire','pire','pire']},{kind:'enemy',x:18,y:9,party:['kura','pire']},{kind:'enemy',x:9,y:9,party:['kutral','pire']},
    {kind:'enemy',x:7,y:13,party:['pire','pire']},{kind:'enemy',x:27,y:14,party:['pire','kura','kutral']}]},
 p_degin:{region:'pewenche',name:'Wente degiñ',g:{es:'El filo ventoso de la cordillera',en:'The windy ridge of the mountains'},floor:'.',bg:'mount',song:'pew',pal:'pewenche',trees:'pewen',
- edges:{down:{to:'p_pire',x:6,y:1}},chests:{'25,4':'nam'},konew:{'25,7':K12},digs:{'16,9':{}},
+ signs:{'26,10':[L('Kura','Puel püle: Puel rüpü.','Una piedra tallada señala al este: «Hacia el puel: el camino a Puelmapu». El filo se abre por ahí, bajando.','A carved stone points east: «Toward the puel: the road to Puelmapu». The ridge opens that way, going down.')]},edges:{down:{to:'p_pire',x:6,y:1}},chests:{'25,4':'nam'},konew:{'25,7':K12},digs:{'16,9':{}},
  ents:[{kind:'enemy',x:7,y:5,party:['pire','pire','kura']},{kind:'enemy',x:18,y:2,party:['kutral','kura']},{kind:'enemy',x:26,y:9,party:['pire','kutral','kura']}]},
 p_lil:{region:'pewenche',name:'Lil mapu',g:{es:'Los riscos de lava (zona difícil)',en:'The lava crags (hard area)'},floor:'.',bg:'crater',song:'pew',pal:'ash',trees:'pewen',lava:1,
  edges:{up:{to:'p_pillan',x:16,y:11}},chests:{'26,3':'mawgift'},stones:{'20,5':'num2'},digs:{'17,6':{}},

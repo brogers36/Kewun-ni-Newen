@@ -816,6 +816,10 @@ N.update(W_)
 E_={}
 # p_degin gets an east exit down the far side of the cordillera
 setr(P_['p_degin'],31,9,1,1,'.')
+# widen the opening to three tiles and clear a visible lane toward it, with a carved stone pointing east
+setr(P_['p_degin'],31,8,1,3,'.')
+setr(P_['p_degin'],27,8,4,3,'.')
+setr(P_['p_degin'],26,10,1,1,'I')
 # --- e_rupu: the eastern slopes, down from the ridge into the pampa ---
 c=C(32,13)
 c.r(0,7,32,1,'=')
