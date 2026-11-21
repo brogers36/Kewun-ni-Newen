@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='865b57a-202611202205';
+window.KEWUN_BUILD='1d5c719-202611202227';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -758,7 +758,7 @@ function txt(s,x,y,col,size,align){ctx.font='bold '+size+'px ui-monospace,Menlo,
 
 /* ---------- characters from hand-drawn 16x24 templates ---------- */
 const SKINT=[['#ecb88c','#c48a5c'],['#e0a474','#b67a4a'],['#cc8c5a','#9e663a'],['#b0713e','#845026'],['#8f5730','#663c1e']];
-const EYET=['#1c120e','#32200f','#4c3014','#6b4a1e','#3f4f2e'];
+const EYET=['#1c120e','#32200f','#4c3014','#6b4a1e','#3f4f2e','#3e6490'];
 const BASEP={o:'#181018',s:'#e8a878',S:'#c07850',h:'#201820',H:'#584860',b:'#d83030',B:'#f8d050',p:'#3050b0',P:'#203878',w:'#f0e8d0',r:'#d83030',l:'#5a4430',L:'#3a2a1c',f:'#6a3a1a',e:'#201018',W:'#ffffff',m:'#a04838',q:'#f09878',x:'#e0e0f0',X:'#9898b0',k:'#282438',K:'#14121e',c:'#8a2458',C:'#5a1838'};
 const LOOKS={
   llanka:{t:'M',fixedSkin:1},
@@ -1924,7 +1924,7 @@ function loadMap(id,x,y,quiet){
     const e=Object.assign({},e0);
     const [ex,ey]=e.fixed||e.path?[e.x,e.y]:placeNear(e.x,e.y,true);e.x=ex;e.y=ey;e.fx=ex;e.fy=ey;e.cd=30+rnd(60);e.dir=e.dir||'down';e.pi=0;e.wait=e.pause||0;e.bt=rnd(400);e.ox=e.x;e.oy=e.y;
     if(e.kind==='npc'){const sd=id+':'+(e.id||e0.x+','+e0.y)+':'+(e.look||'');let h=9;for(let i=0;i<sd.length;i++)h=(h*31+sd.charCodeAt(i))>>>0;
-      e.tn=h%5;e.ey2=[0,0,1,1,2,3,4][(h>>>3)%7]}
+      e.tn=h%5;e.ey2=[0,0,1,1,2,3,4,5][(h>>>3)%8]}
     ents.push(e)}
   if(id==='n_kullin'){let i=0;for(const e0 of M.ents)if(e0.herd&&e0.flag&&S.flags[e0.flag]){const sp=PENSPOT[i++];ents.push({kind:'animal',look:e0.look,x:sp[0],y:sp[1],fx:sp[0],fy:sp[1],ox:sp[0],oy:sp[1],pen:[10,2,15,3],cd:30+rnd(60),wait:0,dir:i%2?'left':'right',home:1})}}
   SCN=(M.scenes||[]).map(s=>Object.assign({},s,{pl:[0,1,2,3].map(i=>({x:s.x*T+s.w*T*(i<2?.3:.7),y:s.y*T+s.h*T*(.3+.4*(i%2)),dir:'right'}))}));
@@ -4441,7 +4441,7 @@ function renderMap(){
       else c.drawImage(p.cvs,sx,sy);
       if(p.board)OV.push(()=>{ctx.font='bold 11px ui-monospace,monospace';ctx.fillStyle='#f0f0e0';ctx.textAlign='center';ctx.fillText('Mari mari',(sx+12)*2,(sy+7)*2);ctx.fillText('kiñe epu küla',(sx+12)*2,(sy+12)*2+1);ctx.textAlign='left'})}})}
   for(const sc of SCN)if(sc.type==='palin'){
-    sc.pl.forEach((p,i)=>list.push({y:p.y/T+.4,d:()=>{const sx=Math.round(p.x-8-cx),sy=Math.round(p.y-8-cy+VY);drawChar(c,i<2?'palinA':'palinB',sx,sy,p.dir,p.mv?Math.floor(frame/7+i)%4:0,false,i%5,[0,1,2,3][i%4]);
+    sc.pl.forEach((p,i)=>list.push({y:p.y/T+.4,d:()=>{const sx=Math.round(p.x-8-cx),sy=Math.round(p.y-8-cy+VY);drawChar(c,i<2?'palinA':'palinB',sx,sy,p.dir,p.mv?Math.floor(frame/7+i)%4:0,false,i%5,[0,1,5,3][i%4]);
       const d=p.dir==='left'?-1:1,near=Math.hypot(p.x-sc.bx,p.y-sc.by)<22,sw=near?Math.sin(frame/5+i*1.7):Math.sin(frame/40+i)*.3;
       const hx=sx+8+d*(CT?2:2),hy=sy+(CT?6:9),tx=sx+8+d*((CT?15:10)+Math.round(sw*(CT?4:3))),ty=sy+16-Math.round(Math.max(0,-sw)*(CT?3:2));drawWino(c,hx,hy,tx,ty,d)}}));
     list.push({y:sc.by/T+.45,d:()=>{const bx=Math.round(sc.bx-cx),by=Math.round(sc.by-cy+VY);ell(c,bx,by+3,2,1,'rgba(0,0,0,.3)');ell(c,bx,by,2,2,'#3a2a1a');R(c,bx-1,by-1,1,1,'#8a6a4a')}});

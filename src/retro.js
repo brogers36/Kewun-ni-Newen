@@ -27,7 +27,7 @@ function txt(s,x,y,col,size,align){ctx.font='bold '+size+'px ui-monospace,Menlo,
 
 /* ---------- characters from hand-drawn 16x24 templates ---------- */
 const SKINT=[['#ecb88c','#c48a5c'],['#e0a474','#b67a4a'],['#cc8c5a','#9e663a'],['#b0713e','#845026'],['#8f5730','#663c1e']];
-const EYET=['#1c120e','#32200f','#4c3014','#6b4a1e','#3f4f2e'];
+const EYET=['#1c120e','#32200f','#4c3014','#6b4a1e','#3f4f2e','#3e6490'];
 const BASEP={o:'#181018',s:'#e8a878',S:'#c07850',h:'#201820',H:'#584860',b:'#d83030',B:'#f8d050',p:'#3050b0',P:'#203878',w:'#f0e8d0',r:'#d83030',l:'#5a4430',L:'#3a2a1c',f:'#6a3a1a',e:'#201018',W:'#ffffff',m:'#a04838',q:'#f09878',x:'#e0e0f0',X:'#9898b0',k:'#282438',K:'#14121e',c:'#8a2458',C:'#5a1838'};
 const LOOKS={
   llanka:{t:'M',fixedSkin:1},
