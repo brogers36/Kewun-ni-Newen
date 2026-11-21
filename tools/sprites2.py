@@ -610,67 +610,86 @@ def wallipen(fr):
     g.outline();return g.rows()
 
 def trawko(fr):
-    import math
-    g=G(32,46)
-    rows=[
-     (14,0, "hh"),
-     (13,1, "hhhh"),
-     (12,2, "hHhhh"),
-     (11,3, "hhHhhh"),
-     (10,4, "hhhHhhhh"),
-     (9,5,  "hhhhHhhhhh"),
-     (8,6,  "hhhhhHhhhhhh"),
-     (7,7,  "hhhhhhHhhhhhhh"),
-     (6,8,  "hhhhhhhHhhhhhhhh"),
-     (5,9,  "HHHHHHHHHHHHHHHHHH"),
-     (8,10, "ffffffffffff"),
-     (8,11, "fffffffffffff"),
-     (7,12, "ffkeffffkeff"),
-     (7,13, "ffkkffffkkff"),
-     (7,14, "fffffNNffffff"),
-     (7,15, "bfffNNNNfffb"),
-     (6,16, "bbffffffffbbb"),
-     (5,17, "bbbbffffbbbbb"),
-     (5,18, "bbBbbbbbbbBbb"),
-     (5,19, "bbbbBbbbBbbbb"),
-     (6,20, "bbbbbbbbbbbb"),
-     (6,21, "bBbbbbbbbBb"),
-     (7,22, "bbbbbbbbbb"),
-     (4,23, "ccbbbbbbbbbbcc"),
-     (3,24, "cccccccccccccccc"),
-     (2,25, "ccCcccccccccccCcc"),
-     (2,26, "cCccccccccccccccCc"),
-     (2,27, "cCccccCCccccccccCc"),
-     (2,28, "cCcccCCCCcccccccCc"),
-     (2,29, "ccccccCCcccccccccc"),
-     (2,30, "cCcccccccccccccrCc"),
-     (2,31, "cCccccccccccccccCc"),
-     (2,32, "ccCcccccccccccCccc"),
-     (3,33, "ccccccccccccccc"),
-     (3,34, "cCcccccccccccCc"),
-     (4,35, "ccccccccccccc"),
-     (6,36, "ccccc..ccccc"),
-     (6,37, "ccccc..ccccc"),
-     (6,38, "cccc....cccc"),
-     (6,39, "cccc....cccc"),
-     (5,40, "ccccc....ccccc"),
-     (5,41, "nnnnn....nnnnn"),
+    # the Trawko: a small, hunched, heavily muscled forest man under a huge
+    # rush hat, long black hair, burning red eyes in a brim-shadowed face, a
+    # wide jagged grin, a ragged tunic, a tattered cape streaming behind and a
+    # big stone toki gripped low. Drawn facing left (flipped in battle).
+    g=G(40,56)
+    art=[
+    "..........hh............................",
+    ".........hHhh...........................",
+    "........hhHhhh..........................",
+    ".......hhhHhhhh.........................",
+    "......hhhhHhhhhh........................",
+    ".....hhhhhHhhhhhh.......................",
+    "....hhhhhhHhhhhhhh......................",
+    "...hhhhhhhHhhhhhhhhh....................",
+    "..hhhhhhhhHhhhhhhhhhhhhh................",
+    ".hhhhhhhhhHhhhhhhhhhhhhhhhhhh...........",
+    "hhhhhhhhhhHhhhhhhhhhhhhhhhhhhhhhh.......",
+    "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhh....",
+    ".HH..nnnnnnnnnnnnnnnnnnnnn...HHHH.......",
+    "....nnnFFFFFFFFFnnnnnnnnnn..............",
+    "...nnnFFFFFFFFFFFnnnnnnnnnn.............",
+    "...nnFFeeFFFFFFeeFFnnnnnnnn.............",
+    "...nnFeeeFFFFFFeeeFFnnnnnnn.............",
+    "...nnFFeFFFFFFFFeFFFnnnnnnn.............",
+    "...nnNFFFFFFFFFFFFFFnnnnnnn.............",
+    "...nnNfFFFFFFFFFFFFfnnnnnnn.............",
+    "...nnfkkkkkkkkkkkkkkfnnnnnn.............",
+    "...nnffktktktktktkfffnnnnnn.............",
+    "....nnffkrrrrrrrrkfffnnnnn..............",
+    ".....nnfffkkkkkkffffnnnnrr..............",
+    "......nnfffffffffffnnnrrrr..............",
+    ".......ccccccccccccccrrrrrr.............",
+    "......ccccccccccccccccrrrrrrr...........",
+    ".....fcccccccccccccccccrrrrrrrr.........",
+    "....ffFcccccccccccccccccrrrrrrrrr.......",
+    "...fffFFccccCcccccccccccrrrrrrkrrrr.....",
+    "..ffffFFccccCCccccccccCCrrrrrrkrrrrrr...",
+    ".aaaffFFFcccccCcccccccCCrrrrrrrkrrrrrrr.",
+    "aaaaAffFFcccccCCcccccccCrrrrrrrkrrrr.rr.",
+    "aaaAAAfFFccccccCccccccCCrrrrrrrkrrr..r..",
+    "aaAAAAsfFFcccccccccccCCCrrrrrrrkrr......",
+    ".aAAAAsffFFccccccccccCCCrrrrrrrkrr......",
+    "..AAA.ssffFFCccccccccCCC.rrrrrrkr.......",
+    ".....ss.fffFFCCccccccCCC..rrrrrkr.......",
+    ".....ss.ffffFFCCccccCCfF...rrrrkr.......",
+    ".....ss.fffffFFFccccCFfFF...rrrkr.......",
+    ".....ss..fffffFFFfffffFFF....rrkr.......",
+    ".....ss..ffffffFF.fffffFF.....rr........",
+    ".....ss..fffffFF...ffffFF......r........",
+    ".....ss.ffffffF....fffffF...............",
+    "........ffffffF....fffffF...............",
+    ".......fffffffF....ffffFF...............",
+    ".......ffffffF......fffffF..............",
+    "......fffffffF......fffffF..............",
+    "......ffffffF.......fffffFF.............",
+    ".....fffffffF........fffffF.............",
+    ".....ffffffF.........fffffF.............",
+    "....fffffffF.........ffffffF............",
+    "....nnnnnnnn.........nnnnnnn............",
+    "...nnnnnnnnn.........nnnnnnnn...........",
+    "...nnnnnnnn...........nnnnnnn...........",
+    "........................................",
+    "........................................",
     ]
-    for (x0,y,st) in rows:
-        for i,ch in enumerate(st):
-            if ch!='.':g.p(x0+i,y,ch)
+    for y,row in enumerate(art):
+        for x,ch in enumerate(row):
+            if ch!='.':g.p(x,y,ch)
+    # hair strands across the brow and cheek
+    for (x,y) in [(9,13),(12,13),(15,13),(7,17),(19,18)]:g.p(x,y,'n')
+    # lit cheekbones and chin below the brim shadow
+    for (x,y) in [(6,19),(7,19),(17,19),(18,19),(8,23),(9,23),(16,23)]:g.p(x,y,'f')
+    # lashing on the toki head, grain on the handle
+    for y in range(32,35):g.p(4,y,'N')
+    for y in range(36,44,2):g.p(6,y,'N')
+    # muscle highlights: shoulders, forearm, calves
+    for (x,y) in [(3,29),(4,30),(5,31),(10,44),(11,45),(21,44),(22,45),(9,48),(20,49),(8,50)]:g.p(x,y,'N')
     if fr:
-        g.p(7,12,'f');g.p(8,12,'e');g.p(13,12,'f');g.p(14,12,'e')
-    # stone axe (toki) raised in the right hand
-    for i in range(10):g.p(22+int(i*.3),30-i,'s')
-    for (x0,y,st) in [(22,14,"aaAA"),(21,15,"aaaAAA"),(21,16,"aaaaAA"),(21,17,"aaaAAA"),(22,18,"aaAA")]:
-        for i,ch in enumerate(st):g.p(x0+i,y,ch)
-    # left arm gripping a knot of the coat
-    g.r(3,27,2,3,'f');g.p(3,30,'f')
-    g.r(22,26,2,3,'f')
-    # moss tufts on the hat and shoulders
-    for (x,y) in [(12,4),(16,6),(8,9),(20,9)]:
-        g.p(x,y,'b');g.p(x+1,y,'B')
+        # crouching breath: eyes narrow to slits, cape tips flick
+        for (x,y) in [(7,15),(8,15),(15,15),(16,15),(7,17),(16,17)]:g.p(x,y,'F')
+        g.p(37,32,'r');g.p(38,31,'r');g.p(36,33,'.') if False else None
     g.outline();return g.rows()
 
 # ---------- hand-drawn bosses ----------
@@ -1912,7 +1931,7 @@ PAL={
  'chinifilu':{'h':'#7a6a46','H':'#52452c','b':'#a89468','m':'#4a4034','M':'#2b2518','e':'#ffe060','w':'#f0e8d8','t':'#d84040','k':'#161208','o':'#0d0a06'},
  'piwuchen':{'w':'#6a4a66','W':'#9a6a8e','s':'#7a3a3a','S':'#521f24','b':'#a85a50','t':'#f0e8d8','M':'#2e0a12','e':'#ff4040','k':'#180a10','o':'#140810'},
  'wallipen':{'w':'#cfcfc2','W':'#9f9f92','d':'#6a6a5e','h':'#8a7458','H':'#5e4c38','e':'#90c8ff','n':'#39302a','k':'#201c16','o':'#16120e'},
- 'trawko':{'h':'#8a6a3a','H':'#5e4624','f':'#9a8a6a','b':'#5a7a3a','B':'#3a5424','c':'#6a5438','C':'#46381f','a':'#9a9aa2','A':'#5e5e68','s':'#7a5a30','r':'#a83030','N':'#7a6a4e','e':'#ffd040','n':'#2e2418','k':'#181408','o':'#120e06'},
+ 'trawko':{'h':'#a08448','H':'#6a5430','f':'#a88a5c','F':'#7a6238','b':'#5a7a3a','B':'#3a5424','c':'#6a5a3c','C':'#463a22','a':'#d0ccc4','A':'#8a8882','s':'#6a4a28','r':'#8e2a2a','N':'#86704a','e':'#ff3838','t':'#f4f0e4','n':'#1a1612','k':'#120e0a','o':'#0c0a06'},
  'luan':{'b':'#c89a5a','B':'#a0763c','w':'#f0e4cc','n':'#4a3418','e':'#201408','o':'#241a0c'},
  'choyke':{'b':'#8a7a56','B':'#6a5c3e','w':'#c8bc9c','n':'#3a3020','e':'#180f06','o':'#1c160c'},
  'mewlen':{'s':'#d8bc6a','S':'#a8883e','y':'#f0dc94','d':'#8a6e30','k':'#3a2c10','e':'#ffe860','o':'#2a2008'},
