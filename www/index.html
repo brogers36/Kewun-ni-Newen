@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='ec78051-202611201930';
+window.KEWUN_BUILD='ad12a05-202611201945';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -4414,6 +4414,11 @@ function renderMap(){
   for(let k=0;k<26;k++){const wx=Math.floor(h2(k,frame>>3,91)*LW),wy=Math.floor(h2(k,frame>>3,92)*LH),mx=Math.floor((wx+cx)/T),my=Math.floor((wy-VY+cy)/T);
     if(inB(mx,my)&&grid[my][mx]==='~'&&WD[my][mx]>1){const a=(frame%8)<4;R(c,wx,wy,1,1,M.lava?'#fff0a0':'#f4faff');if(a){R(c,wx-1,wy,1,1,'rgba(220,240,255,.7)');R(c,wx+1,wy,1,1,'rgba(220,240,255,.7)')}}}
   for(const [gx,gy] of glows)for(const [r,a] of [[24,.05],[16,.07],[10,.08]])ell(c,gx,gy,r,r*.8,'rgba(255,170,80,'+a+')');
+  if(CUR==='w_wapi'&&grid[10]&&grid[10][16]==='v'){const wx=16*T+8-cx,wy=10*T+8-cy+VY;
+    for(let k=0;k<3;k++){const ph=(frame/46+k/3)%1;ell(c,wx,wy,6+ph*17,(6+ph*17)*.45,'rgba(140,255,230,'+(.55*(1-ph)).toFixed(2)+')')}
+    c.globalAlpha=.22+.1*Math.sin(frame/9);const wg=c.createLinearGradient(0,wy-44,0,wy);wg.addColorStop(0,'rgba(140,255,230,0)');wg.addColorStop(1,'rgba(140,255,230,.55)');c.fillStyle=wg;c.fillRect(wx-7,wy-44,14,44);c.globalAlpha=1;
+    for(let k=0;k<5;k++){const ph=((frame+k*23)%115)/115;ell(c,wx+Math.sin(ph*8+k)*6,wy-ph*38,1.5,1.5,'rgba(190,255,240,'+(.7*(1-ph)).toFixed(2)+')')}
+    ell(c,wx,wy,4,2,'rgba(230,255,250,'+(.5+.3*Math.sin(frame/7)).toFixed(2)+')')}
   if(M.bg==='crater'){c.fillStyle=awake(M.region)?'rgba(255,200,120,.05)':'rgba(120,20,0,.18)';c.fillRect(0,VY,LW,VH)}
   if(M.region==='williche'&&!awake('williche')&&!M.dungeon){for(let k=0;k<9;k++){const fx=((k*61+frame*(.15+(k%3)*.08))%(LW+120))-60,fy=VY+((k*47)%LH);ell(c,fx,fy,46+(k%3)*14,14+(k%2)*6,'rgba(220,228,236,.16)')}c.fillStyle='rgba(200,210,220,.10)';c.fillRect(0,VY,LW,VH)}
   if(M.bg==='fjord'){c.fillStyle=awake(M.region)?'rgba(255,240,200,.05)':'rgba(10,20,44,.38)';c.fillRect(0,VY,LW,VH)}
