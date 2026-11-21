@@ -643,7 +643,7 @@ function renderBattle(){
     if(B.wipe<=0)B.snap=null}
   // hero panel (LttP-style box)
   const hrows=Math.ceil(Math.min(40,Math.ceil(maxHP()/HPQ))/10);
-  const px=4,py=4,pw=136,ph=36+Math.max(0,hrows-2)*8;
+  const pw=136,ph=36+Math.max(0,hrows-2)*8,px=LW-pw-4,py=4; // top-right, above the hero
   R(c,px-1,py-1,pw+2,ph+2,'#000');R(c,px,py,pw,ph,'#e8e8f8');R(c,px+1,py+1,pw-2,ph-2,'#7880d0');R(c,px+2,py+2,pw-4,ph-4,'#18186a');
   {const sp=S.sp||0;R(c,px+pw-12,py+4,7,28,'#f8f8f8');R(c,px+pw-11,py+5,5,26,'#000');const fh=Math.round(26*sp/SPMAX);if(fh)R(c,px+pw-11,py+31-fh,5,fh,'#30c030');}
   R(c,px+3,py+3,28,28,'#2a2048');if(CT)c.drawImage(ctCharSprite(heroLook(),'down',0),0,1,18,18,px+3,py+3,28,28);else c.drawImage(charSprite(heroLook(),'down',0),0,0,16,14,px+3,py+3,28,24.5);
