@@ -614,82 +614,103 @@ def trawko(fr):
     # rush hat, long black hair, burning red eyes in a brim-shadowed face, a
     # wide jagged grin, a ragged tunic, a tattered cape streaming behind and a
     # big stone toki gripped low. Drawn facing left (flipped in battle).
-    g=G(40,56)
+    g=G(48,56)
     art=[
-    "..........hh............................",
-    ".........hHhh...........................",
-    "........hhHhhh..........................",
-    ".......hhhHhhhh.........................",
-    "......hhhhHhhhhh........................",
-    ".....hhhhhHhhhhhh.......................",
-    "....hhhhhhHhhhhhhh......................",
-    "...hhhhhhhHhhhhhhhhh....................",
-    "..hhhhhhhhHhhhhhhhhhhhhh................",
-    ".hhhhhhhhhHhhhhhhhhhhhhhhhhhh...........",
-    "hhhhhhhhhhHhhhhhhhhhhhhhhhhhhhhhh.......",
-    "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhh....",
-    ".HH..nnnnnnnnnnnnnnnnnnnnn...HHHH.......",
-    "....nnnFFFFFFFFFnnnnnnnnnn..............",
-    "...nnnFFFFFFFFFFFnnnnnnnnnn.............",
-    "...nnFFeeFFFFFFeeFFnnnnnnnn.............",
-    "...nnFeeeFFFFFFeeeFFnnnnnnn.............",
-    "...nnFFeFFFFFFFFeFFFnnnnnnn.............",
-    "...nnNFFFFFFFFFFFFFFnnnnnnn.............",
-    "...nnNfFFFFFFFFFFFFfnnnnnnn.............",
-    "...nnfkkkkkkkkkkkkkkfnnnnnn.............",
-    "...nnffktktktktktkfffnnnnnn.............",
-    "....nnffkrrrrrrrrkfffnnnnn..............",
-    ".....nnfffkkkkkkffffnnnnrr..............",
-    "......nnfffffffffffnnnrrrr..............",
-    ".......ccccccccccccccrrrrrr.............",
-    "......ccccccccccccccccrrrrrrr...........",
-    ".....fcccccccccccccccccrrrrrrrr.........",
-    "....ffFcccccccccccccccccrrrrrrrrr.......",
-    "...fffFFccccCcccccccccccrrrrrrkrrrr.....",
-    "..ffffFFccccCCccccccccCCrrrrrrkrrrrrr...",
-    ".aaaffFFFcccccCcccccccCCrrrrrrrkrrrrrrr.",
-    "aaaaAffFFcccccCCcccccccCrrrrrrrkrrrr.rr.",
-    "aaaAAAfFFccccccCccccccCCrrrrrrrkrrr..r..",
-    "aaAAAAsfFFcccccccccccCCCrrrrrrrkrr......",
-    ".aAAAAsffFFccccccccccCCCrrrrrrrkrr......",
-    "..AAA.ssffFFCccccccccCCC.rrrrrrkr.......",
-    ".....ss.fffFFCCccccccCCC..rrrrrkr.......",
-    ".....ss.ffffFFCCccccCCfF...rrrrkr.......",
-    ".....ss.fffffFFFccccCFfFF...rrrkr.......",
-    ".....ss..fffffFFFfffffFFF....rrkr.......",
-    ".....ss..ffffffFF.fffffFF.....rr........",
-    ".....ss..fffffFF...ffffFF......r........",
-    ".....ss.ffffffF....fffffF...............",
-    "........ffffffF....fffffF...............",
-    ".......fffffffF....ffffFF...............",
-    ".......ffffffF......fffffF..............",
-    "......fffffffF......fffffF..............",
-    "......ffffffF.......fffffFF.............",
-    ".....fffffffF........fffffF.............",
-    ".....ffffffF.........fffffF.............",
-    "....fffffffF.........ffffffF............",
-    "....nnnnnnnn.........nnnnnnn............",
-    "...nnnnnnnnn.........nnnnnnnn...........",
-    "...nnnnnnnn...........nnnnnnn...........",
-    "........................................",
-    "........................................",
+    "..................hh............................",
+    ".................hHhh...........................",
+    "................hhHhhh..........................",
+    "...............hhhHhhhh.........................",
+    "..............hhhhHhhhhh........................",
+    ".............hhhhhHhhhhhh.......................",
+    "............hhhhhhHhhhhhhh......................",
+    "...........hhhhhhhHhhhhhhhhh....................",
+    "..........hhhhhhhhHhhhhhhhhhhhhh................",
+    ".........hhhhhhhhhHhhhhhhhhhhhhhhhhhh...........",
+    "........hhhhhhhhhhHhhhhhhhhhhhhhhhhhhhhhh.......",
+    "........HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhh....",
+    ".........HH..nnnnnnnnnnnnnnnnnnnnn...HHHH.......",
+    "............nnnFFFFFFFFFnnnnnnnnnn..............",
+    "...........nnnFFFFFFFFFFFnnnnnnnnnn.............",
+    "...........nnFFeeFFFFFFeeFFnnnnnnnn.............",
+    "...........nnFeeeFFFFFFeeeFFnnnnnnn.............",
+    "...........nnFFeFFFFFFFFeFFFnnnnnnn.............",
+    "...........nnNFFFFFFFFFFFFFFnnnnnnn.............",
+    "...........nnNfFFFFFFFFFFFFfnnnnnnn.............",
+    "...........nnfkkkkkkkkkkkkkkfnnnnnn.............",
+    "...........nnffktktktktktkfffnnnnnn.............",
+    "............nnffkrrrrrrrrkfffnnnnn..............",
+    ".............nnfffkkkkkkffffnnnnrr..............",
+    "..............nnfffffffffffnnnrrrr..............",
+    "...............ccccccccccccccrrrrrr.............",
+    "..............ccccccccccccccccrrrrrrr...........",
+    ".............fcccccccccccccccccrrrrrrrr.........",
+    "............ffFcccccccccccccccccrrrrrrrrr.......",
+    "...........fffFFccccCcccccccccccrrrrrrkrrrr.....",
+    "..........ffffFFccccCCccccccccCCrrrrrrkrrrrrr...",
+    "............ffFFFcccccCcccccccCCrrrrrrrkrrrrrrr.",
+    ".............ffFFcccccCCcccccccCrrrrrrrkrrrr.rr.",
+    "..............fFFccccccCccccccCCrrrrrrrkrrr..r..",
+    "...............fFFcccccccccccCCCrrrrrrrkrr......",
+    "...............ffFFccccccccccCCCrrrrrrrkrr......",
+    "................ffFFCccccccccCCC.rrrrrrkr.......",
+    "................fffFFCCccccccCCC..rrrrrkr.......",
+    "................ffffFFCCccccCCfF...rrrrkr.......",
+    "................fffffFFFccccCFfFF...rrrkr.......",
+    ".................fffffFFFfffffFFF....rrkr.......",
+    ".................ffffffFF.fffffFF.....rr........",
+    ".................fffffFF...ffffFF......r........",
+    "................ffffffF....fffffF...............",
+    "................ffffffF....fffffF...............",
+    "...............fffffffF....ffffFF...............",
+    "...............ffffffF......fffffF..............",
+    "..............fffffffF......fffffF..............",
+    "..............ffffffF.......fffffFF.............",
+    ".............fffffffF........fffffF.............",
+    ".............ffffffF.........fffffF.............",
+    "............fffffffF.........ffffffF............",
+    "............nnnnnnnn.........nnnnnnn............",
+    "...........nnnnnnnnn.........nnnnnnnn...........",
+    "...........nnnnnnnn...........nnnnnnn...........",
+    "................................................",
+    "................................................",
     ]
     for y,row in enumerate(art):
         for x,ch in enumerate(row):
             if ch!='.':g.p(x,y,ch)
     # hair strands across the brow and cheek
-    for (x,y) in [(9,13),(12,13),(15,13),(7,17),(19,18)]:g.p(x,y,'n')
+    for (x,y) in [(17,13),(20,13),(23,13),(15,17),(27,18)]:g.p(x,y,'n')
     # lit cheekbones and chin below the brim shadow
-    for (x,y) in [(6,19),(7,19),(17,19),(18,19),(8,23),(9,23),(16,23)]:g.p(x,y,'f')
+    for (x,y) in [(14,19),(15,19),(25,19),(26,19),(16,23),(17,23),(24,23)]:g.p(x,y,'f')
     # lashing on the toki head, grain on the handle
-    for y in range(32,35):g.p(4,y,'N')
-    for y in range(36,44,2):g.p(6,y,'N')
     # muscle highlights: shoulders, forearm, calves
-    for (x,y) in [(3,29),(4,30),(5,31),(10,44),(11,45),(21,44),(22,45),(9,48),(20,49),(8,50)]:g.p(x,y,'N')
+    for (x,y) in [(11,29),(12,30),(18,44),(19,45),(29,44),(30,45),(17,48),(28,49),(16,50)]:g.p(x,y,'N')
     if fr:
         # crouching breath: eyes narrow to slits, cape tips flick
-        for (x,y) in [(7,15),(8,15),(15,15),(16,15),(7,17),(16,17)]:g.p(x,y,'F')
-        g.p(37,32,'r');g.p(38,31,'r');g.p(36,33,'.') if False else None
+        for (x,y) in [(15,15),(16,15),(23,15),(24,15),(15,17),(24,17)]:g.p(x,y,'F')
+        g.p(45,32,'r');g.p(46,31,'r')
+    # forearm thrust forward, fist closed on the toki's haft
+    for x in range(6,13):
+        g.p(x,28,'f');g.p(x,29,'f');g.p(x,30,'F');g.p(x,31,'F')
+    g.r(3,27,4,5,'f');g.p(3,31,'F');g.p(4,31,'F');g.p(5,31,'F');g.p(6,31,'F');g.p(3,27,'F')
+    # haft: a long dark shaft rising from the fist
+    for y in range(14,40):
+        g.p(4,y,'s');g.p(5,y,'s' if y%3 else 'N')
+    # stone head lashed to the top, blade edge forward (left)
+    head=[
+    (2,12,"aaaa"),
+    (1,13,"aaaaaA"),
+    (0,14,"aaaaaaAA"),
+    (0,15,"aaaaaaAAA"),
+    (0,16,"aaaaaaAAA"),
+    (0,17,"aaaaaAAAA"),
+    (1,18,"aaaaAAAA"),
+    (2,19,"aaAAAA"),
+    (3,20,"AAAA"),
+    ]
+    for (x0,y,st) in head:
+        for k,ch in enumerate(st):g.p(x0+k,y,ch)
+    for y in (15,16,17):g.p(4,y,'N');g.p(5,y,'N')
+    g.p(0,15,'t');g.p(0,16,'t');g.p(1,14,'t')
     g.outline();return g.rows()
 
 # ---------- hand-drawn bosses ----------
