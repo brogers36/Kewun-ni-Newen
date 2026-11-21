@@ -923,7 +923,7 @@ g[2][8]='N';g[2][12]='N';g[2][16]='N'
 g[3][6]='I'
 g[9][3]='C';g[9][19]='C'
 g[5][8]='K'
-g[6][14]='k'
+g[6][14]='_'  # (leftover key removed: the chenque's one lock is opened by the key on floor 2)
 carve0(g,2,10,2,1);g[10][2]='E';g[10][3]='S'
 E_['ed1']=[''.join(r) for r in g]
 # ed2: the flooded gallery, two halls joined by a locked corridor
