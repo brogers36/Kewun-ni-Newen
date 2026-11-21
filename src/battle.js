@@ -74,12 +74,13 @@ function pickEnd(r,k,tg){
 const SPECIALS={
   kuruf:{m:'Kürüf',cost:3,es:'Viento: golpea fuerte a todos y baja a los que vuelan',en:'Wind: hits everyone hard and brings flyers down'},
   wino:{m:'Wiño',cost:2,es:'Golpe de wiño: daño triple a uno',en:'Wiño strike: triple damage to one'},
-  lawen:{m:'Lawentun',cost:2,es:'Sanar: +2 piwke y quita la maldición',en:'Heal: +2 hearts and lifts the curse'}};
+  lawen:{m:'Lawentun',cost:2,es:'Sanar: +2 piwke y quita la maldición',en:'Heal: +2 hearts and lifts the curse'},
+  laww:{m:'Lawentuwün',cost:1,es:'Sanarse entero: recupera newen (cada uso sana 25% menos)',en:'Heal yourself whole: restores newen (each use heals 25% less)'}};
 function spark(x,y,col,n){for(let i=0;i<n;i++){const a=Math.random()*6.28,v=.6+Math.random()*1.6;B.parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-1,t:30+rnd(15),col})}}
 function pickSpecial(){
   const en=S.gloss==='en';
   choose({es:'Newen: '+(S.sp||0)+'/'+SPMAX+'. Cada orden bien dicha carga uno.',en:'Newen: '+(S.sp||0)+'/'+SPMAX+'. Every command said correctly charges one.'},
-    Object.keys(SPECIALS).map(k=>({m:SPECIALS[k].m+' · '+SPECIALS[k].cost,g:G(SPECIALS[k]),v:k,dis:(S.sp||0)<SPECIALS[k].cost})).concat([{m:en?'Back':'Volver',v:'x'}]),k=>{
+    Object.keys(SPECIALS).filter(k=>k!=='laww'||S.flags.lawW).map(k=>({m:SPECIALS[k].m+' · '+SPECIALS[k].cost,g:G(SPECIALS[k]),v:k,dis:(S.sp||0)<SPECIALS[k].cost})).concat([{m:en?'Back':'Volver',v:'x'}]),k=>{
     if(!k||k==='x')return battleMenu();
     if(k==='wino'){const al=aliveE();if(al.length===1)return doSpecial(k,al[0]);
       return choose({es:'¿A cuál?',en:'Which one?'},al.map(e=>({m:e.label,v:B.en.indexOf(e)})),i=>{B.cursor=null;if(i===null)return pickSpecial();doSpecial(k,B.en[i])},true,false,(i,o)=>{B.cursor=o.v})}
@@ -88,7 +89,12 @@ function pickSpecial(){
 function doSpecial(k,tgt){
   const sp=SPECIALS[k];S.sp-=sp.cost;B.cursor=null;const fx=[],fxe=[];let targets=[];
   const head=L(S.name,sp.m+'!',G(sp),G(sp));head.fx=()=>{sfx('cast');B.flash=12;B.shake=8};
-  if(k==='lawen'){const hadK=S.kutran;S.hp=Math.min(maxHP(),S.hp+8);S.curse=0;S.kutran=0;fx.push('Recuperas dos piwke.'+(hadK?' El weda kutran te suelta.':''));fxe.push('You recover two hearts.'+(hadK?' The weda kutran lets you go.':''));head.fx=()=>{sfx('heal');spark(60,30,'#80ff90',16)}}
+  if(k==='laww'){const pct=Math.max(25,100-25*(S.lawuses||0));S.lawuses=(S.lawuses||0)+1;persist();
+    const amt=Math.ceil(maxHP()*pct/100);S.hp=Math.min(maxHP(),S.hp+amt);
+    fx.push('La palabra te recorre entera: recuperas el '+pct+'% de tu newen.'+(pct>25?' (La próxima vez sanará menos.)':''));
+    fxe.push('The word runs through your whole body: you recover '+pct+'% of your newen.'+(pct>25?' (It will heal less next time.)':''));
+    head.fx=()=>{sfx('heal');spark(60,30,'#aef2c0',24)}}
+  else if(k==='lawen'){const hadK=S.kutran;S.hp=Math.min(maxHP(),S.hp+8);S.curse=0;S.kutran=0;fx.push('Recuperas dos piwke.'+(hadK?' El weda kutran te suelta.':''));fxe.push('You recover two hearts.'+(hadK?' The weda kutran lets you go.':''));head.fx=()=>{sfx('heal');spark(60,30,'#80ff90',16)}}
   else{targets=k==='wino'?[tgt]:aliveE();
     let burnT=0;for(const e of targets){if(e.hidden){fx.push(e.label+' está escondido en la niebla: no lo alcanzas.');fxe.push(e.label+' is hidden in the fog: you cannot reach it.');continue}if(bossBlock(e)){fx.push(e.label+' se cubre: ¡bloquea tu newen!');fxe.push(e.label+' guards: it blocks your newen!');continue}let d=k==='wino'?atk()*3+rnd(3):Math.round(atk()*1.5)+rnd(3);if(e.tall)d=Math.max(1,Math.round(d/3));if(e.armor)d=Math.max(1,Math.round(d/2));if(ET[e.t].spres){d=Math.max(1,Math.round(d/2));fx.push(e.label+' resiste tu newen.');fxe.push(e.label+' resists your newen.')}if(ET[e.t].thick)d=Math.max(1,Math.round(d/2));if(e.seals&&e.seals.length)d=Math.min(2,d);if(e.dreaming){d=Math.min(1,d);fx.push(e.label+' duerme caminando: hay que despertarlo.');fxe.push(e.label+' sleeps as it walks: it must be woken.')}if(e.down){d+=4;e.down=0}if(e.burn)burnT+=2;if(k==='kuruf'&&ET[e.t].fly)e.gr=3;e.pend=d;e.hp-=d;
       fx.push(e.label+' −'+d+(e.hp<=0?(quizPend(e)?' (se tambalea)':(B.o.chain==='llufu'&&ET[e.t].boss?' (cambia de forma)':' (se va)')):'')+'.');fxe.push(e.label+' −'+d+(e.hp<=0?(quizPend(e)?' (staggers)':(B.o.chain==='llufu'&&ET[e.t].boss?' (shifts form)':' (gone)')):'')+'.')}

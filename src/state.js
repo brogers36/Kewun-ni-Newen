@@ -7,7 +7,7 @@ function atk(){return Math.max(1,S.baseAtk+(S.gear.futrawino?3:0)+(S.gear.waiki?
 function def(){return Math.max(0,S.baseDef+(S.gear.makun?2:0)-(S.kutran?2:0))}
 function xpNeed(){return 10+S.lvl*10}
 function newState(hero){const fem=hero==='millaray';return{hero,fem,name:fem?'Millaray':'Llanka',gloss:LANG,map:'rupu',x:1,y:6,hp:24,baseMax:24,baseAtk:5,baseDef:1,lvl:1,xp:0,gold:0,
-  items:{kulon:2,diwen:0,kofke:0,lawen:0},gear:{},roots:['amutu'],runes:[],flags:{},piwke:0,keys:0,sp:0,curse:0,hints:true,
+  items:{kulon:2,diwen:0,kofke:0,lawen:0,mate:0},gear:{},roots:['amutu'],runes:[],flags:{},piwke:0,keys:0,sp:0,curse:0,hints:true,
   pw:{speed:0,pewen:0,gold:0},save:{map:'rupu',x:1,y:6}}}
 function persist(){try{if(M){S.map=CUR;S.x=P.x;S.y=P.y}localStorage.setItem(SAVE_KEY,JSON.stringify(S))}catch(e){}}
 function loadSave(){try{const t=localStorage.getItem(SAVE_KEY);return t?JSON.parse(t):null}catch(e){return null}}
@@ -113,7 +113,8 @@ const ITEMS={
   kulon:{m:'külon',es:'maqui: +8 newen (2 piwke)',en:'maqui berries: +8 newen (2 hearts)',p:5},
   diwen:{m:'diweñ',es:'digüeñes: +12 newen (3 piwke)',en:'diweñ fungi: +12 newen (3 hearts)',p:8},
   kofke:{m:'kofke',es:'pan: +16 newen (4 piwke)',en:'bread: +16 newen (4 hearts)',p:10},
-  lawen:{m:'lawen',es:'remedio: quita la maldición, +4 newen',en:'medicine: lifts the curse, +4 newen',p:20}};
+  lawen:{m:'lawen',es:'remedio: quita la maldición, +4 newen',en:'medicine: lifts the curse, +4 newen',p:20},
+  mate:{m:'mate',es:'mate caliente: recuperas la mitad de tu newen',en:'hot mate: restores half your newen',p:25}};
 const GEAR={
   trutruka:{m:'trutruka',es:'corneta de coligüe: su sonido aturde a todos los wekufü (1 vez por pelea)',en:'colihue horn: its blast stuns all the wekufü (once per battle)',p:0,hide:1},
   makun:{m:'makuñ',es:'poncho: defensa +2',en:'poncho: defense +2',p:30},
@@ -127,7 +128,8 @@ function useItem(id){
   if(id==='diwen')S.hp=Math.min(mx,S.hp+12);
   if(id==='kofke')S.hp=Math.min(mx,S.hp+16);
   if(id==='lawen'){S.hp=Math.min(mx,S.hp+4);S.curse=0}
+  if(id==='mate')S.hp=Math.min(mx,S.hp+Math.ceil(mx/2));
   sfx('heal');
   return L('',it.m,'Usas '+it.m+'. '+it.es+'.','You use '+it.m+'. '+it.en+'.');
 }
-function itemOpts(){return Object.keys(ITEMS).map(k=>({m:ITEMS[k].m+' ×'+S.items[k],g:G(ITEMS[k]),v:k,dis:!S.items[k]}))}
+function itemOpts(){return Object.keys(ITEMS).map(k=>({m:ITEMS[k].m+' ×'+(S.items[k]||0),g:G(ITEMS[k]),v:k,dis:!S.items[k]}))}

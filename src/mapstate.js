@@ -188,6 +188,7 @@ function loadMap(id,x,y,quiet){
   if(S.flags['gate:'+id])for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++){if(grid[yy][xx]==='G')grid[yy][xx]=M.floor;if(grid[yy][xx]==='O')grid[yy][xx]='q'}
   PZ={n:0,lit:new Set()};
   if(['sb1','sb2','sb3','sb4','sb5','sb6'].every(f=>S.flags[f]))S.flags.sbAll=1;
+  if(id==='g_ngoyman'&&S.flags.gm_all&&!S.flags.lawW){S.flags.lawW=1;S.lawuses=S.lawuses||0}
   if(id==='w_wapi'&&S.flags['pz:w_wapi']&&!S.flags.wapiNpz&&!S.flags['pz:w_wapi:st']){S.flags['pz:w_wapi:st']=1;delete S.flags['pz:w_wapi']}
   {const doorOpen=(M.pz&&M.pz.done)?S.flags['pz:'+id+':st']:S.flags['pz:'+id];
    if(doorOpen)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='E')grid[yy][xx]=M.floor;

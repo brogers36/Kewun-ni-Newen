@@ -1448,6 +1448,22 @@ def ngoyman5(fr):
             if (y*7)%17<2:g.p(x0,y,'v')
     column(1.57,3,4.0)          # central strand first, behind
     column(0,6,6.0);column(3.14,6,6.0)
+    # ---------------- smoke-wing plumes behind the shoulders
+    for sgn in (-1,1):
+        for i in range(18):
+            t=i/17.0
+            wx=CX+sgn*(12+int(t*21));wy=30-int((t**1.4)*22)+int(math.sin(i+fr*3)*1)
+            rw=6.0-t*4.0
+            g.e(wx,wy,max(1.0,rw),max(1.0,rw*.9),'d')
+        for i in range(18):
+            t=i/17.0
+            wx=CX+sgn*(12+int(t*21));wy=30-int((t**1.4)*22)
+            rw=4.0-t*3.0
+            g.e(wx-sgn,wy+1,max(.8,rw),max(.8,rw*.8),'s')
+        for i in range(6):
+            t=i/5.0
+            wx=CX+sgn*(15+int(t*15));wy=33-int((t**1.4)*16)
+            g.p(wx,wy+4,'d');g.p(wx,wy+5,'d' if i%2 else 's')
     # ---------------- shoulders and raised clawed arms (demon stance)
     for sgn in (-1,1):
         g.e(CX+sgn*13,30,8,5,'s');g.e(CX+sgn*15,31,6,4,'d')
