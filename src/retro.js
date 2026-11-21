@@ -26,11 +26,13 @@ function txt(s,x,y,col,size,align){ctx.font='bold '+size+'px ui-monospace,Menlo,
   for(const [dx,dy] of [[-1,0],[1,0],[0,-1],[0,1],[1,1]])ctx.fillText(s,x*2+dx,y*2+dy);ctx.fillStyle=col;ctx.fillText(s,x*2,y*2);ctx.textAlign='left'}
 
 /* ---------- characters from hand-drawn 16x24 templates ---------- */
+const SKINT=[['#ecb88c','#c48a5c'],['#e0a474','#b67a4a'],['#cc8c5a','#9e663a'],['#b0713e','#845026'],['#8f5730','#663c1e']];
+const EYET=['#1c120e','#32200f','#4c3014','#6b4a1e','#3f4f2e'];
 const BASEP={o:'#181018',s:'#e8a878',S:'#c07850',h:'#201820',H:'#584860',b:'#d83030',B:'#f8d050',p:'#3050b0',P:'#203878',w:'#f0e8d0',r:'#d83030',l:'#5a4430',L:'#3a2a1c',f:'#6a3a1a',e:'#201018',W:'#ffffff',m:'#a04838',q:'#f09878',x:'#e0e0f0',X:'#9898b0',k:'#282438',K:'#14121e',c:'#8a2458',C:'#5a1838'};
 const LOOKS={
-  llanka:{t:'M'},
-  millaray:{t:'F',r:'#2a64c8',c:'#8a2458'},
-  kuku:{t:'F',h:'#c8c8d0',H:'#f4f4fa',s:'#d09868',S:'#a87048',c:'#4a2a5a',C:'#2e1a3a',r:'#c03030'},
+  llanka:{t:'M',fixedSkin:1},
+  millaray:{t:'F',r:'#2a64c8',c:'#8a2458',fixedSkin:1},
+  kuku:{t:'F',fixedSkin:1,h:'#c8c8d0',H:'#f4f4fa',s:'#d09868',S:'#a87048',c:'#4a2a5a',C:'#2e1a3a',r:'#c03030'},
   lonko:{t:'M',p:'#6a2818',P:'#481408',w:'#f0dca0',r:'#202020',b:'#c82828'},
   seller:{t:'M',p:'#9a6a30',P:'#6e4a1c',b:'#2f8d4a',r:'#2f8d4a',s:'#d8986a'},
   fisher:{t:'M',p:'#4a6a5a',P:'#30483c',b:'#2a64a8',r:'#2a64a8',s:'#c88858'},
@@ -49,15 +51,16 @@ const LOOKS={
   lonko4:{t:'M',p:'#2a4a6a',P:'#1a3048',w:'#e8e0c8',r:'#c82828',b:'#c82828',s:'#c08458',S:'#8e5c36'},
   lonko3:{t:'M',p:'#6a4a2a',P:'#4a3018',w:'#f0e0b0',r:'#2a64c8',b:'#2a64c8',s:'#c88050',S:'#9a5a30'},
   lonko5:{t:'M',p:'#6a2a2a',P:'#481a1a',w:'#f0ead0',r:'#e0b040',b:'#e0b040',s:'#b87848',S:'#8a5630'},
-  chumpall:{t:'F',h:'#2aa8b8',H:'#7ae0e8',c:'#145a74',C:'#0a3a50',r:'#7ae0c0',b:'#7ae0c0',s:'#9accc8',S:'#5e9a96'},
+  chumpall:{t:'F',fixedSkin:1,h:'#2aa8b8',H:'#7ae0e8',c:'#145a74',C:'#0a3a50',r:'#7ae0c0',b:'#7ae0c0',s:'#9accc8',S:'#5e9a96'},
   chumpallm:{t:'M',p:'#145a74',P:'#0a3a50',w:'#7ae0e8',r:'#7ae0c0',b:'#2aa8b8',s:'#9accc8',S:'#5e9a96'},
   elder2:{t:'F',h:'#c8c8d0',H:'#f0f0f8',c:'#3a5a8a',C:'#24406a',r:'#e0b040',s:'#c08858',S:'#8a5a34'},
   elder:{t:'M',h:'#c8c8d0',H:'#f0f0f8',p:'#5a4a3a',P:'#3a2e24',b:'#8a2458',r:'#e8d8a0',s:'#b8784c',S:'#8a5634'}};
 const CCACHE={};
-function charSprite(look,dir,fr){
-  fr=[0,1,0,2][fr%4];const key=look+dir+fr;if(CCACHE[key])return CCACHE[key];
-  if(dir==='left')return CCACHE[key]=mirror(charSprite(look,'right',fr===1?1:fr===2?3:0));
+function charSprite(look,dir,fr,tn,ey){
+  fr=[0,1,0,2][fr%4];const key=look+dir+fr+':'+(tn==null?'-':tn)+(ey==null?'-':ey);if(CCACHE[key])return CCACHE[key];
+  if(dir==='left')return CCACHE[key]=mirror(charSprite(look,'right',fr===1?1:fr===2?3:0,tn,ey));
   const L0=LOOKS[look],pal=Object.assign({},BASEP,L0),F=L0.t==='F',d=dir==='up'?'U':dir==='right'?'R':'D';
+  if(!L0.fixedSkin){if(tn!=null){pal.s=SKINT[tn][0];pal.S=SKINT[tn][1];pal.q=ctShade(SKINT[tn][0],.1)}if(ey!=null)pal.e=EYET[ey]}
   const head=SPR[(F?'HEAD_F_':'HEAD_M_')+d],body=SPR[(F?'BODY_F_':'BODY_M_')+d],legs=SPR[(F?'LEGSF_':'LEGS_')+(d==='R'?'R':'D')][fr];
   const rows=head.concat(body,legs),[cvs,c]=mk(16,24);
   rows.forEach((r,y)=>{for(let x=0;x<16;x++){const ch=r[x];if(ch!=='.'){c.fillStyle=pal[ch]||'#ff00ff';c.fillRect(x,y,1,1)}}});
@@ -65,10 +68,11 @@ function charSprite(look,dir,fr){
 }
 /* ---------- Chrono Trigger-style characters (CT preview only) ---------- */
 function ctShade(hex,t){const [r,g,b]=hexRGB(hex);const f=v=>Math.max(0,Math.min(255,Math.round(t<0?v*(1+t):v+(255-v)*t)));return 'rgb('+f(r)+','+f(g)+','+f(b)+')'}
-function ctCharSprite(look,dir,fr,seated){
-  const key='ct'+look+dir+fr+(seated?'z':'');if(CCACHE[key])return CCACHE[key];
-  if(dir==='left')return CCACHE[key]=mirror(ctCharSprite(look,'right',fr,seated));
+function ctCharSprite(look,dir,fr,seated,tn,ey){
+  const key='ct'+look+dir+fr+(seated?'z':'')+':'+(tn==null?'-':tn)+(ey==null?'-':ey);if(CCACHE[key])return CCACHE[key];
+  if(dir==='left')return CCACHE[key]=mirror(ctCharSprite(look,'right',fr,seated,tn,ey));
   const L0=LOOKS[look],pal=Object.assign({},BASEP,L0),F=L0.t==='F',small=!!L0.small;
+  if(!L0.fixedSkin){if(tn!=null){pal.s=SKINT[tn][0];pal.S=SKINT[tn][1];pal.q=ctShade(SKINT[tn][0],.1)}if(ey!=null)pal.e=EYET[ey]}
   const W=18,H=small?26:32,g=[...Array(H)].map(()=>Array(W).fill(null));
   const P=(x,y,m)=>{x=Math.round(x);y=Math.round(y);if(x>=0&&x<W&&y>=0&&y<H)g[y][x]=m};
   const E=(cx,cy,rx,ry,m)=>{for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(((x+.5-cx)/rx)**2+((y+.5-cy)/ry)**2<=1)g[y][x]=m};
@@ -136,13 +140,13 @@ function ctCharSprite(look,dir,fr,seated){
   if(seated){const hh=lY+4,[cv2,c2]=mk(W,hh);c2.drawImage(cvs,0,0,W,hh,0,0,W,hh);return CCACHE[key]=cv2}
   return CCACHE[key]=cvs;
 }
-function drawChar(c,look,x,y,dir,fr,seated){
-  if(CT){const L0=LOOKS[look],s=ctCharSprite(look,dir,[0,1,0,2][fr%4]===0?0:fr%4),Hh=s.height;
+function drawChar(c,look,x,y,dir,fr,seated,tn,ey){
+  if(CT){const L0=LOOKS[look],s=ctCharSprite(look,dir,[0,1,0,2][fr%4]===0?0:fr%4,false,tn,ey),Hh=s.height;
     ell(c,x+9,y+15,7,2.4,'rgba(0,10,20,.3)');
-    if(seated){const ss=ctCharSprite(look,dir==='left'?'left':dir,0,true);c.drawImage(ss,x-1,y+16-ss.height+1);return}
+    if(seated){const ss=ctCharSprite(look,dir==='left'?'left':dir,0,true,tn,ey);c.drawImage(ss,x-1,y+16-ss.height+1);return}
     c.drawImage(s,x-1,y+16-Hh);return}
   ell(c,x+8,y+14,6,2,'rgba(0,0,0,.3)');
-  const s=charSprite(look,dir,fr);
+  const s=charSprite(look,dir,fr,tn,ey);
   if(seated){c.drawImage(s,0,0,16,19,x,y-5,16,19);return}
   if(LOOKS[look].small)c.drawImage(s,x+2,y-4,12,18);else c.drawImage(s,x,y-9);
 }

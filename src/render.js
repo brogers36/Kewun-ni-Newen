@@ -156,7 +156,7 @@ function renderMap(){
       else c.drawImage(p.cvs,sx,sy);
       if(p.board)OV.push(()=>{ctx.font='bold 11px ui-monospace,monospace';ctx.fillStyle='#f0f0e0';ctx.textAlign='center';ctx.fillText('Mari mari',(sx+12)*2,(sy+7)*2);ctx.fillText('kiñe epu küla',(sx+12)*2,(sy+12)*2+1);ctx.textAlign='left'})}})}
   for(const sc of SCN)if(sc.type==='palin'){
-    sc.pl.forEach((p,i)=>list.push({y:p.y/T+.4,d:()=>{const sx=Math.round(p.x-8-cx),sy=Math.round(p.y-8-cy+VY);drawChar(c,i<2?'palinA':'palinB',sx,sy,p.dir,p.mv?Math.floor(frame/7+i)%4:0);
+    sc.pl.forEach((p,i)=>list.push({y:p.y/T+.4,d:()=>{const sx=Math.round(p.x-8-cx),sy=Math.round(p.y-8-cy+VY);drawChar(c,i<2?'palinA':'palinB',sx,sy,p.dir,p.mv?Math.floor(frame/7+i)%4:0,false,i%5,[0,1,2,3][i%4]);
       const d=p.dir==='left'?-1:1,near=Math.hypot(p.x-sc.bx,p.y-sc.by)<22,sw=near?Math.sin(frame/5+i*1.7):Math.sin(frame/40+i)*.3;
       const hx=sx+8+d*(CT?2:2),hy=sy+(CT?6:9),tx=sx+8+d*((CT?15:10)+Math.round(sw*(CT?4:3))),ty=sy+16-Math.round(Math.max(0,-sw)*(CT?3:2));drawWino(c,hx,hy,tx,ty,d)}}));
     list.push({y:sc.by/T+.45,d:()=>{const bx=Math.round(sc.bx-cx),by=Math.round(sc.by-cy+VY);ell(c,bx,by+3,2,1,'rgba(0,0,0,.3)');ell(c,bx,by,2,2,'#3a2a1a');R(c,bx-1,by-1,1,1,'#8a6a4a')}});
@@ -171,7 +171,7 @@ function renderMap(){
       else if(e.look==='ngen5')drawNgen(c,sx+8,sy+15,1,frame,'lelfun');
       else if(e.look==='dog'){ell(c,sx+8,sy+14,6,2,'rgba(0,0,0,.3)');c.drawImage(dogSprite(e.mv?Math.floor(frame/6)%2:0,e.dir),sx,sy+4)}
       else{let fr=e.mv?Math.floor(frame/7)%4:0;if(e.act==='weave'||e.act==='teach')fr=Math.floor(frame/24)%2?1:0;
-        drawChar(c,e.look,sx,sy,e.dir||'down',fr,e.seated);
+        drawChar(c,e.look,sx,sy,e.dir||'down',fr,e.seated,e.tn,e.ey2);
         if(e.act==='wood'){R(c,sx+(e.dir==='left'?9:1),sy-6,6,3,'#7a4a22');R(c,sx+(e.dir==='left'?9:1),sy-6,6,1,'#a87040')}}
       if(e.bub&&(frame+e.bt)%600<400&&Math.abs(e.x-P.x)+Math.abs(e.y-P.y)<9)bubble(sx+8,sy-(e.seated?2:8),e.bub[Math.floor((frame+e.bt)/600)%e.bub.length])}
     else if(e.kind==='animal'){const ac=animalCanvas(e.look,e.mv?Math.floor(frame/8)%2:0,e.dir==='right'?'right':'left');ell(c,sx+8,sy+15,ac.width*.36,2,'rgba(0,0,0,.3)');c.drawImage(ac,sx+8-(ac.width>>1),sy+17-ac.height)}
