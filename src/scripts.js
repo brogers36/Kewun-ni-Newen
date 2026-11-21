@@ -304,6 +304,10 @@ function kukuLof(){
     N('Mira el lof: aquí se teje, se cocina, se juega palin y los niños aprenden mapudungun. Habla con todos.','Look around the lof: people weave, cook, play palin, and the children learn Mapudungun here. Talk to everyone.')]);
 }
 function lonkoTalk(){
+  if(S.flags.mq_laf&&!S.flags.mql_laf){S.flags.mql_laf=1;persist();sfx('lvl');
+    return say([L('Lonko','Machi ñi dungu? Kümey.','¿Un encargo de la machi? Bien.','An errand from the machi? Good.'),
+      N('«El foye viejo crece en Fotra mapu, los pantanos: un árbol solo, entre dos brazos de agua. Párate a su pie, por el lado norte, y pídele permiso antes de sacar una sola hoja. Llevas mi palabra.» La machi y el lonko cuidan juntos el lof: ella con el lawen, él con la palabra.','"The old foye grows in Fotra mapu, the marshes: a lone tree between two arms of water. Stand at its foot, on the north side, and ask its leave before taking a single leaf. You carry my word." The machi and the lonko look after the lof together: she with the remedies, he with the word.'),
+      L('Lonko','Amunge, '+nm()+'.','Ve, '+nm()+'.','Go, '+nm()+'.')]);}
   if(S.flags.pentukun){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen)ls.push(L('Lonko','Ngen-lafken nepey. Chaltu may!','Ngen-lafken despertó. ¡Gracias!','Ngen-lafken has woken up. Thank you!'),
@@ -379,6 +383,10 @@ function chuchuTalk(){
   say(ls);
 }
 function nLonkoTalk(){
+  if(S.flags.mq_nag&&!S.flags.mql_nag){S.flags.mql_nag=1;persist();sfx('lvl');
+    return say([L('Lonko','Machi ñi dungu? Kümey.','¿Un encargo de la machi? Bien.','An errand from the machi? Good.'),
+      N('El lonko entra a su ruka y vuelve con un cántaro de greda oscura, brillante de viejo. «El metawe del lof. Con él se saca el agua del menoko: del ojo de agua del rincón del amanecer, el del nororiente, el más quieto. La machi sana y yo pongo lo que haga falta: así ha sido siempre.»','The lonko goes into his ruka and returns with a jug of dark clay, shiny with age. "The metawe of the lof. With it one draws water from the menoko: from the pool in the sunrise corner, the north-east one, the stillest. The machi heals and I provide what is needed: so it has always been."'),
+      L('Lonko','Amunge, '+nm()+'.','Ve, '+nm()+'.','Go, '+nm()+'.')]);}
   if(S.flags.nag_lonko){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen2)ls.push(L('Lonko','Ngen-mawida nepey. Chaltu may!','Ngen-mawida despertó. ¡Gracias!','Ngen-mawida has woken up. Thank you!'),
@@ -711,6 +719,80 @@ function sbossWake(sb){
 }
 
 /* ---------- Nagche overworld puzzles ---------- */
+
+/* ================= MACHI QUESTS (one per lof, in tandem with the lonko) ================= */
+const MACHIQ={
+ laf:{gate:'pentukun',
+  prob:[L('Machi','Kiñe pichiche kutranküley.','Un niño del lof está enfermo.','A child of the lof is sick.'),
+   N('«Tiene un susto metido en el cuerpo y no duerme. Para su lawen necesito hojas de foye, el canelo, el árbol sagrado de las machi. El lonko conoce esta tierra mejor que nadie: él y yo cuidamos juntos el lof. Pídele que te diga dónde crece el foye viejo.»','"A fright has settled in his body and he cannot sleep. For his remedy I need leaves of the foye, the canelo, the sacred tree of the machi. The lonko knows this land better than anyone: he and I look after the lof together. Ask him where the old foye grows."')],
+  ask:L('Machi','Kintulen foye tapül, chaltu may. Lonko mew dungunge.','Búscame hojas de foye, por favor. Habla con el lonko.','Find me foye leaves, please. Speak with the lonko.'),
+  remind:N('«Las hojas del foye viejo, en Fotra mapu: el árbol solo entre los dos brazos de agua. Párate a su pie, por el lado norte, y pídele permiso.»','"The leaves of the old foye, in Fotra mapu: the lone tree between the two arms of water. Stand at its foot, on the north side, and ask its leave."'),
+  thanks:L('Machi','Küme foye! Chaltu may.','¡Buen foye! Gracias.','Good foye! Thank you.'),
+  after:N('Machuca las hojas, las hierve y le lleva el remedio al niño. Después vuelve y pone dos lawen en tus manos. «El lonko habló por ti y tú caminaste por el lof. Así se cuida una comunidad. Cuando estés herido, ven a verme.»','She crushes the leaves, boils them and takes the remedy to the child. Then she returns and puts two lawen in your hands. "The lonko spoke for you and you walked for the lof. That is how a community is cared for. When you are hurt, come and see me."'),
+  give:L('Machi','Epu lawen eluaeyu.','Te doy dos lawen.','I give you two lawen.'),
+  reward:()=>{S.items.lawen+=2}},
+ nag:{gate:'nag_lonko',
+  prob:[L('Machi','Kiñe papay kutranküley.','Una papay está enferma.','A papay is sick.'),
+   N('«Tiene una tos vieja que no la suelta. Su lawen se prepara con agua del menoko, sacada con respeto. El lonko guarda el metawe antiguo del lof, el cántaro de greda: él y yo trabajamos juntos en esto. Pídeselo.»','"An old cough will not let her go. Her remedy is made with water from the menoko, drawn with respect. The lonko keeps the lof\'s old metawe, the clay jug: he and I work together in this. Ask him for it."')],
+  ask:L('Machi','Kintulen menoko ko, chaltu may. Lonko mew dungunge.','Búscame agua del menoko, por favor. Habla con el lonko.','Find me menoko water, please. Speak with the lonko.'),
+  remind:N('«Con el metawe del lonko, saca agua del ojo de agua del rincón del amanecer, el del nororiente del menoko: el agua más quieta.»','"With the lonko\'s metawe, draw water from the pool in the sunrise corner, the north-east of the menoko: the stillest water."'),
+  thanks:L('Machi','Küme ko! Chaltu may.','¡Buena agua! Gracias.','Good water! Thank you.'),
+  after:N('Prepara el remedio y se lo lleva a la papay. Al volver te da un mate caliente y un lawen. «El lonko puso el metawe y tú pusiste el camino. Así trabajamos la machi y el lonko. Cuando estés herido, ven a verme.»','She prepares the remedy and takes it to the papay. When she returns she hands you a hot mate and a lawen. "The lonko gave the metawe and you gave the walking. That is how machi and lonko work. When you are hurt, come and see me."'),
+  give:L('Machi','Kiñe mate ka kiñe lawen eluaeyu.','Te doy un mate y un lawen.','I give you a mate and a lawen.'),
+  reward:()=>{S.items.mate+=1;S.items.lawen+=1}},
+ pew:{gate:'pew_lonko',
+  prob:[L('Machi','Müley llellipun.','Viene una rogativa.','A rogation is coming.'),
+   N('«Antes de las nieves grandes haremos un llellipun, una rogativa, para que el invierno pase liviano. Necesito ngülliw del pewen más viejo, la abuela de todos los pewenes. La familia del lonko la ha cuidado por generaciones: él sabe dónde está. Habla con él.»','"Before the great snows we will hold a llellipun, a rogation, so the winter passes lightly. I need ngülliw from the oldest pewen, the grandmother of all the pewen trees. The lonko\'s family has watched over her for generations: he knows where she stands. Speak with him."')],
+  ask:L('Machi','Kintulen ngülliw, chaltu may. Lonko mew dungunge.','Búscame piñones, por favor. Habla con el lonko.','Find me pewen nuts, please. Speak with the lonko.'),
+  remind:N('«La abuela pewen está en el bosque de abajo de Pewen mapu, en lo más tupido. Párate entre los árboles, donde apenas entra la luz, y recoge solo lo que está en el suelo.»','"The grandmother pewen is in the lower forest of Pewen mapu, where it grows thickest. Stand among the trees, where the light barely enters, and gather only what lies on the ground."'),
+  thanks:L('Machi','Küme ngülliw! Chaltu may.','¡Buenos piñones! Gracias.','Good ngülliw! Thank you.'),
+  after:N('Guarda los ngülliw para el llellipun y te da dos kofke recién hechos y un lawen. «La palabra del lonko abrió el bosque y tus pies hicieron el resto. Cuando estés herido, ven a verme.»','She sets the ngülliw aside for the llellipun and gives you two fresh kofke and a lawen. "The lonko\'s word opened the forest and your feet did the rest. When you are hurt, come and see me."'),
+  give:L('Machi','Epu kofke ka kiñe lawen eluaeyu.','Te doy dos kofke y un lawen.','I give you two kofke and a lawen.'),
+  reward:()=>{S.items.kofke+=2;S.items.lawen+=1}},
+ wil:{gate:'wil_lonko',
+  prob:[L('Machi','Kiñe papay kutranküley.','Una papay está enferma.','A papay is sick.'),
+   N('«Le duelen los huesos con la lluvia. Su lawen pide trayenko: agua del salto, agua que cae con newen. La garganta de la cascada es brava; el lonko quiere ayudar y te prestará su yiwe, su vaso de madera, para traerla. Habla con él primero.»','"Her bones ache with the rain. Her remedy calls for trayenko: water of the waterfall, water that falls with newen. The gorge of the falls is fierce; the lonko wants to help and will lend you his yiwe, his wooden cup, to carry it. Speak with him first."')],
+  ask:L('Machi','Kintulen trayen ko, chaltu may. Lonko mew dungunge.','Búscame agua del salto, por favor. Habla con el lonko.','Find me waterfall water, please. Speak with the lonko.'),
+  remind:N('«Con el yiwe del lonko, llena agua al pie del salto de Trayen mapu, donde el agua golpea la piedra, por el lado derecho.»','"With the lonko\'s yiwe, fill water at the foot of the falls in Trayen mapu, where the water strikes the rock, on the right-hand side."'),
+  thanks:L('Machi','Küme ko! Chaltu may.','¡Buena agua! Gracias.','Good water! Thank you.'),
+  after:N('Prepara el remedio con el trayenko y le devuelve el yiwe al lonko. A ti te da dos lawen. «Él puso su yiwe, tú pusiste el valor. Así se cuida un lof. Cuando estés herido, ven a verme.»','She prepares the remedy with the trayenko and returns the yiwe to the lonko. To you she gives two lawen. "He gave his yiwe, you gave your courage. That is how a lof is cared for. When you are hurt, come and see me."'),
+  give:L('Machi','Epu lawen eluaeyu.','Te doy dos lawen.','I give you two lawen.'),
+  reward:()=>{S.items.lawen+=2}},
+ puel:{gate:'puel_lonko',
+  prob:[L('Machi','Chadi duamnien.','Necesito sal.','I need salt.'),
+   N('«Para los remedios y para la comida del trawün hace falta chadi, sal de la tierra. Antes había un camino de la sal; el lonko lo caminó de joven y todavía lo recuerda. Pídele que te diga dónde queda.»','"For the remedies and for the food of the gathering we need chadi, salt of the earth. There used to be a salt path; the lonko walked it when he was young and still remembers it. Ask him to tell you where it lies."')],
+  ask:L('Machi','Kintulen chadi, chaltu may. Lonko mew dungunge.','Búscame sal, por favor. Habla con el lonko.','Find me salt, please. Speak with the lonko.'),
+  remind:N('«En el lelfün de abajo, junto al chacay solo, el suelo se pone blanco: ahí está la chadi. Escarba junto al árbol.»','"In the lower lelfün, by the lone chacay, the ground turns white: that is where the chadi lies. Dig beside the tree."'),
+  thanks:L('Machi','Küme chadi! Chaltu may.','¡Buena sal! Gracias.','Good salt! Thank you.'),
+  after:N('Guarda la chadi en bolsitas de cuero y te da dos kofke y epu mari (20) ngülliw por el trabajo. «La memoria del lonko y tus manos: con las dos cosas se hizo esto. Cuando estés herido, ven a verme.»','She stores the chadi in small leather pouches and gives you two kofke and epu mari (20) ngülliw for the work. "The lonko\'s memory and your hands: this was done with both. When you are hurt, come and see me."'),
+  give:L('Machi','Epu kofke eluaeyu.','Te doy dos kofke.','I give you two kofke.'),
+  reward:()=>{S.items.kofke+=2;S.gold+=20}}};
+function machiTalk(r){
+  const q=MACHIQ[r];
+  if(S.flags['mq_done_'+r]){
+    return choose(L('Machi','Lawentuaeyu?','¿Te sano?','Shall I heal you?'),
+      [{m:'May, chaltu may.',g:S.gloss==='en'?'Yes, thank you.':'Sí, gracias.',v:1},{m:'Ka antü.',g:S.gloss==='en'?'Another day.':'Otro día.',v:0}],
+      v=>{if(v){S.hp=maxHP();S.kutran=0;persist();sfx('heal');
+        say([N('La machi canta bajito sobre ti con una rama de foye. El cansancio y los males se van: tu newen está completo.','The machi sings softly over you with a foye branch. Weariness and ills fall away: your newen is whole.')])}
+      else say([L('Machi','Kümelkaleaymi.','Que estés bien.','Be well.')])},true,true);
+  }
+  if(!S.flags[q.gate])return say([L('Machi','Mari mari.','Hola.','Hello.'),
+    N('La machi del lof te saluda con calma desde su rewe. Primero preséntate con el lonko, como corresponde; después ella tendrá algo que pedirte.','The machi of the lof greets you calmly from her rewe. First introduce yourself to the lonko, as is proper; then she will have something to ask of you.')]);
+  if(S.flags['mqd_'+r]){
+    S.flags['mq_done_'+r]=1;q.reward();persist();sfx('lvl');
+    return say([q.thanks,q.after,q.give]);
+  }
+  if(S.flags['mql_'+r])return say([q.remind]);
+  if(S.flags['mq_'+r])return say([q.ask]);
+  S.flags['mq_'+r]=1;persist();
+  say([L('Machi','Mari mari, '+nm()+'. Iñche machi.','Hola, '+nm()+'. Yo soy machi.','Hello, '+nm()+'. I am a machi.'),
+    N('La machi es quien sana y quien guía las ceremonias del lof. Junto a ella se alza su rewe, el tronco tallado con escalones que la une con los espíritus.','The machi is the one who heals and who guides the ceremonies of the lof. Beside her rises her rewe, the carved stepped trunk that joins her to the spirits.')]
+    .concat(q.prob,[q.ask]));
+}
+function reweTalk(){
+  say([L('','Rewe','El rewe de la machi: un tronco tallado con escalones, plantado en la tierra, con ramas de foye amarradas. Es su altar y su escalera hacia los espíritus. Se le tiene respeto.','The machi\'s rewe: a carved trunk with steps, planted in the earth, with foye branches tied to it. It is her altar and her ladder to the spirits. It is treated with respect.')]);
+}
+
 function digFind(dk,dv){
   S.flags['dig:'+CUR+':'+dk]=1;
   if(dv&&dv.what==='pali'){S.flags.laf_palid=1;S.gold+=20;persist();sfx('lvl');
@@ -725,6 +807,21 @@ function digFind(dk,dv){
   if(dv&&dv.what==='trutruka'){S.gear.trutruka=1;persist();sfx('lvl');
     return say([N('Entre los juncos mojados aparece una larga corneta de coligüe con un cuerno en la punta...','Among the wet reeds appears a long colihue horn with a cow horn at its tip...'),
       L('','Trutruka!','¡Encontraste la trutruka! En las peleas podrás tocarla: su sonido aturde a todos los wekufü (una vez por pelea). Cuéntale al trutrukatufe.','You found the trutruka! In battle you can blow it: its blast stuns all the wekufü (once per fight). Tell the trutrukatufe.')]);}
+  if(dv&&dv.what==='foye'){S.flags.mqd_laf=1;persist();sfx('lvl');
+    return say([N('Un árbol de hojas verdes claras y corteza clara. Al quebrar una hoja, el aire se llena de un olor picante y limpio: es el foye. Pides permiso, como te enseñaron, y sacas unas pocas hojas.','A tree with light green leaves and pale bark. When you snap a leaf, the air fills with a clean, peppery scent: it is the foye. You ask its leave, as you were taught, and take a few leaves.'),
+      L('','Foye tapül!','Llevas hojas de foye para la machi.','You carry foye leaves for the machi.')]);}
+  if(dv&&dv.what==='menokoko'){S.flags.mqd_nag=1;persist();sfx('lvl');
+    return say([N('Hundes el metawe del lonko en el agua quieta del rincón del amanecer. El agua entra fría y clara, sin una hoja, sin un barro.','You sink the lonko\'s metawe into the still water of the sunrise corner. The water runs in cold and clear, without a leaf, without a trace of mud.'),
+      L('','Menoko ko!','Llevas agua del menoko para la machi.','You carry menoko water for the machi.')]);}
+  if(dv&&dv.what==='ngulliw'){S.flags.mqd_pew=1;persist();sfx('lvl');
+    return say([N('Entre los troncos más viejos, donde apenas entra la luz, el suelo está alfombrado de ngülliw. Recoges solo los que están caídos, como pidió la machi, y le das las gracias a la abuela pewen.','Among the oldest trunks, where the light barely enters, the ground is carpeted with ngülliw. You gather only the fallen ones, as the machi asked, and thank the grandmother pewen.'),
+      L('','Ngülliw!','Llevas piñones de la abuela pewen para la machi.','You carry ngülliw from the grandmother pewen for the machi.')]);}
+  if(dv&&dv.what==='trayenko'){S.flags.mqd_wil=1;persist();sfx('lvl');
+    return say([N('Al pie del salto el agua truena y la espuma te moja la cara. Llenas el yiwe del lonko donde el agua golpea la piedra: trayenko, agua que cae con newen.','At the foot of the falls the water thunders and the spray wets your face. You fill the lonko\'s yiwe where the water strikes the rock: trayenko, water that falls with newen.'),
+      L('','Trayen ko!','Llevas agua del salto para la machi.','You carry waterfall water for the machi.')]);}
+  if(dv&&dv.what==='chadi'){S.flags.mqd_puel=1;persist();sfx('lvl');
+    return say([N('Junto al chacay solo, el suelo se quiebra en costras blancas. Escarbas y juntas chadi, la sal de la tierra, como la juntaban los antiguos en el camino de la sal.','By the lone chacay the ground breaks into white crusts. You dig and gather chadi, the salt of the earth, as the old people gathered it on the salt path.'),
+      L('','Chadi!','Llevas sal de la tierra para la machi.','You carry salt of the earth for the machi.')]);}
   if(dv&&dv.what==='piwke'){persist();sfx('lvl');
     return gainPiwke([N('Escarbas la tierra justo aquí... ¡hay algo enterrado!','You dig right here... something is buried!'),praise()]);}
   S.gold+=50;S.items.kofke++;persist();sfx('lvl');
@@ -779,6 +876,10 @@ function lakuTalk(){
   say(ls);
 }
 function pLonkoTalk(){
+  if(S.flags.mq_pew&&!S.flags.mql_pew){S.flags.mql_pew=1;persist();sfx('lvl');
+    return say([L('Lonko','Machi ñi dungu? Kümey.','¿Un encargo de la machi? Bien.','An errand from the machi? Good.'),
+      N('«La abuela pewen. Mi familia la ha cuidado por generaciones: está en el bosque de abajo de Pewen mapu, en lo más tupido, donde apenas entra la luz. Recoge solo los ngülliw caídos y dale las gracias. Llevas mi palabra.» La machi guía el llellipun y el lonko abre el camino: los dos sostienen el lof.','"The grandmother pewen. My family has watched over her for generations: she stands in the lower forest of Pewen mapu, where it grows thickest, where the light barely enters. Gather only the fallen ngülliw and thank her. You carry my word." The machi guides the llellipun and the lonko opens the way: the two of them hold up the lof.'),
+      L('Lonko','Amunge, '+nm()+'.','Ve, '+nm()+'.','Go, '+nm()+'.')]);}
   if(S.flags.pew_lonko){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen3)ls.push(L('Lonko','Ngen-pewen nepey. Chaltu may!','Ngen-pewen despertó. ¡Gracias!','Ngen-pewen has woken up. Thank you!'),
@@ -869,6 +970,10 @@ function checheTalk(){
   say(ls);
 }
 function wLonkoTalk(){
+  if(S.flags.mq_wil&&!S.flags.mql_wil){S.flags.mql_wil=1;persist();sfx('lvl');
+    return say([L('Lonko','Machi ñi dungu? Kümey.','¿Un encargo de la machi? Bien.','An errand from the machi? Good.'),
+      N('El lonko descuelga de su cinto un vaso de madera tallada, oscuro y liviano. «Mi yiwe. Llénalo al pie del salto de Trayen mapu, donde el agua golpea la piedra, por el lado derecho. La garganta es brava: ten cuidado. La machi pide y yo pongo: así cuidamos este lof entre los dos.»','The lonko unhooks from his belt a carved wooden cup, dark and light in the hand. "My yiwe. Fill it at the foot of the falls in Trayen mapu, where the water strikes the rock, on the right-hand side. The gorge is fierce: take care. The machi asks and I provide: that is how the two of us care for this lof."'),
+      L('Lonko','Amunge, '+nm()+'.','Ve, '+nm()+'.','Go, '+nm()+'.')]);}
   if(S.flags.wil_lonko){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen4)ls.push(L('Lonko','Ngen-kürüf nepey. Chaltu may!','Ngen-kürüf despertó. ¡Gracias!','Ngen-kürüf has woken up. Thank you!'),
@@ -952,6 +1057,10 @@ function wekuTalk(){
   say(ls);
 }
 function eLonkoTalk(){
+  if(S.flags.mq_puel&&!S.flags.mql_puel){S.flags.mql_puel=1;persist();sfx('lvl');
+    return say([L('Lonko','Machi ñi dungu? Kümey.','¿Un encargo de la machi? Bien.','An errand from the machi? Good.'),
+      N('El lonko mira hacia el oriente un momento. «El camino de la sal. Lo caminé de joven con mi chaw. En el lelfün de abajo, junto al chacay solo, el suelo se pone blanco: ahí se junta la chadi. Escarba junto al árbol. La machi pide por el lof y yo recuerdo por el lof: dile que la sal va en camino.»','The lonko looks east for a moment. "The salt path. I walked it as a young man with my father. In the lower lelfün, by the lone chacay, the ground turns white: that is where the chadi gathers. Dig beside the tree. The machi asks for the lof and I remember for the lof: tell her the salt is on its way."'),
+      L('Lonko','Amunge, '+nm()+'.','Ve, '+nm()+'.','Go, '+nm()+'.')]);}
   if(S.flags.puel_lonko){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen5)ls.push(L('Lonko','Ngen-lelfün nepey. Trariwe dewi!','Ngen-lelfün despertó. ¡El trariwe está completo!','Ngen-lelfün has woken up. The trariwe is complete!'),

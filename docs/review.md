@@ -282,3 +282,19 @@ Fuente principal de verificación en línea de variantes de nguruvilu: la entrad
 - Banderas de transformación del jefe final: etapas 3 y 4 anuncian **"Kalewetuy!"** (¡Cambió de forma!; de kalewe(tu)- 'cambiar, transformarse'). ⚠ Confirmar la forma. Etapa 5 lleva la línea dictada por Brandon: "Wefürkey rüf Fütra Ngoyman, awem!" (glosa ES: '¡Apareció el verdadero Fütra Ngoyman! ¡Rayos!').
 - **Lawentuwün**: nombre del hechizo de autocuración que la Kushe ñi am enseña antes de la batalla final (lawentu- 'curar' + -(u)w- reflexivo + -ün). Sana 100% el primer uso y 25% menos cada uso siguiente (piso: 25%). ⚠ Confirmar la forma y la línea de la kushe: "Kiñe dungu elueyu: Lawentuwün."
 - **mate**: nuevo chemkün comprable (25 ngülliw) que recupera la mitad del newen. (Se eligió mate sobre ñachi por disponibilidad pan-mapuche; cámbialo si prefieres ñachi.)
+
+## Tanda 14 (machi de cada lof, quests con el lonko)
+Cada uno de los cinco lof tiene ahora una **machi** junto a su **rewe** (tronco escalonado con ramas de foye y banderita blanca/azul), con una misión secundaria que se hace **a dúo con el lonko**: la machi pide, el lonko aporta el saber o el objeto, el jugador camina. Al completarla, esa machi **sana gratis** (newen completo y quita el weda kutran) cuando se le habla. Mapudungun nuevo a revisar:
+- **"Iñche machi."** y la etiqueta de hablante "Machi".
+- **"Kiñe pichiche kutranküley." / "Kiñe papay kutranküley."** ⚠ kutran-küle-y 'está enfermo/a': confirmar forma.
+- **"Kintulen foye tapül / menoko ko / ngülliw / trayen ko / chadi, chaltu may."** (calco del patrón ya aprobado "Kintulen küla lawen kachu"). ⚠ ¿"foye tapül" y "trayen ko" como compuestos sueltos, o "foye ñi tapül" / "trayenko" junto?
+- **"Lonko mew dungunge."** (calco de "Tami kuku mew dungunge.").
+- **"Machi ñi dungu? Kümey."** (el lonko) ⚠ ¿'dungu' como 'encargo/asunto' funciona aquí?
+- **"Epu lawen eluaeyu."** etc. ⚠ elu-a-eyu 1s→2s futuro 'te daré'; se usa en el momento de entregar: ¿mejor "eluayu", "elueyu" sin futuro, u otra forma?
+- **"Lawentuaeyu?"** '¿te sano?' ⚠ misma duda de la forma -a-eyu.
+- **"May, chaltu may." / "Ka antü."** como sí/otro día. ⚠ confirmar "Ka antü" como rechazo cortés.
+- **"Chadi duamnien."** ⚠ duam-nie-n 'necesito': confirmar.
+- **"Müley llellipun."** 'viene/hay una rogativa' ⚠ confirmar llellipun y la sintaxis.
+- Banners de objeto: "Foye tapül!", "Menoko ko!", "Ngülliw!", "Trayen ko!", "Chadi!".
+- Léxico cultural usado en glosas: foye (canelo), tapül (hoja), metawe (cántaro), yiwe (vaso de madera), trayenko (agua de cascada), chadi (sal), llellipun (rogativa), rewe. ⚠ Revisar ortografías (tapül vs tapül/tapïl; trayenko junto o separado).
+- Las cinco misiones: Lafkenche (hojas de foye del árbol solo de Fotra mapu, para un niño asustado), Nagche (agua del menoko en el metawe que presta el lonko, para la tos de una papay), Pewenche (ngülliw de la "abuela pewen" que cuida la familia del lonko, para el llellipun), Williche (trayenko en el yiwe del lonko, para los dolores de una papay), Puelmapu (chadi del viejo camino de la sal que recuerda el lonko). Recompensas: 2 lawen / mate+lawen / 2 kofke+lawen / 2 lawen / 2 kofke+20 ngülliw.

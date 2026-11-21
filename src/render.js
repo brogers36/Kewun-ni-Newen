@@ -169,6 +169,7 @@ function renderMap(){
       else if(e.look==='ngen3')drawNgen(c,sx+8,sy+15,1,frame,'pewen');
       else if(e.look==='ngen4')drawNgen(c,sx+8,sy+15,1,frame,'kuruf');
       else if(e.look==='ngen5')drawNgen(c,sx+8,sy+15,1,frame,'lelfun');
+      else if(e.look==='rewe'){ell(c,sx+8,sy+14,6,2,'rgba(0,0,0,.3)');const rc=reweCanvas();c.drawImage(rc,sx-1,sy+16-rc.height)}
       else if(e.look==='dog'){ell(c,sx+8,sy+14,6,2,'rgba(0,0,0,.3)');c.drawImage(dogSprite(e.mv?Math.floor(frame/6)%2:0,e.dir),sx,sy+4)}
       else{let fr=e.mv?Math.floor(frame/7)%4:0;if(e.act==='weave'||e.act==='teach')fr=Math.floor(frame/24)%2?1:0;
         drawChar(c,e.look,sx,sy,e.dir||'down',fr,e.seated,e.tn,e.ey2,e.hr2);

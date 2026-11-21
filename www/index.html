@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='861b916-202611202234';
+window.KEWUN_BUILD='221b014-202611202319';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -786,6 +786,7 @@ const LOOKS={
   chumpall:{t:'F',fixedSkin:1,h:'#2aa8b8',H:'#7ae0e8',c:'#145a74',C:'#0a3a50',r:'#7ae0c0',b:'#7ae0c0',s:'#9accc8',S:'#5e9a96'},
   chumpallm:{t:'M',p:'#145a74',P:'#0a3a50',w:'#7ae0e8',r:'#7ae0c0',b:'#2aa8b8',s:'#9accc8',S:'#5e9a96'},
   elder2:{t:'F',h:'#c8c8d0',H:'#f0f0f8',c:'#3a5a8a',C:'#24406a',r:'#e0b040',s:'#c08858',S:'#8a5a34'},
+  machi:{t:'F',c:'#28386e',C:'#1a2650',r:'#ccd4e2'},
   elder:{t:'M',h:'#c8c8d0',H:'#f0f0f8',p:'#5a4a3a',P:'#3a2e24',b:'#8a2458',r:'#e8d8a0',s:'#b8784c',S:'#8a5634'}};
 const CCACHE={};
 function charSprite(look,dir,fr,tn,ey,hr){
@@ -1106,6 +1107,15 @@ function tplCanvas(name,fr,k,pad){
 function animalCanvas(t,fr,dir){
   const key='an'+t+fr+dir;if(PCACHE[key])return PCACHE[key];
   const base=tplCanvas(t,fr,1);return PCACHE[key]=dir==='right'?mirror(base):base}
+function reweCanvas(){
+  const k='rewe';if(PCACHE[k])return PCACHE[k];const [cvs,c]=mk(18,30);
+  R(c,7,6,4,24,'#8a6034');R(c,7,6,1,24,'#a87c48');R(c,10,6,1,24,'#5a3c1e');
+  for(let i=0;i<4;i++){const y=9+i*5;R(c,6,y,6,2,'#8a6034');R(c,6,y,6,1,'#b08850');R(c,6,y+1,6,1,'#5a3c1e')}
+  R(c,7,4,4,3,'#a87c48');R(c,8,5,1,1,'#3a2410');R(c,10,5,1,1,'#3a2410');R(c,8,7,3,1,'#5a3c1e');
+  ell(c,4,8,3,4,'#2e6030');ell(c,3,7,2,2.5,'#3f7c3e');ell(c,14,8,3,4,'#2e6030');ell(c,15,7,2,2.5,'#3f7c3e');
+  R(c,5,10,1,3,'#4a6a2a');R(c,13,10,1,3,'#4a6a2a');
+  R(c,12,3,1,5,'#d8d8e4');R(c,13,3,3,2,'#e8e8f2');R(c,13,5,3,1,'#4a66b0');
+  outline(cvs,'#1a1208');return PCACHE[k]=cvs}
 function loomCanvas(prog){
   const [cvs,c]=mk(16,22);R(c,1,2,2,20,'#6a4020');R(c,13,2,2,20,'#6a4020');R(c,0,2,16,2,'#8a5a30');R(c,0,18,16,2,'#8a5a30');
   for(let x=3;x<13;x++)R(c,x,4,1,14,'#e8dcc0');
@@ -1211,6 +1221,8 @@ lof:{name:'Lof',g:{es:'La comunidad',en:'The community'},floor:',',bg:'coast',so
    {id:'runner',kind:'npc',look:'childf',fem:1,x:17,y:13,path:[[17,13],[21,13],[21,14],[17,14]],pause:10,spd:10,talk:()=>paliTalk(),bub:['Ayüwün!']},
    {id:'dog',kind:'npc',look:'dog',x:8,y:13,path:[[8,13],[10,13],[10,14],[8,14]],pause:40,talk:()=>dogTalk()},
    {id:'kona',kind:'npc',look:'kona',x:10,y:6,dir:'right',fixed:1,talk:()=>konaTalk(),bub:['Palin!','Kümey!']},
+   {id:'machi_laf',kind:'npc',look:'machi',fem:1,x:20,y:6,dir:'down',fixed:1,talk:()=>machiTalk('laf'),bub:['Mari mari!','Foye...']},
+   {id:'rewe_laf',kind:'npc',look:'rewe',x:21,y:6,fixed:1,talk:()=>reweTalk()},
    {id:'seller',kind:'npc',look:'seller',x:24,y:13,talk:()=>shop('lof')},
    {id:'fisher',kind:'npc',look:'fisher',x:31,y:13,talk:()=>fisherTalk()},
    {id:'child',kind:'npc',look:'child',x:30,y:4,talk:()=>childTalk()}]},
@@ -1269,7 +1281,7 @@ const K4={reward:'piwke',q:L('Konew','Wenu mew tripakey, mapu mew ñamkey. Chem 
   opts:[{m:'mawün',es:'lluvia',en:'rain',ok:1},{m:'antü',es:'sol',en:'sun'},{m:'kürüf',es:'viento',en:'wind'},{m:'küyen',es:'luna',en:'moon'}]};
 Object.assign(MAPS,{
 l_wapi:{name:'Fotra mapu',g:{es:'Los pantanos de la costa',en:'The coastal marshes'},floor:'.',bg:'coast',song:'coast',pickStyle:'diwen',
- edges:{up:{to:'kuyum',x:8,y:11}},chests:{'28,4':'piwke'},stones:{'22,6':'fe'},digs:{'14,9':{}},sbt:{t:['20,10','21,10','22,10','20,11','21,11','22,11'],boss:'chinifilu',flag:'sb1',req:'ngen'},
+ edges:{up:{to:'kuyum',x:8,y:11}},chests:{'28,4':'piwke'},stones:{'22,6':'fe'},digs:{'12,8':{what:'foye',req:'mql_laf'},'14,9':{}},sbt:{t:['20,10','21,10','22,10','20,11','21,11','22,11'],boss:'chinifilu',flag:'sb1',req:'ngen'},
  ents:[{id:'diwfe',kind:'npc',look:'gatherer',fem:1,x:10,y:5,dir:'down',fixed:1,talk:()=>diwenfeTalk(),bub:['Diweñ!','Mari mari!']},
    {kind:'enemy',x:12,y:7,party:['laftrache','laftrache']},{kind:'enemy',x:18,y:10,party:['nidol','laftrache']},{kind:'enemy',x:27,y:10,party:['laftrache','laftrache','nidol']}]},
 l_ruka1:{name:'Kallfüray ñi ruka',g:{es:'La ruka de la papay Kallfüray',en:"Papay Kallfüray's ruka"},floor:'_',bg:'coast',song:'lof',pal:'rukain',wall:'ruka',interior:1,
@@ -1289,6 +1301,8 @@ n_lof:{region:'nagche',name:'Nagche lof',g:{es:'La comunidad de los llanos',en:'
  edges:{left:{to:'n_rupu',x:30,y:7},right:{to:'n_kullin',x:1,y:7,req:'nag_lonko',reqMsg:[N('Antes de seguir, habla con el lonko de este lof. Está junto al kütral.','Before you go on, speak with the lonko of this lof. He is by the fire.')]}},
  ents:[{id:'chuchu',kind:'npc',look:'kuku',fem:1,x:5,y:10,talk:()=>chuchuTalk(),bub:['Na küme mi küpan!']},
    {id:'nlonko',kind:'npc',look:'lonko2',x:18,y:7,talk:()=>nLonkoTalk(),bub:['Mari mari!']},
+   {id:'machi_nag',kind:'npc',look:'machi',fem:1,x:19,y:5,dir:'down',fixed:1,talk:()=>machiTalk('nag'),bub:['Mari mari!','Lawen...']},
+   {id:'rewe_nag',kind:'npc',look:'rewe',x:20,y:5,fixed:1,talk:()=>reweTalk()},
    {id:'nutram',kind:'npc',look:'elder',x:16,y:8,dir:'up',fixed:1,act:'teach',talk:()=>nutramTalk(),bub:['Kuyfi...','Fey mew...']},
    {id:'lk1',kind:'npc',look:'child',x:15,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichiche','Epew ayüken!','¡Me gustan los epew!','I love epew!')])},
    {id:'lk2',kind:'npc',look:'childf',fem:1,x:17,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichi domo','Chem pikey ta Witranalwe?','¿Qué dice el Witranalwe?','What does the Witranalwe say?')])},
@@ -1318,7 +1332,7 @@ n_lewfu:{region:'nagche',name:'Lewfü',g:{es:'El río',en:'The river'},floor:','
  ents:[{id:'nfisher',kind:'npc',look:'fisher',x:12,y:9,dir:'right',fixed:1,talk:()=>nFisherTalk(),bub:['Challwatulen.']},{kind:'enemy',x:8,y:3,party:['kolokolo','anchi']},{kind:'enemy',x:21,y:10,party:['chonchon','chonchon','kolokolo']},
    {kind:'enemy',x:6,y:10,party:['kolokolo','kolokolo','kolokolo']},{kind:'enemy',x:20,y:2,party:['anchi','anchi']}]},
 n_menoko:{region:'nagche',name:'Menoko',g:{es:'El menoko, el humedal de los lawen',en:'The menoko, the wetland of healing plants'},floor:',',bg:'field',song:'nag',pal:'nagche',pickStyle:'lawen',
- edges:{up:{to:'n_kullin',x:5,y:11}},digs:{'13,9':{what:'trutruka',req:'n_trut_q'}},
+ edges:{up:{to:'n_kullin',x:5,y:11}},digs:{'21,3':{what:'menokoko',req:'mql_nag'},'13,9':{what:'trutruka',req:'n_trut_q'}},
  ents:[{id:'lawfe',kind:'npc',look:'elder2',fem:1,x:9,y:4,dir:'down',fixed:1,talk:()=>lawenfeTalk(),bub:['Lawen...','Mari mari!']},
    {id:'trutfe',kind:'npc',look:'walker',x:20,y:9,dir:'down',fixed:1,talk:()=>trutfeTalk(),bub:['Trutruka...']},
    {kind:'enemy',x:10,y:10,party:['kolokolo','kolokolo']},{kind:'enemy',x:24,y:5,party:['nguruvilu','kolokolo']},{kind:'enemy',x:16,y:2,party:['anchi','kolokolo']}]},
@@ -1381,6 +1395,8 @@ p_lof:{region:'pewenche',name:'Pewenche lof',g:{es:'La comunidad de los pewenes'
  edges:{left:{to:'p_rupu',x:30,y:7},right:{to:'p_pewen',x:1,y:7,req:'pew_lonko',reqMsg:[N('Antes de seguir, habla con el lonko de este lof. Está junto al kütral.','Before you go on, speak with the lonko of this lof. He is by the fire.')]}},
  ents:[{id:'laku',kind:'npc',look:'elder',x:5,y:11,talk:()=>lakuTalk(),bub:['Mari mari!']},
    {id:'plonko',kind:'npc',look:'lonko3',x:18,y:7,talk:()=>pLonkoTalk(),bub:['Mari mari!']},
+   {id:'machi_pew',kind:'npc',look:'machi',fem:1,x:21,y:5,dir:'down',fixed:1,talk:()=>machiTalk('pew'),bub:['Mari mari!','Ngülliw...']},
+   {id:'rewe_pew',kind:'npc',look:'rewe',x:22,y:5,fixed:1,talk:()=>reweTalk()},
    {id:'pnutram',kind:'npc',look:'elder2',x:15,y:8,dir:'up',fixed:1,act:'teach',talk:()=>pNutramTalk(),bub:['Kuyfi...','Cherufe...']},
    {id:'pk1',kind:'npc',look:'child',x:15,y:6,dir:'down',seated:1,fixed:1,talk:()=>pewKidsTalk(),bub:['Ngülliw!','Kofke?']},
    {id:'pk2',kind:'npc',look:'childf',fem:1,x:20,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichi domo','Chumül amuaymi pillañ mew?','¿Cuándo vas a ir al volcán?','When will you go to the volcano?')])},
@@ -1403,7 +1419,7 @@ p_ruka2:{region:'pewenche',name:'Nawel ñi ruka',g:{es:'La ruka del chachay Nawe
  ents:[{id:'nawel',kind:'npc',look:'elder',x:6,y:4,dir:'right',seated:1,fixed:1,talk:()=>nawelTalk(),bub:['Kof kof...']}]},
 p_pewen:{region:'pewenche',name:'Pewen mapu',g:{es:'El bosque de pewenes',en:'The pewen forest'},floor:',',bg:'mount',song:'pew',pal:'pewenche',trees:'pewen',
  edges:{left:{to:'p_lof',x:32,y:9},right:{to:'p_pire',x:1,y:7}},chests:{'27,2':'piwke','27,13':'mawgift'},
- digs:{'8,9':{what:'piwke',req:'pew_ngu2'}},
+ digs:{'16,12':{what:'ngulliw',req:'mql_pew'},'8,9':{what:'piwke',req:'pew_ngu2'}},
  pz:{kind:'N',tiles:{'9,3':{lab:'rimü',i:2},'12,3':{lab:'pewü',i:0},'15,3':{lab:'pukem',i:3},'18,3':{lab:'walüng',i:1}}},
  signs:{'13,5':[L('Kura','Rayen mew llitukey; pire mew afkey.','Una piedra tallada: «Empieza con las flores; termina con la nieve». Cuatro piedras esperan.','A carved stone: «It begins with the flowers; it ends with the snow». Four stones wait.'),N('Tu chillka tiene las estaciones del año.','Your chillka has the seasons of the year.')]},
  ents:[{kind:'enemy',x:10,y:6,party:['kura','kura']},{kind:'enemy',x:20,y:6,party:['pire','pire']},{kind:'enemy',x:26,y:6,party:['kutral','kura','pire']},
@@ -1470,6 +1486,8 @@ w_lof:{region:'williche',name:'Williche lof',g:{es:'La comunidad del lago',en:'T
  edges:{down:{to:'w_wapi',x:15,y:1},left:{to:'w_rupu',x:30,y:7},right:{to:'w_mawida',x:1,y:7,req:'wil_lonko',reqMsg:[N('Antes de seguir, habla con el lonko de este lof. Está junto al kütral.','Before you go on, speak with the lonko of this lof. He is by the fire.')]}},
  ents:[{id:'cheche',kind:'npc',look:'elder',x:5,y:10,talk:()=>checheTalk(),bub:['Mari mari!']},
    {id:'wlonko',kind:'npc',look:'lonko4',x:18,y:7,talk:()=>wLonkoTalk(),bub:['Mari mari!']},
+   {id:'machi_wil',kind:'npc',look:'machi',fem:1,x:20,y:5,dir:'down',fixed:1,talk:()=>machiTalk('wil'),bub:['Mari mari!','Trayen ko...']},
+   {id:'rewe_wil',kind:'npc',look:'rewe',x:21,y:5,fixed:1,talk:()=>reweTalk()},
    {id:'wnutram',kind:'npc',look:'elder2',fem:1,x:16,y:8,dir:'up',fixed:1,act:'teach',talk:()=>wNutramTalk(),bub:['Kuyfi...','Kaleuche...']},
    {id:'wk1',kind:'npc',look:'child',x:15,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichiche','Kaleuche pewmafiñ!','¡Soñé con el Kaleuche!','I dreamed about the Kaleuche!')]),bub:['Kaleuche!']},
    {id:'wk2',kind:'npc',look:'childf',fem:1,x:17,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichi domo','Mawün ayüfiñ!','¡Me gusta la lluvia!','I love the rain!')]),bub:['Mawün!']},
@@ -1499,7 +1517,7 @@ w_ruka1:{region:'williche',name:'Kintul ñi ruka',g:{es:'La ruka del chachay Kin
  edges:{down:{to:'w_lof',x:3,y:4}},chests:{'2,5':'numgift'},
  ents:[{id:'kintul',kind:'npc',look:'elder',x:8,y:4,dir:'left',seated:1,fixed:1,talk:()=>kintulTalk(),bub:['Challwa...']}]},
 w_trayen:{region:'williche',name:'Trayen mapu',g:{es:'La garganta de la cascada (zona difícil)',en:'The waterfall gorge (hard area)'},floor:',',bg:'rainforest',song:'wil',pal:'williche',trees:'lawal',
- edges:{up:{to:'w_mawida',x:16,y:11}},konew:{'5,8':K14},digs:{'24,10':{}},sbt:{t:['13,7','14,7','15,7','13,8','14,8','15,8'],boss:'trawko',flag:'sb4',req:'ngen4'},
+ edges:{up:{to:'w_mawida',x:16,y:11}},konew:{'5,8':K14},digs:{'13,9':{what:'trayenko',req:'mql_wil'},'24,10':{}},sbt:{t:['13,7','14,7','15,7','13,8','14,8','15,8'],boss:'trawko',flag:'sb4',req:'ngen4'},
  ents:[{kind:'enemy',x:20,y:6,party:['basilisko','kowek']},{kind:'enemy',x:7,y:4,party:['mawek','mawek','mawek']},{kind:'enemy',x:28,y:6,party:['kamawetu','mawek']},{kind:'enemy',x:13,y:8,party:['basilisko','mawek','kowek']}]},
 w_inaltu:{region:'williche',name:'Lafken inaltu',g:{es:'Los acantilados',en:'The cliffs'},floor:'.',bg:'rainforest',song:'wil',pal:'williche',trees:'lawal',
  edges:{left:{to:'w_lafken',x:30,y:7}},stairs:{to:'wd1',x:22,y:3},
@@ -1551,6 +1569,8 @@ e_lof:{region:'puelmapu',name:'Puelche lof',g:{es:'La comunidad del este',en:'Th
  edges:{left:{to:'e_rupu',x:30,y:7},right:{to:'e_lelfun',x:1,y:7,req:'puel_lonko',reqMsg:[N('Antes de seguir, habla con el lonko de este lof. Está junto al kütral.','Before you go on, speak with the lonko of this lof. He is by the fire.')]}},
  ents:[{id:'weku',kind:'npc',look:'elder',x:5,y:10,talk:()=>wekuTalk(),bub:['Mari mari!']},
    {id:'elonko',kind:'npc',look:'lonko5',x:18,y:7,talk:()=>eLonkoTalk(),bub:['Mari mari!']},
+   {id:'machi_puel',kind:'npc',look:'machi',fem:1,x:19,y:6,dir:'down',fixed:1,talk:()=>machiTalk('puel'),bub:['Mari mari!','Chadi...']},
+   {id:'rewe_puel',kind:'npc',look:'rewe',x:20,y:6,fixed:1,talk:()=>reweTalk()},
    {id:'enutram',kind:'npc',look:'elder2',x:16,y:8,dir:'up',fixed:1,act:'teach',talk:()=>eNutramTalk(),bub:['Kuyfi...','Walichu...']},
    {id:'ek1',kind:'npc',look:'child',x:15,y:6,dir:'down',seated:1,fixed:1,talk:()=>choykeKidTalk(),bub:['Choyke!']},
    {id:'ek2',kind:'npc',look:'childf',fem:1,x:17,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichi domo','Luan ayüfiñ! Müna kümeke ngey.','¡Me gustan los luan! Son muy buenos.','I love the guanacos! They are so gentle.')]),bub:['Luan!']},
@@ -1568,7 +1588,7 @@ e_ruka1:{region:'puelmapu',name:'Kushe ñi ruka',g:{es:'La ruka de la kushe Mill
  ents:[{id:'kushe',kind:'npc',look:'kuku',fem:1,x:8,y:4,dir:'left',seated:1,fixed:1,talk:()=>kusheTalk(),bub:['Mülerkey...','Konpange!']}]},
 e_lelfun:{region:'puelmapu',name:'Lelfün mapu',g:{es:'La pampa abierta',en:'The open grassland'},floor:',',bg:'pampa',song:'puel',pal:'puelmapu',trees:'chacay',
  edges:{left:{to:'e_lof',x:32,y:9},right:{to:'e_kura',x:1,y:7},down:{to:'e_mallin',x:16,y:1}},
- chests:{'27,2':'piwke'},stones:{'8,3':'dirmo'},konew:{'22,10':K15},digs:{'12,8':{what:'pichun',req:'puel_kidq'},'4,10':{}},
+ chests:{'27,2':'piwke'},stones:{'8,3':'dirmo'},konew:{'22,10':K15},digs:{'9,11':{what:'chadi',req:'mql_puel'},'12,8':{what:'pichun',req:'puel_kidq'},'4,10':{}},
  ents:[{kind:'animal',look:'luan',x:18,y:4},{kind:'animal',look:'choyke',x:7,y:9},
    {kind:'enemy',x:10,y:4,party:['mewlen','mewlen']},{kind:'enemy',x:20,y:5,party:['kurutrewa']},{kind:'enemy',x:6,y:10,party:['mewlen','kurutrewa']},{kind:'enemy',x:25,y:9,party:['kurutrewa','kurutrewa','mewlen']}]},
 e_mallin:{region:'puelmapu',name:'Malliñ mapu',g:{es:'El mallín, el humedal de la pampa',en:'The mallín, the wet meadow of the plains'},floor:',',bg:'pampa',song:'puel',pal:'puelmapu',trees:'chacay',
@@ -2513,6 +2533,10 @@ function kukuLof(){
     N('Mira el lof: aquí se teje, se cocina, se juega palin y los niños aprenden mapudungun. Habla con todos.','Look around the lof: people weave, cook, play palin, and the children learn Mapudungun here. Talk to everyone.')]);
 }
 function lonkoTalk(){
+  if(S.flags.mq_laf&&!S.flags.mql_laf){S.flags.mql_laf=1;persist();sfx('lvl');
+    return say([L('Lonko','Machi ñi dungu? Kümey.','¿Un encargo de la machi? Bien.','An errand from the machi? Good.'),
+      N('«El foye viejo crece en Fotra mapu, los pantanos: un árbol solo, entre dos brazos de agua. Párate a su pie, por el lado norte, y pídele permiso antes de sacar una sola hoja. Llevas mi palabra.» La machi y el lonko cuidan juntos el lof: ella con el lawen, él con la palabra.','"The old foye grows in Fotra mapu, the marshes: a lone tree between two arms of water. Stand at its foot, on the north side, and ask its leave before taking a single leaf. You carry my word." The machi and the lonko look after the lof together: she with the remedies, he with the word.'),
+      L('Lonko','Amunge, '+nm()+'.','Ve, '+nm()+'.','Go, '+nm()+'.')]);}
   if(S.flags.pentukun){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen)ls.push(L('Lonko','Ngen-lafken nepey. Chaltu may!','Ngen-lafken despertó. ¡Gracias!','Ngen-lafken has woken up. Thank you!'),
@@ -2588,6 +2612,10 @@ function chuchuTalk(){
   say(ls);
 }
 function nLonkoTalk(){
+  if(S.flags.mq_nag&&!S.flags.mql_nag){S.flags.mql_nag=1;persist();sfx('lvl');
+    return say([L('Lonko','Machi ñi dungu? Kümey.','¿Un encargo de la machi? Bien.','An errand from the machi? Good.'),
+      N('El lonko entra a su ruka y vuelve con un cántaro de greda oscura, brillante de viejo. «El metawe del lof. Con él se saca el agua del menoko: del ojo de agua del rincón del amanecer, el del nororiente, el más quieto. La machi sana y yo pongo lo que haga falta: así ha sido siempre.»','The lonko goes into his ruka and returns with a jug of dark clay, shiny with age. "The metawe of the lof. With it one draws water from the menoko: from the pool in the sunrise corner, the north-east one, the stillest. The machi heals and I provide what is needed: so it has always been."'),
+      L('Lonko','Amunge, '+nm()+'.','Ve, '+nm()+'.','Go, '+nm()+'.')]);}
   if(S.flags.nag_lonko){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen2)ls.push(L('Lonko','Ngen-mawida nepey. Chaltu may!','Ngen-mawida despertó. ¡Gracias!','Ngen-mawida has woken up. Thank you!'),
@@ -2920,6 +2948,80 @@ function sbossWake(sb){
 }
 
 /* ---------- Nagche overworld puzzles ---------- */
+
+/* ================= MACHI QUESTS (one per lof, in tandem with the lonko) ================= */
+const MACHIQ={
+ laf:{gate:'pentukun',
+  prob:[L('Machi','Kiñe pichiche kutranküley.','Un niño del lof está enfermo.','A child of the lof is sick.'),
+   N('«Tiene un susto metido en el cuerpo y no duerme. Para su lawen necesito hojas de foye, el canelo, el árbol sagrado de las machi. El lonko conoce esta tierra mejor que nadie: él y yo cuidamos juntos el lof. Pídele que te diga dónde crece el foye viejo.»','"A fright has settled in his body and he cannot sleep. For his remedy I need leaves of the foye, the canelo, the sacred tree of the machi. The lonko knows this land better than anyone: he and I look after the lof together. Ask him where the old foye grows."')],
+  ask:L('Machi','Kintulen foye tapül, chaltu may. Lonko mew dungunge.','Búscame hojas de foye, por favor. Habla con el lonko.','Find me foye leaves, please. Speak with the lonko.'),
+  remind:N('«Las hojas del foye viejo, en Fotra mapu: el árbol solo entre los dos brazos de agua. Párate a su pie, por el lado norte, y pídele permiso.»','"The leaves of the old foye, in Fotra mapu: the lone tree between the two arms of water. Stand at its foot, on the north side, and ask its leave."'),
+  thanks:L('Machi','Küme foye! Chaltu may.','¡Buen foye! Gracias.','Good foye! Thank you.'),
+  after:N('Machuca las hojas, las hierve y le lleva el remedio al niño. Después vuelve y pone dos lawen en tus manos. «El lonko habló por ti y tú caminaste por el lof. Así se cuida una comunidad. Cuando estés herido, ven a verme.»','She crushes the leaves, boils them and takes the remedy to the child. Then she returns and puts two lawen in your hands. "The lonko spoke for you and you walked for the lof. That is how a community is cared for. When you are hurt, come and see me."'),
+  give:L('Machi','Epu lawen eluaeyu.','Te doy dos lawen.','I give you two lawen.'),
+  reward:()=>{S.items.lawen+=2}},
+ nag:{gate:'nag_lonko',
+  prob:[L('Machi','Kiñe papay kutranküley.','Una papay está enferma.','A papay is sick.'),
+   N('«Tiene una tos vieja que no la suelta. Su lawen se prepara con agua del menoko, sacada con respeto. El lonko guarda el metawe antiguo del lof, el cántaro de greda: él y yo trabajamos juntos en esto. Pídeselo.»','"An old cough will not let her go. Her remedy is made with water from the menoko, drawn with respect. The lonko keeps the lof\'s old metawe, the clay jug: he and I work together in this. Ask him for it."')],
+  ask:L('Machi','Kintulen menoko ko, chaltu may. Lonko mew dungunge.','Búscame agua del menoko, por favor. Habla con el lonko.','Find me menoko water, please. Speak with the lonko.'),
+  remind:N('«Con el metawe del lonko, saca agua del ojo de agua del rincón del amanecer, el del nororiente del menoko: el agua más quieta.»','"With the lonko\'s metawe, draw water from the pool in the sunrise corner, the north-east of the menoko: the stillest water."'),
+  thanks:L('Machi','Küme ko! Chaltu may.','¡Buena agua! Gracias.','Good water! Thank you.'),
+  after:N('Prepara el remedio y se lo lleva a la papay. Al volver te da un mate caliente y un lawen. «El lonko puso el metawe y tú pusiste el camino. Así trabajamos la machi y el lonko. Cuando estés herido, ven a verme.»','She prepares the remedy and takes it to the papay. When she returns she hands you a hot mate and a lawen. "The lonko gave the metawe and you gave the walking. That is how machi and lonko work. When you are hurt, come and see me."'),
+  give:L('Machi','Kiñe mate ka kiñe lawen eluaeyu.','Te doy un mate y un lawen.','I give you a mate and a lawen.'),
+  reward:()=>{S.items.mate+=1;S.items.lawen+=1}},
+ pew:{gate:'pew_lonko',
+  prob:[L('Machi','Müley llellipun.','Viene una rogativa.','A rogation is coming.'),
+   N('«Antes de las nieves grandes haremos un llellipun, una rogativa, para que el invierno pase liviano. Necesito ngülliw del pewen más viejo, la abuela de todos los pewenes. La familia del lonko la ha cuidado por generaciones: él sabe dónde está. Habla con él.»','"Before the great snows we will hold a llellipun, a rogation, so the winter passes lightly. I need ngülliw from the oldest pewen, the grandmother of all the pewen trees. The lonko\'s family has watched over her for generations: he knows where she stands. Speak with him."')],
+  ask:L('Machi','Kintulen ngülliw, chaltu may. Lonko mew dungunge.','Búscame piñones, por favor. Habla con el lonko.','Find me pewen nuts, please. Speak with the lonko.'),
+  remind:N('«La abuela pewen está en el bosque de abajo de Pewen mapu, en lo más tupido. Párate entre los árboles, donde apenas entra la luz, y recoge solo lo que está en el suelo.»','"The grandmother pewen is in the lower forest of Pewen mapu, where it grows thickest. Stand among the trees, where the light barely enters, and gather only what lies on the ground."'),
+  thanks:L('Machi','Küme ngülliw! Chaltu may.','¡Buenos piñones! Gracias.','Good ngülliw! Thank you.'),
+  after:N('Guarda los ngülliw para el llellipun y te da dos kofke recién hechos y un lawen. «La palabra del lonko abrió el bosque y tus pies hicieron el resto. Cuando estés herido, ven a verme.»','She sets the ngülliw aside for the llellipun and gives you two fresh kofke and a lawen. "The lonko\'s word opened the forest and your feet did the rest. When you are hurt, come and see me."'),
+  give:L('Machi','Epu kofke ka kiñe lawen eluaeyu.','Te doy dos kofke y un lawen.','I give you two kofke and a lawen.'),
+  reward:()=>{S.items.kofke+=2;S.items.lawen+=1}},
+ wil:{gate:'wil_lonko',
+  prob:[L('Machi','Kiñe papay kutranküley.','Una papay está enferma.','A papay is sick.'),
+   N('«Le duelen los huesos con la lluvia. Su lawen pide trayenko: agua del salto, agua que cae con newen. La garganta de la cascada es brava; el lonko quiere ayudar y te prestará su yiwe, su vaso de madera, para traerla. Habla con él primero.»','"Her bones ache with the rain. Her remedy calls for trayenko: water of the waterfall, water that falls with newen. The gorge of the falls is fierce; the lonko wants to help and will lend you his yiwe, his wooden cup, to carry it. Speak with him first."')],
+  ask:L('Machi','Kintulen trayen ko, chaltu may. Lonko mew dungunge.','Búscame agua del salto, por favor. Habla con el lonko.','Find me waterfall water, please. Speak with the lonko.'),
+  remind:N('«Con el yiwe del lonko, llena agua al pie del salto de Trayen mapu, donde el agua golpea la piedra, por el lado derecho.»','"With the lonko\'s yiwe, fill water at the foot of the falls in Trayen mapu, where the water strikes the rock, on the right-hand side."'),
+  thanks:L('Machi','Küme ko! Chaltu may.','¡Buena agua! Gracias.','Good water! Thank you.'),
+  after:N('Prepara el remedio con el trayenko y le devuelve el yiwe al lonko. A ti te da dos lawen. «Él puso su yiwe, tú pusiste el valor. Así se cuida un lof. Cuando estés herido, ven a verme.»','She prepares the remedy with the trayenko and returns the yiwe to the lonko. To you she gives two lawen. "He gave his yiwe, you gave your courage. That is how a lof is cared for. When you are hurt, come and see me."'),
+  give:L('Machi','Epu lawen eluaeyu.','Te doy dos lawen.','I give you two lawen.'),
+  reward:()=>{S.items.lawen+=2}},
+ puel:{gate:'puel_lonko',
+  prob:[L('Machi','Chadi duamnien.','Necesito sal.','I need salt.'),
+   N('«Para los remedios y para la comida del trawün hace falta chadi, sal de la tierra. Antes había un camino de la sal; el lonko lo caminó de joven y todavía lo recuerda. Pídele que te diga dónde queda.»','"For the remedies and for the food of the gathering we need chadi, salt of the earth. There used to be a salt path; the lonko walked it when he was young and still remembers it. Ask him to tell you where it lies."')],
+  ask:L('Machi','Kintulen chadi, chaltu may. Lonko mew dungunge.','Búscame sal, por favor. Habla con el lonko.','Find me salt, please. Speak with the lonko.'),
+  remind:N('«En el lelfün de abajo, junto al chacay solo, el suelo se pone blanco: ahí está la chadi. Escarba junto al árbol.»','"In the lower lelfün, by the lone chacay, the ground turns white: that is where the chadi lies. Dig beside the tree."'),
+  thanks:L('Machi','Küme chadi! Chaltu may.','¡Buena sal! Gracias.','Good salt! Thank you.'),
+  after:N('Guarda la chadi en bolsitas de cuero y te da dos kofke y epu mari (20) ngülliw por el trabajo. «La memoria del lonko y tus manos: con las dos cosas se hizo esto. Cuando estés herido, ven a verme.»','She stores the chadi in small leather pouches and gives you two kofke and epu mari (20) ngülliw for the work. "The lonko\'s memory and your hands: this was done with both. When you are hurt, come and see me."'),
+  give:L('Machi','Epu kofke eluaeyu.','Te doy dos kofke.','I give you two kofke.'),
+  reward:()=>{S.items.kofke+=2;S.gold+=20}}};
+function machiTalk(r){
+  const q=MACHIQ[r];
+  if(S.flags['mq_done_'+r]){
+    return choose(L('Machi','Lawentuaeyu?','¿Te sano?','Shall I heal you?'),
+      [{m:'May, chaltu may.',g:S.gloss==='en'?'Yes, thank you.':'Sí, gracias.',v:1},{m:'Ka antü.',g:S.gloss==='en'?'Another day.':'Otro día.',v:0}],
+      v=>{if(v){S.hp=maxHP();S.kutran=0;persist();sfx('heal');
+        say([N('La machi canta bajito sobre ti con una rama de foye. El cansancio y los males se van: tu newen está completo.','The machi sings softly over you with a foye branch. Weariness and ills fall away: your newen is whole.')])}
+      else say([L('Machi','Kümelkaleaymi.','Que estés bien.','Be well.')])},true,true);
+  }
+  if(!S.flags[q.gate])return say([L('Machi','Mari mari.','Hola.','Hello.'),
+    N('La machi del lof te saluda con calma desde su rewe. Primero preséntate con el lonko, como corresponde; después ella tendrá algo que pedirte.','The machi of the lof greets you calmly from her rewe. First introduce yourself to the lonko, as is proper; then she will have something to ask of you.')]);
+  if(S.flags['mqd_'+r]){
+    S.flags['mq_done_'+r]=1;q.reward();persist();sfx('lvl');
+    return say([q.thanks,q.after,q.give]);
+  }
+  if(S.flags['mql_'+r])return say([q.remind]);
+  if(S.flags['mq_'+r])return say([q.ask]);
+  S.flags['mq_'+r]=1;persist();
+  say([L('Machi','Mari mari, '+nm()+'. Iñche machi.','Hola, '+nm()+'. Yo soy machi.','Hello, '+nm()+'. I am a machi.'),
+    N('La machi es quien sana y quien guía las ceremonias del lof. Junto a ella se alza su rewe, el tronco tallado con escalones que la une con los espíritus.','The machi is the one who heals and who guides the ceremonies of the lof. Beside her rises her rewe, the carved stepped trunk that joins her to the spirits.')]
+    .concat(q.prob,[q.ask]));
+}
+function reweTalk(){
+  say([L('','Rewe','El rewe de la machi: un tronco tallado con escalones, plantado en la tierra, con ramas de foye amarradas. Es su altar y su escalera hacia los espíritus. Se le tiene respeto.','The machi\'s rewe: a carved trunk with steps, planted in the earth, with foye branches tied to it. It is her altar and her ladder to the spirits. It is treated with respect.')]);
+}
+
 function digFind(dk,dv){
   S.flags['dig:'+CUR+':'+dk]=1;
   if(dv&&dv.what==='pali'){S.flags.laf_palid=1;S.gold+=20;persist();sfx('lvl');
@@ -2934,6 +3036,21 @@ function digFind(dk,dv){
   if(dv&&dv.what==='trutruka'){S.gear.trutruka=1;persist();sfx('lvl');
     return say([N('Entre los juncos mojados aparece una larga corneta de coligüe con un cuerno en la punta...','Among the wet reeds appears a long colihue horn with a cow horn at its tip...'),
       L('','Trutruka!','¡Encontraste la trutruka! En las peleas podrás tocarla: su sonido aturde a todos los wekufü (una vez por pelea). Cuéntale al trutrukatufe.','You found the trutruka! In battle you can blow it: its blast stuns all the wekufü (once per fight). Tell the trutrukatufe.')]);}
+  if(dv&&dv.what==='foye'){S.flags.mqd_laf=1;persist();sfx('lvl');
+    return say([N('Un árbol de hojas verdes claras y corteza clara. Al quebrar una hoja, el aire se llena de un olor picante y limpio: es el foye. Pides permiso, como te enseñaron, y sacas unas pocas hojas.','A tree with light green leaves and pale bark. When you snap a leaf, the air fills with a clean, peppery scent: it is the foye. You ask its leave, as you were taught, and take a few leaves.'),
+      L('','Foye tapül!','Llevas hojas de foye para la machi.','You carry foye leaves for the machi.')]);}
+  if(dv&&dv.what==='menokoko'){S.flags.mqd_nag=1;persist();sfx('lvl');
+    return say([N('Hundes el metawe del lonko en el agua quieta del rincón del amanecer. El agua entra fría y clara, sin una hoja, sin un barro.','You sink the lonko\'s metawe into the still water of the sunrise corner. The water runs in cold and clear, without a leaf, without a trace of mud.'),
+      L('','Menoko ko!','Llevas agua del menoko para la machi.','You carry menoko water for the machi.')]);}
+  if(dv&&dv.what==='ngulliw'){S.flags.mqd_pew=1;persist();sfx('lvl');
+    return say([N('Entre los troncos más viejos, donde apenas entra la luz, el suelo está alfombrado de ngülliw. Recoges solo los que están caídos, como pidió la machi, y le das las gracias a la abuela pewen.','Among the oldest trunks, where the light barely enters, the ground is carpeted with ngülliw. You gather only the fallen ones, as the machi asked, and thank the grandmother pewen.'),
+      L('','Ngülliw!','Llevas piñones de la abuela pewen para la machi.','You carry ngülliw from the grandmother pewen for the machi.')]);}
+  if(dv&&dv.what==='trayenko'){S.flags.mqd_wil=1;persist();sfx('lvl');
+    return say([N('Al pie del salto el agua truena y la espuma te moja la cara. Llenas el yiwe del lonko donde el agua golpea la piedra: trayenko, agua que cae con newen.','At the foot of the falls the water thunders and the spray wets your face. You fill the lonko\'s yiwe where the water strikes the rock: trayenko, water that falls with newen.'),
+      L('','Trayen ko!','Llevas agua del salto para la machi.','You carry waterfall water for the machi.')]);}
+  if(dv&&dv.what==='chadi'){S.flags.mqd_puel=1;persist();sfx('lvl');
+    return say([N('Junto al chacay solo, el suelo se quiebra en costras blancas. Escarbas y juntas chadi, la sal de la tierra, como la juntaban los antiguos en el camino de la sal.','By the lone chacay the ground breaks into white crusts. You dig and gather chadi, the salt of the earth, as the old people gathered it on the salt path.'),
+      L('','Chadi!','Llevas sal de la tierra para la machi.','You carry salt of the earth for the machi.')]);}
   if(dv&&dv.what==='piwke'){persist();sfx('lvl');
     return gainPiwke([N('Escarbas la tierra justo aquí... ¡hay algo enterrado!','You dig right here... something is buried!'),praise()]);}
   S.gold+=50;S.items.kofke++;persist();sfx('lvl');
@@ -2988,6 +3105,10 @@ function lakuTalk(){
   say(ls);
 }
 function pLonkoTalk(){
+  if(S.flags.mq_pew&&!S.flags.mql_pew){S.flags.mql_pew=1;persist();sfx('lvl');
+    return say([L('Lonko','Machi ñi dungu? Kümey.','¿Un encargo de la machi? Bien.','An errand from the machi? Good.'),
+      N('«La abuela pewen. Mi familia la ha cuidado por generaciones: está en el bosque de abajo de Pewen mapu, en lo más tupido, donde apenas entra la luz. Recoge solo los ngülliw caídos y dale las gracias. Llevas mi palabra.» La machi guía el llellipun y el lonko abre el camino: los dos sostienen el lof.','"The grandmother pewen. My family has watched over her for generations: she stands in the lower forest of Pewen mapu, where it grows thickest, where the light barely enters. Gather only the fallen ngülliw and thank her. You carry my word." The machi guides the llellipun and the lonko opens the way: the two of them hold up the lof.'),
+      L('Lonko','Amunge, '+nm()+'.','Ve, '+nm()+'.','Go, '+nm()+'.')]);}
   if(S.flags.pew_lonko){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen3)ls.push(L('Lonko','Ngen-pewen nepey. Chaltu may!','Ngen-pewen despertó. ¡Gracias!','Ngen-pewen has woken up. Thank you!'),
@@ -3078,6 +3199,10 @@ function checheTalk(){
   say(ls);
 }
 function wLonkoTalk(){
+  if(S.flags.mq_wil&&!S.flags.mql_wil){S.flags.mql_wil=1;persist();sfx('lvl');
+    return say([L('Lonko','Machi ñi dungu? Kümey.','¿Un encargo de la machi? Bien.','An errand from the machi? Good.'),
+      N('El lonko descuelga de su cinto un vaso de madera tallada, oscuro y liviano. «Mi yiwe. Llénalo al pie del salto de Trayen mapu, donde el agua golpea la piedra, por el lado derecho. La garganta es brava: ten cuidado. La machi pide y yo pongo: así cuidamos este lof entre los dos.»','The lonko unhooks from his belt a carved wooden cup, dark and light in the hand. "My yiwe. Fill it at the foot of the falls in Trayen mapu, where the water strikes the rock, on the right-hand side. The gorge is fierce: take care. The machi asks and I provide: that is how the two of us care for this lof."'),
+      L('Lonko','Amunge, '+nm()+'.','Ve, '+nm()+'.','Go, '+nm()+'.')]);}
   if(S.flags.wil_lonko){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen4)ls.push(L('Lonko','Ngen-kürüf nepey. Chaltu may!','Ngen-kürüf despertó. ¡Gracias!','Ngen-kürüf has woken up. Thank you!'),
@@ -3161,6 +3286,10 @@ function wekuTalk(){
   say(ls);
 }
 function eLonkoTalk(){
+  if(S.flags.mq_puel&&!S.flags.mql_puel){S.flags.mql_puel=1;persist();sfx('lvl');
+    return say([L('Lonko','Machi ñi dungu? Kümey.','¿Un encargo de la machi? Bien.','An errand from the machi? Good.'),
+      N('El lonko mira hacia el oriente un momento. «El camino de la sal. Lo caminé de joven con mi chaw. En el lelfün de abajo, junto al chacay solo, el suelo se pone blanco: ahí se junta la chadi. Escarba junto al árbol. La machi pide por el lof y yo recuerdo por el lof: dile que la sal va en camino.»','The lonko looks east for a moment. "The salt path. I walked it as a young man with my father. In the lower lelfün, by the lone chacay, the ground turns white: that is where the chadi gathers. Dig beside the tree. The machi asks for the lof and I remember for the lof: tell her the salt is on its way."'),
+      L('Lonko','Amunge, '+nm()+'.','Ve, '+nm()+'.','Go, '+nm()+'.')]);}
   if(S.flags.puel_lonko){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen5)ls.push(L('Lonko','Ngen-lelfün nepey. Trariwe dewi!','Ngen-lelfün despertó. ¡El trariwe está completo!','Ngen-lelfün has woken up. The trariwe is complete!'),
@@ -4455,6 +4584,7 @@ function renderMap(){
       else if(e.look==='ngen3')drawNgen(c,sx+8,sy+15,1,frame,'pewen');
       else if(e.look==='ngen4')drawNgen(c,sx+8,sy+15,1,frame,'kuruf');
       else if(e.look==='ngen5')drawNgen(c,sx+8,sy+15,1,frame,'lelfun');
+      else if(e.look==='rewe'){ell(c,sx+8,sy+14,6,2,'rgba(0,0,0,.3)');const rc=reweCanvas();c.drawImage(rc,sx-1,sy+16-rc.height)}
       else if(e.look==='dog'){ell(c,sx+8,sy+14,6,2,'rgba(0,0,0,.3)');c.drawImage(dogSprite(e.mv?Math.floor(frame/6)%2:0,e.dir),sx,sy+4)}
       else{let fr=e.mv?Math.floor(frame/7)%4:0;if(e.act==='weave'||e.act==='teach')fr=Math.floor(frame/24)%2?1:0;
         drawChar(c,e.look,sx,sy,e.dir||'down',fr,e.seated,e.tn,e.ey2,e.hr2);

@@ -55,6 +55,7 @@ const LOOKS={
   chumpall:{t:'F',fixedSkin:1,h:'#2aa8b8',H:'#7ae0e8',c:'#145a74',C:'#0a3a50',r:'#7ae0c0',b:'#7ae0c0',s:'#9accc8',S:'#5e9a96'},
   chumpallm:{t:'M',p:'#145a74',P:'#0a3a50',w:'#7ae0e8',r:'#7ae0c0',b:'#2aa8b8',s:'#9accc8',S:'#5e9a96'},
   elder2:{t:'F',h:'#c8c8d0',H:'#f0f0f8',c:'#3a5a8a',C:'#24406a',r:'#e0b040',s:'#c08858',S:'#8a5a34'},
+  machi:{t:'F',c:'#28386e',C:'#1a2650',r:'#ccd4e2'},
   elder:{t:'M',h:'#c8c8d0',H:'#f0f0f8',p:'#5a4a3a',P:'#3a2e24',b:'#8a2458',r:'#e8d8a0',s:'#b8784c',S:'#8a5634'}};
 const CCACHE={};
 function charSprite(look,dir,fr,tn,ey,hr){
@@ -375,6 +376,15 @@ function tplCanvas(name,fr,k,pad){
 function animalCanvas(t,fr,dir){
   const key='an'+t+fr+dir;if(PCACHE[key])return PCACHE[key];
   const base=tplCanvas(t,fr,1);return PCACHE[key]=dir==='right'?mirror(base):base}
+function reweCanvas(){
+  const k='rewe';if(PCACHE[k])return PCACHE[k];const [cvs,c]=mk(18,30);
+  R(c,7,6,4,24,'#8a6034');R(c,7,6,1,24,'#a87c48');R(c,10,6,1,24,'#5a3c1e');
+  for(let i=0;i<4;i++){const y=9+i*5;R(c,6,y,6,2,'#8a6034');R(c,6,y,6,1,'#b08850');R(c,6,y+1,6,1,'#5a3c1e')}
+  R(c,7,4,4,3,'#a87c48');R(c,8,5,1,1,'#3a2410');R(c,10,5,1,1,'#3a2410');R(c,8,7,3,1,'#5a3c1e');
+  ell(c,4,8,3,4,'#2e6030');ell(c,3,7,2,2.5,'#3f7c3e');ell(c,14,8,3,4,'#2e6030');ell(c,15,7,2,2.5,'#3f7c3e');
+  R(c,5,10,1,3,'#4a6a2a');R(c,13,10,1,3,'#4a6a2a');
+  R(c,12,3,1,5,'#d8d8e4');R(c,13,3,3,2,'#e8e8f2');R(c,13,5,3,1,'#4a66b0');
+  outline(cvs,'#1a1208');return PCACHE[k]=cvs}
 function loomCanvas(prog){
   const [cvs,c]=mk(16,22);R(c,1,2,2,20,'#6a4020');R(c,13,2,2,20,'#6a4020');R(c,0,2,16,2,'#8a5a30');R(c,0,18,16,2,'#8a5a30');
   for(let x=3;x<13;x++)R(c,x,4,1,14,'#e8dcc0');
