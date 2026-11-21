@@ -301,6 +301,49 @@ function pampaBG(){const [cvs,c]=mk(LW,LH);
   return cvs}
 function mossify(cvs){const c=cvs.getContext('2d'),d=c.getImageData(0,0,cvs.width,cvs.height),a=d.data;
   for(let i=0;i<a.length;i+=4){const r=a[i],g=a[i+1],b=a[i+2];if(r>g+6&&r>b){a[i]=Math.round(g*.85);a[i+1]=Math.round(r*.92+4);a[i+2]=Math.round(b*.8+r*.18)}}c.putImageData(d,0,0);return cvs}
+function lushBG(cvs,area){
+  const CF={
+    field:{bands:[[99,107],[123,LH]],base:['#48a048','#68c058','#307c34','#58a848','#80c868','#48983c'],lite:'#64bc54',dark:'#2c7230',tuft:'#78d064',fl:['#f0e07a','#e8788a','#f8f8f8'],dap:1},
+    coast:{bands:[[121,LH]],base:['#ecd498','#d8bc80','#d0b070'],lite:'#f6e2ac',dark:'#c6a868',tuft:null,fl:null,peb:['#b89868','#f8ecd0','#9a8458'],dap:.6},
+    forest:{bands:[[126,LH]],base:['#2a4a24','#3a6a30','#1c3418'],lite:'#3e7232',dark:'#17301a',tuft:'#548c40',fl:['#d85858','#f0f0e0'],dap:1.3},
+    mount:{bands:[[101,LH]],base:['#e6edf6','#c4d0e2','#ffffff'],lite:'#ffffff',dark:'#c2cfdf',tuft:null,fl:null,peb:['#9aa8bc','#7a8aa0'],dap:.5},
+    rainforest:{bands:[[102,LH]],base:['#2a5a3a','#3a7a4e','#1c4428'],lite:'#3f8752',dark:'#1a3c24',tuft:'#55a05e',fl:['#e8b040'],dap:.9},
+    pampa:{bands:[[96,LH]],base:['#c0a444','#d8bc58','#a8883a','#e8d478','#8a6a2a'],lite:'#e4cc64',dark:'#9a7c32',tuft:'#f0dc80',fl:['#e87a4a'],dap:.8}};
+  const cf=CF[area];if(!cf)return;
+  const c=cvs.getContext('2d');
+  const id=c.getImageData(0,0,LW,LH),d=id.data;
+  const bs=cf.base.map(hx=>[parseInt(hx.slice(1,3),16),parseInt(hx.slice(3,5),16),parseInt(hx.slice(5,7),16)]);
+  const li=[parseInt(cf.lite.slice(1,3),16),parseInt(cf.lite.slice(3,5),16),parseInt(cf.lite.slice(5,7),16)];
+  const dk=[parseInt(cf.dark.slice(1,3),16),parseInt(cf.dark.slice(3,5),16),parseInt(cf.dark.slice(5,7),16)];
+  const isBase=q=>{for(const b of bs){if(Math.abs(d[q]-b[0])+Math.abs(d[q+1]-b[1])+Math.abs(d[q+2]-b[2])<54)return 1}return 0};
+  // organic light/dark patches, horizontally stretched like sun-dappled meadow
+  for(const [y0,y1] of cf.bands)for(let y=y0;y<y1;y++)for(let x=0;x<LW;x++){
+    const q=(y*LW+x)*4;if(!isBase(q))continue;
+    const v=Math.sin(x*.043+y*.15+Math.sin(y*.33)*1.5)+Math.sin(x*.013+y*.052)*1.35+(h2(x,y,31)-.5)*.9;
+    if(v>1.28){d[q]=li[0];d[q+1]=li[1];d[q+2]=li[2]}
+    else if(v<-1.38){d[q]=dk[0];d[q+1]=dk[1];d[q+2]=dk[2]}}
+  c.putImageData(id,0,0);
+  // light shafts / dapple streaks on the ground
+  for(let k=0;k<6;k++){const x=20+((k*89)%(LW-40)),y=cf.bands[cf.bands.length-1][0]+10+((k*37)%(LH-cf.bands[cf.bands.length-1][0]-24));
+    ell(c,x,y,26+(k%3)*14,4+(k%2)*2,'rgba(255,250,215,'+(.05*cf.dap).toFixed(3)+')');
+    ell(c,x,y,17+(k%3)*9,3,'rgba(255,250,215,'+(.05*cf.dap).toFixed(3)+')')}
+  for(let k=0;k<4;k++){const x=50+((k*113)%(LW-60)),y=cf.bands[cf.bands.length-1][0]+16+((k*53)%(LH-cf.bands[cf.bands.length-1][0]-30));
+    ell(c,x,y,24,5,'rgba(8,24,10,'+(.08*cf.dap).toFixed(3)+')')}
+  // tufts, flowers, pebbles (only on matching ground)
+  const id2=c.getImageData(0,0,LW,LH),d2=id2.data;
+  const ok=(x,y)=>{if(x<4||x>LW-5||y<cf.bands[0][0]||y>LH-4)return 0;const q=(y*LW+x)*4;
+    for(const b of bs){if(Math.abs(d2[q]-b[0])+Math.abs(d2[q+1]-b[1])+Math.abs(d2[q+2]-b[2])<80)return 1}
+    return Math.abs(d2[q]-li[0])+Math.abs(d2[q+1]-li[1])+Math.abs(d2[q+2]-dk[2])<120?1:0};
+  if(cf.tuft)for(let k=0;k<NK(26);k++){const x=6+((k*97)%(LW-12)),y=cf.bands[cf.bands.length-1][0]+4+((k*61)%(LH-cf.bands[cf.bands.length-1][0]-10));
+    if(!ok(x,y))continue;
+    for(let i=0;i<4;i++){const hgt=2+((k+i)%3);R(c,x-3+i*2,y-hgt,1,hgt,i%2?cf.tuft:cf.dark)}}
+  if(cf.fl)for(let k=0;k<NK(10);k++){const x=10+((k*131)%(LW-20)),y=cf.bands[cf.bands.length-1][0]+8+((k*83)%(LH-cf.bands[cf.bands.length-1][0]-14));
+    if(!ok(x,y))continue;const col=cf.fl[k%cf.fl.length];
+    R(c,x,y-3,1,3,'#3a6a30');R(c,x-1,y-4,3,1,col);R(c,x,y-5,1,1,col);R(c,x,y-4,1,1,'#f8e860')}
+  if(cf.peb)for(let k=0;k<NK(14);k++){const x=8+((k*109)%(LW-16)),y=cf.bands[0][0]+6+((k*71)%(LH-cf.bands[0][0]-12));
+    if(!ok(x,y))continue;const col=cf.peb[k%cf.peb.length];
+    R(c,x,y,2,1,col);R(c,x,y-1,1,1,col)}
+}
 function polishBG(cvs,area){
   const c=cvs.getContext('2d'),hor=({field:96,coast:118,mount:98,crater:98,forest:122,cave:122,rainforest:100,fjord:100,pampa:92,deep:150}[area])||106;
   const id=c.getImageData(0,0,LW,LH),d=id.data;
@@ -333,7 +376,7 @@ function greyify(cvs){const c=cvs.getContext('2d'),d=c.getImageData(0,0,cvs.widt
 function buildBG(area){
   if(area.startsWith&&area.startsWith('fog:'))return greyify(buildBG(area.slice(4)));
   if(area==='cave2'||area==='cave3'||area==='cave4'||area==='cave5')return buildBGraw(area);
-  const cvs=buildBGraw(area);polishBG(cvs,area);return cvs;
+  const cvs=buildBGraw(area);lushBG(cvs,area);polishBG(cvs,area);return cvs;
 }
 function buildBGraw(area){
   if(area==='cave2')return mossify(buildBG('cave'));
@@ -487,7 +530,7 @@ function renderBattle(){
         ell(c,vx,vy,vr,vr*.55,'rgba(108,150,88,'+(.17*(1-ph)).toFixed(2)+')');
         ell(c,vx+2,vy+1,vr*.6,vr*.35,'rgba(140,184,108,'+(.11*(1-ph)).toFixed(2)+')')}
       for(let k=0;k<4;k++){R(c,Math.round(cx+Math.sin(frame/7+k*3)*sz*.4),Math.round(y+20+Math.cos(frame/9+k*2)*14),1,1,'rgba(16,24,10,.8)')}}
-    ell(c,cx,base,sz/2.6,3,'rgba(0,0,0,.32)');
+    ell(c,cx,base+1,sz/1.95,4,'rgba(0,0,14,.22)');ell(c,cx,base+1,sz/2.6,2.6,'rgba(0,0,14,.3)');
     if(e.dead){e.fadeT--;c.globalAlpha=Math.max(0,e.fadeT/20)}
     if(e.hit>0&&e.hit--%4<2)c.globalAlpha=.25;
     let ly=0,ls=1;if(e.lunge>0){e.lunge--;ly=Math.round(Math.sin(e.lunge/16*Math.PI)*10);}

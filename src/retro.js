@@ -182,7 +182,40 @@ function drawNgen(c,x,y,s,t,v){
 
 /* ---------- enemies (designed on a 16-unit grid, cel-shaded at any size) ---------- */
 const ECACHE={};
+function shade3d(src){
+  const w=src.width,h=src.height;
+  const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+  const c=cv.getContext('2d');c.drawImage(src,0,0);
+  const img=c.getImageData(0,0,w,h),d=img.data,n=w*h;
+  const A=new Float32Array(n);
+  for(let i=0;i<n;i++)A[i]=d[i*4+3]>40?1e9:0;
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=y*w+x;if(!A[i])continue;let m=A[i];
+    if(x>0)m=Math.min(m,A[i-1]+1);if(y>0)m=Math.min(m,A[i-w]+1);
+    if(x>0&&y>0)m=Math.min(m,A[i-w-1]+1.4);if(x<w-1&&y>0)m=Math.min(m,A[i-w+1]+1.4);A[i]=m}
+  for(let y=h-1;y>=0;y--)for(let x=w-1;x>=0;x--){const i=y*w+x;if(!A[i])continue;let m=A[i];
+    if(x<w-1)m=Math.min(m,A[i+1]+1);if(y<h-1)m=Math.min(m,A[i+w]+1);
+    if(x<w-1&&y<h-1)m=Math.min(m,A[i+w+1]+1.4);if(x>0&&y<h-1)m=Math.min(m,A[i+w-1]+1.4);A[i]=m}
+  const cap=Math.max(5,Math.round(Math.min(w,h)/9)),str=1.9;
+  const H=i=>Math.min(A[i],cap);
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=y*w+x,q=i*4;if(d[q+3]<=40)continue;
+    const r=d[q],g=d[q+1],bl=d[q+2];
+    if(r+g+bl<45)continue;
+    const hl=H(x>1?i-2:i),hr=H(x<w-2?i+2:i),hu=H(y>1?i-2*w:i),hd=H(y<h-2?i+2*w:i);
+    let lu=((hr-hl)*0.55+(hd-hu)*0.95)/4*str;
+    lu-=Math.max(0,(y/h-0.5))*1.1*str;
+    const v=lu+((x+y)&1?0.1:-0.1);
+    let f=0;
+    if(v>0.6)f=0.55;else if(v>0.3)f=0.3;else if(v>0.12)f=0.14;
+    else if(v<-0.6)f=-0.45;else if(v<-0.3)f=-0.26;else if(v<-0.12)f=-0.13;
+    if(A[i]<=2&&lu>0.18)f=Math.max(f,0.7);
+    if(f>0){d[q]=Math.min(255,r+(255-r)*f+12*f);d[q+1]=Math.min(255,g+(255-g)*f+10*f);d[q+2]=Math.min(255,bl+(255-bl)*f)}
+    else if(f<0){const k=1+f;d[q]=r*k;d[q+1]=g*k*0.96;d[q+2]=Math.min(255,bl*k*1.12)}
+  }
+  c.putImageData(img,0,0);return cv}
 function enemyCanvas(t,size,fr){
+  const key='s3:'+t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];
+  return ECACHE[key]=shade3d(enemyCanvasRaw(t,size,fr))}
+function enemyCanvasRaw(t,size,fr){
   const key=t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];
   if(typeof SPR2!=='undefined'&&SPR2[t]){const d=SPR2[t],hb=size>=40&&SPR2[t+'@b'],k=hb?1:size>=40?(d.big||1):1,base=hb?tplCanvas(t+'@b',fr,1):tplCanvas(t,fr,k);
     if(!d.aura)return ECACHE[key]=base;
