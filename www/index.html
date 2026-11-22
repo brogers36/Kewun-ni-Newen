@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='0819c8a-202611221033';
+window.KEWUN_BUILD='2dda04a-202611221044';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -48,7 +48,7 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #dlg .g{color:#c8d8ff;font-style:italic;line-height:1.35}
 #dlg .more{position:absolute;right:.6em;bottom:.3em;color:#e8d49a;animation:bl 1s infinite}
 @keyframes bl{50%{opacity:0}}
-#menu{display:none;max-height:50%;overflow:auto}#menu::before{top:calc(4px + var(--st,0px));z-index:3}#menu::after{bottom:calc(4px - var(--st,0px));z-index:3}
+#menu,#dlg{z-index:20}#menu{display:none;max-height:50%;overflow:auto}#menu::before{top:calc(4px + var(--st,0px));z-index:3}#menu::after{bottom:calc(4px - var(--st,0px));z-index:3}
 #menu .p{margin-bottom:.45em}
 #menu .p .m{font-weight:bold;font-size:1.1em;color:#fff}
 #menu .p .g{color:#bfe3d0;font-style:italic}
