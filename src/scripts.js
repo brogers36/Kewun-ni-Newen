@@ -1278,13 +1278,13 @@ function epunamunTalk(){
   if(S.flags.epu_won)return say([L('Epunamun','Newentuleymi. Kimün may nieymi tati. Amunge, weychafe.','Tienes fuerza. Y conocimiento, sí que tienes. Ve, guerrera o guerrero.','You are strong. And knowledge, you truly have. Go, warrior.'),
     N('Las dos caras del Epunamun miran a la vez hacia la niebla y hacia ti. Ambas sonríen.','Both of the Epunamun\'s faces look at once toward the fog and toward you. Both are smiling.')]);
   say([N('El kona se vuelve hacia ti... y por un momento ves que tiene dos caras: una mira hacia la niebla y la otra te mira a ti. No es un kona. Es un espíritu.','The warrior turns toward you... and for a moment you see that he has two faces: one looks toward the fog, and the other looks at you. He is no ordinary warrior. He is a spirit.'),
-    L('Epunamun','Iñche Epunamun. Weychan ñi ngünechen no, welu weychan ñi ngülam.','Yo soy el Epunamun. No soy dueño de la guerra, pero sí su consejo.','I am the Epunamun. I do not own war, but I am its counsel.'),
+    L('Epunamun','Iñche Epunamun. Iñche ti weychan dungu ñi ngen nu, welu ngülamkefiñ ka ngütramken fill kümeke weichafe mu.','Yo soy el Epunamun. No soy el dueño de los asuntos de la guerra, pero aconsejo y converso con todos los buenos guerreros.','I am the Epunamun. I am not the master of the affairs of war, but I counsel and talk with all good warriors.'),
     N('El Epunamun es un espíritu al que los lonko y los weychafe consultaban antes de pelear. No es un wekufü: viene a probarte. Detrás de la niebla te espera el gran olvido, y quiere saber si tus palabras y tu newen alcanzan.','The Epunamun is a spirit that lonko and warriors consulted before battle. He is no wekufü: he has come to test you. Behind the fog the great forgetting awaits you, and he wants to know whether your words and your newen are enough.'),
     L('Epunamun','Weychayayu? Küla sello witrañpüramuan. Umawtulen, nepelen, ka tranakinolpe.','¿Peleamos tú y yo? Levantaré tres sellos. Duérmeme, despiértame, y que yo no caiga.','Shall we fight, you and I? I will raise three seals. Put me to sleep, wake me, and let me not fall.'),
     N('Es una prueba, no una cacería: pelea con respeto y con todas tus palabras.','It is a trial, not a hunt: fight with respect and with all your words.')],()=>{
     choose(L('Epunamun','Weychayayu?','¿Aceptas la prueba?','Do you accept the trial?'),
-      [{m:'May, weychayayu!',g:en?'Yes, let us fight!':'¡Sí, peleemos!',v:1},{m:'Petu pepikawlan',g:en?'I am not ready yet':'Todavía no estoy listo',v:0}],v=>{
-      if(!v)return say([L('Epunamun','Küme rakiduamnge. Faw müleken.','Piénsalo bien. Aquí estaré.','Think it over. I will be here.')]);
+      [{m:'May, weychayayu!',g:en?'Yes, let us fight!':'¡Sí, peleemos!',v:1},{m:'Pepikawkülelan petu',g:en?'I am not prepared yet':'Todavía no estoy preparado',v:0}],v=>{
+      if(!v)return say([L('Epunamun','Küme rakiduamnge. Faw mülekean.','Piénsalo bien. Aquí estaré.','Think it over. I will be here.')]);
       say([N('El Epunamun golpea el suelo con las dos lanzas a la vez. Tres sellos de luz se encienden a su alrededor. El primero susurra: «¡Duérmete!»','The Epunamun strikes the ground with both spears at once. Three seals of light kindle around him. The first whispers: «Sleep!»')],()=>startBattle(['epunamun'],{boss:1,sflag:'epu_won'}));
     },true,true)});
 }
@@ -1421,7 +1421,7 @@ function chQueenTalk(){
     ls.push(N('La ñidol toma tus manos y te canta una palabra nueva, despacio, para que la aprendas: llako- («calmarse, aplacarse»). «Esta es la palabra del ül: llakonge, llakomu, llakomün. Dicha bien, aquieta.»','The ñidol takes your hands and sings you a new word, slowly, so you learn it: llako- ("to calm, to settle"). "This is the word of the ül: llakonge, llakomu, llakomün. Said well, it stills."'),
       N('«Allá abajo no pelearás para vencer: cada orden tuya será un verso del ül. Las otras palabras lo llaman y lo sujetan; llako- lo acerca al sueño.»','"Down there you will not fight to win: every order of yours will be a verse of the ül. The other words call it and hold it; llako- carries it toward sleep."'));}
   say(ls,()=>choose(L('Ñidol chumpall','Weychayaiñ?','¿Peleamos juntos?','Shall we fight together?'),
-    [{m:'May, weychayaiñ!',g:en?'Yes, together!':'¡Sí, juntos!',v:1},{m:'Petu pepikawlan',g:en?'Not yet':'Todavía no',v:0}],v=>{
+    [{m:'May, weychayaiñ!',g:en?'Yes, together!':'¡Sí, juntos!',v:1},{m:'Pepikawkülelan petu',g:en?'Not yet':'Todavía no',v:0}],v=>{
     if(!v)return say([L('Ñidol chumpall','Küme rakiduamnge. Faw müleiñ.','Piénsalo. Aquí estaremos.','Think it over. We will be here.')]);
     say([N('Los chumpall forman un círculo y golpean el agua con las palmas, todos a la vez. El suelo del salón tiembla... y de la fosa sube algo enorme, anillo tras anillo.','The chumpall form a circle and strike the water with their palms, all at once. The floor of the hall trembles... and out of the trench rises something enormous, coil after coil.'),
       N('El Kaykayfilu se esconde en el agua oscura. Lo que se esconde... sale cuando se le dice.','The Kaykayfilu hides in the dark water. What hides... comes out when it is told to.')],
@@ -1470,7 +1470,7 @@ function yewenTalk(){
     L('Yewen','...','No dice nada. Pero lo escuchas igual, adentro de tu cabeza: «lo hablas mal», «no eres de verdad», «te van a mirar raro», «mejor cállate».','It says nothing. But you hear it anyway, inside your head: "you speak it badly", "you are not a real one", "they will look at you funny", "better stay quiet".'),
     N('Es el Yewen: la vergüenza. No es un wekufü del sur: nació aquí, en la waria, de cada vez que alguien se tragó una palabra. Lleva tres sellos: hay que hacerlo salir, decirle que no tenga miedo, y que no se pierda.','It is the Yewen: shame. It is no wekufü from the south: it was born here, in the city, every time someone swallowed a word. It carries three seals: it must be made to come out, told not to be afraid, and told not to get lost.')],()=>{
     choose(L('','Yewen','¿Lo enfrentas?','Do you face it?'),
-      [{m:'May. Yewelayan!',g:en?'Yes. I will not be ashamed!':'Sí. ¡No tendré vergüenza!',v:1},{m:'Petu pepikawlan',g:en?'Not yet':'Todavía no',v:0}],v=>{
+      [{m:'May. Yewelayan!',g:en?'Yes. I will not be ashamed!':'Sí. ¡No tendré vergüenza!',v:1},{m:'Pepikawkülelan petu',g:en?'Not yet':'Todavía no',v:0}],v=>{
       if(!v)return say([N('La sombra sigue ahí, esperando. Toda la población lo sabe.','The shadow stays there, waiting. The whole neighborhood knows it.')]);
       const miss=['tripa','llüka','ñam'].filter(r=>!S.roots.includes(r)),pre=[];
       for(const r of miss){learnRoot(r);const g=ROOTS[r];pre.push(L('Kuku',g.m,'La voz de tu kuku, desde lejos: «Te falta una palabra. '+g.m+' quiere decir "'+g.es+'". Llévala.»','Your kuku\'s voice, from far away: "You are missing a word. '+g.m+' means \''+g.en+'\'. Take it with you."'))}

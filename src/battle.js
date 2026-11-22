@@ -477,7 +477,9 @@ function ngoyStage(n){
     :[L('','Wefürkey rüf Fütra Ngoyman, awem!','¡Apareció el verdadero Fütra Ngoyman! ¡Rayos!','The true Fütra Ngoyman has appeared. Awem!'),N('La noche se parte como un telón podrido. Detrás estaba esperando lo que el olvido es de verdad: una corona de niebla como astas, una boca como cueva sin fondo, un ojo enorme que ya no recuerda la luz.','The night splits like a rotten curtain. Behind it waited what the forgetting truly is: a crown of fog like antlers, a mouth like a bottomless cave, one enormous eye that no longer remembers the light.'),
       N('Rüf Fütra Ngoyman: el verdadero gran olvido. Ya no quedan velos.','Rüf Fütra Ngoyman: the true great forgetting. There are no veils left.')];
   if(n===5&&S.flags.epu_won){S.hp=maxHP();S.sp=SPMAX;e.hp-=15;
-    ls.push(N('Entonces una lanza cruza la niebla y se clava en el coloso (−15). El Epunamun aparece a tu lado, con las dos caras de frente al olvido: «¡Feypin! ¡Pelearía a tu lado!». Su newen te llena de nuevo: piwke y palabras al máximo.','Then a spear crosses the fog and sinks into the colossus (−15). The Epunamun appears at your side, both faces turned to the forgetting: "I said it! I would fight at your side!" His newen fills you again: hearts and words restored.'))}
+    ls.push(N('Entonces una lanza cruza la niebla y se clava en el coloso (−15). El Epunamun aparece a tu lado, con las dos caras de frente al olvido.','Then a spear crosses the fog and sinks into the colossus (−15). The Epunamun appears at your side, both faces turned to the forgetting.'),
+      L('Epunamun','Feypieyu tañi kelluntukafiel eymi tami weichan mu!','¡Te dije que te ayudaría en tu pelea!','I told you I would help you in your fight!'),
+      N('Su newen te llena de nuevo: piwke y palabras al máximo.','His newen fills you again: hearts and words restored.'))}
   say(ls,battleMenu);
 }
 function bossSweep(){
@@ -570,7 +572,7 @@ function endBattle(how){
   if(typeof playAmb==='function')playAmb(ambFor(M.bg));
   if(how==='win'&&o.sflag==='epu_won'){S.flags.epu_won=1;S.gear.waiki=1;persist();sfx('lvl');
     return say([N('El Epunamun baja las dos lanzas a la vez. No se deshace, no huye: te saluda, con las dos caras sonriendo.','The Epunamun lowers both spears at once. He does not break apart, he does not flee: he salutes you, both faces smiling.'),
-      L('Epunamun','Tuteymi! Newentuleymi. Kimün may nieymi tati.','¡Lo lograste! Tienes fuerza. Y conocimiento, sí que tienes.','You did it! You are strong. And knowledge, you truly have.'),
+      L('Epunamun','Tutelu llemay! Newentuleymi. Kimün may nieymi tati.','¡Lo lograste! Tienes fuerza. Y conocimiento, sí que tienes.','You did it! You are strong. And knowledge, you truly have.'),
       L('Epunamun','Tüfa tañi waiki. Yenge.','Esta es mi lanza. Llévala.','This is my spear. Carry it.'),
       Object.assign(L('','Epunamun ñi waiki!','El Epunamun te regala una de sus lanzas: tu fuerza sube +2 para siempre. Dice que la otra la guardará para pelear a tu lado, algún día, al otro lado de la niebla.','The Epunamun gives you one of his spears: your strength rises +2 for good. He says he will keep the other, to fight at your side one day, on the far side of the fog.'),{fx:()=>sfx('lvl')})],
       ()=>gainPiwke([N('Donde golpearon sus lanzas, algo rojo brilla en el suelo...','Where his spears struck, something red glints on the ground...')]));}
