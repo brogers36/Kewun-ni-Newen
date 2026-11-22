@@ -72,7 +72,7 @@ function charSprite(look,dir,fr,tn,ey,hr){
 function ctShade(hex,t){const [r,g,b]=hexRGB(hex);const f=v=>Math.max(0,Math.min(255,Math.round(t<0?v*(1+t):v+(255-v)*t)));return 'rgb('+f(r)+','+f(g)+','+f(b)+')'}
 function ctCharSprite(look,dir,fr,seated,tn,ey,hr){
   const key='S3'+look+dir+fr+(seated?'z':'')+':'+tn+ey+hr;if(CCACHE[key])return CCACHE[key];
-  return CCACHE[key]=shade3d(ctCharSpriteRaw(look,dir,fr,seated,tn,ey,hr),{str:1.3,cap:4,dith:0.03,rim:0,k:.75,mult:1})}
+  return CCACHE[key]=shade3d(ctCharSpriteRaw(look,dir,fr,seated,tn,ey,hr),{str:1.7,cap:4,dith:0.03,rim:0,k:1.15,mult:1})}
 function ctCharSpriteRaw(look,dir,fr,seated,tn,ey,hr){
   const key='ct'+look+dir+fr+(seated?'z':'')+':'+(tn==null?'-':tn)+(ey==null?'-':ey)+(hr==null?'-':hr);if(CCACHE[key])return CCACHE[key];
   if(dir==='left')return CCACHE[key]=mirror(ctCharSpriteRaw(look,'right',fr,seated,tn,ey,hr));
@@ -159,7 +159,7 @@ const DOG=["................","..oo............",".obbo........o..",".obbboooooo
 const DOG2=["................","..oo............",".obbo.........o.",".obbbooooooooob.",".obebbbbbbbbbbo.","..oobbbbbbbbbo..","....obbbbbbbbo..","...obo.....obo..","...obo....obo...","...oo.....oo...."];
 function dogSprite(fr,dir){const key='dog'+fr+dir;if(CCACHE[key])return CCACHE[key];const [cvs,c]=mk(16,10);
   (fr?DOG2:DOG).forEach((r,y)=>{for(let x=0;x<16;x++){const ch=r[x];if(ch!=='.'){c.fillStyle=ch==='o'?'#181018':ch==='e'?'#000':'#a06838';c.fillRect(x,y,1,1)}}});
-  return CCACHE[key]=shade3d(dir==='right'?mirror(cvs):cvs,{str:1.3,cap:3,dith:0.03,rim:0,k:.75,mult:1})}
+  return CCACHE[key]=shade3d(dir==='right'?mirror(cvs):cvs,{str:1.7,cap:3,dith:0.03,rim:0,k:1.1,mult:1})}
 function drawPortal(c,x,y){
   const t=frame;
   // light pillar
@@ -414,7 +414,7 @@ function tplCanvas(name,fr,k,pad){
   return PCACHE[key]=cvs}
 function animalCanvas(t,fr,dir){
   const key='an'+t+fr+dir;if(PCACHE[key])return PCACHE[key];
-  const base=tplCanvas(t,fr,1);return PCACHE[key]=shade3d(dir==='right'?mirror(base):base,{str:1.3,cap:4,dith:0.04,rim:0,k:.8,mult:1})}
+  const base=tplCanvas(t,fr,1);return PCACHE[key]=shade3d(dir==='right'?mirror(base):base,{str:1.7,cap:4,dith:0.04,rim:0,k:1.1,mult:1})}
 function reweCanvas(){
   const k='rewe';if(PCACHE[k])return PCACHE[k];const [cvs,c]=mk(18,30);
   R(c,7,6,4,24,'#8a6034');R(c,7,6,1,24,'#a87c48');R(c,10,6,1,24,'#5a3c1e');

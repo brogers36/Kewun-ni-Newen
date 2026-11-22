@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='79e71d5-202611211931';
+window.KEWUN_BUILD='67447cf-202611211935';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -197,6 +197,7 @@ function auInit(){
       AU.mus=AU.c.createGain();AU.mus.gain.value=.2;AU.mus.connect(AU.m);
       AU.dist=AU.c.createWaveShaper();{const n=1024,cv=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;cv[i]=Math.tanh(x*6)*.8}AU.dist.curve=cv}
       AU.distG=AU.c.createGain();AU.distG.gain.value=.55;AU.dist.connect(AU.distG);AU.distG.connect(AU.mus);
+      mkDist2(AU.c);
       AU.sfx=AU.c.createGain();AU.sfx.gain.value=.3;AU.sfx.connect(AU.m);
       const b=AU.c.createBuffer(1,AU.c.sampleRate,AU.c.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;AU.noise=b;
       if(AU.song){AU.next=AU.c.currentTime+.08}
@@ -205,6 +206,18 @@ function auInit(){
     AU.m.gain.value=AU.muted?0:1;
   }catch(e){}
 }
+/* heavy amp: input drive into a hard, slightly asymmetric clipper, then a speaker-cabinet style EQ
+   (low cut, a mid push, a steep high cut) so the fuzz growls instead of fizzing */
+function mkDist2(c){
+  const pre=c.createGain();pre.gain.value=3.2;
+  const ws=c.createWaveShaper();{const n=2048,cv=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;cv[i]=Math.tanh(x*22+.18)*.85-Math.tanh(.18)*.85}ws.curve=cv;ws.oversample='4x'}
+  const hp=c.createBiquadFilter();hp.type='highpass';hp.frequency.value=95;
+  const mid=c.createBiquadFilter();mid.type='peaking';mid.frequency.value=900;mid.Q.value=.9;mid.gain.value=5;
+  const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=4200;lp.Q.value=.8;
+  const lp2=c.createBiquadFilter();lp2.type='lowpass';lp2.frequency.value=6500;
+  const out=c.createGain();out.gain.value=.2;
+  pre.connect(ws);ws.connect(hp);hp.connect(mid);mid.connect(lp);lp.connect(lp2);lp2.connect(out);out.connect(AU.mus);
+  AU.dist2=pre}
 function toggleMute(){AU.muted=!AU.muted;try{localStorage.setItem(MUTE_KEY,AU.muted?'1':'0')}catch(e){}auInit();if(AU.m)AU.m.gain.value=AU.muted?0:1;$('bMus').textContent=AU.muted?'♪ Música: no':'♪ Música: sí';$('pN').textContent=AU.muted?'♪×':'♪'}
 const NOTE={C:0,'C#':1,Db:1,D:2,'D#':3,Eb:3,E:4,F:5,'F#':6,Gb:6,G:7,'G#':8,Ab:8,A:9,'A#':10,Bb:10,B:11};
 function nf(s){const m=/^([A-G][#b]?)(\d)$/.exec(s);if(!m)return 0;return 440*Math.pow(2,(NOTE[m[1]]+(+m[2]+1)*12-69)/12)}
@@ -465,10 +478,10 @@ const SONGS={
   {w:'square',v:.04,t:'E4 Bb4 E5 Bb4 E4 Bb4 E5 Bb4 | C4 G4 C5 G4 C4 G4 C5 G4'},
   {d:1,v:.6,t:'k h s h k k s h | k h s h k s s c'}]}),
  yewenBoss:mkSong({bpm:176,loop:1,ch:[
-  {w:'sawtooth',v:.095,dist:1,t:'E2 - - - . . E2 E2 | F2 - - - . . F2 F2 | E2 - - - . . G2 G2 | F2 - - - D#2 - - - | E2 E2 . E2 E2 . E2 F2 | E2 E2 . E2 G2 . F2 E2 | E2 E2 . E2 E2 . E2 F2 | A#1 - . A#1 B1 - . B1 | E2 E2 . E2 E2 . E2 F2 | E2 E2 . E2 G2 . F2 E2 | E2 E2 . E2 E2 . E2 F2 | C2 C2 . C2 D2 D2 D#2 - | E2 E2 E2 E2 E2 E2 E2 E2 | C2 C2 C2 C2 C2 C2 C2 C2 | D2 D2 D2 D2 D2 D2 D2 D2 | B1 B1 B1 B1 B1 B1 B1 B1 | E2 E2 E2 E2 E2 E2 E2 E2 | C2 C2 C2 C2 C2 C2 C2 C2 | A1 A1 A1 A1 A1 A1 A1 A1 | B1 B1 B1 B1 B1 B1 B1 B1 | E2 E2 E2 E2 E2 E2 E2 E2 | E2 E2 E2 E2 E2 E2 E2 E2 | C2 C2 C2 C2 C2 C2 C2 C2 | C2 C2 C2 C2 C2 C2 C2 C2 | A1 A1 A1 A1 A1 A1 A1 A1 | A1 A1 A1 A1 A1 A1 A1 A1 | B1 B1 B1 B1 B1 B1 B1 B1 | B1 B1 B1 B1 B1 B1 B1 B1'},
-  {w:'sawtooth',v:.06,dist:1,t:'B2 - - - . . B2 B2 | C3 - - - . . C3 C3 | B2 - - - . . D3 D3 | C3 - - - A#2 - - - | B2 B2 . B2 B2 . B2 C3 | B2 B2 . B2 D3 . C3 B2 | B2 B2 . B2 B2 . B2 C3 | F2 - . F2 F#2 - . F#2 | B2 B2 . B2 B2 . B2 C3 | B2 B2 . B2 D3 . C3 B2 | B2 B2 . B2 B2 . B2 C3 | G2 G2 . G2 A2 A2 A#2 - | B2 B2 B2 B2 B2 B2 B2 B2 | G2 G2 G2 G2 G2 G2 G2 G2 | A2 A2 A2 A2 A2 A2 A2 A2 | F#2 F#2 F#2 F#2 F#2 F#2 F#2 F#2 | B2 B2 B2 B2 B2 B2 B2 B2 | G2 G2 G2 G2 G2 G2 G2 G2 | E2 E2 E2 E2 E2 E2 E2 E2 | F#2 F#2 F#2 F#2 F#2 F#2 F#2 F#2 | B2 B2 B2 B2 B2 B2 B2 B2 | B2 B2 B2 B2 B2 B2 B2 B2 | G2 G2 G2 G2 G2 G2 G2 G2 | G2 G2 G2 G2 G2 G2 G2 G2 | E2 E2 E2 E2 E2 E2 E2 E2 | E2 E2 E2 E2 E2 E2 E2 E2 | F#2 F#2 F#2 F#2 F#2 F#2 F#2 F#2 | F#2 F#2 F#2 F#2 F#2 F#2 F#2 F#2'},
-  {w:'sawtooth',v:.075,dist:1,t:'. . . . . . . . | . . . . . . . . | . . . . . . . . | B4 C5 D#5 E5 F5 G5 A5 B5 | E4 - - - F4 - E4 - | D#4 - - - B3 - - - | E4 - - - G4 - F4 - | E4 - - - - - - - | B4 - - - C5 - B4 - | A#4 - - - F4 - - - | G4 - F4 - E4 - D#4 - | E4 - - - - - - - | B4 - E5 - G5 - - F#5 | E5 - - - D5 - C5 - | D5 - F#5 - A5 - - G5 | F#5 - - - D#5 - - - | E5 - G5 - B5 - - A5 | G5 - - - E5 - G5 - | A5 - G5 - F#5 - E5 - | D#5 - - - F#5 - B5 - | E5 G5 B5 E6 B5 G5 E5 B4 | E5 G5 B5 E6 G6 E6 B5 G5 | C5 E5 G5 C6 G5 E5 C5 G4 | C5 E5 G5 C6 E6 C6 G5 E5 | A4 C5 E5 A5 E5 C5 A4 E4 | A4 C5 E5 A5 C6 A5 E5 C5 | B4 D#5 F#5 B5 F#5 D#5 B4 F#4 | B5 A5 G5 F#5 E5 D#5 E5 F5'},
-  {w:'sawtooth',v:.045,dist:1,t:'. . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . | B3 - - - C4 - B3 - | B3 - - - G3 - - - | B3 - - - D4 - C4 - | B3 - - - - - - - | G4 - - - A4 - G4 - | F#4 - - - D4 - - - | E4 - D4 - C4 - B3 - | B3 - - - - - - - | G4 - B4 - E5 - - D5 | C5 - - - B4 - A4 - | A4 - D5 - F#5 - - E5 | D#5 - - - B4 - - - | B4 - E5 - G5 - - F#5 | E5 - - - C5 - E5 - | E5 - E5 - D#5 - C5 - | B4 - - - D#5 - F#5 - | . . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . .'},
+  {w:'sawtooth',v:.11,dist:2,det:9,t:'E2 - - - . . E2 E2 | F2 - - - . . F2 F2 | E2 - - - . . G2 G2 | F2 - - - D#2 - - - | E2 E2 . E2 E2 . E2 F2 | E2 E2 . E2 G2 . F2 E2 | E2 E2 . E2 E2 . E2 F2 | A#1 - . A#1 B1 - . B1 | E2 E2 . E2 E2 . E2 F2 | E2 E2 . E2 G2 . F2 E2 | E2 E2 . E2 E2 . E2 F2 | C2 C2 . C2 D2 D2 D#2 - | E2 E2 E2 E2 E2 E2 E2 E2 | C2 C2 C2 C2 C2 C2 C2 C2 | D2 D2 D2 D2 D2 D2 D2 D2 | B1 B1 B1 B1 B1 B1 B1 B1 | E2 E2 E2 E2 E2 E2 E2 E2 | C2 C2 C2 C2 C2 C2 C2 C2 | A1 A1 A1 A1 A1 A1 A1 A1 | B1 B1 B1 B1 B1 B1 B1 B1 | E2 E2 E2 E2 E2 E2 E2 E2 | E2 E2 E2 E2 E2 E2 E2 E2 | C2 C2 C2 C2 C2 C2 C2 C2 | C2 C2 C2 C2 C2 C2 C2 C2 | A1 A1 A1 A1 A1 A1 A1 A1 | A1 A1 A1 A1 A1 A1 A1 A1 | B1 B1 B1 B1 B1 B1 B1 B1 | B1 B1 B1 B1 B1 B1 B1 B1'},
+  {w:'sawtooth',v:.07,dist:2,det:-7,t:'B2 - - - . . B2 B2 | C3 - - - . . C3 C3 | B2 - - - . . D3 D3 | C3 - - - A#2 - - - | B2 B2 . B2 B2 . B2 C3 | B2 B2 . B2 D3 . C3 B2 | B2 B2 . B2 B2 . B2 C3 | F2 - . F2 F#2 - . F#2 | B2 B2 . B2 B2 . B2 C3 | B2 B2 . B2 D3 . C3 B2 | B2 B2 . B2 B2 . B2 C3 | G2 G2 . G2 A2 A2 A#2 - | B2 B2 B2 B2 B2 B2 B2 B2 | G2 G2 G2 G2 G2 G2 G2 G2 | A2 A2 A2 A2 A2 A2 A2 A2 | F#2 F#2 F#2 F#2 F#2 F#2 F#2 F#2 | B2 B2 B2 B2 B2 B2 B2 B2 | G2 G2 G2 G2 G2 G2 G2 G2 | E2 E2 E2 E2 E2 E2 E2 E2 | F#2 F#2 F#2 F#2 F#2 F#2 F#2 F#2 | B2 B2 B2 B2 B2 B2 B2 B2 | B2 B2 B2 B2 B2 B2 B2 B2 | G2 G2 G2 G2 G2 G2 G2 G2 | G2 G2 G2 G2 G2 G2 G2 G2 | E2 E2 E2 E2 E2 E2 E2 E2 | E2 E2 E2 E2 E2 E2 E2 E2 | F#2 F#2 F#2 F#2 F#2 F#2 F#2 F#2 | F#2 F#2 F#2 F#2 F#2 F#2 F#2 F#2'},
+  {w:'sawtooth',v:.075,dist:2,det:5,t:'. . . . . . . . | . . . . . . . . | . . . . . . . . | B4 C5 D#5 E5 F5 G5 A5 B5 | E4 - - - F4 - E4 - | D#4 - - - B3 - - - | E4 - - - G4 - F4 - | E4 - - - - - - - | B4 - - - C5 - B4 - | A#4 - - - F4 - - - | G4 - F4 - E4 - D#4 - | E4 - - - - - - - | B4 - E5 - G5 - - F#5 | E5 - - - D5 - C5 - | D5 - F#5 - A5 - - G5 | F#5 - - - D#5 - - - | E5 - G5 - B5 - - A5 | G5 - - - E5 - G5 - | A5 - G5 - F#5 - E5 - | D#5 - - - F#5 - B5 - | E5 G5 B5 E6 B5 G5 E5 B4 | E5 G5 B5 E6 G6 E6 B5 G5 | C5 E5 G5 C6 G5 E5 C5 G4 | C5 E5 G5 C6 E6 C6 G5 E5 | A4 C5 E5 A5 E5 C5 A4 E4 | A4 C5 E5 A5 C6 A5 E5 C5 | B4 D#5 F#5 B5 F#5 D#5 B4 F#4 | B5 A5 G5 F#5 E5 D#5 E5 F5'},
+  {w:'sawtooth',v:.05,dist:2,t:'. . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . | B3 - - - C4 - B3 - | B3 - - - G3 - - - | B3 - - - D4 - C4 - | B3 - - - - - - - | G4 - - - A4 - G4 - | F#4 - - - D4 - - - | E4 - D4 - C4 - B3 - | B3 - - - - - - - | G4 - B4 - E5 - - D5 | C5 - - - B4 - A4 - | A4 - D5 - F#5 - - E5 | D#5 - - - B4 - - - | B4 - E5 - G5 - - F#5 | E5 - - - C5 - E5 - | E5 - E5 - D#5 - C5 - | B4 - - - D#5 - F#5 - | . . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . .'},
   {w:'triangle',v:.42,t:'E2 - - - - - - - | F2 - - - - - - - | E2 - - - - - - - | F2 - - - D#2 - - - | E2 . E2 . E2 . E2 . | E2 . E2 . E2 . E2 . | E2 . E2 . E2 . E2 . | A#1 . A#1 . B1 . B1 . | E2 . E2 . E2 . E2 . | E2 . E2 . E2 . E2 . | E2 . E2 . E2 . E2 . | C2 . C2 . D2 . D#2 . | E3 E2 E3 E2 E3 E2 E3 E2 | C3 C2 C3 C2 C3 C2 C3 C2 | D3 D2 D3 D2 D3 D2 D3 D2 | B2 B1 B2 B1 B2 B1 B2 B1 | E3 E2 E3 E2 E3 E2 E3 E2 | C3 C2 C3 C2 C3 C2 C3 C2 | A2 A1 A2 A1 A2 A1 A2 A1 | B2 B1 B2 B1 B2 B1 B2 B1 | E2 E2 E2 E2 E2 E2 E2 E2 | E2 E2 E2 E2 E2 E2 E2 E2 | C2 C2 C2 C2 C2 C2 C2 C2 | C2 C2 C2 C2 C2 C2 C2 C2 | A1 A1 A1 A1 A1 A1 A1 A1 | A1 A1 A1 A1 A1 A1 A1 A1 | B1 B1 B1 B1 B1 B1 B1 B1 | B1 B1 B1 B1 B1 B1 B1 B1'},
   {w:'square',v:.032,t:'E4 - - - - - - - | F4 - - - - - - - | G4 - - - - - - - | F#4 - - - - - - - | E3 - - - - - - - | E3 - - - - - - - | G3 - - - - - - - | F#3 - - - - - - - | E3 - - - - - - - | F3 - - - - - - - | G3 - - - - - - - | B3 - - - - - - - | G4 - - - - - - - | G4 - - - - - - - | F#4 - - - - - - - | F#4 - - - - - - - | G4 - - - - - - - | G4 - - - - - - - | E4 - - - - - - - | D#4 - - - - - - - | E4 - - - - - - - | B4 - - - - - - - | E4 - - - - - - - | G4 - - - - - - - | E4 - - - - - - - | C5 - - - - - - - | D#4 - - - - - - - | F#4 - - - - - - -'},
   {d:1,v:.62,t:'c . . . . . k k | c . . . . . k k | c . . . . . k k | k k s k k s s s | c k s k k k s k | k k s k k k s k | k k s k k k s k | k k s k k k s k | k k s k k k s k | k k s k k k s k | k k s k k k s k | k k s k s s s s | c k s k k k s k | k k s k k k s k | k k s k k k s k | k k s k k s k s | c k s k k k s k | k k s k k k s k | k k s k k k s k | k s k s s s s s | c s k s k s k s | k s k s k s k s | k s k s k s k s | k s k s k s k s | k s k s k s k s | k s k s k s k s | k s k s k s k s | s s s s s s s s'}]}),
@@ -560,7 +573,8 @@ function playNote(ch,e,t,sd){
   const dur=e.len*sd;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(ch.v,t+.008);g.gain.linearRampToValueAtTime(ch.v*.65,t+Math.min(.12,dur*.5));
   g.gain.setValueAtTime(ch.v*.65,t+dur*.85);g.gain.linearRampToValueAtTime(0,t+dur*.98);
   if(e.len>=3&&ch.w==='square'){const l=c.createOscillator(),lg=c.createGain();l.frequency.value=5.5;lg.gain.value=nf(e.n)*.008;l.connect(lg);lg.connect(o.frequency);l.start(t+.15);l.stop(t+dur)}
-  o.connect(g);g.connect(ch.dist&&AU.dist?AU.dist:AU.mus);o.start(t);o.stop(t+dur);
+  if(ch.dist===2&&AU.dist2&&ch.det){const o2=c.createOscillator();o2.type=ch.w;o2.frequency.value=nf(e.n)*Math.pow(2,ch.det/1200);o2.connect(g);o2.start(t);o2.stop(t+dur)}
+  o.connect(g);g.connect(ch.dist===2&&AU.dist2?AU.dist2:ch.dist&&AU.dist?AU.dist:AU.mus);o.start(t);o.stop(t+dur);
 }
 function tone(type,f0,f1,dur,vol,delay){
   if(!AU.c||AU.muted)return;const c=AU.c,t=c.currentTime+(delay||0),o=c.createOscillator(),g=c.createGain();o.type=type;
@@ -890,7 +904,7 @@ function charSprite(look,dir,fr,tn,ey,hr){
 function ctShade(hex,t){const [r,g,b]=hexRGB(hex);const f=v=>Math.max(0,Math.min(255,Math.round(t<0?v*(1+t):v+(255-v)*t)));return 'rgb('+f(r)+','+f(g)+','+f(b)+')'}
 function ctCharSprite(look,dir,fr,seated,tn,ey,hr){
   const key='S3'+look+dir+fr+(seated?'z':'')+':'+tn+ey+hr;if(CCACHE[key])return CCACHE[key];
-  return CCACHE[key]=shade3d(ctCharSpriteRaw(look,dir,fr,seated,tn,ey,hr),{str:1.3,cap:4,dith:0.03,rim:0,k:.75,mult:1})}
+  return CCACHE[key]=shade3d(ctCharSpriteRaw(look,dir,fr,seated,tn,ey,hr),{str:1.7,cap:4,dith:0.03,rim:0,k:1.15,mult:1})}
 function ctCharSpriteRaw(look,dir,fr,seated,tn,ey,hr){
   const key='ct'+look+dir+fr+(seated?'z':'')+':'+(tn==null?'-':tn)+(ey==null?'-':ey)+(hr==null?'-':hr);if(CCACHE[key])return CCACHE[key];
   if(dir==='left')return CCACHE[key]=mirror(ctCharSpriteRaw(look,'right',fr,seated,tn,ey,hr));
@@ -977,7 +991,7 @@ const DOG=["................","..oo............",".obbo........o..",".obbboooooo
 const DOG2=["................","..oo............",".obbo.........o.",".obbbooooooooob.",".obebbbbbbbbbbo.","..oobbbbbbbbbo..","....obbbbbbbbo..","...obo.....obo..","...obo....obo...","...oo.....oo...."];
 function dogSprite(fr,dir){const key='dog'+fr+dir;if(CCACHE[key])return CCACHE[key];const [cvs,c]=mk(16,10);
   (fr?DOG2:DOG).forEach((r,y)=>{for(let x=0;x<16;x++){const ch=r[x];if(ch!=='.'){c.fillStyle=ch==='o'?'#181018':ch==='e'?'#000':'#a06838';c.fillRect(x,y,1,1)}}});
-  return CCACHE[key]=shade3d(dir==='right'?mirror(cvs):cvs,{str:1.3,cap:3,dith:0.03,rim:0,k:.75,mult:1})}
+  return CCACHE[key]=shade3d(dir==='right'?mirror(cvs):cvs,{str:1.7,cap:3,dith:0.03,rim:0,k:1.1,mult:1})}
 function drawPortal(c,x,y){
   const t=frame;
   // light pillar
@@ -1232,7 +1246,7 @@ function tplCanvas(name,fr,k,pad){
   return PCACHE[key]=cvs}
 function animalCanvas(t,fr,dir){
   const key='an'+t+fr+dir;if(PCACHE[key])return PCACHE[key];
-  const base=tplCanvas(t,fr,1);return PCACHE[key]=shade3d(dir==='right'?mirror(base):base,{str:1.3,cap:4,dith:0.04,rim:0,k:.8,mult:1})}
+  const base=tplCanvas(t,fr,1);return PCACHE[key]=shade3d(dir==='right'?mirror(base):base,{str:1.7,cap:4,dith:0.04,rim:0,k:1.1,mult:1})}
 function reweCanvas(){
   const k='rewe';if(PCACHE[k])return PCACHE[k];const [cvs,c]=mk(18,30);
   R(c,7,6,4,24,'#8a6034');R(c,7,6,1,24,'#a87c48');R(c,10,6,1,24,'#5a3c1e');
