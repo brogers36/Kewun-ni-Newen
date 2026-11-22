@@ -719,8 +719,8 @@ function lanKewun(e){
   B.lanUsed=B.lanUsed||[];const left=LAN_LOFS.filter(l=>!B.lanUsed.includes(l[0])),lofP=(left.length?left:LAN_LOFS)[rnd((left.length?left:LAN_LOFS).length)];
   const pool=lanPool(),qs=[];while(qs.length<n&&pool.length)qs.push(pool.splice(rnd(pool.length),1)[0]);
   say([Object.assign(L(e.label,'Lan kewün!','¡Muerte de la lengua!','Death of the language!'),{fx:()=>{sfx('bad');B.flash=18;B.shake=14}}),
-    N(e.label+' lanza el lan kewün sobre el '+lofP[1]+'. Si fallas una sola de sus '+n+' preguntas, ese lof olvidará todo su mapudungun: perderás 6 piwke y tu newen (la barra verde) no se cargará más contra esta forma.',
-      e.label+' casts lan kewün on the '+lofP[1]+'. Miss even one of its '+n+' questions and that lof will forget all its Mapudungun: you will lose 6 hearts, and your newen (the green bar) will not charge again against this form.'),
+    N(e.label+' lanza el lan kewün sobre '+lanName({lof:lofP},false)+'. Si fallas una sola de sus '+n+' preguntas, ese lof olvidará todo su mapudungun: perderás 6 piwke y tu newen (la barra verde) no se cargará más contra esta forma.',
+      e.label+' casts lan kewün on '+lanName({lof:lofP},true)+'. Miss even one of its '+n+' questions and that lof will forget all its Mapudungun: you will lose 6 hearts, and your newen (the green bar) will not charge again against this form.'),
     N('Responde con lo que has aprendido en tu viaje.','Answer with what you have learned on your journey.')],()=>ask(0));
   function ask(i){
     if(i>=qs.length)return win();
@@ -731,15 +731,16 @@ function lanKewun(e){
     B.lanUsed.push(lofP[0]);B.noSp=e;const d=6*HPQ;S.hp=Math.max(1,S.hp-d);
     B.lanScene={lof:lofP,good:0,t:0};
     say([N('La respuesta era: '+ans+'.','The answer was: '+ans+'.'),
-      N('La niebla entra por las puertas de las ruka del '+lofP[1]+'. La gente se mira, asustada, buscando palabras que ya no están.','The fog seeps through the doors of the rukas of the '+lofP[1]+'. People look at each other, frightened, searching for words that are no longer there.'),
+      N('La niebla entra por las puertas de las ruka en '+lanName({lof:lofP},false)+'. La gente se mira, asustada, buscando palabras que ya no están.','The fog seeps through the doors of the rukas in '+lanName({lof:lofP},true)+'. People look at each other, frightened, searching for words that are no longer there.'),
       N('«¿Cómo se decía...? No me acuerdo», susurra un niño. «Mi chuchu me hablaba en mapudungun... y ya no le entiendo nada», llora una mujer.','"How did you say...? I can\'t remember," a child whispers. "My chuchu used to talk to me in Mapudungun... and now I don\'t understand a thing," a woman weeps.'),
       N('El lonko abre la boca para saludar como saludaban sus antepasados, y no le sale ni una palabra.','The lonko opens his mouth to greet the way his ancestors greeted, and not a single word comes out.'),
       Object.assign(N('Pierdes 6 piwke (−'+d+'). Tu newen ya no se carga contra esta forma.','You lose 6 hearts (−'+d+'). Your newen no longer charges against this form.'),{fx:()=>{B.lanScene=null;sfx('bad');B.red=12;pop(60,30,'-'+d,'#ff6050')}})],()=>{B.lanScene=null;battleMenu()})}
   function win(){
     B.lanScene={lof:lofP,good:1,t:0};
     say([N('La última palabra sale de ti clara y fuerte. El hechizo se quiebra.','The last word leaves you clear and strong. The spell shatters.'),
-      N('Lejos, en el '+lofP[1]+', la gente sale de sus ruka. Las ruka, el kütral y las personas empiezan a brillar.','Far away, in the '+lofP[1]+', people come out of their rukas. The rukas, the kütral and the people begin to glow.'),
-      L('Pu che','Newentuleymi! Taiñ newen!','«¡Eres fuerte! ¡Sentimos que estás venciendo a Ti Fütra Ngoymatulfe! ¡Toma nuestro newen!»','"You are strong! We can feel you overcoming Ti Fütra Ngoymatulfe! Take our newen!"'),
+      N('Lejos, en '+lanName({lof:lofP},false)+', la gente sale de sus ruka. Las ruka, el kütral y las personas empiezan a brillar.','Far away, in '+lanName({lof:lofP},true)+', people come out of their rukas. The rukas, the kütral and the people begin to glow.'),
+      N('«¡Sentimos que estás venciendo a Ti Fütra Ngoymatulfe!», gritan todos.','"We can feel you overcoming Ti Fütra Ngoymatulfe!" they all shout.'),
+      L('Pu che','Llownge taiñ newen!','¡Recibe nuestra fuerza!','Receive our strength!'),
       Object.assign(N('El newen del lof te llega en un río de luz: recuperas todos tus piwke, y tus manos sostienen dos wiño a la vez.','The lof\'s newen reaches you in a river of light: all your hearts return, and your hands hold two wiño at once.'),{fx:()=>{B.lanScene=null;S.hp=maxHP();sfx('heal');spark(60,30,'#ffe890',30)}})],
       ()=>{B.lanScene=null;S.hp=maxHP();B.lanBoon=1;battleMenu()})}
 }

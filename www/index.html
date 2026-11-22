@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='42877d1-202611221058';
+window.KEWUN_BUILD='5092606-202611221112';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -5393,8 +5393,8 @@ function lanKewun(e){
   B.lanUsed=B.lanUsed||[];const left=LAN_LOFS.filter(l=>!B.lanUsed.includes(l[0])),lofP=(left.length?left:LAN_LOFS)[rnd((left.length?left:LAN_LOFS).length)];
   const pool=lanPool(),qs=[];while(qs.length<n&&pool.length)qs.push(pool.splice(rnd(pool.length),1)[0]);
   say([Object.assign(L(e.label,'Lan kewün!','¡Muerte de la lengua!','Death of the language!'),{fx:()=>{sfx('bad');B.flash=18;B.shake=14}}),
-    N(e.label+' lanza el lan kewün sobre el '+lofP[1]+'. Si fallas una sola de sus '+n+' preguntas, ese lof olvidará todo su mapudungun: perderás 6 piwke y tu newen (la barra verde) no se cargará más contra esta forma.',
-      e.label+' casts lan kewün on the '+lofP[1]+'. Miss even one of its '+n+' questions and that lof will forget all its Mapudungun: you will lose 6 hearts, and your newen (the green bar) will not charge again against this form.'),
+    N(e.label+' lanza el lan kewün sobre '+lanName({lof:lofP},false)+'. Si fallas una sola de sus '+n+' preguntas, ese lof olvidará todo su mapudungun: perderás 6 piwke y tu newen (la barra verde) no se cargará más contra esta forma.',
+      e.label+' casts lan kewün on '+lanName({lof:lofP},true)+'. Miss even one of its '+n+' questions and that lof will forget all its Mapudungun: you will lose 6 hearts, and your newen (the green bar) will not charge again against this form.'),
     N('Responde con lo que has aprendido en tu viaje.','Answer with what you have learned on your journey.')],()=>ask(0));
   function ask(i){
     if(i>=qs.length)return win();
@@ -5405,15 +5405,16 @@ function lanKewun(e){
     B.lanUsed.push(lofP[0]);B.noSp=e;const d=6*HPQ;S.hp=Math.max(1,S.hp-d);
     B.lanScene={lof:lofP,good:0,t:0};
     say([N('La respuesta era: '+ans+'.','The answer was: '+ans+'.'),
-      N('La niebla entra por las puertas de las ruka del '+lofP[1]+'. La gente se mira, asustada, buscando palabras que ya no están.','The fog seeps through the doors of the rukas of the '+lofP[1]+'. People look at each other, frightened, searching for words that are no longer there.'),
+      N('La niebla entra por las puertas de las ruka en '+lanName({lof:lofP},false)+'. La gente se mira, asustada, buscando palabras que ya no están.','The fog seeps through the doors of the rukas in '+lanName({lof:lofP},true)+'. People look at each other, frightened, searching for words that are no longer there.'),
       N('«¿Cómo se decía...? No me acuerdo», susurra un niño. «Mi chuchu me hablaba en mapudungun... y ya no le entiendo nada», llora una mujer.','"How did you say...? I can\'t remember," a child whispers. "My chuchu used to talk to me in Mapudungun... and now I don\'t understand a thing," a woman weeps.'),
       N('El lonko abre la boca para saludar como saludaban sus antepasados, y no le sale ni una palabra.','The lonko opens his mouth to greet the way his ancestors greeted, and not a single word comes out.'),
       Object.assign(N('Pierdes 6 piwke (−'+d+'). Tu newen ya no se carga contra esta forma.','You lose 6 hearts (−'+d+'). Your newen no longer charges against this form.'),{fx:()=>{B.lanScene=null;sfx('bad');B.red=12;pop(60,30,'-'+d,'#ff6050')}})],()=>{B.lanScene=null;battleMenu()})}
   function win(){
     B.lanScene={lof:lofP,good:1,t:0};
     say([N('La última palabra sale de ti clara y fuerte. El hechizo se quiebra.','The last word leaves you clear and strong. The spell shatters.'),
-      N('Lejos, en el '+lofP[1]+', la gente sale de sus ruka. Las ruka, el kütral y las personas empiezan a brillar.','Far away, in the '+lofP[1]+', people come out of their rukas. The rukas, the kütral and the people begin to glow.'),
-      L('Pu che','Newentuleymi! Taiñ newen!','«¡Eres fuerte! ¡Sentimos que estás venciendo a Ti Fütra Ngoymatulfe! ¡Toma nuestro newen!»','"You are strong! We can feel you overcoming Ti Fütra Ngoymatulfe! Take our newen!"'),
+      N('Lejos, en '+lanName({lof:lofP},false)+', la gente sale de sus ruka. Las ruka, el kütral y las personas empiezan a brillar.','Far away, in '+lanName({lof:lofP},true)+', people come out of their rukas. The rukas, the kütral and the people begin to glow.'),
+      N('«¡Sentimos que estás venciendo a Ti Fütra Ngoymatulfe!», gritan todos.','"We can feel you overcoming Ti Fütra Ngoymatulfe!" they all shout.'),
+      L('Pu che','Llownge taiñ newen!','¡Recibe nuestra fuerza!','Receive our strength!'),
       Object.assign(N('El newen del lof te llega en un río de luz: recuperas todos tus piwke, y tus manos sostienen dos wiño a la vez.','The lof\'s newen reaches you in a river of light: all your hearts return, and your hands hold two wiño at once.'),{fx:()=>{B.lanScene=null;S.hp=maxHP();sfx('heal');spark(60,30,'#ffe890',30)}})],
       ()=>{B.lanScene=null;S.hp=maxHP();B.lanBoon=1;battleMenu()})}
 }
@@ -6622,38 +6623,67 @@ function cutFx(c,dark){
     v.putImageData(id,0,0)}
   c.globalAlpha=dark?1:.8;c.drawImage(VIGNC,0,0);c.globalAlpha=1}
 
-/* ---------- Lan kewün vignette (drawn over the battle): one lof, either losing its language or sending its newen ---------- */
+/* ---------- Lan kewün vignette (drawn over the battle): one lof, either losing its language or sending its newen.
+   Each lof has its own land (the region's battle backdrop), graded grey and fogged or warm and glowing. ---------- */
+const LAN_LAND={lof:{area:'coast',pe:'lafkenche',an:null},n_lof:{area:'field',pe:'nagche',an:'kawellu'},p_lof:{area:'mount',pe:'pewenche',an:null},
+  w_lof:{area:'rainforest',pe:'williche',an:null},e_lof:{area:'pampa',pe:'puelche',an:'luan'}};
+const LANC={};
+function lanBG(id,good){const k=id+good;if(LANC[k])return LANC[k];const src=buildBG(LAN_LAND[id].area),[cv,c]=mk(src.width,src.height);c.drawImage(src,0,0);
+  const d=c.getImageData(0,0,cv.width,cv.height),a=d.data;
+  for(let p=0;p<a.length;p+=4){const r=a[p],g=a[p+1],b=a[p+2],l=.3*r+.59*g+.11*b;
+    if(good){a[p]=Math.min(255,r*1.03+8);a[p+1]=Math.min(255,g*1.0+4);a[p+2]=Math.max(0,b*.92)}
+    else{const m=.85;a[p]=(r*(1-m)+l*m)*.62+8;a[p+1]=(g*(1-m)+l*m)*.64+10;a[p+2]=(b*(1-m)+l*m)*.70+18}}
+  c.putImageData(d,0,0);return LANC[k]=cv}
+function lanGrey(cvs){const k='g'+(cvs.__id||(cvs.__id=Math.random()));if(LANC[k])return LANC[k];const [cv,c]=mk(cvs.width,cvs.height);c.drawImage(cvs,0,0);
+  const d=c.getImageData(0,0,cv.width,cv.height),a=d.data;for(let p=0;p<a.length;p+=4){const l=.3*a[p]+.59*a[p+1]+.11*a[p+2];a[p]=l*.78+12;a[p+1]=l*.8+14;a[p+2]=l*.88+22}
+  c.putImageData(d,0,0);return LANC[k]=cv}
+function lanName(L,en){const pe=LAN_LAND[L.lof[0]].pe;return en?'the '+pe[0].toUpperCase()+pe.slice(1)+' lof':'el lof de los '+pe}
 function drawLanScene(c,L){
-  const t=++L.t,good=L.good,a=Math.min(1,t/30);
+  const t=++L.t,good=L.good,a=Math.min(1,t/24),en=S.gloss==='en',LD=LAN_LAND[L.lof[0]];
   c.save();c.globalAlpha=a;
-  c.drawImage(landLayer(good?'gold':'grey'),0,0);
-  if(!good){c.fillStyle='rgba(20,22,34,.35)';c.fillRect(0,0,LW,LH)}
+  c.drawImage(lanBG(L.lof[0],good),0,0);
+  if(good){c.save();c.globalAlpha=a*.85;animBG(LD.area);c.restore()}
+  // god rays when the lof wakes, a low sky of fog when it forgets
+  c.save();
+  if(good){c.globalCompositeOperation='lighter';for(let k=0;k<5;k++){const bx=LW*(.12+k*.2)+Math.sin(frame/90+k)*10,w=16+(k%3)*10,al=.045+.025*Math.sin(frame/40+k);
+      const g=c.createLinearGradient(0,0,0,LH*.8);g.addColorStop(0,'rgba(255,236,170,'+al*2+')');g.addColorStop(1,'rgba(255,236,170,0)');c.fillStyle=g;
+      c.beginPath();c.moveTo(bx,0);c.lineTo(bx+w,0);c.lineTo(bx+w+40,LH*.8);c.lineTo(bx+30-w*.3,LH*.8);c.closePath();c.fill()}}
+  else{const g=c.createLinearGradient(0,0,0,LH*.55);g.addColorStop(0,'rgba(60,64,84,.55)');g.addColorStop(1,'rgba(60,64,84,0)');c.fillStyle=g;c.fillRect(0,0,LW,LH*.55)}
+  c.restore();
   caRukas(c,[[LW*.04,92,1.2],[LW*.70,96,1.1]],frame,!!good);
-  if(!good)caFog(c,frame*2,.4);
-  caFire(c,LW*.5,138,frame,good?1.4:.6);
+  if(!good){c.save();c.globalAlpha=a*.55;caRukas(c,[[LW*.04,92,1.2],[LW*.70,96,1.1]],frame,false);c.restore();caFog(c,frame*2,.38)}
+  if(LD.an){const ac=animalCanvas(LD.an,good?Math.floor(frame/14)%2:0,'right'),ag=good?ac:lanGrey(ac),ax=LW*.82,ay=146;ell(c,ax+ac.width,ay,ac.width*.7,3,'rgba(0,0,0,.25)');c.drawImage(ag,ax,ay-ac.height*2,ac.width*2,ac.height*2)}
+  caFire(c,LW*.5,138,frame,good?1.5:.45);
+  if(!good){for(let k=0;k<3;k++)ell(c,LW*.5+Math.sin(frame/20+k)*3,128-k*7-(frame/3+k*9)%14,2+k,2+k,'rgba(150,150,160,.35)')}
   // the people of the lof around the fire
   const ppl=[['kuku','right',-92],['lonko','right',-64],['weaver','right',-36],['child','left',22],['cook','left',50],['childf','left',78]];
   for(let k=0;k<ppl.length;k++){const [lk,d,dx]=ppl[k],x=Math.round(LW*.5+dx-16);
-    const s=ctCharSprite(lk,good?'down':d,good?Math.floor(frame/10+k)%4:0);
-    const by=140+(good?-Math.max(0,Math.round(Math.sin(frame/9+k)*3)):(k%2));
-    if(good){c.save();c.globalCompositeOperation='lighter';const g=c.createRadialGradient(x+16,by-22,3,x+16,by-22,38);g.addColorStop(0,'rgba(255,226,130,'+(.35+.1*Math.sin(frame/8+k))+')');g.addColorStop(1,'rgba(255,200,90,0)');c.fillStyle=g;c.fillRect(x-24,by-60,80,70);c.restore()}
-    const sw=s.width*2,shh=s.height*2;ell(c,x+sw/2,by-1,12,3,'rgba(0,0,0,.3)');c.drawImage(s,x,by-shh,sw,shh);
-    if(!good){ // greyed, trembling, a question mark over some heads, a tear on others
-      c.save();c.globalCompositeOperation='source-atop';c.restore();
+    let s=ctCharSprite(lk,good?'down':d,good?Math.floor(frame/10+k)%4:0);if(!good)s=lanGrey(s);
+    const by=140+(good?-Math.max(0,Math.round(Math.sin(frame/9+k)*3)):(k%2)),sw=s.width*2,shh=s.height*2,shake=!good&&(frame+k*13)%50<6?((frame%2)?1:-1):0;
+    if(good){c.save();c.globalCompositeOperation='lighter';const g=c.createRadialGradient(x+16,by-22,3,x+16,by-22,40);g.addColorStop(0,'rgba(255,226,130,'+(.42+.12*Math.sin(frame/8+k))+')');g.addColorStop(1,'rgba(255,200,90,0)');c.fillStyle=g;c.fillRect(x-26,by-64,84,74);c.restore()}
+    ell(c,x+sw/2,by-1,12,3,'rgba(0,0,0,.3)');c.drawImage(s,x+shake,by-shh,sw,shh);
+    if(good){ // rim of light on each body
+      c.save();c.globalCompositeOperation='lighter';c.globalAlpha=.16+.08*Math.sin(frame/7+k);c.drawImage(s,x-1,by-shh-1,sw,shh);c.restore();
+      if((frame+k*17)%40<20)R(c,x+sw/2+Math.round(Math.sin(frame/6+k)*8),by-shh-4-((frame/2+k*5)%14),1,1,'#fff6c8')}
+    else{
       if(k%2===0&&(frame+k*20)%80<60){const qx=x+sw/2,qy=by-shh-6+Math.round(Math.sin(frame/10+k));OV.push(()=>txt('?',qx,qy,'rgba(235,235,245,.95)',16,'center'))}
       else if((frame+k*30)%90<50)R(c,x+sw/2-5,by-shh+16+((frame/4+k)%8),1,3,'#a8d8ff')}}
   if(good){ // words and light rising from the lof toward the hero
     caWords(['mari mari','newen','kümey','mapudungun','chaltu may','kimün'],frame,110,7,'255,240,180',12);
     c.save();c.globalCompositeOperation='lighter';
-    for(let k=0;k<24;k++){const p=((frame*1.4+k*29)%160)/160;R(c,Math.round(LW*.5+Math.sin(k*1.3+p*5)*90*(1-p)+p*LW*.4),Math.round(136-p*120),2,2,'rgba(255,236,160,'+(1-p).toFixed(2)+')')}
-    const g2=c.createLinearGradient(0,0,0,LH);g2.addColorStop(0,'rgba(255,230,150,.15)');g2.addColorStop(1,'rgba(255,200,100,0)');c.fillStyle=g2;c.fillRect(0,0,LW,LH);c.restore()}
-  else{ // Mapudungun words crumbling and falling into the fog
+    for(let k=0;k<30;k++){const p=((frame*1.4+k*29)%160)/160;R(c,Math.round(LW*.5+Math.sin(k*1.3+p*5)*90*(1-p)+p*LW*.42),Math.round(136-p*124),k%3?2:1,k%3?2:1,'rgba(255,236,160,'+(1-p).toFixed(2)+')')}
+    const g2=c.createRadialGradient(LW*.5,130,10,LW*.5,130,LW*.7);g2.addColorStop(0,'rgba(255,220,140,.18)');g2.addColorStop(1,'rgba(255,200,100,0)');c.fillStyle=g2;c.fillRect(0,0,LW,LH);c.restore()}
+  else{ // Mapudungun words crumbling and falling into the fog, ash in the air
     const W=['mari mari','chumleymi','kümelen','chaltu may','pewkayal','newen','ruka','lafken','mapu'];
-    for(let k=0;k<W.length;k++){const p=((frame*.6+k*37)%180)/180,x=LW*(.1+.8*((k*41)%W.length)/W.length),y=24+p*90;
-      OV.push(()=>txt(W[k],x,y,'rgba(220,224,236,'+(Math.max(0,.8-p)).toFixed(2)+')',11,'center'))}}
-  c.globalAlpha=1;
-  // a title card for the lof
-  R(c,0,0,LW,14,'rgba(0,0,0,.55)');OV.push(()=>txt(L.lof[1]+(good?' · newen':' · lan kewün'),LW/2,11,good?'#ffe890':'#c8ccd8',12,'center'));
+    for(let k=0;k<W.length;k++){const p=((frame*.6+k*37)%180)/180,x=LW*(.1+.8*((k*41)%W.length)/W.length)+Math.sin(p*9+k)*3,y=24+p*90;
+      const cut=Math.floor(W[k].length*Math.max(0,p-.35)/.65),w=W[k].slice(0,W[k].length-cut);   // the words lose their letters as they fall
+      if(w)OV.push(()=>txt(w,x,y,'rgba(220,224,236,'+(Math.max(0,.85-p)).toFixed(2)+')',11,'center'))}
+    for(let k=0;k<26;k++){const x=((k*53+frame*.3)%LW),y=((k*37+frame*.5)%(LH*.7));R(c,Math.round(x),Math.round(y),1,1,'rgba(200,204,214,.45)')}}
+  // vignette and letterbox
+  const v=c.createRadialGradient(LW/2,LH*.45,LH*.3,LW/2,LH*.45,LW*.75);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,good?'rgba(40,20,0,.35)':'rgba(0,0,12,.6)');c.fillStyle=v;c.fillRect(0,0,LW,LH);
+  c.globalAlpha=1;R(c,0,0,LW,15,'rgba(0,0,0,.82)');R(c,0,15,LW,1,good?'rgba(255,220,130,.6)':'rgba(170,176,196,.4)');
+  const ttl=(en?(good?'Newen · ':'Lan kewün · '):(good?'Newen · ':'Lan kewün · '))+lanName(L,en);
+  OV.push(()=>txt(ttl,LW/2,11,good?'#ffe890':'#c8ccd8',12,'center'));
   c.restore();
 }
 

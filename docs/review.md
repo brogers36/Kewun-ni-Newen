@@ -416,3 +416,4 @@ Nütramkan: alguien joven en cada lof quiere conversar (tres turnos, eliges la r
 ### Tanda 20 · lan kewün (Nov 22)
 - (Nov 22) Brandon: el jefe final lanza **"Lan kewün!"** 'muerte de la lengua' una vez por forma (dos en la última). Preguntas: 3 (modo weichafe: 3, 4, 5, 6, 7 según la forma), sacadas de las piedras que hablan, las kuyfi chillka, los nütramkan y las preguntas de los ngen.
 - Si fallas, la gente del lof habla en castellano (ya olvidó el mapudungun). Si aciertas: ⚠ **"Newentuleymi! Taiñ newen!"** '¡eres fuerte! ¡nuestro newen!' (dicho por "Pu che"), y la opción **"Epu wiño!"** 'doble golpe de wiño'.
+- (Nov 22) Brandon: al mandar su newen, la gente dice **"Llownge taiñ newen!"** '¡Recibe nuestra fuerza!'. En castellano: «el lof de los lafkenche / nagche / pewenche / williche / puelche».
