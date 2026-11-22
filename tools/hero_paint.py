@@ -19,6 +19,9 @@ R = {
     'yellow':['#5a3a06', '#8a6010', '#c09020', '#e8b838', '#f8dc70'],
     'pants': ['#06060c', '#0e0e1a', '#181a2c', '#242842', '#343a5c'],
     'boot':  ['#0a0604', '#1c120a', '#2e1e12', '#44301e', '#5e442c'],
+    'kpurple':['#120818', '#24102e', '#381a46', '#4a2a5a', '#62407a', '#7e5c98', '#a088bc'],
+    'shawl': ['#06040c', '#0e0a1a', '#18122a', '#241c3c', '#342a52', '#4a3e6c'],
+    'grey':  ['#4a4a56', '#6a6a78', '#8c8c9a', '#aeaebc', '#c8c8d2', '#e2e2ea', '#f6f6fc'],
     'silver':['#3a3c44', '#62646e', '#8e909a', '#b8bac4', '#e0e2ea', '#ffffff'],
 }
 R = {k: [hx(c) for c in v] for k, v in R.items()}
@@ -42,11 +45,11 @@ def legs(c, fr, dress):
         blob(c, R['boot'], lambda d, x=x: d.polygon([(x - 2, 66), (x + 4, 66), (x + 4, 72), (x - 6, 72), (x - 6, 70)], fill=1), bulge=0.9, lift=lift, name=nm)
         c.px(x - 5, 70, R['boot'][4]); c.rect(x - 6, 72, 11, 1, R['boot'][0])
 
-def head(c, fr, long_hair):
+def head(c, fr, long_hair, hk='hair', old=False):
     _, _, lean, _ = pose(fr); lx = -lean
     # hair mass behind the head (and down the back for Millaray)
     if long_hair:
-        blob(c, R['hair'], lambda d: d.polygon([(24 + lx, 8), (33 + lx, 9), (35 + lx, 18), (36, 32), (37, 48), (31, 50), (29, 34), (26 + lx, 22)], fill=1), bulge=0.9, lift=0.1, name='hairB')
+        blob(c, R[hk], lambda d: d.polygon([(24 + lx, 8), (33 + lx, 9), (35 + lx, 18), (36, 32), (37, 48), (31, 50), (29, 34), (26 + lx, 22)], fill=1), bulge=0.9, lift=0.1, name='hairB')
     blob(c, R['skin'], lambda d: d.rounded_rectangle([20 + lx, 18, 27 + lx, 27], 2, fill=1), bulge=0.9, lift=-0.1, name='neck')
     # profile: brow, nose, lips, chin, facing left
     face = [(18 + lx, 8), (26 + lx, 6), (31 + lx, 10), (31 + lx, 18), (27 + lx, 23), (21 + lx, 24), (18 + lx, 21), (17 + lx, 19), (16 + lx, 17), (17 + lx, 15), (16 + lx, 13), (18 + lx, 11)]
@@ -55,11 +58,16 @@ def head(c, fr, long_hair):
     c.px(17 + lx, 18, R['skin'][1]); c.px(18 + lx, 18, R['skin'][2])            # lips
     c.px(18 + lx, 21, R['skin'][2])                                             # chin crease
     c.rect(19 + lx, 12, 3, 2, (250, 246, 236)); c.px(19 + lx, 12, (20, 14, 18)); c.px(19 + lx, 13, (20, 14, 18))   # eye looking forward
-    c.rect(19 + lx, 11, 4, 1, R['hair'][2])                                     # brow
+    c.rect(19 + lx, 11, 4, 1, R[hk][2] if not old else R[hk][1])                # brow
     c.px(25 + lx, 14, R['skin'][2]); c.px(26 + lx, 15, R['skin'][1]); c.px(25 + lx, 16, R['skin'][2])   # ear
     # hair cap, side lock
-    blob(c, R['hair'], lambda d: d.polygon([(17 + lx, 9), (20 + lx, 4), (27 + lx, 3), (33 + lx, 7), (33 + lx, 16), (29 + lx, 19), (28 + lx, 12), (23 + lx, 9)], fill=1), bulge=1.0, lift=0.18, name='hair')
-    for x in range(22, 31, 3): c.px(x + lx, 5, R['hair'][5])                    # sheen
+    blob(c, R[hk], lambda d: d.polygon([(17 + lx, 9), (20 + lx, 4), (27 + lx, 3), (33 + lx, 7), (33 + lx, 16), (29 + lx, 19), (28 + lx, 12), (23 + lx, 9)], fill=1), bulge=1.0, lift=0.18, name='hair')
+    for x in range(22, 31, 3): c.px(x + lx, 5, R[hk][5])                        # sheen
+    if old:   # the years in the face: crow's feet, a line from nose to mouth, a softer jaw, a strand of hair across the brow
+        c.px(22 + lx, 12, R['skin'][2]); c.px(22 + lx, 14, R['skin'][2]); c.px(23 + lx, 13, R['skin'][3])
+        c.px(18 + lx, 16, R['skin'][2]); c.px(19 + lx, 17, R['skin'][2]); c.px(20 + lx, 20, R['skin'][3]); c.px(22 + lx, 22, R['skin'][2])
+        c.px(19 + lx, 7, R['skin'][3]); c.px(21 + lx, 7, R['skin'][3])
+        for k in range(4): c.px(26 + k + lx, 10 + k, R[hk][4])
     # trarilonko: red band with yellow stepped pattern
     for x in range(17, 33):
         y = 8 + (1 if x > 26 else 0)
@@ -119,6 +127,46 @@ def millaray(fr):
     c.inner_lines({('kupam', 'hairB'), ('face', 'hair'), ('neck', 'kupam'), ('arm', 'kupam'), ('fore', 'arm'), ('hand', 'fore'), ('silver', 'kupam')})
     c.outline(); return finish(c)
 
+def kuku(fr):
+    # the grandmother: a little shorter and stooped, silver-white braid, deep purple küpam under a dark
+    # ükülla shawl pinned with a silver tupu, red trariwe, hands folded in front. Same light and outline as the heroes.
+    yp.W, yp.H = W, H; c = Canvas(); lx = 0; nod = 1 if fr in (1, 3) else 0
+    legs(c, 0, True)
+    blob(c, R['kpurple'], lambda d: d.polygon([(19, 28), (31, 28), (34, 42), (35, 66), (17, 66), (16, 42)], fill=1), bulge=0.8, lift=0.06, name='kupam')
+    for x0, x1 in [(22, 21), (29, 31)]:
+        for y in range(46, 66):
+            t = (y - 46) / 20; x = int(round(x0 + (x1 - x0) * t))
+            if c.part[y, x] == 'kupam': c.px(x, y, R['kpurple'][1]); c.px(x - 1, y, R['kpurple'][4])
+    for x in range(16, 35):                                            # red trariwe with a white stepped line
+        for k, col in enumerate((R['red'][4], R['red'][3], R['red'][2])):
+            if c.part[44 + k, x] == 'kupam': c.px(x, 44 + k, col)
+        if (x // 2) % 2 and c.part[45, x] == 'kupam': c.px(x, 45, R['white'][3])
+    # long silver braid down the back, tied with red wool at the end
+    for y in range(12, 50):
+        x = 31 + min(3, (y - 12) // 3) + (1 if 28 < y < 40 else 0)
+        for dx in (-1, 0, 1, 2):
+            ph = (y + dx * 2) % 4      # plaited: diagonal light and shadow
+            col = R['grey'][5] if ph == 0 else R['grey'][4] if ph == 1 else R['grey'][3] if ph == 2 else R['grey'][1]
+            if dx == 2: col = R['grey'][1]
+            c.px(x + dx, y, col); c.part[y, x + dx] = 'braid'; c.a[y, x + dx] = 1
+    for y in range(45, 50):
+        for dx in (-1, 0, 1, 2): c.px(35 + dx, y, R['red'][4 - (dx > 0) - (dx > 1)])
+    for dx in (0, 1): c.px(35 + dx, 50, R['grey'][3]); c.part[50, 35 + dx] = 'braid'; c.a[50, 35 + dx] = 1
+    # shawl over the shoulders and back, falling to the waist
+    blob(c, R['shawl'], lambda d: d.polygon([(18, 26), (32, 26), (36, 32), (35, 42), (27, 40), (21, 38), (16, 36), (16, 30)], fill=1), bulge=0.9, lift=0.12, name='shawl')
+    for x in range(17, 35, 2): c.px(x, 38 + (x > 26) * 2 - (x > 30), R['shawl'][5])   # fringe glint
+    head(c, (nod and 1) or 0, False, hk='grey', old=True)
+    # tupu: the big silver pin that closes the shawl
+    m = c.mask(lambda d: d.ellipse([18, 29, 23, 34], fill=1)); c.shade(m, R['silver'], bulge=1.1, lift=0.25, name='tupu')
+    c.px(20, 30, R['silver'][5]); c.px(22, 28, R['silver'][3]); c.px(23, 27, R['silver'][2])
+    for (x, y) in [(19, 35), (19, 37), (20, 39)]: c.px(x, y, R['silver'][3])
+    # arms bent, hands folded together at the waist
+    taper(c, [(25, 30), (22, 37), (19, 41)], 6, 5, R['kpurple'], lift=0.14, name='arm', bulge=1.0)
+    blob(c, R['skin'], lambda d: d.ellipse([14, 38, 21, 44], fill=1), bulge=1.1, lift=0.25, name='hand')
+    c.px(16, 40, R['skin'][2]); c.px(18, 41, R['skin'][2])
+    c.inner_lines({('kupam', 'hairB'), ('face', 'hair'), ('neck', 'shawl'), ('shawl', 'kupam'), ('arm', 'shawl'), ('hand', 'arm'), ('tupu', 'shawl'), ('braid', 'shawl'), ('braid', 'kupam')})
+    c.outline(); return finish(c)
+
 def finish(c):
     rim = np.array((190, 210, 255))
     for y in range(H):
@@ -131,7 +179,7 @@ def finish(c):
 if __name__ == '__main__':
     from PIL import Image
     here = os.path.dirname(os.path.abspath(__file__)); out = {}
-    for name, fn in [('llanka', llanka), ('millaray', millaray)]:
+    for name, fn in [('llanka', llanka), ('millaray', millaray), ('kuku', kuku)]:
         frames = [fn(f) for f in range(4)]
         p, f = yp.encode(frames); out[name] = {'pal': p, 'f': f}
         strip = np.concatenate(frames, axis=1); Image.fromarray(strip).resize((strip.shape[1] * 4, strip.shape[0] * 4), Image.NEAREST).save('/home/claude/hero_%s.png' % name)
