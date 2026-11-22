@@ -293,7 +293,7 @@ function withFeet(src,fr){
   return cv}
 function enemyCanvas(t,size,fr){
   const key='s3:'+t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];
-  const raw=enemyCanvasRaw(t,size,fr),sp=typeof SPR2!=='undefined'&&SPR2[t]?((size>=40&&SPR2[t+'@b'])||SPR2[t]):null;return ECACHE[key]=(sp&&sp.hand)?raw:shade3d(raw)}
+  const raw=enemyCanvasRaw(t,size,fr),sp=typeof SPR2!=='undefined'&&SPR2[t]?((size>=40&&SPR2[t+'@b'])||SPR2[t]):null;return ECACHE[key]=(sp&&sp.hand)?raw:repaintSmall(raw,{amp:.9,capG:Math.max(4,Math.min(raw.width,raw.height)/3.4),capP:4})}
 function enemyCanvasRaw(t,size,fr){
   const key=t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];
   if(typeof SPR2!=='undefined'&&SPR2[t]){const d=SPR2[t],hb=size>=40&&SPR2[t+'@b'],k=hb?1:size>=40?(d.big||1):1,base=hb?tplCanvas(t+'@b',fr,1):tplCanvas(t,fr,k);

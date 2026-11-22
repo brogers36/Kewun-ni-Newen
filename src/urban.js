@@ -90,11 +90,11 @@ function facadeShade(cvs,ox,oy,W0,H0,top,house){
 }
 function lampCanvas(){const k='lamp';if(UCACHE[k])return UCACHE[k];const [cvs,c]=mk(10,34);
   R(c,4,6,2,26,'#3a3c44');R(c,4,6,1,26,'#5a5c66');R(c,2,30,6,3,'#2a2c34');R(c,3,30,4,1,'#4a4c56');
-  R(c,2,1,6,5,'#4a4c56');R(c,3,2,4,3,'#ffe9a0');R(c,3,2,2,1,'#fff8d8');R(c,1,0,8,1,'#2a2c34');outline(cvs,'#101014');return UCACHE[k]=shade3d(cvs,{str:1.3,cap:4,dith:0.04,k:.8})}
+  R(c,2,1,6,5,'#4a4c56');R(c,3,2,4,3,'#ffe9a0');R(c,3,2,2,1,'#fff8d8');R(c,1,0,8,1,'#2a2c34');outline(cvs,'#101014');return UCACHE[k]=repaintSmall(cvs,{amp:.8})}
 function benchCanvas(){const k='bench';if(UCACHE[k])return UCACHE[k];const [cvs,c]=mk(16,10);
-  R(c,1,0,14,2,'#9a6a3a');R(c,1,3,14,3,'#b07a44');R(c,1,3,14,1,'#c89058');R(c,2,6,2,4,'#3a3a40');R(c,12,6,2,4,'#3a3a40');R(c,1,2,14,1,'#5a3a1e');outline(cvs,'#1a1410');return UCACHE[k]=shade3d(cvs,{str:1.3,cap:4,dith:0.04,k:.8})}
+  R(c,1,0,14,2,'#9a6a3a');R(c,1,3,14,3,'#b07a44');R(c,1,3,14,1,'#c89058');R(c,2,6,2,4,'#3a3a40');R(c,12,6,2,4,'#3a3a40');R(c,1,2,14,1,'#5a3a1e');outline(cvs,'#1a1410');return UCACHE[k]=repaintSmall(cvs,{amp:.8})}
 function railCanvas(){const k='rail';if(UCACHE[k])return UCACHE[k];const [cvs,c]=mk(16,12);
-  R(c,0,3,16,1,'#2c2c34');R(c,0,9,16,1,'#2c2c34');for(let x=1;x<16;x+=3){R(c,x,2,1,9,'#3c3c46');R(c,x,1,1,1,'#d8b040')}outline(cvs,'#101014');return UCACHE[k]=shade3d(cvs,{str:1.3,cap:4,dith:0.04,k:.8})}
+  R(c,0,3,16,1,'#2c2c34');R(c,0,9,16,1,'#2c2c34');for(let x=1;x<16;x+=3){R(c,x,2,1,9,'#3c3c46');R(c,x,1,1,1,'#d8b040')}outline(cvs,'#101014');return UCACHE[k]=repaintSmall(cvs,{amp:.8})}
 function vehicleCanvas(n,seed){const k='veh'+n+':'+seed;if(UCACHE[k])return UCACHE[k];
   const W0=n*16,[cvs,c]=mk(W0,22),bus=n>=3,flip=h2(seed,1,77)<.5;
   if(bus){R(c,1,2,W0-2,16,'#f0c030');R(c,1,2,W0-2,2,'#f8dc70');R(c,1,16,W0-2,2,'#c08820');R(c,3,5,W0-6,6,'#6a8aa0');for(let x=4;x<W0-4;x+=8)R(c,x+6,5,1,6,'#f0c030');R(c,3,5,W0-6,1,'#c0d8e8');
@@ -103,17 +103,17 @@ function vehicleCanvas(n,seed){const k='veh'+n+':'+seed;if(UCACHE[k])return UCAC
     R(c,2,6,W0-4,10,col);R(c,6,2,W0-12,5,col);R(c,6,2,W0-12,1,shade(col,1.3));R(c,8,3,W0-16,4,'#7a9ab0');R(c,8,3,W0-16,1,'#d0e4f0');R(c,2,14,W0-4,2,shade(col,.7));
     R(c,flip?2:W0-5,9,3,2,'#f8f0c0');R(c,flip?W0-5:2,9,3,2,'#e04040')}
   R(c,4,17,6,4,'#1a1a1e');R(c,W0-10,17,6,4,'#1a1a1e');R(c,6,18,2,2,'#6a6a70');R(c,W0-8,18,2,2,'#6a6a70');
-  outline(cvs,'#101014');return UCACHE[k]=shade3d(cvs,{str:1.3,cap:4,dith:0.04,k:.8})}
+  outline(cvs,'#101014');return UCACHE[k]=repaintSmall(cvs,{amp:.8})}
 function stallCanvas(seed){const k='stall'+seed;if(UCACHE[k])return UCACHE[k];const [cvs,c]=mk(20,26),aw=UPAL.aw[seed%UPAL.aw.length];
   R(c,2,14,16,8,'#8a6a3a');R(c,2,14,16,1,'#b08a50');R(c,3,22,2,4,'#5a3a1e');R(c,15,22,2,4,'#5a3a1e');
   for(let x=0;x<20;x++)R(c,x,4,1,5,((x>>1)&1)?aw[0]:aw[1]);R(c,0,9,20,1,shade(aw[0],.6));R(c,1,2,18,2,aw[0]);R(c,1,9,1,13,'#5a3a1e');R(c,18,9,1,13,'#5a3a1e');
   const fr=[['#e03838','#38a040'],['#f0a020','#8a4a20'],['#48c048','#f0e040']][seed%3];
   R(c,4,11,4,3,fr[0]);R(c,9,11,4,3,fr[1]);R(c,14,11,3,3,fr[0]);R(c,5,11,1,1,shade(fr[0],1.4));R(c,10,11,1,1,shade(fr[1],1.4));
-  outline(cvs,'#1a1410');return UCACHE[k]=shade3d(cvs,{str:1.3,cap:4,dith:0.04,k:.8})}
+  outline(cvs,'#1a1410');return UCACHE[k]=repaintSmall(cvs,{amp:.8})}
 function shelterCanvas(){const k='shelter';if(UCACHE[k])return UCACHE[k];const [cvs,c]=mk(32,26);
   R(c,0,2,32,4,'#3a5a7a');R(c,0,2,32,1,'#6a8aa8');R(c,2,6,1,18,'#3a3c44');R(c,29,6,1,18,'#3a3c44');R(c,3,6,26,10,'#a8c4d8');R(c,3,6,26,1,'#e0f0ff');
   R(c,4,8,10,3,'#f0f0ea');R(c,5,9,8,1,'#4a4a52');R(c,16,8,12,6,'#e8a030');R(c,17,9,10,1,'#3a3a44');R(c,17,11,6,1,'#3a3a44');
-  R(c,4,17,24,2,'#8a6a3a');R(c,4,19,24,1,'#5a3a1e');R(c,5,20,2,4,'#3a3a40');R(c,25,20,2,4,'#3a3a40');outline(cvs,'#101418');return UCACHE[k]=shade3d(cvs,{str:1.3,cap:4,dith:0.04,k:.8})}
+  R(c,4,17,24,2,'#8a6a3a');R(c,4,19,24,1,'#5a3a1e');R(c,5,20,2,4,'#3a3a40');R(c,25,20,2,4,'#3a3a40');outline(cvs,'#101418');return UCACHE[k]=repaintSmall(cvs,{amp:.8})}
 /* night glow for lampposts, drawn after the day tint */
 function urbanNight(c,cx,cy){
   if(!M||!M.urban||typeof dayPhase!=='function')return;const d=dayPhase();if(!d.dark)return;

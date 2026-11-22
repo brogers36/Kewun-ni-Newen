@@ -2358,8 +2358,15 @@ if os.path.exists(_kp):
 import repaint as _rp, yewen_paint as _yp
 _BOSSES=['trelke','cherrufe','kaleuche','witranalwe','chinifilu','piwuchen','wallipen','trawko','walichu','chadikura','epunamun','kalku',
          'ngoyman1','ngoyman2','ngoyman3','ngoyman4','ngoyman5','llufu1','llufu2','llufu3','llufu4','llufu5']
-for _n in _BOSSES:
+_SKIP={'kawellu','waka','ofisa','luan','choyke','yewen','wenangkun','illkun','llukalfe','ayentufe','profe','ngen_lafken','ngen_mawida','ngen_pewen','ngen_kuruf','ngen_lelfun'}
+_ALL=_BOSSES+[n for n in list(D) if '@' not in n and n not in _BOSSES and n not in _SKIP and n in PAL]
+for _n in _ALL:
     if _n not in D or _n not in PAL:continue
+    if _n not in _BOSSES:
+        _g=HI.get(_n,{}).get('glow','')
+        _src=(lambda f:scale2x(f)) if D[_n].get('big',1)==2 else (lambda f:f)
+        _fr=[_rp.repaint(_src(f),PAL[_n],_g,D[_n].get('aura') or None) for f in D[_n]['f']]
+        _p,_f=_yp.encode(_fr);D[_n+'@b']={'pal':_p,'f':_f,'big':1,'aura':D[_n].get('aura',0),'hand':1};continue
     _g=HI.get(_n,{}).get('glow','')
     _fr=[_rp.repaint(scale2x(f),PAL[_n],_g,D[_n].get('aura') or None) for f in D[_n]['f']]
     _p,_f=_yp.encode(_fr)
