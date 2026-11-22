@@ -11,7 +11,13 @@ function engage(e){
 function relabel(){const cnt={},seen={};B.en.forEach(e=>cnt[e.t]=(cnt[e.t]||0)+1);
   B.en.forEach(e=>{seen[e.t]=(seen[e.t]||0)+1;if(e.label)return;e.label=ET[e.t].name+(cnt[e.t]>1||ET[e.t].name==='laftrache'&&B.en.length>1?' '+'ABCDE'[seen[e.t]-1]:'')})}
 function progK(){const F=S.flags||{};return ['ngen','ngen2','ngen3','ngen4','ngen5'].filter(k=>F[k]).length+(F.won?1:0)}
-function mkEnemy(t){const k=progK(),bs=ET[t].boss?.5:1,hp0=Math.round(ET[t].hp*(1+.07*k*bs));return{t,hp:hp0,max:hp0,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'?1:0,armor:ET[t].armor?1:0,burn:ET[t].fire?1:0,hidden:0,dreaming:ET[t].dream?1:0,dreamT:0,down:0,seals:ET[t].seals?ET[t].seals.slice():null}}
+const YEWEN_KIN=['wenangkun','illkun','llukalfe','ayentufe','profe'];
+const YEWEN_CALL={wenangkun:['la pena que se queda callada. Despiértala (nepe-).','the sorrow that keeps quiet. Wake it (nepe-).'],
+  illkun:['la rabia de que te hagan callar. Arde: enfríala (wütre-) o cálmala (llako-).','the rage at being silenced. It burns: cool it (wütre-) or calm it (llako-).'],
+  llukalfe:['el miedo que se agranda. Es altísimo: hazlo retroceder (wüñotreka-).','the fear that grows bigger. It towers: make it step back (wüñotreka-).'],
+  ayentufe:['la burla del patio. Se esconde entre la gente: hazlo salir (tripa-).','the schoolyard mockery. It hides in the crowd: make it come out (tripa-).'],
+  profe:['la escuela que prohibió la lengua. Su regla es dura como piedra: quiébrala (trafo-).','the school that banned the language. Its rule is hard as stone: break it (trafo-).']};
+function mkEnemy(t){const k=progK(),bs=ET[t].boss?.5:1,hp0=Math.round(ET[t].hp*(1+.07*k*bs));return{t,hp:hp0,max:hp0,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'||ET[t].tower?1:0,armor:ET[t].armor?1:0,burn:ET[t].fire?1:0,hidden:ET[t].hide?1:0,dreaming:ET[t].dream?1:0,dreamT:0,down:0,seals:ET[t].seals?ET[t].seals.slice():null}}
 function startBattle(party,o){
   let snap=null;try{snap=document.createElement('canvas');snap.width=LW;snap.height=LH;const sg=snap.getContext('2d');sg.imageSmoothingEnabled=false;sg.drawImage(cv,0,0,LW,LH)}catch(e){snap=null}
   if(typeof stopAmb==='function')stopAmb();
@@ -361,9 +367,29 @@ function enemyPhase(){
       if(!e.parry&&Math.random()<.3){e.parry=1;fx.push('El Epunamun cruza sus dos lanzas y espera tu golpe.');fxe.push('The Epunamun crosses his two spears and waits for your blow.');continue}
       hitP(e,.85);hitP(e,.85,{es:' gira y golpea con la segunda lanza',en:' spins and strikes with the second spear'});continue}
     if(e.t==='yewen'){
-      if(B.turn>0&&B.turn%4===1&&(S.sp||0)>0){S.sp--;fx.push('El Yewen susurra desde la capucha: «lo dices mal, mejor cállate». Las palabras se te atascan: pierdes un punto de newen (✦).');fxe.push('The Yewen whispers from inside the hood: "you say it wrong, better stay quiet". The words stick in your throat: you lose one newen point (✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')});continue}
-      if(B.turn>0&&B.turn%4===3){hitP(e,1.9,{es:' te mira por fin, y la mirada pesa como una mochila de piedras: se te hunden los hombros',en:' finally looks at you, and the look weighs like a backpack of stones: your shoulders sink'});hitsFx.push(()=>B.shake=8);continue}
+      // it calls up what shame is made of: sorrow, anger, fear, mockery, the school that forbade the language
+      const mins=aliveE().filter(x=>YEWEN_KIN.includes(x.t)).length;
+      if((B.turn===0||B.turn%3===0)&&mins<2&&B.en.length<6){
+        const have=new Set(aliveE().map(x=>x.t)),pool=YEWEN_KIN.filter(t=>!have.has(t)),t=pool[rnd(pool.length)]||YEWEN_KIN[rnd(5)];
+        const ne=mkEnemy(t);B.en.push(ne);relabel();const L2=YEWEN_CALL[t];
+        fx.push('El Yewen abre la capucha y de adentro sale '+ne.label+': '+L2[0]);fxe.push('The Yewen opens its hood and out comes '+ne.label+': '+L2[1]);hitsFx.push(()=>{sfx('bad');B.shake=6});continue}
+      if(B.turn>0&&B.turn%4===1&&(S.sp||0)>0){S.sp--;hitP(e,1.0,{es:' susurra desde la capucha: «lo dices mal, mejor cállate». Las palabras se te atascan (−✦)',en:' whispers from inside the hood: "you say it wrong, better stay quiet". The words stick in your throat (−✦)'});hitsFx.push(()=>pop(60,30,'−✦','#c0b8ff'));continue}
+      if(B.turn>0&&B.turn%4===3){hitP(e,2.4,{es:' te mira por fin, y la mirada pesa como una mochila de piedras: se te hunden los hombros',en:' finally looks at you, and the look weighs like a backpack of stones: your shoulders sink'});hitsFx.push(()=>B.shake=10);continue}
+      if(Math.random()<.3){hitP(e,1.5,{es:' descarga el bastón del candado contra ti',en:' brings the padlock staff down on you'});hitsFx.push(()=>B.shake=7);continue}
       if(!S.curse&&Math.random()<.25){S.curse=1;fx.push('El Yewen se ríe bajito, sin boca. Te arde la cara: quedas con maldición (fuerza −2). El lawen la quita.');fxe.push('The Yewen laughs quietly, without a mouth. Your face burns: you are cursed (strength −2). Lawen lifts it.');hitsFx.push(()=>sfx('bad'));continue}
+      hitP(e,1.15);continue}
+    if(e.t==='wenangkun'){
+      if((S.sp||0)>0&&Math.random()<.3){S.sp--;fx.push(e.label+' llora en silencio, y la pena se te contagia: pierdes un punto de newen (✦).');fxe.push(e.label+' weeps in silence, and the sorrow spreads to you: you lose one newen point (✦).');hitsFx.push(()=>pop(60,30,'−✦','#9ad0ff'));continue}
+      hitP(e,1,{es:' te deja caer encima su lluvia gris',en:' lets its grey rain fall on you'});continue}
+    if(e.t==='llukalfe'){
+      if(e.tall&&Math.random()<.4){hitP(e,1.6,{es:' se inclina sobre ti, enorme, y te aplasta con su sombra',en:' leans over you, huge, and crushes you with its shadow'});continue}
+      hitP(e);continue}
+    if(e.t==='ayentufe'){
+      if(!e.hidden&&e.hideT>0){e.hideT--;if(e.hideT<=0){e.hidden=1;fx.push(e.label+' se vuelve a esconder entre la gente, riéndose.');fxe.push(e.label+' hides in the crowd again, laughing.');continue}}
+      hitP(e,1,{es:' te apunta y se ríe: «¡habla bien, indio!»',en:' points at you and laughs: "talk properly!"'});continue}
+    if(e.t==='profe'){
+      if(Math.random()<.35){hitP(e,1.7,{es:' te golpea la mano con la regla: «¡En esta sala se habla castellano!»',en:' cracks the ruler across your hand: "In this classroom we speak Spanish!"'});hitsFx.push(()=>B.shake=6);continue}
+      if(!S.curse&&Math.random()<.3){S.curse=1;fx.push(e.label+' te manda al rincón con las orejas rojas: quedas con maldición (fuerza −2). El lawen la quita.');fxe.push(e.label+' sends you to the corner with burning ears: you are cursed (strength −2). Lawen lifts it.');hitsFx.push(()=>sfx('bad'));continue}
       hitP(e);continue}
     if(e.t==='kalku'){
       const ac=aliveE().filter(x=>x.t==='anchi').length;
@@ -430,7 +456,7 @@ function ngoyStage(n){
   say(ls,battleMenu);
 }
 function bossSweep(){
-  if((B.o.final||B.o.chain==='llufu')&&aliveE().length&&!aliveE().some(x=>ET[x.t].boss)){
+  if((B.o.final||B.o.chain==='llufu'||B.o.sflag==='yewen_won')&&aliveE().length&&!aliveE().some(x=>ET[x.t].boss)){
     for(const x of aliveE()){x.hp=0;x.pend=0;x.dead=true;x.fadeT=20}}}
 
 /* La voz del ngen: pregunta final (no imperativa) antes de que caiga un jefe.

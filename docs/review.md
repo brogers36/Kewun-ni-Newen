@@ -336,3 +336,12 @@ Cada uno de los cinco lof tiene ahora una **machi** junto a su **rewe** (tronco 
 - NPC nuevos con mezcla castellano/mapudungun (deliberada, registro urbano): casera de la feria (poñü, kofke, kachilla, "kiñe kilo, epu kilo"; **manshana** como préstamo), chofer de micro (**"Amuayu!"** 'vamos los dos'; **kareta** como préstamo), estudiante (**kimün**), transeúnte (**"Pewkayal!"** ⚠ confirmar como 'nos vemos').
 - Las cinco tareas de Santiago siguen igual; al completarlas aparece el Yewen en la cancha y al vencerlo se termina Santiago.
 - (Nov 21) Corrección de Brandon: 'voy aprendiendo' = **kimnierpuken** (antes 'kimnieken'), en el wentru de la población de Santiago: "Küdawkülen. Welu pichin pichin kimnierpuken."
+
+### Tanda 15b · las criaturas del Yewen (Nov 21)
+El Yewen ahora invoca (de a una, hasta dos a la vez) cinco criaturas. Nombres a revisar:
+- **weñangkün** 'pena, tristeza' (se despierta con nepe-).
+- **illkun** 'rabia, enojo' (arde: wütre- / llako-).
+- **llükalfe** 'el que hace tener miedo, el que intimida' ⚠ llüka-l-fe (causativo -l- + agentivo -fe): ¿forma aceptable? ¿o prefieres otra?
+- **ayentufe** 'el que se burla' (el bullying) ⚠ ayen-tu-fe a partir de ayen- 'reír': ¿se entiende como burlarse de alguien?
+- **profe del «no»** (la escuela que prohibía el mapudungun; nombre en castellano a propósito, habla solo castellano: «¡En esta sala se habla castellano!»). ⚠ ¿prefieres un nombre en mapudungun (p. ej. kimeltuchefe)?
+- La burla del ayentufe es «¡habla bien, indio!» (ES) / "talk properly!" (EN): insulto histórico real, puesto a propósito; ⚠ dime si prefieres suavizarlo.
