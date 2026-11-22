@@ -128,8 +128,10 @@ function renderEndCut(){
     for(let k=0;k<6;k++){const x=LW*(.15+k*.14);c.fillStyle='rgba(255,236,180,'+(a*.07)+')';c.beginPath();c.moveTo(x,0);c.lineTo(x+16,0);c.lineTo(x-30,LH);c.lineTo(x-50,LH);c.closePath();c.fill()}
     caWords(['mari mari','chaltu may','küpange','newen','kümey','pewkayal','mapu','lafken','mawida','pewen','kürüf','kimün'],frame,150,14,'255,244,200',11)}
   else if(i===1){ // the five ngen bow together
-    c.drawImage(landLayer('gold'),0,0);const names=[undefined,'mawida','pewen','kuruf','lelfun'];
-    for(let k=0;k<5;k++){const x=LW*(.12+k*.19),bow=Math.max(0,Math.sin((frame-k*10)/40))>.9?3:0,bob=Math.sin(frame/22+k)*2;
+    c.drawImage(landLayer('gold'),0,0);const names=[undefined,'mawida','pewen','kuruf','lelfun'],epu=S&&S.flags.epu_won,sp=epu?.155:.19,x0=epu?.09:.12;
+    if(epu){const x=LW*(x0+5*sp),ec=enemyCanvas('epunamun',ET.epunamun.bs,Math.floor(frame/20)%2),bow=Math.max(0,Math.sin((frame-50)/40))>.9?3:0;
+      for(const [r,al] of [[30,.08],[20,.12]])ell(c,x,150,r,r*.4,'rgba(255,120,100,'+al+')');ell(c,x,167,ec.width*.35,3,'rgba(0,0,0,.25)');c.drawImage(ec,Math.round(x-ec.width/2),167-ec.height+bow)}
+    for(let k=0;k<5;k++){const x=LW*(x0+k*sp),bow=Math.max(0,Math.sin((frame-k*10)/40))>.9?3:0,bob=Math.sin(frame/22+k)*2;
       for(const [r,al] of [[30,.08],[20,.12]])ell(c,x,150,r,r*.4,'rgba(255,240,190,'+al+')');drawNgen(c,x,166+bob+bow,1.8,frame+k*7,names[k])}
     for(let k=0;k<18;k++){const a2=((frame*.5+k*29)%160)/160;ell(c,20+(k*53)%(LW-30),160-a2*130,1.5,1.5,'rgba(255,240,180,'+(1-a2)+')')}
     for(let k=0;k<3;k++){const bx=((frame*.3+k*90)%(LW+40))-20,by=30+k*12;condor(c,bx,by,Math.sin(frame/12+k))}}

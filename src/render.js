@@ -765,13 +765,14 @@ function renderBattle(){
   if(B.red>0){c.fillStyle='rgba(255,0,0,'+(B.red/30)+')';c.fillRect(0,0,LW,LH);B.red--}
   if(B.ngenA&&!B.ngenA.done&&B.ngenA.kind==='final'){const A=B.ngenA;A.t++;
     const NG=[[undefined,'120,220,255'],['mawida','120,255,150'],['pewen','255,200,110'],['kuruf','225,240,255'],['lelfun','255,230,120']];
-    const SEG=68,T0=24,e=A.e;
+    if(S.flags.epu_won)NG.push(['epunamun','255,48,40']);   // the Epunamun joins the five ngen, with red fire
+    const SEG=68,T0=24,e=A.e,NS=NG.length;
     const seg=Math.floor((A.t-T0)/SEG),st=(A.t-T0)%SEG;
-    const dark=Math.min(1,A.t/30),SH=T0+SEG*5;
+    const dark=Math.min(1,A.t/30),SH=T0+SEG*NS;
     c.fillStyle='rgba(0,0,14,'+(.55*dark*(A.t>SH+55?Math.max(0,(SH+85-A.t)/30):1)).toFixed(2)+')';c.fillRect(0,0,LW,LH);
     const bx=e.px||72,by=e.py||100;
-    if(A.t>=T0&&seg<5){
-      const vr=NG[seg][0],col=NG[seg][1];
+    if(A.t>=T0&&seg<NS){
+      const vr=NG[seg][0],col=NG[seg][1],epu=vr==='epunamun';
       const nx=Math.round(LW*.68),ny=170;
       const ap=Math.min(1,st/14),strike=st>=26&&st<50;
       if(st===1)sfx('cast');
@@ -782,8 +783,10 @@ function renderBattle(){
       c.save();c.beginPath();c.rect(0,0,LW,ny+9);c.clip();
       c.globalAlpha=ap*(st>58?Math.max(0,(SEG-st)/10):1);
       c.translate(nx,ny+rise);const s2=1.08+ap*.3+(strike?.1:0);c.scale(s2,s2);
-      drawNgen(c,0,0,1,frame,vr);c.restore();c.globalAlpha=1;
-      {const eyY=ny+rise-80*s2,mY=ny+rise-71*s2,ex1=nx-3*s2,ex2=nx+3*s2;
+      if(epu){const ec=enemyCanvas('epunamun',ET.epunamun.bs,Math.floor(frame/16)%2);ell(c,0,4,ec.width*.38,4,'rgba(255,60,40,.25)');c.drawImage(ec,-Math.round(ec.width/2),-ec.height+6)}
+      else drawNgen(c,0,0,1,frame,vr);c.restore();c.globalAlpha=1;
+      {const eh=epu?enemyCanvas('epunamun',ET.epunamun.bs,0).height:0;
+       const eyY=epu?ny+rise+(6-eh*.80)*s2:ny+rise-80*s2,mY=epu?ny+rise+(6-eh*.70)*s2:ny+rise-71*s2,ex1=nx-3*s2,ex2=nx+3*s2;
        if(st>=18&&st<26){const gl=(st-18)/8;  // the eyes kindle before the blast
          ell(c,ex1,eyY,1.5+gl*1.5,1.5+gl*1.5,'rgba('+col+','+(.9*gl).toFixed(2)+')');
          ell(c,ex2,eyY,1.5+gl*1.5,1.5+gl*1.5,'rgba('+col+','+(.9*gl).toFixed(2)+')')}

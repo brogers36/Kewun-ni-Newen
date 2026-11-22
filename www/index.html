@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='22c3b8e-202611220806';
+window.KEWUN_BUILD='5811e99-202611220815';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -5082,6 +5082,7 @@ function victory(){
   const wn=(B.o.boss||B.o.final||B.o.chain)?'win':'winS';const after=SONGS[wn];after.after=()=>mapSong();playSong(wn);
   const NGN={lafken:'Ngen-lafken',mawida:'Ngen-mawida',pewen:'Ngen-pewen',kuruf:'Ngen-kürüf',lelfun:'Ngen-lelfün'};
   const ls=[(B.ngenA&&B.ngenA.kind==='final')?N('¡Los cinco ngen del mapu responden a la vez! Mar, monte, pewen, viento y pampa descargan su newen, uno tras otro... y Ti Fütra Ngoyman se quiebra en mil pedazos que la luz deshace.','The five ngen of the land answer as one! Sea, forest, pewen, wind and plain unleash their newen, one after another... and Ti Fütra Ngoyman shatters into a thousand pieces that the light unmakes.'):B.o.chain==='llufu'?N('El ül se cierra como una marea mansa: Kaykayfilu se aquieta y vuelve a su sueño en el fondo del mar.','The ül closes like a gentle tide: Kaykayfilu grows calm and returns to his sleep at the bottom of the sea.'):(B.ngenA&&B.ngenA.v)?N('¡'+NGN[B.ngenA.v]+' despierta y descarga su newen sobre el wekufü: el maligno estalla en mil pedazos que la luz deshace! La tierra respira de nuevo.',NGN[B.ngenA.v]+' awakens and unleashes its newen upon the wekufü: the evil one shatters into a thousand pieces that the light unmakes! The land breathes again.'):(B.en.some(e=>e.t==='epunamun'))?N('El Epunamun baja sus dos lanzas y asiente con las dos caras: la prueba terminó, y la pasaste.','The Epunamun lowers his two spears and nods with both faces: the trial is over, and you have passed it.'):N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
+  if(B.ngenA&&B.ngenA.kind==='final'&&S.flags.epu_won)ls.push(N('Y al final, entre los ngen, el Epunamun: sus dos caras arden en rojo y sus lanzas disparan el último fuego contra el olvido.','And last, among the ngen, the Epunamun: both his faces burn red and his spears fire the last blaze against the forgetting.'));
   while(S.xp>=xpNeed()){S.xp-=xpNeed();S.lvl++;S.baseMax+=HPQ;S.hp+=HPQ;S.baseAtk+=1;if(S.lvl%2===0)S.baseDef+=1;
     const l=L('','Doy kimün!','¡Más conocimiento! Llegas a kimün '+S.lvl+': ganas un corazón y más fuerza.','More knowledge! You reach kimün '+S.lvl+': you gain a heart and more strength.');l.fx=()=>sfx('lvl');ls.push(l)}
   say(ls,()=>endBattle('win'));
@@ -5981,13 +5982,14 @@ function renderBattle(){
   if(B.red>0){c.fillStyle='rgba(255,0,0,'+(B.red/30)+')';c.fillRect(0,0,LW,LH);B.red--}
   if(B.ngenA&&!B.ngenA.done&&B.ngenA.kind==='final'){const A=B.ngenA;A.t++;
     const NG=[[undefined,'120,220,255'],['mawida','120,255,150'],['pewen','255,200,110'],['kuruf','225,240,255'],['lelfun','255,230,120']];
-    const SEG=68,T0=24,e=A.e;
+    if(S.flags.epu_won)NG.push(['epunamun','255,48,40']);   // the Epunamun joins the five ngen, with red fire
+    const SEG=68,T0=24,e=A.e,NS=NG.length;
     const seg=Math.floor((A.t-T0)/SEG),st=(A.t-T0)%SEG;
-    const dark=Math.min(1,A.t/30),SH=T0+SEG*5;
+    const dark=Math.min(1,A.t/30),SH=T0+SEG*NS;
     c.fillStyle='rgba(0,0,14,'+(.55*dark*(A.t>SH+55?Math.max(0,(SH+85-A.t)/30):1)).toFixed(2)+')';c.fillRect(0,0,LW,LH);
     const bx=e.px||72,by=e.py||100;
-    if(A.t>=T0&&seg<5){
-      const vr=NG[seg][0],col=NG[seg][1];
+    if(A.t>=T0&&seg<NS){
+      const vr=NG[seg][0],col=NG[seg][1],epu=vr==='epunamun';
       const nx=Math.round(LW*.68),ny=170;
       const ap=Math.min(1,st/14),strike=st>=26&&st<50;
       if(st===1)sfx('cast');
@@ -5998,8 +6000,10 @@ function renderBattle(){
       c.save();c.beginPath();c.rect(0,0,LW,ny+9);c.clip();
       c.globalAlpha=ap*(st>58?Math.max(0,(SEG-st)/10):1);
       c.translate(nx,ny+rise);const s2=1.08+ap*.3+(strike?.1:0);c.scale(s2,s2);
-      drawNgen(c,0,0,1,frame,vr);c.restore();c.globalAlpha=1;
-      {const eyY=ny+rise-80*s2,mY=ny+rise-71*s2,ex1=nx-3*s2,ex2=nx+3*s2;
+      if(epu){const ec=enemyCanvas('epunamun',ET.epunamun.bs,Math.floor(frame/16)%2);ell(c,0,4,ec.width*.38,4,'rgba(255,60,40,.25)');c.drawImage(ec,-Math.round(ec.width/2),-ec.height+6)}
+      else drawNgen(c,0,0,1,frame,vr);c.restore();c.globalAlpha=1;
+      {const eh=epu?enemyCanvas('epunamun',ET.epunamun.bs,0).height:0;
+       const eyY=epu?ny+rise+(6-eh*.80)*s2:ny+rise-80*s2,mY=epu?ny+rise+(6-eh*.70)*s2:ny+rise-71*s2,ex1=nx-3*s2,ex2=nx+3*s2;
        if(st>=18&&st<26){const gl=(st-18)/8;  // the eyes kindle before the blast
          ell(c,ex1,eyY,1.5+gl*1.5,1.5+gl*1.5,'rgba('+col+','+(.9*gl).toFixed(2)+')');
          ell(c,ex2,eyY,1.5+gl*1.5,1.5+gl*1.5,'rgba('+col+','+(.9*gl).toFixed(2)+')')}
@@ -6266,8 +6270,10 @@ function renderEndCut(){
     for(let k=0;k<6;k++){const x=LW*(.15+k*.14);c.fillStyle='rgba(255,236,180,'+(a*.07)+')';c.beginPath();c.moveTo(x,0);c.lineTo(x+16,0);c.lineTo(x-30,LH);c.lineTo(x-50,LH);c.closePath();c.fill()}
     caWords(['mari mari','chaltu may','küpange','newen','kümey','pewkayal','mapu','lafken','mawida','pewen','kürüf','kimün'],frame,150,14,'255,244,200',11)}
   else if(i===1){ // the five ngen bow together
-    c.drawImage(landLayer('gold'),0,0);const names=[undefined,'mawida','pewen','kuruf','lelfun'];
-    for(let k=0;k<5;k++){const x=LW*(.12+k*.19),bow=Math.max(0,Math.sin((frame-k*10)/40))>.9?3:0,bob=Math.sin(frame/22+k)*2;
+    c.drawImage(landLayer('gold'),0,0);const names=[undefined,'mawida','pewen','kuruf','lelfun'],epu=S&&S.flags.epu_won,sp=epu?.155:.19,x0=epu?.09:.12;
+    if(epu){const x=LW*(x0+5*sp),ec=enemyCanvas('epunamun',ET.epunamun.bs,Math.floor(frame/20)%2),bow=Math.max(0,Math.sin((frame-50)/40))>.9?3:0;
+      for(const [r,al] of [[30,.08],[20,.12]])ell(c,x,150,r,r*.4,'rgba(255,120,100,'+al+')');ell(c,x,167,ec.width*.35,3,'rgba(0,0,0,.25)');c.drawImage(ec,Math.round(x-ec.width/2),167-ec.height+bow)}
+    for(let k=0;k<5;k++){const x=LW*(x0+k*sp),bow=Math.max(0,Math.sin((frame-k*10)/40))>.9?3:0,bob=Math.sin(frame/22+k)*2;
       for(const [r,al] of [[30,.08],[20,.12]])ell(c,x,150,r,r*.4,'rgba(255,240,190,'+al+')');drawNgen(c,x,166+bob+bow,1.8,frame+k*7,names[k])}
     for(let k=0;k<18;k++){const a2=((frame*.5+k*29)%160)/160;ell(c,20+(k*53)%(LW-30),160-a2*130,1.5,1.5,'rgba(255,240,180,'+(1-a2)+')')}
     for(let k=0;k<3;k++){const bx=((frame*.3+k*90)%(LW+40))-20,by=30+k*12;condor(c,bx,by,Math.sin(frame/12+k))}}
