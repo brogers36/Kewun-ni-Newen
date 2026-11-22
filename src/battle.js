@@ -369,7 +369,9 @@ function enemyPhase(){
     if(e.t==='yewen'){
       // it calls up what shame is made of: sorrow, anger, fear, mockery, the school that forbade the language
       const mins=aliveE().filter(x=>YEWEN_KIN.includes(x.t)).length;
-      if((B.turn===0||B.turn%3===0)&&mins<2&&B.en.length<6){
+      // it keeps calling them for the whole fight: on the first turn, every third turn, and every other turn once the field is clear
+      if(mins<2&&(B.turn===0||B.turn%3===0||(mins===0&&B.turn%2===0))){
+        B.en=B.en.filter(x=>!x.dead||x.fadeT>0);   // clear out the fallen so the line never fills up
         const have=new Set(aliveE().map(x=>x.t)),pool=YEWEN_KIN.filter(t=>!have.has(t)),t=pool[rnd(pool.length)]||YEWEN_KIN[rnd(5)];
         const ne=mkEnemy(t);B.en.push(ne);relabel();const L2=YEWEN_CALL[t];
         fx.push('El Yewen abre la capucha y de adentro sale '+ne.label+': '+L2[0]);fxe.push('The Yewen opens its hood and out comes '+ne.label+': '+L2[1]);hitsFx.push(()=>{sfx('bad');B.shake=6});continue}
