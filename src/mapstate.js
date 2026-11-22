@@ -89,18 +89,38 @@ function gpix(gx,gy,f){
     if(h2(gx>>2,gy,f+50)<.012)return[236,246,255];
     return col}
   if(M.urban&&g!=='~'){
-    if(g==='='){ // asphalt with a curb against the sidewalk and a faded centre line
-      const dc=edgeDist(tx,ty,lx,ly,x=>x===','||x==='Y'||x==='.');if(dc<1)return [150,150,156];if(dc<2)return [118,118,124];
-      const n=h2(gx,gy,61);let col=n<.06?[66,66,72]:n>.96?[88,88,94]:[76,76,82];
+    // contact shadow cast by buildings and big props (light from the upper left: shade falls below and to the right)
+    const hAbove=grid[ty-1]&&grid[ty-1][tx]==='h',hLeft=tx>0&&grid[ty][tx-1]==='h';
+    let ao=0;if(hAbove&&ly<10)ao=Math.max(ao,ly<7?.42:(10-ly)/3*.42*(((gx+gy)&1)?1:.6));if(hLeft&&lx<5)ao=Math.max(ao,(5-lx)/5*.26);
+    // broad dappled light, as in the other regions (passing cloud shade and the canopy of street trees)
+    const dp=vnoise(gx,gy,38,81)*.7+vnoise(gx,gy,13,82)*.3,dap=dp>.62?.13:dp>.56&&((gx+gy)&1)?.07:dp<.3?-.06:0;
+    const AO=col=>{let k=1-dap;if(ao)k*=1-ao*(((gx+gy)&1)?1:.85);return [col[0]*k,col[1]*k*.99,Math.min(255,col[2]*k*1.05)]};
+    if(g==='='){ // asphalt: grain, patches, cracks, a lit curb with a shadowed face
+      const dc=edgeDist(tx,ty,lx,ly,x=>x===','||x==='Y'||x==='.'||x==='h');
+      if(dc<1)return AO([168,168,172]);if(dc<2)return AO([120,120,126]);if(dc<3)return AO([62,62,68]);
+      const n=vnoise(gx,gy,10,51)*.6+vnoise(gx,gy,3,52)*.4;
+      let col=ditherRamp([[62,62,69],[70,70,77],[78,78,85],[86,86,92]],n,gx,gy);
+      if(h2(gx,gy,61)<.025)col=[96,96,102];else if(h2(gx,gy,63)<.02)col=[52,52,58];
+      if(h2(gx>>3,gy>>3,64)<.05){const u=gx&7,v=gy&7;if(Math.abs(u-v)<1||(u+v===7&&h2(gx>>3,gy>>3,65)<.5))col=[46,46,52]}
+      if(vnoise(gx,gy,18,66)>.78)col=lerp3(col,[40,40,48],.35);   // oil stains
       const hor=gAt(tx-1,ty)==='='&&gAt(tx+1,ty)==='=',ver=gAt(tx,ty-1)==='='&&gAt(tx,ty+1)==='=';
       const wide=hor&&(gAt(tx,ty-1)==='='||gAt(tx,ty+1)==='='),wideV=ver&&(gAt(tx-1,ty)==='='||gAt(tx+1,ty)==='=');
-      if(wide&&gAt(tx,ty-1)==='='&&gAt(tx,ty+1)!=='='&&ly===0&&(gx%12)<7)col=[214,196,96];
-      else if(wideV&&gAt(tx-1,ty)==='='&&gAt(tx+1,ty)!=='='&&lx===0&&(gy%12)<7)col=[214,196,96];
-      if(h2(gx>>2,gy>>2,62)<.015)col=[58,58,64];return col}
-    if(g===','){const u=gx&15,v=gy&15;if(u===15||v===15)return [158,158,163];if((u===7||v===7)&&((gx>>4)+(gy>>4))%3===0)return [168,168,172];
-      const n=h2(gx,gy,63);if(n<.02)return [164,164,170];if(n>.985)return [190,190,194];return ((gx>>4)+(gy>>4))%2?[177,177,181]:[181,181,185]}
-    if(g==='.'){const n=vnoise(gx,gy,9,41);return ditherRamp([PL.D1,lerp3(PL.D1,PL.D2,.5),PL.D2,lerp3(PL.D2,PL.D3,.5)],n,gx,gy)}
-    if(g==='Y'){const de=edgeDist(tx,ty,lx,ly,x=>x!==null&&x!=='Y');if(de<1)return [120,110,80];return grassPix(gx,gy,PL.G2)}
+      if(wide&&gAt(tx,ty-1)==='='&&gAt(tx,ty+1)!=='='&&ly<=0&&(gx%12)<7)col=h2(gx,gy,67)<.2?[170,154,80]:[216,196,96];
+      else if(wideV&&gAt(tx-1,ty)==='='&&gAt(tx+1,ty)!=='='&&lx<=0&&(gy%12)<7)col=[216,196,96];
+      if(h2(tx,ty,68)<.04){const dx=lx-7.5,dy=ly-7.5,r=Math.hypot(dx,dy);if(r<4.2)col=r>3.3?[44,44,50]:((lx+ly)%2?[92,92,98]:[70,70,76])}  // manhole
+      return AO(col)}
+    if(g===','){ // sidewalk slabs, each slab bevelled and slightly different
+      const u=gx&15,v=gy&15,sx2=gx>>4,sy2=gy>>4,tone=(h2(sx2,sy2,69)-.5)*10;
+      let col;if(u===15||v===15)col=[118,114,112];else if(u===0||v===0)col=[188,184,178];else if(u===14||v===14)col=[138,134,130];
+      else{const n=vnoise(gx,gy,7,70);col=ditherRamp([[150,146,142],[158,154,150],[166,162,157],[174,170,164]],n*.9+.05,gx,gy)}
+      col=[col[0]+tone,col[1]+tone,col[2]+tone];
+      if(h2(gx,gy,71)<.012)col=[150,150,156];
+      if(h2(sx2,sy2,72)<.06&&Math.abs(u-v-2)<1&&u>2&&u<13)col=[132,132,138];   // a crack across some slabs
+      if(gAt(tx,ty+1)==='='&&ly>=14)col=[110,110,116];                          // curb face toward the street
+      return AO(col)}
+    if(g==='.'){const n=vnoise(gx,gy,9,41)*.7+vnoise(gx,gy,3,42)*.3;let col=ditherRamp([PL.D1,lerp3(PL.D1,PL.D2,.5),PL.D2,lerp3(PL.D2,PL.D3,.5),PL.D3],n,gx,gy);
+      if(h2(gx,gy,43)<.02)col=PL.D3;if(h2(gx>>1,gy>>1,44)<.012)col=[150,150,150];return AO(col)}
+    if(g==='Y'){const de=edgeDist(tx,ty,lx,ly,x=>x!==null&&x!=='Y');if(de<1)return [150,140,110];if(de<2)return [98,90,64];return AO(ctGrass?ctGrass(gx,gy):grassPix(gx,gy,PL.G2))}
   }
   if(g==='.'||g==='='){
     const dg=edgeDist(tx,ty,lx,ly,isGrass),thr=1.6+((gx*7+gy*3)%3)*.7;

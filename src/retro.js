@@ -71,8 +71,11 @@ function charSprite(look,dir,fr,tn,ey,hr){
 /* ---------- Chrono Trigger-style characters (CT preview only) ---------- */
 function ctShade(hex,t){const [r,g,b]=hexRGB(hex);const f=v=>Math.max(0,Math.min(255,Math.round(t<0?v*(1+t):v+(255-v)*t)));return 'rgb('+f(r)+','+f(g)+','+f(b)+')'}
 function ctCharSprite(look,dir,fr,seated,tn,ey,hr){
+  const key='S3'+look+dir+fr+(seated?'z':'')+':'+tn+ey+hr;if(CCACHE[key])return CCACHE[key];
+  return CCACHE[key]=shade3d(ctCharSpriteRaw(look,dir,fr,seated,tn,ey,hr),{str:1.3,cap:4,dith:0.03,rim:0,k:.75,mult:1})}
+function ctCharSpriteRaw(look,dir,fr,seated,tn,ey,hr){
   const key='ct'+look+dir+fr+(seated?'z':'')+':'+(tn==null?'-':tn)+(ey==null?'-':ey)+(hr==null?'-':hr);if(CCACHE[key])return CCACHE[key];
-  if(dir==='left')return CCACHE[key]=mirror(ctCharSprite(look,'right',fr,seated,tn,ey,hr));
+  if(dir==='left')return CCACHE[key]=mirror(ctCharSpriteRaw(look,'right',fr,seated,tn,ey,hr));
   const L0=LOOKS[look],pal=Object.assign({},BASEP,L0),F=L0.t==='F',small=!!L0.small;
   if(!L0.fixedSkin){if(tn!=null){pal.s=SKINT[tn][0];pal.S=SKINT[tn][1];pal.q=ctShade(SKINT[tn][0],.1)}if(ey!=null)pal.e=EYET[ey];if(hr!=null&&!L0.h){pal.h=HAIRT[hr][0];pal.H=HAIRT[hr][1]}}
   const W=18,H=small?26:32,g=[...Array(H)].map(()=>Array(W).fill(null));
@@ -156,7 +159,7 @@ const DOG=["................","..oo............",".obbo........o..",".obbboooooo
 const DOG2=["................","..oo............",".obbo.........o.",".obbbooooooooob.",".obebbbbbbbbbbo.","..oobbbbbbbbbo..","....obbbbbbbbo..","...obo.....obo..","...obo....obo...","...oo.....oo...."];
 function dogSprite(fr,dir){const key='dog'+fr+dir;if(CCACHE[key])return CCACHE[key];const [cvs,c]=mk(16,10);
   (fr?DOG2:DOG).forEach((r,y)=>{for(let x=0;x<16;x++){const ch=r[x];if(ch!=='.'){c.fillStyle=ch==='o'?'#181018':ch==='e'?'#000':'#a06838';c.fillRect(x,y,1,1)}}});
-  return CCACHE[key]=dir==='right'?mirror(cvs):cvs}
+  return CCACHE[key]=shade3d(dir==='right'?mirror(cvs):cvs,{str:1.3,cap:3,dith:0.03,rim:0,k:.75,mult:1})}
 function drawPortal(c,x,y){
   const t=frame;
   // light pillar
@@ -182,7 +185,8 @@ function drawNgen(c,x,y,s,t,v){
 
 /* ---------- enemies (designed on a 16-unit grid, cel-shaded at any size) ---------- */
 const ECACHE={};
-function shade3d(src){
+function shade3d(src,o){
+  o=o||{};
   const w=src.width,h=src.height;
   const cv=document.createElement('canvas');cv.width=w;cv.height=h;
   const c=cv.getContext('2d');c.drawImage(src,0,0);
@@ -195,7 +199,7 @@ function shade3d(src){
   for(let y=h-1;y>=0;y--)for(let x=w-1;x>=0;x--){const i=y*w+x;if(!A[i])continue;let m=A[i];
     if(x<w-1)m=Math.min(m,A[i+1]+1);if(y<h-1)m=Math.min(m,A[i+w]+1);
     if(x<w-1&&y<h-1)m=Math.min(m,A[i+w+1]+1.4);if(x>0&&y<h-1)m=Math.min(m,A[i+w-1]+1.4);A[i]=m}
-  const cap=Math.max(5,Math.round(Math.min(w,h)/9)),str=1.9;
+  const cap=o.cap||Math.max(5,Math.round(Math.min(w,h)/9)),str=o.str||1.9,dz=o.dith==null?0.1:o.dith;
   const H=i=>Math.min(A[i],cap);
   for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=y*w+x,q=i*4;if(d[q+3]<=40)continue;
     const r=d[q],g=d[q+1],bl=d[q+2];
@@ -203,12 +207,14 @@ function shade3d(src){
     const hl=H(x>1?i-2:i),hr=H(x<w-2?i+2:i),hu=H(y>1?i-2*w:i),hd=H(y<h-2?i+2*w:i);
     let lu=((hr-hl)*0.55+(hd-hu)*0.95)/4*str;
     lu-=Math.max(0,(y/h-0.5))*1.1*str;
-    const v=lu+((x+y)&1?0.1:-0.1);
+    const v=lu+((x+y)&1?dz:-dz);
     let f=0;
     if(v>0.6)f=0.55;else if(v>0.3)f=0.3;else if(v>0.12)f=0.14;
     else if(v<-0.6)f=-0.45;else if(v<-0.3)f=-0.26;else if(v<-0.12)f=-0.13;
-    if(A[i]<=2&&lu>0.18)f=Math.max(f,0.7);
-    if(f>0){d[q]=Math.min(255,r+(255-r)*f+12*f);d[q+1]=Math.min(255,g+(255-g)*f+10*f);d[q+2]=Math.min(255,bl+(255-bl)*f)}
+    if(o.rim!==0&&A[i]<=2&&lu>0.18)f=Math.max(f,0.7);
+    if(o.k)f*=o.k;
+    if(f>0&&o.mult){d[q]=Math.min(255,r*(1+f)+14*f);d[q+1]=Math.min(255,g*(1+f)+12*f);d[q+2]=Math.min(255,bl*(1+f*.9)+8*f)}
+    else if(f>0){d[q]=Math.min(255,r+(255-r)*f+12*f);d[q+1]=Math.min(255,g+(255-g)*f+10*f);d[q+2]=Math.min(255,bl+(255-bl)*f)}
     else if(f<0){const k=1+f;d[q]=r*k;d[q+1]=g*k*0.96;d[q+2]=Math.min(255,bl*k*1.12)}
   }
   c.putImageData(img,0,0);return cv}
@@ -408,7 +414,7 @@ function tplCanvas(name,fr,k,pad){
   return PCACHE[key]=cvs}
 function animalCanvas(t,fr,dir){
   const key='an'+t+fr+dir;if(PCACHE[key])return PCACHE[key];
-  const base=tplCanvas(t,fr,1);return PCACHE[key]=dir==='right'?mirror(base):base}
+  const base=tplCanvas(t,fr,1);return PCACHE[key]=shade3d(dir==='right'?mirror(base):base,{str:1.3,cap:4,dith:0.04,rim:0,k:.8,mult:1})}
 function reweCanvas(){
   const k='rewe';if(PCACHE[k])return PCACHE[k];const [cvs,c]=mk(18,30);
   R(c,7,6,4,24,'#8a6034');R(c,7,6,1,24,'#a87c48');R(c,10,6,1,24,'#5a3c1e');

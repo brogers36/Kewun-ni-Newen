@@ -357,30 +357,56 @@ function pampaBG(){const [cvs,c]=mk(LW,LH);
   birds(c,[[70,30],[84,26],[96,33]]);
   return cvs}
 function wariaBG(){const [cvs,c]=mk(LW,LH);
-  // hazy Santiago sky: smog beige low, pale blue high
-  bands(c,0,92,['#8fb4d8','#a4c2de','#b8cfe2','#cad8e2','#d8dcd8','#e2ddd0']);
-  // the cordillera, far and snow-capped
-  ridge(c,70,26,5.1,'#a9a6b4');ridge(c,74,20,2.3,'#9a97a8');
-  for(let x=0;x<LW;x+=2){const y=Math.round(70-26*(.55+.3*Math.sin(x*.022+5.1)+.2*Math.sin(x*.062+10.2)+.12*Math.sin(x*.166+15.3)));R(c,x,y,2,4+((x>>3)%3),'#eef0f4');R(c,x,y+4+((x>>3)%3),2,1,'#c8cad4')}
-  // apartment blocks and houses along the horizon
-  const blk=[[0,62,30,'#b9b5b1'],[28,54,22,'#c89ba2'],[48,70,34,'#93b2c9'],[80,58,20,'#d7c47e'],[98,66,40,'#b9b5b1'],[136,50,26,'#9fc3a3'],[160,64,30,'#e4d7b6'],[188,56,18,'#c57d63'],[204,68,36,'#a8a0c8'],[238,60,18,'#d9b48c']];
-  for(const [x,y,w,col] of blk){R(c,x,y,w,98-y,col);R(c,x+w-2,y,2,98-y,'rgba(0,0,0,.18)');R(c,x,y,w,1,'#f0ece4');
-    for(let yy=y+4;yy<94;yy+=8)for(let xx=x+3;xx<x+w-4;xx+=7){R(c,xx,yy,4,4,'#2d2a2a');R(c,xx+1,yy+1,2,2,h2(xx,yy,5)<.15?'#f6d878':'#a9c9e2')}
-    if(h2(x,y,6)<.5){R(c,x+w-8,y-5,4,5,'#3c4650');R(c,x+w-8,y-6,4,1,'#5a6670')}if(h2(x,y,7)<.5){R(c,x+5,y-7,1,7,'#2a2a30');R(c,x+3,y-6,5,1,'#2a2a30')}}
-  // the concrete wall with the mural, then the cancha
-  R(c,0,96,LW,10,'#8e8e98');R(c,0,96,LW,1,'#b2b2bc');R(c,0,105,LW,1,'#5a5a66');
-  const wc=['#3870b8','#38a058','#e0a030','#c84848'];for(let k=0;k<4;k++){R(c,60+k*34,98,22,6,wc[k]);R(c,62+k*34,99,6,2,'#f3e9c8')}
-  R(c,20,97,10,8,'#f3e9c8');R(c,22,99,6,1,'#c84848');R(c,22,101,6,1,'#3870b8');R(c,200,98,16,6,'#3a3836');R(c,202,99,12,1,'#f0e040');
-  // sidewalk strip, then packed earth
-  R(c,0,106,LW,6,'#b4b4ba');for(let x=0;x<LW;x+=16)R(c,x,106,1,6,'#9a9aa0');R(c,0,111,LW,1,'#8a8a90');
-  R(c,0,112,LW,LH-112,'#b89868');
+  // smoggy Santiago sky, cooler and clearer overhead
+  bands(c,0,92,['#7ea6d0','#92b4d8','#a6c2de','#b8cee2','#c8d6e2','#d6dcdc','#e0dccc']);
+  for(const [x,y,sc] of [[44,16,1],[150,10,.8],[214,26,.9],[300,14,1.1],[372,22,.8]]){ell(c,x,y+3,17*sc,5*sc,'#c4d4e4');ell(c,x,y,15*sc,5*sc,'#eef4fa');ell(c,x-6*sc,y-3*sc,7*sc,5*sc,'#f6f9fc');ell(c,x+6*sc,y-2*sc,6*sc,4*sc,'#f6f9fc')}
+  // the cordillera: two ranges, snow caps with a lit left flank
+  ridge(c,66,30,5.1,'#a3a2b4');ridge(c,72,20,2.3,'#8f8ea4');
+  for(let x=0;x<LW;x+=1){const y=Math.round(66-30*(.55+.3*Math.sin(x*.022+5.1)+.2*Math.sin(x*.062+10.2)+.12*Math.sin(x*.166+15.3)));
+    const yl=Math.round(66-30*(.55+.3*Math.sin((x-1)*.022+5.1)+.2*Math.sin((x-1)*.062+10.2)+.12*Math.sin((x-1)*.166+15.3)));
+    if(y>50)continue;const lit=y<yl,sn=Math.round((50-y)*.45)+2;R(c,x,y,1,sn,lit?'#f6f8fc':'#ccd0de');if((x+y)&1)R(c,x,y+sn,1,1,lit?'#dfe2ec':'#b4b8c8')}
+  // haze band between the range and the city
+  for(let y=70;y<86;y++){c.fillStyle='rgba(222,220,206,'+(.05+(y-70)*.012).toFixed(3)+')';c.fillRect(0,y,LW,1)}
+  // a block with depth: lit front, shaded right side, roof edge, dithered facade
+  const block=(x,y,w,base,col,dep,far)=>{
+    const sideW=far?2:5,front=col,side=shadeHex(col,.68),roof=shadeHex(col,1.18);
+    for(let yy=y;yy<base;yy++)for(let xx=x;xx<x+w;xx++){const t=(yy-y)/(base-y);let k=1+(.5-(xx-x)/w)*.10-Math.max(0,t-.5)*.22;
+      if(h2(xx,yy,31)<.06)k-=.05;if(((xx+yy)&1)&&t>.75)k-=.03;R(c,xx,yy,1,1,shadeHex(front,k))}
+    R(c,x+w,y+2,sideW,base-y-2,side);for(let yy=y+2;yy<base;yy+=2)R(c,x+w+((yy>>1)&1),yy,1,1,shadeHex(side,.9));
+    R(c,x,y,w,2,roof);R(c,x+w,y+1,sideW,1,shadeHex(roof,.8));R(c,x,y+2,w,1,shadeHex(front,.78));
+    if(far){for(let yy=y+4;yy<base-2;yy+=5)for(let xx=x+2;xx<x+w-2;xx+=4)R(c,xx,yy,2,2,shadeHex(front,.72));return}
+    for(let yy=y+5;yy<base-5;yy+=8)for(let xx=x+3;xx<x+w-5;xx+=7){
+      const lit=h2(xx,yy,5)<.18;R(c,xx-1,yy-1,6,7,shadeHex(front,.55));
+      R(c,xx,yy,4,5,lit?'#f4d474':'#8fb0c8');R(c,xx,yy,4,1,lit?'#fff2b8':'#d8eaf6');R(c,xx+2,yy+2,2,3,lit?'#d8a840':'#5e7e96');R(c,xx,yy+4,1,1,'#3a4a58');
+      R(c,xx-1,yy+6,6,1,shadeHex(front,1.12));
+      if(((xx>>3)+(yy>>3))%3===0){R(c,xx-2,yy+7,8,1,'#2e2c2e');for(let k=0;k<4;k++)R(c,xx-2+k*2,yy+7,1,2,'#2e2c2e')}}
+    if(h2(x,y,6)<.55){const tx=x+w-10;R(c,tx,y-6,7,6,'#38424c');R(c,tx,y-6,7,1,'#5e6a76');R(c,tx,y-6,2,6,'#4c5864');R(c,tx+1,y-7,5,1,'#4c5864')}
+    if(h2(x,y,7)<.5){const ax=x+4;R(c,ax,y-9,1,9,'#26262c');R(c,ax-3,y-8,7,1,'#26262c');R(c,ax-2,y-6,5,1,'#26262c')}};
+  // far row (hazy, cool)
+  const FARC=['#b4b6c4','#c0b4c0','#aeb8c6','#c4c0b4','#b4c4bc','#c8c2b6','#c2b0ac','#b6b2c8','#c6b8a8'],NEARC=['#b9b5b1','#c89ba2','#93b2c9','#d7c47e','#9fc3a3','#e4d7b6','#c57d63','#a8a0c8','#d9b48c'];
+  for(let x=-4,i=0;x<LW;i++){const w=16+Math.floor(h2(i,3,41)*16);block(x,68+Math.floor(h2(i,4,41)*10),w,98,FARC[i%FARC.length],0,1);x+=w+2+Math.floor(h2(i,5,41)*4)}
+  for(let y=66;y<98;y++){c.fillStyle='rgba(214,214,206,.10)';c.fillRect(0,y,LW,1)}
+  // near row
+  for(let x=0,i=0;x<LW;i++){const w=22+Math.floor(h2(i,6,43)*12);block(x,50+Math.floor(h2(i,7,43)*16),w,98,NEARC[i%NEARC.length],0,0);x+=w+6+Math.floor(h2(i,8,43)*6)}
+  // the concrete wall with murals, lit top, stains, then the sidewalk and the cancha
+  for(let y=96;y<106;y++)for(let x=0;x<LW;x++){let k=1-(y-96)*.02;if(h2(x,y,33)<.07)k-=.06;if(h2(x>>2,y>>1,34)<.05)k-=.08;R(c,x,y,1,1,shadeHex('#8e8e98',k))}
+  R(c,0,96,LW,1,'#c2c2cc');R(c,0,105,LW,1,'#4a4a56');
+  const wc=['#3870b8','#38a058','#e0a030','#c84848'];
+  for(let k=0;k<Math.floor((LW-60)/36);k++){const mx=58+k*36;if(mx>LW*.45&&mx<LW*.45+30)continue;for(let y=98;y<104;y++)for(let x=mx;x<mx+24;x++)R(c,x,y,1,1,shadeHex(wc[k%4],1+(.5-(x-mx)/24)*.2-(y-98)*.03));
+    R(c,mx+2,99,7,2,'#f3e9c8');R(c,mx+12,100,8,1,shadeHex(wc[k%4],.6))}
+  R(c,18,97,12,8,'#e8dcbc');R(c,20,99,8,1,'#c84848');R(c,20,101,8,1,'#3870b8');R(c,200,98,18,6,'#2e2c2e');R(c,202,99,14,1,'#f0e040');R(c,204,101,9,1,'#e03c8c');
+  for(let x=0;x<LW;x++){const y0=106;let k=1;if((x&15)===0)k=.86;R(c,x,y0,1,1,'#dadade');for(let y=y0+1;y<112;y++)R(c,x,y,1,1,shadeHex('#b4b4ba',k-(y-y0)*.015+((x+y)&1?.01:-.01)))}
+  R(c,0,111,LW,1,'#76767e');R(c,0,112,LW,1,'#5a4c3a');
+  R(c,0,113,LW,LH-113,'#b89868');
   for(let y=114;y<LH;y+=2)for(let x=(y%7);x<LW;x+=5)if(h2(x,y,71)<.5)R(c,x,y,1,2,h2(x,y,72)<.5?'#c8a878':'#9a7c50');
-  for(let x=0;x<LW;x+=6)R(c,x,150,4,1,'#ece4d0');  // the painted line of the cancha
-  // a lamppost and a goal frame at the sides
-  R(c,232,78,2,34,'#3a3c44');R(c,232,78,1,34,'#5a5c66');R(c,229,73,8,5,'#4a4c56');R(c,230,74,6,3,'#ffe9a0');
-  R(c,6,118,1,22,'#e8e8e8');R(c,30,118,1,22,'#e8e8e8');R(c,6,118,25,1,'#e8e8e8');for(let y=120;y<140;y+=3)for(let x=8;x<30;x+=3)R(c,x,y,1,1,'#d8d8d8');
-  birds(c,[[150,22],[164,18]]);
+  for(let x=0;x<LW;x+=6)R(c,x,150,4,1,'#ece4d0');
+  // lamppost with a rounded, lit pole, and a goal frame
+  for(const lx of [Math.round(LW*.58),LW-24]){R(c,lx,76,3,37,'#3a3c44');R(c,lx,76,1,37,'#6a6c76');R(c,lx+2,76,1,37,'#24262c');R(c,lx-3,71,9,5,'#4a4c56');R(c,lx-3,71,9,1,'#6a6c76');R(c,lx-2,73,7,2,'#ffe9a0');ell(c,lx+1,112,5,1.5,'rgba(0,0,0,.25)')}
+  for(const gx of [6,30]){R(c,gx,118,2,22,'#e8e8e8');R(c,gx+1,118,1,22,'#a8a8b0')}R(c,6,117,26,2,'#e8e8e8');R(c,6,118,26,1,'#b0b0b8');
+  for(let y=120;y<140;y+=3)for(let x=8;x<30;x+=3)R(c,x,y,1,1,'#d0d0d4');ell(c,19,141,14,2,'rgba(0,0,0,.18)');
+  birds(c,[[150,24],[164,20]]);
   return cvs}
+function shadeHex(hex,k){const [r,g,b]=hex[0]==='#'?hexRGB(hex):hex.match(/\d+/g).map(Number);const f=v=>Math.max(0,Math.min(255,Math.round(v*k)));return'rgb('+f(r)+','+f(g)+','+f(b)+')'}
 function mossify(cvs){const c=cvs.getContext('2d'),d=c.getImageData(0,0,cvs.width,cvs.height),a=d.data;
   for(let i=0;i<a.length;i+=4){const r=a[i],g=a[i+1],b=a[i+2];if(r>g+6&&r>b){a[i]=Math.round(g*.85);a[i+1]=Math.round(r*.92+4);a[i+2]=Math.round(b*.8+r*.18)}}c.putImageData(d,0,0);return cvs}
 function lushBG(cvs,area){
