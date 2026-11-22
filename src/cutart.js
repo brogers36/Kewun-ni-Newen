@@ -164,3 +164,38 @@ function cutFx(c,dark){
     for(let y=0;y<LH;y++)for(let x=0;x<LW;x++){const i=(y*LW+x)*4,dx=(x-LW/2)/(LW/2),dy=(y-104)/112,q=dx*dx+dy*dy*.8;let a=q>.5?Math.min(120,(q-.5)*170):0;const n=h2(x,y,77);if(n<.05)a+=10;else if(n>.96)a-=8;d[i]=0;d[i+1]=0;d[i+2]=8;d[i+3]=Math.max(0,a)}
     v.putImageData(id,0,0)}
   c.globalAlpha=dark?1:.8;c.drawImage(VIGNC,0,0);c.globalAlpha=1}
+
+/* ---------- Lan kewün vignette (drawn over the battle): one lof, either losing its language or sending its newen ---------- */
+function drawLanScene(c,L){
+  const t=++L.t,good=L.good,a=Math.min(1,t/30);
+  c.save();c.globalAlpha=a;
+  c.drawImage(landLayer(good?'gold':'grey'),0,0);
+  if(!good){c.fillStyle='rgba(20,22,34,.35)';c.fillRect(0,0,LW,LH)}
+  caRukas(c,[[LW*.04,92,1.2],[LW*.70,96,1.1]],frame,!!good);
+  if(!good)caFog(c,frame*2,.4);
+  caFire(c,LW*.5,138,frame,good?1.4:.6);
+  // the people of the lof around the fire
+  const ppl=[['kuku','right',-92],['lonko','right',-64],['weaver','right',-36],['child','left',22],['cook','left',50],['childf','left',78]];
+  for(let k=0;k<ppl.length;k++){const [lk,d,dx]=ppl[k],x=Math.round(LW*.5+dx-16);
+    const s=ctCharSprite(lk,good?'down':d,good?Math.floor(frame/10+k)%4:0);
+    const by=140+(good?-Math.max(0,Math.round(Math.sin(frame/9+k)*3)):(k%2));
+    if(good){c.save();c.globalCompositeOperation='lighter';const g=c.createRadialGradient(x+16,by-22,3,x+16,by-22,38);g.addColorStop(0,'rgba(255,226,130,'+(.35+.1*Math.sin(frame/8+k))+')');g.addColorStop(1,'rgba(255,200,90,0)');c.fillStyle=g;c.fillRect(x-24,by-60,80,70);c.restore()}
+    const sw=s.width*2,shh=s.height*2;ell(c,x+sw/2,by-1,12,3,'rgba(0,0,0,.3)');c.drawImage(s,x,by-shh,sw,shh);
+    if(!good){ // greyed, trembling, a question mark over some heads, a tear on others
+      c.save();c.globalCompositeOperation='source-atop';c.restore();
+      if(k%2===0&&(frame+k*20)%80<60){const qx=x+sw/2,qy=by-shh-6+Math.round(Math.sin(frame/10+k));OV.push(()=>txt('?',qx,qy,'rgba(235,235,245,.95)',16,'center'))}
+      else if((frame+k*30)%90<50)R(c,x+sw/2-5,by-shh+16+((frame/4+k)%8),1,3,'#a8d8ff')}}
+  if(good){ // words and light rising from the lof toward the hero
+    caWords(['mari mari','newen','kümey','mapudungun','chaltu may','kimün'],frame,110,7,'255,240,180',12);
+    c.save();c.globalCompositeOperation='lighter';
+    for(let k=0;k<24;k++){const p=((frame*1.4+k*29)%160)/160;R(c,Math.round(LW*.5+Math.sin(k*1.3+p*5)*90*(1-p)+p*LW*.4),Math.round(136-p*120),2,2,'rgba(255,236,160,'+(1-p).toFixed(2)+')')}
+    const g2=c.createLinearGradient(0,0,0,LH);g2.addColorStop(0,'rgba(255,230,150,.15)');g2.addColorStop(1,'rgba(255,200,100,0)');c.fillStyle=g2;c.fillRect(0,0,LW,LH);c.restore()}
+  else{ // Mapudungun words crumbling and falling into the fog
+    const W=['mari mari','chumleymi','kümelen','chaltu may','pewkayal','newen','ruka','lafken','mapu'];
+    for(let k=0;k<W.length;k++){const p=((frame*.6+k*37)%180)/180,x=LW*(.1+.8*((k*41)%W.length)/W.length),y=24+p*90;
+      OV.push(()=>txt(W[k],x,y,'rgba(220,224,236,'+(Math.max(0,.8-p)).toFixed(2)+')',11,'center'))}}
+  c.globalAlpha=1;
+  // a title card for the lof
+  R(c,0,0,LW,14,'rgba(0,0,0,.55)');OV.push(()=>txt(L.lof[1]+(good?' · newen':' · lan kewün'),LW/2,11,good?'#ffe890':'#c8ccd8',12,'center'));
+  c.restore();
+}

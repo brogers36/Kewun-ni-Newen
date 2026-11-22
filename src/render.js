@@ -918,7 +918,7 @@ function loopBody(ts){
   if(!steps)return;
   OV=[];
   if(mode==='map'&&M)renderMap();
-  else if(mode==='battle'&&B)renderBattle();
+  else if(mode==='battle'&&B){renderBattle();if(B.lanScene){OV=[];drawLanScene(lx,B.lanScene)}}
   else if(mode==='cut')renderCut();
   else if(mode==='title')paintLand(lx,frame,false);
   if(mode==='map'&&M){dayTint(lx);if(M.urban&&typeof urbanNight==='function')urbanNight(lx,CAM.x,CAM.y)}

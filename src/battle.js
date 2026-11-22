@@ -42,12 +42,16 @@ const quizPend=e=>!!B&&ET[e.t].boss&&!B.qok&&!/^ngoyman[1-4]$/.test(e.t)&&!(B.o.
 function battleMenu(){
   if(B&&B.ngenA&&!B.ngenA.done)return;
   if(B&&B.o.tut&&tutStep())return;
+  if(B&&B.lanPending){const le=B.lanPending;B.lanPending=null;if(!le.dead)return lanKewun(le)}
   const en=S.gloss==='en';B.cursor=null;
   choose({es:'¿Qué haces? (Hay '+aliveE().length+')',en:'What do you do? ('+aliveE().length+' left)'},[
+    ...(B.lanBoon?[{m:'Epu wiño!',g:en?'Gift of the lof: a double wiño strike, no newen needed (this turn only)':'Regalo del lof: doble golpe de wiño, sin gastar newen (solo este turno)',v:'ww'}]:[]),
     {m:'Dungun',g:en?'Speak (build a command)':'Hablar (armar una orden)',v:'d'},
     {m:'Newen ('+(S.sp||0)+'/'+SPMAX+')',g:en?'Special ability':'Habilidad especial',v:'s',dis:(S.sp||0)<2},
     {m:'Chemkün',g:en?'Items':'Cosas',v:'i'}].concat(S.gear.trutruka?[{m:'Trutruka',g:en?'Blow the horn: stuns all (once per fight)':'Tocar la trutruka: aturde a todos (1 vez por pelea)',v:'t',dis:!!B.trut}]:[]).concat([
     {m:'Lef',g:en?'Run away':'Huir',v:'r'}]).concat(B.last?[{m:'Ka kiñe rupa: '+ROOTS[B.last.r].m.replace('-','')+(B.last.k?'kil':'')+'-',g:en?'Once more (same verb)':'Otra vez (el mismo verbo)',v:'again'}]:[]),v=>{
+    if(v!=='ww')B.lanBoon=0;
+    if(v==='ww'){B.lanBoon=0;const tg=aliveE().find(x=>/^ngoyman/.test(x.t))||aliveE()[0];return doSpecial('wino2',tg)}
     if(v==='d')pickRoot();
     else if(v==='again')pickTarget(B.last.r,B.last.k);
     else if(v==='s')pickSpecial();
@@ -108,6 +112,7 @@ function pickEnd(r,k,tg){
 }
 const SPECIALS={
   kuruf:{m:'Kürüf',cost:3,es:'Viento: golpea fuerte a todos y baja a los que vuelan',en:'Wind: hits everyone hard and brings flyers down'},
+  wino2:{m:'Epu wiño',cost:0,hide:1,es:'Dos golpes de wiño con el newen del lof',en:'Two wiño strikes with the lof\'s newen'},
   wino:{m:'Wiño',cost:2,es:'Golpe de wiño: daño triple a uno',en:'Wiño strike: triple damage to one'},
   lawen:{m:'Lawentun',cost:2,es:'Sanar: +2 piwke y quita la maldición',en:'Heal: +2 hearts and lifts the curse'},
   laww:{m:'Lawentuwün',cost:1,es:'Sanarse entero: recupera newen (cada uso sana 25% menos)',en:'Heal yourself whole: restores newen (each use heals 25% less)'}};
@@ -115,7 +120,7 @@ function spark(x,y,col,n){for(let i=0;i<n;i++){const a=Math.random()*6.28,v=.6+M
 function pickSpecial(){
   const en=S.gloss==='en';
   choose({es:'Newen: '+(S.sp||0)+'/'+SPMAX+'. Cada orden bien dicha carga uno.',en:'Newen: '+(S.sp||0)+'/'+SPMAX+'. Every command said correctly charges one.'},
-    Object.keys(SPECIALS).filter(k=>k!=='laww'||S.flags.lawW).map(k=>({m:SPECIALS[k].m+' · '+SPECIALS[k].cost,g:G(SPECIALS[k]),v:k,dis:(S.sp||0)<SPECIALS[k].cost})).concat([{m:en?'Back':'Volver',v:'x'}]),k=>{
+    Object.keys(SPECIALS).filter(k=>!SPECIALS[k].hide&&(k!=='laww'||S.flags.lawW)).map(k=>({m:SPECIALS[k].m+' · '+SPECIALS[k].cost,g:G(SPECIALS[k]),v:k,dis:(S.sp||0)<SPECIALS[k].cost})).concat([{m:en?'Back':'Volver',v:'x'}]),k=>{
     if(!k||k==='x')return battleMenu();
     if(k==='wino'){const al=aliveE();if(al.length===1)return doSpecial(k,al[0]);
       return choose({es:'¿A cuál?',en:'Which one?'},al.map(e=>({m:e.label,v:B.en.indexOf(e)})),i=>{B.cursor=null;if(i===null)return pickSpecial();doSpecial(k,B.en[i])},true,false,(i,o)=>{B.cursor=o.v})}
@@ -130,8 +135,8 @@ function doSpecial(k,tgt){
     fxe.push('The word runs through your whole body: you recover '+pct+'% of your newen.'+(pct>25?' (It will heal less next time.)':''));
     head.fx=()=>{sfx('heal');spark(60,30,'#aef2c0',24)}}
   else if(k==='lawen'){const hadK=S.kutran;S.hp=Math.min(maxHP(),S.hp+8);S.curse=0;S.kutran=0;fx.push('Recuperas dos piwke.'+(hadK?' El weda kutran te suelta.':''));fxe.push('You recover two hearts.'+(hadK?' The weda kutran lets you go.':''));head.fx=()=>{sfx('heal');spark(60,30,'#80ff90',16)}}
-  else{targets=k==='wino'?[tgt]:aliveE();
-    let burnT=0;for(const e of targets){if(e.hidden){fx.push(e.label+' está escondido en la niebla: no lo alcanzas.');fxe.push(e.label+' is hidden in the fog: you cannot reach it.');continue}if(bossBlock(e)){fx.push(e.label+' se cubre: ¡bloquea tu newen!');fxe.push(e.label+' guards: it blocks your newen!');continue}let d=k==='wino'?atk()*3+rnd(3):Math.round(atk()*1.5)+rnd(3);if(e.tall)d=Math.max(1,Math.round(d/3));if(e.armor)d=Math.max(1,Math.round(d/2));if(ET[e.t].spres){d=Math.max(1,Math.round(d/2));fx.push(e.label+' resiste tu newen.');fxe.push(e.label+' resists your newen.')}if(ET[e.t].thick)d=Math.max(1,Math.round(d/2));if(e.seals&&e.seals.length)d=Math.min(2,d);if(e.dreaming){d=Math.min(1,d);fx.push(e.label+' duerme caminando: hay que despertarlo.');fxe.push(e.label+' sleeps as it walks: it must be woken.')}if(e.down){d+=4;e.down=0}if(e.burn)burnT+=2;if(k==='kuruf'&&ET[e.t].fly)e.gr=3;e.pend=d;e.hp-=d;
+  else{targets=k==='wino'||k==='wino2'?[tgt]:aliveE();
+    let burnT=0;for(const e of targets){if(e.hidden&&k!=='wino2'){fx.push(e.label+' está escondido en la niebla: no lo alcanzas.');fxe.push(e.label+' is hidden in the fog: you cannot reach it.');continue}if(k!=='wino2'&&bossBlock(e)){fx.push(e.label+' se cubre: ¡bloquea tu newen!');fxe.push(e.label+' guards: it blocks your newen!');continue}let d=k==='wino2'?(atk()*3+rnd(3))*2:k==='wino'?atk()*3+rnd(3):Math.round(atk()*1.5)+rnd(3);if(k!=='wino2'){if(e.tall)d=Math.max(1,Math.round(d/3));if(e.armor)d=Math.max(1,Math.round(d/2));if(ET[e.t].spres){d=Math.max(1,Math.round(d/2));fx.push(e.label+' resiste tu newen.');fxe.push(e.label+' resists your newen.')}}if(ET[e.t].thick)d=Math.max(1,Math.round(d/2));if(e.seals&&e.seals.length)d=Math.min(2,d);if(e.dreaming){d=Math.min(1,d);fx.push(e.label+' duerme caminando: hay que despertarlo.');fxe.push(e.label+' sleeps as it walks: it must be woken.')}if(e.down){d+=4;e.down=0}if(e.burn)burnT+=2;if(k==='kuruf'&&ET[e.t].fly)e.gr=3;e.pend=d;e.hp-=d;
       fx.push(e.label+' −'+d+(e.hp<=0?(quizPend(e)?' (se tambalea)':(B.o.chain==='llufu'&&ET[e.t].boss?' (cambia de forma)':' (se va)')):'')+'.');fxe.push(e.label+' −'+d+(e.hp<=0?(quizPend(e)?' (staggers)':(B.o.chain==='llufu'&&ET[e.t].boss?' (shifts form)':' (gone)')):'')+'.')}
     if(burnT){S.hp=Math.max(1,S.hp-burnT);fx.push('¡Te quemas! (−'+burnT+')');fxe.push('You get burned! (−'+burnT+')')}}
   const eff=N(fx.join(' '),fxe.join(' '));
@@ -158,7 +163,7 @@ function resolve(r,kil,tg,ei){
     if(B.o.tut){lines.push(L('Kuku','Ka kiñe rupa!','"¡Otra vez! Cuenta a quién le hablas y elige la terminación."','"Once more! Count who you are speaking to and choose the ending."'));return say(lines,battleMenu)}
     return say(lines,enemyPhase);
   }
-  const pr=praise();B.last={r,k:kil};S.sp=Math.min(SPMAX,(S.sp||0)+1);
+  const pr=praise();B.last={r,k:kil};if(!(B.noSp&&!B.noSp.dead&&B.en.includes(B.noSp)))S.sp=Math.min(SPMAX,(S.sp||0)+1);
   {const e0=targets[0];
   if((!coll||n===1)&&e0.seals&&e0.seals.length&&(r+(kil?'kil':''))===e0.seals[0]){
     e0.seals.shift();lines[0].fx=()=>{sfx('lvl');B.flash=14;B.shake=6};
@@ -271,6 +276,9 @@ function enemyPhase(){
     hitsFx.push(()=>{e.lunge=16;pop(60,30,'-'+d,'#ff6050')})};
   for(const e of aliveE()){const T=ET[e.t];
     if(e.hp<=0)continue; // staggered by the ngen's question: it does not act
+    if(B.o.final&&/^ngoyman[1-5]$/.test(e.t)){e.ft=(e.ft||0)+1;const ln=e.lanN||0,lim=e.t==='ngoyman5'?2:1;
+      if(ln<lim&&!B.lanPending&&((ln===0&&e.ft===2)||(ln===1&&e.ft>=4&&e.hp<e.max*.6))){e.lanN=ln+1;e.hidden=0;B.lanPending=e;
+        fx.push(e.label+' alza los brazos y la niebla se vuelve palabras muertas...');fxe.push(e.label+' raises its arms and the fog turns into dead words...');hitsFx.push(()=>{sfx('cast');B.flash=14;B.shake=10});continue}}
     if(e.sl>0){e.sl--;fx.push(e.label+' duerme.');fxe.push(e.label+' is asleep.');continue}
     if(e.stun>0){e.stun--;fx.push(e.label+' todavía retrocede.');fxe.push(e.label+' is still backing away.');continue}
     if(e.t==='ngoyam'&&Math.random()<.3&&(S.sp||0)>0){S.sp--;fx.push(e.label+' te susurra el olvido: pierdes un punto de newen (✦).');fxe.push(e.label+' whispers forgetting to you: you lose one newen point (✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')});continue}
@@ -694,4 +702,44 @@ function postFinal(){
   say([N('El coloso se detiene... y suspira. La niebla entera tiembla, se afina, se deshace en hilos de plata que el viento se lleva hacia arriba.','The colossus stops... and sighs. The whole fog trembles, thins, and comes apart into silver threads that the wind carries upward.'),
     N('Y en el silencio nuevo te llega algo más: una voz muy bajita, como un canto bajo el agua, que te llama desde abajo de la isla del lago williche...','And in the new silence something else reaches you: a faint voice, like a song beneath the water, calling you from under the island in the williche lake...')],
     ()=>startEndCut());
+}
+
+/* ---------- Lan kewün: Ti Fütra Ngoymatulfe's spell of language death (once per form, twice in the last).
+   A quiz on what the player has learned; a miss makes one lof forget Mapudungun, a pass makes it send its newen. ---------- */
+const LAN_LOFS=[['lof','Lafkenche lof'],['n_lof','Nagche lof'],['p_lof','Pewenche lof'],['w_lof','Williche lof'],['e_lof','Puelche lof']];
+function lanPool(){const en=S.gloss==='en',P=[],sh=o=>{const a=o.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
+  for(const Q of NGENQ){const op=Q.o.map(o=>Array.isArray(o)?(en?o[1]:o[0]):o);P.push({q:{m:'«'+Q.m+'»',es:Q.es,en:Q.en},o:sh(op),a:op[Q.a]})}
+  if(typeof STONES!=='undefined')for(const k in STONES)for(const q of STONES[k].qs.concat(STONES[k].hq?[STONES[k].hq]:[]))P.push({q:q.q,o:sh(q.o),a:q.a});
+  if(typeof TABLETS!=='undefined')for(const k in TABLETS)for(const q of TABLETS[k].qs)P.push({q:q.q,o:sh(q.o),a:q.a});
+  if(typeof NUTK!=='undefined')for(const k in NUTK)for(const q of NUTK[k].set){const f=s=>s.replace('@',S.name);P.push({q:q.q,o:sh(q.o.map(f)),a:f(q.a)})}
+  return P}
+function lanForm(e){return +e.t.slice(-1)}
+function lanKewun(e){
+  const en=S.gloss==='en',form=lanForm(e),n=S.hm?2+form:3;
+  B.lanUsed=B.lanUsed||[];const left=LAN_LOFS.filter(l=>!B.lanUsed.includes(l[0])),lofP=(left.length?left:LAN_LOFS)[rnd((left.length?left:LAN_LOFS).length)];
+  const pool=lanPool(),qs=[];while(qs.length<n&&pool.length)qs.push(pool.splice(rnd(pool.length),1)[0]);
+  say([Object.assign(L(e.label,'Lan kewün!','¡Muerte de la lengua!','Death of the language!'),{fx:()=>{sfx('bad');B.flash=18;B.shake=14}}),
+    N(e.label+' lanza el lan kewün sobre el '+lofP[1]+'. Si fallas una sola de sus '+n+' preguntas, ese lof olvidará todo su mapudungun: perderás 6 piwke y tu newen (la barra verde) no se cargará más contra esta forma.',
+      e.label+' casts lan kewün on the '+lofP[1]+'. Miss even one of its '+n+' questions and that lof will forget all its Mapudungun: you will lose 6 hearts, and your newen (the green bar) will not charge again against this form.'),
+    N('Responde con lo que has aprendido en tu viaje.','Answer with what you have learned on your journey.')],()=>ask(0));
+  function ask(i){
+    if(i>=qs.length)return win();
+    const q=qs[i];
+    choose(Object.assign({},q.q,{es:'('+(i+1)+'/'+qs.length+') '+(q.q.es||''),en:'('+(i+1)+'/'+qs.length+') '+(q.q.en||'')}),q.o.map(o=>({m:o,v:o})),v=>{
+      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');lose(q.a)}},false,true)}
+  function lose(ans){
+    B.lanUsed.push(lofP[0]);B.noSp=e;const d=6*HPQ;S.hp=Math.max(1,S.hp-d);
+    B.lanScene={lof:lofP,good:0,t:0};
+    say([N('La respuesta era: '+ans+'.','The answer was: '+ans+'.'),
+      N('La niebla entra por las puertas de las ruka del '+lofP[1]+'. La gente se mira, asustada, buscando palabras que ya no están.','The fog seeps through the doors of the rukas of the '+lofP[1]+'. People look at each other, frightened, searching for words that are no longer there.'),
+      N('«¿Cómo se decía...? No me acuerdo», susurra un niño. «Mi chuchu me hablaba en mapudungun... y ya no le entiendo nada», llora una mujer.','"How did you say...? I can\'t remember," a child whispers. "My chuchu used to talk to me in Mapudungun... and now I don\'t understand a thing," a woman weeps.'),
+      N('El lonko abre la boca para saludar como saludaban sus antepasados, y no le sale ni una palabra.','The lonko opens his mouth to greet the way his ancestors greeted, and not a single word comes out.'),
+      Object.assign(N('Pierdes 6 piwke (−'+d+'). Tu newen ya no se carga contra esta forma.','You lose 6 hearts (−'+d+'). Your newen no longer charges against this form.'),{fx:()=>{B.lanScene=null;sfx('bad');B.red=12;pop(60,30,'-'+d,'#ff6050')}})],()=>{B.lanScene=null;battleMenu()})}
+  function win(){
+    B.lanScene={lof:lofP,good:1,t:0};
+    say([N('La última palabra sale de ti clara y fuerte. El hechizo se quiebra.','The last word leaves you clear and strong. The spell shatters.'),
+      N('Lejos, en el '+lofP[1]+', la gente sale de sus ruka. Las ruka, el kütral y las personas empiezan a brillar.','Far away, in the '+lofP[1]+', people come out of their rukas. The rukas, the kütral and the people begin to glow.'),
+      L('Pu che','Newentuleymi! Taiñ newen!','«¡Eres fuerte! ¡Sentimos que estás venciendo a Ti Fütra Ngoymatulfe! ¡Toma nuestro newen!»','"You are strong! We can feel you overcoming Ti Fütra Ngoymatulfe! Take our newen!"'),
+      Object.assign(N('El newen del lof te llega en un río de luz: recuperas todos tus piwke, y tus manos sostienen dos wiño a la vez.','The lof\'s newen reaches you in a river of light: all your hearts return, and your hands hold two wiño at once.'),{fx:()=>{B.lanScene=null;S.hp=maxHP();sfx('heal');spark(60,30,'#ffe890',30)}})],
+      ()=>{B.lanScene=null;S.hp=maxHP();B.lanBoon=1;battleMenu()})}
 }
