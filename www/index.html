@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='b042286-202611220945';
+window.KEWUN_BUILD='c7ef945-202611220946';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -682,28 +682,29 @@ function say(lines,cb){
     w.textContent=l.who||'';w.style.display=l.who?'':'none';
     m.textContent=l.m||'';m.style.display=l.m?'':'none';
     const gt=(S&&S.nogloss&&l.m)?'':G(l);g.textContent=gt;g.style.display=gt?'':'none';
-    dlg.style.display='block';if(l.fx)l.fx();};
+    dlg.style.display='block';SAYT=performance.now();if(l.fx)l.fx();};
   active={kind:'say',a(){i++;if(i>=lines.length){dlg.style.display='none';active=null;cb&&cb()}else{sfx('move');show()}},b(){this.a()}};
   show();
 }
-dlg.addEventListener('click',()=>{if(active&&active.kind==='say')active.a()});
+let SAYT=0;
+dlg.addEventListener('click',()=>{if(active&&active.kind==='say'&&performance.now()-SAYT>180)active.a()});
 function choose(prompt,opts,cb,cancel,one,onSel){
   const pe=menu.querySelector('.p'),le=menu.querySelector('.list');
   pe.innerHTML='';le.innerHTML='';le.classList.toggle('one',!!one);
   if(prompt){if(prompt.mh){const d=document.createElement('div');d.innerHTML=prompt.mh;d.style.lineHeight='1.7';pe.appendChild(d)}
     if(prompt.m){const d=document.createElement('div');d.className='m';d.textContent=prompt.m;pe.appendChild(d)}
     const g=G(prompt);if(g){const d=document.createElement('div');d.className='g';d.textContent=g;pe.appendChild(d)}}
-  let idx=opts.findIndex(o=>!o.dis);if(idx<0)idx=0;
+  let idx=opts.findIndex(o=>!o.dis);if(idx<0)idx=0;const t0=performance.now();
   const pick=k=>{menu.style.display='none';active=null;sfx('ok');cb(opts[k].v!==undefined?opts[k].v:k)};
   const btns=opts.map((o,k)=>{const b=document.createElement('button');b.className='opt';
     b.innerHTML='<span class="om">'+esc(o.m||'')+'</span>'+(o.g?'<span class="og">'+esc(o.g)+'</span>':'');
-    if(o.dis)b.disabled=true;b.onclick=()=>{if(!o.dis)pick(k)};
+    if(o.dis)b.disabled=true;b.onclick=()=>{if(!o.dis&&performance.now()-t0>250)pick(k)};
     b.onmouseenter=()=>{if(!o.dis&&idx!==k){idx=k;hl()}};le.appendChild(b);return b});
   const hl=()=>{btns.forEach((b,k)=>b.classList.toggle('sel',k===idx));if(onSel)onSel(idx,opts[idx])};
   active={kind:'menu',a(){if(!opts[idx].dis)pick(idx)},
     b(){if(cancel){menu.style.display='none';active=null;sfx('move');cb(null)}},
     mv(d){let n=idx;for(let t=0;t<opts.length;t++){n=(n+d+opts.length)%opts.length;if(!opts[n].dis)break}idx=n;sfx('move');hl();btns[idx].scrollIntoView({block:'nearest'})}};
-  menu.style.display='block';menu.style.setProperty('--st',menu.scrollTop+'px');hl();
+  menu.style.display='block';menu.scrollTop=0;menu.style.setProperty('--st','0px');hl();
 }
 function showBanner(m,g){if(S&&S.nogloss&&m)g='';banner.querySelector('b').textContent=m;banner.querySelector('span').textContent=g;banner.style.display='block';clearTimeout(showBanner.t);showBanner.t=setTimeout(()=>banner.style.display='none',2200)}
 
@@ -2748,8 +2749,10 @@ function palEnd(){
       if(two){two=0;tid=null;stop();if(dt<500)pressB();return}
       if(fin&&tid!==null&&!moved&&dt<350&&Date.now()-lastA>150){
         lastA=Date.now();
-        if(active){if(active.kind==='say')active.a()}
-        else if(mode==='map')interact();
+        // handled here: cancel the click the browser would synthesize afterwards, which could land on a
+        // menu that has just opened under the finger and pick an option before the player sees it
+        if(active){if(active.kind==='say'){if(e.cancelable)e.preventDefault();active.a()}}
+        else if(mode==='map'){if(e.cancelable)e.preventDefault();interact()}
       }
       tid=null;stop();moved=0;
     }else if(fin){tid=null;stop()}
