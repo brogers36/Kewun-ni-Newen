@@ -242,6 +242,12 @@ function renderMap(){
     // the lip of the fall at the top of the gorge
     {const X=10*T-cx,Y=1*T-cy+VY;c.fillStyle='rgba(255,255,255,.5)';c.fillRect(X,Y-1,3*T,2)}
   }
+  // trawün rukas carry a small woven banner over the door so players find the lesson
+  if(M.doors)for(const k in M.doors){if(!/_trawun$/.test(M.doors[k].to))continue;const [qx,qy]=k.split(',').map(Number),X=qx*T-cx+8,Y=(qy-1)*T-cy+VY-6;
+    if(X<-30||X>LW+30||Y<-20||Y>LH)continue;const sw=Math.sin(frame/30)*.6;
+    R(c,X-13,Y-1,26,9,'#2a1a10');R(c,X-12,Y,24,7,'#c8402a');for(let j=0;j<12;j++)R(c,X-12+j*2,Y+(j%2?1:5),1,1,'#f4e8c8');R(c,X-12,Y+3,24,1,'#2a1a10');
+    R(c,X-12+Math.round(sw),Y+7,1,3,'#c8402a');R(c,X+11+Math.round(sw),Y+7,1,3,'#c8402a');
+    OV.push(()=>txt('trawün',X,Y-3,'#ffe8a0',11,'center'))}
   // quest dig spots (the ones an NPC has told you about): a faint shimmer in the ground until you dig there
   if(M.digs)for(const k in M.digs){const dv=M.digs[k];if(!dv.req||!S.flags[dv.req]||S.flags['dig:'+CUR+':'+k])continue;
     const [qx,qy]=k.split(',').map(Number),X=qx*T-cx+8,Y=qy*T-cy+VY+10;if(X<-20||X>LW+20||Y<-20||Y>LH+20)continue;

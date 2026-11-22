@@ -542,6 +542,10 @@ rkK=[r[:] for r in rk];rkK[5][3]='F';rkK[2][3]='Z';rkK[5][11]='U'
 P_['l_ruka2']=[''.join(r) for r in rkK]
 P_['n_ruka1']=[''.join(r) for r in rkN]
 P_['w_ruka1']=[''.join(r) for r in rkW]
+# trawün rukas: one per lof, the fire in the middle and room for everyone around it
+for _tid in ('l_trawun','n_trawun','p_trawun','w_trawun','e_trawun'):
+    _t=[r[:] for r in rk];_t[3][7]='F';_t[2][2]='U';_t[2][11]='U'
+    P_[_tid]=[''.join(r) for r in _t]
 # --- p_lil: the lava crags (advanced Pewenche) ---
 c=C(32,13,'.')
 c.p(16,0,'.')
@@ -639,7 +643,7 @@ def bfs2(rows,start):
             X,Y=x+dx,y+dy
             if 0<=X<W and 0<=Y<H and (X,Y) not in seen and rows[Y][X] in OPEN2:seen.add((X,Y));st.append((X,Y))
     return seen
-STARTS={'p_rupu':(0,7),'p_lof':(0,9),'p_pewen':(0,7),'p_pire':(0,7),'p_pillan':(3,1),'p_ruka1':(6,7),'p_ruka2':(6,7),'pd1':(1,4),'pd2':(1,2),'pd3':(1,1),'p_degin':(6,11),'l_ruka1':(6,7),'l_ruka2':(6,7),'n_ruka1':(6,7),'w_ruka1':(6,7)}
+STARTS={'p_rupu':(0,7),'p_lof':(0,9),'p_pewen':(0,7),'p_pire':(0,7),'p_pillan':(3,1),'p_ruka1':(6,7),'p_ruka2':(6,7),'pd1':(1,4),'pd2':(1,2),'pd3':(1,1),'p_degin':(6,11),'l_ruka1':(6,7),'l_ruka2':(6,7),'n_ruka1':(6,7),'w_ruka1':(6,7),'l_trawun':(6,7),'n_trawun':(6,7),'p_trawun':(6,7),'w_trawun':(6,7),'e_trawun':(6,7)}
 ALL=dict(P_);ALL['l_wapi']=L_['l_wapi']
 for k,st in STARTS.items():
     v=ALL[k];R2=bfs2(v,st)

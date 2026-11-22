@@ -418,3 +418,12 @@ Nütramkan: alguien joven en cada lof quiere conversar (tres turnos, eliges la r
 - Si fallas, la gente del lof habla en castellano (ya olvidó el mapudungun). Si aciertas: ⚠ **"Newentuleymi! Taiñ newen!"** '¡eres fuerte! ¡nuestro newen!' (dicho por "Pu che"), y la opción **"Epu wiño!"** 'doble golpe de wiño'.
 - (Nov 22) Brandon: al mandar su newen, la gente dice **"Llownge taiñ newen!"** '¡Recibe nuestra fuerza!'. En castellano: «el lof de los lafkenche / nagche / pewenche / williche / puelche».
 - (Nov 22) Brandon: la raíz 'bajar' es **nagtu-** (antes nag-): nagtunge, nagtumu, nagtumün; negativo nagtukilnge… Las partidas guardadas con nag- se convierten solas.
+
+### Tanda 21 · trawün (Nov 22)
+Una ruka del trawün en cada lof (con un cartel tejido sobre la puerta). Un kimeltuchefe da una lección de 2-3 minutos con práctica. Todo ⚠:
+- Nombres: Ñanku (Lafkenche), Küyen (Nagche), Lienlaf (Pewenche), Liwen (Williche), Kallfükura (Puelche). "Trawüleaiñ?" '¿nos reunimos?'; "Kimeltuaiñ" 'enseñaremos/aprendemos'; "Kangelu..." 'casi'; "Fey tati." 'eso es todo'; "Kümey ta trawün."
+- Lafkenche · personas singulares: iñche amun / eymi amuymi / fey amuy; küdawün / küdawimi / küdawi; iyay; kimün ('sé' y 'saber').
+- Nagche · dual y plural: iñchiw amuyu, iñchiñ amuiñ, eymu amuymu, eymün amuymün, feyengu amuyngu, feyengün amuyngün; küdawiyu; iyaymün.
+- Pewenche · -la- y -a-: amulan, amulaymi, amulay, amuan, amuaymi, amulayan, iyalan; "kimlan" / "kimuan".
+- Williche · preguntas: chem, iney, chew, chumül, tunten, chumngechi; "Iney pingeymi?", "Chew mülimi?", "Tunten tripantu nieymi?", "Chumngechi pingekey «casa»? · Ruka pingekey.", "ko pingekey".
+- Puelche · -ke-: amuken, amukeymi, amukey, iyaken; "Liwen küdawken. Pun umawtuken."; "mapudunguken"; la -ke- de "pingekey".

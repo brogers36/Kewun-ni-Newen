@@ -1667,3 +1667,101 @@ function nutkTalk(lofId){
     choose(s.q,opts,v=>{if(v===s.a){sfx('ok');step(i+1)}
       else{sfx('bad');say([L(D.who,'Feyta chi no...','Eso no...','Not that...'),N('Se podía decir: «'+sub(s.a)+'». Probemos otra vez.','You could say: «'+sub(s.a)+'». Let us try again.')],()=>step(i))}},false,true)}
 }
+
+/* ---------- Trawün: in one ruka of every lof, a kimeltuchefe gives a real 2-3 minute Mapudungun lesson.
+   Each lesson: explanation, the group repeating, three practice questions woven in, a summary for the chillka. ---------- */
+const TRW_T={lof:'Ñanku',n_lof:'Küyen',p_lof:'Lienlaf',w_lof:'Liwen',e_lof:'Kallfükura'};
+const TRAWUN={
+ lof:{t:N('Iñche, eymi, fey: quién hace la acción','Iñche, eymi, fey: who does the action'),steps:[
+  N('El verbo mapuche dice quién hace la acción con su terminación. Hoy: yo, tú, él o ella.','The Mapuche verb says who acts through its ending. Today: I, you, he or she.'),
+  L('@','Iñche amun.','Yo voy. La terminación -n es «yo».','I go. The ending -n is "I".'),
+  L('@','Eymi amuymi.','Tú vas. -ymi es «tú».','You go. -ymi is "you".'),
+  L('@','Fey amuy.','Él o ella va. -y es «él» o «ella».','He or she goes. -y is "he" or "she".'),
+  L('Pu che','Iñche amun! Eymi amuymi! Fey amuy!','(Todos repiten juntos.)','(Everyone repeats together.)'),
+  N('Si la raíz termina en consonante, se cuela una vocal: küdaw- (trabajar) da küdawün, küdawimi, küdawi.','If the root ends in a consonant, a vowel slips in: küdaw- (work) gives küdawün, küdawimi, küdawi.'),
+  L('@','Iñche küdawün. Eymi küdawimi. Fey küdawi.','Yo trabajo. Tú trabajas. Él o ella trabaja.','I work. You work. He or she works.'),
+  {q:L('@','Fey ___ (iya-, comer)','Él o ella come.','He or she eats.'),o:['iyan','iyaymi','iyay'],a:'iyay',why:N('-y es la tercera persona: iyay.','-y is the third person: iyay.')},
+  N('El pronombre se puede omitir: «Amun» ya dice «voy». Y la misma forma sirve para algo que pasó hace poco: «Wiya amun», ayer fui.','You can drop the pronoun: "Amun" already means "I go". The same form also works for something just done: "Wiya amun", I went yesterday.'),
+  {q:N('¿Cómo se dice «tú trabajas»?','How do you say "you work"?'),o:['küdawün','küdawimi','küdawi'],a:'küdawimi',why:N('küdaw- + -imi: küdawimi.','küdaw- + -imi: küdawimi.')},
+  {q:L('@','Iñche ___ mapudungun (kim-, saber)','Yo sé mapudungun.','I know Mapudungun.'),o:['kimün','kimimi','kimi'],a:'kimün',why:N('kim- + -ün: kimün.','kim- + -ün: kimün.')},
+  N('¿Viste? «Kimün» es también «el saber». Por eso tu nivel en este viaje se llama kimün: cada palabra que aprendes es kimün.','See? "Kimün" also means "knowledge". That is why your level on this journey is called kimün: every word you learn is kimün.')],
+  sum:[L('','iñche amun · eymi amuymi · fey amuy','yo voy · tú vas · él/ella va','I go · you go · he/she goes'),L('','küdawün · küdawimi · küdawi','yo trabajo · tú trabajas · él/ella trabaja','I work · you work · he/she works')]},
+ n_lof:{t:N('Dos y muchos: el dual y el plural','Two and many: dual and plural'),steps:[
+  N('El mapudungun cuenta a la gente: una persona, dos personas, o tres y más. Cada cuenta tiene su terminación.','Mapudungun counts people: one person, two, or three and more. Each count has its own ending.'),
+  L('@','Iñchiw amuyu.','Nosotros dos vamos. -yu: «nosotros dos».','We two go. -yu: "we two".'),
+  L('@','Iñchiñ amuiñ.','Nosotros (tres o más) vamos. -iñ.','We (three or more) go. -iñ.'),
+  L('Pu che','Iñchiw amuyu! Iñchiñ amuiñ!','(Todos repiten.)','(Everyone repeats.)'),
+  L('@','Eymu amuymu. Eymün amuymün.','Ustedes dos van. Ustedes (tres o más) van.','You two go. You (three or more) go.'),
+  N('¿Te suenan -mu y -mün? Son las mismas que usas en las peleas: -nge a uno, -mu a dos, -mün a tres o más.','Do -mu and -mün sound familiar? They are the same ones you use in battle: -nge to one, -mu to two, -mün to three or more.'),
+  L('@','Feyengu amuyngu. Feyengün amuyngün.','Ellos dos van. Ellos (tres o más) van.','The two of them go. They (three or more) go.'),
+  {q:L('@','Iñchiw küdaw___','Nosotros dos trabajamos.','We two work.'),o:['küdawiñ','küdawiyu','küdawimu'],a:'küdawiyu',why:N('Dos y yo dentro: -iyu después de consonante.','Two, including me: -iyu after a consonant.')},
+  {q:N('¿Cómo se dice «ustedes (muchos) comen»?','How do you say "you (many) eat"?'),o:['iyaymu','iyaymün','iyayngün'],a:'iyaymün',why:N('Ustedes, tres o más: -ymün.','You, three or more: -ymün.')},
+  {q:N('¿Cómo se dice «ellos dos van»?','How do you say "the two of them go"?'),o:['amuyngu','amuyngün','amuyu'],a:'amuyngu',why:N('Ellos dos: -yngu.','The two of them: -yngu.')},
+  N('Contar bien a la gente es respeto: en mapudungun nunca da lo mismo si son dos o son muchos.','Counting people right is respect: in Mapudungun it never matters little whether there are two or many.')],
+  sum:[L('','iñchiw amuyu · eymu amuymu · feyengu amuyngu','dos: nosotros · ustedes · ellos','two: we · you · they'),L('','iñchiñ amuiñ · eymün amuymün · feyengün amuyngün','muchos: nosotros · ustedes · ellos','many: we · you · they')]},
+ p_lof:{t:N('No y mañana: -la- y -a-','Not and tomorrow: -la- and -a-'),steps:[
+  N('Dentro del verbo caben piezas pequeñas. Hoy dos: -la- (no) y -a- (lo que vendrá).','Small pieces fit inside the verb. Today, two: -la- (not) and -a- (what is to come).'),
+  L('@','Amun. Amulan.','Voy. No voy.','I go. I do not go.'),
+  L('@','Amuymi. Amulaymi. · Amuy. Amulay.','Vas. No vas. · Va. No va.','You go. You do not go. · He goes. He does not go.'),
+  L('Pu che','Amulan! Amulaymi! Amulay!','(Todos repiten.)','(Everyone repeats.)'),
+  L('@','Wüle amuan. Wüle amuaymi.','Mañana iré. Mañana irás.','Tomorrow I will go. Tomorrow you will go.'),
+  {q:N('¿Cómo se dice «no como»?','How do you say "I do not eat"?'),o:['iyalan','iyaan','iyan'],a:'iyalan',why:N('iya- + -la- + -n: iyalan.','iya- + -la- + -n: iyalan.')},
+  {q:N('¿Cómo se dice «irás»?','How do you say "you will go"?'),o:['amuymi','amuaymi','amulaymi'],a:'amuaymi',why:N('amu- + -a- + -ymi: amuaymi.','amu- + -a- + -ymi: amuaymi.')},
+  N('Y se pueden juntar, siempre en el mismo orden: primero -la-, después -a-.','And they combine, always in the same order: first -la-, then -a-.'),
+  L('@','Amulayan.','No iré.','I will not go.'),
+  {q:N('¿Cómo se dice «no iré»?','How do you say "I will not go"?'),o:['amualan','amulayan','amulan'],a:'amulayan',why:N('Primero -la-, después -a-: amu-la-ya-n.','First -la-, then -a-: amu-la-ya-n.')},
+  N('El Ngoymatulfe quiere que digas «kimlan», no sé. El trawün enseña a decir «kimuan»: lo sabré.','The Ngoymatulfe wants you to say "kimlan", I do not know. The trawün teaches you to say "kimuan": I will know.')],
+  sum:[L('','amun · amulan · amuan · amulayan','voy · no voy · iré · no iré','I go · I do not go · I will go · I will not go')]},
+ w_lof:{t:N('Preguntar: chem, iney, chew, chumül, tunten','Asking: chem, iney, chew, chumül, tunten'),steps:[
+  N('Para conversar hay que saber preguntar. La palabra de pregunta va al principio.','To hold a conversation you have to know how to ask. The question word goes first.'),
+  L('@','Chem? · Iney? · Chew?','¿Qué? · ¿Quién? · ¿Dónde?','What? · Who? · Where?'),
+  L('@','Chumül? · Tunten? · Chumngechi?','¿Cuándo? · ¿Cuánto? · ¿Cómo?','When? · How much? · How?'),
+  L('Pu che','Chem? Iney? Chew? Chumül? Tunten?','(Todos repiten.)','(Everyone repeats.)'),
+  L('@','Iney pingeymi? · Chew mülimi?','¿Cómo te llamas? (¿Quién te llaman?) · ¿Dónde estás?','What is your name? · Where are you?'),
+  {q:N('¿Cómo preguntas «¿dónde estás?»?','How do you ask "where are you?"'),o:['Chem mülimi?','Chew mülimi?','Iney mülimi?'],a:'Chew mülimi?',why:N('Chew es «dónde».','Chew is "where".')},
+  L('@','Tunten tripantu nieymi?','¿Cuántos años tienes?','How old are you?'),
+  {q:L('@','Tunten tripantu nieymi?','¿Qué te están preguntando?','What are they asking you?'),o:['¿Cuántos años tienes?','¿Dónde vives?','¿Cómo te llamas?'],a:'¿Cuántos años tienes?',why:N('Tunten es «cuánto»; tripantu es «año».','Tunten is "how much"; tripantu is "year".')},
+  L('@','Chumngechi pingekey «casa»? · Ruka pingekey.','¿Cómo se dice «casa»? · Se dice ruka.','How do you say "house"? · It is called ruka.'),
+  N('Esta pregunta es tu mejor herramienta: con ella cualquier persona del lof te puede enseñar una palabra nueva.','This question is your best tool: with it, anyone in the lof can teach you a new word.'),
+  {q:N('Quieres aprender a decir «agua». ¿Qué preguntas?','You want to learn how to say "water". What do you ask?'),o:['Chumngechi pingekey «agua»?','Chew mülimi «agua»?','Tunten «agua»?'],a:'Chumngechi pingekey «agua»?',why:N('Chumngechi pingekey…?: ¿cómo se dice…? (Y la respuesta es: ko pingekey.)','Chumngechi pingekey…?: how do you say…? (And the answer is: ko pingekey.)')}],
+  sum:[L('','chem · iney · chew · chumül · tunten · chumngechi','qué · quién · dónde · cuándo · cuánto · cómo','what · who · where · when · how much · how'),L('','Chumngechi pingekey …?','¿Cómo se dice …?','How do you say …?')]},
+ e_lof:{t:N('Lo de siempre: -ke-','What you always do: -ke-'),steps:[
+  N('Con -ke- el verbo dice lo que se hace siempre, como costumbre.','With -ke- the verb says what you always do, as a habit.'),
+  L('@','Amun. Amuken.','Voy. Suelo ir (siempre voy).','I go. I usually go (I always go).'),
+  L('@','Liwen küdawken. Pun umawtuken.','En la mañana suelo trabajar. De noche suelo dormir.','In the morning I usually work. At night I usually sleep.'),
+  L('Pu che','Liwen küdawken! Pun umawtuken!','(Todos repiten.)','(Everyone repeats.)'),
+  {q:N('¿Cómo se dice «suelo comer»?','How do you say "I usually eat"?'),o:['iyan','iyaken','iyaan'],a:'iyaken',why:N('iya- + -ke- + -n: iyaken.','iya- + -ke- + -n: iyaken.')},
+  L('@','Eymi amukeymi. Fey amukey.','Tú sueles ir. Él o ella suele ir.','You usually go. He or she usually goes.'),
+  {q:N('¿Cómo se dice «tú sueles ir»?','How do you say "you usually go"?'),o:['amukeymi','amukey','amuken'],a:'amukeymi',why:N('-ke- y después -ymi: amukeymi.','-ke- and then -ymi: amukeymi.')},
+  N('¿Recuerdas «Chumngechi pingekey»? Ahí también está -ke-: «cómo se suele decir». La lengua vive en lo que se repite todos los días.','Remember "Chumngechi pingekey"? -ke- is there too: "how is it usually said". A language lives in what is repeated every day.'),
+  {q:L('@','Pun umawtuken.','¿Qué significa?','What does it mean?'),o:['De noche suelo dormir.','Anoche dormí.','Esta noche dormiré.'],a:'De noche suelo dormir.',why:N('-ke- es costumbre: lo que hago siempre.','-ke- is habit: what I always do.')},
+  N('Si hablas mapudungun un poco cada día, «mapudunguken» deja de ser un sueño y se vuelve costumbre.','If you speak Mapudungun a little every day, "mapudunguken" stops being a dream and becomes a habit.')],
+  sum:[L('','amuken · amukeymi · amukey','suelo ir · sueles ir · suele ir','I usually go · you usually go · he/she usually goes'),L('','liwen küdawken · pun umawtuken','en la mañana suelo trabajar · de noche suelo dormir','in the morning I usually work · at night I usually sleep')]}};
+const TRW_IDS=Object.keys(TRAWUN);
+function trawunTalk(id){
+  const D=TRAWUN[id],who=TRW_T[id],en=S.gloss==='en',fl='trw_'+id,done=!!S.flags[fl];
+  const sub=l=>l&&l.who==='@'?Object.assign({},l,{who:who}):l;
+  say([L(who,'Mari mari! Kimeltuaiñ.',done?'¡Volviste! ¿Repasamos la lección?':'¡Bienvenido al trawün! Siéntate junto al kütral: hoy aprendemos juntos.',done?'You came back! Shall we go over the lesson?':'Welcome to the trawün! Sit by the kütral: today we learn together.')],()=>
+    choose(Object.assign({},D.t,{m:'Trawüleaiñ?'}),[{m:'May',g:en?'Take the lesson (2-3 minutes)':'Tomar la lección (2-3 minutos)',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{if(v)run(0)},true,true));
+  function run(i){
+    const chunk=[];while(i<D.steps.length&&!D.steps[i].q){chunk.push(sub(D.steps[i]));i++}
+    const next=()=>{if(i>=D.steps.length)return finish();ask(D.steps[i],()=>run(i+1))};
+    if(chunk.length)say(chunk,next);else next()}
+  function ask(Q,cb){
+    const opts=Q.o.map(o=>({m:o,v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
+    choose(sub(Q.q),opts,v=>{if(v===Q.a){sfx('ok');say([L(who,'Kümey!','¡Muy bien!','Very good!'),Q.why],cb)}
+      else{sfx('bad');say([L(who,'Kangelu...','Casi...','Almost...'),Q.why,N('Inténtalo de nuevo.','Try again.')],()=>ask(Q,cb))}},false,true)}
+  function finish(){
+    const ls=[L(who,'Fey tati. Pewkayal!','Eso es todo por hoy. ¡Hasta luego!','That is all for today. See you later!'),N('Lo que aprendiste quedó escrito en tu chillka:','What you learned is now written in your chillka:')].concat(D.sum);
+    if(!done){S.flags[fl]=1;S.xp+=10;S.gold+=20;sfx('lvl');ls.push(N('+10 kimün · +20 ngülliw.','+10 kimün · +20 ngülliw.'));
+      if(TRW_IDS.every(k=>S.flags['trw_'+k])&&!S.flags.trw_all){S.flags.trw_all=1;S.items.mate=(S.items.mate||0)+5;ls.push(N('Tomaste las lecciones de los cinco trawün. Los kimeltuchefe te regalan cinco mate: «Sigue aprendiendo, siempre».','You took the lessons of all five trawün. The kimeltuchefe give you five mate: "Keep learning, always."'))}
+      persist()}
+    say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+}
+function trawunListener(id,k){
+  const lines=[[L('Pu che','Kimeltuaiñ...','Aquí aprendemos juntos. ¡Habla con el kimeltuchefe!','Here we learn together. Talk to the kimeltuchefe!')],
+    [L('Pu che','Kimnierpuken!','¡Voy aprendiendo!','I am learning!')],
+    [L('Pu che','Chumngechi pingekey...?','(Repasa sus palabras en voz baja.)','(Quietly goes over their words.)')],
+    [L('Pu che','Kümey ta trawün.','El trawün es bueno.','The trawün is good.')]];
+  say(lines[k%lines.length])
+}
