@@ -242,6 +242,11 @@ function renderMap(){
     // the lip of the fall at the top of the gorge
     {const X=10*T-cx,Y=1*T-cy+VY;c.fillStyle='rgba(255,255,255,.5)';c.fillRect(X,Y-1,3*T,2)}
   }
+  // quest dig spots (the ones an NPC has told you about): a faint shimmer in the ground until you dig there
+  if(M.digs)for(const k in M.digs){const dv=M.digs[k];if(!dv.req||!S.flags[dv.req]||S.flags['dig:'+CUR+':'+k])continue;
+    const [qx,qy]=k.split(',').map(Number),X=qx*T-cx+8,Y=qy*T-cy+VY+10;if(X<-20||X>LW+20||Y<-20||Y>LH+20)continue;
+    const ph=(frame%120)/120;c.strokeStyle='rgba(255,250,220,'+(.55*(1-ph)).toFixed(2)+')';c.lineWidth=1;c.beginPath();c.ellipse(X,Y,2+ph*7,1+ph*2.5,0,0,6.283);c.stroke();
+    for(let j=0;j<3;j++){const t2=(frame+j*40)%120;if(t2<18){const sx=X-4+((j*7+Math.floor(frame/120)*3)%9),sy=Y-2-(j%2)*2;R(c,sx,sy,1,1,'#ffffff');if(t2>4&&t2<12){R(c,sx-1,sy,1,1,'rgba(255,255,255,.6)');R(c,sx+1,sy,1,1,'rgba(255,255,255,.6)');R(c,sx,sy-1,1,1,'rgba(255,255,255,.6)');R(c,sx,sy+1,1,1,'rgba(255,255,255,.6)')}}}}
   // machi-quest landmarks: quiet environmental cues at the five dig spots
   {const MQC={l_wapi:[12,9,'foye'],n_menoko:[22,3,'pool'],p_pewen:[16,13,'pewen'],w_trayen:[12,9,'mist'],e_lelfun:[10,11,'salt']}[CUR];
    if(MQC){const [qx,qy,kind]=MQC,ox=qx*T+8-cx,oy=qy*T+8-cy+VY;
