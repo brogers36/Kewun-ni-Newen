@@ -4,7 +4,7 @@
 const HPQ=4,SPMAX=3;
 function maxHP(){return S.baseMax+(S.gear.trariwe?4:0)+Math.floor(S.piwke/4)*4+(S.flags.ngen?4:0)+(S.flags.ngen2?4:0)+(S.flags.ngen3?4:0)+(S.flags.ngen4?4:0)+(S.flags.ngen5?4:0)}
 function atk(){return Math.max(1,S.baseAtk+(S.gear.futrawino?3:0)+(S.gear.waiki?2:0)-(S.curse?2:0)-(S.kutran?3:0)-(S.chill>0?2:0))}
-function def(){return Math.max(0,S.baseDef+(S.gear.makun?2:0)-(S.kutran?2:0))}
+function def(){return Math.max(0,S.baseDef+(S.gear.makun?2:0)+(S.gear.trarilongko?3:0)-(S.kutran?2:0))}
 function xpNeed(){return 10+S.lvl*10}
 function newState(hero){const fem=hero==='millaray';return{hero,fem,name:fem?'Millaray':'Llanka',gloss:LANG,map:'rupu',x:1,y:6,hp:24,baseMax:24,baseAtk:5,baseDef:1,lvl:1,xp:0,gold:0,
   items:{kulon:2,diwen:0,kofke:0,lawen:0,mate:0},gear:{},roots:['amutu'],runes:[],flags:{},piwke:0,keys:0,sp:0,curse:0,hints:true,
@@ -137,6 +137,7 @@ const GEAR={
   trariwe:{m:'trariwe',es:'faja tejida: +1 piwke máximo',en:'woven sash: +1 max heart',p:40},
   futrawino:{m:'fütra wiño',es:'wiño grande: fuerza +3',en:'big palin stick: strength +3',p:50},
   waiki:{m:'Epunamun ñi waiki',es:'la lanza del Epunamun: fuerza +2',en:"Epunamun's spear: strength +2",p:0,hide:1},
+  trarilongko:{m:'trarilongko',es:'el trarilongko de las kuyfi chillka: defensa +3',en:'the trarilongko of the kuyfi chillka: defense +3',p:0,hide:1},
   lafkenkura:{m:'lafkenkura',es:'la piedra del mar de los chumpall: recuperas 2 de newen cada turno de pelea',en:'the chumpall sea stone: you recover 2 newen every battle turn',p:0,hide:1}};
 function useItem(id){
   const it=ITEMS[id];if(!S.items[id])return null;S.items[id]--;const mx=maxHP();

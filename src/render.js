@@ -113,7 +113,7 @@ function renderCut(){
 }
 /* ---------- map ---------- */
 const CAM={x:0,y:0};
-const DYN=new Set(['@','^','Ñ','D','F','C','K','S','I','X','v','P','m','g','p','k','L','G','B','O','q','Q','N','J','H','E','A','j']);
+const DYN=new Set(['Ł','@','^','Ñ','D','F','C','K','S','I','X','v','P','m','g','p','k','L','G','B','O','q','Q','N','J','H','E','A','j']);
 const BOB=new Set(['P','m','g','p','k']);
 function bubble(x,y,text){OV.push(()=>{ctx.font='bold 13px ui-monospace,Menlo,Consolas,monospace';const w=ctx.measureText(text).width+12,bx=Math.round(x*2-w/2),by=Math.round(y*2-26);
   ctx.fillStyle='#181018';ctx.fillRect(bx-2,by-2,w+4,24);ctx.fillStyle='#fffaf0';ctx.fillRect(bx,by,w,20);ctx.fillStyle='#181018';ctx.fillRect(x*2-3,by+20,6,4);ctx.fillStyle='#fffaf0';ctx.fillRect(x*2-1,by+20,2,2);
@@ -147,6 +147,7 @@ function renderMap(){
       c.drawImage(dynCanvas(ch,ch==='N'?(lit?1:0):t.col+'|'+(lit?1:0)),X,Y);if(lit)glows.push([X+8,Y+6]);
       if(Math.abs(x-P.x)+Math.abs(y-P.y)<7)OV.push(()=>txt(t.lab,X+8,Y-2,ch==='J'?t.col:'#e0f4ff',12,'center'));continue}}
     if(ch==='A'){drawWarpRing(c,X+8,Y+9);continue}
+    if(ch==='Ł'){const id=M.tablets&&M.tablets[x+','+y],lit=id&&S.flags['tab_'+id];drawTablet(c,X,Y,lit);if(lit)glows.push([X+8,Y-2]);continue}
     if(ch==='@'){drawPortal(c,X+8,Y+9);continue}
     if(BOB.has(ch)){const b=Math.round(Math.sin(frame/10+x)*1.5);ell(c,X+8,Y+14,4,1.5,'rgba(0,0,0,.25)');c.drawImage(dynCanvas(ch,0),X,Y-3+b);if(frame%40<6)R(c,X+13,Y+1+b,1,1,'#ffffff')}
     else{if('CIK'.includes(ch))ell(c,X+8,Y+15,7,2,'rgba(0,0,0,.28)');c.drawImage(dynCanvas(ch,anim?f4:0),X,Y)}
@@ -1007,4 +1008,29 @@ function atmos(c){
   const tint=gloom?'rgba(96,104,128,.55)':indoor?'rgba(140,118,96,.35)':urban?'rgba(128,122,130,.4)':M.bg==='mount'?'rgba(112,124,150,.35)':M.bg==='pampa'?'rgba(156,128,96,.38)':'rgba(146,132,104,.32)';
   const g2=c.createLinearGradient(0,VY,0,VY+H);g2.addColorStop(0,tint);g2.addColorStop(1,'rgba(60,50,90,.35)');c.fillStyle=g2;c.fillRect(0,VY,W,H);
   c.restore();
+}
+/* ---------- kuyfi chillka: an ancient carved stone stele, mossy when asleep, glowing when awake ---------- */
+function drawTablet(c,X,Y,lit){
+  ell(c,X+8,Y+15,8,2.5,'rgba(0,0,0,.32)');
+  const top=Y-12;
+  // stone body: rounded top, darker right side for depth
+  c.fillStyle='#1a1418';c.fillRect(X+1,top+2,14,26);c.fillRect(X+2,top+1,12,1);c.fillRect(X+4,top,8,1);
+  c.fillStyle='#6e6a66';c.fillRect(X+2,top+2,12,24);c.fillRect(X+3,top+1,10,1);c.fillRect(X+5,top+1,6,1);
+  c.fillStyle='#8a8580';c.fillRect(X+2,top+2,4,24);c.fillRect(X+3,top+1,3,1);
+  c.fillStyle='#55504c';c.fillRect(X+11,top+3,3,23);
+  c.fillStyle='#a49e96';c.fillRect(X+3,top+2,1,22);
+  // base plinth
+  c.fillStyle='#1a1418';c.fillRect(X,Y+11,16,4);c.fillStyle='#5a5652';c.fillRect(X+1,Y+11,14,3);c.fillStyle='#7a7670';c.fillRect(X+1,Y+11,14,1);
+  // carved rows of signs (stepped trariwe-like motifs)
+  const gc=lit?(frame%60<30?'#ffe68a':'#fff2b8'):'#3e3a38',gl=lit?'#b07a20':'#8e8a84';
+  for(let r=0;r<5;r++){const yy=top+5+r*4;for(let k=0;k<3;k++){const xx=X+3+k*4,m=(r*3+k)%4;
+    c.fillStyle=gc;if(m===0){c.fillRect(xx,yy,3,1);c.fillRect(xx+1,yy+1,1,1)}else if(m===1){c.fillRect(xx,yy+1,1,1);c.fillRect(xx+1,yy,1,2);c.fillRect(xx+2,yy+1,1,1)}else if(m===2){c.fillRect(xx,yy,1,2);c.fillRect(xx+2,yy,1,2)}else{c.fillRect(xx,yy,2,1);c.fillRect(xx+1,yy+1,2,1)}
+    c.fillStyle=gl;c.fillRect(xx,yy+2,1,1)}}
+  if(!lit){ // moss
+    c.fillStyle='#4a7a30';c.fillRect(X+2,top+2,5,2);c.fillRect(X+10,top+12,4,3);c.fillRect(X+2,top+20,3,5);c.fillRect(X+8,top+23,6,3);
+    c.fillStyle='#6aa040';c.fillRect(X+3,top+2,2,1);c.fillRect(X+11,top+12,2,1);c.fillRect(X+2,top+21,2,1);c.fillRect(X+9,top+23,3,1);
+    if(Math.abs(Math.round(P.fx)-((X+CAM.x)>>4))+Math.abs(Math.round(P.fy)-((Y+CAM.y-VY)>>4))<4&&frame%50<25){c.fillStyle='rgba(255,240,170,.8)';c.fillRect(X+7,top+9,1,1)}}
+  else{ // awake: soft halo and motes rising
+    c.save();c.globalCompositeOperation='lighter';const g=c.createRadialGradient(X+8,top+12,2,X+8,top+12,20);g.addColorStop(0,'rgba(255,220,120,'+(.28+.08*Math.sin(frame/12))+')');g.addColorStop(1,'rgba(255,200,80,0)');c.fillStyle=g;c.fillRect(X-14,top-10,44,44);c.restore();
+    for(let k=0;k<3;k++){const t=((frame+k*33)%100)/100;c.fillStyle='rgba(255,236,160,'+(1-t).toFixed(2)+')';c.fillRect(Math.round(X+4+k*4+Math.sin(t*6+k)*2),Math.round(top+4-t*16),1,1)}}
 }

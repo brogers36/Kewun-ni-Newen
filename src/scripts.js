@@ -1569,3 +1569,101 @@ function stTeenTalk(){
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
     choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Weche','...no sé si eso me ayuda.','...no sé si eso me ayuda.','...I am not sure that helps.')],()=>ask(0))}},true,false)}
 }
+
+/* ---------- Kuyfi chillka: six ancient carved tablets, each a Mapudungun lesson. All six = the trarilongko ---------- */
+const TABLETS={
+  saludo:{t:N('Saludar y despedirse','Greeting and leaving'),lines:[
+    L('','Mari mari!','Hola (a una persona o a muchas).','Hello (to one person or to many).'),
+    L('','Chumleymi? · Kümelen, eymi kay?','¿Cómo estás? · Estoy bien, ¿y tú?','How are you? · I am well, and you?'),
+    L('','Chaltu may! · Pewkayal!','¡Gracias! · ¡Hasta luego!','Thank you! · See you later!')],
+   qs:[{q:L('','Chumleymi?','Te preguntan esto. ¿Qué respondes?','Someone asks you this. What do you answer?'),o:['Kümelen, eymi kay?','Pewkayal!','Mari mari pingen'],a:'Kümelen, eymi kay?'},
+       {q:N('¿Cómo das las gracias?','How do you say thank you?'),o:['Chumleymi?','Chaltu may!','Pewkayal!'],a:'Chaltu may!'}]},
+  mew:{t:N('Dónde: mew','Where: mew'),lines:[
+    N('mew va después del nombre del lugar: dice dónde estás o adónde vas.','mew comes after the place: it says where you are or where you go.'),
+    L('','ruka mew · lafken mew · mawida mew','en la casa · en el mar · en el monte','at home · at the sea · in the forest'),
+    L('','Ruka mew mülen. · Lafken mew amuan.','Estoy en la casa. · Iré al mar.','I am at home. · I will go to the sea.')],
+   qs:[{q:L('','Ruka mew mülen.','¿Qué significa?','What does it mean?'),o:['Estoy en la casa.','Voy a la casa.','Mi casa es grande.'],a:'Estoy en la casa.'},
+       {q:N('¿Cómo se dice «iré al monte»?','How do you say «I will go to the forest»?'),o:['Mawida mülen.','Mawida mew amuan.','Mawida amun mew.'],a:'Mawida mew amuan.'}]},
+  kalül:{t:N('El cuerpo','The body'),lines:[
+    L('','lonko · nge · pilun · wün','cabeza · ojo · oreja · boca','head · eye · ear · mouth'),
+    L('','kuwü · namun · piwke','mano · pie (pierna) · corazón','hand · foot (leg) · heart'),
+    N('lonko también es el jefe del lof: la «cabeza» de la comunidad.','lonko is also the leader of the lof: the «head» of the community.')],
+   qs:[{q:L('','kuwü','¿Qué es?','What is it?'),o:['el pie','la mano','la oreja'],a:'la mano'},
+       {q:N('¿Cómo se dice «cabeza»?','How do you say «head»?'),o:['lonko','namun','pilun'],a:'lonko'}]},
+  antu:{t:N('El tiempo: hoy, ayer, mañana','Time: today, yesterday, tomorrow'),lines:[
+    L('','fewla · wiya · wüle','ahora · ayer · mañana','now · yesterday · tomorrow'),
+    L('','liwen · antü · pun','la mañana temprano · el día (el sol) · la noche','early morning · day (the sun) · night'),
+    L('','Wiya amun. · Wüle amuan.','Ayer fui. · Mañana iré.','Yesterday I went. · Tomorrow I will go.')],
+   qs:[{q:L('','wüle','¿Qué significa?','What does it mean?'),o:['ayer','mañana','ahora'],a:'mañana'},
+       {q:L('','Wiya amun.','¿Qué significa?','What does it mean?'),o:['Ayer fui.','Mañana iré.','Ahora voy.'],a:'Ayer fui.'}]},
+  kulliñ:{t:N('Los animales del mapu','The animals of the land'),lines:[
+    L('','kawellu · trewa · waka','caballo · perro · vaca','horse · dog · cow'),
+    L('','choyke · luan · pangi · mañke','ñandú · guanaco · puma · cóndor','rhea · guanaco · puma · condor'),
+    N('Muchas palabras para animales nuevos vienen del castellano (kawellu, waka); las de los animales de siempre son mapuche.','Many words for newly arrived animals come from Spanish (kawellu, waka); those for the animals that were always here are Mapuche.')],
+   qs:[{q:L('','choyke','¿Qué animal es?','Which animal is it?'),o:['el puma','el ñandú','el cóndor'],a:'el ñandú'},
+       {q:N('¿Cómo se dice «puma»?','How do you say «puma»?'),o:['pangi','luan','trewa'],a:'pangi'}]},
+  rakizuam:{t:N('Cómo te sientes: -le-, -külen','How you feel: -le-, -külen'),lines:[
+    N('-le- y -külen dicen cómo estás ahora mismo.','-le- and -külen say how you are right now.'),
+    L('','Kümelen. · Ayiwkülen. · Weñangkülen.','Estoy bien. · Estoy feliz. · Estoy triste.','I am well. · I am happy. · I am sad.'),
+    N('El olvido se alimenta de la tristeza callada: decir cómo te sientes también es newen.','The forgetting feeds on silent sorrow: saying how you feel is newen too.')],
+   qs:[{q:L('','Ayiwkülen.','¿Qué significa?','What does it mean?'),o:['Estoy triste.','Estoy feliz.','Estoy cansado.'],a:'Estoy feliz.'},
+       {q:N('¿Cómo se dice «estoy triste»?','How do you say «I am sad»?'),o:['Weñangkülen.','Kümelen.','Ayiwkülen.'],a:'Weñangkülen.'}]}};
+const TAB_IDS=Object.keys(TABLETS);
+const tabCount=()=>TAB_IDS.filter(t=>S.flags['tab_'+t]).length;
+function tabletTalk(id){
+  const T=TABLETS[id],en=S.gloss==='en';
+  if(S.flags['tab_'+id])return choose(L('','Kuyfi chillka','La piedra brilla tranquila. ¿Vuelves a leerla?','The stone glows quietly. Read it again?'),
+    [{m:'May',g:en?'Read the lesson':'Leer la lección',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{if(v)say([T.t].concat(T.lines))},true,true);
+  const first=!S.flags.tab_seen;S.flags.tab_seen=1;
+  say((first?[N('Una piedra antigua, verde de musgo, tallada de arriba abajo con signos. Bajo el musgo se leen palabras en mapudungun: la dejaron los kuyfikeche, la gente de antes, para que nadie olvidara.','An ancient stone, green with moss, carved from top to bottom. Under the moss you can read words in Mapudungun: the kuyfikeche, the people of long ago, left it so that no one would forget.'),
+      N('Dicen que quien despierta las seis kuyfi chillka recibe un trarilongko que protege como ningún otro.','They say whoever wakes all six kuyfi chillka receives a trarilongko that protects like no other.')]
+    :[N('Otra kuyfi chillka, cubierta de musgo. Le quitas el musgo y lees.','Another kuyfi chillka, covered in moss. You brush the moss away and read.')]).concat([T.t],T.lines,[N('Los signos se apagan, esperando: la piedra quiere saber si aprendiste.','The signs dim, waiting: the stone wants to know if you learned.')]),()=>ask(0));
+  function ask(i){
+    if(i>=T.qs.length){S.flags['tab_'+id]=1;S.xp+=8;sfx('lvl');const n=tabCount();persist();
+      const ls=[N('Los signos se encienden uno por uno, de abajo hacia arriba. La piedra está despierta. +8 kimün. ('+n+'/6)','The signs light up one by one, from the bottom up. The stone is awake. +8 kimün. ('+n+'/6)'),praise()];
+      if(n>=6&&!S.gear.trarilongko){S.gear.trarilongko=1;persist();
+        ls.push(Object.assign(L('','Trarilongko!','Las seis piedras cantan a la vez, lejos y cerca. Del musgo cae un trarilongko antiguo, tejido con hilo que brilla. Te lo amarras en la frente: tu defensa sube +3.','The six stones sing at once, near and far. An ancient trarilongko falls from the moss, woven with shining thread. You tie it around your forehead: defense +3.'),{fx:()=>sfx('lvl')}))}
+      return say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+    const q=T.qs[i],opts=q.o.map(o=>({m:o,v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
+    choose(q.q,opts,v=>{if(v===q.a){sfx('ok');ask(i+1)}
+      else{sfx('bad');const hd=S.hm?heroHurt():0;say([N((hd?'(−'+hd+') ':'')+'Los signos tiemblan y se apagan. La respuesta era: '+q.a+'. Lee la piedra otra vez.',(hd?'(−'+hd+') ':'')+'The signs tremble and go dark. The answer was: '+q.a+'. Read the stone again.')].concat(T.lines),()=>ask(0))}},false,true)}
+}
+
+/* ---------- Nütramkan: a young visitor in every lof who wants to practise talking ---------- */
+const NUTK={
+  lof:{who:'Ayelen',set:[
+    {q:L('Ayelen','Mari mari!','Te saluda.','She greets you.'),o:['Mari mari!','Pewkayal!','Chaltu may!'],a:'Mari mari!'},
+    {q:L('Ayelen','Chumleymi?','¿Cómo estás?','How are you?'),o:['Kümelen, eymi kay?','Fewla.','Ruka mew.'],a:'Kümelen, eymi kay?'},
+    {q:L('Ayelen','Iney pingeymi?','¿Cómo te llamas?','What is your name?'),o:['@ pingen.','Kümelen.','Lafken mew.'],a:'@ pingen.'}]},
+  n_lof:{who:'Kallfü',set:[
+    {q:L('Kallfü','Chew tuwimi?','¿De dónde eres?','Where are you from?'),o:['Lafken mew tuwün.','Lafken mew amuan.','Lafken pingen.'],a:'Lafken mew tuwün.'},
+    {q:L('Kallfü','Chew amuaymi?','¿Adónde vas?','Where are you going?'),o:['Mawida mew amuan.','Mawida mew tuwün.','Mawida pingen.'],a:'Mawida mew amuan.'},
+    {q:L('Kallfü','Kimimi mapudungun?','¿Sabes mapudungun?','Do you know Mapudungun?'),o:['Kimnierpuken.','Amuyngün.','Kiñe pataka.'],a:'Kimnierpuken.'}]},
+  p_lof:{who:'Rayen',set:[
+    {q:L('Rayen','Iyaymi kofke?','¿Vas a comer pan?','Will you eat bread?'),o:['May, iyaan.','May, iyay.','Iyael pingen.'],a:'May, iyaan.'},
+    {q:L('Rayen','Chem ayüymi?','¿Qué te gusta?','What do you like?'),o:['Ngülliw ayüfiñ.','Ngülliw pingen.','Ngülliw mew tuwün.'],a:'Ngülliw ayüfiñ.'},
+    {q:L('Rayen','Wütreymi?','¿Tienes frío?','Are you cold?'),o:['May, wütren.','May, wütrey.','Wütre ruka.'],a:'May, wütren.'}]},
+  w_lof:{who:'Millanao',set:[
+    {q:L('Millanao','Chumngechi pingekey «lluvia»?','¿Cómo se dice «lluvia»?','How do you say «rain»?'),o:['Mawün.','Antü.','Kürüf.'],a:'Mawün.'},
+    {q:L('Millanao','Chumngechi pingekey «sol»?','¿Cómo se dice «sol»?','How do you say «sun»?'),o:['Antü.','Küyen.','Wangülen.'],a:'Antü.'},
+    {q:L('Millanao','Chumngechi pingekey «luna»?','¿Cómo se dice «luna»?','How do you say «moon»?'),o:['Küyen.','Antü.','Pire.'],a:'Küyen.'}]},
+  e_lof:{who:'Nawel',set:[
+    {q:L('Nawel','Chumngechi pingekey «caballo»?','¿Cómo se dice «caballo»?','How do you say «horse»?'),o:['Kawellu.','Trewa.','Choyke.'],a:'Kawellu.'},
+    {q:L('Nawel','Epu ka küla: tunten?','Dos y tres: ¿cuánto es?','Two and three: how much?'),o:['Kechu.','Meli.','Kayu.'],a:'Kechu.'},
+    {q:L('Nawel','Chew müley ta choyke?','¿Dónde está el ñandú?','Where is the rhea?'),o:['Lelfün mew.','Choyke pingen.','Kechu choyke.'],a:'Lelfün mew.'}]}};
+function nutkTalk(lofId){
+  const D=NUTK[lofId],fl='ntk_'+lofId,done=!!S.flags[fl],nm=S.name;
+  const sub=s=>s.replace('@',nm);
+  say([L(D.who,'Mari mari! Nütramkayaiñ?','¡Hola! ¿Conversamos? Estoy aprendiendo y quiero practicar.','Hello! Shall we talk? I am learning and I want to practise.')],()=>{
+    choose(L('','Nütramkayaiñ?','¿Conversas con '+D.who+'?','Talk with '+D.who+'?'),[{m:'May',g:S.gloss==='en'?'Yes, let us talk':'Sí, conversemos',v:1},{m:'Ka mew',g:S.gloss==='en'?'Later':'Después',v:0}],v=>{if(v)step(0)},true,true)});
+  function step(i){
+    if(i>=D.set.length){const ls=[L(D.who,'Kümey! Pewkayal!','¡Muy bien! ¡Hasta luego!','Very good! See you later!')];
+      if(!done){S.flags[fl]=1;S.gold+=15;S.xp+=6;sfx('lvl');ls.push(N('+15 ngülliw · +6 kimün.','+15 ngülliw · +6 kimün.'));
+        const all=Object.keys(NUTK).every(k=>S.flags['ntk_'+k]);
+        if(all&&!S.flags.ntk_all){S.flags.ntk_all=1;S.items.mate=(S.items.mate||0)+3;ls.push(N('Conversaste en los cinco lof. La gente joven te regala tres mate para el camino.','You have talked in all five lof. The young people give you three mate for the road.'))}
+        persist()}
+      return say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+    const s=D.set[i],opts=s.o.map(o=>({m:sub(o),v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
+    choose(s.q,opts,v=>{if(v===s.a){sfx('ok');step(i+1)}
+      else{sfx('bad');say([L(D.who,'Feyta chi no...','Eso no...','Not that...'),N('Se podía decir: «'+sub(s.a)+'». Probemos otra vez.','You could say: «'+sub(s.a)+'». Let us try again.')],()=>step(i))}},false,true)}
+}

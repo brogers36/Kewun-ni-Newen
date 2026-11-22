@@ -113,6 +113,7 @@ function interact(){
   if(c==='I'&&M.signs&&M.signs[k])return say(M.signs[k]);
   if(c==='C')return openChest(tx,ty,M.chests&&M.chests[k]);
   if(c==='K'&&M.konew&&M.konew[k])return konew(tx,ty,M.konew[k]);
+  if(c==='Ł'&&M.tablets&&M.tablets[k])return tabletTalk(M.tablets[k]);
   if(c==='L')return unlock(tx,ty);
   if((c==='N'||c==='J')&&M.pz&&M.pz.tiles[k])return pzTouch(tx,ty);
   if(c==='H'&&M.stones&&M.stones[k])return stoneTalk(M.stones[k]);
@@ -309,8 +310,10 @@ function palEnd(){
       if(two){two=0;tid=null;stop();if(dt<500)pressB();return}
       if(fin&&tid!==null&&!moved&&dt<350&&Date.now()-lastA>150){
         lastA=Date.now();
-        if(active){if(active.kind==='say')active.a()}
-        else if(mode==='map')interact();
+        // handled here: cancel the click the browser would synthesize afterwards, which could land on a
+        // menu that has just opened under the finger and pick an option before the player sees it
+        if(active){if(active.kind==='say'){if(e.cancelable)e.preventDefault();active.a()}}
+        else if(mode==='map'){if(e.cancelable)e.preventDefault();interact()}
       }
       tid=null;stop();moved=0;
     }else if(fin){tid=null;stop()}

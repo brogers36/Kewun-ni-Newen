@@ -234,6 +234,7 @@ function loadMap(id,x,y,quiet){TALKER=null;
   for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++){const c=grid[yy][xx];
     if((c==='P'||c==='C'||c==='K'||c==='k'||c==='L'||c==='x')&&S.flags['t:'+id+':'+xx+','+yy])grid[yy][xx]=M.floor;}
   if(S.flags['gate:'+id])for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++){if(grid[yy][xx]==='G')grid[yy][xx]=M.floor;if(grid[yy][xx]==='O')grid[yy][xx]='q'}
+  if(M.tablets)for(const k in M.tablets){const [tx,ty]=k.split(',').map(Number);grid[ty][tx]='Ł'}
   PZ={n:0,lit:new Set()};
   if(['sb1','sb2','sb3','sb4','sb5'].every(f=>S.flags[f]))S.flags.sbAll=1;
   if(['st1','st2','st3','st4','st5'].every(f=>S.flags[f]))S.flags.st_all=1;

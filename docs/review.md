@@ -394,3 +394,20 @@ Al empezar el juego la kuku guía una pelea de práctica (un laftrache, después
 ### Tanda 18 · apariciones en batalla (Nov 22)
 - (Nov 22) Brandon: al empezar una pelea con jefe, **"Wefürkey X!"**; con wekufü comunes, **"Wefi / Wefyngu / Wefyngün"** + número + nombre(s). Con tipos mezclados uso "ka" entre grupos: p. ej. **"Wefyngün epu laftrache ka kiñe chonchon!"** ⚠ confirmar que "ka" funciona así en la lista.
 - Nuevo: si fallas la última pregunta contra el Yewen, puede llamar al **Fütra Ngoymatulfe** como secuaz (texto solo en castellano/inglés).
+
+### Tanda 19 · kuyfi chillka y nütramkan (Nov 22)
+Seis piedras antiguas (una por tierra) con una lección y dos preguntas; las seis dan un **trarilongko** (defensa +3). Todo ⚠ para revisar:
+- Nombre: **"kuyfi chillka"** 'escritura antigua' y **kuyfikeche** 'la gente de antes'.
+- Kuyüm (Lafkenche) · saludos: Mari mari · Chumleymi? · Kümelen, eymi kay? · Chaltu may! · Pewkayal!
+- Lewfü (Nagche) · mew: ruka mew / lafken mew / mawida mew · "Ruka mew mülen." · "Lafken mew amuan." · "Mawida mew amuan."
+- Pewen mapu (Pewenche) · cuerpo: lonko, nge, pilun, wün, kuwü, namun, piwke.
+- Fütra mawida (Williche) · tiempo: fewla, wiya, wüle, liwen, antü, pun · "Wiya amun." · "Wüle amuan."
+- Kura (Puelmapu) · animales: kawellu, trewa, waka, choyke, luan, pangi, mañke.
+- Ngoyman lelfün · estados: Kümelen · Ayiwkülen · Weñangkülen.
+Nütramkan: alguien joven en cada lof quiere conversar (tres turnos, eliges la respuesta). Nombres: Ayelen, Kallfü, Rayen, Millanao, Nawel. Frases nuevas ⚠:
+- "Nütramkayaiñ?" '¿conversamos?'; "Feyta chi no..." 'eso no...' (¿mejor otra forma?); "Kümey! Pewkayal!"; "Ka mew" 'después'.
+- lof: Mari mari! · Chumleymi? → Kümelen, eymi kay? · Iney pingeymi? → X pingen.
+- n_lof: Chew tuwimi? → Lafken mew tuwün. · Chew amuaymi? → Mawida mew amuan. · Kimimi mapudungun? → Kimnierpuken.
+- p_lof: Iyaymi kofke? → May, iyaan. · Chem ayüymi? → Ngülliw ayüfiñ. · Wütreymi? → May, wütren.
+- w_lof: Chumngechi pingekey «lluvia / sol / luna»? → Mawün / Antü / Küyen.
+- e_lof: «caballo» → Kawellu · Epu ka küla: tunten? → Kechu · Chew müley ta choyke? → Lelfün mew.

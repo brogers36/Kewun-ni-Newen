@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='ea02d35-202611220928';
+window.KEWUN_BUILD='b042286-202611220945';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -714,7 +714,7 @@ function showBanner(m,g){if(S&&S.nogloss&&m)g='';banner.querySelector('b').textC
 const HPQ=4,SPMAX=3;
 function maxHP(){return S.baseMax+(S.gear.trariwe?4:0)+Math.floor(S.piwke/4)*4+(S.flags.ngen?4:0)+(S.flags.ngen2?4:0)+(S.flags.ngen3?4:0)+(S.flags.ngen4?4:0)+(S.flags.ngen5?4:0)}
 function atk(){return Math.max(1,S.baseAtk+(S.gear.futrawino?3:0)+(S.gear.waiki?2:0)-(S.curse?2:0)-(S.kutran?3:0)-(S.chill>0?2:0))}
-function def(){return Math.max(0,S.baseDef+(S.gear.makun?2:0)-(S.kutran?2:0))}
+function def(){return Math.max(0,S.baseDef+(S.gear.makun?2:0)+(S.gear.trarilongko?3:0)-(S.kutran?2:0))}
 function xpNeed(){return 10+S.lvl*10}
 function newState(hero){const fem=hero==='millaray';return{hero,fem,name:fem?'Millaray':'Llanka',gloss:LANG,map:'rupu',x:1,y:6,hp:24,baseMax:24,baseAtk:5,baseDef:1,lvl:1,xp:0,gold:0,
   items:{kulon:2,diwen:0,kofke:0,lawen:0,mate:0},gear:{},roots:['amutu'],runes:[],flags:{},piwke:0,keys:0,sp:0,curse:0,hints:true,
@@ -847,6 +847,7 @@ const GEAR={
   trariwe:{m:'trariwe',es:'faja tejida: +1 piwke máximo',en:'woven sash: +1 max heart',p:40},
   futrawino:{m:'fütra wiño',es:'wiño grande: fuerza +3',en:'big palin stick: strength +3',p:50},
   waiki:{m:'Epunamun ñi waiki',es:'la lanza del Epunamun: fuerza +2',en:"Epunamun's spear: strength +2",p:0,hide:1},
+  trarilongko:{m:'trarilongko',es:'el trarilongko de las kuyfi chillka: defensa +3',en:'the trarilongko of the kuyfi chillka: defense +3',p:0,hide:1},
   lafkenkura:{m:'lafkenkura',es:'la piedra del mar de los chumpall: recuperas 2 de newen cada turno de pelea',en:'the chumpall sea stone: you recover 2 newen every battle turn',p:0,hide:1}};
 function useItem(id){
   const it=ITEMS[id];if(!S.items[id])return null;S.items[id]--;const mx=maxHP();
@@ -1610,7 +1611,8 @@ lof:{name:'Lof',g:{es:'La comunidad',en:'The community'},floor:',',bg:'coast',so
  doors:{'3,3':{to:'l_ruka1',x:6,y:7},'3,8':{to:'l_ruka2',x:6,y:7}},
  edges:{left:{to:'rupu',x:28,y:6},right:{to:'kuyum',x:1,y:7,req:'pentukun',reqMsg:[N('Antes de seguir, haz el pentukuwün con el lonko. Si no sabes cómo, habla primero con tu kuku.','Before you go on, do the pentukuwün with the lonko. If you do not know how, talk to your kuku first.')]}},
  scenes:[{type:'palin',x:11,y:3,w:12,h:3}],
- ents:[{id:'lonko',kind:'npc',look:'lonko',x:18,y:7,talk:()=>lonkoTalk(),bub:['Mari mari!','Kümey antü.']},
+ ents:[{id:'ntk',kind:'npc',look:'weaver',fem:1,x:8,y:5,dir:'down',fixed:1,talk:()=>nutkTalk('lof'),bub:['Nütramkayaiñ?','Mari mari!']},
+   {id:'lonko',kind:'npc',look:'lonko',x:18,y:7,talk:()=>lonkoTalk(),bub:['Mari mari!','Kümey antü.']},
    {id:'kuku2',kind:'npc',look:'kuku',fem:1,x:5,y:9,flag:'stgo_call',talk:()=>kukuLof()},
    {id:'weaver',kind:'npc',look:'weaver',fem:1,x:6,y:3,dir:'up',act:'weave',fixed:1,talk:()=>weaverTalk(),bub:['Ngürekalen.','Kümey!']},
    {id:'cook',kind:'npc',look:'cook',fem:1,x:24,y:8,act:'cook',path:[[24,8],[24,10],[28,10],[24,10]],pause:160,talk:()=>cookTalk(),bub:['Iyael!','Kofke, ilo, poñü...']},
@@ -1628,6 +1630,7 @@ lof:{name:'Lof',g:{es:'La comunidad',en:'The community'},floor:',',bg:'coast',so
    {id:'fisher',kind:'npc',look:'fisher',x:31,y:13,talk:()=>fisherTalk()},
    {id:'child',kind:'npc',look:'child',x:30,y:4,talk:()=>childTalk()}]},
 kuyum:{name:'Kuyüm',g:{es:'Las dunas',en:'The dunes'},floor:'.',bg:'coast',song:'coast',
+ tablets:{'2,5':'saludo'},
  edges:{left:{to:'lof',x:32,y:9},right:{to:'mawida',x:1,y:7},down:{to:'l_wapi',x:8,y:1}},digs:{'6,8':{what:'piwke'},'7,3':{what:'pali',req:'laf_paliq'}},
  signs:{'25,11':[L('Kura','Kiñe, epu, küla, meli.','Una piedra tallada dice: «uno, dos, tres, cuatro». Hay cuatro piedras con números en las dunas.','A carved stone says: «one, two, three, four». There are four numbered stones in the dunes.')],'20,5':[N('Un viento fuerte y frío cierra el paso. Solo el don de Ngen-kürüf, el ngen del viento, podría abrirlo (otra región).','A strong, cold wind blocks the way. Only the gift of Ngen-kürüf, the wind ngen, could open it (another region).')]},
  chests:{'23,5':'locked','29,10':'numgift'},dive:{'17,3':'piwke'},
@@ -1703,7 +1706,8 @@ n_rupu:{region:'nagche',name:'Nagche rüpü',g:{es:'El camino a los llanos',en:'
 n_lof:{region:'nagche',name:'Nagche lof',g:{es:'La comunidad de los llanos',en:'The lowland community'},floor:',',bg:'field',song:'lof',
  doors:{'3,3':{to:'n_ruka1',x:6,y:7}},
  edges:{left:{to:'n_rupu',x:30,y:7},right:{to:'n_kullin',x:1,y:7,req:'nag_lonko',reqMsg:[N('Antes de seguir, habla con el lonko de este lof. Está junto al kütral.','Before you go on, speak with the lonko of this lof. He is by the fire.')]}},
- ents:[{id:'chuchu',kind:'npc',look:'kuku',fem:1,x:5,y:10,talk:()=>chuchuTalk(),bub:['Na küme mi küpan!']},
+ ents:[{id:'ntk',kind:'npc',look:'kona',x:11,y:3,dir:'down',fixed:1,talk:()=>nutkTalk('n_lof'),bub:['Nütramkayaiñ?','Mari mari!']},
+   {id:'chuchu',kind:'npc',look:'kuku',fem:1,x:5,y:10,talk:()=>chuchuTalk(),bub:['Na küme mi küpan!']},
    {id:'nlonko',kind:'npc',look:'lonko2',x:18,y:7,talk:()=>nLonkoTalk(),bub:['Mari mari!']},
    {id:'machi_nag',kind:'npc',look:'machi',fem:1,x:19,y:5,dir:'down',fixed:1,talk:()=>machiTalk('nag'),bub:['Mari mari!','Lawen...']},
    {id:'rewe_nag',kind:'npc',look:'rewe',x:20,y:5,fixed:1,talk:()=>reweTalk()},
@@ -1732,6 +1736,7 @@ n_kullin:{region:'nagche',name:'Kulliñ mapu',g:{es:'Los campos de los animales'
    ...[[16,9],[18,9],[20,9],[17,10],[19,10],[21,10]].map(([x,y],i)=>({id:'fl'+i,kind:'animal',look:'ofisa',x,y,still:1,dir:i%2?'right':'left'})),
    {kind:'enemy',x:18,y:2,party:['kolokolo','kolokolo']},{kind:'enemy',x:9,y:8,party:['chonchon','chonchon']},{kind:'enemy',x:24,y:8,party:['anchi','kolokolo']}]},
 n_lewfu:{region:'nagche',name:'Lewfü',g:{es:'El río',en:'The river'},floor:',',bg:'field',song:'nag',
+ tablets:{'28,9':'mew'},
  edges:{left:{to:'n_kullin',x:30,y:7},right:{to:'n_mawida',x:1,y:7}},stones:{'25,5':'poss'},chests:{'28,1':'piwke'},
  ents:[{id:'nfisher',kind:'npc',look:'fisher',x:12,y:9,dir:'right',fixed:1,talk:()=>nFisherTalk(),bub:['Challwatulen.']},{kind:'enemy',x:8,y:3,party:['kolokolo','anchi']},{kind:'enemy',x:21,y:10,party:['chonchon','chonchon','kolokolo']},
    {kind:'enemy',x:6,y:10,party:['kolokolo','kolokolo','kolokolo']},{kind:'enemy',x:20,y:2,party:['anchi','anchi']}]},
@@ -1797,7 +1802,8 @@ p_rupu:{region:'pewenche',name:'Pewenche rüpü',g:{es:'El camino a la cordiller
 p_lof:{region:'pewenche',name:'Pewenche lof',g:{es:'La comunidad de los pewenes',en:'The community of the pewen trees'},floor:',',bg:'mount',song:'lof',pal:'pewenche',trees:'pewen',
  doors:{'19,3':{to:'p_ruka1',x:6,y:7},'3,7':{to:'p_ruka2',x:6,y:7}},digs:{'30,5':{what:'piwke',req:'pew_kidd'}},
  edges:{left:{to:'p_rupu',x:30,y:7},right:{to:'p_pewen',x:1,y:7,req:'pew_lonko',reqMsg:[N('Antes de seguir, habla con el lonko de este lof. Está junto al kütral.','Before you go on, speak with the lonko of this lof. He is by the fire.')]}},
- ents:[{id:'laku',kind:'npc',look:'elder',x:5,y:11,talk:()=>lakuTalk(),bub:['Mari mari!']},
+ ents:[{id:'ntk',kind:'npc',look:'weaver',fem:1,x:11,y:3,dir:'down',fixed:1,talk:()=>nutkTalk('p_lof'),bub:['Nütramkayaiñ?','Mari mari!']},
+   {id:'laku',kind:'npc',look:'elder',x:5,y:11,talk:()=>lakuTalk(),bub:['Mari mari!']},
    {id:'plonko',kind:'npc',look:'lonko3',x:18,y:7,talk:()=>pLonkoTalk(),bub:['Mari mari!']},
    {id:'machi_pew',kind:'npc',look:'machi',fem:1,x:21,y:5,dir:'down',fixed:1,talk:()=>machiTalk('pew'),bub:['Mari mari!','Ngülliw...']},
    {id:'rewe_pew',kind:'npc',look:'rewe',x:22,y:5,fixed:1,talk:()=>reweTalk()},
@@ -1822,6 +1828,7 @@ p_ruka2:{region:'pewenche',name:'Nawel ñi ruka',g:{es:'La ruka del chachay Nawe
  edges:{down:{to:'p_lof',x:3,y:8}},chests:{'11,5':'kulongift'},
  ents:[{id:'nawel',kind:'npc',look:'elder',x:6,y:4,dir:'right',seated:1,fixed:1,talk:()=>nawelTalk(),bub:['Kof kof...']}]},
 p_pewen:{region:'pewenche',name:'Pewen mapu',g:{es:'El bosque de pewenes',en:'The pewen forest'},floor:',',bg:'mount',song:'pew',pal:'pewenche',trees:'pewen',
+ tablets:{'12,11':'kalül'},
  edges:{left:{to:'p_lof',x:32,y:9},right:{to:'p_pire',x:1,y:7}},chests:{'27,2':'piwke','27,13':'mawgift'},
  digs:{'16,12':{what:'ngulliw',req:'mql_pew'},'8,9':{what:'piwke',req:'pew_ngu2'}},
  pz:{kind:'N',tiles:{'9,3':{lab:'rimü',i:2},'12,3':{lab:'pewü',i:0},'15,3':{lab:'pukem',i:3},'18,3':{lab:'walüng',i:1}}},
@@ -1888,7 +1895,8 @@ w_rupu:{region:'williche',name:'Williche rüpü',g:{es:'El camino al sur',en:'Th
 w_lof:{region:'williche',name:'Williche lof',g:{es:'La comunidad del lago',en:'The lake community'},floor:',',bg:'rainforest',song:'lof',pal:'williche',trees:'lawal',
  doors:{'3,3':{to:'w_ruka1',x:6,y:7}},
  edges:{down:{to:'w_wapi',x:15,y:1},left:{to:'w_rupu',x:30,y:7},right:{to:'w_mawida',x:1,y:7,req:'wil_lonko',reqMsg:[N('Antes de seguir, habla con el lonko de este lof. Está junto al kütral.','Before you go on, speak with the lonko of this lof. He is by the fire.')]}},
- ents:[{id:'cheche',kind:'npc',look:'elder',x:5,y:10,talk:()=>checheTalk(),bub:['Mari mari!']},
+ ents:[{id:'ntk',kind:'npc',look:'kona',x:11,y:3,dir:'down',fixed:1,talk:()=>nutkTalk('w_lof'),bub:['Nütramkayaiñ?','Mari mari!']},
+   {id:'cheche',kind:'npc',look:'elder',x:5,y:10,talk:()=>checheTalk(),bub:['Mari mari!']},
    {id:'wlonko',kind:'npc',look:'lonko4',x:18,y:7,talk:()=>wLonkoTalk(),bub:['Mari mari!']},
    {id:'machi_wil',kind:'npc',look:'machi',fem:1,x:20,y:5,dir:'down',fixed:1,talk:()=>machiTalk('wil'),bub:['Mari mari!','Trayen ko...']},
    {id:'rewe_wil',kind:'npc',look:'rewe',x:21,y:5,fixed:1,talk:()=>reweTalk()},
@@ -1904,6 +1912,7 @@ w_lof:{region:'williche',name:'Williche lof',g:{es:'La comunidad del lago',en:'T
    {id:'wpapay',kind:'npc',look:'kuku',fem:1,x:19,y:8,dir:'left',seated:1,fixed:1,talk:()=>mushayTalk(),bub:['Mushay...','Mari mari!']},
    {id:'wseller',kind:'npc',look:'seller',x:31,y:10,talk:()=>shop('w_lof')}]},
 w_mawida:{region:'williche',name:'Lawal mawida',g:{es:'El bosque de alerces',en:'The alerce forest'},floor:',',bg:'rainforest',song:'wil',pal:'williche',trees:'lawal',
+ tablets:{'12,10':'antu'},
  marks:['16,10','16,11','16,12'],edges:{left:{to:'w_lof',x:32,y:9},right:{to:'w_lafken',x:1,y:7},down:{to:'w_trayen',x:16,y:1}},stones:{'14,3':'kin'},chests:{'27,2':'piwke'},konew:{'22,10':K8},
  ents:[{kind:'enemy',x:10,y:3,party:['kowek','mawek']},{kind:'enemy',x:17,y:7,party:['mawek','mawek','kowek']},{kind:'enemy',x:5,y:6,party:['kowek','kowek']}]},
 w_lafken:{region:'williche',name:'Willi lafken',g:{es:'La costa del sur',en:'The southern coast'},floor:'.',bg:'rainforest',song:'wil',pal:'williche',trees:'lawal',
@@ -1971,7 +1980,8 @@ e_rupu:{region:'puelmapu',name:'Puel rüpü',g:{es:'La bajada al este de la cord
 e_lof:{region:'puelmapu',name:'Puelche lof',g:{es:'La comunidad del este',en:'The community of the east'},floor:',',bg:'pampa',song:'lof',pal:'puelmapu',trees:'chacay',
  doors:{'3,3':{to:'e_ruka1',x:6,y:7}},
  edges:{left:{to:'e_rupu',x:30,y:7},right:{to:'e_lelfun',x:1,y:7,req:'puel_lonko',reqMsg:[N('Antes de seguir, habla con el lonko de este lof. Está junto al kütral.','Before you go on, speak with the lonko of this lof. He is by the fire.')]}},
- ents:[{id:'weku',kind:'npc',look:'elder',x:5,y:10,talk:()=>wekuTalk(),bub:['Mari mari!']},
+ ents:[{id:'ntk',kind:'npc',look:'kona',x:11,y:3,dir:'down',fixed:1,talk:()=>nutkTalk('e_lof'),bub:['Nütramkayaiñ?','Mari mari!']},
+   {id:'weku',kind:'npc',look:'elder',x:5,y:10,talk:()=>wekuTalk(),bub:['Mari mari!']},
    {id:'elonko',kind:'npc',look:'lonko5',x:18,y:7,talk:()=>eLonkoTalk(),bub:['Mari mari!']},
    {id:'machi_puel',kind:'npc',look:'machi',fem:1,x:19,y:6,dir:'down',fixed:1,talk:()=>machiTalk('puel'),bub:['Mari mari!','Chadi...']},
    {id:'rewe_puel',kind:'npc',look:'rewe',x:20,y:6,fixed:1,talk:()=>reweTalk()},
@@ -2002,6 +2012,7 @@ e_mallin:{region:'puelmapu',name:'Malliñ mapu',g:{es:'El mallín, el humedal de
    {kind:'animal',look:'choyke',x:22,y:3},
    {kind:'enemy',x:9,y:6,party:['kurutrewa','mewlen']},{kind:'enemy',x:18,y:9,party:['mewlen','mewlen','mewlen']},{kind:'enemy',x:26,y:6,party:['kurutrewa','kurutrewa']}]},
 e_kura:{region:'puelmapu',name:'Kura mapu',g:{es:'El pedregal',en:'The stone barrens'},floor:'.',bg:'pampa',song:'puel',pal:'puelmapu',trees:'chacay',
+ tablets:{'10,10':'kulliñ'},
  edges:{left:{to:'e_lelfun',x:30,y:7},right:{to:'e_meseta',x:1,y:7},down:{to:'e_salitral',x:24,y:1}},
  chests:{'5,3':'mawgift','20,2':'piwke'},digs:{'14,9':{}},
  ents:[{kind:'enemy',x:12,y:4,party:['kura','mewlen']},{kind:'enemy',x:22,y:9,party:['kurutrewa','kura']},{kind:'enemy',x:8,y:10,party:['mewlen','mewlen','kurutrewa']},{kind:'enemy',x:28,y:4,party:['kurutrewa','mewlen','kura']}]},
@@ -2052,6 +2063,7 @@ g_lafken:{region:'ngoyman',name:'Ngoyman lafken',g:{es:'La costa robada',en:'The
  ents:[{id:'cap1',kind:'npc',look:'child',x:10,y:4,dir:'down',fixed:1,flag:'gm1',talk:()=>gLafTalk(),bub:['...','Kellumuchi!']},
    {kind:'enemy',x:16,y:3,party:['nidol','ngoyam']},{kind:'enemy',x:24,y:8,party:['piwichen','nidol']},{kind:'enemy',x:8,y:8,party:['ngoyam','ngoyam','piwichen']}]},
 g_nag:{region:'ngoyman',name:'Ngoyman lelfün',g:{es:'Los llanos robados',en:'The stolen lowlands'},floor:',',bg:'field',song:'ngoy',pal:'ngoynag',trees:'koyam',fog:1,
+ tablets:{'25,10':'rakizuam'},
  edges:{right:{to:'g_lafken',x:1,y:7},left:{to:'g_pewen',x:30,y:7}},chests:{'6,3':'mawgift','28,2':'piwke'},digs:{'24,10':{}},
  ents:[{id:'cap2',kind:'npc',look:'fisher',x:20,y:8,dir:'down',fixed:1,flag:'gm2',talk:()=>gNagTalk(),bub:['...','Kellumuchi!']},
    {kind:'enemy',x:10,y:3,party:['fkolokolo','ngoyam']},{kind:'enemy',x:25,y:8,party:['nguruvilu','fkolokolo']},{kind:'enemy',x:13,y:9,party:['ngoyam','nguruvilu','fkolokolo']}]},
@@ -2386,6 +2398,7 @@ function loadMap(id,x,y,quiet){TALKER=null;
   for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++){const c=grid[yy][xx];
     if((c==='P'||c==='C'||c==='K'||c==='k'||c==='L'||c==='x')&&S.flags['t:'+id+':'+xx+','+yy])grid[yy][xx]=M.floor;}
   if(S.flags['gate:'+id])for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++){if(grid[yy][xx]==='G')grid[yy][xx]=M.floor;if(grid[yy][xx]==='O')grid[yy][xx]='q'}
+  if(M.tablets)for(const k in M.tablets){const [tx,ty]=k.split(',').map(Number);grid[ty][tx]='Ł'}
   PZ={n:0,lit:new Set()};
   if(['sb1','sb2','sb3','sb4','sb5'].every(f=>S.flags[f]))S.flags.sbAll=1;
   if(['st1','st2','st3','st4','st5'].every(f=>S.flags[f]))S.flags.st_all=1;
@@ -2538,6 +2551,7 @@ function interact(){
   if(c==='I'&&M.signs&&M.signs[k])return say(M.signs[k]);
   if(c==='C')return openChest(tx,ty,M.chests&&M.chests[k]);
   if(c==='K'&&M.konew&&M.konew[k])return konew(tx,ty,M.konew[k]);
+  if(c==='Ł'&&M.tablets&&M.tablets[k])return tabletTalk(M.tablets[k]);
   if(c==='L')return unlock(tx,ty);
   if((c==='N'||c==='J')&&M.pz&&M.pz.tiles[k])return pzTouch(tx,ty);
   if(c==='H'&&M.stones&&M.stones[k])return stoneTalk(M.stones[k]);
@@ -4353,6 +4367,104 @@ function stTeenTalk(){
     choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Weche','...no sé si eso me ayuda.','...no sé si eso me ayuda.','...I am not sure that helps.')],()=>ask(0))}},true,false)}
 }
 
+/* ---------- Kuyfi chillka: six ancient carved tablets, each a Mapudungun lesson. All six = the trarilongko ---------- */
+const TABLETS={
+  saludo:{t:N('Saludar y despedirse','Greeting and leaving'),lines:[
+    L('','Mari mari!','Hola (a una persona o a muchas).','Hello (to one person or to many).'),
+    L('','Chumleymi? · Kümelen, eymi kay?','¿Cómo estás? · Estoy bien, ¿y tú?','How are you? · I am well, and you?'),
+    L('','Chaltu may! · Pewkayal!','¡Gracias! · ¡Hasta luego!','Thank you! · See you later!')],
+   qs:[{q:L('','Chumleymi?','Te preguntan esto. ¿Qué respondes?','Someone asks you this. What do you answer?'),o:['Kümelen, eymi kay?','Pewkayal!','Mari mari pingen'],a:'Kümelen, eymi kay?'},
+       {q:N('¿Cómo das las gracias?','How do you say thank you?'),o:['Chumleymi?','Chaltu may!','Pewkayal!'],a:'Chaltu may!'}]},
+  mew:{t:N('Dónde: mew','Where: mew'),lines:[
+    N('mew va después del nombre del lugar: dice dónde estás o adónde vas.','mew comes after the place: it says where you are or where you go.'),
+    L('','ruka mew · lafken mew · mawida mew','en la casa · en el mar · en el monte','at home · at the sea · in the forest'),
+    L('','Ruka mew mülen. · Lafken mew amuan.','Estoy en la casa. · Iré al mar.','I am at home. · I will go to the sea.')],
+   qs:[{q:L('','Ruka mew mülen.','¿Qué significa?','What does it mean?'),o:['Estoy en la casa.','Voy a la casa.','Mi casa es grande.'],a:'Estoy en la casa.'},
+       {q:N('¿Cómo se dice «iré al monte»?','How do you say «I will go to the forest»?'),o:['Mawida mülen.','Mawida mew amuan.','Mawida amun mew.'],a:'Mawida mew amuan.'}]},
+  kalül:{t:N('El cuerpo','The body'),lines:[
+    L('','lonko · nge · pilun · wün','cabeza · ojo · oreja · boca','head · eye · ear · mouth'),
+    L('','kuwü · namun · piwke','mano · pie (pierna) · corazón','hand · foot (leg) · heart'),
+    N('lonko también es el jefe del lof: la «cabeza» de la comunidad.','lonko is also the leader of the lof: the «head» of the community.')],
+   qs:[{q:L('','kuwü','¿Qué es?','What is it?'),o:['el pie','la mano','la oreja'],a:'la mano'},
+       {q:N('¿Cómo se dice «cabeza»?','How do you say «head»?'),o:['lonko','namun','pilun'],a:'lonko'}]},
+  antu:{t:N('El tiempo: hoy, ayer, mañana','Time: today, yesterday, tomorrow'),lines:[
+    L('','fewla · wiya · wüle','ahora · ayer · mañana','now · yesterday · tomorrow'),
+    L('','liwen · antü · pun','la mañana temprano · el día (el sol) · la noche','early morning · day (the sun) · night'),
+    L('','Wiya amun. · Wüle amuan.','Ayer fui. · Mañana iré.','Yesterday I went. · Tomorrow I will go.')],
+   qs:[{q:L('','wüle','¿Qué significa?','What does it mean?'),o:['ayer','mañana','ahora'],a:'mañana'},
+       {q:L('','Wiya amun.','¿Qué significa?','What does it mean?'),o:['Ayer fui.','Mañana iré.','Ahora voy.'],a:'Ayer fui.'}]},
+  kulliñ:{t:N('Los animales del mapu','The animals of the land'),lines:[
+    L('','kawellu · trewa · waka','caballo · perro · vaca','horse · dog · cow'),
+    L('','choyke · luan · pangi · mañke','ñandú · guanaco · puma · cóndor','rhea · guanaco · puma · condor'),
+    N('Muchas palabras para animales nuevos vienen del castellano (kawellu, waka); las de los animales de siempre son mapuche.','Many words for newly arrived animals come from Spanish (kawellu, waka); those for the animals that were always here are Mapuche.')],
+   qs:[{q:L('','choyke','¿Qué animal es?','Which animal is it?'),o:['el puma','el ñandú','el cóndor'],a:'el ñandú'},
+       {q:N('¿Cómo se dice «puma»?','How do you say «puma»?'),o:['pangi','luan','trewa'],a:'pangi'}]},
+  rakizuam:{t:N('Cómo te sientes: -le-, -külen','How you feel: -le-, -külen'),lines:[
+    N('-le- y -külen dicen cómo estás ahora mismo.','-le- and -külen say how you are right now.'),
+    L('','Kümelen. · Ayiwkülen. · Weñangkülen.','Estoy bien. · Estoy feliz. · Estoy triste.','I am well. · I am happy. · I am sad.'),
+    N('El olvido se alimenta de la tristeza callada: decir cómo te sientes también es newen.','The forgetting feeds on silent sorrow: saying how you feel is newen too.')],
+   qs:[{q:L('','Ayiwkülen.','¿Qué significa?','What does it mean?'),o:['Estoy triste.','Estoy feliz.','Estoy cansado.'],a:'Estoy feliz.'},
+       {q:N('¿Cómo se dice «estoy triste»?','How do you say «I am sad»?'),o:['Weñangkülen.','Kümelen.','Ayiwkülen.'],a:'Weñangkülen.'}]}};
+const TAB_IDS=Object.keys(TABLETS);
+const tabCount=()=>TAB_IDS.filter(t=>S.flags['tab_'+t]).length;
+function tabletTalk(id){
+  const T=TABLETS[id],en=S.gloss==='en';
+  if(S.flags['tab_'+id])return choose(L('','Kuyfi chillka','La piedra brilla tranquila. ¿Vuelves a leerla?','The stone glows quietly. Read it again?'),
+    [{m:'May',g:en?'Read the lesson':'Leer la lección',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{if(v)say([T.t].concat(T.lines))},true,true);
+  const first=!S.flags.tab_seen;S.flags.tab_seen=1;
+  say((first?[N('Una piedra antigua, verde de musgo, tallada de arriba abajo con signos. Bajo el musgo se leen palabras en mapudungun: la dejaron los kuyfikeche, la gente de antes, para que nadie olvidara.','An ancient stone, green with moss, carved from top to bottom. Under the moss you can read words in Mapudungun: the kuyfikeche, the people of long ago, left it so that no one would forget.'),
+      N('Dicen que quien despierta las seis kuyfi chillka recibe un trarilongko que protege como ningún otro.','They say whoever wakes all six kuyfi chillka receives a trarilongko that protects like no other.')]
+    :[N('Otra kuyfi chillka, cubierta de musgo. Le quitas el musgo y lees.','Another kuyfi chillka, covered in moss. You brush the moss away and read.')]).concat([T.t],T.lines,[N('Los signos se apagan, esperando: la piedra quiere saber si aprendiste.','The signs dim, waiting: the stone wants to know if you learned.')]),()=>ask(0));
+  function ask(i){
+    if(i>=T.qs.length){S.flags['tab_'+id]=1;S.xp+=8;sfx('lvl');const n=tabCount();persist();
+      const ls=[N('Los signos se encienden uno por uno, de abajo hacia arriba. La piedra está despierta. +8 kimün. ('+n+'/6)','The signs light up one by one, from the bottom up. The stone is awake. +8 kimün. ('+n+'/6)'),praise()];
+      if(n>=6&&!S.gear.trarilongko){S.gear.trarilongko=1;persist();
+        ls.push(Object.assign(L('','Trarilongko!','Las seis piedras cantan a la vez, lejos y cerca. Del musgo cae un trarilongko antiguo, tejido con hilo que brilla. Te lo amarras en la frente: tu defensa sube +3.','The six stones sing at once, near and far. An ancient trarilongko falls from the moss, woven with shining thread. You tie it around your forehead: defense +3.'),{fx:()=>sfx('lvl')}))}
+      return say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+    const q=T.qs[i],opts=q.o.map(o=>({m:o,v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
+    choose(q.q,opts,v=>{if(v===q.a){sfx('ok');ask(i+1)}
+      else{sfx('bad');const hd=S.hm?heroHurt():0;say([N((hd?'(−'+hd+') ':'')+'Los signos tiemblan y se apagan. La respuesta era: '+q.a+'. Lee la piedra otra vez.',(hd?'(−'+hd+') ':'')+'The signs tremble and go dark. The answer was: '+q.a+'. Read the stone again.')].concat(T.lines),()=>ask(0))}},false,true)}
+}
+
+/* ---------- Nütramkan: a young visitor in every lof who wants to practise talking ---------- */
+const NUTK={
+  lof:{who:'Ayelen',set:[
+    {q:L('Ayelen','Mari mari!','Te saluda.','She greets you.'),o:['Mari mari!','Pewkayal!','Chaltu may!'],a:'Mari mari!'},
+    {q:L('Ayelen','Chumleymi?','¿Cómo estás?','How are you?'),o:['Kümelen, eymi kay?','Fewla.','Ruka mew.'],a:'Kümelen, eymi kay?'},
+    {q:L('Ayelen','Iney pingeymi?','¿Cómo te llamas?','What is your name?'),o:['@ pingen.','Kümelen.','Lafken mew.'],a:'@ pingen.'}]},
+  n_lof:{who:'Kallfü',set:[
+    {q:L('Kallfü','Chew tuwimi?','¿De dónde eres?','Where are you from?'),o:['Lafken mew tuwün.','Lafken mew amuan.','Lafken pingen.'],a:'Lafken mew tuwün.'},
+    {q:L('Kallfü','Chew amuaymi?','¿Adónde vas?','Where are you going?'),o:['Mawida mew amuan.','Mawida mew tuwün.','Mawida pingen.'],a:'Mawida mew amuan.'},
+    {q:L('Kallfü','Kimimi mapudungun?','¿Sabes mapudungun?','Do you know Mapudungun?'),o:['Kimnierpuken.','Amuyngün.','Kiñe pataka.'],a:'Kimnierpuken.'}]},
+  p_lof:{who:'Rayen',set:[
+    {q:L('Rayen','Iyaymi kofke?','¿Vas a comer pan?','Will you eat bread?'),o:['May, iyaan.','May, iyay.','Iyael pingen.'],a:'May, iyaan.'},
+    {q:L('Rayen','Chem ayüymi?','¿Qué te gusta?','What do you like?'),o:['Ngülliw ayüfiñ.','Ngülliw pingen.','Ngülliw mew tuwün.'],a:'Ngülliw ayüfiñ.'},
+    {q:L('Rayen','Wütreymi?','¿Tienes frío?','Are you cold?'),o:['May, wütren.','May, wütrey.','Wütre ruka.'],a:'May, wütren.'}]},
+  w_lof:{who:'Millanao',set:[
+    {q:L('Millanao','Chumngechi pingekey «lluvia»?','¿Cómo se dice «lluvia»?','How do you say «rain»?'),o:['Mawün.','Antü.','Kürüf.'],a:'Mawün.'},
+    {q:L('Millanao','Chumngechi pingekey «sol»?','¿Cómo se dice «sol»?','How do you say «sun»?'),o:['Antü.','Küyen.','Wangülen.'],a:'Antü.'},
+    {q:L('Millanao','Chumngechi pingekey «luna»?','¿Cómo se dice «luna»?','How do you say «moon»?'),o:['Küyen.','Antü.','Pire.'],a:'Küyen.'}]},
+  e_lof:{who:'Nawel',set:[
+    {q:L('Nawel','Chumngechi pingekey «caballo»?','¿Cómo se dice «caballo»?','How do you say «horse»?'),o:['Kawellu.','Trewa.','Choyke.'],a:'Kawellu.'},
+    {q:L('Nawel','Epu ka küla: tunten?','Dos y tres: ¿cuánto es?','Two and three: how much?'),o:['Kechu.','Meli.','Kayu.'],a:'Kechu.'},
+    {q:L('Nawel','Chew müley ta choyke?','¿Dónde está el ñandú?','Where is the rhea?'),o:['Lelfün mew.','Choyke pingen.','Kechu choyke.'],a:'Lelfün mew.'}]}};
+function nutkTalk(lofId){
+  const D=NUTK[lofId],fl='ntk_'+lofId,done=!!S.flags[fl],nm=S.name;
+  const sub=s=>s.replace('@',nm);
+  say([L(D.who,'Mari mari! Nütramkayaiñ?','¡Hola! ¿Conversamos? Estoy aprendiendo y quiero practicar.','Hello! Shall we talk? I am learning and I want to practise.')],()=>{
+    choose(L('','Nütramkayaiñ?','¿Conversas con '+D.who+'?','Talk with '+D.who+'?'),[{m:'May',g:S.gloss==='en'?'Yes, let us talk':'Sí, conversemos',v:1},{m:'Ka mew',g:S.gloss==='en'?'Later':'Después',v:0}],v=>{if(v)step(0)},true,true)});
+  function step(i){
+    if(i>=D.set.length){const ls=[L(D.who,'Kümey! Pewkayal!','¡Muy bien! ¡Hasta luego!','Very good! See you later!')];
+      if(!done){S.flags[fl]=1;S.gold+=15;S.xp+=6;sfx('lvl');ls.push(N('+15 ngülliw · +6 kimün.','+15 ngülliw · +6 kimün.'));
+        const all=Object.keys(NUTK).every(k=>S.flags['ntk_'+k]);
+        if(all&&!S.flags.ntk_all){S.flags.ntk_all=1;S.items.mate=(S.items.mate||0)+3;ls.push(N('Conversaste en los cinco lof. La gente joven te regala tres mate para el camino.','You have talked in all five lof. The young people give you three mate for the road.'))}
+        persist()}
+      return say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+    const s=D.set[i],opts=s.o.map(o=>({m:sub(o),v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
+    choose(s.q,opts,v=>{if(v===s.a){sfx('ok');step(i+1)}
+      else{sfx('bad');say([L(D.who,'Feyta chi no...','Eso no...','Not that...'),N('Se podía decir: «'+sub(s.a)+'». Probemos otra vez.','You could say: «'+sub(s.a)+'». Let us try again.')],()=>step(i))}},false,true)}
+}
+
 /* ============================================================
    PAUSE MENU
    ============================================================ */
@@ -4428,6 +4540,9 @@ function questLines(){
   else if(F.l_diwq)Q('Diweñ',0,'Junta tres diweñes en Fotra mapu para el diweñfe.','Gather three diweñ in Fotra mapu for the diweñfe.');
   if(F.n_lawd)Q('Lawen kachu',1,'La lawentuchefe tiene sus hierbas.','The healer has her herbs.');
   else if(F.n_lawq)Q('Lawen kachu',0,'Junta tres matas de lawen en el borde del agua del menoko.','Gather three lawen plants at the water edge of the menoko.');
+  {const tn=TAB_IDS.filter(t=>S.flags['tab_'+t]).length;if(S.gear.trarilongko)Q('Kuyfi chillka',1,'Las seis piedras despertaron: el trarilongko es tuyo (defensa +3).','All six stones are awake: the trarilongko is yours (defense +3).');
+   else if(S.flags.intro)Q('Kuyfi chillka '+tn+'/6',0,'Piedras antiguas talladas con lecciones de mapudungun, una en cada tierra. Despierta las seis.','Ancient stones carved with Mapudungun lessons, one in each land. Wake all six.')}
+  {const nk=['lof','n_lof','p_lof','w_lof','e_lof'].filter(k=>S.flags['ntk_'+k]).length;if(nk)Q('Nütramkan '+nk+'/5',nk>=5,'En cada lof hay alguien joven que quiere conversar contigo.','In every lof there is a young person who wants to talk with you.')}
   if(S.gear.trutruka)Q('Trutruka',1,'La trutruka es tuya: tócala en las peleas.','The trutruka is yours: blow it in battle.');
   else if(F.n_trut_q)Q('Trutruka',0,'Cayó entre los juncos, junto al agua del medio del menoko.','It fell among the reeds, beside the middle pool of the menoko.');
   if(F.herd)Q('Kulliñ',1,'Los animales volvieron al corral.','The animals are back in the pen.');
@@ -4460,6 +4575,7 @@ function vocabLines(){
   const F=S.flags,ls=[];
   const V=[[()=>F.lawW,'Lawentuwün','palabra de sanación: te cura en batalla','healing word: heals you in battle'],
     [()=>S.gear.trutruka,'trutruka','corneta larga de colihue con cuerno','long colihue horn'],
+    [()=>S.gear.trarilongko,'trarilongko','cinta tejida que se amarra en la frente','woven band tied around the forehead'],
     [()=>F.mq_done_laf||F.mq_laf,'foye · tapül','canelo, árbol sagrado de la machi · hoja','canelo, the machi\'s sacred tree · leaf'],
     [()=>F.mq_done_nag||F.mq_nag,'metawe · menoko','cántaro de greda · ojo de agua','clay jug · spring pool'],
     [()=>F.mq_done_pew||F.mq_pew,'ngülliw · llellipun','piñón del pewen · rogativa','pewen nut · rogation ceremony'],
@@ -4542,10 +4658,12 @@ const BOOK={
 function openBook(back){
   const en=S.gloss==='en';
   choose(L('','Chillka',en?'Your book of words. What do you want to look up?':'Tu libro de palabras. ¿Qué quieres consultar?',''),
-    Object.keys(BOOK).map(k=>({m:BOOK[k].m,g:G(BOOK[k]),v:k})).concat([{m:en?'Close':'Cerrar',v:'x'}]),k=>{
+    Object.keys(BOOK).filter(k=>!BOOK[k].req||S.flags[BOOK[k].req]).map(k=>({m:BOOK[k].m,g:G(BOOK[k]),v:k})).concat([{m:en?'Close':'Cerrar',v:'x'}]),k=>{
       if(!k||k==='x')return back&&back();
       say(BOOK[k].lines,()=>openBook(back))},true);
 }
+/* the kuyfi chillka lessons go into the book once their stone is awake */
+for(const id of TAB_IDS){const T=TABLETS[id];BOOK['tab_'+id]={m:'Kuyfi chillka',es:T.t.es,en:T.t.en,req:'tab_'+id,lines:T.lines}}
 
 /* ============================================================
    BATTLE
@@ -5360,7 +5478,7 @@ function renderCut(){
 }
 /* ---------- map ---------- */
 const CAM={x:0,y:0};
-const DYN=new Set(['@','^','Ñ','D','F','C','K','S','I','X','v','P','m','g','p','k','L','G','B','O','q','Q','N','J','H','E','A','j']);
+const DYN=new Set(['Ł','@','^','Ñ','D','F','C','K','S','I','X','v','P','m','g','p','k','L','G','B','O','q','Q','N','J','H','E','A','j']);
 const BOB=new Set(['P','m','g','p','k']);
 function bubble(x,y,text){OV.push(()=>{ctx.font='bold 13px ui-monospace,Menlo,Consolas,monospace';const w=ctx.measureText(text).width+12,bx=Math.round(x*2-w/2),by=Math.round(y*2-26);
   ctx.fillStyle='#181018';ctx.fillRect(bx-2,by-2,w+4,24);ctx.fillStyle='#fffaf0';ctx.fillRect(bx,by,w,20);ctx.fillStyle='#181018';ctx.fillRect(x*2-3,by+20,6,4);ctx.fillStyle='#fffaf0';ctx.fillRect(x*2-1,by+20,2,2);
@@ -5394,6 +5512,7 @@ function renderMap(){
       c.drawImage(dynCanvas(ch,ch==='N'?(lit?1:0):t.col+'|'+(lit?1:0)),X,Y);if(lit)glows.push([X+8,Y+6]);
       if(Math.abs(x-P.x)+Math.abs(y-P.y)<7)OV.push(()=>txt(t.lab,X+8,Y-2,ch==='J'?t.col:'#e0f4ff',12,'center'));continue}}
     if(ch==='A'){drawWarpRing(c,X+8,Y+9);continue}
+    if(ch==='Ł'){const id=M.tablets&&M.tablets[x+','+y],lit=id&&S.flags['tab_'+id];drawTablet(c,X,Y,lit);if(lit)glows.push([X+8,Y-2]);continue}
     if(ch==='@'){drawPortal(c,X+8,Y+9);continue}
     if(BOB.has(ch)){const b=Math.round(Math.sin(frame/10+x)*1.5);ell(c,X+8,Y+14,4,1.5,'rgba(0,0,0,.25)');c.drawImage(dynCanvas(ch,0),X,Y-3+b);if(frame%40<6)R(c,X+13,Y+1+b,1,1,'#ffffff')}
     else{if('CIK'.includes(ch))ell(c,X+8,Y+15,7,2,'rgba(0,0,0,.28)');c.drawImage(dynCanvas(ch,anim?f4:0),X,Y)}
@@ -6254,6 +6373,31 @@ function atmos(c){
   const tint=gloom?'rgba(96,104,128,.55)':indoor?'rgba(140,118,96,.35)':urban?'rgba(128,122,130,.4)':M.bg==='mount'?'rgba(112,124,150,.35)':M.bg==='pampa'?'rgba(156,128,96,.38)':'rgba(146,132,104,.32)';
   const g2=c.createLinearGradient(0,VY,0,VY+H);g2.addColorStop(0,tint);g2.addColorStop(1,'rgba(60,50,90,.35)');c.fillStyle=g2;c.fillRect(0,VY,W,H);
   c.restore();
+}
+/* ---------- kuyfi chillka: an ancient carved stone stele, mossy when asleep, glowing when awake ---------- */
+function drawTablet(c,X,Y,lit){
+  ell(c,X+8,Y+15,8,2.5,'rgba(0,0,0,.32)');
+  const top=Y-12;
+  // stone body: rounded top, darker right side for depth
+  c.fillStyle='#1a1418';c.fillRect(X+1,top+2,14,26);c.fillRect(X+2,top+1,12,1);c.fillRect(X+4,top,8,1);
+  c.fillStyle='#6e6a66';c.fillRect(X+2,top+2,12,24);c.fillRect(X+3,top+1,10,1);c.fillRect(X+5,top+1,6,1);
+  c.fillStyle='#8a8580';c.fillRect(X+2,top+2,4,24);c.fillRect(X+3,top+1,3,1);
+  c.fillStyle='#55504c';c.fillRect(X+11,top+3,3,23);
+  c.fillStyle='#a49e96';c.fillRect(X+3,top+2,1,22);
+  // base plinth
+  c.fillStyle='#1a1418';c.fillRect(X,Y+11,16,4);c.fillStyle='#5a5652';c.fillRect(X+1,Y+11,14,3);c.fillStyle='#7a7670';c.fillRect(X+1,Y+11,14,1);
+  // carved rows of signs (stepped trariwe-like motifs)
+  const gc=lit?(frame%60<30?'#ffe68a':'#fff2b8'):'#3e3a38',gl=lit?'#b07a20':'#8e8a84';
+  for(let r=0;r<5;r++){const yy=top+5+r*4;for(let k=0;k<3;k++){const xx=X+3+k*4,m=(r*3+k)%4;
+    c.fillStyle=gc;if(m===0){c.fillRect(xx,yy,3,1);c.fillRect(xx+1,yy+1,1,1)}else if(m===1){c.fillRect(xx,yy+1,1,1);c.fillRect(xx+1,yy,1,2);c.fillRect(xx+2,yy+1,1,1)}else if(m===2){c.fillRect(xx,yy,1,2);c.fillRect(xx+2,yy,1,2)}else{c.fillRect(xx,yy,2,1);c.fillRect(xx+1,yy+1,2,1)}
+    c.fillStyle=gl;c.fillRect(xx,yy+2,1,1)}}
+  if(!lit){ // moss
+    c.fillStyle='#4a7a30';c.fillRect(X+2,top+2,5,2);c.fillRect(X+10,top+12,4,3);c.fillRect(X+2,top+20,3,5);c.fillRect(X+8,top+23,6,3);
+    c.fillStyle='#6aa040';c.fillRect(X+3,top+2,2,1);c.fillRect(X+11,top+12,2,1);c.fillRect(X+2,top+21,2,1);c.fillRect(X+9,top+23,3,1);
+    if(Math.abs(Math.round(P.fx)-((X+CAM.x)>>4))+Math.abs(Math.round(P.fy)-((Y+CAM.y-VY)>>4))<4&&frame%50<25){c.fillStyle='rgba(255,240,170,.8)';c.fillRect(X+7,top+9,1,1)}}
+  else{ // awake: soft halo and motes rising
+    c.save();c.globalCompositeOperation='lighter';const g=c.createRadialGradient(X+8,top+12,2,X+8,top+12,20);g.addColorStop(0,'rgba(255,220,120,'+(.28+.08*Math.sin(frame/12))+')');g.addColorStop(1,'rgba(255,200,80,0)');c.fillStyle=g;c.fillRect(X-14,top-10,44,44);c.restore();
+    for(let k=0;k<3;k++){const t=((frame+k*33)%100)/100;c.fillStyle='rgba(255,236,160,'+(1-t).toFixed(2)+')';c.fillRect(Math.round(X+4+k*4+Math.sin(t*6+k)*2),Math.round(top+4-t*16),1,1)}}
 }
 
 /* ============================================================

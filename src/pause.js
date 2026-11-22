@@ -73,6 +73,9 @@ function questLines(){
   else if(F.l_diwq)Q('Diweñ',0,'Junta tres diweñes en Fotra mapu para el diweñfe.','Gather three diweñ in Fotra mapu for the diweñfe.');
   if(F.n_lawd)Q('Lawen kachu',1,'La lawentuchefe tiene sus hierbas.','The healer has her herbs.');
   else if(F.n_lawq)Q('Lawen kachu',0,'Junta tres matas de lawen en el borde del agua del menoko.','Gather three lawen plants at the water edge of the menoko.');
+  {const tn=TAB_IDS.filter(t=>S.flags['tab_'+t]).length;if(S.gear.trarilongko)Q('Kuyfi chillka',1,'Las seis piedras despertaron: el trarilongko es tuyo (defensa +3).','All six stones are awake: the trarilongko is yours (defense +3).');
+   else if(S.flags.intro)Q('Kuyfi chillka '+tn+'/6',0,'Piedras antiguas talladas con lecciones de mapudungun, una en cada tierra. Despierta las seis.','Ancient stones carved with Mapudungun lessons, one in each land. Wake all six.')}
+  {const nk=['lof','n_lof','p_lof','w_lof','e_lof'].filter(k=>S.flags['ntk_'+k]).length;if(nk)Q('Nütramkan '+nk+'/5',nk>=5,'En cada lof hay alguien joven que quiere conversar contigo.','In every lof there is a young person who wants to talk with you.')}
   if(S.gear.trutruka)Q('Trutruka',1,'La trutruka es tuya: tócala en las peleas.','The trutruka is yours: blow it in battle.');
   else if(F.n_trut_q)Q('Trutruka',0,'Cayó entre los juncos, junto al agua del medio del menoko.','It fell among the reeds, beside the middle pool of the menoko.');
   if(F.herd)Q('Kulliñ',1,'Los animales volvieron al corral.','The animals are back in the pen.');
@@ -105,6 +108,7 @@ function vocabLines(){
   const F=S.flags,ls=[];
   const V=[[()=>F.lawW,'Lawentuwün','palabra de sanación: te cura en batalla','healing word: heals you in battle'],
     [()=>S.gear.trutruka,'trutruka','corneta larga de colihue con cuerno','long colihue horn'],
+    [()=>S.gear.trarilongko,'trarilongko','cinta tejida que se amarra en la frente','woven band tied around the forehead'],
     [()=>F.mq_done_laf||F.mq_laf,'foye · tapül','canelo, árbol sagrado de la machi · hoja','canelo, the machi\'s sacred tree · leaf'],
     [()=>F.mq_done_nag||F.mq_nag,'metawe · menoko','cántaro de greda · ojo de agua','clay jug · spring pool'],
     [()=>F.mq_done_pew||F.mq_pew,'ngülliw · llellipun','piñón del pewen · rogativa','pewen nut · rogation ceremony'],
@@ -187,7 +191,9 @@ const BOOK={
 function openBook(back){
   const en=S.gloss==='en';
   choose(L('','Chillka',en?'Your book of words. What do you want to look up?':'Tu libro de palabras. ¿Qué quieres consultar?',''),
-    Object.keys(BOOK).map(k=>({m:BOOK[k].m,g:G(BOOK[k]),v:k})).concat([{m:en?'Close':'Cerrar',v:'x'}]),k=>{
+    Object.keys(BOOK).filter(k=>!BOOK[k].req||S.flags[BOOK[k].req]).map(k=>({m:BOOK[k].m,g:G(BOOK[k]),v:k})).concat([{m:en?'Close':'Cerrar',v:'x'}]),k=>{
       if(!k||k==='x')return back&&back();
       say(BOOK[k].lines,()=>openBook(back))},true);
 }
+/* the kuyfi chillka lessons go into the book once their stone is awake */
+for(const id of TAB_IDS){const T=TABLETS[id];BOOK['tab_'+id]={m:'Kuyfi chillka',es:T.t.es,en:T.t.en,req:'tab_'+id,lines:T.lines}}
