@@ -13,10 +13,10 @@ function cutLines(){const n=S.name;return[
   [L('Kuku','Küpange, '+n+'!','"¡Ven, '+n+'!" Tu kuku te llama desde la costa lafkenche. (küpa- es "venir"; -nge le habla a una persona.)','"Come, '+n+'!" Your kuku calls you from the Lafkenche coast. (küpa- means "come"; -nge speaks to one person.)'),
    N('Es hora de volver. Aprende la lengua, despierta a los ngen uno por uno y devuélvele la voz a tu pueblo: a su lengua y a su cultura.','It is time to go back. Learn the language, wake the ngen one by one, and give your people back their voice: their language and their culture.')]
 ];}
-function startCut(){mode='cut';CUT={i:0,t:0,L:cutLines()};$('skip').style.display='block';playSong('epew');nextCut()}
+function startCut(){$('ui').classList.add('cutm');mode='cut';CUT={i:0,t:0,L:cutLines()};$('skip').style.display='block';playSong('epew');nextCut()}
 function nextCut(){if(!CUT)return;if(CUT.i>=CUT.L.length)return endCut();CUT.t=0;const ls=CUT.L[CUT.i];say(ls,()=>{if(!CUT)return;CUT.i++;nextCut()})}
 function skipCut(){if(!CUT)return;dlg.style.display='none';active=null;endCut()}
-function endCut(){CUT=null;$('skip').style.display='none';mode='map';loadMap('rupu',1,6,true);showBanner(M.name,G(M.g));setTimeout(()=>{if(!active)introScript()},400)}
+function endCut(){$('ui').classList.remove('cutm');CUT=null;$('skip').style.display='none';mode='map';loadMap('rupu',1,6,true);showBanner(M.name,G(M.g));setTimeout(()=>{if(!active)introScript()},400)}
 let ECUT=null;
 function endCutLines(){const n=nm();return[
   [N('La niebla del gran olvido se deshace sobre Wallmapu. Donde pasaba borrando, ahora pasa el viento, limpio y liviano.','The fog of the great forgetting dissolves over Wallmapu. Where it once passed erasing, now the wind passes, clean and light.'),
@@ -28,9 +28,9 @@ function endCutLines(){const n=nm();return[
    N('El trariwe en tu cintura brilla una última vez: cinco tierras, una sola lengua viva. Mientras alguien la hable, el gran olvido no podrá volver.','The trariwe at your waist glows one last time: five lands, one living language. As long as someone speaks it, the great forgetting cannot return.'),
    N('AFPUY · FIN','AFPUY · THE END')]
 ];}
-function startEndCut(){mode='cut';ECUT={i:0,t:0,L:endCutLines()};$('skip').style.display='block';AU.name=null;playSong('ending');nextEndCut()}
+function startEndCut(){$('ui').classList.add('cutm');mode='cut';ECUT={i:0,t:0,L:endCutLines()};$('skip').style.display='block';AU.name=null;playSong('ending');nextEndCut()}
 function nextEndCut(){if(!ECUT)return;if(ECUT.i>=ECUT.L.length)return endEndCut();ECUT.t=0;const ls=ECUT.L[ECUT.i];say(ls,()=>{if(!ECUT)return;ECUT.i++;nextEndCut()})}
-function endEndCut(){ECUT=null;$('skip').style.display='none';mode='map';AU.name=null;loadMap('ngoyman',8,8,true);showBanner(M.name,G(M.g));
+function endEndCut(){$('ui').classList.remove('cutm');ECUT=null;$('skip').style.display='none';mode='map';AU.name=null;loadMap('ngoyman',8,8,true);showBanner(M.name,G(M.g));
   setTimeout(()=>{if(!active)say([N('Puedes seguir jugando: las tierras, los wekufü escondidos y el Epunamun siguen ahí... y dicen que el mundo todavía guarda secretos bajo el agua.','You can keep playing: the lands, the hidden wekufü and the Epunamun are still there... and they say the world still keeps secrets under the water.'),
     N('Chaltu may por jugar Kewün ñi Newen.','Chaltu may for playing Kewün ñi Newen.')])},400)}
 $('skip').addEventListener('click',()=>{if(ECUT){dlg.style.display='none';active=null;endEndCut();return}skipCut()});
