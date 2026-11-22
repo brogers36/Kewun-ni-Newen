@@ -84,7 +84,7 @@ function onStep(){
   const sb=M.sbt;
   if(sb&&!S.flags[sb.flag]&&!(sb.req&&!S.flags[sb.req])&&sb.t.indexOf(P.x+','+P.y)>=0)return sbossWake(sb);
   const c=grid[P.y][P.x];P.bump=0;
-  if(c==='A'){warpMenu();return}
+  if(c==='A'){if(LOFIDS.includes(CUR))lofWarpMenu();else warpMenu();return}
   if(c==='@'){portalMenu();return}
   if(c==='S'){const st=M.stairs;if(!st)return;if(st.req&&!S.flags[st.req]){say(st.reqMsg);return}sfx('door');loadMap(st.to,st.x,st.y);return}
   if(c==='P'){setTileFlag(P.x,P.y);gainPiwke([]);return}

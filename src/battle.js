@@ -68,7 +68,7 @@ function tutStep(){
     k('"¡Mira, viene otro! Ahora son epu, dos."','"Look, another one is coming! Now there are epu, two."','Ka kiñe laftrache!'),
     k('"Puedes hablarle a uno solo, y le pega más fuerte. O elegir «Kom» y hablarles a los dos juntos: más suave, pero a los dos. Para dos, la terminación es -mu."','"You can speak to just one, and it hits harder. Or choose «Kom» and speak to both together: softer, but to both. For two, the ending is -mu."')],battleMenu),true}
   if(T.b&&!T.c&&S.hp<maxHP()){T.c=1;return say([
-    k('"¡Ay! Te alcanzó. Cuida tus piwke, esos corazones de arriba: si se acaban, pierdes la pelea."','"Ouch! It got you. Watch your piwke, those hearts up top: if they run out, you lose the fight."','Adkintifinge mi pu piwke!'),
+    k('"¡Ay! Te alcanzó. Cuida tus piwke, esos corazones de arriba: si se acaban, pierdes la pelea."','"Ouch! It got you. Watch your piwke, those hearts up top: if they run out, you lose the fight."','Adkintufinge mi pu piwke!'),
     k('"Si te pegan mucho, abre «Chemkün», tus cosas, y come un külon (maqui): te devuelve piwke. Junto a cada kütral te recuperas entero."','"If they hit you a lot, open «Chemkün», your things, and eat a külon (maqui): it gives you piwke back. By every kütral you recover completely."')],battleMenu),true}
   if(!T.d&&(S.sp||0)>=2){T.d=1;return say([
     k('"Cada orden bien dicha carga tu newen: la barrita verde. Con dos, ya puedes usar «Newen»: el golpe de wiño pega el triple."','"Every command said correctly charges your newen: the little green bar. With two you can already use «Newen»: the wiño strike hits three times as hard."','Newentuleymi!')],battleMenu),true}
@@ -570,7 +570,7 @@ function endBattle(how){
   if(typeof playAmb==='function')playAmb(ambFor(M.bg));
   if(how==='win'&&o.sflag==='epu_won'){S.flags.epu_won=1;S.gear.waiki=1;persist();sfx('lvl');
     return say([N('El Epunamun baja las dos lanzas a la vez. No se deshace, no huye: te saluda, con las dos caras sonriendo.','The Epunamun lowers both spears at once. He does not break apart, he does not flee: he salutes you, both faces smiling.'),
-      L('Epunamun','Tuteymi! Newen nieymi, kimün nieymi.','¡Lo lograste! Tienes fuerza y tienes conocimiento.','You did it! You have strength and you have knowledge.'),
+      L('Epunamun','Tuteymi! Newentuleymi. Kimün may nieymi tati.','¡Lo lograste! Tienes fuerza. Y conocimiento, sí que tienes.','You did it! You are strong. And knowledge, you truly have.'),
       L('Epunamun','Tüfa tañi waiki. Yenge.','Esta es mi lanza. Llévala.','This is my spear. Carry it.'),
       Object.assign(L('','Epunamun ñi waiki!','El Epunamun te regala una de sus lanzas: tu fuerza sube +2 para siempre. Dice que la otra la guardará para pelear a tu lado, algún día, al otro lado de la niebla.','The Epunamun gives you one of his spears: your strength rises +2 for good. He says he will keep the other, to fight at your side one day, on the far side of the fog.'),{fx:()=>sfx('lvl')})],
       ()=>gainPiwke([N('Donde golpearon sus lanzas, algo rojo brilla en el suelo...','Where his spears struck, something red glints on the ground...')]));}

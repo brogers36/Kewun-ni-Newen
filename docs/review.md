@@ -365,3 +365,5 @@ Al empezar el juego la kuku guía una pelea de práctica (un laftrache, después
 - **"Ka kiñe rupa!"** '¡otra vez!'.
 - **"Kümey, X! Tuteymi!"** '¡muy bien, lo lograste!' (tuteymi ya se usaba con el Epunamun).
 - (Nov 22) Correcciones de Brandon a la tanda 16: **"Ka kiñe laftrache!"** (antes "Kake laftrache!"); **"Newentuleymi!"** (antes "Newen nieymi!"); y la línea de los corazones ahora dice **"Adkintifinge mi pu piwke!"** 'cuida tus piwke'.
+- (Nov 22) Correcciones de Brandon: **"Adkintufinge mi pu piwke!"** (con -tu-, no -ti-); el Epunamun ahora dice **"Newentuleymi. Kimün may nieymi tati."** al ganarle (y "…Amunge, weychafe." si le hablas después).
+- Nuevo: anillo de viaje entre lof (desde el segundo ngen despierto). Texto: **"Chew lof mew amuaymi?"** '¿a qué lof vas?' ⚠ confirmar.

@@ -335,6 +335,15 @@ function warpMenu(){
   choose(L('','Chew amuaymi?','¿A dónde vas?','Where will you go?'),opts,v=>{if(!v||v==='x')return;sfx('cast');loadMap(v[0],v[1],v[2])},true,true);
 }
 
+/* lof-to-lof fast travel: a ngen ring by the road in every awakened lof, once two ngen are awake */
+function lofWarpMenu(){
+  const en=S.gloss==='en',opts=[];
+  for(const r of lofsOpen()){if(LOFS[r]===CUR)continue;const w=WARPS[r].find(x=>x.to[0]===LOFS[r])||WARPS[r][1];opts.push({m:w.m,g:G(w),v:[LOFS[r],20,9]})}
+  opts.push({m:'Mülekan faw',g:en?'Stay here':'Quedarme aquí',v:'x'});
+  choose(L('','Chew lof mew amuaymi?','¿A qué lof vas? El anillo de los ngen une los lof que ya despertaste.','Which lof will you go to? The ngen ring links the lofs you have already awakened.'),opts,v=>{if(!v||v==='x')return;sfx('cast');loadMap(v[0],v[1],v[2])},true,true);
+}
+function lofWarpIntro(){if(S.flags.lofwarp_seen||!LOFIDS.includes(CUR)||lofsOpen().length<2||!awake(M.region))return;S.flags.lofwarp_seen=1;persist();
+  say([N('Junto al camino del lof brilla un anillo nuevo. Los ngen que despertaste unieron sus tierras: desde aquí puedes ir a cualquier lof que ya haya despertado, y volver.','By the lof road a new ring glows. The ngen you awakened have joined their lands: from here you can travel to any lof that has already awakened, and back.')])}
 function kukuLof(){
   if(!S.flags.pentukun){
     if(S.flags.pentu_prac)return say([L('Kuku','Lonko mew amunge. Kütral mew müley.','Ve donde el lonko. Está junto al kütral.','Go to the lonko. He is by the fire.'),
@@ -1266,7 +1275,7 @@ function ngoymanTalk(){
 
 function epunamunTalk(){
   const en=S.gloss==='en';
-  if(S.flags.epu_won)return say([L('Epunamun','Newen nieymi, kimün nieymi. Amunge, weychafe.','Tienes fuerza y tienes conocimiento. Ve, guerrera o guerrero.','You have strength and you have knowledge. Go, warrior.'),
+  if(S.flags.epu_won)return say([L('Epunamun','Newentuleymi. Kimün may nieymi tati. Amunge, weychafe.','Tienes fuerza. Y conocimiento, sí que tienes. Ve, guerrera o guerrero.','You are strong. And knowledge, you truly have. Go, warrior.'),
     N('Las dos caras del Epunamun miran a la vez hacia la niebla y hacia ti. Ambas sonríen.','Both of the Epunamun\'s faces look at once toward the fog and toward you. Both are smiling.')]);
   say([N('El kona se vuelve hacia ti... y por un momento ves que tiene dos caras: una mira hacia la niebla y la otra te mira a ti. No es un kona. Es un espíritu.','The warrior turns toward you... and for a moment you see that he has two faces: one looks toward the fog, and the other looks at you. He is no ordinary warrior. He is a spirit.'),
     L('Epunamun','Iñche Epunamun. Weychan ñi ngünechen no, welu weychan ñi ngülam.','Yo soy el Epunamun. No soy dueño de la guerra, pero sí su consejo.','I am the Epunamun. I do not own war, but I am its counsel.'),

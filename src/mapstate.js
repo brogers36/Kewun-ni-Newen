@@ -222,6 +222,8 @@ function placeNear(x,y,isEnt){
   return [x,y];
 }
 const RFLAG={lafkenche:'ngen',nagche:'ngen2',pewenche:'ngen3',williche:'ngen4',puelmapu:'ngen5'};
+const LOFS={lafkenche:'lof',nagche:'n_lof',pewenche:'p_lof',williche:'w_lof',puelmapu:'e_lof'},LOFIDS=Object.values(LOFS);
+const lofsOpen=()=>Object.keys(LOFS).filter(r=>S&&S.flags[RFLAG[r]]);
 const awake=r=>!!S.flags[RFLAG[r]];
 const SONGSET={chumpall:{battle:'deepBattle',boss:'deepBoss'},ngoyman:{battle:'ngoyBattle',boss:'ngoyBoss'},puelmapu:{puel:'puel',puelG:'puelG',lof:'puelLof',lofG:'puelLofG',cave:'puelCave',battle:'puelBattle',boss:'puelBoss',ngen:'puelNgen'},williche:{lof:'wilLof',lofG:'wilLofG',cave:'wilCave',battle:'wilBattle',boss:'wilBoss',ngen:'wilNgen'},pewenche:{nag:'pew',nagG:'pewG',lof:'pewLof',lofG:'pewLofG',cave:'pewCave',battle:'pewBattle',boss:'pewBoss',ngen:'pewNgen'},nagche:{lof:'nagLof',lofG:'nagLofG',cave:'nagCave',battle:'nagBattle',boss:'nagBoss',ngen:'nagNgen'}};
 const rsong=n=>{const r=M&&M.region;return (SONGSET[r]&&SONGSET[r][n])||n};
@@ -241,6 +243,7 @@ function loadMap(id,x,y,quiet){TALKER=null;
    if(doorOpen)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='E')grid[yy][xx]=M.floor;
    if(S.flags['pz:'+id]&&M.pz){for(const k in M.pz.tiles)PZ.lit.add(k);if(M.pz.reveal)grid[M.pz.reveal.y][M.pz.reveal.x]=M.pz.reveal.ch}}
   if(!awake(M.region))for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='A')grid[yy][xx]=M.floor;
+  if(LOFIDS.includes(id)&&awake(M.region)&&lofsOpen().length>=2)grid[10][20]='A';   // lof fast-travel ring, from the second ngen on
   if(S.flags.wind)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='X')grid[yy][xx]=M.floor;
   if(S.flags.snow)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='^')grid[yy][xx]=M.floor;
   if(S.flags.bramble)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='Ñ')grid[yy][xx]=M.floor;
@@ -262,6 +265,7 @@ function loadMap(id,x,y,quiet){TALKER=null;
   SCN=(M.scenes||[]).map(s=>Object.assign({},s,{pl:[0,1,2,3].map(i=>({x:s.x*T+s.w*T*(i<2?.3:.7),y:s.y*T+s.h*T*(.3+.4*(i%2)),dir:'right'}))}));
   S.map=id;fade=16;grace=40;
   if(!quiet)showBanner(M.name,G(M.g));
+  setTimeout(()=>{if(!active&&mode==='map'&&typeof lofWarpIntro==='function')lofWarpIntro()},600);
   playSong(mapSong());
   if(typeof playAmb==='function')playAmb(ambFor(M.bg));
   persist();

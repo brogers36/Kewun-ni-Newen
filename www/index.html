@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='ec35de5-202611220632';
+window.KEWUN_BUILD='9e62589-202611220641';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -2356,6 +2356,8 @@ function placeNear(x,y,isEnt){
   return [x,y];
 }
 const RFLAG={lafkenche:'ngen',nagche:'ngen2',pewenche:'ngen3',williche:'ngen4',puelmapu:'ngen5'};
+const LOFS={lafkenche:'lof',nagche:'n_lof',pewenche:'p_lof',williche:'w_lof',puelmapu:'e_lof'},LOFIDS=Object.values(LOFS);
+const lofsOpen=()=>Object.keys(LOFS).filter(r=>S&&S.flags[RFLAG[r]]);
 const awake=r=>!!S.flags[RFLAG[r]];
 const SONGSET={chumpall:{battle:'deepBattle',boss:'deepBoss'},ngoyman:{battle:'ngoyBattle',boss:'ngoyBoss'},puelmapu:{puel:'puel',puelG:'puelG',lof:'puelLof',lofG:'puelLofG',cave:'puelCave',battle:'puelBattle',boss:'puelBoss',ngen:'puelNgen'},williche:{lof:'wilLof',lofG:'wilLofG',cave:'wilCave',battle:'wilBattle',boss:'wilBoss',ngen:'wilNgen'},pewenche:{nag:'pew',nagG:'pewG',lof:'pewLof',lofG:'pewLofG',cave:'pewCave',battle:'pewBattle',boss:'pewBoss',ngen:'pewNgen'},nagche:{lof:'nagLof',lofG:'nagLofG',cave:'nagCave',battle:'nagBattle',boss:'nagBoss',ngen:'nagNgen'}};
 const rsong=n=>{const r=M&&M.region;return (SONGSET[r]&&SONGSET[r][n])||n};
@@ -2375,6 +2377,7 @@ function loadMap(id,x,y,quiet){TALKER=null;
    if(doorOpen)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='E')grid[yy][xx]=M.floor;
    if(S.flags['pz:'+id]&&M.pz){for(const k in M.pz.tiles)PZ.lit.add(k);if(M.pz.reveal)grid[M.pz.reveal.y][M.pz.reveal.x]=M.pz.reveal.ch}}
   if(!awake(M.region))for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='A')grid[yy][xx]=M.floor;
+  if(LOFIDS.includes(id)&&awake(M.region)&&lofsOpen().length>=2)grid[10][20]='A';   // lof fast-travel ring, from the second ngen on
   if(S.flags.wind)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='X')grid[yy][xx]=M.floor;
   if(S.flags.snow)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='^')grid[yy][xx]=M.floor;
   if(S.flags.bramble)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='Ñ')grid[yy][xx]=M.floor;
@@ -2396,6 +2399,7 @@ function loadMap(id,x,y,quiet){TALKER=null;
   SCN=(M.scenes||[]).map(s=>Object.assign({},s,{pl:[0,1,2,3].map(i=>({x:s.x*T+s.w*T*(i<2?.3:.7),y:s.y*T+s.h*T*(.3+.4*(i%2)),dir:'right'}))}));
   S.map=id;fade=16;grace=40;
   if(!quiet)showBanner(M.name,G(M.g));
+  setTimeout(()=>{if(!active&&mode==='map'&&typeof lofWarpIntro==='function')lofWarpIntro()},600);
   playSong(mapSong());
   if(typeof playAmb==='function')playAmb(ambFor(M.bg));
   persist();
@@ -2487,7 +2491,7 @@ function onStep(){
   const sb=M.sbt;
   if(sb&&!S.flags[sb.flag]&&!(sb.req&&!S.flags[sb.req])&&sb.t.indexOf(P.x+','+P.y)>=0)return sbossWake(sb);
   const c=grid[P.y][P.x];P.bump=0;
-  if(c==='A'){warpMenu();return}
+  if(c==='A'){if(LOFIDS.includes(CUR))lofWarpMenu();else warpMenu();return}
   if(c==='@'){portalMenu();return}
   if(c==='S'){const st=M.stairs;if(!st)return;if(st.req&&!S.flags[st.req]){say(st.reqMsg);return}sfx('door');loadMap(st.to,st.x,st.y);return}
   if(c==='P'){setTileFlag(P.x,P.y);gainPiwke([]);return}
@@ -3096,6 +3100,15 @@ function warpMenu(){
   choose(L('','Chew amuaymi?','¿A dónde vas?','Where will you go?'),opts,v=>{if(!v||v==='x')return;sfx('cast');loadMap(v[0],v[1],v[2])},true,true);
 }
 
+/* lof-to-lof fast travel: a ngen ring by the road in every awakened lof, once two ngen are awake */
+function lofWarpMenu(){
+  const en=S.gloss==='en',opts=[];
+  for(const r of lofsOpen()){if(LOFS[r]===CUR)continue;const w=WARPS[r].find(x=>x.to[0]===LOFS[r])||WARPS[r][1];opts.push({m:w.m,g:G(w),v:[LOFS[r],20,9]})}
+  opts.push({m:'Mülekan faw',g:en?'Stay here':'Quedarme aquí',v:'x'});
+  choose(L('','Chew lof mew amuaymi?','¿A qué lof vas? El anillo de los ngen une los lof que ya despertaste.','Which lof will you go to? The ngen ring links the lofs you have already awakened.'),opts,v=>{if(!v||v==='x')return;sfx('cast');loadMap(v[0],v[1],v[2])},true,true);
+}
+function lofWarpIntro(){if(S.flags.lofwarp_seen||!LOFIDS.includes(CUR)||lofsOpen().length<2||!awake(M.region))return;S.flags.lofwarp_seen=1;persist();
+  say([N('Junto al camino del lof brilla un anillo nuevo. Los ngen que despertaste unieron sus tierras: desde aquí puedes ir a cualquier lof que ya haya despertado, y volver.','By the lof road a new ring glows. The ngen you awakened have joined their lands: from here you can travel to any lof that has already awakened, and back.')])}
 function kukuLof(){
   if(!S.flags.pentukun){
     if(S.flags.pentu_prac)return say([L('Kuku','Lonko mew amunge. Kütral mew müley.','Ve donde el lonko. Está junto al kütral.','Go to the lonko. He is by the fire.'),
@@ -4027,7 +4040,7 @@ function ngoymanTalk(){
 
 function epunamunTalk(){
   const en=S.gloss==='en';
-  if(S.flags.epu_won)return say([L('Epunamun','Newen nieymi, kimün nieymi. Amunge, weychafe.','Tienes fuerza y tienes conocimiento. Ve, guerrera o guerrero.','You have strength and you have knowledge. Go, warrior.'),
+  if(S.flags.epu_won)return say([L('Epunamun','Newentuleymi. Kimün may nieymi tati. Amunge, weychafe.','Tienes fuerza. Y conocimiento, sí que tienes. Ve, guerrera o guerrero.','You are strong. And knowledge, you truly have. Go, warrior.'),
     N('Las dos caras del Epunamun miran a la vez hacia la niebla y hacia ti. Ambas sonríen.','Both of the Epunamun\'s faces look at once toward the fog and toward you. Both are smiling.')]);
   say([N('El kona se vuelve hacia ti... y por un momento ves que tiene dos caras: una mira hacia la niebla y la otra te mira a ti. No es un kona. Es un espíritu.','The warrior turns toward you... and for a moment you see that he has two faces: one looks toward the fog, and the other looks at you. He is no ordinary warrior. He is a spirit.'),
     L('Epunamun','Iñche Epunamun. Weychan ñi ngünechen no, welu weychan ñi ngülam.','Yo soy el Epunamun. No soy dueño de la guerra, pero sí su consejo.','I am the Epunamun. I do not own war, but I am its counsel.'),
@@ -4583,7 +4596,7 @@ function tutStep(){
     k('"¡Mira, viene otro! Ahora son epu, dos."','"Look, another one is coming! Now there are epu, two."','Ka kiñe laftrache!'),
     k('"Puedes hablarle a uno solo, y le pega más fuerte. O elegir «Kom» y hablarles a los dos juntos: más suave, pero a los dos. Para dos, la terminación es -mu."','"You can speak to just one, and it hits harder. Or choose «Kom» and speak to both together: softer, but to both. For two, the ending is -mu."')],battleMenu),true}
   if(T.b&&!T.c&&S.hp<maxHP()){T.c=1;return say([
-    k('"¡Ay! Te alcanzó. Cuida tus piwke, esos corazones de arriba: si se acaban, pierdes la pelea."','"Ouch! It got you. Watch your piwke, those hearts up top: if they run out, you lose the fight."','Adkintifinge mi pu piwke!'),
+    k('"¡Ay! Te alcanzó. Cuida tus piwke, esos corazones de arriba: si se acaban, pierdes la pelea."','"Ouch! It got you. Watch your piwke, those hearts up top: if they run out, you lose the fight."','Adkintufinge mi pu piwke!'),
     k('"Si te pegan mucho, abre «Chemkün», tus cosas, y come un külon (maqui): te devuelve piwke. Junto a cada kütral te recuperas entero."','"If they hit you a lot, open «Chemkün», your things, and eat a külon (maqui): it gives you piwke back. By every kütral you recover completely."')],battleMenu),true}
   if(!T.d&&(S.sp||0)>=2){T.d=1;return say([
     k('"Cada orden bien dicha carga tu newen: la barrita verde. Con dos, ya puedes usar «Newen»: el golpe de wiño pega el triple."','"Every command said correctly charges your newen: the little green bar. With two you can already use «Newen»: the wiño strike hits three times as hard."','Newentuleymi!')],battleMenu),true}
@@ -5085,7 +5098,7 @@ function endBattle(how){
   if(typeof playAmb==='function')playAmb(ambFor(M.bg));
   if(how==='win'&&o.sflag==='epu_won'){S.flags.epu_won=1;S.gear.waiki=1;persist();sfx('lvl');
     return say([N('El Epunamun baja las dos lanzas a la vez. No se deshace, no huye: te saluda, con las dos caras sonriendo.','The Epunamun lowers both spears at once. He does not break apart, he does not flee: he salutes you, both faces smiling.'),
-      L('Epunamun','Tuteymi! Newen nieymi, kimün nieymi.','¡Lo lograste! Tienes fuerza y tienes conocimiento.','You did it! You have strength and you have knowledge.'),
+      L('Epunamun','Tuteymi! Newentuleymi. Kimün may nieymi tati.','¡Lo lograste! Tienes fuerza. Y conocimiento, sí que tienes.','You did it! You are strong. And knowledge, you truly have.'),
       L('Epunamun','Tüfa tañi waiki. Yenge.','Esta es mi lanza. Llévala.','This is my spear. Carry it.'),
       Object.assign(L('','Epunamun ñi waiki!','El Epunamun te regala una de sus lanzas: tu fuerza sube +2 para siempre. Dice que la otra la guardará para pelear a tu lado, algún día, al otro lado de la niebla.','The Epunamun gives you one of his spears: your strength rises +2 for good. He says he will keep the other, to fight at your side one day, on the far side of the fog.'),{fx:()=>sfx('lvl')})],
       ()=>gainPiwke([N('Donde golpearon sus lanzas, algo rojo brilla en el suelo...','Where his spears struck, something red glints on the ground...')]));}
