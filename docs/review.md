@@ -335,3 +335,4 @@ Cada uno de los cinco lof tiene ahora una **machi** junto a su **rewe** (tronco 
 - **"Yewelkilnge"** 'no tengas vergüenza' ⚠ misma duda del tema verbal.
 - NPC nuevos con mezcla castellano/mapudungun (deliberada, registro urbano): casera de la feria (poñü, kofke, kachilla, "kiñe kilo, epu kilo"; **manshana** como préstamo), chofer de micro (**"Amuayu!"** 'vamos los dos'; **kareta** como préstamo), estudiante (**kimün**), transeúnte (**"Pewkayal!"** ⚠ confirmar como 'nos vemos').
 - Las cinco tareas de Santiago siguen igual; al completarlas aparece el Yewen en la cancha y al vencerlo se termina Santiago.
+- (Nov 21) Corrección de Brandon: 'voy aprendiendo' = **kimnierpuken** (antes 'kimnieken'), en el wentru de la población de Santiago: "Küdawkülen. Welu pichin pichin kimnierpuken."

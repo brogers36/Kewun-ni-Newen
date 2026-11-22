@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='f3ab936-202611211919';
+window.KEWUN_BUILD='9cdd0dc-202611211931';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -1970,7 +1970,7 @@ s_poblacion:{region:'santiago',name:'Santiago · población',g:{es:'La població
  edges:{left:{to:'s_calle',x:38,y:3}},
  ents:[{id:'steen',kind:'npc',look:'kona',x:21,y:6,dir:'down',fixed:1,talk:()=>stTeenTalk(),bub:['...','¿y si me equivoco?']},
    {id:'svecina',kind:'npc',look:'cook',fem:1,x:12,y:9,dir:'down',fixed:1,talk:()=>say([L('Vecina','Mari mari! ...¿así se dice, cierto?','¡Mari mari! ...¿así se dice, cierto?','Mari mari! ...that is how you say it, right?'),N('Se ríe, orgullosa. «Lo aprendí en la ruka del centro cultural. Vamos todos los jueves.»','She laughs, proud. "I learned it at the cultural center\'s ruka. We all go on Thursdays."')]),bub:['Mari mari!']},
-   {id:'swood',kind:'npc',look:'walker',x:2,y:6,act:'wood',path:[[2,6],[30,6]],pause:80,talk:()=>say([L('Wentru','Küdawkülen. Welu pichin pichin kimnieken.','Ando trabajando. Pero de a poquito voy aprendiendo.','I am working. But little by little I am learning.')]),bub:['Pichin pichin...']},
+   {id:'swood',kind:'npc',look:'walker',x:2,y:6,act:'wood',path:[[2,6],[30,6]],pause:80,talk:()=>say([L('Wentru','Küdawkülen. Welu pichin pichin kimnierpuken.','Ando trabajando. Pero de a poquito voy aprendiendo.','I am working. But little by little I am learning.')]),bub:['Pichin pichin...']},
    {id:'skids',kind:'npc',look:'child',x:26,y:10,path:[[26,10],[30,10],[30,8],[22,8]],pause:30,flag:'st_all',talk:()=>say([L('Pichiche','Mari mari! Acá jugamos todos los días.','¡Mari mari! Acá jugamos todos los días.','Mari mari! We play here every day.')]),bub:['Gol!']},
    {id:'yewen',kind:'npc',look:'yewen',x:25,y:9,dir:'down',fixed:1,req:'st_all',flag:'yewen_won',talk:()=>yewenTalk(),bub:['...','Shhh.']}]},
 s_centro:{region:'santiago',name:'Ruka urbana',g:{es:'La ruka del centro cultural',en:'The cultural center ruka'},floor:'_',bg:'field',song:'waria',pal:'rukain',wall:'ruka',interior:1,
