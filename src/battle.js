@@ -197,9 +197,9 @@ function resolve(r,kil,tg,ei){
   else if(r==='umawtu'&&!kil){for(const e of targets){const T=ET[e.t];if(T.boss){fx.push(e.label+' no se duerme.');fxe.push(e.label+' does not fall asleep.');continue}
       if(Math.random()<(coll?.7:.9)){e.sl=2;fx.push(e.label+' se duerme.');fxe.push(e.label+' falls asleep.')}else{fx.push(e.label+' bosteza, pero no se duerme.');fxe.push(e.label+' yawns, but stays awake.')}}}
   else if(r==='umawtu'){let w=0;for(const e of targets)if(e.sl){e.sl=0;w=1}fx.push(w?'¡Los despertaste!':'Ninguno dormía.');fxe.push(w?'You woke them up!':'None of them was asleep.')}
-  else if(r==='nag'&&!kil){let any=0;for(const e of targets)if(ET[e.t].fly){e.gr=3;any=1;fx.push(e.label+' baja al suelo.');fxe.push(e.label+' comes down to the ground.')}
+  else if(r==='nagtu'&&!kil){let any=0;for(const e of targets)if(ET[e.t].fly){e.gr=3;any=1;fx.push(e.label+' baja al suelo.');fxe.push(e.label+' comes down to the ground.')}
       if(!any){fx.push('No vuela: ya está abajo.');fxe.push('It does not fly: it is already down.')}}
-  else if(r==='nag'){fx.push('Les dijiste que no bajaran. Siguen donde estaban.');fxe.push('You told them not to come down. They stay where they were.')}
+  else if(r==='nagtu'){fx.push('Les dijiste que no bajaran. Siguen donde estaban.');fxe.push('You told them not to come down. They stay where they were.')}
   else if(r==='lef'&&!kil){for(const e of targets){const T=ET[e.t];
       if(T.boss||T.mini){fx.push(e.label+' no tiene miedo: no va a correr.');fxe.push(e.label+' is not afraid: it will not run.');continue}
       if(e.hp<=e.max*.5){e.hp=0;e.pend=0;e.dead=true;e.fadeT=20;fx.push(e.label+' sale corriendo y no vuelve.');fxe.push(e.label+' runs off and does not come back.')}
@@ -255,11 +255,11 @@ function resolve(r,kil,tg,ei){
   else if(r==='wüñotreka'){fx.push('Les dijiste que no retrocedieran. Se quedan firmes.');fxe.push('You told them not to go back. They hold their ground.')}
   if(burnT){S.hp=Math.max(1,S.hp-burnT);fx.push('¡Te quemas con su fuego! (−'+burnT+')');fxe.push('You get burned by its fire! (−'+burnT+')')}
   const eff=L('',pr.m+(S.sp>=2?'  ✦'+S.sp:''),fx.join(' '),fxe.join(' '));
-  eff.fx=()=>{for(const e of targets){const p=epos(e);spark(p.x,p.y,r==='amutu'?'#fff6a0':r==='umawtu'?'#a0c8ff':r==='nag'?'#ffe080':'#ffffff',10);
+  eff.fx=()=>{for(const e of targets){const p=epos(e);spark(p.x,p.y,r==='amutu'?'#fff6a0':r==='umawtu'?'#a0c8ff':r==='nagtu'?'#ffe080':'#ffffff',10);
       if(e.pend){e.hit=12;pop(p.x,p.y-10,'-'+e.pend,'#ffffff');sfx('hit');if(e.hp<=0&&!quizPend(e)){e.dead=true;e.fadeT=20}e.pend=0}
       else if(e.miss){pop(p.x,p.y-10,'MISS','#a0c0ff');e.miss=0}
       else if(r==='umawtu'&&e.sl){pop(p.x,p.y-10,'zZ','#c0e0ff');sfx('sleep')}
-      else if(r==='nag'&&e.gr===3){pop(p.x,p.y-10,'↓','#ffe080')}
+      else if(r==='nagtu'&&e.gr===3){pop(p.x,p.y-10,'↓','#ffe080')}
       else if(r==='küpa'&&kil){pop(p.x,p.y-10,'✋','#ffe080');sfx('block')}}};
   lines.push(eff);
   say(lines,()=>{for(const e of targets)if(e.hp<=0&&!e.dead&&!quizPend(e)){e.dead=true;e.fadeT=20}bossSweep();if(!aliveE().some(x=>x.hp>0))return victory();enemyPhase()});

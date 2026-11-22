@@ -122,11 +122,11 @@ function childTalk(){
   }else say([L('Pichiche','Pewkayal!','¡Chao!','Bye!')]);
 }
 function pescadoraTalk(){
-  if(!S.roots.includes('nag')){
+  if(!S.roots.includes('nagtu')){
     say([L('Challwafe','Mari mari, '+addr(true)+'.','Hola, '+addr(true)+'.','Hello, '+addr(true)+'.'),
       L('Challwafe','Müley chonchon!','¡Hay chonchon!','There are chonchon!'),
-      N('Los chonchon vuelan alto: amutu- no los alcanza. Primero diles nag- ("bajar"): nagnge, nagmu, nagmün. Ya en el suelo, échalos.','Chonchon fly high: amutu- cannot reach them. First tell them nag- ("come down"): nagnge, nagmu, nagmün. Once they are on the ground, drive them off.'),
-      N('Aprendiste nag- (bajar).','You learned nag- (come down).')],()=>{learnRoot('nag');sfx('lvl');persist()});
+      N('Los chonchon vuelan alto: amutu- no los alcanza. Primero diles nagtu- ("bajar"): nagtunge, nagtumu, nagtumün. Ya en el suelo, échalos.','Chonchon fly high: amutu- cannot reach them. First tell them nagtu- ("come down"): nagtunge, nagtumu, nagtumün. Once they are on the ground, drive them off.'),
+      N('Aprendiste nagtu- (bajar).','You learned nagtu- (come down).')],()=>{learnRoot('nagtu');sfx('lvl');persist()});
   }else say([L('Challwafe','Newentunge!','¡Ánimo!','Be strong!'),N('Los anchümalleñ brillan y curan a otros wekufü. Si los haces dormir con umawtu-, dejan de molestar.','The anchümalleñ glow and heal other wekufü. If you make them sleep with umawtu-, they stop helping.')]);
 }
 function gathererTalk(){

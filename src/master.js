@@ -55,7 +55,7 @@ const MCHK=[
   {m:'Santiago · Yewen',es:'La waria: las cinco personas ayudadas; el Yewen espera en la cancha',en:'The city: the five people helped; the Yewen waits on the cancha',lvl:31,at:['s_poblacion',14,6],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','finalwon','sbosses','kalkudone','epuwon','chq','chdone','stgocall','stgofive']}];
 const MSET={
   intro:s=>{s.flags.intro=1;s.roots.push('küpa')},
-  pentu:s=>{Object.assign(s.flags,{pentu_prac:1,pentukun:1});s.roots.push('umawtu','nag');s.items.kulon+=2},
+  pentu:s=>{Object.assign(s.flags,{pentu_prac:1,pentukun:1});s.roots.push('umawtu','nagtu');s.items.kulon+=2},
   lafcave:s=>{Object.assign(s.flags,{rune_kil:1,mini1:1,mini2:1,mini3:1,'pz:d1':1,'pz:d2':1});s.runes.push('kil');s.items.lawen+=2;s.items.kofke+=2},
   lafdone:s=>{Object.assign(s.flags,{ngen:1,dive:1,boss:1,awake_lafkenche:1});s.pieces.push('lafkenche');s.gear.trariwe=1;s.gear.makun=1},
   naglof:s=>{Object.assign(s.flags,{chuchu:1,nag_lonko:1,herd_task:1,herd:1,awar:1,'pz:n_lewfu':1});s.roots.push('llüka');s.piwke+=1},
@@ -95,7 +95,7 @@ function mCheckpoints(back){
 }
 /* Master saves made before a root was added to a checkpoint (or reached by 'go to a map') can lack words the
    region already taught. Backfill them from the story flags whenever a map loads or a battle starts. */
-const MROOTFLAGS=[['intro','küpa'],['pentukun','umawtu'],['pentukun','nag'],['nag_lonko','llüka'],['root_winotu','wüñotreka'],
+const MROOTFLAGS=[['intro','küpa'],['pentukun','umawtu'],['pentukun','nagtu'],['nag_lonko','llüka'],['root_winotu','wüñotreka'],
   ['pew_lonko','trafo'],['root_wutre','wütre'],['ngen3','ñam'],['root_nam','ñam'],['wil_lonko','lef'],['root_tripa','tripa'],
   ['puel_lonko','trana'],['root_nepe','nepe'],['chboss','llako']];
 function mFixRoots(){if(!S||!S.roots)return;let add=0;for(const [f,r] of MROOTFLAGS)if(S.flags[f]&&!S.roots.includes(r)){S.roots.push(r);add=1}if(add)persist()}

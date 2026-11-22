@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='c5bd75b-202611221148';
+window.KEWUN_BUILD='4ee93f5-202611221227';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -771,7 +771,7 @@ const ROOTS={
   amutu:{m:'amutu-',es:'irse (de aquí)',en:'go away (from here)'},
   'küpa':{m:'küpa-',es:'venir',en:'come'},
   umawtu:{m:'umawtu-',es:'dormir',en:'sleep'},
-  nag:{m:'nag-',es:'bajar',en:'come down'},
+  nagtu:{m:'nagtu-',es:'bajar',en:'come down'},
   'llüka':{m:'llüka-',es:'tener miedo',en:'be afraid'},
   'wüñotreka':{m:'wüñotreka-',es:'volver atrás, retroceder',en:'step back'},
   trafo:{m:'trafo-',es:'quebrarse, romperse',en:'break'},
@@ -791,7 +791,7 @@ const VG={
        nes:['¡No vengas!','¡No vengan (ustedes dos)!','¡No vengan (todos)!'],nen:["Don't come!","Don't come, you two!","Don't come, all of you!"]},
   umawtu:{es:['¡Duerme!','¡Duerman (ustedes dos)!','¡Duerman (todos)!'],en:['Sleep!','Sleep, you two!','Sleep, all of you!'],
        nes:['¡No duermas!','¡No duerman (ustedes dos)!','¡No duerman (todos)!'],nen:["Don't sleep!","Don't sleep, you two!","Don't sleep, all of you!"]},
-  nag:{es:['¡Baja!','¡Bajen (ustedes dos)!','¡Bajen (todos)!'],en:['Come down!','Come down, you two!','Come down, all of you!'],
+  nagtu:{es:['¡Baja!','¡Bajen (ustedes dos)!','¡Bajen (todos)!'],en:['Come down!','Come down, you two!','Come down, all of you!'],
        nes:['¡No bajes!','¡No bajen (ustedes dos)!','¡No bajen (todos)!'],nen:["Don't come down!","Don't come down, you two!","Don't come down, all of you!"]},
   'llüka':{es:['¡Ten miedo!','¡Tengan miedo (ustedes dos)!','¡Tengan miedo (todos)!'],en:['Be afraid!','Be afraid, you two!','Be afraid, all of you!'],
        nes:['¡No tengas miedo!','¡No tengan miedo (ustedes dos)!','¡No tengan miedo (todos)!'],nen:["Don't be afraid!","Don't be afraid, you two!","Don't be afraid, all of you!"]},
@@ -838,7 +838,7 @@ const ET={
   kaleuche:{name:'Kaleuche',hp:175,atk:12,xp:110,gold:[100,100],boss:true,bs:112,hide:1},
   witranalwe:{name:'Witranalwe',hp:135,atk:10,xp:70,gold:[60,60],boss:true,bs:110},
   chinifilu:{name:'Chiñifilu',hp:150,atk:14,xp:120,gold:[150,150],boss:true,bs:96,spres:1,seals:['umawtu','küpakil','amutu']},
-  piwuchen:{name:'Piwüchen',hp:170,atk:15,xp:140,gold:[170,170],boss:true,bs:100,fly:true,spres:1,seals:['nag','llüka','küpakil']},
+  piwuchen:{name:'Piwüchen',hp:170,atk:15,xp:140,gold:[170,170],boss:true,bs:100,fly:true,spres:1,seals:['nagtu','llüka','küpakil']},
   wallipen:{name:'Wallepeñ',hp:190,atk:15,xp:160,gold:[190,190],boss:true,bs:92,spres:1,armor:1,seals:['wütre','trafo','umawtu']},
   trawko:{name:'Trawko',hp:200,atk:16,xp:180,gold:[220,220],boss:true,bs:88,spres:1,seals:['tripa','lef','amutukil']},
   mewlen:{name:'mewlen wekufü',hp:22,atk:8,xp:12,gold:[8,12],bs:44,fly:true},
@@ -2958,11 +2958,11 @@ function childTalk(){
   }else say([L('Pichiche','Pewkayal!','¡Chao!','Bye!')]);
 }
 function pescadoraTalk(){
-  if(!S.roots.includes('nag')){
+  if(!S.roots.includes('nagtu')){
     say([L('Challwafe','Mari mari, '+addr(true)+'.','Hola, '+addr(true)+'.','Hello, '+addr(true)+'.'),
       L('Challwafe','Müley chonchon!','¡Hay chonchon!','There are chonchon!'),
-      N('Los chonchon vuelan alto: amutu- no los alcanza. Primero diles nag- ("bajar"): nagnge, nagmu, nagmün. Ya en el suelo, échalos.','Chonchon fly high: amutu- cannot reach them. First tell them nag- ("come down"): nagnge, nagmu, nagmün. Once they are on the ground, drive them off.'),
-      N('Aprendiste nag- (bajar).','You learned nag- (come down).')],()=>{learnRoot('nag');sfx('lvl');persist()});
+      N('Los chonchon vuelan alto: amutu- no los alcanza. Primero diles nagtu- ("bajar"): nagtunge, nagtumu, nagtumün. Ya en el suelo, échalos.','Chonchon fly high: amutu- cannot reach them. First tell them nagtu- ("come down"): nagtunge, nagtumu, nagtumün. Once they are on the ground, drive them off.'),
+      N('Aprendiste nagtu- (bajar).','You learned nagtu- (come down).')],()=>{learnRoot('nagtu');sfx('lvl');persist()});
   }else say([L('Challwafe','Newentunge!','¡Ánimo!','Be strong!'),N('Los anchümalleñ brillan y curan a otros wekufü. Si los haces dormir con umawtu-, dejan de molestar.','The anchümalleñ glow and heal other wekufü. If you make them sleep with umawtu-, they stop helping.')]);
 }
 function gathererTalk(){
@@ -4903,9 +4903,9 @@ function resolve(r,kil,tg,ei){
   else if(r==='umawtu'&&!kil){for(const e of targets){const T=ET[e.t];if(T.boss){fx.push(e.label+' no se duerme.');fxe.push(e.label+' does not fall asleep.');continue}
       if(Math.random()<(coll?.7:.9)){e.sl=2;fx.push(e.label+' se duerme.');fxe.push(e.label+' falls asleep.')}else{fx.push(e.label+' bosteza, pero no se duerme.');fxe.push(e.label+' yawns, but stays awake.')}}}
   else if(r==='umawtu'){let w=0;for(const e of targets)if(e.sl){e.sl=0;w=1}fx.push(w?'¡Los despertaste!':'Ninguno dormía.');fxe.push(w?'You woke them up!':'None of them was asleep.')}
-  else if(r==='nag'&&!kil){let any=0;for(const e of targets)if(ET[e.t].fly){e.gr=3;any=1;fx.push(e.label+' baja al suelo.');fxe.push(e.label+' comes down to the ground.')}
+  else if(r==='nagtu'&&!kil){let any=0;for(const e of targets)if(ET[e.t].fly){e.gr=3;any=1;fx.push(e.label+' baja al suelo.');fxe.push(e.label+' comes down to the ground.')}
       if(!any){fx.push('No vuela: ya está abajo.');fxe.push('It does not fly: it is already down.')}}
-  else if(r==='nag'){fx.push('Les dijiste que no bajaran. Siguen donde estaban.');fxe.push('You told them not to come down. They stay where they were.')}
+  else if(r==='nagtu'){fx.push('Les dijiste que no bajaran. Siguen donde estaban.');fxe.push('You told them not to come down. They stay where they were.')}
   else if(r==='lef'&&!kil){for(const e of targets){const T=ET[e.t];
       if(T.boss||T.mini){fx.push(e.label+' no tiene miedo: no va a correr.');fxe.push(e.label+' is not afraid: it will not run.');continue}
       if(e.hp<=e.max*.5){e.hp=0;e.pend=0;e.dead=true;e.fadeT=20;fx.push(e.label+' sale corriendo y no vuelve.');fxe.push(e.label+' runs off and does not come back.')}
@@ -4961,11 +4961,11 @@ function resolve(r,kil,tg,ei){
   else if(r==='wüñotreka'){fx.push('Les dijiste que no retrocedieran. Se quedan firmes.');fxe.push('You told them not to go back. They hold their ground.')}
   if(burnT){S.hp=Math.max(1,S.hp-burnT);fx.push('¡Te quemas con su fuego! (−'+burnT+')');fxe.push('You get burned by its fire! (−'+burnT+')')}
   const eff=L('',pr.m+(S.sp>=2?'  ✦'+S.sp:''),fx.join(' '),fxe.join(' '));
-  eff.fx=()=>{for(const e of targets){const p=epos(e);spark(p.x,p.y,r==='amutu'?'#fff6a0':r==='umawtu'?'#a0c8ff':r==='nag'?'#ffe080':'#ffffff',10);
+  eff.fx=()=>{for(const e of targets){const p=epos(e);spark(p.x,p.y,r==='amutu'?'#fff6a0':r==='umawtu'?'#a0c8ff':r==='nagtu'?'#ffe080':'#ffffff',10);
       if(e.pend){e.hit=12;pop(p.x,p.y-10,'-'+e.pend,'#ffffff');sfx('hit');if(e.hp<=0&&!quizPend(e)){e.dead=true;e.fadeT=20}e.pend=0}
       else if(e.miss){pop(p.x,p.y-10,'MISS','#a0c0ff');e.miss=0}
       else if(r==='umawtu'&&e.sl){pop(p.x,p.y-10,'zZ','#c0e0ff');sfx('sleep')}
-      else if(r==='nag'&&e.gr===3){pop(p.x,p.y-10,'↓','#ffe080')}
+      else if(r==='nagtu'&&e.gr===3){pop(p.x,p.y-10,'↓','#ffe080')}
       else if(r==='küpa'&&kil){pop(p.x,p.y-10,'✋','#ffe080');sfx('block')}}};
   lines.push(eff);
   say(lines,()=>{for(const e of targets)if(e.hp<=0&&!e.dead&&!quizPend(e)){e.dead=true;e.fadeT=20}bossSweep();if(!aliveE().some(x=>x.hp>0))return victory();enemyPhase()});
@@ -6812,7 +6812,7 @@ function slotPick(forNew,cb){
       cb(v)},true)}
 function contSlot(n){
   setSlot(n);const sv=loadSave(n);if(!sv)return;
-  S=Object.assign(newState(sv.hero||'llanka'),sv);S.items.diwen=S.items.diwen||0;S.gear=S.gear||{};S.gloss=LANG;S.pw={speed:0,pewen:0,gold:0};S.roots=S.roots.map(r=>r==='amu'?'amutu':r==='wiñotu'?'wüñotreka':r);if(S.last)S.last=null;$('title').style.display='none';mode='map';AU.name=null;loadMap(MAPS[S.map]?S.map:'rupu',S.x,S.y);
+  S=Object.assign(newState(sv.hero||'llanka'),sv);S.items.diwen=S.items.diwen||0;S.gear=S.gear||{};S.gloss=LANG;S.pw={speed:0,pewen:0,gold:0};S.roots=S.roots.map(r=>r==='amu'?'amutu':r==='wiñotu'?'wüñotreka':r==='nag'?'nagtu':r).filter(r=>ROOTS[r]);if(S.last)S.last=null;$('title').style.display='none';mode='map';AU.name=null;loadMap(MAPS[S.map]?S.map:'rupu',S.x,S.y);
 }
 function newGo(src){slotPick(true,n=>{setSlot(n);S=src?heroState(src):newState(HERO);persist();$('title').style.display='none';startCut()})}
 $('bNew').onclick=()=>{auInit();const won=[1,2,3].filter(n=>{const v=loadSave(n);return v&&v.flags&&v.flags.won});
