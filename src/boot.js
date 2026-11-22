@@ -6,7 +6,7 @@ function fit(){
   const aw=innerWidth-12,ah=Math.max(1,innerHeight-pad);
   setView(Math.round(224*aw/ah));
   const s=Math.max(1,Math.min(aw/LW,ah/224));
-  const si=s>=2?Math.floor(s*2)/2:s;$('screen').style.setProperty('--s',si);
+  const si=s>=2?Math.floor(s*2)/2:s;$('screen').style.setProperty('--s',si);setBacking(si);
 }
 addEventListener('resize',fit);fit();
 (function(){

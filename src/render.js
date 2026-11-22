@@ -298,10 +298,10 @@ function drawWino(c,hx,hy,tx,ty,d){
 function ctLight(c,glows){
   const dark=M.dungeon||M.bg==='forest'||M.trees==='mawida'||M.bg==='crater'||M.bg==='fjord';
   c.save();
-  const g=c.createLinearGradient(0,VY,0,LH);g.addColorStop(0,dark?'rgba(10,20,50,.18)':'rgba(255,236,190,.10)');g.addColorStop(1,dark?'rgba(0,0,20,.28)':'rgba(40,30,80,.10)');c.fillStyle=g;c.fillRect(0,VY,LW,VH);
-  const v=c.createRadialGradient(LW/2,LH/2,LH*.35,LW/2,LH/2,LH*.85);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,dark?'rgba(0,0,16,.55)':'rgba(0,0,20,.32)');c.fillStyle=v;c.fillRect(0,VY,LW,VH);
+  const g=dLin(0,VY,0,LH);g.addColorStop(0,dark?'rgba(10,20,50,.18)':'rgba(255,236,190,.10)');g.addColorStop(1,dark?'rgba(0,0,20,.28)':'rgba(40,30,80,.10)');g.fill(c,0,VY,LW,VH);
+  const v=dRad(LW/2,LH/2,LH*.35,LW/2,LH/2,LH*.85);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,dark?'rgba(0,0,16,.55)':'rgba(0,0,20,.32)');v.fill(c,0,VY,LW,VH);
   c.globalCompositeOperation='lighter';
-  for(const [gx,gy] of glows){const fl=1+Math.sin(frame/6+gx)*.06,rg=c.createRadialGradient(gx,gy,2,gx,gy,48*fl);rg.addColorStop(0,'rgba(255,190,90,.45)');rg.addColorStop(.4,'rgba(255,140,50,.16)');rg.addColorStop(1,'rgba(255,120,40,0)');c.fillStyle=rg;c.fillRect(gx-56,gy-56,112,112)}
+  for(const [gx,gy] of glows){const fl=Math.floor(frame/10+gx)%3,rg=dRad(56,56,2,56,56,46+fl*2);rg.addColorStop(0,'rgba(255,190,90,.45)');rg.addColorStop(.4,'rgba(255,140,50,.16)');rg.addColorStop(1,'rgba(255,120,40,0)');c.save();c.translate(Math.round(gx-56),Math.round(gy-56));rg.fill(c,0,0,112,112);c.restore()}
   c.restore()}
 function ctWin(c,x,y,w,h){const g=c.createLinearGradient(0,y,0,y+h);g.addColorStop(0,'#5a6a9e');g.addColorStop(.5,'#2a3468');g.addColorStop(1,'#141a3c');
   R(c,x-1,y-1,w+2,h+2,'#000');c.fillStyle=g;c.fillRect(x,y,w,h);R(c,x,y,w,1,'#e8ecf8');R(c,x,y,1,h,'#e8ecf8');R(c,x+w-1,y,1,h,'#7a7e94');R(c,x,y+h-1,w,1,'#7a7e94');
@@ -489,7 +489,11 @@ function greyify(cvs){const c=cvs.getContext('2d'),d=c.getImageData(0,0,cvs.widt
   c.putImageData(d,0,0);
   c.fillStyle='rgba(150,160,175,.14)';c.fillRect(0,0,cvs.width,cvs.height);
   return cvs}
+/* hand-painted backdrops (src/paintbg.js): load once, crop the middle to the current screen width */
+const PBGI={};if(typeof PAINTBG!=='undefined')for(const k in PAINTBG){const im=new Image();im.src=PAINTBG[k].src;PBGI[k]=im}
+const paintedBG=a=>!!(PBGI[a]&&PBGI[a].complete&&PBGI[a].naturalWidth);
 function buildBG(area){
+  if(paintedBG(area)){const [cv,c]=mk(LW,LH),im=PBGI[area];c.drawImage(im,Math.round((LW-im.naturalWidth)/2),0);return cv}
   if(area.startsWith&&area.startsWith('fog:'))return greyify(buildBG(area.slice(4)));
   if(area==='cave2'||area==='cave3'||area==='cave4'||area==='cave5')return buildBGraw(area);
   const cvs=buildBGraw(area);lushBG(cvs,area);polishBG(cvs,area);return cvs;
@@ -644,18 +648,20 @@ function renderBattle(){
   const c=lx;R(c,0,0,LW,LH,'#000');
   const sh=B.shake>0?(B.shake--%2?2:-2):0;
   c.save();c.translate(sh,0);
-  if(!BG[B.area])BG[B.area]=buildBG(B.area);c.drawImage(BG[B.area],0,0);animBG(B.area);
+  const pa=B.area.replace('fog:',''),painted=!!PBGI[pa];
+  if(!BG[B.area]||BG[B.area].width!==LW){const bg=buildBG(B.area);if(!painted||paintedBG(pa))BG[B.area]=bg;else{c.drawImage(bg,0,0)}}
+  if(BG[B.area])c.drawImage(BG[B.area],0,0);if(painted&&paintedBG(pa)&&B.area===pa)animPainted(c,pa);else animBG(B.area);
   {// battle grade: soft-light contrast on the backdrop, a little haze where sky meets land, so the fighters pop off it
-   const ar=B.area,dark=/cave|deep|crater|fog:|waria/.test(ar);c.save();c.globalCompositeOperation='soft-light';
-   const g=c.createLinearGradient(0,0,0,LH);g.addColorStop(0,dark?'rgba(80,90,130,.5)':'rgba(150,140,120,.4)');g.addColorStop(.55,'rgba(128,128,128,0)');g.addColorStop(1,'rgba(50,40,80,.5)');c.fillStyle=g;c.fillRect(0,0,LW,LH);
-   c.globalCompositeOperation='source-over';if(!dark){const hz=c.createLinearGradient(0,LH*.36,0,LH*.56);hz.addColorStop(0,'rgba(235,240,255,0)');hz.addColorStop(.5,'rgba(235,240,255,.12)');hz.addColorStop(1,'rgba(235,240,255,0)');c.fillStyle=hz;c.fillRect(0,LH*.36,LW,LH*.2)}
-   c.restore()}
+   const ar=B.area,dark=/cave|deep|crater|fog:|waria/.test(ar);if(!painted){c.save();c.globalCompositeOperation='soft-light';
+   const g=dLin(0,0,0,LH);g.addColorStop(0,dark?'rgba(80,90,130,.5)':'rgba(150,140,120,.4)');g.addColorStop(.55,'rgba(128,128,128,0)');g.addColorStop(1,'rgba(50,40,80,.5)');g.fill(c,0,0,LW,LH);
+   c.globalCompositeOperation='source-over';if(!dark){const hz=dLin(0,LH*.36,0,LH*.56);hz.addColorStop(0,'rgba(235,240,255,0)');hz.addColorStop(.5,'rgba(235,240,255,.12)');hz.addColorStop(1,'rgba(235,240,255,0)');hz.fill(c,0,LH*.36,LW,LH*.2)}
+   c.restore()}}
   const ngoyUp=B.en.some(e=>/^ngoyman/.test(e.t)&&!e.dead);
   if(ngoyUp){const br=.34+.07*Math.sin(frame/37);
     c.fillStyle='rgba(4,6,4,'+br.toFixed(2)+')';c.fillRect(0,0,LW,LH);
-    const vg=c.createRadialGradient(LW/2,LH*.45,LH*.3,LW/2,LH*.45,LW*.7);
+    const vg=dRad(LW/2,LH*.45,LH*.3,LW/2,LH*.45,LW*.7);
     vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(10,14,8,.5)');
-    c.fillStyle=vg;c.fillRect(0,0,LW,LH)}
+    vg.fill(c,0,0,LW,LH)}
   if(B.intro>0)B.intro--;
   const al=B.en.filter(e=>!e.dead||e.fadeT>0),n=al.length,base=138;
   al.forEach((e,i)=>{const Tt=ET[e.t],sz=Tt.bs,cvs=enemyCanvas(e.t,sz,Math.floor(frame/12)%2);
@@ -740,7 +746,7 @@ function renderBattle(){
         c.beginPath();c.arc(hx-4,132+hb,10,Math.PI-0.9,Math.PI+1.2);c.stroke();c.restore()}
     }
   }
-  if(!FG[B.area])FG[B.area]=buildFG(B.area);c.drawImage(FG[B.area],0,0);
+  if(!(PBGI[B.area.replace('fog:','')]&&paintedBG(B.area.replace('fog:','')))){if(!FG[B.area])FG[B.area]=buildFG(B.area);c.drawImage(FG[B.area],0,0)}
   c.restore();
   for(const p of B.parts){p.t--;p.x+=p.vx;p.y+=p.vy;p.vy+=.06;R(c,p.x,p.y,p.t>15?2:1,p.t>15?2:1,p.col)}B.parts=B.parts.filter(p=>p.t>0);
   if(!B.en.some(e=>/^ngoyman/.test(e.t)&&!e.dead))dayTint(c);
@@ -923,7 +929,7 @@ function loopBody(ts){
   else if(mode==='title')paintLand(lx,frame,false);
   if(mode==='map'&&M){dayTint(lx);if(M.urban&&typeof urbanNight==='function')urbanNight(lx,CAM.x,CAM.y)}
   if(fade>0&&mode==='map'){lx.fillStyle='rgba(0,0,0,'+(fade/16)+')';lx.fillRect(0,0,LW,LH);fade=Math.max(0,fade-steps)}
-  ctx.drawImage(LO,0,0,W,H);
+  present();
   for(const f of OV)f();
 }
 
@@ -978,8 +984,8 @@ function atmos(c){
   if(!indoor&&!gloom&&!urban&&M.bg!=='fjord'){
     c.globalCompositeOperation='lighter';
     for(let k=0;k<4;k++){const bx=((k*97-ox*.3+frame*.05)%(W+140)+W+140)%(W+140)-70,w=18+(k%3)*10,al=.035+.02*Math.sin(frame/70+k*2);
-      const g=c.createLinearGradient(0,VY,0,VY+H);g.addColorStop(0,'rgba(255,240,190,'+al*1.6+')');g.addColorStop(1,'rgba(255,240,190,0)');c.fillStyle=g;
-      c.beginPath();c.moveTo(bx,VY);c.lineTo(bx+w,VY);c.lineTo(bx+w-60,VY+H);c.lineTo(bx-60-w*.4,VY+H);c.closePath();c.fill()}
+      const g=dLin(0,VY,0,VY+H);g.addColorStop(0,'rgba(255,240,190,'+(Math.round(al*1.6*40)/40)+')');g.addColorStop(1,'rgba(255,240,190,0)');
+      c.save();c.beginPath();c.moveTo(Math.round(bx),VY);c.lineTo(Math.round(bx+w),VY);c.lineTo(Math.round(bx+w-60),VY+H);c.lineTo(Math.round(bx-60-w*.4),VY+H);c.closePath();c.clip();g.fill(c,0,VY,W,H);c.restore()}
     c.globalCompositeOperation='source-over'}
   // 2. weather and drifting life
   const P=(n,fn)=>{for(let k=0;k<n;k++)fn(k,((k*9301+49297)%233280)/233280)};
@@ -988,7 +994,7 @@ function atmos(c){
     P(M.interior?10:14,(k,r)=>{const x=wrapX(r*W*3+Math.sin(frame/80+k)*10-ox*.5),y=VY+wrapY(k*37+Math.sin(frame/60+k*2)*8-frame*.06*(1+r)-oy*.5);
       c.fillStyle='rgba(255,240,210,'+(.18+.18*Math.sin(frame/25+k))+')';c.fillRect(Math.round(x),Math.round(y),1,1)})}
   else if(urban){ // smog high up, scraps of paper skittering on the wind
-    const g=c.createLinearGradient(0,VY,0,VY+H*.6);g.addColorStop(0,'rgba(150,130,120,.22)');g.addColorStop(1,'rgba(150,130,120,0)');c.fillStyle=g;c.fillRect(0,VY,W,H*.6);
+    const g=dLin(0,VY,0,VY+H*.6);g.addColorStop(0,'rgba(150,130,120,.22)');g.addColorStop(1,'rgba(150,130,120,0)');g.fill(c,0,VY,W,H*.6);
     P(5,(k,r)=>{const x=wrapX(r*W*4+frame*(.5+r)-ox),y=VY+wrapY(k*53+Math.sin(frame/12+k)*6-oy*.8);c.fillStyle=k%2?'#e8e4da':'#c8c2b4';c.fillRect(Math.round(x),Math.round(y),2,1);if((frame+k*7)%20<10)c.fillRect(Math.round(x)+1,Math.round(y)-1,1,1)})}
   else if(gloom){ // ash of the forgetting, drifting up
     P(22,(k,r)=>{const x=wrapX(r*W*5+Math.sin(frame/40+k)*12-ox),y=VY+wrapY(H-((frame*.25*(1+r))+k*29)-oy);c.fillStyle='rgba(200,204,214,'+(.25+.2*r)+')';c.fillRect(Math.round(x),Math.round(y),1,1)})}
@@ -1006,7 +1012,7 @@ function atmos(c){
   // 3. colour grade: a soft-light pass that deepens shadows and warms highlights, tuned per place
   c.globalCompositeOperation='soft-light';
   const tint=gloom?'rgba(96,104,128,.55)':indoor?'rgba(140,118,96,.35)':urban?'rgba(128,122,130,.4)':M.bg==='mount'?'rgba(112,124,150,.35)':M.bg==='pampa'?'rgba(156,128,96,.38)':'rgba(146,132,104,.32)';
-  const g2=c.createLinearGradient(0,VY,0,VY+H);g2.addColorStop(0,tint);g2.addColorStop(1,'rgba(60,50,90,.35)');c.fillStyle=g2;c.fillRect(0,VY,W,H);
+  const g2=dLin(0,VY,0,VY+H);g2.addColorStop(0,tint);g2.addColorStop(1,'rgba(60,50,90,.35)');g2.fill(c,0,VY,W,H);
   c.restore();
 }
 /* ---------- kuyfi chillka: an ancient carved stone stele, mossy when asleep, glowing when awake ---------- */
@@ -1034,3 +1040,11 @@ function drawTablet(c,X,Y,lit){
     c.save();c.globalCompositeOperation='lighter';const g=c.createRadialGradient(X+8,top+12,2,X+8,top+12,20);g.addColorStop(0,'rgba(255,220,120,'+(.28+.08*Math.sin(frame/12))+')');g.addColorStop(1,'rgba(255,200,80,0)');c.fillStyle=g;c.fillRect(X-14,top-10,44,44);c.restore();
     for(let k=0;k<3;k++){const t=((frame+k*33)%100)/100;c.fillStyle='rgba(255,236,160,'+(1-t).toFixed(2)+')';c.fillRect(Math.round(X+4+k*4+Math.sin(t*6+k)*2),Math.round(top+4-t*16),1,1)}}
 }
+
+/* light animation on top of a painted backdrop, in the painting's own colours */
+function animPainted(c,a){const G2=PAINTBG[a].geo,ox=Math.round((LW-400)/2);
+  if(a==='coast'){const sx=G2.sun[0]+ox;
+    for(let k=0;k<22;k++){const y=G2.hz+3+((k*7)%(G2.sh-G2.hz-8)),sp=6+(y-G2.hz)*1.4,x=Math.round(sx+Math.sin(k*2.3+frame/40)*sp);if((frame+k*11)%34<14){R(c,x,y,2+(k%3),1,k%2?'#fff4d8':'#e6f6ff')}}
+    for(let k=0;k<30;k++){const x=((k*53+Math.floor(frame*.35))%LW),y=G2.hz+6+((k*29)%(G2.sh-G2.hz-10));if((frame+k*9)%60<10)R(c,x,y,3,1,'#a8daf0')}
+    for(let x=0;x<LW;x+=2){const y=G2.sh-1+Math.round(Math.sin((x-ox)/9+frame/24)*1.4);R(c,x,y,2,1,(x>>1)%3?'#eef9ff':'#c8e4f0')}
+    for(let i=0;i<2;i++){const bx=Math.round((frame*.25+i*170)%(LW+30)-15),by=Math.round(30+i*14+Math.sin(frame/20+i)*3),f=Math.sin(frame/6+i)>0?1:0;R(c,bx-1,by,3,1,'#f4f4f8');R(c,bx-4,by-f,3,1,'#f4f4f8');R(c,bx+2,by-f,3,1,'#f4f4f8')}}}
