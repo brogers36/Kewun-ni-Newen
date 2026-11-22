@@ -107,6 +107,7 @@ const ET={
   illkun:{name:'illkun',hp:38,atk:11,xp:22,gold:[12,16],bs:62,mini:1,fire:true,twice:true},
   llukalfe:{name:'llükalfe',hp:36,atk:12,xp:24,gold:[12,16],bs:64,mini:1,tower:true},
   ayentufe:{name:'ayentufe',hp:30,atk:10,xp:20,gold:[10,14],bs:58,mini:1,curse:true,hide:true},
+  ngoysum:{name:'Fütra Ngoymatulfe',hp:70,atk:14,xp:40,gold:[20,30],bs:64,mini:1},
   profe:{name:'illamtufe kimeltulelu',hp:44,atk:12,xp:26,gold:[14,18],bs:64,mini:1,armor:true},
   yewen:{name:'Yewen',hp:300,atk:23,xp:300,gold:[400,400],boss:true,bs:100,spres:1,seals:['tripa','llükakil','ñamkil']},
   epunamun:{name:'Epunamun',hp:240,atk:14,xp:220,gold:[300,300],boss:true,bs:100,spres:1,seals:['umawtu','nepe','tranakil']},

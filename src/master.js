@@ -85,6 +85,7 @@ function mBuild(c){
   s.roots=[...new Set(s.roots)];
   for(let l=1;l<c.lvl;l++){s.lvl++;s.baseMax+=HPQ;s.baseAtk+=1;if(s.lvl%2===0)s.baseDef+=1}
   s.gold=60*c.lvl;s.save={map:c.at[0],x:c.at[1],y:c.at[2]};
+  if(/jefe|secreto|Epunamun|Yewen/.test(c.m))s.items.mate=25;   // boss checkpoints: plenty of mate for testing
   return s}
 function mStart(c){auInit();S=mBuild(c);S.gloss=LANG;S.hp=maxHP();S.sp=SPMAX;$('title').style.display='none';mode='map';AU.name=null;loadMap(c.at[0],c.at[1],c.at[2]);persist()}
 function mCheckpoints(back){

@@ -19,3 +19,10 @@
   const fdyn=window.dynCanvas;if(typeof fdyn==='function'){const DC={};
     window.dynCanvas=function(ch,f){if(!DYNP.has(ch))return fdyn(ch,f);const k=ch+'|'+f;if(DC[k])return DC[k];return DC[k]=repaintSmall(fdyn(ch,f),{amp:.85,capG:5,capP:4})}}
 })();
+
+/* the Yewen can call the Fütra Ngoymatulfe as a minion: borrow its first form's sprite */
+if(typeof SPR2!=='undefined'&&SPR2.ngoyman1){SPR2.ngoysum=SPR2.ngoyman1;if(SPR2['ngoyman1@b'])SPR2['ngoysum@b']=SPR2['ngoyman1@b']}
+{const _ec=enemyCanvas,NSC={};enemyCanvas=function(t,size,fr){if(t!=='ngoysum')return _ec(t,size,fr);
+  const k='n'+fr;if(NSC[k])return NSC[k];const src=_ec('ngoyman1',104,fr),w=Math.round(src.width*.7),h=Math.round(src.height*.7);
+  const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(src,0,0,w,h);
+  const id=g.getImageData(0,0,w,h),d=id.data;for(let i=3;i<d.length;i+=4)d[i]=d[i]>110?255:0;g.putImageData(id,0,0);return NSC[k]=c}}

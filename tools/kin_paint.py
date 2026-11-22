@@ -211,13 +211,18 @@ def profe(f):
     c.px(27, 19, R['tskin'][1]); c.px(27, 20, R['tskin'][4])         # nose
     for x in range(25, 30): c.px(x, 22, R['tskin'][0])               # thin lips, pressed flat
     c.px(24, 23, R['tskin'][1]); c.px(30, 23, R['tskin'][1])
-    # raised arm with the ruler, the other hand on the hip
-    taper(c, [(18, 32), (12, 26), (10, 18)], 6, 5, R['suit'], lift=0.18, name='armL', bulge=1.0)
-    blob(c, R['tskin'], lambda d: d.ellipse([7, 14, 13, 20], fill=1), bulge=1.1, lift=0.25, name='hand')
-    taper(c, [(9, 16), (6, 6), (4, -2)], 3.2, 3.0, R['ruler'], lift=0.2, name='ruler', bulge=0.8)
-    for y in range(-1, 15, 3): c.px(5 + (15 - y) // 8 if y > 0 else 4, y, R['ruler'][0])
-    taper(c, [(36, 32), (41, 40), (37, 46)], 6, 5, R['suit'], lift=-0.05, name='armR', bulge=1.0)
-    blob(c, R['tskin'], lambda d: d.ellipse([33, 43, 39, 48], fill=1), bulge=1.1, lift=0.0, name='hand2')
+    # arms folded hard across the chest; the ruler tucked under one arm, pointing down
+    taper(c, [(22, 43), (14, 50), (8, 56)], 3.2, 3.0, R['ruler'], lift=0.15, name='ruler', bulge=0.8)
+    for k in range(3): c.px(19 - k * 4, 46 + k * 3, R['ruler'][0])
+    taper(c, [(18, 32), (15, 38), (17, 44)], 6, 6, R['suit'], lift=0.10, name='armL', bulge=1.0)
+    taper(c, [(36, 32), (39, 38), (37, 44)], 6, 6, R['suit'], lift=-0.05, name='armR', bulge=1.0)
+    # back forearm (right) runs under, front forearm (left) lies on top
+    taper(c, [(37, 43), (29, 41), (21, 39)], 5.5, 5, R['suit'], lift=-0.02, name='armR', bulge=1.0)
+    blob(c, R['tskin'], lambda d: d.ellipse([18, 37, 23, 41], fill=1), bulge=1.1, lift=0.05, name='hand2')
+    taper(c, [(17, 44), (25, 43), (33, 41)], 6, 5.5, R['suit'], lift=0.14, name='armL', bulge=1.05)
+    blob(c, R['tskin'], lambda d: d.ellipse([32, 38, 37, 42], fill=1), bulge=1.1, lift=0.12, name='hand')
+    for x in range(19, 34): c.px(x, 46 - (x - 19) // 6, R['suit'][1])   # crease where the arms cross
+    c.rect(16, 44, 2, 1, R['shirt'][3]); c.rect(36, 42, 2, 1, R['shirt'][3])  # cuffs
     return finish(c, [('face', 'hair'), ('face', 'neck'), ('neck', 'jacket'), ('jacket', 'skirt'), ('armL', 'jacket'), ('armR', 'jacket'), ('hand', 'ruler'), ('shirt', 'jacket'), ('board', 'easel')],
                   rim=(200, 200, 215), rimparts=('jacket', 'skirt', 'armR'))
 

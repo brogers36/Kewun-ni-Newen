@@ -281,6 +281,7 @@ function renderMap(){
   if(CUR==='rupu'){for(let k=0;k<7;k++){const fx=-cx+Math.round(Math.sin(frame/60+k)*6)+6,fy=k*30+((frame/3+k*17)%30)-cy+VY;for(const [rr,al] of [[26,.18],[16,.22],[9,.25]])ell(c,fx,fy,rr,rr*.7,'rgba(200,200,212,'+al+')')}}
   if(M.bg==='forest'){c.fillStyle=awake(M.region)?'rgba(255,240,160,.06)':'rgba(10,30,20,.3)';c.fillRect(0,VY,LW,VH)}
   if(M.bg==='lagoon'){c.fillStyle=S.flags.ngen?'rgba(120,200,255,.08)':'rgba(60,30,90,.22)';c.fillRect(0,VY,LW,VH)}
+  atmos(c);
   if(CT)ctLight(c,glows);
   drawHUD(c);
 }
@@ -643,6 +644,11 @@ function renderBattle(){
   const sh=B.shake>0?(B.shake--%2?2:-2):0;
   c.save();c.translate(sh,0);
   if(!BG[B.area])BG[B.area]=buildBG(B.area);c.drawImage(BG[B.area],0,0);animBG(B.area);
+  {// battle grade: soft-light contrast on the backdrop, a little haze where sky meets land, so the fighters pop off it
+   const ar=B.area,dark=/cave|deep|crater|fog:|waria/.test(ar);c.save();c.globalCompositeOperation='soft-light';
+   const g=c.createLinearGradient(0,0,0,LH);g.addColorStop(0,dark?'rgba(80,90,130,.5)':'rgba(150,140,120,.4)');g.addColorStop(.55,'rgba(128,128,128,0)');g.addColorStop(1,'rgba(50,40,80,.5)');c.fillStyle=g;c.fillRect(0,0,LW,LH);
+   c.globalCompositeOperation='source-over';if(!dark){const hz=c.createLinearGradient(0,LH*.36,0,LH*.56);hz.addColorStop(0,'rgba(235,240,255,0)');hz.addColorStop(.5,'rgba(235,240,255,.12)');hz.addColorStop(1,'rgba(235,240,255,0)');c.fillStyle=hz;c.fillRect(0,LH*.36,LW,LH*.2)}
+   c.restore()}
   const ngoyUp=B.en.some(e=>/^ngoyman/.test(e.t)&&!e.dead);
   if(ngoyUp){const br=.34+.07*Math.sin(frame/37);
     c.fillStyle='rgba(4,6,4,'+br.toFixed(2)+')';c.fillRect(0,0,LW,LH);
@@ -702,12 +708,10 @@ function renderBattle(){
       c.save();c.scale(-1,1);c.drawImage(tcv,-(cx+Math.ceil(cvs.width/2)),y+ly);c.restore();
     }
     if(e.dead)return;
-    if(e.seals&&e.seals.length){const cyS=y+cvs.height/2;
-      for(let k=0;k<e.seals.length;k++){
-        c.save();c.strokeStyle=['rgba(255,240,170,.85)','rgba(190,230,255,.65)','rgba(255,200,230,.5)'][k%3];c.lineWidth=1.5;
-        c.setLineDash([6,8]);c.lineDashOffset=(frame*(k%2?1.4:-1.1))%14;
-        c.beginPath();c.ellipse(cx,cyS,sz*.60+k*6,sz*.33+k*4,0,0,6.283);c.stroke();c.restore()}
-      for(let k=0;k<6;k++){const a2=frame/16+k*1.047;R(c,Math.round(cx+Math.cos(a2)*(sz*.60)),Math.round(cyS+Math.sin(a2)*(sz*.33)),2,2,k%2?'#fff6c0':'#ffe060')}}
+    if(e.seals){const cyS=y+cvs.height/2;
+      if(e._sn!=null&&e.seals.length<e._sn){for(let q=0;q<3;q++)spark(cx+(q-1)*sz*.3,cyS,['#fff0a0','#b8e4ff','#ffc0e0'][e._sn%3],14);B.flash=Math.max(B.flash||0,6)}
+      e._sn=e.seals.length;
+      if(e.seals.length)drawWard(c,cx,cyS,sz,e.seals.length,frame,e.t);}
     if(e.sl>0)OV.push(()=>txt('z'+(frame%40<20?'Z':''),cx+sz/2-3,y+6,'#e0f0ff',16));
     const bw=Math.max(32,Math.min(76,sz*.8)),bx=Math.round(cx-bw/2),by=bse+4;
     const col=!tall&&!ET[e.t].boss&&(bossI<0?n>1:others.length>1)&&!(fi>=0&&bossI<0&&!grd.length);
@@ -922,3 +926,85 @@ function loopBody(ts){
   for(const f of OV)f();
 }
 
+
+/* ---------- boss light barrier: a layered ward of stolen light, one shell per seal ---------- */
+const WARD_COL=[[255,226,120],[150,214,255],[255,160,214],[190,255,200]];
+const WARD_GLYPH=[[0x04,0x0e,0x1f,0x0e,0x04],[0x11,0x0a,0x04,0x0a,0x11],[0x1f,0x11,0x15,0x11,0x1f],[0x04,0x15,0x1f,0x15,0x04],[0x0e,0x11,0x15,0x11,0x0e],[0x1b,0x0a,0x04,0x0a,0x1b]];
+function drawWard(c,cx,cy,sz,n,frame,seed){
+  const RX0=sz*.6,RY0=sz*.36;
+  for(let k=n-1;k>=0;k--){
+    const [r,g,b]=WARD_COL[k%WARD_COL.length],rx=RX0+k*7,ry=RY0+k*5,pulse=.5+.5*Math.sin(frame/14+k*1.9);
+    c.save();
+    // soft dome body
+    c.beginPath();c.ellipse(cx,cy,rx,ry,0,0,6.283);c.clip();
+    const gr=c.createRadialGradient(cx,cy-ry*.35,ry*.1,cx,cy,rx);
+    gr.addColorStop(0,'rgba('+r+','+g+','+b+','+(.02+.03*pulse)+')');gr.addColorStop(.72,'rgba('+r+','+g+','+b+','+(.07+.05*pulse)+')');gr.addColorStop(1,'rgba('+r+','+g+','+b+','+(.26+.1*pulse)+')');
+    c.fillStyle=gr;c.fillRect(cx-rx,cy-ry,rx*2,ry*2);
+    // drifting hex lattice of light
+    if(k===0){c.globalAlpha=.16+.1*pulse;c.fillStyle='rgb('+r+','+g+','+b+')';const hs=9,off=(frame*.25)%(hs*2);
+      for(let yy=-ry-hs;yy<ry+hs;yy+=hs*.87)for(let xx=-rx-hs*2;xx<rx+hs*2;xx+=hs*1.5){const row=Math.round((yy+ry)/(hs*.87));const px=Math.round(cx+xx+(row%2?hs*.75:0)+off-hs),py=Math.round(cy+yy);
+        c.fillRect(px,py,4,1);c.fillRect(px-1,py+1,1,3);c.fillRect(px+4,py+1,1,3);c.fillRect(px,py+4,4,1)}
+      c.globalAlpha=1}
+    // refraction sweep
+    const sw=((frame*1.6+k*40)%(rx*4))-rx*1.5;c.globalAlpha=.22;c.fillStyle='#ffffff';
+    for(let d=0;d<6;d++)c.fillRect(Math.round(cx+sw+d-(d>2?1:0)),cy-ry,1+(d>1&&d<4?1:0),ry*2);
+    c.globalAlpha=1;c.restore();
+    // crisp pixel rim with a travelling highlight
+    const steps=Math.round((rx+ry)*2.2),hl=(frame/40+k*.33)%1;
+    for(let q=0;q<steps;q++){const a=q/steps*6.283,px=Math.round(cx+Math.cos(a)*rx),py=Math.round(cy+Math.sin(a)*ry);
+      const dh=Math.abs(((q/steps-hl+1.5)%1)-.5),bright=dh<.06?1:dh<.14?.6:.28;
+      const back=Math.sin(a)<0;   // far side of the shell is dimmer
+      c.fillStyle='rgba('+Math.min(255,r+60*bright)+','+Math.min(255,g+60*bright)+','+Math.min(255,b+60*bright)+','+((back?.45:.85)*(.55+.45*bright))+')';
+      c.fillRect(px,py,1,1);if(!back&&q%2===0)c.fillRect(px,py+1,1,1)}
+    // orbiting rune glyphs (woven motifs), one ring per shell
+    const ng=6+k*2,sp=(k%2?-1:1)*frame/(90+k*30);
+    for(let q=0;q<ng;q++){const a=q/ng*6.283+sp,gx=Math.round(cx+Math.cos(a)*rx)-2,gy=Math.round(cy+Math.sin(a)*ry)-2,G=WARD_GLYPH[(q+k)%WARD_GLYPH.length],fr=Math.sin(a)<0?.5:1;
+      c.fillStyle='rgba('+r+','+g+','+b+','+(.18*fr)+')';c.fillRect(gx-1,gy,7,5);c.fillRect(gx,gy-1,5,7);
+      for(let yy=0;yy<5;yy++)for(let xx=0;xx<5;xx++)if(G[yy]>>(4-xx)&1){c.fillStyle='rgba(30,16,50,'+(.55*fr)+')';c.fillRect(gx+xx+1,gy+yy+1,1,1);c.fillStyle=(xx+yy+(frame>>3))%5===0?'rgba(255,255,255,'+fr+')':'rgba('+r+','+g+','+b+','+fr+')';c.fillRect(gx+xx,gy+yy,1,1)}}
+  }
+  // motes of light climbing the ward
+  for(let q=0;q<8;q++){const t=(frame*.7+q*37)%90,a=q*.785+frame/120,px=Math.round(cx+Math.cos(a)*RX0*.9),py=Math.round(cy+RY0*.8-t*.9);
+    if(t<80){c.fillStyle=q%2?'#fff6c8':'#ffffff';c.fillRect(px,py,1,1);if(t%20<10)c.fillRect(px,py-1,1,1)}}
+}
+
+/* ---------- atmosphere pass (overworld): light shafts, weather by region, and a gentle colour grade ---------- */
+function atmos(c){
+  const indoor=M.interior||M.dungeon||/^cave/.test(M.bg)||M.under,urban=M.region==='santiago';
+  const gloom=!!(M.fog&&!S.flags.won);
+  const ox=CAM.x,oy=CAM.y,W=LW,H=VH;
+  c.save();
+  // 1. sun shafts through open sky (they drift slowly; none indoors or in the fog)
+  if(!indoor&&!gloom&&!urban&&M.bg!=='fjord'){
+    c.globalCompositeOperation='lighter';
+    for(let k=0;k<4;k++){const bx=((k*97-ox*.3+frame*.05)%(W+140)+W+140)%(W+140)-70,w=18+(k%3)*10,al=.035+.02*Math.sin(frame/70+k*2);
+      const g=c.createLinearGradient(0,VY,0,VY+H);g.addColorStop(0,'rgba(255,240,190,'+al*1.6+')');g.addColorStop(1,'rgba(255,240,190,0)');c.fillStyle=g;
+      c.beginPath();c.moveTo(bx,VY);c.lineTo(bx+w,VY);c.lineTo(bx+w-60,VY+H);c.lineTo(bx-60-w*.4,VY+H);c.closePath();c.fill()}
+    c.globalCompositeOperation='source-over'}
+  // 2. weather and drifting life
+  const P=(n,fn)=>{for(let k=0;k<n;k++)fn(k,((k*9301+49297)%233280)/233280)};
+  const wrapX=x=>((x%W)+W)%W,wrapY=y=>((y%H)+H)%H;
+  if(indoor){ // dust motes turning in the still air
+    P(M.interior?10:14,(k,r)=>{const x=wrapX(r*W*3+Math.sin(frame/80+k)*10-ox*.5),y=VY+wrapY(k*37+Math.sin(frame/60+k*2)*8-frame*.06*(1+r)-oy*.5);
+      c.fillStyle='rgba(255,240,210,'+(.18+.18*Math.sin(frame/25+k))+')';c.fillRect(Math.round(x),Math.round(y),1,1)})}
+  else if(urban){ // smog high up, scraps of paper skittering on the wind
+    const g=c.createLinearGradient(0,VY,0,VY+H*.6);g.addColorStop(0,'rgba(150,130,120,.22)');g.addColorStop(1,'rgba(150,130,120,0)');c.fillStyle=g;c.fillRect(0,VY,W,H*.6);
+    P(5,(k,r)=>{const x=wrapX(r*W*4+frame*(.5+r)-ox),y=VY+wrapY(k*53+Math.sin(frame/12+k)*6-oy*.8);c.fillStyle=k%2?'#e8e4da':'#c8c2b4';c.fillRect(Math.round(x),Math.round(y),2,1);if((frame+k*7)%20<10)c.fillRect(Math.round(x)+1,Math.round(y)-1,1,1)})}
+  else if(gloom){ // ash of the forgetting, drifting up
+    P(22,(k,r)=>{const x=wrapX(r*W*5+Math.sin(frame/40+k)*12-ox),y=VY+wrapY(H-((frame*.25*(1+r))+k*29)-oy);c.fillStyle='rgba(200,204,214,'+(.25+.2*r)+')';c.fillRect(Math.round(x),Math.round(y),1,1)})}
+  else if(M.bg==='mount'){ // light snow in the high country
+    P(34,(k,r)=>{const x=wrapX(r*W*7+Math.sin(frame/50+k)*14-ox),y=VY+wrapY(frame*(.35+r*.4)+k*31-oy);c.fillStyle='rgba(90,110,150,.45)';c.fillRect(Math.round(x)+1,Math.round(y)+1,1,1);c.fillStyle=r>.6?'#ffffff':'rgba(240,246,255,.85)';c.fillRect(Math.round(x),Math.round(y),r>.8?2:1,r>.8?2:1)})}
+  else if(M.bg==='rainforest'||M.bg==='fjord'){ // drizzle and the odd falling leaf
+    c.fillStyle='rgba(200,220,240,.28)';P(30,(k,r)=>{const x=wrapX(r*W*9-frame*.6-ox),y=VY+wrapY(frame*3+k*47-oy);c.fillRect(Math.round(x),Math.round(y),1,3)});
+    P(4,(k,r)=>{const t=frame*.4+k*60,x=wrapX(r*W*3+Math.sin(t/20)*14-ox),y=VY+wrapY(t-oy);c.fillStyle=k%2?'#c88a30':'#6aa040';c.fillRect(Math.round(x),Math.round(y),2,1)})}
+  else if(M.bg==='pampa'){ // wind-blown dust and grass seed
+    P(26,(k,r)=>{const x=wrapX(frame*(1+r*1.4)+r*W*6-ox),y=VY+wrapY(k*23+Math.sin(frame/9+k)*3-oy*.9);c.fillStyle=k%3?'rgba(240,220,150,.5)':'rgba(255,250,224,.65)';c.fillRect(Math.round(x),Math.round(y),2,1)})}
+  else{ // fields and coast: pollen, and a couple of butterflies
+    P(16,(k,r)=>{const x=wrapX(r*W*5+Math.sin(frame/45+k)*16+frame*.12-ox),y=VY+wrapY(k*41+Math.sin(frame/33+k*2)*10-oy);if((frame+k*13)%60<46){c.fillStyle=M.bg==='coast'?'rgba(240,250,255,.7)':'rgba(255,248,180,.75)';c.fillRect(Math.round(x),Math.round(y),1,1)}});
+    if(M.bg==='field')P(2,(k,r)=>{const t=frame*.5+k*200,x=wrapX(r*W*2+t*.6+Math.sin(t/13)*20-ox),y=VY+wrapY(40+k*70+Math.sin(t/7)*8-oy),f=Math.floor(frame/4+k)%2;c.fillStyle=k?'#f0d040':'#f4f4ff';
+      c.fillRect(Math.round(x)-1-f,Math.round(y),1+f,1);c.fillRect(Math.round(x)+1,Math.round(y),1+f,1);c.fillStyle='#302010';c.fillRect(Math.round(x),Math.round(y),1,1)})}
+  // 3. colour grade: a soft-light pass that deepens shadows and warms highlights, tuned per place
+  c.globalCompositeOperation='soft-light';
+  const tint=gloom?'rgba(96,104,128,.55)':indoor?'rgba(140,118,96,.35)':urban?'rgba(128,122,130,.4)':M.bg==='mount'?'rgba(112,124,150,.35)':M.bg==='pampa'?'rgba(156,128,96,.38)':'rgba(146,132,104,.32)';
+  const g2=c.createLinearGradient(0,VY,0,VY+H);g2.addColorStop(0,tint);g2.addColorStop(1,'rgba(60,50,90,.35)');c.fillStyle=g2;c.fillRect(0,VY,W,H);
+  c.restore();
+}

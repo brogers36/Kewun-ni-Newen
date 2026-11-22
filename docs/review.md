@@ -390,3 +390,7 @@ Al empezar el juego la kuku guía una pelea de práctica (un laftrache, después
   - kead: **"Fentren ___ kawellu"** → **fütrake**.
   - num2: **"Küla warangka epu pataka"** → 3200.
   - plur: **"Pu domo küdaw___"** → **küdawingün**.
+
+### Tanda 18 · apariciones en batalla (Nov 22)
+- (Nov 22) Brandon: al empezar una pelea con jefe, **"Wefürkey X!"**; con wekufü comunes, **"Wefi / Wefyngu / Wefyngün"** + número + nombre(s). Con tipos mezclados uso "ka" entre grupos: p. ej. **"Wefyngün epu laftrache ka kiñe chonchon!"** ⚠ confirmar que "ka" funciona así en la lista.
+- Nuevo: si fallas la última pregunta contra el Yewen, puede llamar al **Fütra Ngoymatulfe** como secuaz (texto solo en castellano/inglés).

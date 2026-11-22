@@ -16,7 +16,8 @@ const YEWEN_CALL={wenangkun:['la pena que se queda callada. Despiértala (nepe-)
   illkun:['la rabia de que te hagan callar. Arde: enfríala (wütre-) o cálmala (llako-).','the rage at being silenced. It burns: cool it (wütre-) or calm it (llako-).'],
   llukalfe:['el miedo que se agranda. Es altísimo: hazlo retroceder (wüñotreka-).','the fear that grows bigger. It towers: make it step back (wüñotreka-).'],
   ayentufe:['la burla del patio. Se esconde entre la gente: hazlo salir (tripa-).','the schoolyard mockery. It hides in the crowd: make it come out (tripa-).'],
-  profe:['la escuela que prohibió la lengua. Su regla es dura como piedra: quiébrala (trafo-).','the school that banned the language. Its rule is hard as stone: break it (trafo-).']};
+  profe:['la escuela que prohibió la lengua. Su regla es dura como piedra: quiébrala (trafo-).','the school that banned the language. Its rule is hard as stone: break it (trafo-).'],
+  ngoysum:['el gran olvido en persona, que vuelve cuando la palabra se te escapa. Te roba las palabras: ¡háblale fuerte!','the great forgetting itself, back because the word slipped away. It steals your words: speak to it loudly!']};
 function mkEnemy(t){const k=progK(),bs=ET[t].boss?.5:1,hp0=Math.round(ET[t].hp*(1+.07*k*bs)*(S.hm?1+(heroMul()*Math.max(1,atk()/heroExp().atk)-1)*(ET[t].boss?.75:1):1));return{t,hp:hp0,max:hp0,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'||ET[t].tower?1:0,armor:ET[t].armor?1:0,burn:ET[t].fire?1:0,hidden:ET[t].hide?1:0,dreaming:ET[t].dream?1:0,dreamT:0,down:0,seals:ET[t].seals?ET[t].seals.slice():null}}
 function startBattle(party,o){o=o||{};
   let snap=null;try{snap=document.createElement('canvas');snap.width=LW;snap.height=LH;const sg=snap.getContext('2d');sg.imageSmoothingEnabled=false;sg.drawImage(cv,0,0,LW,LH)}catch(e){snap=null}
@@ -25,9 +26,13 @@ function startBattle(party,o){o=o||{};
   B={snap,wipe:snap?22:0,en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(M.fog&&M.bg!=='fjord'?'fog:':'')+M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
   if(o.tut){B.en[0].hp=B.en[0].max=20}
   relabel();sfx('enc');if(snap)sfx('swirl');playSong(o.song||(o.final?'ngoyFinal':rsong(o.boss?'boss':'battle')));
-  const alive=B.en.length,same=party.every(t=>t===party[0]),nameL=same?ET[party[0]].name:'wekufü';
-  const lst=same?nameL:'wekufü ('+party.map(t=>ET[t].name).join(', ')+')';
-  say([L('','Müley '+numW(alive)+' '+nameL+'!','¡Hay '+alive+' '+lst+'!','There '+(alive>1?'are ':'is ')+alive+' '+lst+'!')],battleMenu);
+  const alive=B.en.length,bt=party.find(t=>ET[t].boss);
+  if(bt){const bn=ET[bt].name;say([L('','Wefürkey '+bn+'!','¡Apareció '+bn+'!',bn+' appeared!')],battleMenu);return}
+  const grp=[];for(const t of party){const g=grp.find(x=>x.t===t);if(g)g.n++;else grp.push({t,n:1})}
+  const jn=(a,k)=>a.length<2?a[0]:a.slice(0,-1).join(', ')+' '+k+' '+a[a.length-1];
+  const mw=jn(grp.map(g=>numW(g.n)+' '+ET[g.t].name),'ka'),me=jn(grp.map(g=>g.n+' '+ET[g.t].name),'y'),mn=jn(grp.map(g=>g.n+' '+ET[g.t].name),'and');
+  const vb=alive===1?'Wefi':alive===2?'Wefyngu':'Wefyngün';
+  say([L('',vb+' '+mw+'!',(alive>1?'¡Aparecieron ':'¡Apareció ')+me+'!',mn+' appeared!')],battleMenu);
 }
 const aliveE=()=>B.en.filter(e=>!e.dead);
 function bossBlock(e){const T=ET[e.t];if(!T.boss)return false;if(e.down||e.sl||e.stag||e.dreaming||e.hidden||e.hp<=0)return false;
@@ -390,11 +395,12 @@ function enemyPhase(){
       hitP(e,.85);hitP(e,.85,{es:' gira y golpea con la segunda lanza',en:' spins and strikes with the second spear'});continue}
     if(e.t==='yewen'){
       // it calls up what shame is made of: sorrow, anger, fear, mockery, the school that forbade the language
-      const mins=aliveE().filter(x=>YEWEN_KIN.includes(x.t)).length;
+      const YK=B.ngoyCall?YEWEN_KIN.concat(['ngoysum']):YEWEN_KIN,mins=aliveE().filter(x=>YK.includes(x.t)).length;
       // it keeps calling them for the whole fight: on the first turn, every third turn, and every other turn once the field is clear
       if(mins<2&&(B.turn===0||B.turn%3===0||(mins===0&&B.turn%2===0))){
         B.en=B.en.filter(x=>!x.dead||x.fadeT>0);   // clear out the fallen so the line never fills up
-        const have=new Set(aliveE().map(x=>x.t)),pool=YEWEN_KIN.filter(t=>!have.has(t)),t=pool[rnd(pool.length)]||YEWEN_KIN[rnd(5)];
+        const have=new Set(aliveE().map(x=>x.t)),pool=YK.filter(t=>!have.has(t));let t=pool[rnd(pool.length)]||YK[rnd(YK.length)];
+        if(B.ngoyCall===1&&!have.has('ngoysum')){t='ngoysum';B.ngoyCall=2}
         const ne=mkEnemy(t);B.en.push(ne);relabel();const L2=YEWEN_CALL[t];
         fx.push('El Yewen abre la capucha y de adentro sale '+ne.label+': '+L2[0]);fxe.push('The Yewen opens its hood and out comes '+ne.label+': '+L2[1]);hitsFx.push(()=>{sfx('bad');B.shake=6});continue}
       if(B.turn>0&&B.turn%4===1&&(S.sp||0)>0){S.sp--;hitP(e,1.0,{es:' susurra desde la capucha: «lo dices mal, mejor cállate». Las palabras se te atascan (−✦)',en:' whispers from inside the hood: "you say it wrong, better stay quiet". The words stick in your throat (−✦)'});hitsFx.push(()=>pop(60,30,'−✦','#c0b8ff'));continue}
@@ -411,6 +417,9 @@ function enemyPhase(){
     if(e.t==='ayentufe'){
       if(!e.hidden&&e.hideT>0){e.hideT--;if(e.hideT<=0){e.hidden=1;fx.push(e.label+' se vuelve a esconder entre la gente, riéndose.');fxe.push(e.label+' hides in the crowd again, laughing.');continue}}
       hitP(e,1,{es:' te apunta y se ríe: «¡Ja! ¿Y eso qué idioma es? ¡Habla bien!»',en:' points at you and laughs: "Ha! What language is that even? Talk properly!"'});continue}
+    if(e.t==='ngoysum'){
+      if((S.sp||0)>0&&Math.random()<.35){S.sp--;hitP(e,.8,{es:' te sopla su niebla en la boca: se te olvida una palabra (−✦)',en:' breathes its fog into your mouth: a word is forgotten (−✦)'});hitsFx.push(()=>pop(60,30,'−✦','#c0b8ff'));continue}
+      hitP(e,1.3,{es:' te cubre con la niebla del gran olvido',en:' wraps you in the fog of the great forgetting'});continue}
     if(e.t==='profe'){
       if(Math.random()<.35){hitP(e,1.7,{es:' te golpea la mano con la regla: «¡En esta sala se habla castellano!»',en:' cracks the ruler across your hand: "In this classroom we speak Spanish!"'});hitsFx.push(()=>B.shake=6);continue}
       if(!S.curse&&Math.random()<.3){S.curse=1;fx.push(e.label+' te manda al rincón con las orejas rojas: quedas con maldición (fuerza −2). El lawen la quita.');fxe.push(e.label+' sends you to the corner with burning ears: you are cursed (strength −2). Lawen lifts it.');hitsFx.push(()=>sfx('bad'));continue}
@@ -525,7 +534,7 @@ function ngenQuiz(qb){
       if(v===Q.a){sfx('lvl');B.flash=16;B.shake=10;qb.hp=0;B.qok=1;
         say([N('Respondes, y la palabra sale de ti como un golpe de luz. '+qb.label+' cae.','You answer, and the word leaves you like a blow of light. '+qb.label+' falls.')],victory);}
       else{sfx('bad');qb.stag=0;const rg=Math.max(4,Math.round(ET[qb.t].hp*(.15+Math.random()*.25)));qb.hp=Math.min(ET[qb.t].hp,qb.hp+rg);
-        say([N('La palabra se te escapa... El tiempo vuelve a correr y '+qb.label+' se endereza, recuperando fuerzas (+'+rg+'). La respuesta era: '+(Array.isArray(Q.o[Q.a])?(en?Q.o[Q.a][1]:Q.o[Q.a][0]):Q.o[Q.a])+'.','The word slips away... Time runs again and '+qb.label+' straightens, recovering strength (+'+rg+'). The answer was: '+(Array.isArray(Q.o[Q.a])?(en?Q.o[Q.a][1]:Q.o[Q.a][0]):Q.o[Q.a])+'.')],battleMenu);}
+        say([N('La palabra se te escapa... El tiempo vuelve a correr y '+qb.label+' se endereza, recuperando fuerzas (+'+rg+'). La respuesta era: '+(Array.isArray(Q.o[Q.a])?(en?Q.o[Q.a][1]:Q.o[Q.a][0]):Q.o[Q.a])+'.','The word slips away... Time runs again and '+qb.label+' straightens, recovering strength (+'+rg+'). The answer was: '+(Array.isArray(Q.o[Q.a])?(en?Q.o[Q.a][1]:Q.o[Q.a][0]):Q.o[Q.a])+'.')].concat(B.o.sflag==='yewen_won'&&!B.ngoyCall?[N('El Yewen se ríe bajito dentro de la capucha. Tu silencio le dio fuerzas: ahora puede llamar también al Fütra Ngoymatulfe.','The Yewen laughs quietly inside its hood. Your silence gave it strength: now it can also call up the Fütra Ngoymatulfe.')]:[]),()=>{if(B.o.sflag==='yewen_won'&&!B.ngoyCall)B.ngoyCall=1;battleMenu()});}
     },false,true);
   });
 }
