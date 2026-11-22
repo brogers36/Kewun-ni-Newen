@@ -66,6 +66,8 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #title h1{margin:0;font-size:2.5em;color:#ffe9b0;text-shadow:0 3px 0 #7a3a1a,0 0 14px #000,0 0 3px #000;letter-spacing:.04em}
 #title .sub{color:#cfe6ff;font-size:1.05em;text-shadow:0 0 4px #000}
 #title .row{display:flex;gap:.6em;flex-wrap:wrap;justify-content:center;align-items:center;text-shadow:0 0 4px #000}
+#title.inst .help:not(#ioshint):not(#andhint){display:none}
+#title a.ib{font:inherit;padding:.4em .9em;border-radius:4px;border:2px solid #e8d49a;background:#6a3a1a;color:#fff;text-decoration:none}
 #title button{font:inherit;padding:.4em .9em;border-radius:4px;border:2px solid #e8d49a;background:#2a2238;color:#fff;cursor:pointer}
 .hero{display:flex;flex-direction:column;align-items:center;gap:.2em;padding:.4em .7em!important;border-color:#4a3d5c!important}
 .hero.on{border-color:#ffcf6a!important;background:#3d3050!important}
@@ -112,6 +114,8 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
           <button id="bCont" style="display:none">Continuar · Continue</button>
         </div>
         <div class="row"><button id="bLang">Glosa: Español</button><button id="bMus">♪ Música: sí</button></div>
+        <div class="row" id="instRow" style="display:none"><span style="font-size:.85em;color:#e8d49a">📲 Instalar · Install:</span><button id="bAnd">Android</button><button id="bIOS">iPhone / iPad</button></div>
+        <div class="help" id="andhint" style="display:none;border:2px solid #e8d49a"><div class="row" style="margin-bottom:.4em"><a id="bAPK" class="ib" href="https://github.com/brogers36/Kewun-ni-Newen/releases/download/android/KewunNiNewen.apk" download>⬇ APK</a><button id="bPWA">App web · Web app</button></div><span id="andtxt">APK: ábrelo y acepta instalar · se actualiza sola.<br>APK: open it and allow the install · it updates itself.</span></div>
         <div class="help" id="ioshint" style="display:none;border:2px solid #e8d49a">📲 Instala el juego en tu iPhone: toca <b>Compartir</b> y luego <b>«Añadir a pantalla de inicio»</b>. Se abre a pantalla completa y funciona sin internet.<br>Install on iPhone: tap <b>Share</b>, then <b>"Add to Home Screen"</b>. It opens fullscreen and works offline.</div>
 <div class="help"><span class="kb">Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música.</span><span class="tc">Un toque: hablar / avanzar · mantén el dedo y arrastra: caminar (suéltalo para parar) · desliza: recorrer el menú · dos dedos: volver · mantener pulsado o ☰: menú.<br>Tap: talk / advance · hold and drag: walk (lift to stop) · swipe: scroll a menu · two fingers: back · long press or ☰: menu.</span></div>
         <div class="copy" id="copy">© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.</div>

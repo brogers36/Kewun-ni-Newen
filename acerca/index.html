@@ -91,6 +91,10 @@ html[data-l="en"] .es, html:not([data-l="en"]) .en{display:none}
 .step{border:1.5px solid var(--panel2);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0;overflow-wrap:anywhere}
 .step ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px;color:var(--muted)}
 .step ol b{color:var(--ink)}
+.ibtns{display:flex;flex-wrap:wrap;gap:10px}
+.step .opt{margin:6px 0 -2px;color:var(--bright)}
+.step.mine{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold) inset}
+button.btn{font:inherit;cursor:pointer}
 .note{background:var(--panel);border-left:4px solid var(--gold);border-radius:6px;padding:14px 16px;color:var(--muted);max-width:70ch}
 .note b{color:var(--ink)}
 /* newen manifesto */
@@ -139,10 +143,11 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:.9rem;display:flex;f
       </div>
       <div class="facts" aria-label="En cifras">
         <span><b>5</b><span class="es">regiones</span><span class="en">regions</span></span>
-        <span><b>76</b><span class="es">mapas</span><span class="en">maps</span></span>
-        <span><b>42</b><span class="es">criaturas y jefes</span><span class="en">creatures and bosses</span></span>
+        <span><b>78</b><span class="es">mapas</span><span class="en">maps</span></span>
+        <span><b>50</b><span class="es">criaturas y jefes</span><span class="en">creatures and bosses</span></span>
         <span><b>18</b>konew</span>
-        <span><b>52</b><span class="es">melodías originales</span><span class="en">original tunes</span></span>
+        <span><b>6</b>kuyfi chillka</span>
+        <span><b>54</b><span class="es">melodías originales</span><span class="en">original tunes</span></span>
       </div>
     </div>
     <div class="shot"><img src="img/battle.jpg" alt="Millaray en batalla contra un chonchon y un laftrache en la costa: el menú pide armar una orden en mapudungun" width="960" height="644"></div>
@@ -170,7 +175,7 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:.9rem;display:flex;f
         <div class="shot"><img src="img/title.jpg" alt="Pantalla de inicio: Millaray y Llanka frente al mar, bajo el volcán" width="1024" height="896" loading="lazy"></div>
         <div class="copy">
           <h3><span class="es">Órdenes que se arman, no que se aprietan</span><span class="en">Orders you build, not buttons you press</span></h3>
-          <p class="muted"><span class="es">En cada combate eliges una raíz verbal y la conjugas: la terminación decide a quién va la orden (a uno, a dos o a todos) y <span class="mapu">-kil-</span> la vuelve negativa. <span class="mapu">Amutunge</span>, «¡vete!», espanta a un enemigo; <span class="mapu">amutukilmün</span>, «¡no se vayan!», es otra historia. El juego enseña trece raíces, y cada jefe exige usarlas con cabeza.</span><span class="en">In every battle you pick a verb root and conjugate it: the ending decides who the order goes to (one, two or everyone), and <span class="mapu">-kil-</span> makes it negative. <span class="mapu">Amutunge</span>, “go away!”, drives an enemy off; <span class="mapu">amutukilmün</span>, “don't you all leave!”, is a different story. The game teaches thirteen roots, and every boss makes you use them wisely.</span></p>
+          <p class="muted"><span class="es">En cada combate eliges una raíz verbal y la conjugas: la terminación decide a quién va la orden (a uno, a dos o a todos) y <span class="mapu">-kil-</span> la vuelve negativa. <span class="mapu">Amutunge</span>, «¡vete!», espanta a un enemigo; <span class="mapu">amutukilmün</span>, «¡no se vayan!», es otra historia. El juego enseña catorce raíces, y cada jefe exige usarlas con cabeza.</span><span class="en">In every battle you pick a verb root and conjugate it: the ending decides who the order goes to (one, two or everyone), and <span class="mapu">-kil-</span> makes it negative. <span class="mapu">Amutunge</span>, “go away!”, drives an enemy off; <span class="mapu">amutukilmün</span>, “don't you all leave!”, is a different story. The game teaches fourteen roots, and every boss makes you use them wisely.</span></p>
           <ul>
             <li><span class="es"><b>Habilidades especiales</b> que se recargan, y <span class="mapu">newen</span> que se recupera en el kütral, no solo.</span><span class="en"><b>Special abilities</b> that recharge, and <span class="mapu">newen</span> recovered at the kütral, not automatically.</span></li>
             <li><span class="es"><b>Objetos con historia:</b> diweñ, trutruka, plumas de mañke y más, comprados con <span class="mapu">ngülliw</span>.</span><span class="en"><b>Items with a story:</b> diweñ, trutruka, mañke feathers and more, bought with <span class="mapu">ngülliw</span>.</span></li>
@@ -193,7 +198,7 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:.9rem;display:flex;f
         <div class="shot"><img src="img/lof.jpg" alt="Millaray en un lof lafkenche con ruka, cancha de palin y gente conversando en mapudungun" width="960" height="644" loading="lazy"></div>
         <div class="copy">
           <h3><span class="es">Pueblos vivos, konew y mini misiones</span><span class="en">Living villages, konew and side quests</span></h3>
-          <p class="muted"><span class="es">En los lof la gente juega al palin, teje en el witral, cocina y estudia; el pentukuwün con el lonko se hace como corresponde. Hay dieciocho konew (adivinanzas) que terminan con «Chem am ta tatey?», tiendas donde se responde en mapudungun, y secretos que premian con gramática nueva que después sirve en combate.</span><span class="en">In the lof people play palin, weave at the witral, cook and study; the pentukuwün with the lonko is done properly. There are eighteen konew (riddles) ending in “Chem am ta tatey?”, shops answered in Mapudungun, and secrets that reward you with new grammar you then use in battle.</span></p>
+          <p class="muted"><span class="es">En los lof la gente juega al palin, teje en el witral, cocina y estudia; el pentukuwün con el lonko se hace como corresponde. Hay dieciocho konew (adivinanzas) que terminan con «Chem am ta tatey?», tiendas donde se responde en mapudungun, y secretos que premian con gramática nueva que después sirve en combate. En cada lof alguien joven quiere conversar contigo para practicar, y en cada tierra espera una <span class="mapu">kuyfi chillka</span>, una piedra antigua tallada con una lección de mapudungun: quien despierta las seis recibe un trarilongko que protege como ningún otro.</span><span class="en">In the lof people play palin, weave at the witral, cook and study; the pentukuwün with the lonko is done properly. There are eighteen konew (riddles) ending in “Chem am ta tatey?”, shops answered in Mapudungun, and secrets that reward you with new grammar you then use in battle. In every lof a young person wants to practise conversation with you, and in every land waits a <span class="mapu">kuyfi chillka</span>, an ancient stone carved with a Mapudungun lesson: whoever wakes all six receives a trarilongko that protects like no other.</span></p>
         </div>
       </div>
 
@@ -209,7 +214,7 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:.9rem;display:flex;f
         <div class="shot"><img src="img/boss.jpg" alt="Un jefe secreto de sal en el salitral, rodeado de barreras de luz" width="960" height="644" loading="lazy"></div>
         <div class="copy">
           <h3><span class="es">Y más allá de la niebla...</span><span class="en">And beyond the fog...</span></h3>
-          <p class="muted"><span class="es">Despertados los cinco ngen, queda lo que la niebla esconde: Ti Fütra Ngoyman, el gran olvido. Jefes secretos que se encuentran explorando, barreras de luz que solo la gramática rompe, un final en varias etapas y, para quien busca de verdad, regiones enteras que no aparecen en ningún mapa. No contamos más.</span><span class="en">Once the five ngen are awake, what the fog hides remains: Ti Fütra Ngoyman, the great forgetting. Secret bosses found by exploring, light barriers only grammar can break, a multi-stage finale and, for those who truly search, whole regions that appear on no map. We'll say no more.</span></p>
+          <p class="muted"><span class="es">Despertados los cinco ngen, queda lo que la niebla esconde: Ti Fütra Ngoymatulfe, el gran olvido. Jefes secretos que se encuentran explorando, barreras de luz que solo la gramática rompe, un final en varias etapas y, para quien busca de verdad, regiones enteras que no aparecen en ningún mapa. No contamos más. Y al terminar, el modo <span class="mapu">weichafe</span>: vuelves a empezar con tu kimün y tus cosas, contra wekufü que crecen contigo y pruebas sin pistas.</span><span class="en">Once the five ngen are awake, what the fog hides remains: Ti Fütra Ngoymatulfe, the great forgetting. Secret bosses found by exploring, light barriers only grammar can break, a multi-stage finale and, for those who truly search, whole regions that appear on no map. We'll say no more. And once you finish, <span class="mapu">weichafe</span> mode: start again with your kimün and your things, against wekufü that grow with you and trials with no hints.</span></p>
         </div>
       </div>
     </div>
@@ -233,7 +238,7 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:.9rem;display:flex;f
     <div class="split">
       <div>
         <p class="lead"><span class="es">El juego se construyó con herramientas de investigación entrenadas con el corpus AVENUE y con recursos gramaticales y léxicos reconocidos, y todo el mapudungun pasó por revisión a mano.</span><span class="en">The game was built with research tools trained on the AVENUE corpus and with established grammatical and lexical resources, and all the Mapudungun went through review by hand.</span></p>
-        <p class="muted"><span class="es">Todo el juego es un solo archivo web, sin cuentas, sin anuncios y sin compras. El avance queda guardado en el navegador de cada persona. Los dibujos son pixel art original y las 52 melodías, incluida la música propia de cada región, se compusieron para el juego.</span><span class="en">The whole game is a single web file, with no accounts, no ads and no purchases. Progress is saved in each player's own browser. The drawings are original pixel art, and the 52 tunes, including each region's own music, were composed for the game.</span></p>
+        <p class="muted"><span class="es">Todo el juego es un solo archivo web, sin cuentas, sin anuncios y sin compras. El avance queda guardado en el navegador de cada persona. Los dibujos son pixel art original y las 54 melodías, incluida la música propia de cada región, se compusieron para el juego.</span><span class="en">The whole game is a single web file, with no accounts, no ads and no purchases. Progress is saved in each player's own browser. The drawings are original pixel art, and the 54 tunes, including each region's own music, were composed for the game.</span></p>
       </div>
       <div>
         <ul class="checks">
@@ -267,16 +272,29 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:.9rem;display:flex;f
   <section id="instalar" aria-labelledby="h-inst">
     <p class="eyebrow"><span class="es">Instalar</span><span class="en">Install</span></p>
     <h2 id="h-inst"><span class="es">Llévalo en el teléfono</span><span class="en">Put it on your phone</span></h2>
+    <p class="muted" id="devhint" style="margin-top:10px"></p>
     <div class="steps">
-      <div class="step"><h3>Android</h3>
-        <ol><li><span class="es">Abre <b>brogers36.github.io/Kewun-ni-Newen</b> en Chrome.</span><span class="en">Open <b>brogers36.github.io/Kewun-ni-Newen</b> in Chrome.</span></li>
-            <li><span class="es">Toca <b>Instalar la app</b> (o el menú ⋮ → <b>Instalar app</b>).</span><span class="en">Tap <b>Install the app</b> (or the ⋮ menu → <b>Install app</b>).</span></li>
-            <li><span class="es">Ábrelo desde la pantalla de inicio. Se juega horizontal y funciona sin conexión.</span><span class="en">Open it from your home screen. It plays in landscape and works offline.</span></li></ol>
-        <p class="muted" style="font-size:.9rem"><span class="es">También hay un instalador APK en <a href="https://github.com/brogers36/Kewun-ni-Newen/releases/tag/android" target="_blank" rel="noopener">la página de descargas</a>.</span><span class="en">There is also an APK installer on <a href="https://github.com/brogers36/Kewun-ni-Newen/releases/tag/android" target="_blank" rel="noopener">the downloads page</a>.</span></p></div>
-      <div class="step"><h3>iPhone / iPad</h3>
-        <ol><li><span class="es">Abre <b>brogers36.github.io/Kewun-ni-Newen</b> en Safari.</span><span class="en">Open <b>brogers36.github.io/Kewun-ni-Newen</b> in Safari.</span></li>
-            <li><span class="es">Toca <b>Compartir</b> → <b>Añadir a pantalla de inicio</b>.</span><span class="en">Tap <b>Share</b> → <b>Add to Home Screen</b>.</span></li>
-            <li><span class="es">Ábrelo desde el ícono. Funciona sin conexión.</span><span class="en">Open it from the icon. It works offline.</span></li></ol></div>
+      <div class="step" id="st-and"><h3>Android</h3>
+        <div class="ibtns">
+          <a class="btn" href="https://github.com/brogers36/Kewun-ni-Newen/releases/download/android/KewunNiNewen.apk" download><span class="es">⬇ Descargar la app (APK)</span><span class="en">⬇ Download the app (APK)</span></a>
+          <a class="btn ghost" href="https://brogers36.github.io/Kewun-ni-Newen/" target="_blank" rel="noopener"><span class="es">Instalar desde Chrome</span><span class="en">Install from Chrome</span></a>
+        </div>
+        <p class="opt"><b><span class="es">Opción 1 · APK</span><span class="en">Option 1 · APK</span></b></p>
+        <ol><li><span class="es">Toca <b>Descargar la app (APK)</b>.</span><span class="en">Tap <b>Download the app (APK)</b>.</span></li>
+            <li><span class="es">Abre el archivo descargado. La primera vez, Android pide permiso para instalar apps desde el navegador: acéptalo una vez.</span><span class="en">Open the downloaded file. The first time, Android asks permission to install apps from your browser: allow it once.</span></li>
+            <li><span class="es">Listo: la app se actualiza sola, porque carga siempre la versión más nueva del juego.</span><span class="en">Done: the app updates itself, because it always loads the newest version of the game.</span></li></ol>
+        <p class="opt"><b><span class="es">Opción 2 · app web</span><span class="en">Option 2 · web app</span></b></p>
+        <ol><li><span class="es">Toca <b>Instalar desde Chrome</b> para abrir el juego.</span><span class="en">Tap <b>Install from Chrome</b> to open the game.</span></li>
+            <li><span class="es">Toca <b>Instalar la app</b> (o el menú ⋮ → <b>Instalar app</b>). Funciona sin conexión.</span><span class="en">Tap <b>Install the app</b> (or the ⋮ menu → <b>Install app</b>). It works offline.</span></li></ol>
+        <p class="muted" style="font-size:.9rem"><span class="es">Todas las versiones del APK están en <a href="https://github.com/brogers36/Kewun-ni-Newen/releases/tag/android" target="_blank" rel="noopener">la página de descargas</a>.</span><span class="en">Every APK build is on <a href="https://github.com/brogers36/Kewun-ni-Newen/releases/tag/android" target="_blank" rel="noopener">the downloads page</a>.</span></p></div>
+      <div class="step" id="st-ios"><h3>iPhone / iPad</h3>
+        <div class="ibtns">
+          <a class="btn" href="https://brogers36.github.io/Kewun-ni-Newen/" target="_blank" rel="noopener"><span class="es">Abrir el juego en Safari</span><span class="en">Open the game in Safari</span></a>
+          <button class="btn ghost" type="button" id="copylink"><span class="es">Copiar el enlace</span><span class="en">Copy the link</span></button>
+        </div>
+        <ol><li><span class="es">Toca <b>Abrir el juego en Safari</b> (en otro navegador, copia el enlace y pégalo en Safari).</span><span class="en">Tap <b>Open the game in Safari</b> (in another browser, copy the link and paste it into Safari).</span></li>
+            <li><span class="es">Toca <b>Compartir</b> <span aria-hidden="true">⬆︎</span> → <b>Añadir a pantalla de inicio</b> → <b>Añadir</b>.</span><span class="en">Tap <b>Share</b> <span aria-hidden="true">⬆︎</span> → <b>Add to Home Screen</b> → <b>Add</b>.</span></li>
+            <li><span class="es">Ábrelo desde el ícono: pantalla completa y sin conexión.</span><span class="en">Open it from the icon: full screen and offline.</span></li></ol></div>
     </div>
     <p class="muted" style="margin-top:18px;max-width:70ch"><span class="es">Sin botones en pantalla: un toque habla, el dedo guía el paso y los menús se deslizan. Cuando el juego se actualiza, la app instalada recibe la versión nueva la próxima vez que se abre con internet. El sitio público cuenta visitas de forma anónima, sin cookies ni datos personales.</span><span class="en">No buttons on screen: a tap talks, your finger guides your steps, and menus swipe. When the game is updated, the installed app gets the new version the next time it opens online. The public site counts visits anonymously, with no cookies and no personal data.</span></p>
     <div class="cta" style="margin-top:22px"><a class="btn" href="https://brogers36.github.io/Kewun-ni-Newen/" target="_blank" rel="noopener"><span class="es">Abrir el juego</span><span class="en">Open the game</span></a></div>
@@ -316,6 +334,15 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:.9rem;display:flex;f
 <script>
 (function(){ if(location.protocol!=='https:'||location.hostname!=='brogers36.github.io') return;
   try{ new Image().src='https://brogers36.goatcounter.com/count?p='+encodeURIComponent(location.pathname)+'&t='+encodeURIComponent(document.title)+'&r='+encodeURIComponent(document.referrer||'')+'&rnd='+Math.random().toString(36).slice(2); }catch(e){} })();
+</script>
+<script>
+(function(){var ua=navigator.userAgent,ios=/iPad|iPhone|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1),and=/Android/i.test(ua);
+  var h=document.getElementById('devhint'),es=document.documentElement.lang!=='en';
+  function hint(){var e=document.documentElement.lang==='en';if(!h)return;h.textContent=and?(e?'You are on Android: the APK is the quickest way.':'Estás en Android: el APK es lo más rápido.'):ios?(e?'You are on an iPhone or iPad: install it from Safari.':'Estás en iPhone o iPad: instálalo desde Safari.'):(e?'On a computer, just play in the browser; to install, open this page on your phone.':'En el computador se juega en el navegador; para instalarlo, abre esta página en el teléfono.')}
+  var m=document.getElementById(and?'st-and':ios?'st-ios':'');if(m)m.classList.add('mine');hint();
+  ['l-es','l-en'].forEach(function(id){var b=document.getElementById(id);if(b)b.addEventListener('click',function(){setTimeout(hint,0)})});
+  var c=document.getElementById('copylink');if(c)c.onclick=function(){var u='https://brogers36.github.io/Kewun-ni-Newen/';(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){c.firstChild.textContent='¡Copiado!';c.lastChild.textContent='Copied!'},function(){prompt('',u)})};
+})();
 </script>
 </body>
 </html>

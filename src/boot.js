@@ -23,6 +23,15 @@ addEventListener('resize',fit);fit();
   addEventListener('keydown',e=>{if((e.key==='f'||e.key==='F')&&!e.repeat)tog()});
 })();
 if([1,2,3].some(n=>loadSave(n)))$('bCont').style.display='';
+/* install options on the title screen (hidden inside the installed app or the Android APK) */
+let PWAQ=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();PWAQ=e});
+(function(){const ua=navigator.userAgent,inApp=navigator.standalone||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||!!window.Capacitor||/; wv\)/.test(ua);
+  if(inApp)return;$('instRow').style.display='';
+  const APK='https://github.com/brogers36/Kewun-ni-Newen/releases/download/android/KewunNiNewen.apk';
+  $('bAnd').onclick=()=>{const h=$('andhint');h.style.display=h.style.display==='none'?'block':'none';$('ioshint').style.display='none';$('title').classList.toggle('inst',h.style.display==='block')};
+  $('bPWA').onclick=()=>{if(PWAQ){PWAQ.prompt();PWAQ=null}else $('andtxt').innerHTML='En Chrome: menú ⋮ → «Instalar app».<br>In Chrome: ⋮ menu → "Install app".'};
+  $('bIOS').onclick=()=>{const h=$('ioshint');h.style.display=h.style.display==='block'?'none':'block';$('andhint').style.display='none';$('title').classList.toggle('inst',h.style.display==='block')};
+})();
 function updLang(){$('copy').textContent=LANG==='es'?'© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.':'© 2026 Brandon M. A. Rogers · All rights reserved. No use of this site to train artificial intelligence.';$('bLang').textContent=LANG==='es'?'Glosa: Español':'Gloss: English';$('skip').textContent=LANG==='es'?'Saltar ▶▶':'Skip ▶▶'}
 $('bLang').onclick=()=>{LANG=LANG==='es'?'en':'es';updLang()};
 $('bMus').onclick=()=>toggleMute();
