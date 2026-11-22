@@ -2354,6 +2354,16 @@ if os.path.exists(_kp):
         _a=D[_n]['aura'] if _n in D else 0
         D[_n]={'pal':_k['small']['pal'],'f':_k['small']['f'],'big':1,'aura':_a,'hand':1}
         D[_n+'@b']={'pal':_k['big']['pal'],'f':_k['big']['f'],'big':1,'aura':_a,'hand':1}
+# every boss and every form of the final boss: repainted with the Yewen's 3D method (tools/repaint.py)
+import repaint as _rp, yewen_paint as _yp
+_BOSSES=['trelke','cherrufe','kaleuche','witranalwe','chinifilu','piwuchen','wallipen','trawko','walichu','chadikura','epunamun','kalku',
+         'ngoyman1','ngoyman2','ngoyman3','ngoyman4','ngoyman5','llufu1','llufu2','llufu3','llufu4','llufu5']
+for _n in _BOSSES:
+    if _n not in D or _n not in PAL:continue
+    _g=HI.get(_n,{}).get('glow','')
+    _fr=[_rp.repaint(scale2x(f),PAL[_n],_g,D[_n].get('aura') or None) for f in D[_n]['f']]
+    _p,_f=_yp.encode(_fr)
+    D[_n+'@b']={'pal':_p,'f':_f,'big':1,'aura':D[_n].get('aura',0),'hand':1}
 open(OUT,'w').write('const SPR2='+json.dumps(D,ensure_ascii=False)+';\n')
 if __name__=='__main__':
     for n in D:

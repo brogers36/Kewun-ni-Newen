@@ -345,3 +345,5 @@ El Yewen ahora invoca (de a una, hasta dos a la vez) cinco criaturas. Nombres a 
 - **ayentufe** 'el que se burla' (el bullying) ⚠ ayen-tu-fe a partir de ayen- 'reír': ¿se entiende como burlarse de alguien?
 - **illamtufe kimeltulelu** (nombre dado por Brandon): la escuela que prohibía el mapudungun; habla solo castellano: «¡En esta sala se habla castellano!».
 - La burla del ayentufe (por indicación de Brandon, sin insultos étnicos): «¡Ja! ¿Y eso qué idioma es? ¡Habla bien!» / "Ha! What language is that even? Talk properly!"
+
+- (Nov 21) La 4.ª forma del jefe final se llama ahora **Füta Dumiñ** (nombre dado por Brandon; antes 'Ngoyman ñi pun'). Textos: «Füta Dumiñ: la gran oscuridad del olvido.»

@@ -106,7 +106,7 @@ const ET={
   ngoyman1:{name:'Ti Fütra Ngoyman',hp:175,atk:13,xp:0,gold:[0,0],boss:true,bs:104},
   ngoyman2:{name:'Ngoyman ñi piwke',hp:185,atk:14,xp:0,gold:[0,0],boss:true,bs:112,armor:1,spres:1},
   ngoyman3:{name:'Fütra Ngoyman',hp:205,atk:16,xp:0,gold:[0,0],boss:true,bs:122,spres:1,thick:1},
-  ngoyman4:{name:'Ngoyman ñi pun',hp:235,atk:18,xp:0,gold:[0,0],boss:true,bs:134,armor:1,spres:1},
+  ngoyman4:{name:'Füta Dumiñ',hp:235,atk:18,xp:0,gold:[0,0],boss:true,bs:134,armor:1,spres:1},
   ngoyman5:{name:'Rüf Fütra Ngoyman',hp:265,atk:20,xp:400,gold:[500,500],boss:true,bs:146,spres:1,thick:1},
   llufu1:{name:'Kaykayfilu',hp:140,atk:14,xp:0,gold:[0,0],boss:true,bs:104},
   llufu2:{name:'Kaykayfilu ñi foro',hp:150,atk:14,xp:0,gold:[0,0],boss:true,bs:106,armor:1},
