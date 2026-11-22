@@ -1448,7 +1448,7 @@ function yewenTalk(){
     choose(L('','Yewen','¿Lo enfrentas?','Do you face it?'),
       [{m:'May. Yewelayan!',g:en?'Yes. I will not be ashamed!':'Sí. ¡No tendré vergüenza!',v:1},{m:'Petu pepikawlan',g:en?'Not yet':'Todavía no',v:0}],v=>{
       if(!v)return say([N('La sombra sigue ahí, esperando. Toda la población lo sabe.','The shadow stays there, waiting. The whole neighborhood knows it.')]);
-      say([N('Das un paso al frente y dices «mari mari» en voz alta, en medio de la cancha. El Yewen levanta la cabeza.','You step forward and say "mari mari" out loud, in the middle of the cancha. The Yewen lifts its head.')],()=>startBattle(['yewen'],{boss:1,sflag:'yewen_won'}))},true,false)});
+      say([N('Das un paso al frente y dices «mari mari» en voz alta, en medio de la cancha. El Yewen levanta la cabeza.','You step forward and say "mari mari" out loud, in the middle of the cancha. The Yewen lifts its head.')],()=>startBattle(['yewen'],{boss:1,sflag:'yewen_won',song:'yewenBoss'}))},true,false)});
 }
 function stPaseoTalk(){
   const en=S.gloss==='en',v=rot('spaseo',3);

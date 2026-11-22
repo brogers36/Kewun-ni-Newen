@@ -214,7 +214,7 @@ function shade3d(src){
   c.putImageData(img,0,0);return cv}
 function enemyCanvas(t,size,fr){
   const key='s3:'+t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];
-  return ECACHE[key]=shade3d(enemyCanvasRaw(t,size,fr))}
+  const raw=enemyCanvasRaw(t,size,fr);return ECACHE[key]=(typeof SPR2!=='undefined'&&SPR2[t]&&SPR2[t].hand)?raw:shade3d(raw)}
 function enemyCanvasRaw(t,size,fr){
   const key=t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];
   if(typeof SPR2!=='undefined'&&SPR2[t]){const d=SPR2[t],hb=size>=40&&SPR2[t+'@b'],k=hb?1:size>=40?(d.big||1):1,base=hb?tplCanvas(t+'@b',fr,1):tplCanvas(t,fr,k);

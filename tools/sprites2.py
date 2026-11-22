@@ -2186,6 +2186,12 @@ for name in ['nguruvilu','nirivilu','witranalwe','trelke','cherrufe','kaleuche',
         best=min(cmap,key=lambda k:sum((int(k[i:i+2],16)-int(hx[i:i+2],16))**2 for i in (1,3,5)));return cmap[best]
     frames=[[''.join('.' if ch=='.' else near(p[ch]) for ch in r) for r in rows] for p,rows in fr]
     D[name+'@b']={'pal':{v:k for k,v in cmap.items()},'f':frames,'big':1,'aura':D[name]['aura']}
+# Yewen is hand-painted at native resolution (tools/yewen_paint.py): use it as is, no upscaler, no auto-shading
+_yp=os.path.join(os.path.dirname(os.path.abspath(__file__)),'yewen.json')
+if os.path.exists(_yp):
+    _y=json.load(open(_yp))
+    D['yewen']={'pal':_y['small']['pal'],'f':_y['small']['f'],'big':1,'aura':'150,40,130','hand':1}
+    D['yewen@b']={'pal':_y['big']['pal'],'f':_y['big']['f'],'big':1,'aura':'150,40,130','hand':1}
 open(OUT,'w').write('const SPR2='+json.dumps(D,ensure_ascii=False)+';\n')
 if __name__=='__main__':
     for n in D:
