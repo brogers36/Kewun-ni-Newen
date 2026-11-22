@@ -714,14 +714,14 @@ function renderBattle(){
     if(tg&&frame%20<15){const ay=y-8+Math.round(Math.sin(frame/5)*2);for(let k=0;k<5;k++){R(c,cx-5+k,ay+k,11-k*2,1,'#ffe040');R(c,cx-6+k,ay+k,1,1,'#181018');R(c,cx+5-k,ay+k,1,1,'#181018')}R(c,cx-6,ay-1,13,1,'#181018')}
   });
   if(!B.ngenA){
-    const hsc=1.6,hb=Math.sin(frame/14)*1.2;
+    const hsc=2,hb=Math.sin(frame/14)*1.2;
     let hx=LW-52,hfr=0;
     if(B.heroA>0){B.heroA--;const ph=Math.sin((16-B.heroA)/16*Math.PI);hx-=Math.round(ph*16);hfr=Math.floor(frame/5)%4}
     if(B.intro>0)hx+=Math.round(B.intro*1.2);
     const hurt=B.red>0;
     if(!(hurt&&frame%6<3)){
-      const hcv=ctCharSprite(heroLook(),'left',hfr,false);
-      const hw=hcv.width*hsc,hh=hcv.height*hsc;
+      const hcv=ctCharSpriteBig(heroLook(),'left',hfr);
+      const hw=hcv.width*hsc/2,hh=hcv.height*hsc/2;
       ell(c,hx+hw/2,139,hw*.42,3,'rgba(0,0,14,.3)');
       c.save();if(hurt){c.translate(hx+2,0)}
       c.drawImage(hcv,0,0,hcv.width,hcv.height,hx,Math.round(138+hb-hh),hw,hh);

@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='8a2abcd-202611212137';
+window.KEWUN_BUILD='8ebc178-202611212139';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -909,7 +909,7 @@ function charSprite(look,dir,fr,tn,ey,hr){
 function ctShade(hex,t){const [r,g,b]=hexRGB(hex);const f=v=>Math.max(0,Math.min(255,Math.round(t<0?v*(1+t):v+(255-v)*t)));return 'rgb('+f(r)+','+f(g)+','+f(b)+')'}
 function ctCharSprite(look,dir,fr,seated,tn,ey,hr){
   const key='S3'+look+dir+fr+(seated?'z':'')+':'+tn+ey+hr;if(CCACHE[key])return CCACHE[key];
-  return CCACHE[key]=shade3d(ctCharSpriteRaw(look,dir,fr,seated,tn,ey,hr),{str:1.7,cap:4,dith:0.03,rim:0,k:1.15,mult:1})}
+  return CCACHE[key]=repaintSmall(ctCharSpriteRaw(look,dir,fr,seated,tn,ey,hr),{amp:.85})}
 function ctCharSpriteRaw(look,dir,fr,seated,tn,ey,hr){
   const key='ct'+look+dir+fr+(seated?'z':'')+':'+(tn==null?'-':tn)+(ey==null?'-':ey)+(hr==null?'-':hr);if(CCACHE[key])return CCACHE[key];
   if(dir==='left')return CCACHE[key]=mirror(ctCharSpriteRaw(look,'right',fr,seated,tn,ey,hr));
@@ -996,7 +996,7 @@ const DOG=["................","..oo............",".obbo........o..",".obbboooooo
 const DOG2=["................","..oo............",".obbo.........o.",".obbbooooooooob.",".obebbbbbbbbbbo.","..oobbbbbbbbbo..","....obbbbbbbbo..","...obo.....obo..","...obo....obo...","...oo.....oo...."];
 function dogSprite(fr,dir){const key='dog'+fr+dir;if(CCACHE[key])return CCACHE[key];const [cvs,c]=mk(16,10);
   (fr?DOG2:DOG).forEach((r,y)=>{for(let x=0;x<16;x++){const ch=r[x];if(ch!=='.'){c.fillStyle=ch==='o'?'#181018':ch==='e'?'#000':'#a06838';c.fillRect(x,y,1,1)}}});
-  return CCACHE[key]=shade3d(dir==='right'?mirror(cvs):cvs,{str:1.7,cap:3,dith:0.03,rim:0,k:1.1,mult:1})}
+  return CCACHE[key]=repaintSmall(dir==='right'?mirror(cvs):cvs,{amp:.85,capG:3})}
 function drawPortal(c,x,y){
   const t=frame;
   // light pillar
@@ -1055,6 +1055,63 @@ function shade3d(src,o){
     else if(f<0){const k=1+f;d[q]=r*k;d[q+1]=g*k*0.96;d[q+2]=Math.min(255,bl*k*1.12)}
   }
   c.putImageData(img,0,0);return cv}
+/* Small-sprite repaint: the same 3D method as the bosses (tools/repaint.py), ported for the
+   runtime-built characters. Every colour is a part with its own 7-step ramp (cool shadows,
+   warm lights); the height field mixes the whole silhouette with each part, lit from the upper
+   left; bands are lightly dithered; seams between parts darken on their shadow side; a cool
+   sky rim runs down the back edge. Near-black pixels (outline, pupils, mouths) stay crisp. */
+function repaintSmall(src,o){
+  o=o||{};const w=src.width,h=src.height,cv=document.createElement('canvas');cv.width=w;cv.height=h;
+  const c=cv.getContext('2d');c.drawImage(src,0,0);const img=c.getImageData(0,0,w,h),d=img.data,n=w*h;
+  const key=new Int32Array(n),sol=new Uint8Array(n),dark=new Uint8Array(n);
+  for(let i=0;i<n;i++){const q=i*4;if(d[q+3]>40){sol[i]=1;key[i]=(d[q]<<16)|(d[q+1]<<8)|d[q+2];if(d[q]+d[q+1]+d[q+2]<70)dark[i]=1}else key[i]=-1}
+  const body=i=>sol[i]&&!dark[i];
+  // global distance (whole figure, outline counts as figure) and per-part distance (same colour only)
+  const G=new Float32Array(n),Pd=new Float32Array(n),INF=1e9;
+  for(let i=0;i<n;i++){G[i]=sol[i]?INF:0;Pd[i]=body(i)?INF:0}
+  const same=(i,j)=>key[i]===key[j];
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=y*w+x;
+    if(G[i]){let m=G[i];if(x>0)m=Math.min(m,G[i-1]+1);if(y>0)m=Math.min(m,G[i-w]+1);if(x>0&&y>0)m=Math.min(m,G[i-w-1]+1.4);if(x<w-1&&y>0)m=Math.min(m,G[i-w+1]+1.4);G[i]=m}
+    if(Pd[i]){let m=Pd[i];if(x===0||!same(i,i-1))m=Math.min(m,1);else m=Math.min(m,Pd[i-1]+1);if(y===0||!same(i,i-w))m=Math.min(m,1);else m=Math.min(m,Pd[i-w]+1);Pd[i]=m}}
+  for(let y=h-1;y>=0;y--)for(let x=w-1;x>=0;x--){const i=y*w+x;
+    if(G[i]){let m=G[i];if(x<w-1)m=Math.min(m,G[i+1]+1);if(y<h-1)m=Math.min(m,G[i+w]+1);if(x<w-1&&y<h-1)m=Math.min(m,G[i+w+1]+1.4);if(x>0&&y<h-1)m=Math.min(m,G[i+w-1]+1.4);G[i]=m}
+    if(Pd[i]){let m=Pd[i];if(x===w-1||!same(i,i+1))m=Math.min(m,1);else m=Math.min(m,Pd[i+1]+1);if(y===h-1||!same(i,i+w))m=Math.min(m,1);else m=Math.min(m,Pd[i+w]+1);Pd[i]=m}}
+  const cg=o.capG||Math.max(4,Math.min(w,h)/3.2),cp=o.capP||3,H=new Float32Array(n);
+  for(let i=0;i<n;i++){if(!sol[i])continue;const g=Math.min(G[i],cg),p=Math.min(Pd[i]||0,cp);H[i]=Math.sqrt(g/cg)*cg*.62+Math.sqrt(p/cp)*cp*.5}
+  const L=[-0.62,-0.62,0.48],ln=Math.hypot(...L);L[0]/=ln;L[1]/=ln;L[2]/=ln;
+  const BY=[[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]],ST=[-.78,-.56,-.34,-.14,.06,.27,.48],amp=o.amp||1;
+  const out=new Uint8ClampedArray(d);
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=y*w+x,q=i*4;if(!body(i))continue;
+    const hl=H[x>0?i-1:i],hr=H[x<w-1?i+1:i],hu=H[y>0?i-w:i],hd=H[y<h-1?i+w:i];
+    let nx=-(hr-hl)/2,ny=-(hd-hu)/2,nz=1;const nl=Math.hypot(nx,ny,nz);nx/=nl;ny/=nl;nz/=nl;
+    let lum=((nx*L[0]+ny*L[1]+nz*L[2])-.15)/.85-(y/h)*.10+(o.lift==null?.16:o.lift);
+    const t=Math.max(0,Math.min(.999,lum))*6,k=Math.max(0,Math.min(6,Math.floor(t+(BY[y&3][x&3]/16-.5)*.4))),s=ST[k]*amp*(ST[k]<0?(o.sh||.6):1);
+    const r=d[q],g=d[q+1],b=d[q+2];
+    if(s<0){const sr=r*.30+6,sg=g*.32+6,sb=b*.42+22;out[q]=r+(sr-r)*-s;out[q+1]=g+(sg-g)*-s;out[q+2]=b+(sb-b)*-s}
+    else{out[q]=r+(255-r)*s;out[q+1]=g+(244-g)*s;out[q+2]=b+(222-b)*s}}
+  // seams on the shadow side between differently coloured parts
+  const o2=new Uint8ClampedArray(out);
+  for(let y=1;y<h;y++)for(let x=1;x<w;x++){const i=y*w+x,q=i*4;if(!body(i))continue;
+    if((body(i-1)&&!same(i,i-1))||(body(i-w)&&!same(i,i-w))){o2[q]=out[q]*.8;o2[q+1]=out[q+1]*.8;o2[q+2]=out[q+2]*.84}}
+  // rim light on the back edge (just inside the outline), cool sky light
+  for(let y=0;y<h;y++)for(let x=1;x<w-1;x++){const i=y*w+x,q=i*4;if(!body(i))continue;
+    if(x+1<w&&(!sol[i+1]||dark[i+1])&&(x+2>=w||!body(i+2))&&body(i-1)){o2[q]=o2[q]*.62+190*.38;o2[q+1]=o2[q+1]*.62+210*.38;o2[q+2]=o2[q+2]*.62+255*.38}}
+  // outline: the lit (upper/left) contour warms slightly so the silhouette is not a flat black cut-out
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=y*w+x,q=i*4;if(!dark[i])continue;
+    const outL=x===0||!sol[i-1],outU=y===0||!sol[i-w];if((outL||outU)&&(x<w-1&&body(i+1)||y<h-1&&body(i+w))){o2[q]=Math.min(255,d[q]+26);o2[q+1]=Math.min(255,d[q+1]+20);o2[q+2]=Math.min(255,d[q+2]+24)}}
+  img.data.set(o2);c.putImageData(img,0,0);return cv}
+/* EPX / scale2x on a canvas: doubles the resolution while keeping diagonals smooth */
+function scale2xCanvas(src){const w=src.width,h=src.height,a=src.getContext('2d').getImageData(0,0,w,h).data,[cv,c]=mk(w*2,h*2),img=c.createImageData(w*2,h*2),o=img.data;
+  const P=(x,y)=>{x=Math.max(0,Math.min(w-1,x));y=Math.max(0,Math.min(h-1,y));const q=(y*w+x)*4;return (a[q+3]>40?1:0)*0x1000000+(a[q]<<16)+(a[q+1]<<8)+a[q+2]};
+  const put=(x,y,v)=>{const q=(y*w*2+x)*4;if(!(v>=0x1000000)){o[q+3]=0;return}o[q]=(v>>16)&255;o[q+1]=(v>>8)&255;o[q+2]=v&255;o[q+3]=255};
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const P0=P(x,y),A=P(x,y-1),B=P(x+1,y),C=P(x-1,y),D=P(x,y+1);
+    put(x*2,y*2,(C===A&&C!==D&&A!==B)?A:P0);put(x*2+1,y*2,(A===B&&A!==C&&B!==D)?B:P0);
+    put(x*2,y*2+1,(D===C&&D!==B&&C!==A)?C:P0);put(x*2+1,y*2+1,(B===D&&B!==A&&D!==C)?D:P0)}
+  c.putImageData(img,0,0);return cv}
+/* battle-size hero: scale2x then the full 3D repaint at the doubled resolution (finer volume, like the bosses) */
+function ctCharSpriteBig(look,dir,fr){const key='BIG'+look+dir+fr;if(CCACHE[key])return CCACHE[key];
+  const raw=ctCharSpriteRaw(look,dir==='left'?'right':dir,fr,false);let big=scale2xCanvas(raw);if(dir==='left')big=mirror(big);
+  return CCACHE[key]=repaintSmall(big,{amp:.95,capG:9,capP:5,lift:.14,sh:.7})}
 function enemyCanvas(t,size,fr){
   const key='s3:'+t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];
   const raw=enemyCanvasRaw(t,size,fr),sp=typeof SPR2!=='undefined'&&SPR2[t]?((size>=40&&SPR2[t+'@b'])||SPR2[t]):null;return ECACHE[key]=(sp&&sp.hand)?raw:shade3d(raw)}
@@ -1251,7 +1308,7 @@ function tplCanvas(name,fr,k,pad){
   return PCACHE[key]=cvs}
 function animalCanvas(t,fr,dir){
   const key='an'+t+fr+dir;if(PCACHE[key])return PCACHE[key];
-  const base=tplCanvas(t,fr,1);return PCACHE[key]=shade3d(dir==='right'?mirror(base):base,{str:1.7,cap:4,dith:0.04,rim:0,k:1.1,mult:1})}
+  const base=tplCanvas(t,fr,1);return PCACHE[key]=repaintSmall(dir==='right'?mirror(base):base,{amp:.9})}
 function reweCanvas(){
   const k='rewe';if(PCACHE[k])return PCACHE[k];const [cvs,c]=mk(18,30);
   R(c,7,6,4,24,'#8a6034');R(c,7,6,1,24,'#a87c48');R(c,10,6,1,24,'#5a3c1e');
@@ -5772,14 +5829,14 @@ function renderBattle(){
     if(tg&&frame%20<15){const ay=y-8+Math.round(Math.sin(frame/5)*2);for(let k=0;k<5;k++){R(c,cx-5+k,ay+k,11-k*2,1,'#ffe040');R(c,cx-6+k,ay+k,1,1,'#181018');R(c,cx+5-k,ay+k,1,1,'#181018')}R(c,cx-6,ay-1,13,1,'#181018')}
   });
   if(!B.ngenA){
-    const hsc=1.6,hb=Math.sin(frame/14)*1.2;
+    const hsc=2,hb=Math.sin(frame/14)*1.2;
     let hx=LW-52,hfr=0;
     if(B.heroA>0){B.heroA--;const ph=Math.sin((16-B.heroA)/16*Math.PI);hx-=Math.round(ph*16);hfr=Math.floor(frame/5)%4}
     if(B.intro>0)hx+=Math.round(B.intro*1.2);
     const hurt=B.red>0;
     if(!(hurt&&frame%6<3)){
-      const hcv=ctCharSprite(heroLook(),'left',hfr,false);
-      const hw=hcv.width*hsc,hh=hcv.height*hsc;
+      const hcv=ctCharSpriteBig(heroLook(),'left',hfr);
+      const hw=hcv.width*hsc/2,hh=hcv.height*hsc/2;
       ell(c,hx+hw/2,139,hw*.42,3,'rgba(0,0,14,.3)');
       c.save();if(hurt){c.translate(hx+2,0)}
       c.drawImage(hcv,0,0,hcv.width,hcv.height,hx,Math.round(138+hb-hh),hw,hh);
