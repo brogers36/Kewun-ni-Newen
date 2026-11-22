@@ -146,9 +146,19 @@ function shop(where){
       if(v===null||v==='x')return say([L('Ngillakafe','Pewkayal!','¡Hasta luego!','See you later!')]);
       const [t,k]=v.split(':'),it=t==='i'?ITEMS[k]:GEAR[k];
       if(S.gold<it.p){sfx('bad');return say([N('No te alcanzan los ngülliw. Te faltan '+numP(it.p-S.gold)+'.','You do not have enough ngülliw. You need '+numP(it.p-S.gold)+' more.')],list)}
-      choose(L('',it.m+' · '+numW(it.p)+' ngülliw','¿Lo compras?','Buy it?'),[{m:'Ngillayafiñ',g:S.gloss==='en'?'I will buy it':'Lo voy a comprar',v:1},{m:'Ngillalayafiñ',g:S.gloss==='en'?'I will not buy it':'No lo voy a comprar',v:0}],y=>{
+      const en=S.gloss==='en';
+      if(t==='i'){ // consumables: choose how many, counted in Mapudungun
+        const most=Math.floor(S.gold/it.p),qs=[1,2,3,4,5,10].filter(n=>n<=most);if(most>5&&!qs.includes(most))qs.push(most);
+        const qo=qs.map(n=>({m:numW(n)+(n===most&&n>5?(en?'  (all you can)':'  (todo lo que alcanza)'):''),g:n+' × '+it.m+' = '+(n*it.p)+' ngülliw',v:n}));
+        qo.push({m:'Ngillalayafiñ',g:en?'I will not buy it (back)':'No lo voy a comprar (volver)',v:0});
+        return choose(L('',it.m+' · '+numW(it.p)+' ngülliw','¿Cuántos compras? (tienes '+numP(S.items[k]||0)+')','How many will you buy? (you have '+numP(S.items[k]||0)+')'),qo,n=>{
+          if(!n)return list();
+          S.gold-=it.p*n;S.items[k]=(S.items[k]||0)+n;persist();sfx('pick');
+          say([L('Ngillakafe','Chaltu may! '+numW(n)+' '+it.m+'.','¡Gracias! Te llevas '+n+'.','Thank you! You take '+n+'.')],list)},true,false);
+      }
+      choose(L('',it.m+' · '+numW(it.p)+' ngülliw','¿Lo compras?','Buy it?'),[{m:'Ngillayafiñ',g:en?'I will buy it':'Lo voy a comprar',v:1},{m:'Ngillalayafiñ',g:en?'I will not buy it':'No lo voy a comprar',v:0}],y=>{
         if(!y)return list();
-        S.gold-=it.p;if(t==='i')S.items[k]++;else{S.gear[k]=1;if(k==='trariwe')S.hp+=HPQ}
+        S.gold-=it.p;S.gear[k]=1;if(k==='trariwe')S.hp+=HPQ;
         persist();sfx('pick');say([L('Ngillakafe','Chaltu may!','¡Gracias!','Thank you!')],list)},true,false)
     },true,true);
   }

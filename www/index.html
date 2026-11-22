@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='41fc734-202611212033';
+window.KEWUN_BUILD='6f472f4-202611212105';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -210,7 +210,7 @@ function auInit(){
    (low cut, a mid push, a steep high cut) so the fuzz growls instead of fizzing */
 function mkDist2(c){
   const pre=c.createGain();pre.gain.value=3.2;
-  const ws=c.createWaveShaper();{const n=2048,cv=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;cv[i]=Math.tanh(x*22+.18)*.85-Math.tanh(.18)*.85}ws.curve=cv;ws.oversample='4x'}
+  const ws=c.createWaveShaper();{const n=2048,cv=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;cv[i]=Math.tanh(x*22+.18)*.85-Math.tanh(.18)*.85}ws.curve=cv;ws.oversample='2x'}
   const hp=c.createBiquadFilter();hp.type='highpass';hp.frequency.value=95;
   const mid=c.createBiquadFilter();mid.type='peaking';mid.frequency.value=900;mid.Q.value=.9;mid.gain.value=5;
   const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=4200;lp.Q.value=.8;
@@ -555,8 +555,8 @@ function playSong(name){
 }
 function tick(){
   const so=AU.song;if(!so||!AU.c)return;const sd=60/so.bpm/2;
-  if(AU.next<AU.c.currentTime-.3)AU.next=AU.c.currentTime+.02;
-  while(AU.next<AU.c.currentTime+.12){
+  if(AU.next<AU.c.currentTime-.05)AU.next=AU.c.currentTime+.05;
+  while(AU.next<AU.c.currentTime+.35){
     for(const ch of so.ch){const ev=ch.at[AU.step%ch.len];if(ev)for(const e of ev)playNote(ch,e,AU.next,sd)}
     AU.step++;AU.next+=sd;
     if(!so.loop&&AU.step>=so.len){AU.song=null;AU.name=null;if(so.after){const n=so.after;so.after=null;playSong(n())}return}
@@ -2793,9 +2793,19 @@ function shop(where){
       if(v===null||v==='x')return say([L('Ngillakafe','Pewkayal!','¡Hasta luego!','See you later!')]);
       const [t,k]=v.split(':'),it=t==='i'?ITEMS[k]:GEAR[k];
       if(S.gold<it.p){sfx('bad');return say([N('No te alcanzan los ngülliw. Te faltan '+numP(it.p-S.gold)+'.','You do not have enough ngülliw. You need '+numP(it.p-S.gold)+' more.')],list)}
-      choose(L('',it.m+' · '+numW(it.p)+' ngülliw','¿Lo compras?','Buy it?'),[{m:'Ngillayafiñ',g:S.gloss==='en'?'I will buy it':'Lo voy a comprar',v:1},{m:'Ngillalayafiñ',g:S.gloss==='en'?'I will not buy it':'No lo voy a comprar',v:0}],y=>{
+      const en=S.gloss==='en';
+      if(t==='i'){ // consumables: choose how many, counted in Mapudungun
+        const most=Math.floor(S.gold/it.p),qs=[1,2,3,4,5,10].filter(n=>n<=most);if(most>5&&!qs.includes(most))qs.push(most);
+        const qo=qs.map(n=>({m:numW(n)+(n===most&&n>5?(en?'  (all you can)':'  (todo lo que alcanza)'):''),g:n+' × '+it.m+' = '+(n*it.p)+' ngülliw',v:n}));
+        qo.push({m:'Ngillalayafiñ',g:en?'I will not buy it (back)':'No lo voy a comprar (volver)',v:0});
+        return choose(L('',it.m+' · '+numW(it.p)+' ngülliw','¿Cuántos compras? (tienes '+numP(S.items[k]||0)+')','How many will you buy? (you have '+numP(S.items[k]||0)+')'),qo,n=>{
+          if(!n)return list();
+          S.gold-=it.p*n;S.items[k]=(S.items[k]||0)+n;persist();sfx('pick');
+          say([L('Ngillakafe','Chaltu may! '+numW(n)+' '+it.m+'.','¡Gracias! Te llevas '+n+'.','Thank you! You take '+n+'.')],list)},true,false);
+      }
+      choose(L('',it.m+' · '+numW(it.p)+' ngülliw','¿Lo compras?','Buy it?'),[{m:'Ngillayafiñ',g:en?'I will buy it':'Lo voy a comprar',v:1},{m:'Ngillalayafiñ',g:en?'I will not buy it':'No lo voy a comprar',v:0}],y=>{
         if(!y)return list();
-        S.gold-=it.p;if(t==='i')S.items[k]++;else{S.gear[k]=1;if(k==='trariwe')S.hp+=HPQ}
+        S.gold-=it.p;S.gear[k]=1;if(k==='trariwe')S.hp+=HPQ;
         persist();sfx('pick');say([L('Ngillakafe','Chaltu may!','¡Gracias!','Thank you!')],list)},true,false)
     },true,true);
   }

@@ -23,7 +23,7 @@ function auInit(){
    (low cut, a mid push, a steep high cut) so the fuzz growls instead of fizzing */
 function mkDist2(c){
   const pre=c.createGain();pre.gain.value=3.2;
-  const ws=c.createWaveShaper();{const n=2048,cv=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;cv[i]=Math.tanh(x*22+.18)*.85-Math.tanh(.18)*.85}ws.curve=cv;ws.oversample='4x'}
+  const ws=c.createWaveShaper();{const n=2048,cv=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;cv[i]=Math.tanh(x*22+.18)*.85-Math.tanh(.18)*.85}ws.curve=cv;ws.oversample='2x'}
   const hp=c.createBiquadFilter();hp.type='highpass';hp.frequency.value=95;
   const mid=c.createBiquadFilter();mid.type='peaking';mid.frequency.value=900;mid.Q.value=.9;mid.gain.value=5;
   const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=4200;lp.Q.value=.8;
@@ -368,8 +368,8 @@ function playSong(name){
 }
 function tick(){
   const so=AU.song;if(!so||!AU.c)return;const sd=60/so.bpm/2;
-  if(AU.next<AU.c.currentTime-.3)AU.next=AU.c.currentTime+.02;
-  while(AU.next<AU.c.currentTime+.12){
+  if(AU.next<AU.c.currentTime-.05)AU.next=AU.c.currentTime+.05;
+  while(AU.next<AU.c.currentTime+.35){
     for(const ch of so.ch){const ev=ch.at[AU.step%ch.len];if(ev)for(const e of ev)playNote(ch,e,AU.next,sd)}
     AU.step++;AU.next+=sd;
     if(!so.loop&&AU.step>=so.len){AU.song=null;AU.name=null;if(so.after){const n=so.after;so.after=null;playSong(n())}return}
