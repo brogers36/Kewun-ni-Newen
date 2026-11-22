@@ -306,32 +306,49 @@ function ctLight(c,glows){
 function ctWin(c,x,y,w,h){const g=c.createLinearGradient(0,y,0,y+h);g.addColorStop(0,'#5a6a9e');g.addColorStop(.5,'#2a3468');g.addColorStop(1,'#141a3c');
   R(c,x-1,y-1,w+2,h+2,'#000');c.fillStyle=g;c.fillRect(x,y,w,h);R(c,x,y,w,1,'#e8ecf8');R(c,x,y,1,h,'#e8ecf8');R(c,x+w-1,y,1,h,'#7a7e94');R(c,x,y+h-1,w,1,'#7a7e94');
   R(c,x+1,y+1,w-2,1,'#9aa2c8');for(let yy=y+2;yy<y+h-1;yy+=2)for(let xx=x+2+((yy>>1)%2);xx<x+w-1;xx+=4)R(c,xx,yy,1,1,'rgba(255,255,255,.05)')}
+/* small 5x5 heart for the compact HUD; q = quarters filled (0..4), filled left to right */
+const MHS=['.X.X.','XXXXX','XXXXX','.XXX.','..X..'];
+function drawMiniHeart(c,x,y,q){
+  for(let r=0;r<5;r++)for(let k=0;k<5;k++)if(MHS[r][k]==='X'){R(c,x+k-1,y+r,1,1,'#120a14');R(c,x+k+1,y+r,1,1,'#120a14');R(c,x+k,y+r-1,1,1,'#120a14');R(c,x+k,y+r+1,1,1,'#120a14')}
+  const fill=Math.round(5*q/4);
+  for(let r=0;r<5;r++)for(let k=0;k<5;k++)if(MHS[r][k]==='X')R(c,x+k,y+r,1,1,k<fill?(r<2&&k<2?'#ff9a8a':r>2?'#b81c2c':'#e83a3a'):'#3e2638');
+  if(fill)R(c,x+1,y+1,1,1,'#ffe0d8')}
 function drawHUD(c){
-  // LttP-style overlay: newen meter, counters, "- PIWKE -" hearts
-  { // backing plates so the HUD reads on any ground: dark glass with a thin gold edge
-    const mxh=Math.min(40,Math.ceil(maxHP()/HPQ)),hr=Math.ceil(mxh/10),plate=(x,y,w,h)=>{c.fillStyle='rgba(12,10,30,.55)';c.fillRect(x+1,y,w-2,h);c.fillRect(x,y+1,w,h-2);
-      c.fillStyle='rgba(232,236,248,.45)';c.fillRect(x+1,y,w-2,1);c.fillRect(x+1,y+h-1,w-2,1);c.fillRect(x,y+1,1,h-2);c.fillRect(x+w-1,y+1,1,h-2)};
-    plate(4,2,M&&M.dungeon?134:124,39);plate(LW-92,2,88,13+hr*8+10)}
-  R(c,7,5,12,34,'#181018');R(c,8,6,10,32,'#f8f8f8');R(c,9,7,8,30,'#181018');
-  const sp=S.sp||0,fh=Math.round(30*sp/SPMAX);if(fh>0){R(c,9,37-fh,8,fh,'#30b030');R(c,9,37-fh,3,fh,'#70e070')}
-  for(let k=1;k<SPMAX;k++)R(c,9,7+Math.round(30*k/SPMAX),8,1,'#000');
-  const ic=(x,draw)=>{draw(x)};
-  ell(c,30,10,2.5,4,'#c88a18');ell(c,29.5,9.5,1.8,3.2,'#f0c040');R(c,29,7,1,2,'#fff4b0');
-  ell(c,58,10,3,3,'#5a1a6a');ell(c,57,9,2,2,'#8a3aa0');R(c,58,5,1,2,'#2a7a2a');
-  if(M&&M.dungeon)c.drawImage(dynCanvas('k',0),76,2);
-  const mx=maxHP(),hearts=Math.min(40,Math.ceil(mx/HPQ)),hp=Math.max(0,S.hp);
-  for(let i=0;i<hearts;i++){const q=Math.max(0,Math.min(4,hp-i*HPQ)),col=i%10,row=Math.floor(i/10);drawHeart(c,LW-88+col*8,13+row*8,q)}
-  {const ty=13+Math.ceil(hearts/10)*8+2,tx=LW-88,pcs=S.pieces||[];const RG=['lafkenche','nagche','pewenche','williche','puelche'];
+  // compact overlay: newen meter and counters top-left; a thin heart strip tucked into the top-right corner.
+  // Either panel fades when the player walks underneath it, so nothing on the map stays hidden.
+  const mx=maxHP(),hearts=Math.min(40,Math.ceil(mx/HPQ)),hp=Math.max(0,S.hp),PER=14,rows=Math.ceil(hearts/PER),hw=Math.min(hearts,PER)*6+3;
+  const tw=5*12,pw=Math.max(hw,tw+4)+4,ph=rows*6+3+8,px=LW-pw-19,py=1,LX=19;   // clear of the ☰ and ⛶ buttons
+  const pxs=P.fx*T-CAM.x+8,pys=P.fy*T-CAM.y+VY+8,under=(x,y,w,h)=>pxs>x-10&&pxs<x+w+10&&pys>y-6&&pys<y+h+16;
+  const lw=M&&M.dungeon?118:108,lh=30,lfade=under(LX+2,1,lw,lh),rfade=under(px,py,pw,ph);
+  const plate=(x,y,w,h)=>{c.fillStyle='rgba(12,10,30,.5)';c.fillRect(x+1,y,w-2,h);c.fillRect(x,y+1,w,h-2);
+      c.fillStyle='rgba(232,236,248,.4)';c.fillRect(x+1,y,w-2,1);c.fillRect(x+1,y+h-1,w-2,1);c.fillRect(x,y+1,1,h-2);c.fillRect(x+w-1,y+1,1,h-2)};
+  // ---- left: newen bar + ngülliw, kulon, keys, kimün
+  c.save();c.globalAlpha=lfade?.3:1;c.translate(LX,0);
+  plate(2,1,lw,lh);
+  R(c,5,3,9,26,'#181018');R(c,6,4,7,24,'#f8f8f8');R(c,7,5,5,22,'#181018');
+  const sp=S.sp||0,fh=Math.round(22*sp/SPMAX);if(fh>0){R(c,7,27-fh,5,fh,'#30b030');R(c,7,27-fh,2,fh,'#70e070')}
+  for(let k=1;k<SPMAX;k++)R(c,7,5+Math.round(22*k/SPMAX),5,1,'#000');
+  ell(c,22,8,2,3.2,'#c88a18');ell(c,21.6,7.6,1.4,2.6,'#f0c040');R(c,21,6,1,2,'#fff4b0');
+  ell(c,46,8,2.6,2.6,'#5a1a6a');ell(c,45.2,7.2,1.6,1.6,'#8a3aa0');R(c,46,4,1,2,'#2a7a2a');
+  if(M&&M.dungeon)c.drawImage(dynCanvas('k',0),62,0);
+  c.restore();
+  // ---- right: hearts in rows of 14, the trariwe strip underneath
+  c.save();c.globalAlpha=rfade?.3:1;
+  plate(px,py,pw,ph);
+  for(let i=0;i<hearts;i++){const q=Math.max(0,Math.min(4,hp-i*HPQ)),col=i%PER,row=Math.floor(i/PER);drawMiniHeart(c,px+4+col*6,py+3+row*6,q)}
+  {const ty=py+3+rows*6+1,tx=px+4,pcs=S.pieces||[];const RG=['lafkenche','nagche','pewenche','williche','puelche'];
     const PAT={lafkenche:['#2a64c8','#f0f0f0'],nagche:['#2f8d4a','#f0d060'],pewenche:['#6a3a1a','#e8e0d0'],williche:['#8a2458','#f0f0f0'],puelche:['#c87a20','#202020']};
-    R(c,tx-1,ty-1,RG.length*14+2,8,'#181018');
-    RG.forEach((k,i)=>{const x=tx+i*14;if(pcs.includes(k)){const [a,b]=PAT[k];R(c,x,ty,14,6,a);for(let j=0;j<7;j++){R(c,x+j*2,ty+(j%2?1:3),1,1,b);R(c,x+j*2+1,ty+(j%2?2:2),1,1,b)}R(c,x,ty,14,1,'rgba(255,255,255,.35)')}
-      else{R(c,x,ty,14,6,'#2a2238');for(let j=0;j<14;j+=3)R(c,x+j,ty+2,2,1,'#4a3d5c')}
-      if(i)R(c,x,ty,1,6,'#181018')});
-    R(c,tx-3,ty+1,2,4,'#c8b080');R(c,tx+RG.length*14+1,ty+1,2,4,'#c8b080')}
-  OV.push(()=>{txt(String(S.gold).padStart(3,'0'),31,25,'#ffffff',14,'center');txt(String(S.items.kulon||0).padStart(2,'0'),58,25,'#ffffff',14,'center');
-    if(M&&M.dungeon)txt(String(S.keys||0).padStart(2,'0'),84,25,'#ffffff',14,'center');
-    txt('- PIWKE -',LW-48,10,'#ffffff',12,'center');txt('kimün '+S.lvl,100,25,'#bfe3d0',12);
-    if(S.curse)txt('☠',140,25,'#d0a0ff',13);if(S.kutran)txt('✖',154,25,'#9fe870',13);const pw=[];if(S.pw.speed>0)pw.push('mañke');if(S.pw.pewen>0)pw.push('pewen');if(S.pw.gold)pw.push('milla');if(pw.length)txt(pw.join(' '),LW-6,40,'#ffe27a',11,'right')});
+    R(c,tx-1,ty-1,RG.length*12+2,6,'#181018');
+    RG.forEach((k,i)=>{const x=tx+i*12;if(pcs.includes(k)){const [a,b]=PAT[k];R(c,x,ty,12,4,a);for(let j=0;j<6;j++){R(c,x+j*2,ty+(j%2?1:2),1,1,b)}R(c,x,ty,12,1,'rgba(255,255,255,.35)')}
+      else{R(c,x,ty,12,4,'#2a2238');for(let j=0;j<12;j+=3)R(c,x+j,ty+1,2,1,'#4a3d5c')}
+      if(i)R(c,x,ty,1,4,'#181018')})}
+  c.restore();
+  const la=lfade?.35:1;
+  OV.push(()=>{ctx.save();ctx.globalAlpha=la;txt(String(S.gold).padStart(3,'0'),LX+22,22,'#ffffff',12,'center');txt(String(S.items.kulon||0).padStart(2,'0'),LX+46,22,'#ffffff',12,'center');
+    if(M&&M.dungeon)txt(String(S.keys||0).padStart(2,'0'),LX+70,22,'#ffffff',12,'center');
+    txt('kimün '+S.lvl,LX+(M&&M.dungeon?80:60),12,'#bfe3d0',11);
+    if(S.curse)txt('☠',LX+(M&&M.dungeon?84:64),24,'#d0a0ff',12);if(S.kutran)txt('✖',LX+(M&&M.dungeon?96:76),24,'#9fe870',12);ctx.restore();
+    const pw2=[];if(S.pw.speed>0)pw2.push('mañke');if(S.pw.pewen>0)pw2.push('pewen');if(S.pw.gold)pw2.push('milla');if(pw2.length)txt(pw2.join(' '),LW-6,py+ph+8,'#ffe27a',11,'right')});
 }
 /* ---------- battle ---------- */
 const BG={},FG={};
