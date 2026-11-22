@@ -9,11 +9,16 @@ function introScript(){
     L('Kuku','Chumleymi?','¿Cómo estás?','How are you?'),
     L(nm(),'Kümelen, kuku. Eymi kay?','Estoy bien, kuku. ¿Y tú?','I am well, kuku. And you?'),
     L('Kuku','Iñche ka kümelen. Welu... müley wekufü!','Yo también estoy bien. Pero... ¡hay wekufü!','I am well too. But... there are wekufü!'),
-    N('Para echarlos, diles amutu- ("irse de aquí"). Puedes hablarle a uno solo, con -nge, o a todos juntos: a dos, con -mu; a tres o más, con -mün.','To drive them off, tell them amutu- ("go away from here"). You can speak to just one, with -nge, or to all of them together: to two, with -mu; to three or more, with -mün.'),
+    L('Kuku','Kimeltuaeyu!','¡Te voy a enseñar! Ven, peleemos juntos la primera vez. Yo te voy diciendo qué hacer.','I will teach you! Come, let us fight the first one together. I will tell you what to do.')
+  ],()=>startBattle(['laftrache'],{tut:1,after:introAfterTut}));
+}
+function introAfterTut(){
+  say([
+    L('Kuku','Kümey, '+nm()+'! Tuteymi!','¡Muy bien, '+nm()+'! ¡Lo lograste!','Well done, '+nm()+'! You did it!'),
     L('Kuku','Kiñe: amutunge. Epu: amutumu. Küla: amutumün.','Uno: amutunge. Dos: amutumu. Tres (o más): amutumün.','One: amutunge. Two: amutumu. Three (or more): amutumün.'),
-    N('Hablarle a uno solo pega más fuerte; hablarles a todos alcanza a todos, pero más suave. Y recuerda: tu newen no vuelve solo. Descansa junto a cada kütral que encuentres.','Speaking to just one hits harder; speaking to all of them reaches everyone, but more softly. And remember: your newen does not come back on its own. Rest by every kütral you find.'),
+    N('Cuenta siempre a los wekufü antes de hablarles. Y tu newen no vuelve solo: descansa junto a cada kütral que encuentres.','Always count the wekufü before you speak to them. And your newen does not come back on its own: rest by every kütral you find.'),
     L('Kuku','Kiñe chillka elueyu.','Te doy un chillka, un libro.','I give you a chillka, a book.'),
-    N('En el chillka están las terminaciones de los verbos, la negación, el futuro, los números y los colores. Ábrelo en el menú (M), y también cuando una piedra te haga una pregunta. No trae las respuestas: trae los patrones para que las descubras.','The chillka holds verb endings, negation, the future, numbers and colours. Open it from the menu (M), and also whenever a stone asks you a question. It does not give the answers: it gives the patterns so you can work them out.'),
+    N('En el chillka están las terminaciones de los verbos, la negación, el futuro, los números y los colores. Ábrelo en el menú (M), y también cuando una piedra te haga una pregunta. No trae las respuestas: trae los patrones para que las descubras.','The chillka holds verb endings, negation, the future, numbers and colours. Open it from the menu (M), and also whenever a stone asks you a question. It does not hold the answers: it holds the patterns so you can discover them.'),
     L('Kuku','Lof mew amuaymi. Lonko mew dungunge.','Ve al lof. Habla con el lonko.','Go to the lof. Speak with the lonko.'),
     L('Kuku','Pewkayal!','¡Hasta luego!','See you later!')
   ],()=>{learnRoot('küpa');S.flags.intro=1;persist()});

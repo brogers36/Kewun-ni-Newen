@@ -352,3 +352,15 @@ El Yewen ahora invoca (de a una, hasta dos a la vez) cinco criaturas. Nombres a 
   - 'ayúdame' = **kelluen** en todos los diálogos: los cinco cautivos de Ngoyman (antes "Kellumuchi..."; el niño lafkenche: "K-kelluen...") y la tejedora del lof nagche (antes "welu ngillañmakelen kal"; ahora "Mari mari! Makuñ ngürekalen. Kelluen!", glosa «¡Ayúdame! (con la lana)»).
   - '¿cómo se dice X?' = **chumngechi pingekey X** (o *pingeafuy X*): el niño lafkenche ahora pregunta "Chumngechi pingekey "gracias"?" y "Chumngechi pingekey "hasta luego"?" (antes "Chem pin ...?").
   - Sin cambiar: "Kellumuyiñ!" de los chumpall ('ayúdennos', plural) y la casera y el chofer de Santiago, que preguntan «¿cómo se dice...?» en castellano a propósito (son hablantes urbanos que no saben la lengua).
+
+### Tanda 16 · la pelea guiada de la kuku (Nov 22)
+Al empezar el juego la kuku guía una pelea de práctica (un laftrache, después llega otro). Líneas nuevas en mapudungun:
+- **"Kimeltuaeyu!"** 'te voy a enseñar' ⚠ kimeltu-a-eyu (1sg→2sg futuro): confirmar.
+- **"Adkintunge!"** '¡mira!' (al aparecer el laftrache).
+- **"Amutu- pingey."** 'se dice amutu-' ⚠ ¿o mejor "Amutu- pingekey"?
+- **"Kake laftrache!"** '¡otro laftrache!' ⚠ kake 'otro (distinto)': ¿o "Ka kiñe laftrache!"?
+- La línea sobre los piwke (corazones) va solo en castellano/inglés por ahora: ⚠ si quieres una frase en mapudungun ('cuida tus piwke'), dímela.
+- **"Newen nieymi!"** 'tienes fuerza'.
+- **"Petu, X!"** '¡todavía no!' ⚠ ¿"Petu no"?
+- **"Ka kiñe rupa!"** '¡otra vez!'.
+- **"Kümey, X! Tuteymi!"** '¡muy bien, lo lograste!' (tuteymi ya se usaba con el Epunamun).

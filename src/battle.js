@@ -23,6 +23,7 @@ function startBattle(party,o){o=o||{};
   if(typeof stopAmb==='function')stopAmb();
   mode='battle';banner.style.display='none';held.up=held.down=held.left=held.right=0;
   B={snap,wipe:snap?22:0,en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(M.fog&&M.bg!=='fjord'?'fog:':'')+M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
+  if(o.tut){B.en[0].hp=B.en[0].max=20}
   relabel();sfx('enc');if(snap)sfx('swirl');playSong(o.song||(o.final?'ngoyFinal':rsong(o.boss?'boss':'battle')));
   const alive=B.en.length,same=party.every(t=>t===party[0]),nameL=same?ET[party[0]].name:'wekufü';
   const lst=same?nameL:'wekufü ('+party.map(t=>ET[t].name).join(', ')+')';
@@ -35,6 +36,7 @@ function bossBlock(e){const T=ET[e.t];if(!T.boss)return false;if(e.down||e.sl||e
 const quizPend=e=>!!B&&ET[e.t].boss&&!B.qok&&!/^ngoyman[1-4]$/.test(e.t)&&!(B.o.chain==='llufu'&&e.t!=='llufu5');
 function battleMenu(){
   if(B&&B.ngenA&&!B.ngenA.done)return;
+  if(B&&B.o.tut&&tutStep())return;
   const en=S.gloss==='en';B.cursor=null;
   choose({es:'¿Qué haces? (Hay '+aliveE().length+')',en:'What do you do? ('+aliveE().length+' left)'},[
     {m:'Dungun',g:en?'Speak (build a command)':'Hablar (armar una orden)',v:'d'},
@@ -50,13 +52,30 @@ function battleMenu(){
       ls.push(N('Los wekufü se tapan los oídos: pierden su turno y quedan asustados. Los más grandes solo se asustan.','The wekufü cover their ears: they lose their turn and are left scared. The biggest ones are only scared.'));
       return say(ls,enemyPhase)}
     else if(v==='i')choose({es:'Chemkün',en:'Items'},itemOpts().concat([{m:en?'Back':'Volver',v:'x'}]),k=>{if(!k||k==='x')return battleMenu();const l=useItem(k);say([l],enemyPhase)},true);
+    else if(v==='r'&&B.o.tut){return say([L('Kuku','Petu, '+nm()+'!','¡Todavía no, '+nm()+'! Primero aprende a hablarles. (En las peleas normales, «Lef» sirve para huir; de los jefes no se puede huir.)','Not yet, '+nm()+'! First learn to speak to them. (In ordinary fights «Lef» lets you run away; you cannot run from bosses.)')],battleMenu)}
     else if(v==='r'){if(B.o.boss||B.o.mini){sfx('bad');return say([N('¡No puedes huir de esta pelea!','You cannot run from this fight!')],battleMenu)}
       if(Math.random()<.65)return say([L('','Lef!','Huyes corriendo.','You run away.')],()=>endBattle('flee'));
       sfx('bad');say([N('¡No pudiste escapar!','You could not get away!')],enemyPhase)}
   },false);
 }
+/* the kuku's guided first fight (o.tut): she steps in at each new idea */
+function tutStep(){
+  const T=B.tut||(B.tut={});const k=(es,en,m)=>L('Kuku',m||'',es,en);
+  if(!T.a){T.a=1;return say([
+    k('"Mira: un laftrache, un wekufü chico. A los wekufü no se les pega con los puños: se les habla, en mapudungun."','"Look: a laftrache, a small wekufü. You do not hit wekufü with your fists: you speak to them, in Mapudungun."','Adkintunge!'),
+    k('"En cada turno eliges qué hacer. Elige «Dungun», hablar, y arma una orden con tus palabras."','"Each turn you choose what to do. Choose «Dungun», speak, and build a command with your words."')],battleMenu),true}
+  if(B.turn>=1&&!T.b&&aliveE().length===1){T.b=1;const ne=mkEnemy('laftrache');B.en.push(ne);relabel();sfx('enc');return say([
+    k('"¡Mira, viene otro! Ahora son epu, dos."','"Look, another one is coming! Now there are epu, two."','Kake laftrache!'),
+    k('"Puedes hablarle a uno solo, y le pega más fuerte. O elegir «Kom» y hablarles a los dos juntos: más suave, pero a los dos. Para dos, la terminación es -mu."','"You can speak to just one, and it hits harder. Or choose «Kom» and speak to both together: softer, but to both. For two, the ending is -mu."')],battleMenu),true}
+  if(T.b&&!T.c&&S.hp<maxHP()){T.c=1;return say([
+    k('"¡Ay! Te alcanzó. Esos corazones de arriba son tus piwke: si se acaban, pierdes la pelea."','"Ouch! It got you. Those hearts up top are your piwke: if they run out, you lose the fight."',''),
+    k('"Si te pegan mucho, abre «Chemkün», tus cosas, y come un külon (maqui): te devuelve piwke. Junto a cada kütral te recuperas entero."','"If they hit you a lot, open «Chemkün», your things, and eat a külon (maqui): it gives you piwke back. By every kütral you recover completely."')],battleMenu),true}
+  if(!T.d&&(S.sp||0)>=2){T.d=1;return say([
+    k('"Cada orden bien dicha carga tu newen: la barrita verde. Con dos, ya puedes usar «Newen»: el golpe de wiño pega el triple."','"Every command said correctly charges your newen: the little green bar. With two you can already use «Newen»: the wiño strike hits three times as hard."','Newen nieymi!')],battleMenu),true}
+  return false}
 function pickRoot(){
   const en=S.gloss==='en';
+  if(B.o.tut&&!B.tut.r){B.tut.r=1;return say([L('Kuku','Amutu- pingey.','"amutu- quiere decir «irse de aquí». Es la primera raíz de tu chillka. Elígela."','"amutu- means «go away from here». It is the first root in your chillka. Choose it."')],pickRoot)}
   const opts=S.roots.map(r=>({m:ROOTS[r].m,g:G(ROOTS[r]),v:r}));opts.push({m:en?'Back':'Volver',v:'x'});
   choose({m:'___',es:'Elige la raíz del verbo.',en:'Choose the verb root.'},opts,r=>{
     if(!r||r==='x')return battleMenu();
@@ -74,6 +93,8 @@ function pickTarget(r,k){
 }
 function pickEnd(r,k,tg){
   const en=S.gloss==='en',base=r+(k?'kil':''),coll=tg==='all',n=coll?aliveE().length:1;B.cursor=tg;
+  if(B.o.tut&&!B.tut['e'+n]){B.tut['e'+n]=1;const one=n===1;
+    return say([L('Kuku',one?'Kiñe: amutunge.':'Epu: amutumu.',one?'"Le hablas a uno solo: '+base+'-nge. La terminación dice a cuántos les hablas."':'"Les hablas a los dos juntos: '+base+'-mu. Si fueran tres o más: -mün."',one?'"You are speaking to just one: '+base+'-nge. The ending says how many you are speaking to."':'"You are speaking to the two together: '+base+'-mu. If there were three or more: -mün."')],()=>pickEnd(r,k,tg))}
   const hint=S.hints?[en?'to one':'a uno',en?'to two':'a dos',en?'to three or more':'a tres o más']:['','',''];
   const who=coll?{es:'Les hablas a todos juntos. ¿Cuántos son?',en:'You are speaking to all of them together. How many are there?'}:{es:'Le hablas solo a '+B.en[tg].label+'.',en:'You are speaking only to '+B.en[tg].label+'.'};
   choose({m:base+'-___',es:who.es,en:who.en},ENDS.map((e,i)=>({m:'-'+e,g:hint[i],v:i})),i=>{
@@ -129,6 +150,7 @@ function resolve(r,kil,tg,ei){
     if(coll)lines.push(N('Los wekufü se miran confundidos. Les hablas a todos y son '+numP(n)+': para '+(n===2?'dos':'tres o más')+' se usa -'+ENDS[need]+'.',
       'The wekufü look at each other, confused. You are speaking to all of them and there are '+numP(n)+': for '+(n===2?'two':'three or more')+' you use -'+ENDS[need]+'.'));
     else lines.push(N(B.en[tg].label+' no entiende. Le hablas a uno solo: se usa -nge.',B.en[tg].label+' does not understand. You are speaking to just one: you use -nge.'));
+    if(B.o.tut){lines.push(L('Kuku','Ka kiñe rupa!','"¡Otra vez! Cuenta a quién le hablas y elige la terminación."','"Once more! Count who you are speaking to and choose the ending."'));return say(lines,battleMenu)}
     return say(lines,enemyPhase);
   }
   const pr=praise();B.last={r,k:kil};S.sp=Math.min(SPMAX,(S.sp||0)+1);
@@ -238,7 +260,7 @@ function enemyPhase(){
   const hitP=(e,mult,tag)=>{
     if(B.blocked&&B.blocked.has(e)){fx.push(e.label+': ¡bloqueado!');fxe.push(e.label+': blocked!');hitsFx.push(()=>{const p=epos(e);pop(p.x,p.y-10,'✋','#ffe080');sfx('block')});return}
     const T=ET[e.t],rush=B.rush&&B.rush.has(e);
-    const d=Math.max(1,Math.round((T.atk+Math.floor(progK()*(T.boss?.3:.6))+rnd(3)-1)*(mult||1)*(rush?1.5:1)*(e.fear>0?.5:1))-def());S.hp-=d;dmgTotal+=d;
+    let d=Math.max(1,Math.round((T.atk+Math.floor(progK()*(T.boss?.3:.6))+rnd(3)-1)*(mult||1)*(rush?1.5:1)*(e.fear>0?.5:1))-def());if(B.o.tut)d=Math.min(3,Math.max(1,Math.round(d*.4)));S.hp-=d;dmgTotal+=d;
     fx.push(e.label+(tag?tag.es:' te golpea')+' (−'+d+').');fxe.push(e.label+(tag?tag.en:' hits you')+' (−'+d+').');
     if(T.drain){const hl=Math.ceil(d/2);e.hp=Math.min(e.max,e.hp+hl);fx.push(e.label+' bebe tu fuerza (+'+hl+').');fxe.push(e.label+' drinks your strength (+'+hl+').');hitsFx.push(()=>{const p=epos(e);pop(p.x,p.y-10,'+'+hl,'#80ff90')})}
     hitsFx.push(()=>{e.lunge=16;pop(60,30,'-'+d,'#ff6050')})};
@@ -421,6 +443,7 @@ function enemyPhase(){
   if(bossE&&bossE.seals&&bossE.seals.length&&B.turn%3===1){lines.push(N('Los sellos de luz giran alrededor de '+bossE.label+'. '+sealGloss(bossE.seals[0],'es'),'The seals of light spin around '+bossE.label+'. '+sealGloss(bossE.seals[0],'en')))}
   if(B.tele&&!B.teleHint&&bossE){B.teleHint=1;lines.push(N('Pista: dile que no venga (küpa- con -kil-), a él solo o a todos, con la terminación correcta.','Hint: tell it not to come (küpa- with -kil-), to it alone or to all of them, with the right ending.'))}
   say(lines,()=>{
+    if(S.hp<=0&&B.o.tut)S.hp=1;
     if(S.hp<=0){S.hp=0;return defeat()}
     battleMenu()});
 }
@@ -560,6 +583,7 @@ function endBattle(how){
   if(how==='win'&&o.sflag){S.flags[o.sflag]=1;persist();sfx('lvl');
     return say([N('El wekufü secreto se deshace en jirones de sombra que el viento se lleva.','The secret wekufü breaks apart into shreds of shadow that the wind carries away.'),
       L('','Newen!','Venciste a uno de los wekufü escondidos. Pocos pueden contarlo.','You defeated one of the hidden wekufü. Few can say the same.')],()=>gainPiwke([N('Donde estaba, algo rojo brilla en el suelo...','Where it stood, something red glints on the ground...')]));}
+  if(how==='win'&&o.tut&&o.after)return o.after();
   if(how==='win'&&o.final)return postFinal();
   if(how==='win'&&o.chain==='llufu')return postLlufu();
   if(how==='win'&&o.boss)postBoss();
