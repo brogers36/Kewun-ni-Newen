@@ -408,6 +408,7 @@ Nütramkan: alguien joven en cada lof quiere conversar (tres turnos, eliges la r
 - "Nütramkayaiñ?" '¿conversamos?'; "Feyta chi no..." 'eso no...' (¿mejor otra forma?); "Kümey! Pewkayal!"; "Ka mew" 'después'.
 - lof: Mari mari! · Chumleymi? → Kümelen, eymi kay? · Iney pingeymi? → X pingen.
 - n_lof: Chew tuwimi? → Lafken mew tuwün. · Chew amuaymi? → Mawida mew amuan. · Kimimi mapudungun? → Kimnierpuken.
-- p_lof: Iyaymi kofke? → May, iyaan. · Chem ayüymi? → Ngülliw ayüfiñ. · Wütreymi? → May, wütren.
+- p_lof: Iyaymi kofke? → May, iyan. · Chem ayüymi? → Ngülliw ayüfiñ. · Wütreymi? → May, wütren.
 - w_lof: Chumngechi pingekey «lluvia / sol / luna»? → Mawün / Antü / Küyen.
 - e_lof: «caballo» → Kawellu · Epu ka küla: tunten? → Kechu · Chew müley ta choyke? → Lelfün mew.
+- (Nov 22) Brandon: **"May, iyan"** (o "ian") en vez de "May, iyaan".
