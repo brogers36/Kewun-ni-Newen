@@ -386,7 +386,7 @@ function enemyPhase(){
       hitP(e);continue}
     if(e.t==='ayentufe'){
       if(!e.hidden&&e.hideT>0){e.hideT--;if(e.hideT<=0){e.hidden=1;fx.push(e.label+' se vuelve a esconder entre la gente, riéndose.');fxe.push(e.label+' hides in the crowd again, laughing.');continue}}
-      hitP(e,1,{es:' te apunta y se ríe: «¡habla bien, indio!»',en:' points at you and laughs: "talk properly!"'});continue}
+      hitP(e,1,{es:' te apunta y se ríe: «¡Ja! ¿Y eso qué idioma es? ¡Habla bien!»',en:' points at you and laughs: "Ha! What language is that even? Talk properly!"'});continue}
     if(e.t==='profe'){
       if(Math.random()<.35){hitP(e,1.7,{es:' te golpea la mano con la regla: «¡En esta sala se habla castellano!»',en:' cracks the ruler across your hand: "In this classroom we speak Spanish!"'});hitsFx.push(()=>B.shake=6);continue}
       if(!S.curse&&Math.random()<.3){S.curse=1;fx.push(e.label+' te manda al rincón con las orejas rojas: quedas con maldición (fuerza −2). El lawen la quita.');fxe.push(e.label+' sends you to the corner with burning ears: you are cursed (strength −2). Lawen lifts it.');hitsFx.push(()=>sfx('bad'));continue}

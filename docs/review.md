@@ -343,5 +343,5 @@ El Yewen ahora invoca (de a una, hasta dos a la vez) cinco criaturas. Nombres a 
 - **illkun** 'rabia, enojo' (arde: wütre- / llako-).
 - **llükalfe** 'el que hace tener miedo, el que intimida' ⚠ llüka-l-fe (causativo -l- + agentivo -fe): ¿forma aceptable? ¿o prefieres otra?
 - **ayentufe** 'el que se burla' (el bullying) ⚠ ayen-tu-fe a partir de ayen- 'reír': ¿se entiende como burlarse de alguien?
-- **profe del «no»** (la escuela que prohibía el mapudungun; nombre en castellano a propósito, habla solo castellano: «¡En esta sala se habla castellano!»). ⚠ ¿prefieres un nombre en mapudungun (p. ej. kimeltuchefe)?
-- La burla del ayentufe es «¡habla bien, indio!» (ES) / "talk properly!" (EN): insulto histórico real, puesto a propósito; ⚠ dime si prefieres suavizarlo.
+- **illamtufe kimeltulelu** (nombre dado por Brandon): la escuela que prohibía el mapudungun; habla solo castellano: «¡En esta sala se habla castellano!».
+- La burla del ayentufe (por indicación de Brandon, sin insultos étnicos): «¡Ja! ¿Y eso qué idioma es? ¡Habla bien!» / "Ha! What language is that even? Talk properly!"

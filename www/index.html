@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='acfb354-202611212016';
+window.KEWUN_BUILD='b50afa2-202611212026';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -789,7 +789,7 @@ const ET={
   illkun:{name:'illkun',hp:38,atk:11,xp:22,gold:[12,16],bs:62,mini:1,fire:true,twice:true},
   llukalfe:{name:'llükalfe',hp:36,atk:12,xp:24,gold:[12,16],bs:64,mini:1,tower:true},
   ayentufe:{name:'ayentufe',hp:30,atk:10,xp:20,gold:[10,14],bs:58,mini:1,curse:true,hide:true},
-  profe:{name:'profe del «no»',hp:44,atk:12,xp:26,gold:[14,18],bs:64,mini:1,armor:true},
+  profe:{name:'illamtufe kimeltulelu',hp:44,atk:12,xp:26,gold:[14,18],bs:64,mini:1,armor:true},
   yewen:{name:'Yewen',hp:300,atk:23,xp:300,gold:[400,400],boss:true,bs:100,spres:1,seals:['tripa','llükakil','ñamkil']},
   epunamun:{name:'Epunamun',hp:240,atk:14,xp:220,gold:[300,300],boss:true,bs:100,spres:1,seals:['umawtu','nepe','tranakil']},
   ngoyam:{name:'ngoyman am',hp:34,atk:12,xp:22,gold:[12,16],bs:46},
@@ -4772,7 +4772,7 @@ function enemyPhase(){
       hitP(e);continue}
     if(e.t==='ayentufe'){
       if(!e.hidden&&e.hideT>0){e.hideT--;if(e.hideT<=0){e.hidden=1;fx.push(e.label+' se vuelve a esconder entre la gente, riéndose.');fxe.push(e.label+' hides in the crowd again, laughing.');continue}}
-      hitP(e,1,{es:' te apunta y se ríe: «¡habla bien, indio!»',en:' points at you and laughs: "talk properly!"'});continue}
+      hitP(e,1,{es:' te apunta y se ríe: «¡Ja! ¿Y eso qué idioma es? ¡Habla bien!»',en:' points at you and laughs: "Ha! What language is that even? Talk properly!"'});continue}
     if(e.t==='profe'){
       if(Math.random()<.35){hitP(e,1.7,{es:' te golpea la mano con la regla: «¡En esta sala se habla castellano!»',en:' cracks the ruler across your hand: "In this classroom we speak Spanish!"'});hitsFx.push(()=>B.shake=6);continue}
       if(!S.curse&&Math.random()<.3){S.curse=1;fx.push(e.label+' te manda al rincón con las orejas rojas: quedas con maldición (fuerza −2). El lawen la quita.');fxe.push(e.label+' sends you to the corner with burning ears: you are cursed (strength −2). Lawen lifts it.');hitsFx.push(()=>sfx('bad'));continue}
