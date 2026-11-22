@@ -92,6 +92,14 @@ function mCheckpoints(back){
     if(v===null||v==='x')return back&&back();
     mStart(MCHK[v])},true);
 }
+/* Master saves made before a root was added to a checkpoint (or reached by 'go to a map') can lack words the
+   region already taught. Backfill them from the story flags whenever a map loads or a battle starts. */
+const MROOTFLAGS=[['intro','küpa'],['pentukun','umawtu'],['pentukun','nag'],['nag_lonko','llüka'],['root_winotu','wüñotreka'],
+  ['pew_lonko','trafo'],['root_wutre','wütre'],['ngen3','ñam'],['root_nam','ñam'],['wil_lonko','lef'],['root_tripa','tripa'],
+  ['puel_lonko','trana'],['root_nepe','nepe'],['chboss','llako']];
+function mFixRoots(){if(!S||!S.roots)return;let add=0;for(const [f,r] of MROOTFLAGS)if(S.flags[f]&&!S.roots.includes(r)){S.roots.push(r);add=1}if(add)persist()}
+const _mLoadMap=loadMap;loadMap=function(){mFixRoots();return _mLoadMap.apply(this,arguments)};
+const _mStartBattle=startBattle;startBattle=function(){mFixRoots();return _mStartBattle.apply(this,arguments)};
 let MNOENC=false;
 const _mEngage=engage;
 engage=function(e){if(MNOENC&&!e.boss&&!e.mini)return;_mEngage(e)};
@@ -107,6 +115,7 @@ function mMenu(){
     {m:en?'Go to a map':'Ir a un mapa',v:'map'},
     {m:en?'Heal fully':'Sanar todo',v:'heal'},
     {m:'+100 ngülliw',v:'gold'},
+    {m:en?'Learn every word':'Aprender todas las palabras',g:en?'All verb roots, for testing any fight':'Todas las raíces verbales, para probar cualquier pelea',v:'roots'},
     {m:'Lawentuwün',g:en?'Learn the self-heal word (resets its uses)':'Aprender la palabra de autocuración (reinicia sus usos)',v:'laww'},
     {m:(en?'Battles: ':'Peleas: ')+(MNOENC?(en?'off':'no'):(en?'on':'sí')),g:en?'Off: only minibosses and bosses fight':'No: solo pelean minijefes y jefes',v:'enc'},
     {m:en?'Close':'Cerrar',v:'x'}],v=>{
@@ -116,6 +125,7 @@ function mMenu(){
     if(v==='heal'){S.hp=maxHP();S.sp=SPMAX;S.curse=0;sfx('heal');persist();return mMenu()}
     if(v==='gold'){S.gold+=100;sfx('pick');persist();return mMenu()}
     if(v==='laww'){S.flags.lawW=1;S.lawuses=0;sfx('lvl');persist();return mMenu()}
+    if(v==='roots'){for(const r of Object.keys(ROOTS))if(!S.roots.includes(r))S.roots.push(r);sfx('lvl');persist();return mMenu()}
     if(v==='enc'){MNOENC=!MNOENC;return mMenu()}
   },true);
 }
