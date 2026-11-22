@@ -72,7 +72,7 @@ function edge(d){
   const E=M.edges&&M.edges[d];if(!E)return;
   if(E.need){const n=(S.pieces||[]).length;
     if(n<E.need){if(P.bump)return;P.bump=1;
-      return say([N('Una niebla gris y espesa cubre el camino hacia el oeste. Ahí las palabras se borran: es la niebla de Ti Fütra Ngoyman, el gran olvido.','A thick grey fog covers the road west. Words fade inside it: it is the fog of Ti Fütra Ngoyman, the great forgetting.'),
+      return say([N('Una niebla gris y espesa cubre el camino hacia el oeste. Ahí las palabras se borran: es la niebla de Ti Fütra Ngoymatulfe, el gran olvido.','A thick grey fog covers the road west. Words fade inside it: it is the fog of Ti Fütra Ngoymatulfe, the great forgetting.'),
         L('','Trariwe trokiñ: '+n+'/'+E.need,'Solo un trariwe completo puede atravesarla. Tienes '+n+' de '+E.need+' trokiñ: uno por cada tierra (Lafkenche, Nagche, Pewenche, Williche, Puelmapu).','Only a complete trariwe can pass through it. You have '+n+' of '+E.need+' trokiñ: one for each land (Lafkenche, Nagche, Pewenche, Williche, Puelmapu).')])}
     if(!S.flags.ngoy_open){S.flags.ngoy_open=1;persist();
       return say([N('Te pones el trariwe completo. Los cinco trokiñ brillan a la vez... y la niebla gris se abre ante ti como una cortina.','You put on the completed trariwe. The five trokiñ glow all at once... and the grey fog parts before you like a curtain.')],()=>loadMap(E.to,E.x,E.y))}}

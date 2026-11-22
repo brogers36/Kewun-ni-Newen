@@ -11,6 +11,15 @@ function newState(hero){const fem=hero==='millaray';return{hero,fem,name:fem?'Mi
   pw:{speed:0,pewen:0,gold:0},save:{map:'rupu',x:1,y:6}}}
 function persist(){try{if(M){S.map=CUR;S.x=P.x;S.y=P.y}localStorage.setItem(slotKey(SLOT),JSON.stringify(S))}catch(e){}}
 function loadSave(n){try{const t=localStorage.getItem(slotKey(n||SLOT));return t?JSON.parse(t):null}catch(e){return null}}
+/* hero mode (new game after beating Ti Fütra Ngoymatulfe): kimün and things carry over, enemies and trials scale up */
+const heroMul=()=>Math.min(2.75,1.6+.25*((S.hm||1)-1));
+function heroExp(){const k=progK(),L=[2,7,12,17,21,25,29][Math.min(6,k)];
+  return{atk:L+4+(k>=2?3:0),def:1+Math.floor(L/2)+(k>=1?2:0),hp:24+HPQ*(L-1)+4*k+(k>=1?4:0)+4*Math.floor(k*.8)}}
+function heroState(src){const s=newState(src.hero||'llanka');
+  for(const k of ['lvl','xp','baseMax','baseAtk','baseDef','gold','hints'])if(src[k]!=null)s[k]=src[k];
+  s.items=Object.assign(s.items,src.items||{});s.gear=Object.assign({},src.gear||{});s.hm=(src.hm||0)+1;
+  s.hp=s.baseMax+(s.gear.trariwe?4:0);return s}
+function heroHurt(){const d=Math.max(1,Math.round(maxHP()*.1));S.hp=Math.max(1,S.hp-d);sfx('bad');return d}
 const heroLook=()=>S.hero==='millaray'?'millaray':'llanka';
 
 /* ---------- verbs ---------- */
@@ -103,11 +112,11 @@ const ET={
   epunamun:{name:'Epunamun',hp:240,atk:14,xp:220,gold:[300,300],boss:true,bs:100,spres:1,seals:['umawtu','nepe','tranakil']},
   ngoyam:{name:'ngoyman am',hp:34,atk:12,xp:22,gold:[12,16],bs:46},
   kalku:{name:'Fütra Kalku',hp:250,atk:18,xp:260,gold:[350,350],boss:true,bs:92,spres:1,seals:['llüka','wüñotreka','ñamkil']},
-  ngoyman1:{name:'Ti Fütra Ngoyman',hp:175,atk:13,xp:0,gold:[0,0],boss:true,bs:104},
-  ngoyman2:{name:'Ngoyman ñi piwke',hp:185,atk:14,xp:0,gold:[0,0],boss:true,bs:112,armor:1,spres:1},
-  ngoyman3:{name:'Fütra Ngoyman',hp:205,atk:16,xp:0,gold:[0,0],boss:true,bs:122,spres:1,thick:1},
+  ngoyman1:{name:'Ti Fütra Ngoymatulfe',hp:175,atk:13,xp:0,gold:[0,0],boss:true,bs:104},
+  ngoyman2:{name:'Ngoymatulfe ñi piwke',hp:185,atk:14,xp:0,gold:[0,0],boss:true,bs:112,armor:1,spres:1},
+  ngoyman3:{name:'Fütra Ngoymatulfe',hp:205,atk:16,xp:0,gold:[0,0],boss:true,bs:122,spres:1,thick:1},
   ngoyman4:{name:'Füta Dumiñ',hp:235,atk:18,xp:0,gold:[0,0],boss:true,bs:134,armor:1,spres:1},
-  ngoyman5:{name:'Rüf Fütra Ngoyman',hp:265,atk:20,xp:400,gold:[500,500],boss:true,bs:146,spres:1,thick:1},
+  ngoyman5:{name:'Rüf Fütra Ngoymatulfe',hp:265,atk:20,xp:400,gold:[500,500],boss:true,bs:146,spres:1,thick:1},
   llufu1:{name:'Kaykayfilu',hp:140,atk:14,xp:0,gold:[0,0],boss:true,bs:104},
   llufu2:{name:'Kaykayfilu ñi foro',hp:150,atk:14,xp:0,gold:[0,0],boss:true,bs:106,armor:1},
   llufu3:{name:'Kaykayfilu ñi müpü',hp:160,atk:15,xp:0,gold:[0,0],boss:true,bs:108,twice:1},

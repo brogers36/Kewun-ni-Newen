@@ -368,3 +368,25 @@ Al empezar el juego la kuku guía una pelea de práctica (un laftrache, después
 - (Nov 22) Correcciones de Brandon: **"Adkintufinge mi pu piwke!"** (con -tu-, no -ti-); el Epunamun ahora dice **"Newentuleymi. Kimün may nieymi tati."** al ganarle (y "…Amunge, weychafe." si le hablas después).
 - Nuevo: anillo de viaje entre lof (desde el segundo ngen despierto). Texto: **"Chew lof mew amuaymi?"** '¿a qué lof vas?' ⚠ confirmar.
 - (Nov 22) Diálogo del Epunamun corregido por Brandon: **"Tutelu llemay!"** (antes "Tuteymi!") al ganarle; **"Faw mülekean."** 'aquí estaré'; **"Pepikawkülelan petu"** 'todavía no estoy preparado' (también en la opción de la pelea del Yewen y la de los chumpall); presentación: **"Iñche Epunamun. Iñche ti weychan dungu ñi ngen nu, welu ngülamkefiñ ka ngütramken fill kümeke weichafe mu."**; al aparecer en la pelea final: **"Feypieyu tañi kelluntukafiel eymi tami weichan mu!"** ⚠ en el mensaje decía "eyeing"; puse *eymi* (parece autocorrector), confirmar.
+
+### Tanda 17 · nombres nuevos y modo weichafe (Nov 22)
+- (Nov 22) Brandon: el jefe final se llama ahora **Ti Fütra Ngoymatulfe** (formas: Ti Fütra Ngoymatulfe, Ngoymatulfe ñi piwke, Fütra Ngoymatulfe, Füta Dumiñ, Rüf Fütra Ngoymatulfe), y su región es **Ngoyman mapu** (nombre del primer mapa al cruzar la niebla).
+- ⚠ Cambié también la forma 2, "Ngoyman ñi piwke" → **"Ngoymatulfe ñi piwke"** (el corazón del jefe, no del olvido). Si preferías que quedara "Ngoyman ñi piwke", se revierte.
+- ⚠ Las glosas siguen diciendo "el gran olvido" para Ti Fütra Ngoymatulfe. Si ngoymatulfe se debe glosar como agente ('el gran olvidador', 'the great forgetter'), dímelo y cambio las glosas.
+- ⚠ Dejé "ngoyman" como sustantivo común donde habla del olvido mismo: "Ngoyman ñi duam mew küdawken" (Fütra Kalku), "Ngoyman mew mülen" (cautivos), "Ngoyman ñi kayñe" (adivinanza K18), "ngoyman am", y los mapas Ngoyman lafken / lelfün / pire / mawida / chadi / ñi wülngiñ.
+- Modo héroe: se llama **"Weichafe"** en el menú ⚠ confirmar el nombre (¿"weichafe ñi rüpü"? ¿otro?).
+- Preguntas nuevas solo para el modo weichafe (una más en cada piedra que habla), todas ⚠:
+  - conj: **"Eymün amu___"** → amuymün 'ustedes (muchos) van'.
+  - neg: "no vamos (muchos)" → **amulaiñ**.
+  - poss: **"___ ruka"** 'nuestra casa (de muchos)' → **tayiñ** (¿o taiñ según el grafemario?).
+  - kin: **"Tañi chaw ñi peñi"** → **malle** (distractores weku, palu).
+  - negfut: "no comeremos (muchos)" → **iyalayaiñ**.
+  - dirmo: "vine a comer (acá)" → **iyapan**.
+  - rke: "dicen que ellos (muchos) se fueron" → **amurkeyngün**.
+  - quest: **"___ amuaymi?"** '¿cuándo te vas?' → **Chumül**.
+  - du: **"Iñchiw küdaw___"** → **küdawiyu**.
+  - fe: **"Küdaw + -fe"** → **küdawfe**.
+  - fu: **"Eymi kim___"** → **kimfuymi**.
+  - kead: **"Fentren ___ kawellu"** → **fütrake**.
+  - num2: **"Küla warangka epu pataka"** → 3200.
+  - plur: **"Pu domo küdaw___"** → **küdawingün**.

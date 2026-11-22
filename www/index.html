@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='2a106f5-202611220816';
+window.KEWUN_BUILD='a504aa8-202611220855';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -720,6 +720,15 @@ function newState(hero){const fem=hero==='millaray';return{hero,fem,name:fem?'Mi
   pw:{speed:0,pewen:0,gold:0},save:{map:'rupu',x:1,y:6}}}
 function persist(){try{if(M){S.map=CUR;S.x=P.x;S.y=P.y}localStorage.setItem(slotKey(SLOT),JSON.stringify(S))}catch(e){}}
 function loadSave(n){try{const t=localStorage.getItem(slotKey(n||SLOT));return t?JSON.parse(t):null}catch(e){return null}}
+/* hero mode (new game after beating Ti Fütra Ngoymatulfe): kimün and things carry over, enemies and trials scale up */
+const heroMul=()=>Math.min(2.75,1.6+.25*((S.hm||1)-1));
+function heroExp(){const k=progK(),L=[2,7,12,17,21,25,29][Math.min(6,k)];
+  return{atk:L+4+(k>=2?3:0),def:1+Math.floor(L/2)+(k>=1?2:0),hp:24+HPQ*(L-1)+4*k+(k>=1?4:0)+4*Math.floor(k*.8)}}
+function heroState(src){const s=newState(src.hero||'llanka');
+  for(const k of ['lvl','xp','baseMax','baseAtk','baseDef','gold','hints'])if(src[k]!=null)s[k]=src[k];
+  s.items=Object.assign(s.items,src.items||{});s.gear=Object.assign({},src.gear||{});s.hm=(src.hm||0)+1;
+  s.hp=s.baseMax+(s.gear.trariwe?4:0);return s}
+function heroHurt(){const d=Math.max(1,Math.round(maxHP()*.1));S.hp=Math.max(1,S.hp-d);sfx('bad');return d}
 const heroLook=()=>S.hero==='millaray'?'millaray':'llanka';
 
 /* ---------- verbs ---------- */
@@ -812,11 +821,11 @@ const ET={
   epunamun:{name:'Epunamun',hp:240,atk:14,xp:220,gold:[300,300],boss:true,bs:100,spres:1,seals:['umawtu','nepe','tranakil']},
   ngoyam:{name:'ngoyman am',hp:34,atk:12,xp:22,gold:[12,16],bs:46},
   kalku:{name:'Fütra Kalku',hp:250,atk:18,xp:260,gold:[350,350],boss:true,bs:92,spres:1,seals:['llüka','wüñotreka','ñamkil']},
-  ngoyman1:{name:'Ti Fütra Ngoyman',hp:175,atk:13,xp:0,gold:[0,0],boss:true,bs:104},
-  ngoyman2:{name:'Ngoyman ñi piwke',hp:185,atk:14,xp:0,gold:[0,0],boss:true,bs:112,armor:1,spres:1},
-  ngoyman3:{name:'Fütra Ngoyman',hp:205,atk:16,xp:0,gold:[0,0],boss:true,bs:122,spres:1,thick:1},
+  ngoyman1:{name:'Ti Fütra Ngoymatulfe',hp:175,atk:13,xp:0,gold:[0,0],boss:true,bs:104},
+  ngoyman2:{name:'Ngoymatulfe ñi piwke',hp:185,atk:14,xp:0,gold:[0,0],boss:true,bs:112,armor:1,spres:1},
+  ngoyman3:{name:'Fütra Ngoymatulfe',hp:205,atk:16,xp:0,gold:[0,0],boss:true,bs:122,spres:1,thick:1},
   ngoyman4:{name:'Füta Dumiñ',hp:235,atk:18,xp:0,gold:[0,0],boss:true,bs:134,armor:1,spres:1},
-  ngoyman5:{name:'Rüf Fütra Ngoyman',hp:265,atk:20,xp:400,gold:[500,500],boss:true,bs:146,spres:1,thick:1},
+  ngoyman5:{name:'Rüf Fütra Ngoymatulfe',hp:265,atk:20,xp:400,gold:[500,500],boss:true,bs:146,spres:1,thick:1},
   llufu1:{name:'Kaykayfilu',hp:140,atk:14,xp:0,gold:[0,0],boss:true,bs:104},
   llufu2:{name:'Kaykayfilu ñi foro',hp:150,atk:14,xp:0,gold:[0,0],boss:true,bs:106,armor:1},
   llufu3:{name:'Kaykayfilu ñi müpü',hp:160,atk:15,xp:0,gold:[0,0],boss:true,bs:108,twice:1},
@@ -2024,9 +2033,9 @@ ngen5:{region:'puelmapu',ngenmap:1,name:'Ngen-lelfün',g:{es:'El círculo de pie
    {id:'ngen',kind:'npc',look:'ngen5',x:8,y:5,req:'ngen5',fixed:1,talk:()=>{const ls=[L('Ngen-lelfün','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")];
    if(!S.flags.sb5)ls.push(N('«Una cosa más: bajo el salitral del sur duerme algo que nació cuando el agua se fue: un wekufü de pura sal, duro como la piedra. Camina por la tierra blanda junto a las pozas blancas. Y lleva todas tus palabras: despiértalo, quiébralo, y no lo dejes volver a armarse.»','"One more thing: under the southern salt flat sleeps something born when the water left: a wekufü of pure salt, hard as stone. Walk the soft ground beside the white pools. And bring all your words: wake it, break it, and do not let it put itself back together."'));
    say(ls)}}]},
-ngoyman:{region:'ngoyman',name:'Ngoyman wülngiñ',g:{es:'El umbral de la niebla',en:'The threshold of the fog'},floor:',',bg:'fjord',song:'ngoy',pal:'niebla',trees:'mawida',fog:1,
+ngoyman:{region:'ngoyman',name:'Ngoyman mapu',g:{es:'La tierra del olvido: el umbral de la niebla',en:'The land of forgetting: the threshold of the fog'},floor:',',bg:'fjord',song:'ngoy',pal:'niebla',trees:'mawida',fog:1,
  edges:{right:{to:'rupu',x:1,y:10},left:{to:'g_lafken',x:30,y:7}},
- signs:{'8,5':[L('Kura','Faw müley Ti Fütra Ngoyman ñi wülngiñ.','Una piedra muy antigua: «Aquí está el umbral del gran olvido».','A very old stone: «Here is the threshold of the great forgetting».')]},
+ signs:{'8,5':[L('Kura','Faw müley Ti Fütra Ngoymatulfe ñi wülngiñ.','Una piedra muy antigua: «Aquí está el umbral del gran olvido».','A very old stone: «Here is the threshold of the great forgetting».')]},
  ents:[{id:'ngoyku',kind:'npc',look:'elder2',fem:1,x:8,y:4,dir:'down',fixed:1,talk:()=>ngoymanTalk(),bub:['...']},
    {id:'epuwar',kind:'npc',look:'kona',x:4,y:8,dir:'right',fixed:1,req:'sbAll',talk:()=>epunamunTalk(),bub:['Newen...','Epu ange...']}]},
 g_lafken:{region:'ngoyman',name:'Ngoyman lafken',g:{es:'La costa robada',en:'The stolen coast'},floor:'.',bg:'coast',song:'ngoy',pal:'ngoylaf',fog:1,
@@ -2057,13 +2066,13 @@ g_puel:{region:'ngoyman',name:'Ngoyman chadi',g:{es:'La pampa robada',en:'The st
 g_wulngin:{region:'ngoyman',name:'Ngoyman ñi wülngiñ',g:{es:'La puerta del gran olvido',en:'The gate of the great forgetting'},floor:'_',bg:'fjord',song:'ngoy',dungeon:1,pal:'ngoycave',fog:1,
  edges:{right:{to:'g_puel',x:1,y:7}},stairs:{to:'g_ngoyman',x:8,y:9,req:'gm_all',reqMsg:[N('Una puerta de niebla sólida, fría como la piedra. Dentro de ella giran cinco sombras: un niño de la costa, un pescador, una recolectora, una pescadora del sur y un werken.','A door of solid fog, cold as stone. Inside it five shadows turn: a child of the coast, a fisherman, a gatherer, a fisherwoman of the south and a werken.'),
    N('La puerta solo se abrirá cuando los cinco cautivos hayan vuelto a sus tierras.','The door will only open when all five captives have returned to their lands.')]},
- signs:{'8,5':[L('Kura','Faw umawtuley Ti Fütra Ngoyman.','Una piedra negra: «Aquí duerme el gran olvido». Detrás de la puerta, la niebla es tan espesa que parece piedra.','A black stone: «Here sleeps the great forgetting». Beyond the door, the fog is so thick it looks like stone.')]},
+ signs:{'8,5':[L('Kura','Faw umawtuley Ti Fütra Ngoymatulfe.','Una piedra negra: «Aquí duerme el gran olvido». Detrás de la puerta, la niebla es tan espesa que parece piedra.','A black stone: «Here sleeps the great forgetting». Beyond the door, the fog is so thick it looks like stone.')]},
  ents:[]},
-g_ngoyman:{region:'ngoyman',name:'Ti Fütra Ngoyman',g:{es:'El corazón de la niebla',en:'The heart of the fog'},floor:'_',bg:'fjord',song:'ngoy',dungeon:1,pal:'ngoycave',fog:1,
+g_ngoyman:{region:'ngoyman',name:'Ti Fütra Ngoymatulfe',g:{es:'El corazón de la niebla',en:'The heart of the fog'},floor:'_',bg:'fjord',song:'ngoy',dungeon:1,pal:'ngoycave',fog:1,
  stairs:{to:'g_wulngin',x:8,y:3},
  ents:[{id:'boss',kind:'enemy',x:8,y:4,party:['ngoyman1'],fixed:1,boss:1,final:1,flag:'bossF',
    pre:[N('Aquí la niebla no flota: se acumula, como siglos. En el centro de la sala respira algo enorme que no tiene forma... o que las tiene todas.','Here the fog does not drift: it piles up, like centuries. In the middle of the hall something enormous breathes, something with no shape... or with all of them.'),
-     L('','Müley Ti Fütra Ngoyman!','¡El gran olvido está aquí!','The great forgetting is here!'),
+     L('','Müley Ti Fütra Ngoymatulfe!','¡El gran olvido está aquí!','The great forgetting is here!'),
      N('Un velo de niebla lo envuelve por completo. Lo que se esconde... sale cuando se le dice.','A veil of fog wraps it completely. What hides... comes out when it is told to.')]}]},
 u_grotto:{region:'chumpall',name:'Münche lafken wülngiñ',g:{es:'La gruta bajo el lago',en:'The grotto beneath the lake'},floor:'_',bg:'deep',song:'deep',dungeon:1,pal:'munchedeep',under:1,
  edges:{right:{to:'u_garden',x:1,y:7}},stairs:{to:'w_wapi',x:16,y:9},
@@ -2479,7 +2488,7 @@ function edge(d){
   const E=M.edges&&M.edges[d];if(!E)return;
   if(E.need){const n=(S.pieces||[]).length;
     if(n<E.need){if(P.bump)return;P.bump=1;
-      return say([N('Una niebla gris y espesa cubre el camino hacia el oeste. Ahí las palabras se borran: es la niebla de Ti Fütra Ngoyman, el gran olvido.','A thick grey fog covers the road west. Words fade inside it: it is the fog of Ti Fütra Ngoyman, the great forgetting.'),
+      return say([N('Una niebla gris y espesa cubre el camino hacia el oeste. Ahí las palabras se borran: es la niebla de Ti Fütra Ngoymatulfe, el gran olvido.','A thick grey fog covers the road west. Words fade inside it: it is the fog of Ti Fütra Ngoymatulfe, the great forgetting.'),
         L('','Trariwe trokiñ: '+n+'/'+E.need,'Solo un trariwe completo puede atravesarla. Tienes '+n+' de '+E.need+' trokiñ: uno por cada tierra (Lafkenche, Nagche, Pewenche, Williche, Puelmapu).','Only a complete trariwe can pass through it. You have '+n+' of '+E.need+' trokiñ: one for each land (Lafkenche, Nagche, Pewenche, Williche, Puelmapu).')])}
     if(!S.flags.ngoy_open){S.flags.ngoy_open=1;persist();
       return say([N('Te pones el trariwe completo. Los cinco trokiñ brillan a la vez... y la niebla gris se abre ante ti como una cortina.','You put on the completed trariwe. The five trokiñ glow all at once... and the grey fog parts before you like a curtain.')],()=>loadMap(E.to,E.x,E.y))}}
@@ -2734,7 +2743,7 @@ function cutLines(){const n=S.name;return[
   [N('Hace mucho tiempo, en todo Wallmapu se escuchaba mapudungun: junto al lafken (el mar), en la mawida (el monte), arriba en la cordillera.','Long ago, Mapudungun was heard all over Wallmapu: beside the lafken (the sea), in the mawida (the forest), high up in the mountains.'),
    N('La gente le hablaba a los ngen, los dueños espirituales de cada lugar: del agua, del bosque, del viento, del mar. Y los ngen respondían.','People spoke to the ngen, the spirit owners of each place: of the water, the forest, the wind, the sea. And the ngen answered.')],
   [N('Pero el silencio fue entrando, despacio. Muchas familias tuvieron que irse a la waria, la ciudad. En las escuelas castigaban a los niños por hablar mapudungun, y muchos padres dejaron de enseñarlo.','But silence crept in, slowly. Many families had to move to the waria, the city. In schools children were punished for speaking Mapudungun, and many parents stopped teaching it.'),
-   N('Con el silencio llegó una niebla de olvido: Ti Fütra Ngoyman, el gran olvido. Donde pasa, las palabras se borran, los nütram (las conversaciones) se apagan y los nombres de las cosas se pierden.','With the silence came a fog of forgetting: Ti Fütra Ngoyman, the great forgetting. Wherever it passes, words fade, the nütram (conversations) die out, and the names of things are lost.')],
+   N('Con el silencio llegó una niebla de olvido: Ti Fütra Ngoymatulfe, el gran olvido. Donde pasa, las palabras se borran, los nütram (las conversaciones) se apagan y los nombres de las cosas se pierden.','With the silence came a fog of forgetting: Ti Fütra Ngoymatulfe, the great forgetting. Wherever it passes, words fade, the nütram (conversations) die out, and the names of things are lost.')],
   [N('Tú eres '+n+'. Naciste en Santiago: eres wariache, mapuche de la ciudad. Entiendes algunas palabras de tu kuku, pero casi no hablas la lengua.','You are '+n+'. You were born in Santiago: you are wariache, a Mapuche person of the city. You understand a few of your kuku\'s words, but you hardly speak the language.')],
   [N('Sin nadie que les hable, los ngen se quedaron dormidos y callados. Y en su silencio despertaron los wekufü: el chonchon, el laftrache, el anchümalleñ... y otros peores.','With no one to speak to them, the ngen fell asleep and went silent. And in their silence the wekufü awoke: the chonchon, the laftrache, the anchümalleñ... and worse.'),
    N('Los wekufü no le temen a la fuerza. Le temen a la lengua: solo se van cuando se les habla bien, en mapudungun.','The wekufü do not fear strength. They fear the language: they only leave when they are spoken to properly, in Mapudungun.')],
@@ -3010,6 +3019,7 @@ function pzTouch(tx,ty){
       return say([L('',t.lab+'!',M.pz.kind==='N'?'La última piedra se enciende. ¡Se oye cómo se corre una roca!':'El último brasero se enciende. ¡La puerta de piedra se abre!',M.pz.kind==='N'?'The last stone lights up. You hear a rock sliding away!':'The last brazier lights up. The stone door opens!'),praise()])}
     return say([L('',t.lab,M.pz.kind==='N'?'La piedra se ilumina.':'El brasero se enciende.',M.pz.kind==='N'?'The stone lights up.':'The brazier lights up.')])}
   PZ.n=0;PZ.lit.clear();sfx('bad');
+  if(S.hm){const d=heroHurt();return say([L('',t.lab,M.pz.kind==='N'?'Las piedras se apagan y te devuelven el golpe (−'+d+'). Ya no hay pistas para un weichafe.':'Los braseros se apagan y te queman (−'+d+'). Ya no hay pistas para un weichafe.',M.pz.kind==='N'?'The stones go dark and strike back (−'+d+'). No more hints for a weichafe.':'The braziers go out and burn you (−'+d+'). No more hints for a weichafe.')])}
   say([L('',t.lab,M.pz.kind==='N'?'La luz se apaga en todas las piedras. Ese no era el orden.':'Todos los braseros se apagan. Ese no era el orden.',M.pz.kind==='N'?'The light goes out in every stone. That was not the order.':'All the braziers go out. That was not the order.'),
     M.pz.hint?M.pz.hint:M.pz.kind==='N'?N('Pista: kiñe (1), epu (2), küla (3), meli (4).','Hint: kiñe (1), epu (2), küla (3), meli (4).'):N('Pista: lee la piedra tallada. Kallfü = azul, lig = blanco, kelü = rojo.','Hint: read the carved stone. Kallfü = blue, lig = white, kelü = red.')]);
 }
@@ -3017,77 +3027,78 @@ const STONES={
   conj:{intro:[L('Kura','Mari mari! Kura ngen, welu dunguken.','¡Hola! Soy una piedra, pero hablo.','Hello! I am a stone, but I speak.'),N('Responde bien y te dejo pasar. Cambia el final del verbo según quién lo hace.','Answer well and I will let you through. Change the end of the verb depending on who does it.')],
     qs:[{q:L('Kura','Fey amu___','Él / ella va. (fey = él, ella)','He / she goes. (fey = he, she)'),o:['amun','amuymi','amuy'],a:'amuy'},
         {q:L('Kura','Eymi küpa___','Tú vienes. (eymi = tú)','You come. (eymi = you)'),o:['küpan','küpaymi','küpay'],a:'küpaymi'},
-        {q:L('Kura','Iñche kim___','Yo sé. (iñche = yo)','I know. (iñche = I)'),o:['kimün','kimimi','kimi'],a:'kimün'}]},
+        {q:L('Kura','Iñche kim___','Yo sé. (iñche = yo)','I know. (iñche = I)'),o:['kimün','kimimi','kimi'],a:'kimün'}],hq:{q:L('Kura','Eymün amu___','Ustedes (muchos) van.','You (many) go.'),o:['amuymu','amuymün','amuyngün'],a:'amuymün'}},
   neg:{intro:[L('Kura','Mari mari! Kimimi -la-?','¡Hola! ¿Conoces -la-?','Hello! Do you know -la-?'),N('-la- niega el verbo: amun "voy" → amulan "no voy". Responde bien y la puerta se abrirá.','-la- negates the verb: amun "I go" → amulan "I do not go". Answer well and the door will open.')],
     qs:[{q:N('¿Cómo se dice "no voy"?','How do you say "I do not go"?'),o:['amun','amulan','amulay'],a:'amulan'},
         {q:N('¿Cómo se dice "ella no viene"?','How do you say "she does not come"?'),o:['küpalay','küpay','küpalan'],a:'küpalay'},
-        {q:N('¿Cómo se dice "no sé"?','How do you say "I do not know"?'),o:['kimün','kimlay','kimlan'],a:'kimlan'}]},
+        {q:N('¿Cómo se dice "no sé"?','How do you say "I do not know"?'),o:['kimün','kimlay','kimlan'],a:'kimlan'}],hq:{q:N('¿Cómo se dice "no vamos" (nosotros, muchos)?','How do you say "we do not go" (we, many)?'),o:['amuiñ','amulaiñ','amulayngün'],a:'amulaiñ'}},
   poss:{intro:[L('Kura','Mari mari! Kura ngen, welu dunguken.','¡Hola! Soy una piedra, pero hablo.','Hello! I am a stone, but I speak.'),N('¿De quién es? Completa con la palabra correcta y te abro el paso.','Whose is it? Fill in the right word and I will open the way.')],
     qs:[{q:L('Kura','___ ruka','Mi casa.','My house.'),o:['tami','ñi','tañi'],a:'tañi'},
         {q:L('Kura','___ kawellu','Tu caballo.','Your horse.'),o:['tañi','tami','ñi'],a:'tami'},
-        {q:L('Kura','___ trewa','Su perro (de él o de ella).','His / her dog.'),o:['ñi','tañi','tami'],a:'ñi'}]},
+        {q:L('Kura','___ trewa','Su perro (de él o de ella).','His / her dog.'),o:['ñi','tañi','tami'],a:'ñi'}],hq:{q:L('Kura','___ ruka','Nuestra casa (de muchos).','Our house (of many).'),o:['tañi','tayiñ','tami'],a:'tayiñ'}},
   kin:{intro:[L('Kura','Mari mari! Kimimi tami pu che?','¡Hola! ¿Conoces a tu familia?','Hello! Do you know your family?'),N('Di quién es cada uno y te abro el paso.','Say who each one is and I will open the way.')],
     qs:[{q:L('Kura','Tañi chaw ñi ñuke: ___','La mamá de mi papá.','My father\'s mother.'),o:['chuchu','kuku','laku'],a:'kuku'},
         {q:L('Kura','Tañi ñuke ñi ñuke: ___','La mamá de mi mamá.','My mother\'s mother.'),o:['kuku','cheche','chuchu'],a:'chuchu'},
         {q:L('Kura','Tañi chaw ñi chaw: ___','El papá de mi papá.','My father\'s father.'),o:['laku','cheche','kuku'],a:'laku'},
-        {q:L('Kura','Tañi ñuke ñi chaw: ___','El papá de mi mamá.','My mother\'s father.'),o:['laku','chuchu','cheche'],a:'cheche'}]},
+        {q:L('Kura','Tañi ñuke ñi chaw: ___','El papá de mi mamá.','My mother\'s father.'),o:['laku','chuchu','cheche'],a:'cheche'}],hq:{q:L('Kura','Tañi chaw ñi peñi: ___','El hermano de mi papá.','My father\'s brother.'),o:['weku','palu','malle'],a:'malle'}},
   negfut:{intro:[L('Kura','Mari mari! Kimimi -la- ka -a-?','¡Hola! ¿Conoces -la- y -a-?','Hello! Do you know -la- and -a-?'),N('Junta lo que no pasa con lo que todavía no pasa. Responde bien y te abro el paso.','Put together what does not happen with what has not happened yet. Answer well and I will open the way.')],
     qs:[{q:N('¿Cómo se dice "no iré"?','How do you say "I will not go"?'),o:['amulan','amuan','amulayan'],a:'amulayan'},
         {q:N('¿Cómo se dice "ella no vendrá"?','How do you say "she will not come"?'),o:['küpalayay','küpalay','küpayay'],a:'küpalayay'},
-        {q:N('¿Cómo se dice "no sabré"?','How do you say "I will not know"?'),o:['kiman','kimlayan','kimlan'],a:'kimlayan'}]},
+        {q:N('¿Cómo se dice "no sabré"?','How do you say "I will not know"?'),o:['kiman','kimlayan','kimlan'],a:'kimlayan'}],hq:{q:N('¿Cómo se dice "no comeremos" (nosotros, muchos)?','How do you say "we will not eat" (we, many)?'),o:['iyalaiñ','iyalayaiñ','iyayaiñ'],a:'iyalayaiñ'}},
   dirmo:{intro:[L('Kura','Mari mari! Kimimi -me- ka -pa-?','¡Hola! ¿Conoces -me- y -pa-?','Hello! Do you know -me- and -pa-?'),
     N('-me- es ir a hacer algo allá (y volver): challwatun "pesqué" → challwatumen "fui a pescar allá". -pa- es hacia acá: küpan "vine" ya lo lleva adentro; umawtupay "vino a dormir acá". Responde bien y te abro el paso.','-me- is going to do something over there (and coming back): challwatun "I fished" → challwatumen "I went fishing there". -pa- is toward here: umawtupay "he came here to sleep". Answer well and I will open the way.')],
     qs:[{q:N('¿Cómo se dice "fui a pescar (allá)"?','How do you say "I went fishing (over there)"?'),o:['challwatun','challwatumen','challwatupan'],a:'challwatumen'},
         {q:N('¿Cómo se dice "vino a dormir (acá)"?','How do you say "he came here to sleep"?'),o:['umawtumey','umawtupay','umawtuy'],a:'umawtupay'},
-        {q:N('¿Cómo se dice "iré a buscar (allá)"?','How do you say "I will go and look for it (over there)"?'),o:['kintuan','kintumean','kintupayan'],a:'kintumean'}]},
+        {q:N('¿Cómo se dice "iré a buscar (allá)"?','How do you say "I will go and look for it (over there)"?'),o:['kintuan','kintumean','kintupayan'],a:'kintumean'}],hq:{q:N('¿Cómo se dice "vine a comer (acá)"?','How do you say "I came here to eat"?'),o:['iyamen','iyapan','iyan'],a:'iyapan'}},
   rke:{intro:[L('Kura','Mari mari! Kimimi -rke-?','¡Hola! ¿Conoces -rke-?','Hello! Do you know -rke-?'),
     N('-rke- marca lo que uno supo por otros, o lo que lo sorprende: amuy "fue" → amurkey "dicen que fue / ¡resulta que fue!". Responde bien y te abro el paso.','-rke- marks what you learned from others, or what surprises you: amuy "he went" → amurkey "they say he went / it turns out he went!". Answer well and I will open the way.')],
     qs:[{q:N('¿Cómo se dice "dicen que él fue"?','How do you say "they say he went"?'),o:['amuy','amurkey','amuan'],a:'amurkey'},
         {q:N('¿Cómo se dice "dicen que aquí había un walichu"?','How do you say "they say there was a walichu here"?'),o:['müley','mülerkey','mülelay'],a:'mülerkey'},
-        {q:N('¿Cómo se dice "¡resulta que tú sabías!"?','How do you say "it turns out you knew!"?'),o:['kimürkeymi','kimimi','kimaymi'],a:'kimürkeymi'}]},
+        {q:N('¿Cómo se dice "¡resulta que tú sabías!"?','How do you say "it turns out you knew!"?'),o:['kimürkeymi','kimimi','kimaymi'],a:'kimürkeymi'}],hq:{q:N('¿Cómo se dice "dicen que ellos (muchos) se fueron"?','How do you say "they say they (many) left"?'),o:['amuyngün','amurkeyngu','amurkeyngün'],a:'amurkeyngün'}},
   quest:{intro:[L('Kura','Mari mari! Kimimi chem, iney, chew?','¡Hola! ¿Conoces chem, iney, chew?','Hello! Do you know chem, iney, chew?'),N('Completa mis preguntas con la palabra que pregunta y te abro el paso.','Complete my questions with the question word and I will open the way.')],
     qs:[{q:L('Kura','___ pingeymi?','¿Cómo te llamas?','What is your name?'),o:['Chew','Iney','Chem'],a:'Iney'},
         {q:L('Kura','___ tuwimi?','¿De dónde eres?','Where are you from?'),o:['Chew','Chumül','Iney'],a:'Chew'},
         {q:L('Kura','___ nieymi?','¿Qué tienes?','What do you have?'),o:['Chumten','Chem','Chew'],a:'Chem'},
-        {q:L('Kura','___ ngülliw nieymi?','¿Cuántos piñones tienes?','How many pewen nuts do you have?'),o:['Chumten','Chumül','Iney'],a:'Chumten'}]},
+        {q:L('Kura','___ ngülliw nieymi?','¿Cuántos piñones tienes?','How many pewen nuts do you have?'),o:['Chumten','Chumül','Iney'],a:'Chumten'}],hq:{q:L('Kura','___ amuaymi?','¿Cuándo te vas a ir?','When will you leave?'),o:['Chew','Chumül','Chem'],a:'Chumül'}},
   du:{intro:[L('Kura','Mari mari! Kimimi iñchiw, eymu, fey engu?','¡Hola! ¿Conoces iñchiw, eymu, fey engu?','Hello! Do you know iñchiw, eymu, fey engu?'),
     N('El mapudungun tiene formas especiales para DOS personas: iñchiw (nosotros dos), eymu (ustedes dos), fey engu (ellos dos). Tu chillka las muestra en «Iñche, eymi, fey...».','Mapudungun has special forms for TWO people: iñchiw (we two), eymu (you two), fey engu (they two). Your chillka shows them under «Iñche, eymi, fey...».')],
     qs:[{q:L('Kura','Iñchiw amu___','Nosotros dos vamos.','We two go.'),o:['amuyu','amuiñ','amuymu'],a:'amuyu'},
         {q:L('Kura','Eymu küpa___','Ustedes dos vienen.','You two come.'),o:['küpaymün','küpaymu','küpayu'],a:'küpaymu'},
-        {q:L('Kura','Fey engu kim___','Ellos dos saben.','They two know.'),o:['kimingün','kimi','kimingu'],a:'kimingu'}]},
+        {q:L('Kura','Fey engu kim___','Ellos dos saben.','They two know.'),o:['kimingün','kimi','kimingu'],a:'kimingu'}],hq:{q:L('Kura','Iñchiw küdaw___','Nosotros dos trabajamos.','We two work.'),o:['küdawiñ','küdawiyu','küdawimu'],a:'küdawiyu'}},
   fe:{intro:[L('Kura','Mari mari! Kimimi -fe?','¡Hola! ¿Conoces -fe?','Hello! Do you know -fe?'),
     N('-fe hace nombres de oficio: challwan «pescar» → challwafe «pescador». Responde bien y te abro el paso.','-fe makes names of trades: challwan «to fish» → challwafe «fisher». Answer well and I will open the way.')],
     qs:[{q:L('Kura','Challwa + -fe: ___','La persona que pesca.','The person who fishes.'),o:['challwawe','challwafe','challwan'],a:'challwafe'},
         {q:L('Kura','Ngillaka- («comprar y vender») + -fe: ___','La persona que vende.','The person who sells.'),o:['ngillakafe','ngillakan','ngillakawe'],a:'ngillakafe'},
-        {q:L('Kura','Trutruka + -tu- + -fe: ___','La persona que toca la trutruka.','The person who plays the trutruka.'),o:['trutrukawe','trutrukan','trutrukatufe'],a:'trutrukatufe'}]},
+        {q:L('Kura','Trutruka + -tu- + -fe: ___','La persona que toca la trutruka.','The person who plays the trutruka.'),o:['trutrukawe','trutrukan','trutrukatufe'],a:'trutrukatufe'}],hq:{q:L('Kura','Küdaw + -fe: ___','La persona que trabaja.','The person who works.'),o:['küdawün','küdawfe','küdawwe'],a:'küdawfe'}},
   fu:{intro:[L('Kura','Mari mari! Kimimi -fu-?','¡Hola! ¿Conoces -fu-?','Hello! Do you know -fu-?'),
     N('-fu- habla de lo que era antes y ya no es: kümelen «estoy bien» → kümelefun «estaba bien». Tu chillka lo explica en «Kuyfi · -fu-».','-fu- talks about what used to be: kümelen «I am well» → kümelefun «I was well». Your chillka explains it under «Kuyfi · -fu-».')],
     qs:[{q:L('Kura','Kuyfi iñche pichiche nge___','Antes yo era niño.','Long ago I was a child.'),o:['ngen','ngefun','ngefuy'],a:'ngefun'},
         {q:L('Kura','Fey kim___','Ella sabía.','She used to know.'),o:['kimfuy','kimi','kimfun'],a:'kimfuy'},
-        {q:L('Kura','Iñchiñ lof mew müle___','Nosotros vivíamos en el lof.','We used to live in the lof.'),o:['müleiñ','mülefuy','mülefuiñ'],a:'mülefuiñ'}]},
+        {q:L('Kura','Iñchiñ lof mew müle___','Nosotros vivíamos en el lof.','We used to live in the lof.'),o:['müleiñ','mülefuy','mülefuiñ'],a:'mülefuiñ'}],hq:{q:L('Kura','Eymi kim___','Tú sabías.','You used to know.'),o:['kimfun','kimimi','kimfuymi'],a:'kimfuymi'}},
   kead:{intro:[L('Kura','Mari mari! Epu pichi ruka? Pichike ruka!','¡Hola! ¿Dos casas chicas? ¡Pichike ruka!','Hello! Two little houses? Pichike ruka!'),
     N('Cuando hay varios, el adjetivo lleva -ke: pichi ruka «casa chica» → pichike ruka «casas chicas».','When there are several, the adjective takes -ke: pichi ruka «small house» → pichike ruka «small houses».')],
     qs:[{q:L('Kura','Epu ___ trewa','Dos perros chicos.','Two small dogs.'),o:['pichike','pichi','pichiñma'],a:'pichike'},
         {q:L('Kura','Pu ___ pewen','Los pewenes grandes.','The big pewen trees.'),o:['fütra','fütrake','fütralen'],a:'fütrake'},
-        {q:L('Kura','Küla ___ che','Tres buenas personas.','Three good people.'),o:['kümeke','küme','kümen'],a:'kümeke'}]},
+        {q:L('Kura','Küla ___ che','Tres buenas personas.','Three good people.'),o:['kümeke','küme','kümen'],a:'kümeke'}],hq:{q:L('Kura','Fentren ___ kawellu','Muchos caballos grandes.','Many big horses.'),o:['fütra','fütrake','fütralu'],a:'fütrake'}},
   num2:{intro:[L('Kura','Mari mari! Fütake rakin kimimi?','¡Hola! ¿Conoces los números grandes?','Hello! Do you know the big numbers?'),
     N('pataka = cien; warangka = mil. Se combinan igual que los chicos: epu pataka = 200.','pataka = one hundred; warangka = one thousand. They combine like the small ones: epu pataka = 200.')],
     qs:[{q:N('¿Cómo se dice «cien»?','How do you say «one hundred»?'),o:['pataka','warangka','mari mari'],a:'pataka'},
         {q:N('¿Cómo se dice «mil»?','How do you say «one thousand»?'),o:['pataka mari','warangka','mari pataka'],a:'warangka'},
-        {q:L('Kura','Epu pataka kechu mari = ?','¿Qué número es?','Which number is it?'),o:['250','205','2050'],a:'250'}]},
+        {q:L('Kura','Epu pataka kechu mari = ?','¿Qué número es?','Which number is it?'),o:['250','205','2050'],a:'250'}],hq:{q:L('Kura','Küla warangka epu pataka = ?','¿Qué número es?','Which number is it?'),o:['2300','3020','3200'],a:'3200'}},
   plur:{intro:[L('Kura','Mari mari! Kimimi pu?','¡Hola! ¿Conoces pu?','Hello! Do you know pu?'),N('Cuando son dos o muchos, el verbo también cambia. Completa los verbos.','When there are two or many, the verb changes too. Complete the verbs.')],
     qs:[{q:L('Kura','Pu wentru amu___','Los hombres van.','The men go.'),o:['amuy','amuyngu','amuyngün'],a:'amuyngün'},
         {q:L('Kura','Epu domo küpa___','Dos mujeres vienen.','Two women come.'),o:['küpayngu','küpay','küpayngün'],a:'küpayngu'},
-        {q:L('Kura','Pu pichikeche kim___','Los niños saben.','The children know.'),o:['kimi','kimingün','kimingu'],a:'kimingün'}]}};
+        {q:L('Kura','Pu pichikeche kim___','Los niños saben.','The children know.'),o:['kimi','kimingün','kimingu'],a:'kimingün'}],hq:{q:L('Kura','Pu domo küdaw___','Las mujeres trabajan.','The women work.'),o:['küdawi','küdawingu','küdawingün'],a:'küdawingün'}}};
 function stoneTalk(id){
   const st=STONES[id],sf=M.pz?'pz:'+CUR+':st':'pz:'+CUR;
   if(S.flags[sf])return say([L('Kura','Kümey! Amunge.','¡Bien! Pasa.','Good! Go on through.')]);
+  const qs=S.hm&&st.hq?st.qs.concat([st.hq]):st.qs;
   say(st.intro,()=>ask(0));
   function ask(i){
-    if(i>=st.qs.length){S.flags[sf]=1;pzOpen();sfx('lvl');S.xp+=4;persist();return say([praise(),L('Kura','Tuteley! Amunge.','¡Muy bien! Pasa.','Well done! Go on through.'),N('La puerta de piedra se abre. +4 kimün.','The stone door opens. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
-    const q=st.qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:S.gloss==='en'?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
+    if(i>=qs.length){S.flags[sf]=1;pzOpen();sfx('lvl');S.xp+=4;persist();return say([praise(),L('Kura','Tuteley! Amunge.','¡Muy bien! Pasa.','Well done! Go on through.'),N('La puerta de piedra se abre. +4 kimün.','The stone door opens. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+    const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat(S.hm?[]:[{m:'Chillka',g:S.gloss==='en'?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
       if(v==='_book')return openBook(()=>ask(i));
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Kura','Fey no...','Eso no...','Not that...'),N('Vuelve a intentarlo desde el principio.','Try again from the beginning.')],()=>ask(0))}},false,false)}
+      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');const hd=S.hm?heroHurt():0;say([L('Kura','Fey no...','Eso no...','Not that...'),N((hd?'La piedra te golpea (−'+hd+'). ':'')+'Vuelve a intentarlo desde el principio.',(hd?'The stone strikes you (−'+hd+'). ':'')+'Try again from the beginning.')],()=>ask(0))}},false,false)}
 }
 const WARPS={lafkenche:[{m:'Lafken inaltu',es:'Entrada de la cueva (orilla)',en:'Cave entrance (lagoon shore)',to:['inaltu',21,5]},{m:'Lafkenche lof',es:'El lof de la costa',en:'The coast lof',to:['lof',17,9]}],
   nagche:[{m:'Fütra mawida',es:'Entrada de la guarida (monte)',en:'Lair entrance (forest)',to:['n_mawida',28,4]},{m:'Nagche lof',es:'El lof de los llanos',en:'The lowland lof',to:['n_lof',17,9]}],
@@ -3131,7 +3142,7 @@ function lonkoTalk(){
     if(S.flags.ngen)ls.push(L('Lonko','Ngen-lafken nepey. Chaltu may!','Ngen-lafken despertó. ¡Gracias!','Ngen-lafken has woken up. Thank you!'),
       N('La niebla se levantó del camino que sale al este de la laguna: lleva a las tierras nagche, los llanos. Allá vive tu chuchu.','The fog has lifted from the road leading east from the lagoon: it goes to the Nagche lands, the lowlands. Your chuchu lives there.'),
       N('El camino: sal del lof hacia el este, cruza las dunas de Kuyüm y el camino del monte, bordea la laguna por Lafken inaltu y sigue al este por el Nagche rüpü hasta el lof nagche.','The way: leave the lof eastward, cross the Kuyüm dunes and the forest road, skirt the lagoon along Lafken inaltu and keep east along the Nagche rüpü to the Nagche lof.'),
-      N('Ese trokiñ de trariwe que traes es muy antiguo. Dicen que el trariwe completo, con un trokiñ de cada tierra, es lo único que puede atravesar la niebla de Ti Fütra Ngoyman, el gran olvido.','That trokiñ of trariwe you carry is very old. They say the complete trariwe, with one trokiñ from each land, is the only thing that can pass through the fog of Ti Fütra Ngoyman, the great forgetting.'));
+      N('Ese trokiñ de trariwe que traes es muy antiguo. Dicen que el trariwe completo, con un trokiñ de cada tierra, es lo único que puede atravesar la niebla de Ti Fütra Ngoymatulfe, el gran olvido.','That trokiñ of trariwe you carry is very old. They say the complete trariwe, with one trokiñ from each land, is the only thing that can pass through the fog of Ti Fütra Ngoymatulfe, the great forgetting.'));
     else ls.push(L('Lonko','Ngen-lafken umawtuley. Trelke-wekufü müley lafken mew.','Ngen-lafken está dormido. Trelke-wekufü está en la laguna.','Ngen-lafken is asleep. Trelke-wekufü is in the lagoon.'),
       N('Sigue la costa hacia el este: las dunas, el monte y la orilla de la laguna.','Follow the coast east: the dunes, the forest, and the shore of the lagoon.'));
     return say(ls);
@@ -3900,7 +3911,7 @@ function eLonkoTalk(){
   if(S.flags.puel_lonko){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen5)ls.push(L('Lonko','Ngen-lelfün nepey. Trariwe dewi!','Ngen-lelfün despertó. ¡El trariwe está completo!','Ngen-lelfün has woken up. The trariwe is complete!'),
-      N('Los cinco trokiñ brillan en tu cintura. Ahora vuelve al oeste, al primer camino junto al mar: la niebla de Ti Fütra Ngoyman ya puede abrirse ante ti.','The five trokiñ glow at your waist. Now go back west, to the first road by the sea: the fog of Ti Fütra Ngoyman can open before you now.'));
+      N('Los cinco trokiñ brillan en tu cintura. Ahora vuelve al oeste, al primer camino junto al mar: la niebla de Ti Fütra Ngoymatulfe ya puede abrirse ante ti.','The five trokiñ glow at your waist. Now go back west, to the first road by the sea: the fog of Ti Fütra Ngoymatulfe can open before you now.'));
     else ls.push(L('Lonko','Wingkul lelfün mew amunge.','Ve a la meseta.','Go to the meseta.'),
       N('Pasando la pampa y el pedregal está la meseta. El chenque del Walichu baja entre las piedras.','Past the grassland and the stone barrens is the meseta. The Walichu\'s chenque goes down among the rocks.'));
     return say(ls);
@@ -3923,7 +3934,7 @@ function eLonkoTalk(){
     S.flags.puel_lonko=1;learnRoot('trana');S.items.kulon++;persist();sfx('lvl');
     say([L('Lonko','Kümey! Meli ngen nepeyngün, pikeyngün.','¡Bien! Dicen que cuatro ngen despertaron.','Good! They say four ngen have woken up.'),
       L('Lonko','Welu Ngen-lelfün umawtuley. Walichu miawi.','Pero Ngen-lelfün duerme. El Walichu anda suelto.','But Ngen-lelfün sleeps. The Walichu is on the loose.'),
-      N('El Walichu es un wekufü de la pampa: seca el pasto, espanta a los luan y hace tropezar a los kawellu. Y lo peor: a la gente le va robando las palabras, una por una, para su patrón: Ti Fütra Ngoyman.','The Walichu is a wekufü of the plains: it dries the grass, scares off the guanacos and makes the horses stumble. And worst of all: it steals people\'s words, one by one, for its master: Ti Fütra Ngoyman.'),
+      N('El Walichu es un wekufü de la pampa: seca el pasto, espanta a los luan y hace tropezar a los kawellu. Y lo peor: a la gente le va robando las palabras, una por una, para su patrón: Ti Fütra Ngoymatulfe.','The Walichu is a wekufü of the plains: it dries the grass, scares off the guanacos and makes the horses stumble. And worst of all: it steals people\'s words, one by one, for its master: Ti Fütra Ngoymatulfe.'),
       L('Lonko','Trana- kimeltueyu.','Te enseño trana- ("caerse").','I teach you trana- ("fall down").'),
       N('Con tranange, tranamu o tranamün, el wekufü cae al suelo: pierde su turno y el próximo golpe le duele más. Recibiste trana- y un külon.','With tranange, tranamu or tranamün, a wekufü falls to the ground: it loses its turn and the next blow hurts it more. You received trana- and a külon.'),
       L('Lonko','Wingkul lelfün mew amunge, '+nm()+'.','Ve a la meseta, '+nm()+'.','Go to the meseta, '+nm()+'.')]);
@@ -4364,7 +4375,7 @@ function openPause(){
       const vl=vocabLines();if(vl.length){ls.push(N('— Pu dungu —','— Words —'));ls.push(...vl)}say(ls)}
     else if(v==='trariwe'){const R5=[['lafkenche','Lafkenche'],['nagche','Nagche'],['pewenche','Pewenche'],['williche','Williche'],['puelche','Puelmapu']];
       say([L('','Trariwe trokiñ · '+(S.pieces||[]).length+'/5',R5.map(([k,n])=>((S.pieces||[]).includes(k)?'■ ':'□ ')+n).join('   '),R5.map(([k,n])=>((S.pieces||[]).includes(k)?'■ ':'□ ')+n).join('   ')),
-        N('Con los cinco trokiñ, el trariwe completo podrá atravesar la niebla de Ti Fütra Ngoyman, al oeste del camino del mar.','With all five trokiñ, the complete trariwe will be able to pass through the fog of Ti Fütra Ngoyman, west of the sea road.')])}
+        N('Con los cinco trokiñ, el trariwe completo podrá atravesar la niebla de Ti Fütra Ngoymatulfe, al oeste del camino del mar.','With all five trokiñ, the complete trariwe will be able to pass through the fog of Ti Fütra Ngoymatulfe, west of the sea road.')])}
     else if(v==='kudaw')say(questLines());
     else if(v==='mapa')say(mapaLines());
     else if(v==='nogloss'){S.nogloss=S.nogloss?0:1;persist();openPause()}
@@ -4384,7 +4395,7 @@ function questLines(){
   if(F.sbAll&&!F.epu_won)Q('Epunamun',0,'El Epunamun espera a quien venció a los cinco males escondidos de las cinco tierras: un kona de dos caras, en el umbral de la niebla.','The Epunamun awaits the one who defeated the five hidden evils of the five lands: a two-faced warrior at the threshold of the fog.');
   if(F.pentukun&&!F.won){
     if(pcs<5)Q('Trariwe trokiñ '+pcs+'/5',0,'Reúne los cinco trokiñ del trariwe antiguo, uno por cada tierra.','Gather the five trokiñ of the ancient sash, one from each land.');
-    else Q('Ti Fütra Ngoyman',0,'Con el trariwe completo, cruza la niebla al oeste del camino del mar.','With the complete sash, cross the fog west of the sea road.');
+    else Q('Ti Fütra Ngoymatulfe',0,'Con el trariwe completo, cruza la niebla al oeste del camino del mar.','With the complete sash, cross the fog west of the sea road.');
   }else{
     const sbs=['sb1','sb2','sb3','sb4','sb5','sb6'].filter(k=>F[k]).length;
     if(!F.chboss)Q('Münche lafken',0,'Una voz débil suena bajo el islote de las piedras del agua, en Willi mapu.','A faint voice sounds beneath the islet of the water stones, in Willi mapu.');
@@ -4431,8 +4442,9 @@ function mapaLines(){
   const ng=['ngen','ngen2','ngen3','ngen4','ngen5'].filter(k=>F[k]).length;
   const sbs=['sb1','sb2','sb3','sb4','sb5','sb6'].filter(k=>F[k]).length;
   ls.push(L('','Mapu',
-    'Ngen despiertos '+ng+'/5 · Llum wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoyman · '+(F.epu_won?'■':'□')+' Epunamun · '+(F.yewen_won?'■':'□')+' Yewen',
-    'Ngen awakened '+ng+'/5 · Hidden wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoyman · '+(F.epu_won?'■':'□')+' Epunamun'));
+    'Ngen despiertos '+ng+'/5 · Llum wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoymatulfe · '+(F.epu_won?'■':'□')+' Epunamun · '+(F.yewen_won?'■':'□')+' Yewen',
+    'Ngen awakened '+ng+'/5 · Hidden wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoymatulfe · '+(F.epu_won?'■':'□')+' Epunamun'));
+  if(S.hm)ls.push(L('','Weichafe'+(S.hm>1?' ×'+S.hm:''),'Modo héroe: conservas tu kimün y tus cosas, pero los wekufü crecen contigo y las pruebas no dan pistas.','Hero mode: you keep your kimün and your things, but the wekufü grow with you and the trials give no hints.'));
   return ls}
 /* ---------- vocabulary unlocked outside battle roots ---------- */
 function vocabLines(){
@@ -4545,7 +4557,7 @@ const YEWEN_CALL={wenangkun:['la pena que se queda callada. Despiértala (nepe-)
   llukalfe:['el miedo que se agranda. Es altísimo: hazlo retroceder (wüñotreka-).','the fear that grows bigger. It towers: make it step back (wüñotreka-).'],
   ayentufe:['la burla del patio. Se esconde entre la gente: hazlo salir (tripa-).','the schoolyard mockery. It hides in the crowd: make it come out (tripa-).'],
   profe:['la escuela que prohibió la lengua. Su regla es dura como piedra: quiébrala (trafo-).','the school that banned the language. Its rule is hard as stone: break it (trafo-).']};
-function mkEnemy(t){const k=progK(),bs=ET[t].boss?.5:1,hp0=Math.round(ET[t].hp*(1+.07*k*bs));return{t,hp:hp0,max:hp0,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'||ET[t].tower?1:0,armor:ET[t].armor?1:0,burn:ET[t].fire?1:0,hidden:ET[t].hide?1:0,dreaming:ET[t].dream?1:0,dreamT:0,down:0,seals:ET[t].seals?ET[t].seals.slice():null}}
+function mkEnemy(t){const k=progK(),bs=ET[t].boss?.5:1,hp0=Math.round(ET[t].hp*(1+.07*k*bs)*(S.hm?1+(heroMul()*Math.max(1,atk()/heroExp().atk)-1)*(ET[t].boss?.75:1):1));return{t,hp:hp0,max:hp0,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'||ET[t].tower?1:0,armor:ET[t].armor?1:0,burn:ET[t].fire?1:0,hidden:ET[t].hide?1:0,dreaming:ET[t].dream?1:0,dreamT:0,down:0,seals:ET[t].seals?ET[t].seals.slice():null}}
 function startBattle(party,o){o=o||{};
   let snap=null;try{snap=document.createElement('canvas');snap.width=LW;snap.height=LH;const sg=snap.getContext('2d');sg.imageSmoothingEnabled=false;sg.drawImage(cv,0,0,LW,LH)}catch(e){snap=null}
   if(typeof stopAmb==='function')stopAmb();
@@ -4560,7 +4572,7 @@ function startBattle(party,o){o=o||{};
 const aliveE=()=>B.en.filter(e=>!e.dead);
 function bossBlock(e){const T=ET[e.t];if(!T.boss)return false;if(e.down||e.sl||e.stag||e.dreaming||e.hidden||e.hp<=0)return false;
   if(e.parry){e.parry=0;return true}
-  return Math.random()<(T.blk||.22)}
+  return Math.random()<(T.blk||.22)+(S.hm?.08:0)}
 const quizPend=e=>!!B&&ET[e.t].boss&&!B.qok&&!/^ngoyman[1-4]$/.test(e.t)&&!(B.o.chain==='llufu'&&e.t!=='llufu5');
 function battleMenu(){
   if(B&&B.ngenA&&!B.ngenA.done)return;
@@ -4788,7 +4800,7 @@ function enemyPhase(){
   const hitP=(e,mult,tag)=>{
     if(B.blocked&&B.blocked.has(e)){fx.push(e.label+': ¡bloqueado!');fxe.push(e.label+': blocked!');hitsFx.push(()=>{const p=epos(e);pop(p.x,p.y-10,'✋','#ffe080');sfx('block')});return}
     const T=ET[e.t],rush=B.rush&&B.rush.has(e);
-    let d=Math.max(1,Math.round((T.atk+Math.floor(progK()*(T.boss?.3:.6))+rnd(3)-1)*(mult||1)*(rush?1.5:1)*(e.fear>0?.5:1))-def());if(B.o.tut)d=Math.min(3,Math.max(1,Math.round(d*.4)));S.hp-=d;dmgTotal+=d;
+    let d=Math.max(1,Math.round((T.atk+Math.floor(progK()*(T.boss?.3:.6))+rnd(3)-1)*(mult||1)*(rush?1.5:1)*(e.fear>0?.5:1))-(S.hm?heroExp().def:def()));if(S.hm){const X=heroExp();d=Math.max(1,Math.round(Math.max(1.5,d)*heroMul()*maxHP()/X.hp))}if(B.o.tut)d=Math.min(3,Math.max(1,Math.round(d*.4)));S.hp-=d;dmgTotal+=d;
     fx.push(e.label+(tag?tag.es:' te golpea')+' (−'+d+').');fxe.push(e.label+(tag?tag.en:' hits you')+' (−'+d+').');
     if(T.drain){const hl=Math.ceil(d/2);e.hp=Math.min(e.max,e.hp+hl);fx.push(e.label+' bebe tu fuerza (+'+hl+').');fxe.push(e.label+' drinks your strength (+'+hl+').');hitsFx.push(()=>{const p=epos(e);pop(p.x,p.y-10,'+'+hl,'#80ff90')})}
     hitsFx.push(()=>{e.lunge=16;pop(60,30,'-'+d,'#ff6050')})};
@@ -4798,7 +4810,7 @@ function enemyPhase(){
     if(e.stun>0){e.stun--;fx.push(e.label+' todavía retrocede.');fxe.push(e.label+' is still backing away.');continue}
     if(e.t==='ngoyam'&&Math.random()<.3&&(S.sp||0)>0){S.sp--;fx.push(e.label+' te susurra el olvido: pierdes un punto de newen (✦).');fxe.push(e.label+' whispers forgetting to you: you lose one newen point (✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')});continue}
     if(e.t==='ngoyman1'||e.t==='llufu1'){const wat=e.t==='llufu1';
-      if(!e.hidden&&e.hideT>0){e.hideT--;if(e.hideT<=0){e.hidden=1;fx.push(wat?'El agua oscura vuelve a tragarse al Kaykayfilu.':'La niebla vuelve a tragarse a Ti Fütra Ngoyman.');fxe.push(wat?'The dark water swallows the Kaykayfilu again.':'The fog swallows Ti Fütra Ngoyman again.');continue}}
+      if(!e.hidden&&e.hideT>0){e.hideT--;if(e.hideT<=0){e.hidden=1;fx.push(wat?'El agua oscura vuelve a tragarse al Kaykayfilu.':'La niebla vuelve a tragarse a Ti Fütra Ngoymatulfe.');fxe.push(wat?'The dark water swallows the Kaykayfilu again.':'The fog swallows Ti Fütra Ngoymatulfe again.');continue}}
       if(!e.hidden&&!e.hideT&&B.turn===0){e.hidden=1;fx.push(wat?'El Kaykayfilu se hunde en el agua oscura: no ves dónde golpear.':'El velo de niebla se cierra sobre el gran olvido: no ves dónde golpear.');fxe.push(wat?'The Kaykayfilu sinks into the dark water: you cannot see where to strike.':'The veil of fog closes over the great forgetting: you cannot see where to strike.');continue}
       if(!wat&&B.turn>0&&B.turn%3===2){hitP(e,2.0,{es:': dos garras de niebla salen del velo y te cruzan el pecho',en:': two claws of fog lash out of the veil and rake your chest'});hitsFx.push(()=>B.shake=10);continue}
       hitP(e,e.hidden?1:1.3,wat?{es:' te golpea con la cola desde lo oscuro',en:' strikes you with its tail from the dark'}:{es:' te azota con un jirón de niebla',en:' lashes you with a shred of fog'});continue}
@@ -4822,14 +4834,14 @@ function enemyPhase(){
       hitP(e);continue}
     if(e.t==='ngoyman3'){
       if(B.tele){B.tele=false;hitP(e,2.6,{es:': el puño de niebla reunida cae entero sobre ti',en:': the fist of gathered fog comes down whole upon you'});hitsFx.push(()=>B.shake=14);continue}
-      if(B.turn>0&&B.turn-(e.lastTele||-9)>3&&Math.random()<.3){B.tele=true;e.lastTele=B.turn;fx.push('Fütra Ngoyman junta toda la niebla de la sala sobre su puño...');fxe.push('Fütra Ngoyman gathers all the fog in the hall over its fist...');continue}
+      if(B.turn>0&&B.turn-(e.lastTele||-9)>3&&Math.random()<.3){B.tele=true;e.lastTele=B.turn;fx.push('Fütra Ngoymatulfe junta toda la niebla de la sala sobre su puño...');fxe.push('Fütra Ngoymatulfe gathers all the fog in the hall over its fist...');continue}
       if(!e.seals)e.seals=[];
       if(!e.seals.length&&B.turn>0&&B.turn%4===0){const pool=S.roots.slice();let code=pool[rnd(pool.length)];if(Math.random()<.4)code+='kil';e.seals=[code];
-        fx.push('¡Fütra Ngoyman alza una barrera de luz robada! '+sealGloss(code,'es'));fxe.push('Fütra Ngoyman raises a barrier of stolen light! '+sealGloss(code,'en'));hitsFx.push(()=>{sfx('cast');B.flash=10});continue}
+        fx.push('¡Fütra Ngoymatulfe alza una barrera de luz robada! '+sealGloss(code,'es'));fxe.push('Fütra Ngoymatulfe raises a barrier of stolen light! '+sealGloss(code,'en'));hitsFx.push(()=>{sfx('cast');B.flash=10});continue}
       if(B.en.length<4&&Math.random()<.3){const t2=SUMMONP[rnd(SUMMONP.length)],ne=mkEnemy(t2);B.en.push(ne);relabel();
         fx.push('El olvido recuerda a tus enemigos: ¡'+ne.label+' sale de la niebla!');fxe.push('The forgetting remembers your enemies: '+ne.label+' steps out of the fog!');continue}
       if(B.turn%3===2){hitP(e,2.0,{es:' descarga el golpe del olvido',en:' brings down the blow of forgetting'});continue}
-      if(Math.random()<.25&&(S.sp||0)>0){S.sp--;fx.push('Fütra Ngoyman aspira tus palabras (−✦).');fxe.push('Fütra Ngoyman breathes in your words (−✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')})}
+      if(Math.random()<.25&&(S.sp||0)>0){S.sp--;fx.push('Fütra Ngoymatulfe aspira tus palabras (−✦).');fxe.push('Fütra Ngoymatulfe breathes in your words (−✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')})}
       hitP(e,.8);hitP(e,.8,{es:' golpea otra vez',en:' strikes again'});continue}
     if(e.t==='ngoyman4'){
       if(B.turn>0&&B.turn%4===2&&!S.curse){S.curse=1;hitP(e,1.6,{es:': los seis ojos arden a la vez y su mirada te marca (maldición: fuerza −2)',en:': all six eyes blaze at once and their gaze marks you (curse: strength −2)'});hitsFx.push(()=>sfx('bad'));continue}
@@ -4843,11 +4855,11 @@ function enemyPhase(){
         hitsFx.push(()=>{sfx('bad');const p2=epos(e);pop(p2.x,p2.y-10,'+'+hl,'#80ff90')});continue}
       if(!e.seals)e.seals=[];
       if(!e.seals.length&&B.turn>0&&B.turn%3===0){const pool=S.roots.slice();let code=pool[rnd(pool.length)];if(Math.random()<.4)code+='kil';e.seals=[code];
-        fx.push('¡Rüf Fütra Ngoyman alza una barrera de luz robada! '+sealGloss(code,'es'));fxe.push('Rüf Fütra Ngoyman raises a barrier of stolen light! '+sealGloss(code,'en'));hitsFx.push(()=>{sfx('cast');B.flash=10});continue}
+        fx.push('¡Rüf Fütra Ngoymatulfe alza una barrera de luz robada! '+sealGloss(code,'es'));fxe.push('Rüf Fütra Ngoymatulfe raises a barrier of stolen light! '+sealGloss(code,'en'));hitsFx.push(()=>{sfx('cast');B.flash=10});continue}
       if(B.en.length<4&&Math.random()<.3){const t2=SUMMONP[rnd(SUMMONP.length)],ne=mkEnemy(t2);B.en.push(ne);relabel();
         fx.push('El olvido recuerda a tus enemigos: ¡'+ne.label+' sale de la niebla!');fxe.push('The forgetting remembers your enemies: '+ne.label+' steps out of the fog!');continue}
       if(B.turn%3===2){hitP(e,2.3,{es:': la boca sin fondo se cierra sobre ti',en:': the bottomless mouth closes over you'});hitsFx.push(()=>B.shake=12);continue}
-      if(Math.random()<.3&&(S.sp||0)>0){S.sp--;fx.push('Rüf Fütra Ngoyman aspira tus palabras (−✦).');fxe.push('Rüf Fütra Ngoyman breathes in your words (−✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')})}
+      if(Math.random()<.3&&(S.sp||0)>0){S.sp--;fx.push('Rüf Fütra Ngoymatulfe aspira tus palabras (−✦).');fxe.push('Rüf Fütra Ngoymatulfe breathes in your words (−✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')})}
       hitP(e,.85);hitP(e,.85,{es:' golpea otra vez',en:' strikes again'});continue}
     if(e.t==='walichu'){
       if(!e.dreaming&&e.dreamT>0){e.dreamT--;
@@ -4999,11 +5011,11 @@ function ngoyStage(n){
   const e=mkEnemy('ngoyman'+n);B.en=[e];relabel();B.tele=false;B.blocked=null;B.rush=null;sfx('lvl');B.flash=16;B.shake=10;
   const ls=n===2?[N('El velo de niebla se rasga de arriba abajo... y detrás no hay cuerpo: hay un piwke enorme de piedra gris, envuelto en una coraza de olvido, latiendo despacio.','The veil of fog tears from top to bottom... and behind it there is no body: there is a huge heart of grey stone, wrapped in a crust of forgetting, beating slowly.'),
       N('Es el corazón del gran olvido. Cada latido borra una palabra en alguna parte.','It is the heart of the great forgetting. Every beat erases a word somewhere.')]
-    :n===3?[L('','Kalewetuy!','¡Cambió de forma!','It has changed form!'),N('¡El piwke de piedra se parte en dos! De la grieta sale todo lo que el olvido se ha tragado: un coloso de niebla y silencio, con dos ojos como lunas apagadas. Fütra Ngoyman: el gran olvido tiene cuerpo.','The stone heart splits in two! Out of the crack pours everything the forgetting has swallowed: a colossus of fog and silence, with two eyes like burnt-out moons. Fütra Ngoyman: the great forgetting has a body.')]
+    :n===3?[L('','Kalewetuy!','¡Cambió de forma!','It has changed form!'),N('¡El piwke de piedra se parte en dos! De la grieta sale todo lo que el olvido se ha tragado: un coloso de niebla y silencio, con dos ojos como lunas apagadas. Fütra Ngoymatulfe: el gran olvido tiene cuerpo.','The stone heart splits in two! Out of the crack pours everything the forgetting has swallowed: a colossus of fog and silence, with two eyes like burnt-out moons. Fütra Ngoymatulfe: the great forgetting has a body.')]
     :n===4?[L('','Kalewetuy!','¡Cambió de forma!','It has changed form!'),N('El coloso se agrieta de arriba abajo... y no cae. Lo que sale de las grietas es noche pura: la niebla entera se dobla hacia adentro y se levanta una figura más vasta todavía, con seis ojos apagados y cuernos de humo.','The colossus cracks from top to bottom... and does not fall. What pours from the cracks is pure night: the whole fog folds inward and a vaster figure yet rises, with six burnt-out eyes and horns of smoke.'),
       N('Füta Dumiñ: la gran oscuridad del olvido. Hasta el suelo parece olvidar que existe.','Füta Dumiñ: the great darkness of the forgetting. Even the ground seems to forget it exists.')]
-    :[L('','Wefürkey rüf Fütra Ngoyman, awem!','¡Apareció el verdadero Fütra Ngoyman! ¡Rayos!','The true Fütra Ngoyman has appeared. Awem!'),N('La noche se parte como un telón podrido. Detrás estaba esperando lo que el olvido es de verdad: una corona de niebla como astas, una boca como cueva sin fondo, un ojo enorme que ya no recuerda la luz.','The night splits like a rotten curtain. Behind it waited what the forgetting truly is: a crown of fog like antlers, a mouth like a bottomless cave, one enormous eye that no longer remembers the light.'),
-      N('Rüf Fütra Ngoyman: el verdadero gran olvido. Ya no quedan velos.','Rüf Fütra Ngoyman: the true great forgetting. There are no veils left.')];
+    :[L('','Wefürkey rüf Fütra Ngoymatulfe, awem!','¡Apareció el verdadero Fütra Ngoymatulfe! ¡Rayos!','The true Fütra Ngoymatulfe has appeared. Awem!'),N('La noche se parte como un telón podrido. Detrás estaba esperando lo que el olvido es de verdad: una corona de niebla como astas, una boca como cueva sin fondo, un ojo enorme que ya no recuerda la luz.','The night splits like a rotten curtain. Behind it waited what the forgetting truly is: a crown of fog like antlers, a mouth like a bottomless cave, one enormous eye that no longer remembers the light.'),
+      N('Rüf Fütra Ngoymatulfe: el verdadero gran olvido. Ya no quedan velos.','Rüf Fütra Ngoymatulfe: the true great forgetting. There are no veils left.')];
   if(n===5&&S.flags.epu_won){S.hp=maxHP();S.sp=SPMAX;e.hp-=15;
     ls.push(N('Entonces una lanza cruza la niebla y se clava en el coloso (−15). El Epunamun aparece a tu lado, con las dos caras de frente al olvido.','Then a spear crosses the fog and sinks into the colossus (−15). The Epunamun appears at your side, both faces turned to the forgetting.'),
       L('Epunamun','Feypieyu tañi kelluntukafiel eymi tami weichan mu!','¡Te dije que te ayudaría en tu pelea!','I told you I would help you in your fight!'),
@@ -5081,7 +5093,7 @@ function victory(){
   S.xp+=xp;S.gold+=gold;
   const wn=(B.o.boss||B.o.final||B.o.chain)?'win':'winS';const after=SONGS[wn];after.after=()=>mapSong();playSong(wn);
   const NGN={lafken:'Ngen-lafken',mawida:'Ngen-mawida',pewen:'Ngen-pewen',kuruf:'Ngen-kürüf',lelfun:'Ngen-lelfün'};
-  const ls=[(B.ngenA&&B.ngenA.kind==='final')?N('¡Los cinco ngen del mapu responden a la vez! Mar, monte, pewen, viento y pampa descargan su newen, uno tras otro... y Ti Fütra Ngoyman se quiebra en mil pedazos que la luz deshace.','The five ngen of the land answer as one! Sea, forest, pewen, wind and plain unleash their newen, one after another... and Ti Fütra Ngoyman shatters into a thousand pieces that the light unmakes.'):B.o.chain==='llufu'?N('El ül se cierra como una marea mansa: Kaykayfilu se aquieta y vuelve a su sueño en el fondo del mar.','The ül closes like a gentle tide: Kaykayfilu grows calm and returns to his sleep at the bottom of the sea.'):(B.ngenA&&B.ngenA.v)?N('¡'+NGN[B.ngenA.v]+' despierta y descarga su newen sobre el wekufü: el maligno estalla en mil pedazos que la luz deshace! La tierra respira de nuevo.',NGN[B.ngenA.v]+' awakens and unleashes its newen upon the wekufü: the evil one shatters into a thousand pieces that the light unmakes! The land breathes again.'):(B.en.some(e=>e.t==='epunamun'))?N('El Epunamun baja sus dos lanzas y asiente con las dos caras: la prueba terminó, y la pasaste.','The Epunamun lowers his two spears and nods with both faces: the trial is over, and you have passed it.'):N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
+  const ls=[(B.ngenA&&B.ngenA.kind==='final')?N('¡Los cinco ngen del mapu responden a la vez! Mar, monte, pewen, viento y pampa descargan su newen, uno tras otro... y Ti Fütra Ngoymatulfe se quiebra en mil pedazos que la luz deshace.','The five ngen of the land answer as one! Sea, forest, pewen, wind and plain unleash their newen, one after another... and Ti Fütra Ngoymatulfe shatters into a thousand pieces that the light unmakes.'):B.o.chain==='llufu'?N('El ül se cierra como una marea mansa: Kaykayfilu se aquieta y vuelve a su sueño en el fondo del mar.','The ül closes like a gentle tide: Kaykayfilu grows calm and returns to his sleep at the bottom of the sea.'):(B.ngenA&&B.ngenA.v)?N('¡'+NGN[B.ngenA.v]+' despierta y descarga su newen sobre el wekufü: el maligno estalla en mil pedazos que la luz deshace! La tierra respira de nuevo.',NGN[B.ngenA.v]+' awakens and unleashes its newen upon the wekufü: the evil one shatters into a thousand pieces that the light unmakes! The land breathes again.'):(B.en.some(e=>e.t==='epunamun'))?N('El Epunamun baja sus dos lanzas y asiente con las dos caras: la prueba terminó, y la pasaste.','The Epunamun lowers his two spears and nods with both faces: the trial is over, and you have passed it.'):N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
   if(B.ngenA&&B.ngenA.kind==='final'&&S.flags.epu_won)ls.push(N('Y al final, entre los ngen, el Epunamun: sus dos caras arden en rojo y sus lanzas disparan el último fuego contra el olvido.','And last, among the ngen, the Epunamun: both his faces burn red and his spears fire the last blaze against the forgetting.'));
   while(S.xp>=xpNeed()){S.xp-=xpNeed();S.lvl++;S.baseMax+=HPQ;S.hp+=HPQ;S.baseAtk+=1;if(S.lvl%2===0)S.baseDef+=1;
     const l=L('','Doy kimün!','¡Más conocimiento! Llegas a kimün '+S.lvl+': ganas un corazón y más fuerza.','More knowledge! You reach kimün '+S.lvl+': you gain a heart and more strength.');l.fx=()=>sfx('lvl');ls.push(l)}
@@ -5136,7 +5148,7 @@ function postBoss(){
       N('Ngen-lafken te da su newen: ahora puedes sumergirte en los remolinos oscuros del agua. Además ganas un corazón nuevo.','Ngen-lafken gives you its newen: now you can dive into the dark whirlpools in the water. You also gain a new heart.'),
       L('Ngen-lafken','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!"),
       Object.assign(L('','Kiñe trariwe trokiñ!','Entre la espuma queda algo tejido: un trokiñ (pedazo) de un trariwe antiguo, con figuras del mar. Tienes 1 de 5.','Something woven is left in the foam: a trokiñ (piece) of an ancient trariwe, with figures of the sea. You have 1 of 5.'),{fx:()=>{sfx('lvl')}}),
-      N('Dicen que un trariwe completo, con un trokiñ de cada tierra, es lo único que puede atravesar la niebla del olvido y llegar hasta su origen: Ti Fütra Ngoyman, el gran olvido.','They say a complete trariwe, with one trokiñ from each land, is the only thing that can pass through the fog of forgetting and reach its source: Ti Fütra Ngoyman, the great forgetting.'),
+      N('Dicen que un trariwe completo, con un trokiñ de cada tierra, es lo único que puede atravesar la niebla del olvido y llegar hasta su origen: Ti Fütra Ngoymatulfe, el gran olvido.','They say a complete trariwe, with one trokiñ from each land, is the only thing that can pass through the fog of forgetting and reach its source: Ti Fütra Ngoymatulfe, the great forgetting.'),
       N('Un círculo de luz aparece en el islote: pisándolo puedes volver a la entrada de la cueva o al lof.','A circle of light appears on the islet: step on it to return to the cave entrance or to the lof.'),
       N('Fin de la región lafkenche (prototipo). Puedes volver a los remolinos de las dunas y de la orilla: ahora sí puedes explorarlos. Las demás regiones esperan: Nagche, Pewenche, Williche y Puelmapu.','End of the Lafkenche region (prototype). You can go back to the whirlpools in the dunes and on the shore: now you can explore them. The other regions are waiting: Nagche, Pewenche, Williche and Puelmapu.')]);
   });
@@ -5202,7 +5214,7 @@ function postBoss5(){
       N('Ngen-lelfün es el ngen de la pampa abierta: cuida el pasto, los luan, los choyke y a la gente que vive del campo.','Ngen-lelfün is the ngen of the open plain: it looks after the grass, the guanacos, the rheas, and the people who live from the land.'),
       N('Ngen-lelfün te da su newen: ahora los cercos de espino seco se apartan cuando pasas. Además ganas un corazón nuevo.','Ngen-lelfün gives you its newen: now the fences of dry thorn move aside when you pass. You also gain a new heart.'),
       Object.assign(L('','Kechu trariwe trokiñ!','Entre el pasto dorado queda el último trokiñ, tejido en amarillo y negro. ¡Tienes los 5: el trariwe antiguo está COMPLETO!','In the golden grass lies the last trokiñ, woven in yellow and black. You have all 5: the ancient trariwe is COMPLETE!'),{fx:()=>{sfx('lvl')}}),
-      N('Los cinco trokiñ se tejen solos entre tus manos: mar, monte, pewen, viento y pampa, una sola faja. El Walichu era un sirviente de Ti Fütra Ngoyman: el gran olvido te espera al oeste del primer camino, donde todo empezó.','The five trokiñ weave themselves together in your hands: sea, forest, pewen, wind and plain, one single sash. The Walichu was a servant of Ti Fütra Ngoyman: the great forgetting awaits you west of the first road, where everything began.'),
+      N('Los cinco trokiñ se tejen solos entre tus manos: mar, monte, pewen, viento y pampa, una sola faja. El Walichu era un sirviente de Ti Fütra Ngoymatulfe: el gran olvido te espera al oeste del primer camino, donde todo empezó.','The five trokiñ weave themselves together in your hands: sea, forest, pewen, wind and plain, one single sash. The Walichu was a servant of Ti Fütra Ngoymatulfe: the great forgetting awaits you west of the first road, where everything began.'),
       N('Un círculo de luz aparece en el círculo de piedras: pisándolo puedes volver a la meseta, al lof puelche o a las otras tierras.','A circle of light appears in the stone circle: step on it to return to the meseta, the Puelche lof, or the other lands.'),
       N('Fin de la región puelche (prototipo). Con el trariwe completo, la niebla del oeste ya puede abrirse...','End of the Puelche region (prototype). With the trariwe complete, the fog in the west can now be opened...')]);
   });
@@ -6343,7 +6355,7 @@ $('title').addEventListener('pointerdown',()=>{auInit();if(!AU.name)playSong('in
 playSong('intro');
 function slotLabel(n){const v=loadSave(n);if(!v)return LANG==='es'?'vacío':'empty';
   const mp=(typeof MAPS!=='undefined'&&MAPS[v.map]&&MAPS[v.map].name)||'';
-  return (v.name||'')+' · kimün '+(v.lvl||1)+(mp?' · '+mp:'')}
+  return (v.name||'')+(v.hm?' · weichafe'+(v.hm>1?' ×'+v.hm:''):'')+' · kimün '+(v.lvl||1)+(mp?' · '+mp:'')}
 function slotPick(forNew,cb){
   choose({es:forNew?'Nueva partida, ¿en qué espacio?':'¿Qué partida sigues?',en:forNew?'New game: which slot?':'Continue which save?'},
     [1,2,3].map(n=>({m:(loadSave(n)?'■':'□')+' '+n,g:slotLabel(n),v:n,dis:!forNew&&!loadSave(n)}))
@@ -6359,7 +6371,18 @@ function contSlot(n){
   setSlot(n);const sv=loadSave(n);if(!sv)return;
   S=Object.assign(newState(sv.hero||'llanka'),sv);S.items.diwen=S.items.diwen||0;S.gear=S.gear||{};S.gloss=LANG;S.pw={speed:0,pewen:0,gold:0};S.roots=S.roots.map(r=>r==='amu'?'amutu':r==='wiñotu'?'wüñotreka':r);if(S.last)S.last=null;$('title').style.display='none';mode='map';AU.name=null;loadMap(MAPS[S.map]?S.map:'rupu',S.x,S.y);
 }
-$('bNew').onclick=()=>{auInit();slotPick(true,n=>{setSlot(n);S=newState(HERO);persist();$('title').style.display='none';startCut()})};
+function newGo(src){slotPick(true,n=>{setSlot(n);S=src?heroState(src):newState(HERO);persist();$('title').style.display='none';startCut()})}
+$('bNew').onclick=()=>{auInit();const won=[1,2,3].filter(n=>{const v=loadSave(n);return v&&v.flags&&v.flags.won});
+  if(!won.length)return newGo(null);
+  const en=LANG==='en';
+  choose({es:'¿Cómo quieres empezar?',en:'How do you want to start?'},[
+    {m:en?'Normal game':'Partida normal',g:en?'From the beginning, kimün 1':'Desde el principio, kimün 1',v:'n'},
+    {m:'Weichafe',g:en?'Hero mode: keep your kimün and things; the wekufü and the trials get harder':'Modo héroe: conservas tu kimün y tus cosas; los wekufü y las pruebas se ponen más difíciles',v:'h'},
+    {m:en?'Back':'Volver',v:'x'}],v=>{
+    if(v==='n')return newGo(null);if(v!=='h')return;
+    if(won.length===1)return newGo(loadSave(won[0]));
+    choose({es:'¿De qué partida viene tu weichafe?',en:'Which save does your weichafe come from?'},
+      won.map(n=>({m:'■ '+n,g:slotLabel(n),v:n})).concat([{m:en?'Back':'Volver',v:'x'}]),k=>{if(k&&k!=='x')newGo(loadSave(k))},true)},true)};
 $('bCont').onclick=()=>{auInit();if([1,2,3].filter(n=>loadSave(n)).length===1)return contSlot([1,2,3].find(n=>loadSave(n)));slotPick(false,contSlot)};
 if(CT){const st=document.createElement('style');st.textContent=`.box{background:linear-gradient(180deg,#5a6a9e 0%,#2a3468 50%,#141a3c 100%)!important;border:3px solid #e8ecf8!important;border-radius:4px!important;box-shadow:inset 0 0 0 1px #9aa2c8,inset -2px -2px 0 1px #5a5e74,0 0 0 2px #000!important}
 .opt{background:linear-gradient(#3a4680,#1e2652)!important;border:2px solid #8890b8!important}.opt.sel{border-color:#fff!important;background:linear-gradient(#5a68b0,#2e3a78)!important}.opt.sel .om::before{content:'▶ ';color:#ffe060}

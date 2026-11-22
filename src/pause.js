@@ -29,7 +29,7 @@ function openPause(){
       const vl=vocabLines();if(vl.length){ls.push(N('— Pu dungu —','— Words —'));ls.push(...vl)}say(ls)}
     else if(v==='trariwe'){const R5=[['lafkenche','Lafkenche'],['nagche','Nagche'],['pewenche','Pewenche'],['williche','Williche'],['puelche','Puelmapu']];
       say([L('','Trariwe trokiñ · '+(S.pieces||[]).length+'/5',R5.map(([k,n])=>((S.pieces||[]).includes(k)?'■ ':'□ ')+n).join('   '),R5.map(([k,n])=>((S.pieces||[]).includes(k)?'■ ':'□ ')+n).join('   ')),
-        N('Con los cinco trokiñ, el trariwe completo podrá atravesar la niebla de Ti Fütra Ngoyman, al oeste del camino del mar.','With all five trokiñ, the complete trariwe will be able to pass through the fog of Ti Fütra Ngoyman, west of the sea road.')])}
+        N('Con los cinco trokiñ, el trariwe completo podrá atravesar la niebla de Ti Fütra Ngoymatulfe, al oeste del camino del mar.','With all five trokiñ, the complete trariwe will be able to pass through the fog of Ti Fütra Ngoymatulfe, west of the sea road.')])}
     else if(v==='kudaw')say(questLines());
     else if(v==='mapa')say(mapaLines());
     else if(v==='nogloss'){S.nogloss=S.nogloss?0:1;persist();openPause()}
@@ -49,7 +49,7 @@ function questLines(){
   if(F.sbAll&&!F.epu_won)Q('Epunamun',0,'El Epunamun espera a quien venció a los cinco males escondidos de las cinco tierras: un kona de dos caras, en el umbral de la niebla.','The Epunamun awaits the one who defeated the five hidden evils of the five lands: a two-faced warrior at the threshold of the fog.');
   if(F.pentukun&&!F.won){
     if(pcs<5)Q('Trariwe trokiñ '+pcs+'/5',0,'Reúne los cinco trokiñ del trariwe antiguo, uno por cada tierra.','Gather the five trokiñ of the ancient sash, one from each land.');
-    else Q('Ti Fütra Ngoyman',0,'Con el trariwe completo, cruza la niebla al oeste del camino del mar.','With the complete sash, cross the fog west of the sea road.');
+    else Q('Ti Fütra Ngoymatulfe',0,'Con el trariwe completo, cruza la niebla al oeste del camino del mar.','With the complete sash, cross the fog west of the sea road.');
   }else{
     const sbs=['sb1','sb2','sb3','sb4','sb5','sb6'].filter(k=>F[k]).length;
     if(!F.chboss)Q('Münche lafken',0,'Una voz débil suena bajo el islote de las piedras del agua, en Willi mapu.','A faint voice sounds beneath the islet of the water stones, in Willi mapu.');
@@ -96,8 +96,9 @@ function mapaLines(){
   const ng=['ngen','ngen2','ngen3','ngen4','ngen5'].filter(k=>F[k]).length;
   const sbs=['sb1','sb2','sb3','sb4','sb5','sb6'].filter(k=>F[k]).length;
   ls.push(L('','Mapu',
-    'Ngen despiertos '+ng+'/5 · Llum wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoyman · '+(F.epu_won?'■':'□')+' Epunamun · '+(F.yewen_won?'■':'□')+' Yewen',
-    'Ngen awakened '+ng+'/5 · Hidden wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoyman · '+(F.epu_won?'■':'□')+' Epunamun'));
+    'Ngen despiertos '+ng+'/5 · Llum wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoymatulfe · '+(F.epu_won?'■':'□')+' Epunamun · '+(F.yewen_won?'■':'□')+' Yewen',
+    'Ngen awakened '+ng+'/5 · Hidden wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoymatulfe · '+(F.epu_won?'■':'□')+' Epunamun'));
+  if(S.hm)ls.push(L('','Weichafe'+(S.hm>1?' ×'+S.hm:''),'Modo héroe: conservas tu kimün y tus cosas, pero los wekufü crecen contigo y las pruebas no dan pistas.','Hero mode: you keep your kimün and your things, but the wekufü grow with you and the trials give no hints.'));
   return ls}
 /* ---------- vocabulary unlocked outside battle roots ---------- */
 function vocabLines(){

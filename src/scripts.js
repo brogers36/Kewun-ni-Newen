@@ -245,6 +245,7 @@ function pzTouch(tx,ty){
       return say([L('',t.lab+'!',M.pz.kind==='N'?'La última piedra se enciende. ¡Se oye cómo se corre una roca!':'El último brasero se enciende. ¡La puerta de piedra se abre!',M.pz.kind==='N'?'The last stone lights up. You hear a rock sliding away!':'The last brazier lights up. The stone door opens!'),praise()])}
     return say([L('',t.lab,M.pz.kind==='N'?'La piedra se ilumina.':'El brasero se enciende.',M.pz.kind==='N'?'The stone lights up.':'The brazier lights up.')])}
   PZ.n=0;PZ.lit.clear();sfx('bad');
+  if(S.hm){const d=heroHurt();return say([L('',t.lab,M.pz.kind==='N'?'Las piedras se apagan y te devuelven el golpe (−'+d+'). Ya no hay pistas para un weichafe.':'Los braseros se apagan y te queman (−'+d+'). Ya no hay pistas para un weichafe.',M.pz.kind==='N'?'The stones go dark and strike back (−'+d+'). No more hints for a weichafe.':'The braziers go out and burn you (−'+d+'). No more hints for a weichafe.')])}
   say([L('',t.lab,M.pz.kind==='N'?'La luz se apaga en todas las piedras. Ese no era el orden.':'Todos los braseros se apagan. Ese no era el orden.',M.pz.kind==='N'?'The light goes out in every stone. That was not the order.':'All the braziers go out. That was not the order.'),
     M.pz.hint?M.pz.hint:M.pz.kind==='N'?N('Pista: kiñe (1), epu (2), küla (3), meli (4).','Hint: kiñe (1), epu (2), küla (3), meli (4).'):N('Pista: lee la piedra tallada. Kallfü = azul, lig = blanco, kelü = rojo.','Hint: read the carved stone. Kallfü = blue, lig = white, kelü = red.')]);
 }
@@ -252,77 +253,78 @@ const STONES={
   conj:{intro:[L('Kura','Mari mari! Kura ngen, welu dunguken.','¡Hola! Soy una piedra, pero hablo.','Hello! I am a stone, but I speak.'),N('Responde bien y te dejo pasar. Cambia el final del verbo según quién lo hace.','Answer well and I will let you through. Change the end of the verb depending on who does it.')],
     qs:[{q:L('Kura','Fey amu___','Él / ella va. (fey = él, ella)','He / she goes. (fey = he, she)'),o:['amun','amuymi','amuy'],a:'amuy'},
         {q:L('Kura','Eymi küpa___','Tú vienes. (eymi = tú)','You come. (eymi = you)'),o:['küpan','küpaymi','küpay'],a:'küpaymi'},
-        {q:L('Kura','Iñche kim___','Yo sé. (iñche = yo)','I know. (iñche = I)'),o:['kimün','kimimi','kimi'],a:'kimün'}]},
+        {q:L('Kura','Iñche kim___','Yo sé. (iñche = yo)','I know. (iñche = I)'),o:['kimün','kimimi','kimi'],a:'kimün'}],hq:{q:L('Kura','Eymün amu___','Ustedes (muchos) van.','You (many) go.'),o:['amuymu','amuymün','amuyngün'],a:'amuymün'}},
   neg:{intro:[L('Kura','Mari mari! Kimimi -la-?','¡Hola! ¿Conoces -la-?','Hello! Do you know -la-?'),N('-la- niega el verbo: amun "voy" → amulan "no voy". Responde bien y la puerta se abrirá.','-la- negates the verb: amun "I go" → amulan "I do not go". Answer well and the door will open.')],
     qs:[{q:N('¿Cómo se dice "no voy"?','How do you say "I do not go"?'),o:['amun','amulan','amulay'],a:'amulan'},
         {q:N('¿Cómo se dice "ella no viene"?','How do you say "she does not come"?'),o:['küpalay','küpay','küpalan'],a:'küpalay'},
-        {q:N('¿Cómo se dice "no sé"?','How do you say "I do not know"?'),o:['kimün','kimlay','kimlan'],a:'kimlan'}]},
+        {q:N('¿Cómo se dice "no sé"?','How do you say "I do not know"?'),o:['kimün','kimlay','kimlan'],a:'kimlan'}],hq:{q:N('¿Cómo se dice "no vamos" (nosotros, muchos)?','How do you say "we do not go" (we, many)?'),o:['amuiñ','amulaiñ','amulayngün'],a:'amulaiñ'}},
   poss:{intro:[L('Kura','Mari mari! Kura ngen, welu dunguken.','¡Hola! Soy una piedra, pero hablo.','Hello! I am a stone, but I speak.'),N('¿De quién es? Completa con la palabra correcta y te abro el paso.','Whose is it? Fill in the right word and I will open the way.')],
     qs:[{q:L('Kura','___ ruka','Mi casa.','My house.'),o:['tami','ñi','tañi'],a:'tañi'},
         {q:L('Kura','___ kawellu','Tu caballo.','Your horse.'),o:['tañi','tami','ñi'],a:'tami'},
-        {q:L('Kura','___ trewa','Su perro (de él o de ella).','His / her dog.'),o:['ñi','tañi','tami'],a:'ñi'}]},
+        {q:L('Kura','___ trewa','Su perro (de él o de ella).','His / her dog.'),o:['ñi','tañi','tami'],a:'ñi'}],hq:{q:L('Kura','___ ruka','Nuestra casa (de muchos).','Our house (of many).'),o:['tañi','tayiñ','tami'],a:'tayiñ'}},
   kin:{intro:[L('Kura','Mari mari! Kimimi tami pu che?','¡Hola! ¿Conoces a tu familia?','Hello! Do you know your family?'),N('Di quién es cada uno y te abro el paso.','Say who each one is and I will open the way.')],
     qs:[{q:L('Kura','Tañi chaw ñi ñuke: ___','La mamá de mi papá.','My father\'s mother.'),o:['chuchu','kuku','laku'],a:'kuku'},
         {q:L('Kura','Tañi ñuke ñi ñuke: ___','La mamá de mi mamá.','My mother\'s mother.'),o:['kuku','cheche','chuchu'],a:'chuchu'},
         {q:L('Kura','Tañi chaw ñi chaw: ___','El papá de mi papá.','My father\'s father.'),o:['laku','cheche','kuku'],a:'laku'},
-        {q:L('Kura','Tañi ñuke ñi chaw: ___','El papá de mi mamá.','My mother\'s father.'),o:['laku','chuchu','cheche'],a:'cheche'}]},
+        {q:L('Kura','Tañi ñuke ñi chaw: ___','El papá de mi mamá.','My mother\'s father.'),o:['laku','chuchu','cheche'],a:'cheche'}],hq:{q:L('Kura','Tañi chaw ñi peñi: ___','El hermano de mi papá.','My father\'s brother.'),o:['weku','palu','malle'],a:'malle'}},
   negfut:{intro:[L('Kura','Mari mari! Kimimi -la- ka -a-?','¡Hola! ¿Conoces -la- y -a-?','Hello! Do you know -la- and -a-?'),N('Junta lo que no pasa con lo que todavía no pasa. Responde bien y te abro el paso.','Put together what does not happen with what has not happened yet. Answer well and I will open the way.')],
     qs:[{q:N('¿Cómo se dice "no iré"?','How do you say "I will not go"?'),o:['amulan','amuan','amulayan'],a:'amulayan'},
         {q:N('¿Cómo se dice "ella no vendrá"?','How do you say "she will not come"?'),o:['küpalayay','küpalay','küpayay'],a:'küpalayay'},
-        {q:N('¿Cómo se dice "no sabré"?','How do you say "I will not know"?'),o:['kiman','kimlayan','kimlan'],a:'kimlayan'}]},
+        {q:N('¿Cómo se dice "no sabré"?','How do you say "I will not know"?'),o:['kiman','kimlayan','kimlan'],a:'kimlayan'}],hq:{q:N('¿Cómo se dice "no comeremos" (nosotros, muchos)?','How do you say "we will not eat" (we, many)?'),o:['iyalaiñ','iyalayaiñ','iyayaiñ'],a:'iyalayaiñ'}},
   dirmo:{intro:[L('Kura','Mari mari! Kimimi -me- ka -pa-?','¡Hola! ¿Conoces -me- y -pa-?','Hello! Do you know -me- and -pa-?'),
     N('-me- es ir a hacer algo allá (y volver): challwatun "pesqué" → challwatumen "fui a pescar allá". -pa- es hacia acá: küpan "vine" ya lo lleva adentro; umawtupay "vino a dormir acá". Responde bien y te abro el paso.','-me- is going to do something over there (and coming back): challwatun "I fished" → challwatumen "I went fishing there". -pa- is toward here: umawtupay "he came here to sleep". Answer well and I will open the way.')],
     qs:[{q:N('¿Cómo se dice "fui a pescar (allá)"?','How do you say "I went fishing (over there)"?'),o:['challwatun','challwatumen','challwatupan'],a:'challwatumen'},
         {q:N('¿Cómo se dice "vino a dormir (acá)"?','How do you say "he came here to sleep"?'),o:['umawtumey','umawtupay','umawtuy'],a:'umawtupay'},
-        {q:N('¿Cómo se dice "iré a buscar (allá)"?','How do you say "I will go and look for it (over there)"?'),o:['kintuan','kintumean','kintupayan'],a:'kintumean'}]},
+        {q:N('¿Cómo se dice "iré a buscar (allá)"?','How do you say "I will go and look for it (over there)"?'),o:['kintuan','kintumean','kintupayan'],a:'kintumean'}],hq:{q:N('¿Cómo se dice "vine a comer (acá)"?','How do you say "I came here to eat"?'),o:['iyamen','iyapan','iyan'],a:'iyapan'}},
   rke:{intro:[L('Kura','Mari mari! Kimimi -rke-?','¡Hola! ¿Conoces -rke-?','Hello! Do you know -rke-?'),
     N('-rke- marca lo que uno supo por otros, o lo que lo sorprende: amuy "fue" → amurkey "dicen que fue / ¡resulta que fue!". Responde bien y te abro el paso.','-rke- marks what you learned from others, or what surprises you: amuy "he went" → amurkey "they say he went / it turns out he went!". Answer well and I will open the way.')],
     qs:[{q:N('¿Cómo se dice "dicen que él fue"?','How do you say "they say he went"?'),o:['amuy','amurkey','amuan'],a:'amurkey'},
         {q:N('¿Cómo se dice "dicen que aquí había un walichu"?','How do you say "they say there was a walichu here"?'),o:['müley','mülerkey','mülelay'],a:'mülerkey'},
-        {q:N('¿Cómo se dice "¡resulta que tú sabías!"?','How do you say "it turns out you knew!"?'),o:['kimürkeymi','kimimi','kimaymi'],a:'kimürkeymi'}]},
+        {q:N('¿Cómo se dice "¡resulta que tú sabías!"?','How do you say "it turns out you knew!"?'),o:['kimürkeymi','kimimi','kimaymi'],a:'kimürkeymi'}],hq:{q:N('¿Cómo se dice "dicen que ellos (muchos) se fueron"?','How do you say "they say they (many) left"?'),o:['amuyngün','amurkeyngu','amurkeyngün'],a:'amurkeyngün'}},
   quest:{intro:[L('Kura','Mari mari! Kimimi chem, iney, chew?','¡Hola! ¿Conoces chem, iney, chew?','Hello! Do you know chem, iney, chew?'),N('Completa mis preguntas con la palabra que pregunta y te abro el paso.','Complete my questions with the question word and I will open the way.')],
     qs:[{q:L('Kura','___ pingeymi?','¿Cómo te llamas?','What is your name?'),o:['Chew','Iney','Chem'],a:'Iney'},
         {q:L('Kura','___ tuwimi?','¿De dónde eres?','Where are you from?'),o:['Chew','Chumül','Iney'],a:'Chew'},
         {q:L('Kura','___ nieymi?','¿Qué tienes?','What do you have?'),o:['Chumten','Chem','Chew'],a:'Chem'},
-        {q:L('Kura','___ ngülliw nieymi?','¿Cuántos piñones tienes?','How many pewen nuts do you have?'),o:['Chumten','Chumül','Iney'],a:'Chumten'}]},
+        {q:L('Kura','___ ngülliw nieymi?','¿Cuántos piñones tienes?','How many pewen nuts do you have?'),o:['Chumten','Chumül','Iney'],a:'Chumten'}],hq:{q:L('Kura','___ amuaymi?','¿Cuándo te vas a ir?','When will you leave?'),o:['Chew','Chumül','Chem'],a:'Chumül'}},
   du:{intro:[L('Kura','Mari mari! Kimimi iñchiw, eymu, fey engu?','¡Hola! ¿Conoces iñchiw, eymu, fey engu?','Hello! Do you know iñchiw, eymu, fey engu?'),
     N('El mapudungun tiene formas especiales para DOS personas: iñchiw (nosotros dos), eymu (ustedes dos), fey engu (ellos dos). Tu chillka las muestra en «Iñche, eymi, fey...».','Mapudungun has special forms for TWO people: iñchiw (we two), eymu (you two), fey engu (they two). Your chillka shows them under «Iñche, eymi, fey...».')],
     qs:[{q:L('Kura','Iñchiw amu___','Nosotros dos vamos.','We two go.'),o:['amuyu','amuiñ','amuymu'],a:'amuyu'},
         {q:L('Kura','Eymu küpa___','Ustedes dos vienen.','You two come.'),o:['küpaymün','küpaymu','küpayu'],a:'küpaymu'},
-        {q:L('Kura','Fey engu kim___','Ellos dos saben.','They two know.'),o:['kimingün','kimi','kimingu'],a:'kimingu'}]},
+        {q:L('Kura','Fey engu kim___','Ellos dos saben.','They two know.'),o:['kimingün','kimi','kimingu'],a:'kimingu'}],hq:{q:L('Kura','Iñchiw küdaw___','Nosotros dos trabajamos.','We two work.'),o:['küdawiñ','küdawiyu','küdawimu'],a:'küdawiyu'}},
   fe:{intro:[L('Kura','Mari mari! Kimimi -fe?','¡Hola! ¿Conoces -fe?','Hello! Do you know -fe?'),
     N('-fe hace nombres de oficio: challwan «pescar» → challwafe «pescador». Responde bien y te abro el paso.','-fe makes names of trades: challwan «to fish» → challwafe «fisher». Answer well and I will open the way.')],
     qs:[{q:L('Kura','Challwa + -fe: ___','La persona que pesca.','The person who fishes.'),o:['challwawe','challwafe','challwan'],a:'challwafe'},
         {q:L('Kura','Ngillaka- («comprar y vender») + -fe: ___','La persona que vende.','The person who sells.'),o:['ngillakafe','ngillakan','ngillakawe'],a:'ngillakafe'},
-        {q:L('Kura','Trutruka + -tu- + -fe: ___','La persona que toca la trutruka.','The person who plays the trutruka.'),o:['trutrukawe','trutrukan','trutrukatufe'],a:'trutrukatufe'}]},
+        {q:L('Kura','Trutruka + -tu- + -fe: ___','La persona que toca la trutruka.','The person who plays the trutruka.'),o:['trutrukawe','trutrukan','trutrukatufe'],a:'trutrukatufe'}],hq:{q:L('Kura','Küdaw + -fe: ___','La persona que trabaja.','The person who works.'),o:['küdawün','küdawfe','küdawwe'],a:'küdawfe'}},
   fu:{intro:[L('Kura','Mari mari! Kimimi -fu-?','¡Hola! ¿Conoces -fu-?','Hello! Do you know -fu-?'),
     N('-fu- habla de lo que era antes y ya no es: kümelen «estoy bien» → kümelefun «estaba bien». Tu chillka lo explica en «Kuyfi · -fu-».','-fu- talks about what used to be: kümelen «I am well» → kümelefun «I was well». Your chillka explains it under «Kuyfi · -fu-».')],
     qs:[{q:L('Kura','Kuyfi iñche pichiche nge___','Antes yo era niño.','Long ago I was a child.'),o:['ngen','ngefun','ngefuy'],a:'ngefun'},
         {q:L('Kura','Fey kim___','Ella sabía.','She used to know.'),o:['kimfuy','kimi','kimfun'],a:'kimfuy'},
-        {q:L('Kura','Iñchiñ lof mew müle___','Nosotros vivíamos en el lof.','We used to live in the lof.'),o:['müleiñ','mülefuy','mülefuiñ'],a:'mülefuiñ'}]},
+        {q:L('Kura','Iñchiñ lof mew müle___','Nosotros vivíamos en el lof.','We used to live in the lof.'),o:['müleiñ','mülefuy','mülefuiñ'],a:'mülefuiñ'}],hq:{q:L('Kura','Eymi kim___','Tú sabías.','You used to know.'),o:['kimfun','kimimi','kimfuymi'],a:'kimfuymi'}},
   kead:{intro:[L('Kura','Mari mari! Epu pichi ruka? Pichike ruka!','¡Hola! ¿Dos casas chicas? ¡Pichike ruka!','Hello! Two little houses? Pichike ruka!'),
     N('Cuando hay varios, el adjetivo lleva -ke: pichi ruka «casa chica» → pichike ruka «casas chicas».','When there are several, the adjective takes -ke: pichi ruka «small house» → pichike ruka «small houses».')],
     qs:[{q:L('Kura','Epu ___ trewa','Dos perros chicos.','Two small dogs.'),o:['pichike','pichi','pichiñma'],a:'pichike'},
         {q:L('Kura','Pu ___ pewen','Los pewenes grandes.','The big pewen trees.'),o:['fütra','fütrake','fütralen'],a:'fütrake'},
-        {q:L('Kura','Küla ___ che','Tres buenas personas.','Three good people.'),o:['kümeke','küme','kümen'],a:'kümeke'}]},
+        {q:L('Kura','Küla ___ che','Tres buenas personas.','Three good people.'),o:['kümeke','küme','kümen'],a:'kümeke'}],hq:{q:L('Kura','Fentren ___ kawellu','Muchos caballos grandes.','Many big horses.'),o:['fütra','fütrake','fütralu'],a:'fütrake'}},
   num2:{intro:[L('Kura','Mari mari! Fütake rakin kimimi?','¡Hola! ¿Conoces los números grandes?','Hello! Do you know the big numbers?'),
     N('pataka = cien; warangka = mil. Se combinan igual que los chicos: epu pataka = 200.','pataka = one hundred; warangka = one thousand. They combine like the small ones: epu pataka = 200.')],
     qs:[{q:N('¿Cómo se dice «cien»?','How do you say «one hundred»?'),o:['pataka','warangka','mari mari'],a:'pataka'},
         {q:N('¿Cómo se dice «mil»?','How do you say «one thousand»?'),o:['pataka mari','warangka','mari pataka'],a:'warangka'},
-        {q:L('Kura','Epu pataka kechu mari = ?','¿Qué número es?','Which number is it?'),o:['250','205','2050'],a:'250'}]},
+        {q:L('Kura','Epu pataka kechu mari = ?','¿Qué número es?','Which number is it?'),o:['250','205','2050'],a:'250'}],hq:{q:L('Kura','Küla warangka epu pataka = ?','¿Qué número es?','Which number is it?'),o:['2300','3020','3200'],a:'3200'}},
   plur:{intro:[L('Kura','Mari mari! Kimimi pu?','¡Hola! ¿Conoces pu?','Hello! Do you know pu?'),N('Cuando son dos o muchos, el verbo también cambia. Completa los verbos.','When there are two or many, the verb changes too. Complete the verbs.')],
     qs:[{q:L('Kura','Pu wentru amu___','Los hombres van.','The men go.'),o:['amuy','amuyngu','amuyngün'],a:'amuyngün'},
         {q:L('Kura','Epu domo küpa___','Dos mujeres vienen.','Two women come.'),o:['küpayngu','küpay','küpayngün'],a:'küpayngu'},
-        {q:L('Kura','Pu pichikeche kim___','Los niños saben.','The children know.'),o:['kimi','kimingün','kimingu'],a:'kimingün'}]}};
+        {q:L('Kura','Pu pichikeche kim___','Los niños saben.','The children know.'),o:['kimi','kimingün','kimingu'],a:'kimingün'}],hq:{q:L('Kura','Pu domo küdaw___','Las mujeres trabajan.','The women work.'),o:['küdawi','küdawingu','küdawingün'],a:'küdawingün'}}};
 function stoneTalk(id){
   const st=STONES[id],sf=M.pz?'pz:'+CUR+':st':'pz:'+CUR;
   if(S.flags[sf])return say([L('Kura','Kümey! Amunge.','¡Bien! Pasa.','Good! Go on through.')]);
+  const qs=S.hm&&st.hq?st.qs.concat([st.hq]):st.qs;
   say(st.intro,()=>ask(0));
   function ask(i){
-    if(i>=st.qs.length){S.flags[sf]=1;pzOpen();sfx('lvl');S.xp+=4;persist();return say([praise(),L('Kura','Tuteley! Amunge.','¡Muy bien! Pasa.','Well done! Go on through.'),N('La puerta de piedra se abre. +4 kimün.','The stone door opens. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
-    const q=st.qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:S.gloss==='en'?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
+    if(i>=qs.length){S.flags[sf]=1;pzOpen();sfx('lvl');S.xp+=4;persist();return say([praise(),L('Kura','Tuteley! Amunge.','¡Muy bien! Pasa.','Well done! Go on through.'),N('La puerta de piedra se abre. +4 kimün.','The stone door opens. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+    const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat(S.hm?[]:[{m:'Chillka',g:S.gloss==='en'?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
       if(v==='_book')return openBook(()=>ask(i));
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Kura','Fey no...','Eso no...','Not that...'),N('Vuelve a intentarlo desde el principio.','Try again from the beginning.')],()=>ask(0))}},false,false)}
+      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');const hd=S.hm?heroHurt():0;say([L('Kura','Fey no...','Eso no...','Not that...'),N((hd?'La piedra te golpea (−'+hd+'). ':'')+'Vuelve a intentarlo desde el principio.',(hd?'The stone strikes you (−'+hd+'). ':'')+'Try again from the beginning.')],()=>ask(0))}},false,false)}
 }
 const WARPS={lafkenche:[{m:'Lafken inaltu',es:'Entrada de la cueva (orilla)',en:'Cave entrance (lagoon shore)',to:['inaltu',21,5]},{m:'Lafkenche lof',es:'El lof de la costa',en:'The coast lof',to:['lof',17,9]}],
   nagche:[{m:'Fütra mawida',es:'Entrada de la guarida (monte)',en:'Lair entrance (forest)',to:['n_mawida',28,4]},{m:'Nagche lof',es:'El lof de los llanos',en:'The lowland lof',to:['n_lof',17,9]}],
@@ -366,7 +368,7 @@ function lonkoTalk(){
     if(S.flags.ngen)ls.push(L('Lonko','Ngen-lafken nepey. Chaltu may!','Ngen-lafken despertó. ¡Gracias!','Ngen-lafken has woken up. Thank you!'),
       N('La niebla se levantó del camino que sale al este de la laguna: lleva a las tierras nagche, los llanos. Allá vive tu chuchu.','The fog has lifted from the road leading east from the lagoon: it goes to the Nagche lands, the lowlands. Your chuchu lives there.'),
       N('El camino: sal del lof hacia el este, cruza las dunas de Kuyüm y el camino del monte, bordea la laguna por Lafken inaltu y sigue al este por el Nagche rüpü hasta el lof nagche.','The way: leave the lof eastward, cross the Kuyüm dunes and the forest road, skirt the lagoon along Lafken inaltu and keep east along the Nagche rüpü to the Nagche lof.'),
-      N('Ese trokiñ de trariwe que traes es muy antiguo. Dicen que el trariwe completo, con un trokiñ de cada tierra, es lo único que puede atravesar la niebla de Ti Fütra Ngoyman, el gran olvido.','That trokiñ of trariwe you carry is very old. They say the complete trariwe, with one trokiñ from each land, is the only thing that can pass through the fog of Ti Fütra Ngoyman, the great forgetting.'));
+      N('Ese trokiñ de trariwe que traes es muy antiguo. Dicen que el trariwe completo, con un trokiñ de cada tierra, es lo único que puede atravesar la niebla de Ti Fütra Ngoymatulfe, el gran olvido.','That trokiñ of trariwe you carry is very old. They say the complete trariwe, with one trokiñ from each land, is the only thing that can pass through the fog of Ti Fütra Ngoymatulfe, the great forgetting.'));
     else ls.push(L('Lonko','Ngen-lafken umawtuley. Trelke-wekufü müley lafken mew.','Ngen-lafken está dormido. Trelke-wekufü está en la laguna.','Ngen-lafken is asleep. Trelke-wekufü is in the lagoon.'),
       N('Sigue la costa hacia el este: las dunas, el monte y la orilla de la laguna.','Follow the coast east: the dunes, the forest, and the shore of the lagoon.'));
     return say(ls);
@@ -1135,7 +1137,7 @@ function eLonkoTalk(){
   if(S.flags.puel_lonko){
     const ls=[L('Lonko','Mari mari, '+nm()+'.','Hola, '+nm()+'.','Hello, '+nm()+'.')];
     if(S.flags.ngen5)ls.push(L('Lonko','Ngen-lelfün nepey. Trariwe dewi!','Ngen-lelfün despertó. ¡El trariwe está completo!','Ngen-lelfün has woken up. The trariwe is complete!'),
-      N('Los cinco trokiñ brillan en tu cintura. Ahora vuelve al oeste, al primer camino junto al mar: la niebla de Ti Fütra Ngoyman ya puede abrirse ante ti.','The five trokiñ glow at your waist. Now go back west, to the first road by the sea: the fog of Ti Fütra Ngoyman can open before you now.'));
+      N('Los cinco trokiñ brillan en tu cintura. Ahora vuelve al oeste, al primer camino junto al mar: la niebla de Ti Fütra Ngoymatulfe ya puede abrirse ante ti.','The five trokiñ glow at your waist. Now go back west, to the first road by the sea: the fog of Ti Fütra Ngoymatulfe can open before you now.'));
     else ls.push(L('Lonko','Wingkul lelfün mew amunge.','Ve a la meseta.','Go to the meseta.'),
       N('Pasando la pampa y el pedregal está la meseta. El chenque del Walichu baja entre las piedras.','Past the grassland and the stone barrens is the meseta. The Walichu\'s chenque goes down among the rocks.'));
     return say(ls);
@@ -1158,7 +1160,7 @@ function eLonkoTalk(){
     S.flags.puel_lonko=1;learnRoot('trana');S.items.kulon++;persist();sfx('lvl');
     say([L('Lonko','Kümey! Meli ngen nepeyngün, pikeyngün.','¡Bien! Dicen que cuatro ngen despertaron.','Good! They say four ngen have woken up.'),
       L('Lonko','Welu Ngen-lelfün umawtuley. Walichu miawi.','Pero Ngen-lelfün duerme. El Walichu anda suelto.','But Ngen-lelfün sleeps. The Walichu is on the loose.'),
-      N('El Walichu es un wekufü de la pampa: seca el pasto, espanta a los luan y hace tropezar a los kawellu. Y lo peor: a la gente le va robando las palabras, una por una, para su patrón: Ti Fütra Ngoyman.','The Walichu is a wekufü of the plains: it dries the grass, scares off the guanacos and makes the horses stumble. And worst of all: it steals people\'s words, one by one, for its master: Ti Fütra Ngoyman.'),
+      N('El Walichu es un wekufü de la pampa: seca el pasto, espanta a los luan y hace tropezar a los kawellu. Y lo peor: a la gente le va robando las palabras, una por una, para su patrón: Ti Fütra Ngoymatulfe.','The Walichu is a wekufü of the plains: it dries the grass, scares off the guanacos and makes the horses stumble. And worst of all: it steals people\'s words, one by one, for its master: Ti Fütra Ngoymatulfe.'),
       L('Lonko','Trana- kimeltueyu.','Te enseño trana- ("caerse").','I teach you trana- ("fall down").'),
       N('Con tranange, tranamu o tranamün, el wekufü cae al suelo: pierde su turno y el próximo golpe le duele más. Recibiste trana- y un külon.','With tranange, tranamu or tranamün, a wekufü falls to the ground: it loses its turn and the next blow hurts it more. You received trana- and a külon.'),
       L('Lonko','Wingkul lelfün mew amunge, '+nm()+'.','Ve a la meseta, '+nm()+'.','Go to the meseta, '+nm()+'.')]);
