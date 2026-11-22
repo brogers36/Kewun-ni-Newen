@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='a814ae7-202611211701';
+window.KEWUN_BUILD='6002d27-202611211717';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -2032,7 +2032,7 @@ function loadMap(id,x,y,quiet){
     if((c==='P'||c==='C'||c==='K'||c==='k'||c==='L'||c==='x')&&S.flags['t:'+id+':'+xx+','+yy])grid[yy][xx]=M.floor;}
   if(S.flags['gate:'+id])for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++){if(grid[yy][xx]==='G')grid[yy][xx]=M.floor;if(grid[yy][xx]==='O')grid[yy][xx]='q'}
   PZ={n:0,lit:new Set()};
-  if(['sb1','sb2','sb3','sb4','sb5','sb6'].every(f=>S.flags[f]))S.flags.sbAll=1;
+  if(['sb1','sb2','sb3','sb4','sb5'].every(f=>S.flags[f]))S.flags.sbAll=1;
   if(id==='g_ngoyman'&&S.flags.gm_all&&!S.flags.lawW){S.flags.lawW=1;S.lawuses=S.lawuses||0}
   if(id==='w_wapi'&&S.flags['pz:w_wapi']&&!S.flags.wapiNpz&&!S.flags['pz:w_wapi:st']){S.flags['pz:w_wapi:st']=1;delete S.flags['pz:w_wapi']}
   {const doorOpen=(M.pz&&M.pz.done)?S.flags['pz:'+id+':st']:S.flags['pz:'+id];
@@ -3966,14 +3966,14 @@ function questLines(){
   const F=S.flags,ls=[],pcs=(S.pieces||[]).length;
   const Q=(t,done,es,en)=>ls.push(L('',(done?'■ ':'▶ ')+t,(done?'(hecho) ':'')+es,(done?'(done) ':'')+en));
   if(!F.pentukun)Q('Chalin',0,'Preséntate con el lonko del lof lafkenche.','Introduce yourself to the lonko of the Lafkenche lof.');
-  else if(!F.won){
+  if(F.sbAll&&!F.epu_won)Q('Epunamun',0,'El Epunamun espera a quien venció a los cinco males escondidos de las cinco tierras: un kona de dos caras, en el umbral de la niebla.','The Epunamun awaits the one who defeated the five hidden evils of the five lands: a two-faced warrior at the threshold of the fog.');
+  if(F.pentukun&&!F.won){
     if(pcs<5)Q('Trariwe trokiñ '+pcs+'/5',0,'Reúne los cinco trokiñ del trariwe antiguo, uno por cada tierra.','Gather the five trokiñ of the ancient sash, one from each land.');
     else Q('Ti Fütra Ngoyman',0,'Con el trariwe completo, cruza la niebla al oeste del camino del mar.','With the complete sash, cross the fog west of the sea road.');
   }else{
     const sbs=['sb1','sb2','sb3','sb4','sb5','sb6'].filter(k=>F[k]).length;
     if(!F.chboss)Q('Münche lafken',0,'Una voz débil suena bajo el islote de las piedras del agua, en Willi mapu.','A faint voice sounds beneath the islet of the water stones, in Willi mapu.');
     if(sbs<6)Q('Pu llum wekufü '+sbs+'/6',0,'Seis males antiguos siguen escondidos en los rincones del mapu; el terreno los delata.','Six ancient evils remain hidden in the corners of the land; the ground gives them away.');
-    else if(!F.epu_won)Q('Epunamun',0,'El Epunamun espera a quien venció a los seis males escondidos.','The Epunamun awaits the one who defeated all six hidden evils.');
     if(F.epu_won&&F.chboss&&sbs>=6)Q('Mapu',1,'La tierra respira. Lo que queda es caminar y aprender.','The land breathes. What remains is to walk and to learn.');
   }
   const MQ=[['laf','Machi (Lafkenche)','pentukun','Saca hojas del foye solo de Fotra mapu, por el lado norte.','Take leaves from the lone foye of Fotra mapu, on the north side.'],
