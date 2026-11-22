@@ -2348,6 +2348,12 @@ if os.path.exists(_yp):
     _y=json.load(open(_yp))
     D['yewen']={'pal':_y['small']['pal'],'f':_y['small']['f'],'big':1,'aura':'150,40,130','hand':1}
     D['yewen@b']={'pal':_y['big']['pal'],'f':_y['big']['f'],'big':1,'aura':'150,40,130','hand':1}
+_kp=os.path.join(os.path.dirname(os.path.abspath(__file__)),'kin.json')
+if os.path.exists(_kp):
+    for _n,_k in json.load(open(_kp)).items():
+        _a=D[_n]['aura'] if _n in D else 0
+        D[_n]={'pal':_k['small']['pal'],'f':_k['small']['f'],'big':1,'aura':_a,'hand':1}
+        D[_n+'@b']={'pal':_k['big']['pal'],'f':_k['big']['f'],'big':1,'aura':_a,'hand':1}
 open(OUT,'w').write('const SPR2='+json.dumps(D,ensure_ascii=False)+';\n')
 if __name__=='__main__':
     for n in D:

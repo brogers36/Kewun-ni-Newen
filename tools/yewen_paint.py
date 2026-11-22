@@ -107,7 +107,8 @@ def taper(c, pts, w0, w1, ramp, lift=0.0, name='', bulge=0.9, prof=False):
                 d.ellipse([x - w / 2, y - w / 2, x + w / 2, y + w / 2], fill=1)
     m = c.mask(fn); c.shade(m, ramp, bulge=bulge, lift=lift, name=name); return m
 
-def flame(c, x0, y0, length, amp, phase, w, lift=0.2):
+def flame(c, x0, y0, length, amp, phase, w, lift=0.2, ramp=None):
+    FR = ramp or RAMP['fire']
     """A tongue of ghostfire: smooth S-curve, widest low, curling to a point; banded core-to-edge."""
     best = {}
     for k in range(length * 2):
@@ -120,8 +121,8 @@ def flame(c, x0, y0, length, amp, phase, w, lift=0.2):
                 if dd <= 1 and (best.get((xx, yy), 9) > dd): best[(xx, yy)] = dd
     for (xx, yy), dd in best.items():
         if 0 <= xx < W and 0 <= yy < H:
-            col = RAMP['fire'][4] if dd < .28 else RAMP['fire'][3] if dd < .55 else RAMP['fire'][2] if dd < .82 else RAMP['fire'][1]
-            if .5 < dd < .6 and (xx + yy) % 2: col = RAMP['fire'][2]
+            col = FR[4] if dd < .28 else FR[3] if dd < .55 else FR[2] if dd < .82 else FR[1]
+            if .5 < dd < .6 and (xx + yy) % 2: col = FR[2]
             c.px(xx, yy, col); c.part[yy, xx] = 'fire'
 
 def muscle(c, box, lift, name, base_mask=None):
