@@ -650,7 +650,7 @@ function renderBattle(){
   c.save();c.translate(sh,0);
   const pa=B.area.replace('fog:',''),painted=!!PBGI[pa];
   if(!BG[B.area]||BG[B.area].width!==LW){const bg=buildBG(B.area);if(!painted||paintedBG(pa))BG[B.area]=bg;else{c.drawImage(bg,0,0)}}
-  if(BG[B.area])c.drawImage(BG[B.area],0,0);if(painted&&paintedBG(pa)&&B.area===pa)animPainted(c,pa);else animBG(B.area);
+  if(BG[B.area])c.drawImage(BG[B.area],0,0);if(painted&&paintedBG(pa)){animPainted(c,pa);if(B.area!==pa)for(let k=0;k<6;k++){const fx=((k*83+frame*.4)%(LW+120))-60;for(let d=0;d<5;d++)R(c,Math.round(fx+d*7),70+k*16+(d%2),46-d*8,2,'rgba(200,206,216,.14)')}}else animBG(B.area);
   {// battle grade: soft-light contrast on the backdrop, a little haze where sky meets land, so the fighters pop off it
    const ar=B.area,dark=/cave|deep|crater|fog:|waria/.test(ar);if(!painted){c.save();c.globalCompositeOperation='soft-light';
    const g=dLin(0,0,0,LH);g.addColorStop(0,dark?'rgba(80,90,130,.5)':'rgba(150,140,120,.4)');g.addColorStop(.55,'rgba(128,128,128,0)');g.addColorStop(1,'rgba(50,40,80,.5)');g.fill(c,0,0,LW,LH);
@@ -1042,9 +1042,29 @@ function drawTablet(c,X,Y,lit){
 }
 
 /* light animation on top of a painted backdrop, in the painting's own colours */
-function animPainted(c,a){const G2=PAINTBG[a].geo,ox=Math.round((LW-400)/2);
+function animPainted(c,a){const G2=PAINTBG[a].geo||{},ox=Math.round((LW-400)/2),F=frame;
+  const motes=(n,col,y0,y1,vx,vy,blink)=>{for(let k=0;k<n;k++){const x=(((k*73+F*vx*(1+(k%3)*.3))%(LW+20))+LW+20)%(LW+20)-10,y=y0+((((k*37+F*vy*(1+(k%4)*.2))%(y1-y0))+(y1-y0))%(y1-y0));if(!blink||(F+k*13)%blink<blink*.7)R(c,Math.round(x),Math.round(y),1,1,col)}};
   if(a==='coast'){const sx=G2.sun[0]+ox;
-    for(let k=0;k<22;k++){const y=G2.hz+3+((k*7)%(G2.sh-G2.hz-8)),sp=6+(y-G2.hz)*1.4,x=Math.round(sx+Math.sin(k*2.3+frame/40)*sp);if((frame+k*11)%34<14){R(c,x,y,2+(k%3),1,k%2?'#fff4d8':'#e6f6ff')}}
-    for(let k=0;k<30;k++){const x=((k*53+Math.floor(frame*.35))%LW),y=G2.hz+6+((k*29)%(G2.sh-G2.hz-10));if((frame+k*9)%60<10)R(c,x,y,3,1,'#a8daf0')}
-    for(let x=0;x<LW;x+=2){const y=G2.sh-1+Math.round(Math.sin((x-ox)/9+frame/24)*1.4);R(c,x,y,2,1,(x>>1)%3?'#eef9ff':'#c8e4f0')}
-    for(let i=0;i<2;i++){const bx=Math.round((frame*.25+i*170)%(LW+30)-15),by=Math.round(30+i*14+Math.sin(frame/20+i)*3),f=Math.sin(frame/6+i)>0?1:0;R(c,bx-1,by,3,1,'#f4f4f8');R(c,bx-4,by-f,3,1,'#f4f4f8');R(c,bx+2,by-f,3,1,'#f4f4f8')}}}
+    for(let k=0;k<22;k++){const y=G2.hz+3+((k*7)%(G2.sh-G2.hz-8)),sp=6+(y-G2.hz)*1.4,x=Math.round(sx+Math.sin(k*2.3+F/40)*sp);if((F+k*11)%34<14){R(c,x,y,2+(k%3),1,k%2?'#fff4d8':'#e6f6ff')}}
+    for(let k=0;k<30;k++){const x=((k*53+Math.floor(F*.35))%LW),y=G2.hz+6+((k*29)%(G2.sh-G2.hz-10));if((F+k*9)%60<10)R(c,x,y,3,1,'#a8daf0')}
+    for(let x=0;x<LW;x+=2){const y=G2.sh-1+Math.round(Math.sin((x-ox)/9+F/24)*1.4);R(c,x,y,2,1,(x>>1)%3?'#eef9ff':'#c8e4f0')}
+    for(let i=0;i<2;i++){const bx=Math.round((F*.25+i*170)%(LW+30)-15),by=Math.round(30+i*14+Math.sin(F/20+i)*3),f=Math.sin(F/6+i)>0?1:0;R(c,bx-1,by,3,1,'#f4f4f8');R(c,bx-4,by-f,3,1,'#f4f4f8');R(c,bx+2,by-f,3,1,'#f4f4f8')}}
+  else if(a==='field'){motes(18,'#fff4b0',90,200,.15,-.08,60);
+    for(let i=0;i<2;i++){const bx=Math.round((F*.3+i*190)%(LW+30)-15),by=Math.round(36+i*16+Math.sin(F/22+i)*3),f=Math.sin(F/6+i)>0?1:0;R(c,bx-1,by,3,1,'#24304a');R(c,bx-4,by-f,3,1,'#24304a');R(c,bx+2,by-f,3,1,'#24304a')}}
+  else if(a==='forest'){motes(16,'#fff6b8',30,170,.06,-.05,50);motes(6,'#7aa848',0,200,.2,.45,0)}
+  else if(a==='mount'){motes(40,'#ffffff',0,224,.25,.6,0);motes(14,'#d8e4f4',0,224,.15,.4,0)}
+  else if(a==='crater'||a==='cave3'){motes(26,'#ffb040',0,200,.1,-.5,40);motes(10,'#ff7020',0,200,.15,-.35,30);
+    if(a==='crater')for(let k=0;k<26;k++){const x=((k*61+Math.floor(F*.4))%LW),y=104+((k*5)%14);if((F+k*7)%40<14)R(c,x,y,3,1,'#ffe08a')}}
+  else if(a==='rainforest'||a==='fjord'){for(let k=0;k<46;k++){const x=((k*29-Math.floor(F*.7))%LW+LW)%LW,y=Math.floor((k*47+F*3.2)%LH);R(c,x,y,1,3,a==='fjord'?'rgba(170,190,210,.55)':'rgba(200,220,236,.55)')}
+    for(let k=0;k<3;k++){const x=((F*.18+k*140)%(LW+120))-60;for(let d=0;d<4;d++)R(c,Math.round(x+d*9),96+k*6+(d%2),40-d*8,1,'rgba(200,210,220,.18)')}}
+  else if(a==='pampa'){motes(30,'#f4e2a0',100,210,1.3,.05,0);motes(10,'#fff8dc',100,210,1.8,.02,0)}
+  else if(a==='lagoon'){const mx=(G2.moon?G2.moon[0]:280)+ox;for(let k=0;k<20;k++){const y=94+((k*3)%28),x=Math.round(mx+Math.sin(k*1.7+F/30)*(2+(y-92)/3));if((F+k*9)%30<12)R(c,x,y,2,1,'#e0e8ff')}
+    for(let k=0;k<30;k++)if((F+k*17)%90<8)R(c,(k*97)%LW,(k*31)%70,1,1,'#ffffff');motes(10,'#d8ff9a',100,200,.08,-.04,40)}
+  else if(a==='deep'){for(let k=0;k<20;k++){const x=(k*41+Math.round(Math.sin((F+k*20)/18)*3))%LW,y=LH-((F*1.1+k*43)%(LH+20));c.fillStyle='rgba(200,240,250,.5)';c.fillRect(x,Math.round(y),1+(k%2),1+(k%2))}
+    motes(12,'#9ad8e0',0,120,.1,.05,60)}
+  else if(/^cave/.test(a)){motes(14,a==='cave4'?'#9ae0d0':'#e8d0a0',20,200,.05,-.04,50);
+    for(const tx of [70,330]){const x=tx+ox,fl=(F>>2)%3;R(c,x-1,56-fl,4,2,'#ffb04a');R(c,x,54-fl,2,2,'#ffe08a')}
+    const dy=Math.floor(F*1.4)%110;R(c,140+ox,dy,1,3,'#9ad0f0');R(c,262+ox,(dy+55)%110,1,3,'#9ad0f0')}
+  else if(a==='waria'){for(let k=0;k<26;k++){const x=((k*37+Math.floor(F*.5))%LW),y=Math.floor((k*53+F*2.6)%LH);R(c,x,y,1,2,'rgba(190,200,220,.4)')}
+    const hx2=((F*2)%(LW+80))-40;R(c,Math.round(hx2),152,4,2,'#fff4c0');R(c,Math.round(hx2)+18,152,4,2,'#fff4c0');R(c,Math.round(LW-hx2*.8),158,4,2,'#ff4030')}
+}
