@@ -347,3 +347,8 @@ El Yewen ahora invoca (de a una, hasta dos a la vez) cinco criaturas. Nombres a 
 - La burla del ayentufe (por indicación de Brandon, sin insultos étnicos): «¡Ja! ¿Y eso qué idioma es? ¡Habla bien!» / "Ha! What language is that even? Talk properly!"
 
 - (Nov 21) La 4.ª forma del jefe final se llama ahora **Füta Dumiñ** (nombre dado por Brandon; antes 'Ngoyman ñi pun'). Textos: «Füta Dumiñ: la gran oscuridad del olvido.»
+
+- (Nov 21) Correcciones de Brandon:
+  - 'ayúdame' = **kelluen** en todos los diálogos: los cinco cautivos de Ngoyman (antes "Kellumuchi..."; el niño lafkenche: "K-kelluen...") y la tejedora del lof nagche (antes "welu ngillañmakelen kal"; ahora "Mari mari! Makuñ ngürekalen. Kelluen!", glosa «¡Ayúdame! (con la lana)»).
+  - '¿cómo se dice X?' = **chumngechi pingekey X** (o *pingeafuy X*): el niño lafkenche ahora pregunta "Chumngechi pingekey "gracias"?" y "Chumngechi pingekey "hasta luego"?" (antes "Chem pin ...?").
+  - Sin cambiar: "Kellumuyiñ!" de los chumpall ('ayúdennos', plural) y la casera y el chofer de Santiago, que preguntan «¿cómo se dice...?» en castellano a propósito (son hablantes urbanos que no saben la lengua).

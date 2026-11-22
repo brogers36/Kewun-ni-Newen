@@ -581,7 +581,7 @@ function nweavTalk(){
   const qs=[{q:L('Domo','Chem antü tüfa? Kelü kal.','Lana de color rojo.','Wool of the red color.'),o:['kelü','kallfü','lig'],a:'kelü'},
     {q:L('Domo','Tüfa kay? Kallfü kal.','Y esta: lana azul.','And this: blue wool.'),o:['kurü','kallfü','chod'],a:'kallfü'},
     {q:L('Domo','Ka tüfa? Lig kal.','Y esta: lana blanca.','And this one: white wool.'),o:['lig','karü','kelü'],a:'lig'}];
-  say([L('Domo','Mari mari! Makuñ ngürekalen, welu ngillañmakelen kal.','¡Hola! Estoy tejiendo un makuñ, pero ayúdame a ordenar la lana.','Hello! I am weaving a makuñ, but help me sort the wool.'),
+  say([L('Domo','Mari mari! Makuñ ngürekalen. Kelluen!','¡Hola! Estoy tejiendo un makuñ. ¡Ayúdame! (con la lana)','Hello! I am weaving a makuñ. Help me! (with the wool)'),
     N('Te muestra ovillos de colores. Dile el color de cada uno. Tu chillka tiene los colores.','She shows you balls of dyed wool. Name each color. Your chillka has the colors.')],()=>ask(0));
   function ask(i){
     if(i>=qs.length){S.flags.n_weavd=1;S.gold+=20;S.items.lawen++;S.xp+=3;persist();sfx('lvl');
@@ -1297,17 +1297,17 @@ function capQuiz(id,gm,label,intro,qs,who,whoen,reward,rewardEn,give){
 }
 function gLafTalk(){
   capQuiz('cap1','gm1','Pichiche',
-    [L('Pichiche','K-kellumuchi...','A-ayúdenme...','H-help me...'),
+    [L('Pichiche','K-kelluen...','A-ayúdame...','H-help me...'),
      N('Un niño lafkenche está envuelto en hilos de niebla. Sus palabras se están borrando: ayúdalo a recordarlas y la niebla lo soltará.','A Lafkenche child is wrapped in threads of fog. His words are being erased: help him remember them and the fog will let him go.')],
     [{q:L('Pichiche','Chumleymi? ...Chem pin?','Si te preguntan "¿cómo estás?", ¿qué respondes?','If they ask "how are you?", what do you answer?'),o:['Kümelen','Kümeleymi','Kümeley'],a:'Kümelen'},
-     {q:L('Pichiche','Chem pin "gracias"?','¿Cómo se dice "gracias"?','How do you say "thank you"?'),o:['chaltu may','mari mari','pewkayal'],a:'chaltu may'},
-     {q:L('Pichiche','Chem pin "hasta luego"?','¿Cómo se dice "hasta luego"?','How do you say "see you later"?'),o:['pewkayal','mari mari','fey no'],a:'pewkayal'}],
+     {q:L('Pichiche','Chumngechi pingekey "gracias"?','¿Cómo se dice "gracias"?','How do you say "thank you"?'),o:['chaltu may','mari mari','pewkayal'],a:'chaltu may'},
+     {q:L('Pichiche','Chumngechi pingekey "hasta luego"?','¿Cómo se dice "hasta luego"?','How do you say "see you later"?'),o:['pewkayal','mari mari','fey no'],a:'pewkayal'}],
     'el niño','the child','Antes de irse te deja epu kofke y meli mari (40) ngülliw.','Before leaving he gives you two kofke and meli mari (40) ngülliw.',
     ()=>{S.items.kofke+=2;S.gold+=40});
 }
 function gNagTalk(){
   capQuiz('cap2','gm2','Challwafe',
-    [L('Challwafe','Kellumuchi... Ngoyman mew mülen.','Ayúdame... Estoy dentro del olvido.','Help me... I am inside the forgetting.'),
+    [L('Challwafe','Kelluen... Ngoyman mew mülen.','Ayúdame... Estoy dentro del olvido.','Help me... I am inside the forgetting.'),
      N('Un pescador nagche está atrapado en la niebla. Olvidó lo que viene: el futuro. Devuélvele el -a- y la niebla lo soltará.','A Nagche fisherman is trapped in the fog. He has forgotten what is to come: the future. Give him back the -a- and the fog will let him go.')],
     [{q:L('Challwafe','Wüle iñche challwatu___','Mañana yo pescaré.','Tomorrow I will fish.'),o:['challwatun','challwatuan','challwatuy'],a:'challwatuan'},
      {q:L('Challwafe','Eymi amu___','Tú irás.','You will go.'),o:['amuymi','amuaymi','amuan'],a:'amuaymi'},
@@ -1317,7 +1317,7 @@ function gNagTalk(){
 }
 function gPewTalk(){
   capQuiz('cap3','gm3','Ngülliwfe',
-    [L('Ngülliwfe','Kellumuchi... Rakin ñamün.','Ayúdame... Perdí los números.','Help me... I have lost the numbers.'),
+    [L('Ngülliwfe','Kelluen... Rakin ñamün.','Ayúdame... Perdí los números.','Help me... I have lost the numbers.'),
      N('Una recolectora pewenche cuenta ngülliw que ya no sabe contar. Devuélvele los números y la niebla la soltará.','A Pewenche gatherer counts pine nuts she no longer knows how to count. Give her back the numbers and the fog will let her go.')],
     [{q:L('Ngülliwfe','Kechu mari... chumten am?','Kechu mari, ¿cuánto es?','Kechu mari, how many is that?'),o:['15','50','500'],a:'50'},
      {q:L('Ngülliwfe','Pataka... chumten am?','Pataka, ¿cuánto es?','Pataka, how many is that?'),o:['100','1000','40'],a:'100'},
@@ -1328,7 +1328,7 @@ function gPewTalk(){
 function gWilTalk(){
   const en=S.gloss==='en';
   capQuiz('cap4','gm4','Challwafe domo',
-    [L('Challwafe domo','Kellumuchi... Chumül? Chumül am?','Ayúdame... ¿Cuándo? ¿Cuándo?','Help me... When? When?'),
+    [L('Challwafe domo','Kelluen... Chumül? Chumül am?','Ayúdame... ¿Cuándo? ¿Cuándo?','Help me... When? When?'),
      N('Una pescadora williche perdió los días en la niebla: ayer, hoy y mañana se le mezclan. Ordénaselos y la niebla la soltará.','A Williche fisherwoman has lost the days in the fog: yesterday, today and tomorrow blur together. Set them in order and the fog will let her go.')],
     [{q:L('Challwafe domo','"Wiya"... chem am?','"Wiya", ¿qué es?','"Wiya", what is it?'),o:[en?'yesterday':'ayer',en?'tomorrow':'mañana',en?'today':'hoy'],a:en?'yesterday':'ayer'},
      {q:L('Challwafe domo','"Wüle"... chem am?','"Wüle", ¿qué es?','"Wüle", what is it?'),o:[en?'today':'hoy',en?'tomorrow':'mañana',en?'yesterday':'ayer'],a:en?'tomorrow':'mañana'},
@@ -1338,7 +1338,7 @@ function gWilTalk(){
 }
 function gPuelTalk(){
   capQuiz('cap5','gm5','Werken',
-    [L('Werken','Kellumuchi... Ñi dungu ñamyawi.','Ayúdame... Mis mensajes andan perdidos.','Help me... My messages have gone astray.'),
+    [L('Werken','Kelluen... Ñi dungu ñamyawi.','Ayúdame... Mis mensajes andan perdidos.','Help me... My messages have gone astray.'),
      N('Un werken puelche lleva mensajes que la niebla le borró. Son los más difíciles: ir y venir, y lo que dicen otros. Devuélveselos y la niebla lo soltará.','A Puelche messenger carries messages the fog erased. They are the hardest ones: going and coming, and what others say. Give them back and the fog will let him go.')],
     [{q:L('Werken','Kintu___ ("fui a buscar allá")','"Fui a buscar (allá y volví)".','"I went looking (over there and back)".'),o:['kintun','kintumen','kintupan'],a:'kintumen'},
      {q:L('Werken','Kellu___ ("vino a ayudar acá")','"Vino a ayudar (hacia acá)".','"He came here to help".'),o:['kellumey','kellupay','kelluy'],a:'kellupay'},
