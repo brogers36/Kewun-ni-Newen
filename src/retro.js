@@ -273,8 +273,24 @@ function scale2xCanvas(src){const w=src.width,h=src.height,a=src.getContext('2d'
   c.putImageData(img,0,0);return cv}
 /* battle-size hero: scale2x then the full 3D repaint at the doubled resolution (finer volume, like the bosses) */
 function ctCharSpriteBig(look,dir,fr){const key='BIG'+look+dir+fr;if(CCACHE[key])return CCACHE[key];
-  const raw=ctCharSpriteRaw(look,dir==='left'?'right':dir,fr,false);let big=scale2xCanvas(raw);if(dir==='left')big=mirror(big);
+  const raw=ctCharSpriteRaw(look,dir==='left'?'right':dir,fr,false);let big=withFeet(scale2xCanvas(raw),fr);if(dir==='left')big=mirror(big);
   return CCACHE[key]=repaintSmall(big,{amp:.95,capG:9,capP:5,lift:.14,sh:.7})}
+/* side-view feet for the battle sprite: shoes planted under each leg (or peeking from under a long
+   dress), pointing forward (right in the raw sprite; mirrored when facing left) */
+function withFeet(src,fr){
+  const w=src.width,h=src.height,a=src.getContext('2d').getImageData(0,0,w,h).data,al=(x,y)=>a[(y*w+x)*4+3]>40;
+  let yb=h-1;while(yb>0&&![...Array(w).keys()].some(x=>al(x,yb)))yb--;
+  const segs=[];for(let x=0;x<w;){if(al(x,yb)){let x1=x;while(x1+1<w&&al(x1+1,yb))x1++;segs.push([x,x1]);x=x1+1}else x++}
+  const [cv,c]=mk(w+6,yb+1+6);c.drawImage(src,0,0);
+  const shoe=(x0,x1,lift)=>{const y=yb+1-lift,len=x1-x0+1+4;
+    R(c,x0-1,y-1,len+1,6,'#100a08');                 // outline
+    R(c,x0,y,len-1,4,'#3c2618');R(c,x0,y,len-2,1,'#6a4630');R(c,x0+len-3,y+1,2,2,'#2a1a10');   // upper, lit top, toe
+    R(c,x0,y+3,len,1,'#16100c');R(c,x0+1,y,1,1,'#8a6244')};       // sole, highlight
+  const narrow=segs.filter(([x0,x1])=>x1-x0<=9);
+  if(narrow.length&&segs.length>=2){segs.forEach(([x0,x1],k)=>shoe(x0,x1,fr===1&&k===0?1:fr===2&&k===1?1:0))}
+  else{const [x0,x1]=segs.reduce((m,s2)=>s2[1]-s2[0]>m[1]-m[0]?s2:m,segs[0]||[0,0]),mid=(x0+x1)>>1;   // long dress: two feet peek out
+    shoe(mid-6,mid-2,0);shoe(mid+1,mid+5,fr?1:0)}
+  return cv}
 function enemyCanvas(t,size,fr){
   const key='s3:'+t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];
   const raw=enemyCanvasRaw(t,size,fr),sp=typeof SPR2!=='undefined'&&SPR2[t]?((size>=40&&SPR2[t+'@b'])||SPR2[t]):null;return ECACHE[key]=(sp&&sp.hand)?raw:shade3d(raw)}
