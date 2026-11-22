@@ -169,28 +169,8 @@ def paint(fr):
     c.shade(m_boot, RAMP['boot'], bulge=0.8, lift=0.1, name='boot')
     c.px(30, 106, RAMP['metal'][5]); c.px(47, 106, RAMP['metal'][5])
 
-    # back arm (our right) down to the staff
+    # back shoulder (our right); the arm itself is drawn later, over the staff
     muscle(c, [58, 28, 70, 40], -0.05, 'armB')
-    m_armB = taper(c, [(64, 36), (69, 44), (72, 52)], 8, 7, RAMP['skin'], lift=-0.12, name='armB', bulge=1.1)
-
-    # staff with an iron padlock head
-    sx = 75
-    m_staff = c.mask(lambda d: d.rectangle([sx - 1, 16, sx + 1, 108], fill=1))
-    c.shade(m_staff, RAMP['wood'], bulge=0.8, lift=0.15, name='staff')
-    for y in (26, 42, 80, 96):
-        c.rect(sx - 2, y, 5, 2, RAMP['metal'][2]); c.rect(sx - 2, y, 5, 1, RAMP['metal'][5]); c.px(sx - 2, y + 1, RAMP['metal'][1])
-    m_shk = c.mask(lambda d: d.arc([sx - 5, 1, sx + 5, 13], 180, 360, fill=1, width=3))
-    c.shade(m_shk, RAMP['metal'], bulge=0.8, lift=0.2, name='lock')
-    m_lock = c.mask(lambda d: d.rounded_rectangle([sx - 7, 6, sx + 7, 18], 2, fill=1))
-    c.shade(m_lock, RAMP['metal'], bulge=1.0, lift=0.0, name='lock')
-    c.rect(sx - 3, 9, 7, 7, RAMP['gold'][3]); c.rect(sx - 3, 9, 7, 1, RAMP['gold'][5]); c.rect(sx - 3, 15, 7, 1, RAMP['gold'][1])
-    kg = RAMP['fire'][5 if f else 4]
-    c.rect(sx - 1, 10, 3, 2, RAMP['fire'][1]); c.px(sx, 10, kg); c.px(sx, 11, kg); c.rect(sx, 12, 1, 3, RAMP['fire'][2]); c.px(sx, 13, kg)
-    for x, y in [(sx - 6, 7), (sx + 6, 7), (sx - 6, 17), (sx + 6, 17)]: c.px(x, y, RAMP['metal'][6])
-    m_handB = c.mask(lambda d: d.ellipse([sx - 4, 51, sx + 4, 60], fill=1))
-    c.shade(m_handB, RAMP['skin'], bulge=1.1, lift=-0.05, name='handB')
-    for y in (53, 55, 57): c.px(sx - 4, y, RAMP['skin'][1]); c.px(sx - 3, y, RAMP['skin'][4])
-    c.px(sx - 5, 59, RAMP['metal'][6]); c.px(sx - 5, 57, RAMP['metal'][5])
 
     # torso: V-shaped, gaunt, with sculpted muscle masses
     m_torso = c.mask(lambda d: d.polygon([(30, 32), (66, 32), (63, 42), (58, 54), (57, 67), (39, 67), (38, 54), (33, 42)], fill=1))
@@ -219,6 +199,25 @@ def paint(fr):
     c.shade(m_col, RAMP['cloak'], bulge=0.7, lift=0.15, name='collar')
     m_colin = c.mask(lambda d: d.polygon([(35, 33), (33, 20), (40, 26), (56, 26), (63, 20), (61, 33)], fill=1)) & m_col
     c.shade(m_colin, RAMP['lining'], bulge=0.5, name='collarin')
+
+    # staff, held upright in front of the right shoulder with both hands, padlock head
+    sx = 70
+    m_staff = c.mask(lambda d: d.rectangle([sx - 1, 16, sx + 1, 108], fill=1))
+    c.shade(m_staff, RAMP['wood'], bulge=0.8, lift=0.15, name='staff')
+    for y in (24, 70, 84, 98):
+        c.rect(sx - 2, y, 5, 2, RAMP['metal'][2]); c.rect(sx - 2, y, 5, 1, RAMP['metal'][5]); c.px(sx - 2, y + 1, RAMP['metal'][1])
+    m_shk = c.mask(lambda d: d.arc([sx - 5, 1, sx + 5, 13], 180, 360, fill=1, width=3))
+    c.shade(m_shk, RAMP['metal'], bulge=0.8, lift=0.2, name='lock')
+    m_lock = c.mask(lambda d: d.rounded_rectangle([sx - 7, 6, sx + 7, 18], 2, fill=1))
+    c.shade(m_lock, RAMP['metal'], bulge=1.0, lift=0.0, name='lock')
+    c.rect(sx - 3, 9, 7, 7, RAMP['gold'][3]); c.rect(sx - 3, 9, 7, 1, RAMP['gold'][5]); c.rect(sx - 3, 15, 7, 1, RAMP['gold'][1])
+    kg = RAMP['fire'][5 if f else 4]
+    c.rect(sx - 1, 10, 3, 2, RAMP['fire'][1]); c.px(sx, 10, kg); c.px(sx, 11, kg); c.rect(sx, 12, 1, 3, RAMP['fire'][2]); c.px(sx, 13, kg)
+    for x, y in [(sx - 6, 7), (sx + 6, 7), (sx - 6, 17), (sx + 6, 17)]: c.px(x, y, RAMP['metal'][6])
+    for i in range(8):  # ghostfire leaking from the keyhole
+        a2 = i * 0.9 + f * 1.6
+        c.px(int(round(sx + math.cos(a2) * 2)), int(round(4 - i * 0.6 + math.sin(a2))), RAMP['fire'][min(5, 2 + (i % 4))])
+
 
     # neck and head (bigger, gaunt, jaw jutting toward the front)
     m_neck = c.mask(lambda d: d.polygon([(42, 24), (54, 24), (56, 34), (40, 34)], fill=1))
@@ -250,54 +249,44 @@ def paint(fr):
             c.px(xi, yi, RAMP['metal'][6 if i == n - 1 else 4 if i > n // 2 else 3]); c.px(xi + 1, yi, RAMP['metal'][1])
         c.px(bx, by + 1, K0)
 
-    # front arm reaching toward the hero, open clawed hand (palm toward us, four fingers fanned, thumb low)
-    muscle(c, [26, 28, 40, 42], 0.30, 'armF')
-    taper(c, [(32, 38), (27, 44), (22, 46)], 9, 8, RAMP['skin'], lift=0.22, name='armF', bulge=1.1)
-    taper(c, [(22, 46), (19, 42), (17, 38)], 8, 7, RAMP['skin'], lift=0.26, name='fore', bulge=1.1)
-    m_brc = c.mask(lambda d: d.polygon([(23, 43), (20, 47), (16, 43), (19, 39)], fill=1))
-    c.shade(m_brc, RAMP['gold'], bulge=0.9, lift=0.1, name='bracer')
-    c.px(19, 41, RAMP['gold'][5]); c.px(20, 42, RAMP['gold'][5])
-    # palm: a rounded square tilted toward the hero, with a lit heel and a crease
-    m_palm = c.mask(lambda d: d.polygon([(18, 35), (14, 30), (9, 30), (7, 34), (8, 39), (12, 42), (17, 40)], fill=1))
-    c.shade(m_palm, RAMP['skin'], bulge=1.25, lift=0.34, name='palm')
-    for (x, y) in [(10, 35), (11, 36), (12, 36), (13, 37)]: c.px(x, y, RAMP['skin'][2])       # life-line crease
-    for (x, y) in [(10, 34), (11, 35)]: c.px(x, y, RAMP['skin'][5])
-    def finger(name, base, d1, l1, d2, l2, lift):
-        """Two phalanges: base -> knuckle -> tip, 3px wide, the second bent into a claw."""
-        bx, by = base; kx, ky = bx + d1[0] * l1, by + d1[1] * l1; tx, ty = kx + d2[0] * l2, ky + d2[1] * l2
-        def fn(dd):
-            for (ax, ay), (ex, ey), w in [((bx, by), (kx, ky), 3.4), ((kx, ky), (tx, ty), 2.8)]:
-                n = int(max(abs(ex - ax), abs(ey - ay)) * 2) + 1
-                for k in range(n + 1):
-                    x = ax + (ex - ax) * k / n; y = ay + (ey - ay) * k / n
-                    dd.ellipse([x - w / 2, y - w / 2, x + w / 2, y + w / 2], fill=1)
-        m = c.mask(fn) & ~(c.part == 'palm')
-        c.shade(m, RAMP['skin'], bulge=1.1, lift=lift, name=name)
-        c.px(int(round(kx)), int(round(ky)), RAMP['skin'][5])                                   # knuckle highlight
-        c.px(int(round(kx + d1[1])), int(round(ky - d1[0])), RAMP['skin'][1])                  # crease on the far side
-        # hooked nail: pale tip with a dark underside
-        nx, ny = int(round(tx)), int(round(ty))
-        c.px(nx, ny, RAMP['metal'][6]); c.px(int(round(tx - d2[0])), int(round(ty - d2[1])), RAMP['metal'][4])
-        c.px(int(round(tx + d2[1] * .9)), int(round(ty - d2[0] * .9)), RAMP['metal'][2])
-    nrm = lambda x, y: (x / math.hypot(x, y), y / math.hypot(x, y))
-    curl = 1 if f else 0
-    finger('f0', (12, 31), nrm(-0.35, -1), 6, nrm(-0.9, -0.5 + 0.2 * curl), 4, 0.46)   # index, pointing up and out
-    finger('f1', (10, 32), nrm(-0.8, -0.75), 7, nrm(-1, 0.05 + 0.2 * curl), 4, 0.42)   # middle, the longest
-    finger('f2', (8, 35), nrm(-1, -0.2), 6, nrm(-0.75, 0.6 + 0.15 * curl), 4, 0.36)    # ring
-    finger('f3', (8, 38), nrm(-0.9, 0.35), 5, nrm(-0.4, 0.95), 3, 0.30)                # little finger
-    finger('f4', (13, 41), nrm(-0.45, 0.95), 5, nrm(-0.95, 0.35), 3, 0.34)             # thumb, low and opposed
-    # a small ghostfire flicker hovering above the claw (no longer hiding the palm)
-    for i in range(7):
-        a = i * 0.9 + f * 1.6
-        c.px(int(round(5 + math.cos(a) * 2)), int(round(23 - i + math.sin(a))), RAMP['fire'][min(5, 2 + (i % 4))])
+    def fist(name, cx, cy, lift, knuckles_left=True):
+        """A fist wrapped around the staff: rounded block, four knuckle bumps toward us, a thumb over the fingers."""
+        m = c.mask(lambda d: d.rounded_rectangle([cx - 5, cy - 4, cx + 5, cy + 4], 3, fill=1))
+        c.shade(m, RAMP['skin'], bulge=1.2, lift=lift, name=name)
+        kx = cx - 4 if knuckles_left else cx + 4
+        for k in range(4):                                   # finger segments wrapped round the shaft
+            y = cy - 3 + k * 2
+            c.px(kx, y, RAMP['skin'][5]); c.px(kx + (1 if knuckles_left else -1), y, RAMP['skin'][4])
+            for x in range(cx - 3, cx + 4): c.px(x, y + 1, RAMP['skin'][1]) if k < 3 else None
+        for x in range(cx - 2, cx + 3): c.px(x, cy - 4, RAMP['skin'][5])       # thumb over the top
+        c.px(cx + 2, cy - 5, RAMP['skin'][4]); c.px(cx + 3, cy - 4, RAMP['metal'][5])  # thumbnail
+        c.px(kx - (1 if knuckles_left else -1), cy + 3, RAMP['metal'][6])          # a claw tip curling past the shaft
+        c.px(kx - (1 if knuckles_left else -1), cy + 2, RAMP['metal'][4])
+
+    # back arm: elbow out to the right, the upper hand high on the staff
+    taper(c, [(64, 34), (73, 42), (76, 48)], 8, 7, RAMP['skin'], lift=-0.10, name='armB', bulge=1.1)
+    taper(c, [(76, 48), (74, 42), (71, 38)], 7, 6, RAMP['skin'], lift=-0.02, name='armB2', bulge=1.1)
+    m_brcB = c.mask(lambda d: d.polygon([(77, 44), (74, 47), (72, 43), (75, 40)], fill=1))
+    c.shade(m_brcB, RAMP['gold'], bulge=0.9, lift=0.0, name='bracerB')
+    fist('handB', sx, 36, 0.05, knuckles_left=True)
+
+    # front arm: down from the shoulder, forearm crossing the belly to grip the staff lower down
+    muscle(c, [26, 30, 40, 44], 0.30, 'armF')
+    taper(c, [(33, 38), (34, 47), (38, 55)], 9, 8, RAMP['skin'], lift=0.22, name='armF', bulge=1.1)
+    taper(c, [(38, 55), (50, 56), (63, 55)], 8, 7, RAMP['skin'], lift=0.26, name='fore', bulge=1.1)
+    m_brc = c.mask(lambda d: d.polygon([(44, 52), (49, 52), (49, 59), (44, 59)], fill=1))
+    c.shade(m_brc, RAMP['gold'], bulge=0.9, lift=0.12, name='bracer')
+    c.px(45, 53, RAMP['gold'][5]); c.px(45, 54, RAMP['gold'][5])
+    for x in range(52, 62, 3): c.px(x, 53, RAMP['skin'][5])            # tendons along the forearm
+    fist('hand', sx, 55, 0.24, knuckles_left=True)
+
 
     # foreground flame licks at the hem
     flame(c, 24, 112, 14, 2, 0.5 + f, 7, lift=0.3)
     flame(c, 68, 112, 16, 2, 2.0 + f, 7, lift=0.3)
 
     c.inner_lines({('torso', 'sash'), ('pec', 'abs'), ('armF', 'pec'), ('armF', 'torso'), ('head', 'neck'), ('neck', 'collarin'),
-                   ('legL', 'legR'), ('armB', 'cloak'), ('cloak', 'lining'), ('collar', 'head'), ('palm', 'bracer'), ('bracer', 'fore'), ('fore', 'palm'),
-                   ('f0', 'palm'), ('f1', 'palm'), ('f2', 'palm'), ('f3', 'palm'), ('f4', 'palm'), ('f0', 'f1'), ('f1', 'f2'), ('f2', 'f3'), ('f1', 'f0'), ('f2', 'f1'), ('f3', 'f2'), ('abs', 'abs'), ('pec', 'pec'), ('abs', 'torso'), ('pec', 'abs'), ('armB', 'pec')})
+                   ('legL', 'legR'), ('armB', 'cloak'), ('cloak', 'lining'), ('collar', 'head'), ('hand', 'fore'), ('fore', 'hand'), ('bracer', 'fore'), ('fore', 'abs'), ('fore', 'torso'), ('fore', 'sash'), ('handB', 'armB2'), ('armB2', 'handB'), ('bracerB', 'armB'), ('armB', 'armB2'), ('armB2', 'collar'), ('abs', 'abs'), ('pec', 'pec'), ('abs', 'torso'), ('pec', 'abs'), ('armB', 'pec')})
     c.outline()
     # magenta rim light on the shadow (right) side, cast by the ghostfire behind
     for y in range(H):
@@ -306,7 +295,7 @@ def paint(fr):
     rim = (238, 92, 208)
     for y in range(H):
         for x in range(2, W - 1):
-            if c.a[y, x + 1] and c.a[y, x] and not (x + 2 < W and c.a[y, x + 2]) and c.part[y, x] in ('torso', 'pec', 'abs', 'armB', 'head', 'ear', 'neck', 'cloak', 'collar', 'legR', 'handB'):
+            if c.a[y, x + 1] and c.a[y, x] and not (x + 2 < W and c.a[y, x + 2]) and c.part[y, x] in ('torso', 'pec', 'abs', 'armB', 'head', 'ear', 'neck', 'cloak', 'collar', 'legR', 'handB', 'armB2', 'staff', 'lock'):
                 v = c.rgb[y, x].astype(float); c.rgb[y, x] = (v * 0.5 + np.array(rim) * 0.5).astype(np.uint8)
     img = np.zeros((H, W, 4), np.uint8); img[..., :3] = c.rgb; img[..., 3] = c.a * 255
     return img
