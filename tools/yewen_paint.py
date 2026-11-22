@@ -91,7 +91,7 @@ class Canvas:
                 p = s.part[y, x]
                 for q in [s.part[y, x + 1], s.part[y + 1, x], s.part[y, x - 1], s.part[y - 1, x]]:
                     if (p, q) in pairs:
-                        k = 0.72 if p in ('abs', 'pec') and q in ('abs', 'pec', 'torso') else 0.45
+                        k = 0.72 if p in ('abs', 'pec') and q in ('abs', 'pec', 'torso') else 0.62 if p[:1] == 'f' and len(p) == 2 else 0.45
                         s.rgb[y, x] = (s.rgb[y, x] * k).astype(np.uint8); break
 
 def taper(c, pts, w0, w1, ramp, lift=0.0, name='', bulge=0.9, prof=False):
@@ -250,33 +250,54 @@ def paint(fr):
             c.px(xi, yi, RAMP['metal'][6 if i == n - 1 else 4 if i > n // 2 else 3]); c.px(xi + 1, yi, RAMP['metal'][1])
         c.px(bx, by + 1, K0)
 
-    # front arm reaching toward the hero, big clawed hand
+    # front arm reaching toward the hero, open clawed hand (palm toward us, four fingers fanned, thumb low)
     muscle(c, [26, 28, 40, 42], 0.30, 'armF')
-    taper(c, [(32, 38), (26, 44), (20, 47)], 9, 8, RAMP['skin'], lift=0.22, name='armF', bulge=1.1)
-    taper(c, [(20, 47), (15, 42), (11, 37)], 8, 7, RAMP['skin'], lift=0.26, name='fore', bulge=1.1)
-    m_brc = c.mask(lambda d: d.polygon([(20, 41), (16, 46), (12, 42), (16, 37)], fill=1))
+    taper(c, [(32, 38), (27, 44), (22, 46)], 9, 8, RAMP['skin'], lift=0.22, name='armF', bulge=1.1)
+    taper(c, [(22, 46), (19, 42), (17, 38)], 8, 7, RAMP['skin'], lift=0.26, name='fore', bulge=1.1)
+    m_brc = c.mask(lambda d: d.polygon([(23, 43), (20, 47), (16, 43), (19, 39)], fill=1))
     c.shade(m_brc, RAMP['gold'], bulge=0.9, lift=0.1, name='bracer')
-    c.px(16, 39, RAMP['gold'][5]); c.px(17, 40, RAMP['gold'][5])
-    m_palm = c.mask(lambda d: d.polygon([(13, 29), (6, 27), (2, 33), (4, 42), (12, 43), (15, 36)], fill=1))
-    c.shade(m_palm, RAMP['skin'], bulge=1.2, lift=0.30, name='hand')
-    fl = [[(7, 29), (4, 22), (3 - f, 16)], [(4, 31), (0, 26), (-2, 22 + f)], [(2, 35), (-2, 34), (-3, 31)],
-          [(3, 40), (0, 45), (0, 50 - f)], [(11, 42), (11, 47), (13, 52 - f)]]
-    for pts in fl:
-        pts = [(x + 2, y) for x, y in pts]
-        taper(c, pts, 4, 2.2, RAMP['skin'], lift=0.28, name='finger', bulge=1.0)
-        (x1, y1), (x2, y2) = pts[-2], pts[-1]
-        c.px(int(x2), int(y2), RAMP['metal'][6]); c.px(int(round((x1 + x2) / 2)), int(round((y1 + y2) / 2)), RAMP['skin'][2])
-    for i in range(16):  # ghostfire swirling in the palm
-        a = i * 0.6 + f * 1.4; r = 2 + i * 0.3
-        c.px(int(round(7 + math.cos(a) * r)), int(round(35 + math.sin(a) * r * 0.7)), RAMP['fire'][min(5, 2 + (i % 4))])
+    c.px(19, 41, RAMP['gold'][5]); c.px(20, 42, RAMP['gold'][5])
+    # palm: a rounded square tilted toward the hero, with a lit heel and a crease
+    m_palm = c.mask(lambda d: d.polygon([(18, 35), (14, 30), (9, 30), (7, 34), (8, 39), (12, 42), (17, 40)], fill=1))
+    c.shade(m_palm, RAMP['skin'], bulge=1.25, lift=0.34, name='palm')
+    for (x, y) in [(10, 35), (11, 36), (12, 36), (13, 37)]: c.px(x, y, RAMP['skin'][2])       # life-line crease
+    for (x, y) in [(10, 34), (11, 35)]: c.px(x, y, RAMP['skin'][5])
+    def finger(name, base, d1, l1, d2, l2, lift):
+        """Two phalanges: base -> knuckle -> tip, 3px wide, the second bent into a claw."""
+        bx, by = base; kx, ky = bx + d1[0] * l1, by + d1[1] * l1; tx, ty = kx + d2[0] * l2, ky + d2[1] * l2
+        def fn(dd):
+            for (ax, ay), (ex, ey), w in [((bx, by), (kx, ky), 3.4), ((kx, ky), (tx, ty), 2.8)]:
+                n = int(max(abs(ex - ax), abs(ey - ay)) * 2) + 1
+                for k in range(n + 1):
+                    x = ax + (ex - ax) * k / n; y = ay + (ey - ay) * k / n
+                    dd.ellipse([x - w / 2, y - w / 2, x + w / 2, y + w / 2], fill=1)
+        m = c.mask(fn) & ~(c.part == 'palm')
+        c.shade(m, RAMP['skin'], bulge=1.1, lift=lift, name=name)
+        c.px(int(round(kx)), int(round(ky)), RAMP['skin'][5])                                   # knuckle highlight
+        c.px(int(round(kx + d1[1])), int(round(ky - d1[0])), RAMP['skin'][1])                  # crease on the far side
+        # hooked nail: pale tip with a dark underside
+        nx, ny = int(round(tx)), int(round(ty))
+        c.px(nx, ny, RAMP['metal'][6]); c.px(int(round(tx - d2[0])), int(round(ty - d2[1])), RAMP['metal'][4])
+        c.px(int(round(tx + d2[1] * .9)), int(round(ty - d2[0] * .9)), RAMP['metal'][2])
+    nrm = lambda x, y: (x / math.hypot(x, y), y / math.hypot(x, y))
+    curl = 1 if f else 0
+    finger('f0', (12, 31), nrm(-0.35, -1), 6, nrm(-0.9, -0.5 + 0.2 * curl), 4, 0.46)   # index, pointing up and out
+    finger('f1', (10, 32), nrm(-0.8, -0.75), 7, nrm(-1, 0.05 + 0.2 * curl), 4, 0.42)   # middle, the longest
+    finger('f2', (8, 35), nrm(-1, -0.2), 6, nrm(-0.75, 0.6 + 0.15 * curl), 4, 0.36)    # ring
+    finger('f3', (8, 38), nrm(-0.9, 0.35), 5, nrm(-0.4, 0.95), 3, 0.30)                # little finger
+    finger('f4', (13, 41), nrm(-0.45, 0.95), 5, nrm(-0.95, 0.35), 3, 0.34)             # thumb, low and opposed
+    # a small ghostfire flicker hovering above the claw (no longer hiding the palm)
+    for i in range(7):
+        a = i * 0.9 + f * 1.6
+        c.px(int(round(5 + math.cos(a) * 2)), int(round(23 - i + math.sin(a))), RAMP['fire'][min(5, 2 + (i % 4))])
 
     # foreground flame licks at the hem
     flame(c, 24, 112, 14, 2, 0.5 + f, 7, lift=0.3)
     flame(c, 68, 112, 16, 2, 2.0 + f, 7, lift=0.3)
 
     c.inner_lines({('torso', 'sash'), ('pec', 'abs'), ('armF', 'pec'), ('armF', 'torso'), ('head', 'neck'), ('neck', 'collarin'),
-                   ('legL', 'legR'), ('armB', 'cloak'), ('cloak', 'lining'), ('collar', 'head'), ('hand', 'bracer'), ('bracer', 'fore'),
-                   ('finger', 'hand'), ('abs', 'abs'), ('pec', 'pec'), ('abs', 'torso'), ('pec', 'abs'), ('armB', 'pec')})
+                   ('legL', 'legR'), ('armB', 'cloak'), ('cloak', 'lining'), ('collar', 'head'), ('palm', 'bracer'), ('bracer', 'fore'), ('fore', 'palm'),
+                   ('f0', 'palm'), ('f1', 'palm'), ('f2', 'palm'), ('f3', 'palm'), ('f4', 'palm'), ('f0', 'f1'), ('f1', 'f2'), ('f2', 'f3'), ('f1', 'f0'), ('f2', 'f1'), ('f3', 'f2'), ('abs', 'abs'), ('pec', 'pec'), ('abs', 'torso'), ('pec', 'abs'), ('armB', 'pec')})
     c.outline()
     # magenta rim light on the shadow (right) side, cast by the ghostfire behind
     for y in range(H):
