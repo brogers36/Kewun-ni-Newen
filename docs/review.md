@@ -364,3 +364,4 @@ Al empezar el juego la kuku guía una pelea de práctica (un laftrache, después
 - **"Petu, X!"** '¡todavía no!' ⚠ ¿"Petu no"?
 - **"Ka kiñe rupa!"** '¡otra vez!'.
 - **"Kümey, X! Tuteymi!"** '¡muy bien, lo lograste!' (tuteymi ya se usaba con el Epunamun).
+- (Nov 22) Correcciones de Brandon a la tanda 16: **"Ka kiñe laftrache!"** (antes "Kake laftrache!"); **"Newentuleymi!"** (antes "Newen nieymi!"); y la línea de los corazones ahora dice **"Adkintifinge mi pu piwke!"** 'cuida tus piwke'.
