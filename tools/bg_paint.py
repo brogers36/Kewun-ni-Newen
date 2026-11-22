@@ -22,6 +22,34 @@ class Pic:
 
 def P(*c): return [hx(x) for x in c]
 
+# ---- value noise + shading helpers (numpy, vectorised) ----
+YY, XX = np.mgrid[0:H, 0:W].astype(float)
+BAYF = np.tile(B4, (H // 4 + 1, W // 4 + 1))[:H, :W]
+def vnoise(x, y, seed):
+    r = np.random.RandomState(seed); g = r.rand(64, 64)
+    xi, yi = np.floor(x).astype(int), np.floor(y).astype(int); fx, fy = x - xi, y - yi
+    sx, sy = fx * fx * (3 - 2 * fx), fy * fy * (3 - 2 * fy)
+    a = g[yi % 64, xi % 64]; b = g[yi % 64, (xi + 1) % 64]; c = g[(yi + 1) % 64, xi % 64]; d = g[(yi + 1) % 64, (xi + 1) % 64]
+    return (a + (b - a) * sx) * (1 - sy) + (c + (d - c) * sx) * sy
+def fbm(x, y, seed, oct=4):
+    v, a, t = 0, .5, 0
+    for o in range(oct): v = v + a * vnoise(x * 2 ** o, y * 2 ** o, seed + o); t += a; a *= .5
+    return v / t
+def ridged(x, y, seed, oct=4):
+    v, a, t = 0, .5, 0
+    for o in range(oct): v = v + a * (1 - abs(vnoise(x * 2 ** o, y * 2 ** o, seed + o) * 2 - 1)) ** 2; t += a; a *= .5
+    return v / t
+LIGHT = np.array([.72, -.42, .55]); LIGHT = LIGHT / np.linalg.norm(LIGHT)
+def shade(z, k=1.0):
+    dzx = np.gradient(z, axis=1) * k; dzy = np.gradient(z, axis=0) * k
+    n = np.stack([-dzx, -dzy, np.ones_like(z)], -1); n /= np.linalg.norm(n, axis=-1, keepdims=True)
+    return np.clip((n * LIGHT).sum(-1), 0, 1)
+def paint(s, mask, t, ramp):
+    """write ramp colours where mask is set, t in 0..1, ordered-dithered between ramp steps"""
+    t = np.clip(t, 0, .9999) * (len(ramp) - 1); i = np.floor(t).astype(int); f = t - i
+    i = np.minimum(len(ramp) - 1, i + (f > BAYF)); R_ = np.array(ramp)
+    s.p[mask] = R_[i[mask]]; s.a[mask] = True
+
 SKY = P('#1c2f6e', '#25408a', '#3156a3', '#4470b8', '#5e8cca', '#7ea8d8', '#a3c4e4', '#c6dcef', '#e2ecf4')
 CLOUD = P('#7f96bc', '#a7b9d6', '#c9d6ea', '#e6edf7', '#ffffff')
 MNT = P('#3e5384', '#4a6194', '#566fa4', '#6680b4', '#7c96c6', '#98b0d6')
@@ -33,7 +61,7 @@ WET = P('#6e5f48', '#7d6c52', '#8f7c5e', '#a1906e', '#b4a684')
 SAND = P('#8f7350', '#a2845a', '#b69766', '#c8a973', '#d6b882', '#e3c896', '#eed8ae', '#f6e7c8')
 ROCK = P('#141219', '#221f2a', '#322e3c', '#46414f', '#5c5666', '#78717f', '#948c98')
 KELP = P('#2a2410', '#40381a', '#5a4e22', '#76662c', '#94823a')
-WOOD = P('#2e2118', '#4a3424', '#684a32', '#8a6644', '#ac865c', '#cbaa80')
+WOOD = P('#1e140e', '#33241a', '#4c3626', '#664a34', '#836248', '#a2826a', '#c2a68e', '#ddc8b2')
 
 def coast():
     s = Pic(); rnd = np.random.RandomState(7)
@@ -70,60 +98,87 @@ def coast():
                     s.px(x, y, s.ramp_at(x, y, CLOUD, lit))
     for cx, cy, w, h, sd in [(60, 30, 34, 7, 1), (150, 18, 22, 5, 2), (236, 36, 30, 6, 3), (352, 24, 26, 6, 4), (110, 56, 16, 3, 5), (290, 58, 14, 3, 6)]:
         cloud(cx, cy, w, h, sd)
-    # ---- two coastal ranges: a pale far one in haze, a nearer darker one, and a snow-capped volcano
-    def ridge(seed, base, amp, x):
+    # ---- two coastal ranges, shaded from a heightfield (ridges, gullies, lit faces toward the low sun on the right)
+    def ridge1(seed, base, amp, x):
         r = np.random.RandomState(seed); ph = r.rand(4) * 6
-        return base - amp * (abs(math.sin(x / 41 + ph[0])) * .6 + abs(math.sin(x / 17 + ph[1])) * .3 + abs(math.sin(x / 7 + ph[2])) * .1)
-    for layer, (seed, base, amp, lo, hi) in enumerate([(3, 70, 20, .55, .95), (5, 76, 13, .15, .6)]):
-        prof = [ridge(seed, base, amp, x) for x in range(W)]
+        return base - amp * (abs(np.sin(x / 41 + ph[0])) * .6 + abs(np.sin(x / 17 + ph[1])) * .3 + abs(np.sin(x / 7 + ph[2])) * .1)
+    xs = np.arange(W, dtype=float)
+    VX, VTOP = 150, 22                                   # the volcano: summit position
+    for layer, (seed, base, amp) in enumerate([(3, 70, 20), (5, 77, 12)]):
+        top = ridge1(seed, base, amp, xs)
+        cone = VTOP + abs(xs - VX) * .56 + np.maximum(0, abs(xs - VX) - 40) * .3
+        if layer == 0: top = np.minimum(top, cone)
+        T = top[None, :]; below = (YY >= T) & (YY < HZ)
+        # heightfield: the slope leans back as it rises; ridged noise cuts ridges and gullies running downhill
+        rid = ridged(XX / 9 + layer * 7, YY / 4.5, 20 + layer * 9, 4)
+        z = (HZ - YY) * .35 + rid * (6 if layer == 0 else 4)
         if layer == 0:
-            prof = [min(p, 30 + abs(x - 150) * .58) if 98 < x < 208 else p for x, p in enumerate(prof)]
+            onv = below & (abs(XX - VX) < (YY - VTOP) / .56 + 2)
+            gul = ridged((XX - VX) / np.maximum(4, (YY - VTOP) * .22) * 1.6, YY / 26, 33, 3)   # gullies fanning out from the summit
+            z = np.where(onv, (HZ - YY) * .35 - abs(XX - VX) * .55 * 0 + gul * 5, z)
+            # the cone itself is rounded: its right flank faces the sun
+            z = np.where(onv, z - ((XX - VX) / np.maximum(6, (YY - VTOP) * 1.8)) ** 2 * 6, z)
+        L = shade(z, 1.0)
+        dist = (YY - T) / np.maximum(1, HZ - T)
+        if layer == 0:
+            t = .05 + L * 1.05 - dist * .25 + .1
+            paint(s, below, t, MNT)
+            # snow: a ragged cap whose lower edge runs down the gullies, plus thin snow on the highest ridges
+            cap = 16 + (fbm(XX / 4, YY / 4, 41) - .5) * 10 + (gul > .6) * 9
+            snow = onv & ((YY - VTOP) < cap)
+            snow |= below & (T < 50) & ((YY - T) < 2 + (rid > .62) * 3)
+            paint(s, snow, .1 + L * 1.1, SNOW)
+            # rocky outcrops poking through the snow
+            out = snow & (fbm(XX / 2.5, YY / 2.5, 44) > .7)
+            s.p[out] = MNT[2]
+            # aerial perspective: the far range pales toward its foot (blend, not dots)
+            fade = below & (dist > .45)
+            k = np.clip((dist - .45) * .9, 0, .45)[fade][:, None]
+            s.p[fade] = (s.p[fade] * (1 - k) + SKY[6] * k).astype(np.uint8)
+        else:
+            t = .05 + L * .7 - dist * .1
+            paint(s, below, t, MNT)
         for x in range(W):
-            top = int(prof[x]); sl = prof[min(W - 1, x + 4)] - prof[max(0, x - 4)]   # >0: slope faces right (lit)
-            for y in range(top, HZ):
-                t = (y - top) / max(1, HZ - top)
-                lit = lo + (hi - lo) * (.55 + max(-.3, min(.35, sl * .05)) - t * .45)
-                c = s.ramp_at(x, y, MNT, lit)
-                if layer == 0 and 98 < x < 208 and y - top < 10 - abs(x - 150) * .09 and y < 50:
-                    c = s.ramp_at(x, y, SNOW, .95 - (y - top) / 10 + (.25 if sl > 0 else -.1))
-                if layer == 0 and t > .6 and bay(x, y) < (t - .6) * .5: c = SKY[7]          # haze at the foot of the far range
-                s.px(x, y, c)
-            s.px(x, top, MNT[5] if sl > 0 else MNT[2] if layer else MNT[4])
-    # ---- sea: perspective rows, crests spaced wider toward the shore
+            ty = int(top[x])
+            if 0 <= ty < HZ: s.px(x, ty, (MNT[5] if layer else SNOW[2] if ty < 50 else MNT[5]) if np.gradient(top)[x] > 0 else MNT[3])
+    # ---- sea: a wave heightfield seen in perspective; rising faces mirror the pale sky, troughs go deep blue,
+    #      turquoise in the shallows, broken glitter under the sun
     SH = 112
-    for y in range(HZ, SH):
-        t = (y - HZ) / (SH - HZ)
-        for x in range(W):
-            c = s.ramp_at(x, y, SEA, .15 + t * .8)
-            s.px(x, y, c)
-    s.p[HZ, :] = hx('#9cc4e4')   # bright horizon line
-    k = 0; y = HZ + 2.0
-    while y < SH - 6:
-        gap = 2 + k * .9; k += 1; yi = int(y)
-        x = rnd.randint(0, 12)
-        while x < W:
-            L = rnd.randint(3, 8 + k * 2)
-            for i in range(L):
-                if x + i < W: s.px(x + i, yi, CREST[0] if k < 3 else CREST[min(2, 1 + (i % 4 == 0))])
-            if k > 2 and rnd.rand() < .6:
-                for i in range(L - 1): s.px(x + i, yi + 1, SEA[1])          # shadow under each crest
-            x += L + rnd.randint(4, 18)
-        y += gap
-    # sun path: broken glints under the sun
-    for y in range(HZ + 1, SH - 4):
-        spread = 6 + (y - HZ) * 1.4
+    d = np.clip((YY - HZ) / (SH - HZ), 0, 1); Z = 1 / (d * .92 + .08)        # distance into the scene
+    Xw = (XX - W / 2) * Z / 46
+    hw = (np.sin(Z * 1.9 + np.sin(Xw * .35) * 1.2) * .55 + np.sin(Z * 4.1 + Xw * .9) * .25 + fbm(Xw * .8, Z * 1.6, 60) * .6)
+    slope = np.gradient(hw, axis=0)                                          # facing up the screen = rising toward us
+    sea = (YY > HZ) & (YY < SH)
+    fres = (1 - d) ** 2                                                      # far water reflects more sky
+    t = .22 + d * .55 + np.clip(slope * 1.4, -.35, .35) - fres * .1
+    paint(s, sea, t, SEA)
+    sky_m = sea & (d < .25) & (BAYF < (.25 - d) * 2.2)                      # pale sky mirrored near the horizon
+    s.p[sky_m] = SKY[6]
+    shal = sea & (d > .8) & (BAYF < (d - .8) * 2.5)                           # turquoise shallows before the break
+    s.p[shal] = hx('#4fb5c4')
+    s.p[HZ, :] = hx('#9cc4e4')
+    # wavelets: short strokes, lit on top and shadowed below, longer and farther apart toward the shore
+    r = np.random.RandomState(31)
+    for _ in range(620):
+        y = int(HZ + 2 + (r.rand() ** 1.6) * (SH - HZ - 6)); dd = (y - HZ) / (SH - HZ)
+        x = r.randint(0, W); L = int(2 + dd * 10 + r.rand() * 4)
+        for i in range(L):
+            if 0 <= x + i < W:
+                s.px(x + i, y, CREST[0] if dd < .35 else CREST[1] if i not in (0, L - 1) else CREST[0])
+                if dd > .2: s.px(x + i, y + 1, SEA[max(0, int(dd * 4) - 1)])
+        if dd > .55 and r.rand() < .5:
+            for i in range(1, L - 1): s.px(x + i, y - 1, CREST[2] if i % 3 == 1 else CREST[1])
+    # glitter on the sun path: short bright dashes, denser toward the middle of the path
+    for y in range(HZ + 1, SH - 3):
+        dd = (y - HZ) / (SH - HZ); spread = 5 + (y - HZ) * 1.3
         for x in range(int(sx - spread), int(sx + spread)):
-            if (x + y * 3) % 5 == 0 and rnd.rand() < .5 * (1 - abs(x - sx) / spread):
-                for i in range(rnd.randint(2, 5)): s.px(x + i, y, CREST[2] if i % 2 else '#fff4d8')
-    # sea stack (a rock island) mid-distance on the left
-    for y in range(78, 104):
-        w2 = 5 + (y - 78) * .55 + (2 if y > 96 else 0)
-        for x in range(int(250 - w2 * .6), int(250 + w2)):
-            lit = .2 + (x - 244) / 24 + rnd.rand() * .1
-            s.px(x, y, s.ramp_at(x, y, ROCK, min(.8, lit)))
-        if y > 98:
-            for x in range(int(250 - w2 * .6) - 2, int(250 + w2) + 3, 2): s.px(x, y + 1, FOAM[2])
-    for x, y in [(247, 77), (249, 76), (250, 76), (252, 77)]: s.px(x, y, ROCK[4])
+            if (x * 7 + y * 13) % 11 == 0 and r.rand() < .75 * (1 - abs(x - sx) / spread):
+                for i in range(1 + int(dd * 4)): s.px(x + i, y, '#fff6dc' if i % 2 == 0 else CREST[2])
+    # sea stack: a basalt island shaded like the foreground rocks, wet at the foot
+    ss = (YY >= 78) & (YY < 104) & (abs(XX - 250) < 5 + (YY - 78) * .55 + (YY > 96) * 2)
+    zr = fbm(XX / 5, YY / 5, 70) * 4 - abs(XX - 250) * .35
+    paint(s, ss, .18 + shade(zr, 1.4) * .75, ROCK)
+    for x in range(236, 266, 2): s.px(x, 104, FOAM[2]); s.px(x + 1, 103, FOAM[1])
     # ---- shore break: two foam lines, irregular
     for x in range(W):
         f1 = SH - 2 + int(2 * math.sin(x / 9.0) + 1.5 * math.sin(x / 3.7 + 1))
@@ -163,37 +218,61 @@ def coast():
         x, y = rnd.randint(0, W), rnd.randint(WS + 6, H - 4)
         if rnd.rand() < .5: s.px(x, y, SAND[7]); s.px(x + 1, y, SAND[6]); s.px(x, y + 1, SAND[2])
         else: s.px(x, y, ROCK[3]); s.px(x + 1, y, ROCK[2]); s.px(x, y - 1, ROCK[5])
-    # ---- foreground framing: basalt rocks with cochayuyo on the left, driftwood and rocks on the right
+    # ---- foreground framing: faceted basalt boulders and a weathered driftwood log, shaded from heightfields
     def boulder(cx, cy, rx, ry, seed):
-        r = np.random.RandomState(seed)
-        for y in range(int(cy - ry), int(cy + ry)):
-            for x in range(int(cx - rx), int(cx + rx)):
-                nx, ny = (x - cx) / rx, (y - cy) / ry
-                wob = .12 * math.sin(math.atan2(ny, nx) * 5 + seed)
-                if nx * nx + ny * ny <= (1 + wob) ** 2 and y < H:
-                    lit = .55 + nx * .35 - ny * .45 + r.rand() * .08
-                    if nx * nx + ny * ny > (.86 + wob) ** 2 and ny < 0: lit += .2
-                    s.px(x, y, s.ramp_at(x, y, ROCK, lit))
-        for x in range(int(cx - rx * .9), int(cx + rx * .9)):   # contact shadow
-            s.px(x, int(cy + ry) - 1, ROCK[0])
-    for cx, cy, rx, ry, sd in [(60, 210, 40, 26, 11), (100, 218, 26, 16, 12), (130, 222, 12, 7, 13), (352, 210, 36, 24, 14), (322, 220, 18, 10, 15)]:
-        boulder(cx, cy, rx, ry, sd)
-    # cochayuyo strands draped over the left rocks
+        nx, ny = (XX - cx) / rx, (YY - cy) / ry; ang = np.arctan2(ny, nx)
+        edge = 1 + .12 * np.sin(ang * 4 + seed) + .03 * np.sin(ang * 9 + seed * 2)
+        r2 = np.sqrt(nx * nx + ny * ny); m = (r2 <= edge) & (YY < H)
+        dome = np.sqrt(np.clip(1 - (r2 / edge) ** 2, 0, 1)) * min(rx, ry)
+        facets = np.floor(fbm(XX / 7 + seed, YY / 7, 80 + seed, 2) * 5) * 2.2     # flat fractured planes
+        z = dome + facets + fbm(XX / 3.5, YY / 3.5, 90 + seed) * .7
+        L = shade(z, .9)
+        # cast shadow on the sand, thrown to the left and down by the low sun on the right
+        sh = (np.sqrt(((XX - cx + rx * .45) / (rx * 1.1)) ** 2 + ((YY - cy - ry * .55) / (ry * .45)) ** 2) <= 1) & ~m & (YY < H)
+        s.p[sh] = (s.p[sh] * .62).astype(np.uint8)
+        ao = np.clip((YY - (cy + ry * .35)) / (ry * .7), 0, 1)                      # dark where it meets the ground
+        paint(s, m, .14 + L * .95 - ao * .3, ROCK)
+        wet = m & (fbm(XX / 4, YY / 4, 95 + seed) > .7) & (L > .6)                 # damp sheen
+        s.p[wet] = hx('#a4b2c0')
+        cr = m & (abs(fbm(XX / 4, YY / 9, 99 + seed) - .5) < .018)                 # cracks
+        s.p[cr] = ROCK[0]
+        bar = m & (YY > cy) & (np.random.RandomState(seed).rand(H, W) < .02)       # barnacles
+        s.p[bar] = hx('#c8c2b4')
+        return m
+    rocks = [(60, 210, 40, 26, 11), (100, 218, 26, 16, 12), (130, 222, 12, 7, 13), (352, 210, 36, 24, 14), (322, 220, 18, 10, 15)]
+    for r_ in rocks: boulder(*r_)
+    # cochayuyo: thick leathery strands draped over the left rocks, shaded round
     for k in range(9):
         x0 = 34 + k * 6; y0 = 186 + (k % 3) * 4
-        for i in range(26):
+        for i in range(28):
             x = x0 + int(4 * math.sin(i / 5 + k)); y = y0 + i
-            s.px(x, y, KELP[2 + (i % 3 == 0)]); s.px(x + 1, y, KELP[1])
-    # driftwood log, lit from the right
-    for x in range(236, 318):
-        t = (x - 236) / 82; yc = 198 + int(6 * t) + int(1.5 * math.sin(x / 7))
-        for d in range(-5, 6):
-            s.px(x, yc + d, s.ramp_at(x, yc + d, WOOD, .58 - d * .075 + (.06 if (x // 6) % 2 else 0) - (.25 if abs(d) == 5 else 0)))
-        s.px(x, yc + 6, ROCK[0]); s.px(x, yc + 7, SAND[1])
-    for d in range(-5, 6):   # sawn end of the log, rings showing
-        for e in range(-5, 6):
-            if d * d + e * e <= 25: s.px(318 + e // 2, 204 + d, WOOD[5] if (d * d + e * e) % 9 < 3 else WOOD[4])
-    for x in range(240, 316, 11): s.px(x, 198 + int(6 * (x - 236) / 82), WOOD[0])   # grain knots
+            for dx, c in ((-1, KELP[1]), (0, KELP[3] if i % 4 else KELP[4]), (1, KELP[2]), (2, KELP[0])): s.px(x + dx, y, c)
+    # driftwood: a bent, bleached log; round shading across its thickness, bark grain along it, a branch stub
+    x0, x1 = 236, 318
+    for x in range(x0, x1):
+        t = (x - x0) / (x1 - x0); yc = 198 + 6 * t + 1.6 * math.sin(x / 9); rad = 6.5 - t * 1.4
+        for yy in range(int(yc - rad - 1), int(yc + rad + 2)):
+            v = (yy - yc) / rad
+            if abs(v) > 1: continue
+            nz = math.sqrt(1 - v * v); ny = v
+            L = max(0, .72 * .0 + -.42 * ny * -1 * -1 + .55 * nz)                 # light from above (y up) and front
+            L = max(0, .42 * -ny + .55 * nz + .25)
+            grain = .08 * math.sin(x * .9 + yy * 2.3) + (.12 if (int(x * .35 + yy * 1.7) % 9 == 0) else 0)
+            c = s.ramp_at(x, yy, WOOD, .05 + L * .85 - grain - (.15 if int(yy * 1.3 + x * .05) % 3 == 0 else 0))
+            if v > .75: c = WOOD[0]
+            s.px(x, yy, c)
+        s.px(x, int(yc + rad + 2), (s.p[min(H - 1, int(yc + rad + 2)), x] * .55).astype(np.uint8))   # shadow under the log
+        s.px(x, int(yc + rad + 3), (s.p[min(H - 1, int(yc + rad + 3)), x] * .75).astype(np.uint8))
+    for k, x in enumerate(range(244, 312, 13)):           # knots and splits
+        yc = int(198 + 6 * (x - x0) / (x1 - x0) + 1.6 * math.sin(x / 9))
+        s.px(x, yc - 1, WOOD[0]); s.px(x + 1, yc - 1, WOOD[1]); s.px(x, yc, WOOD[1])
+        for i in range(4): s.px(x + 3 + i, yc - 2 + (k % 2), WOOD[1])
+    for i in range(9):                                      # a broken branch stub rising from the log
+        s.px(262 + i // 2, 193 - i, WOOD[3]); s.px(263 + i // 2, 193 - i, WOOD[4]); s.px(261 + i // 2, 193 - i, WOOD[1])
+    for d in range(-5, 6):                                  # sawn end, growth rings
+        for e in range(-4, 5):
+            r2 = d * d + e * e * 1.4
+            if r2 <= 22: s.px(x1 + e // 2, 205 + d, WOOD[5] if int(r2) % 7 < 3 else WOOD[3])
     return s, {'hz': HZ, 'sh': SH, 'ws': WS, 'sun': [sx, sy]}
 
 def encode(s):
