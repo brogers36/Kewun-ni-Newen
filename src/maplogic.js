@@ -104,7 +104,7 @@ function interact(){
   if(typeof PAL!=='undefined'&&PAL&&PAL.on&&palKick())return;
   const [dx,dy]=DV[P.dir],tx=P.x+dx,ty=P.y+dy;
   const e=entAt(tx,ty);
-  if(e){if(e.kind==='npc'){e.dir=OPP[P.dir];e.wait=Math.max(e.wait,90);sfx('ok');e.talk()}else if(e.kind==='animal'){e.wait=120;sfx('ok');animalTalk(e)}else engage(e);return}
+  if(e){if(e.kind==='npc'){e.dir=OPP[P.dir];e.wait=Math.max(e.wait,90);sfx('ok');TALKER=e;e.talk()}else if(e.kind==='animal'){e.wait=120;sfx('ok');animalTalk(e)}else engage(e);return}
   const dk=P.x+','+P.y,dv=M.digs&&M.digs[dk];
   if(dv&&!(dv.req&&!S.flags[dv.req])&&!S.flags['dig:'+CUR+':'+dk]&&(!inB(tx,ty)||WALK.has(grid[ty][tx])||grid[ty][tx]==='T'||grid[ty][tx]==='#'||grid[ty][tx]==='~'))return digFind(dk,dv);
   if(!inB(tx,ty))return;

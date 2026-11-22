@@ -41,10 +41,10 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #cv{width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000}
 #ui{position:absolute;inset:0;font-size:calc(6.2px*var(--s));pointer-events:none}
 #ui>*{pointer-events:auto}
-.box{position:absolute;left:3%;right:3%;bottom:3%;background:#18186af2;border:3px solid #e8e8f8;border-radius:6px;padding:.7em .9em;box-shadow:inset 0 0 0 3px #7880d0,0 0 0 2px #000;image-rendering:pixelated}
-#dlg{display:none;cursor:pointer;min-height:24%}
-#dlg .who{color:#f8e070;font-weight:bold;margin-bottom:.2em}
-#dlg .m{font-size:1.18em;font-weight:bold;color:#fff;margin-bottom:.25em}
+.box{position:absolute;left:3%;right:3%;bottom:3%;background:linear-gradient(180deg,#25205cf4 0%,#1a1648f4 55%,#110e30f6 100%);border:3px solid #e2c27a;border-radius:5px;padding:.95em 1em .8em;box-shadow:inset 0 0 0 2px #3a2c18,inset 0 0 0 4px #8a6a30,inset 0 .6em 1.2em #ffffff0d,0 .35em 0 #000a,0 0 0 2px #000;image-rendering:pixelated}.box::before,.box::after{content:'';position:absolute;left:4px;right:4px;height:calc(6px*var(--s)/2);background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='6' shape-rendering='crispEdges'><rect width='16' height='6' fill='%23201028'/><path d='M0 4h2v-1h2v-1h2v-1h2v1h2v1h2v1h2v1h2v1H0z' fill='%23b8282a'/><path d='M2 4h2v-1h2v-1h4v1h2v1h2v1H2z' fill='%23f0e6d0'/><path d='M6 3h4v1H6z' fill='%23b8282a'/></svg>") repeat-x;background-size:auto 100%;image-rendering:pixelated;opacity:.9;pointer-events:none}.box::before{top:4px}.box::after{bottom:4px;transform:scaleY(-1)}#dlg .por{display:none;float:left;width:4.4em;height:4em;margin:.15em .8em .2em 0;border:2px solid #e8ecf8;border-radius:3px;box-shadow:0 0 0 2px #000,inset 0 0 0 1px #9aa2c8;image-rendering:pixelated}#dlg.hasp .por{display:block}#dlg .txt{overflow:hidden}
+#dlg{display:none;cursor:pointer;min-height:26%;overflow:visible}
+#dlg .who{position:absolute;left:1em;top:-1.25em;color:#ffe48a;font-weight:bold;background:linear-gradient(180deg,#5a6a9e,#2a3468);border:2px solid #e8ecf8;border-radius:3px;padding:.1em .7em;box-shadow:0 0 0 2px #000;text-shadow:0 1px 0 #000;letter-spacing:.03em}
+#dlg .m{font-size:1.18em;font-weight:bold;color:#fff;margin-bottom:.25em;text-shadow:0 1px 0 #000,0 0 .4em #6a60c080}
 #dlg .g{color:#c8d8ff;font-style:italic;line-height:1.35}
 #dlg .more{position:absolute;right:.6em;bottom:.3em;color:#e8d49a;animation:bl 1s infinite}
 @keyframes bl{50%{opacity:0}}
@@ -54,13 +54,13 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #menu .p .g{color:#bfe3d0;font-style:italic}
 #menu .list{display:grid;grid-template-columns:1fr 1fr;gap:.35em}
 #menu .list.one{grid-template-columns:1fr}
-.opt{font:inherit;color:#f4ecd8;background:#202080;border:2px solid #4850a8;border-radius:3px;padding:.35em .5em;text-align:left;cursor:pointer;display:flex;flex-direction:column}
+.opt{font:inherit;color:#f4ecd8;background:linear-gradient(180deg,#2a2672,#1c1a52);border:2px solid #4a4690;border-radius:3px;padding:.35em .5em .35em 1.3em;text-align:left;cursor:pointer;display:flex;flex-direction:column;position:relative;box-shadow:inset 0 1px 0 #ffffff14}
 .opt .om{font-weight:bold;color:#fff}
 .opt .og{font-size:.82em;color:#bfe3d0}
-.opt.sel{border-color:#f8e070;background:#3038a8}
+.opt.sel{border-color:#ffe48a;background:linear-gradient(180deg,#4a40a0,#2e2a78);box-shadow:inset 0 1px 0 #ffffff26,0 0 .45em #f8e07066}
 .opt:disabled{opacity:.4;cursor:default}
-#banner{position:absolute;left:50%;top:22%;transform:translateX(-50%);background:#18186aee;border:3px solid #e8e8f8;box-shadow:inset 0 0 0 2px #7880d0;padding:.4em 1.2em;border-radius:3px;text-align:center;display:none;pointer-events:none}
-#banner b{display:block;font-size:1.3em;color:#fff}
+#banner{position:absolute;left:50%;top:22%;transform:translateX(-50%);background:linear-gradient(180deg,#25205cf2,#110e30f4);border:3px solid #e2c27a;box-shadow:inset 0 0 0 2px #3a2c18,inset 0 0 0 4px #8a6a30,0 0 0 2px #000,0 .3em 0 #000a;padding:.4em 1.2em;border-radius:3px;text-align:center;display:none;pointer-events:none}
+#banner b{display:block;font-size:1.3em;color:#ffe9b0;text-shadow:0 2px 0 #000,0 0 .5em #e2c27a66}
 #banner span{color:#bfe3d0;font-style:italic}
 #title{position:absolute;inset:0;background:linear-gradient(#0d0b1022,#0d0b10bb 85%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.55em;text-align:center;padding:1em}
 #title h1{margin:0;font-size:2.5em;color:#ffe9b0;text-shadow:0 3px 0 #7a3a1a,0 0 14px #000,0 0 3px #000;letter-spacing:.04em}
@@ -94,7 +94,7 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
     <canvas id="cv" width="512" height="448"></canvas>
     <div id="ui">
       <div id="banner"><b></b><span></span></div>
-      <div id="dlg" class="box"><div class="who"></div><div class="m"></div><div class="g"></div><div class="more">▼</div></div>
+      <div id="dlg" class="box"><canvas class="por" width="44" height="40"></canvas><div class="who"></div><div class="txt"><div class="m"></div><div class="g"></div></div><div class="more">▼</div></div>
       <div id="menu" class="box"><div class="p"></div><div class="list"></div></div>
       <button id="skip">Saltar ▶▶</button>
       <button id="mbtn">☰</button>

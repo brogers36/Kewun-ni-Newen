@@ -2354,6 +2354,9 @@ if os.path.exists(_kp):
         _a=D[_n]['aura'] if _n in D else 0
         D[_n]={'pal':_k['small']['pal'],'f':_k['small']['f'],'big':1,'aura':_a,'hand':1}
         D[_n+'@b']={'pal':_k['big']['pal'],'f':_k['big']['f'],'big':1,'aura':_a,'hand':1}
+_hp=os.path.join(os.path.dirname(os.path.abspath(__file__)),'heroes.json')
+if os.path.exists(_hp):
+    for _n,_h in json.load(open(_hp)).items():D['hero_'+_n]={'pal':_h['pal'],'f':_h['f'],'big':1,'aura':0,'hand':1}
 # every boss and every form of the final boss: repainted with the Yewen's 3D method (tools/repaint.py)
 import repaint as _rp, yewen_paint as _yp
 _BOSSES=['trelke','cherrufe','kaleuche','witranalwe','chinifilu','piwuchen','wallipen','trawko','walichu','chadikura','epunamun','kalku',

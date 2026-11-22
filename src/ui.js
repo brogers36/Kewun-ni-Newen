@@ -15,12 +15,29 @@ const N=(es,en)=>({es,en});
 const PRAISE=[{m:'Kümey!',es:'¡Bien!',en:'Good!'},{m:'Tuteley!',es:'¡Muy bien hecho!',en:'Well done!'}];
 let praiseI=0;const praise=()=>{const p=PRAISE[praiseI++%2];return L('',p.m,p.es,p.en)};
 const dlg=$('dlg'),menu=$('menu'),hud=$('hud'),banner=$('banner');
+let TALKER=null;
+const WHOLOOK={Kuku:'kuku',Lonko:'lonko',Machi:'machi',Papay:'kuku'};
+const PORT={};
+function portraitFor(l){
+  if(!l.who||typeof ctCharSpriteBig!=='function'||!S)return null;
+  let look=null,tn,ey,hr;
+  if(S.name&&l.who.indexOf(S.name)===0){look=heroLook()}
+  else if(WHOLOOK[l.who]&&(!TALKER||TALKER.look!==WHOLOOK[l.who])){look=WHOLOOK[l.who]}
+  else if(TALKER&&TALKER.kind==='npc'&&typeof LOOKS!=='undefined'&&LOOKS[TALKER.look]){look=TALKER.look;tn=TALKER.tn;ey=TALKER.ey2;hr=TALKER.hr2}
+  if(!look||!LOOKS[look])return null;
+  const key=look+':'+tn+ey+hr;if(PORT[key])return PORT[key];
+  const raw=ctCharSpriteRaw(look,'down',0,false,tn,ey,hr),big=repaintSmall(scale2xCanvas(raw),{amp:.95,capG:9,capP:5,lift:.16,sh:.7});
+  const [cv,c]=mk(44,40);const g=c.createLinearGradient(0,0,0,40);g.addColorStop(0,'#5a6a9e');g.addColorStop(1,'#1a2250');c.fillStyle=g;c.fillRect(0,0,44,40);
+  c.fillStyle='rgba(255,230,160,.10)';c.beginPath();c.ellipse(16,12,18,14,0,0,6.283);c.fill();
+  c.drawImage(big,0,0,big.width,40,(44-big.width)/2,2,big.width,40);
+  return PORT[key]=cv}
 function say(lines,cb){
   lines=lines.filter(Boolean);
   if(!lines.length){active=null;cb&&cb();return}
   let i=0;
   const show=()=>{const l=lines[i];
-    const w=dlg.querySelector('.who'),m=dlg.querySelector('.m'),g=dlg.querySelector('.g');
+    const w=dlg.querySelector('.who'),m=dlg.querySelector('.m'),g=dlg.querySelector('.g'),pc=dlg.querySelector('.por');
+    const pt=portraitFor(l);if(pt&&pc){pc.width=pt.width;pc.height=pt.height;pc.getContext('2d').drawImage(pt,0,0);dlg.classList.add('hasp')}else dlg.classList.remove('hasp');
     w.textContent=l.who||'';w.style.display=l.who?'':'none';
     m.textContent=l.m||'';m.style.display=l.m?'':'none';
     const gt=(S&&S.nogloss&&l.m)?'':G(l);g.textContent=gt;g.style.display=gt?'':'none';

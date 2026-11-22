@@ -273,6 +273,7 @@ function scale2xCanvas(src){const w=src.width,h=src.height,a=src.getContext('2d'
   c.putImageData(img,0,0);return cv}
 /* battle-size hero: scale2x then the full 3D repaint at the doubled resolution (finer volume, like the bosses) */
 function ctCharSpriteBig(look,dir,fr){const key='BIG'+look+dir+fr;if(CCACHE[key])return CCACHE[key];
+  if(dir==='left'&&typeof SPR2!=='undefined'&&SPR2['hero_'+look])return CCACHE[key]=tplCanvas('hero_'+look,fr%4,1);
   const raw=ctCharSpriteRaw(look,dir==='left'?'right':dir,fr,false);let big=withFeet(scale2xCanvas(raw),fr);if(dir==='left')big=mirror(big);
   return CCACHE[key]=repaintSmall(big,{amp:.95,capG:9,capP:5,lift:.14,sh:.7})}
 /* side-view feet for the battle sprite: shoes planted under each leg (or peeking from under a long

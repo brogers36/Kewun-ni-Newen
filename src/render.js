@@ -306,6 +306,10 @@ function ctWin(c,x,y,w,h){const g=c.createLinearGradient(0,y,0,y+h);g.addColorSt
   R(c,x+1,y+1,w-2,1,'#9aa2c8');for(let yy=y+2;yy<y+h-1;yy+=2)for(let xx=x+2+((yy>>1)%2);xx<x+w-1;xx+=4)R(c,xx,yy,1,1,'rgba(255,255,255,.05)')}
 function drawHUD(c){
   // LttP-style overlay: newen meter, counters, "- PIWKE -" hearts
+  { // backing plates so the HUD reads on any ground: dark glass with a thin gold edge
+    const mxh=Math.min(40,Math.ceil(maxHP()/HPQ)),hr=Math.ceil(mxh/10),plate=(x,y,w,h)=>{c.fillStyle='rgba(12,10,30,.55)';c.fillRect(x+1,y,w-2,h);c.fillRect(x,y+1,w,h-2);
+      c.fillStyle='rgba(232,236,248,.45)';c.fillRect(x+1,y,w-2,1);c.fillRect(x+1,y+h-1,w-2,1);c.fillRect(x,y+1,1,h-2);c.fillRect(x+w-1,y+1,1,h-2)};
+    plate(4,2,M&&M.dungeon?134:124,39);plate(LW-92,2,88,13+hr*8+10)}
   R(c,7,5,12,34,'#181018');R(c,8,6,10,32,'#f8f8f8');R(c,9,7,8,30,'#181018');
   const sp=S.sp||0,fh=Math.round(30*sp/SPMAX);if(fh>0){R(c,9,37-fh,8,fh,'#30b030');R(c,9,37-fh,3,fh,'#70e070')}
   for(let k=1;k<SPMAX;k++)R(c,9,7+Math.round(30*k/SPMAX),8,1,'#000');
@@ -749,9 +753,9 @@ function renderBattle(){
   // hero panel (LttP-style box)
   const hrows=Math.ceil(Math.min(40,Math.ceil(maxHP()/HPQ))/8);
   const pw=100,ph=Math.max(32,hrows*8+18),px=LW-pw-4,py=4; // compact, top-right above the hero; grows with the heart rows
-  R(c,px-1,py-1,pw+2,ph+2,'#000');R(c,px,py,pw,ph,'#e8e8f8');R(c,px+1,py+1,pw-2,ph-2,'#7880d0');R(c,px+2,py+2,pw-4,ph-4,'#18186a');
+  R(c,px-1,py-1,pw+2,ph+2,'#000');ctWin(c,px,py,pw,ph);
   {const sp=S.sp||0;R(c,px+pw-10,py+4,6,ph-8,'#f8f8f8');R(c,px+pw-9,py+5,4,ph-10,'#000');const fh=Math.round((ph-10)*sp/SPMAX);if(fh)R(c,px+pw-9,py+ph-5-fh,4,fh,'#30c030');}
-  R(c,px+3,py+3,20,20,'#2a2048');if(CT)c.drawImage(ctCharSprite(heroLook(),'down',0),0,1,18,18,px+3,py+3,20,20);else c.drawImage(charSprite(heroLook(),'down',0),0,0,16,14,px+3,py+3,20,17.5);
+  R(c,px+3,py+3,21,21,'#e8ecf8');{const pt=typeof portraitFor==='function'&&S.name?portraitFor({who:S.name}):null;if(pt)c.drawImage(pt,0,0,44,40,px+4,py+4,19,19);else c.drawImage(ctCharSprite(heroLook(),'down',0),0,1,18,18,px+4,py+4,19,19)}if(0){}else c.drawImage(charSprite(heroLook(),'down',0),0,0,16,14,px+3,py+3,20,17.5);
   const mx=maxHP(),hearts=Math.min(40,Math.ceil(mx/HPQ));let hp=Math.max(0,S.hp);
   for(let i=0;i<hearts;i++){const q=Math.max(0,Math.min(4,hp-i*HPQ)),col=i%8,row=Math.floor(i/8);drawHeart(c,px+26+col*8,py+13+row*8,q)}
   OV.push(()=>{txt(S.name,px+26,py+10,'#ffffff',11);txt(Math.max(0,S.hp)+'/'+mx,px+pw-13,py+10,'#c8d0ff',10,'right')});
