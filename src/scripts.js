@@ -1232,7 +1232,7 @@ function ngoymanTalk(){
   if(S.flags.won)return say([L('Kushe ñi am','Kom mapu tukulpaturkey. Chaltu may, '+nm()+'.','Toda la tierra vuelve a recordar. Gracias, '+nm()+'.','All the land remembers again. Thank you, '+nm()+'.'),
     N('La figura de niebla ya casi no se ve: donde estaba, crece pasto nuevo. «Las tierras robadas siguen ahí, al oeste, si quieres volver a caminarlas. Y los que viven en ellas te recordarán siempre.»','The fog figure is barely visible now: where it stood, new grass is growing. "The stolen lands are still there, to the west, if you want to walk them again. And those who live in them will remember you always."')]
     .concat(!S.flags.chboss?[N('«Y escucha: en el lago williche, junto a la isla, hay un remolino que canta. Los chumpall, la gente del agua, necesitan ayuda. Baja con respeto.»','"And listen: in the Williche lake, beside the island, there is a whirlpool that sings. The chumpall, the water people, need help. Go down with respect."')]:[])
-    .concat(secretsDone()?[N('Junto al kütral del umbral brilla un portal tejido de luz: te llevará de vuelta a Santiago, la waria donde naciste. Allá también te necesitan.','Beside the threshold fire glows a portal woven of light: it will take you back to Santiago, the waria where you were born. They need you there too.')]:[]));
+    .concat(secretsDone()?[N('«¿Escuchaste esa voz? Tu kuku te llama desde su ruka, en el lof lafkenche. Ve: lo que te espera allá no está en estas tierras.»','"Did you hear that voice? Your kuku calls you from her ruka, in the Lafkenche lof. Go: what awaits you there is not in these lands."')]:[]));
   const n=freedN();
   const ls=[L('Kushe ñi am','Akuymi, pichi weche... Afpun rüpü mew akuymi.','Llegaste... Llegaste al final del camino.','You have come... You have come to the end of the road.'),
     N('La figura es apenas niebla con forma de persona. Pero te mira con un cariño muy viejo, y la niebla no se atreve a tocarla.','The figure is barely fog in the shape of a person. But it looks at you with a very old tenderness, and the fog does not dare touch it.'),
@@ -1406,7 +1406,7 @@ function chQueenTalk(){
 }
 
 /* ================= SANTIAGO: the return ================= */
-function secretsDone(){return !!(S.flags.sb1&&S.flags.sb2&&S.flags.sb3&&S.flags.sb4&&S.flags.sb5&&S.flags.sb6&&S.flags.epu_won&&S.flags.chboss)}
+function secretsDone(){return !!(S.flags.won&&S.flags.sb1&&S.flags.sb2&&S.flags.sb3&&S.flags.sb4&&S.flags.sb5&&S.flags.sb6&&S.flags.chboss)}
 function portalMenu(){
   const en=S.gloss==='en',toStgo=M.region!=='santiago';
   choose(L('','Wülngiñ','Un portal de luz tranquila, tejido como un trariwe.','A portal of calm light, woven like a trariwe.'),
@@ -1418,17 +1418,59 @@ function portalMenu(){
       return say([N('Cruzas la luz... y el aire cambia: bocinas lejanas, olor a pan y a micro. Estás de vuelta donde naciste: Santiago, la waria.','You cross the light... and the air changes: distant horns, the smell of bread and buses. You are back where you were born: Santiago, the waria.'),
         N('Pero algo es distinto: en una plaza de la ciudad, alguien pintó un letrero en mapudungun. La lengua te siguió hasta acá. Ayuda a los wariache a hacerla crecer.','But something is different: in a city plaza, someone has painted a sign in Mapudungun. The language followed you here. Help the wariache make it grow.')],()=>loadMap('s_plaza',3,11));}
       loadMap('s_plaza',3,11)}
-    else loadMap('ngoyman',4,3)},true,true);
+    else loadMap('l_ruka2',7,4)},true,true);
+}
+function kukuHome(){
+  const en=S.gloss==='en';
+  if(S.flags.stgo_done)return say([L('Kuku','Waria mew ka mongeley taiñ dungun. Chaltu may, '+nm()+'.','También en la ciudad vive nuestra lengua. Gracias, '+nm()+'.','In the city, too, our language lives. Thank you, '+nm()+'.'),
+    N('La kuku teje junto al kütral. «Cuando quieras, el portal sigue ahí. Las dos casas son tuyas.»','Your kuku weaves beside the fire. "Whenever you want, the portal is still there. Both homes are yours."')]);
+  if(secretsDone())return say([L('Kuku','Akuymi, '+nm()+'. Kom dew kimimi.','Llegaste, '+nm()+'. Ya lo sabes todo.','You came, '+nm()+'. Now you know it all.'),
+    N('«Despertaste a los ngen, venciste a los males escondidos, y hasta los chumpall te dicen amigo. Pero el camino no termina aquí.»','"You woke the ngen, you defeated the hidden evils, and even the chumpall call you friend. But the road does not end here."'),
+    L('Kuku','Waria mew ka müley che. Yewelkülelu che.','En la ciudad también hay gente. Gente que tiene vergüenza.','In the city there are people too. People who feel ashamed.'),
+    N('«Allá nadie se atreve a decir ni mari mari: la vergüenza (yewen) les cierra la boca. Lleva lo que aprendiste. Junto al kütral tejí un wülngiñ, una puerta de luz: te lleva a Santiago y te trae de vuelta cuando quieras.»','"There nobody dares to say even mari mari: shame (yewen) closes their mouths. Carry what you have learned. Beside the fire I wove a wülngiñ, a door of light: it takes you to Santiago and brings you back whenever you want."')]);
+  say([L('Kuku','Konpange, '+nm()+'! Kümelen, eymi kay?','¡Pasa, '+nm()+'! Estoy bien, ¿y tú?','Come in, '+nm()+'! I am well, and you?'),
+    N('La ruka de tu kuku huele a humo y a pan. «Camina el mapu, hijo de la waria. Cuando sea hora, yo te llamo.»','Your kuku\'s ruka smells of smoke and bread. "Walk the land, child of the city. When it is time, I will call you."')]);
 }
 function stDone(){return ['st1','st2','st3','st4','st5'].filter(f=>S.flags[f]).length}
 function stReward(flag,give,lines){
   give();S.flags[flag]=1;
-  const all=stDone()===5;if(all)S.flags.stgo_done=1;
+  const all=stDone()===5;if(all)S.flags.st_all=1;
   persist();sfx('lvl');
   return say(lines.concat(all?[
-    N('Y entonces lo notas: en la plaza, en la población, en la ruka urbana... la gente se saluda en mapudungun. Chiquillos contando en el paradero. Una abuela enseñando. Un mural que dice MAPU.','And then you notice it: in the plaza, in the neighborhood, in the urban ruka... people greet each other in Mapudungun. Kids counting at the bus stop. A grandmother teaching. A mural that says MAPU.'),
-    L('','Waria mew ka mongeley taiñ dungun!','¡También en la ciudad vive nuestra lengua!','In the city, too, our language lives!'),
-    N('Santiago también es Wallmapu cuando se habla mapudungun. Tu viaje empezó aquí... y aquí vuelve a empezar, cada vez que alguien dice "mari mari".','Santiago is Wallmapu too when Mapudungun is spoken. Your journey began here... and here it begins again, every time someone says "mari mari".')]:[]));
+    N('Cinco personas de la waria hablaron sin vergüenza. Pero al fondo de la población, en la cancha, se juntó una sombra: todo el yewen que les quitaste tiene que ir a alguna parte.','Five people of the city spoke without shame. But at the back of the neighborhood, on the cancha, a shadow has gathered: all the yewen you took from them has to go somewhere.'),
+    L('','Yewen','Vergüenza. Es la última prueba: ve a la cancha y enfréntalo.','Shame. It is the last trial: go to the cancha and face it.')]:[]));
+}
+function yewenTalk(){
+  const en=S.gloss==='en';
+  say([N('En medio de la cancha hay alguien parado, de capucha, con las manos tapándose la boca. Los niños dejaron de jugar. Nadie se le acerca.','In the middle of the cancha someone stands, hooded, hands clamped over the mouth. The kids have stopped playing. Nobody goes near.'),
+    L('Yewen','...','No dice nada. Pero lo escuchas igual, adentro de tu cabeza: «lo hablas mal», «no eres de verdad», «te van a mirar raro», «mejor cállate».','It says nothing. But you hear it anyway, inside your head: "you speak it badly", "you are not a real one", "they will look at you funny", "better stay quiet".'),
+    N('Es el Yewen: la vergüenza. No es un wekufü del sur: nació aquí, en la waria, de cada vez que alguien se tragó una palabra. Lleva tres sellos: hay que hacerlo salir, decirle que no tenga miedo, y que no se pierda.','It is the Yewen: shame. It is no wekufü from the south: it was born here, in the city, every time someone swallowed a word. It carries three seals: it must be made to come out, told not to be afraid, and told not to get lost.')],()=>{
+    choose(L('','Yewen','¿Lo enfrentas?','Do you face it?'),
+      [{m:'May. Yewelayan!',g:en?'Yes. I will not be ashamed!':'Sí. ¡No tendré vergüenza!',v:1},{m:'Petu pepikawlan',g:en?'Not yet':'Todavía no',v:0}],v=>{
+      if(!v)return say([N('La sombra sigue ahí, esperando. Toda la población lo sabe.','The shadow stays there, waiting. The whole neighborhood knows it.')]);
+      say([N('Das un paso al frente y dices «mari mari» en voz alta, en medio de la cancha. El Yewen levanta la cabeza.','You step forward and say "mari mari" out loud, in the middle of the cancha. The Yewen lifts its head.')],()=>startBattle(['yewen'],{boss:1,sflag:'yewen_won'}))},true,false)});
+}
+function stPaseoTalk(){
+  const en=S.gloss==='en',v=rot('spaseo',3);
+  if(v===0)return say([L('Wariache','Mari mari... ¿se dice así? Me da no sé qué decirlo en la calle.','Mari mari... ¿se dice así? Me da no sé qué decirlo en la calle.','Mari mari... is that right? It feels odd saying it out loud in the street.'),N('Mira para los lados antes de decirlo. Eso también es el yewen.','He looks around before saying it. That, too, is the yewen.')]);
+  if(v===1)return say([L('Wariache','Mi apellido es mapuche, pero yo nunca aprendí. Mi mamá decía que no servía para nada en Santiago.','Mi apellido es mapuche, pero yo nunca aprendí. Mi mamá decía que no servía para nada en Santiago.','My surname is Mapuche, but I never learned. My mom said it was no use in Santiago.'),N('«Ahora en la plaza hay un letrero... y me dieron ganas.»','"Now there is a sign in the plaza... and it made me want to."')]);
+  return say([L('Wariache','Pewkayal!','¡Hasta luego! (pewkayal: nos vemos)','See you! (pewkayal: see you later)'),N('Lo dice rápido y sigue caminando, pero sonríe.','He says it fast and keeps walking, but he is smiling.')]);
+}
+function stFeriaTalk(){
+  const en=S.gloss==='en',v=rot('sferia',3);
+  if(v===0)return say([L('Casera','¡Casera, caserito! Poñü, kofke, kachilla... ¿cómo se dice tomate?','¡Casera, caserito! Poñü (papas), kofke (pan), kachilla (trigo)... ¿cómo se dice tomate?','Casera, caserito! Poñü (potatoes), kofke (bread), kachilla (wheat)... how do you say tomato?'),N('Se ríe: «¡tomate no más, pues! Esa llegó con los españoles... bueno, al revés.»','She laughs: "just tomate! That one came with the Spaniards... well, the other way round."')]);
+  if(v===1)return say([L('Casera','Kiñe kilo, epu kilo, küla kilo... ¡así le cobro a los que saben!','Un kilo, dos kilos, tres kilos... ¡así le cobro a los que saben!','One kilo, two kilos, three kilos... that is how I charge the ones who know!'),N('Te regala una manzana. «Manshana. Esa sí es prestada.»','She gives you an apple. "Manshana. That one is borrowed, yes."')]);
+  return say([L('Casera','Chaltu may, pichi weche. Vuelva el domingo.','Gracias, joven. Vuelva el domingo.','Thank you, young one. Come back on Sunday.')]);
+}
+function stChoferTalk(){
+  const v=rot('schofer',2);
+  if(v===0)return say([L('Chofer','¡Sube, sube! ...Oiga, ¿usted sabe cómo se dice «micro» en mapudungun?','¡Sube, sube! ...Oiga, ¿usted sabe cómo se dice «micro» en mapudungun?','Get on, get on! ...Hey, do you know how to say "bus" in Mapudungun?'),N('Se queda pensando. «Mi abuelo decía kareta para la carreta. Micro... micro no más, pues.»','He thinks about it. "My grandpa said kareta for the cart. Bus... just micro, I guess."')]);
+  return say([L('Chofer','Amuayu! ...¿así? Vamos los dos. Me lo enseñó un pasajero.','¡Vamos (tú y yo)! ...¿así? Me lo enseñó un pasajero.','Let us go, you and I! ...like that? A passenger taught me.'),N('Toca la bocina dos veces, contento.','He honks twice, pleased.')]);
+}
+function stEstudTalk(){
+  const v=rot('sestud',2);
+  if(v===0)return say([L('Estudiante','Mañana tengo prueba de historia. Sale el «pueblo mapuche», dos páginas. Y de la lengua, nada.','Mañana tengo prueba de historia. Sale el «pueblo mapuche», dos páginas. Y de la lengua, nada.','Tomorrow I have a history test. The "Mapuche people" are in it, two pages. And nothing about the language.'),N('Cierra el cuaderno. «¿Tú lo hablas? ¿De verdad?»','She closes the notebook. "Do you speak it? Really?"')]);
+  return say([L('Estudiante','Kimün... conocimiento. Eso sí lo anoté.','Kimün... conocimiento. Eso sí lo anoté.','Kimün... knowledge. That one I did write down.')]);
 }
 function stKidsTalk(){
   const en=S.gloss==='en';

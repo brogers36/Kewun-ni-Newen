@@ -321,3 +321,17 @@ Cada uno de los cinco lof tiene ahora una **machi** junto a su **rewe** (tronco 
 - Niños: "Pire ayüfiñ!", "Trayen mew amuan!", "Choyke müna lefkey!" ⚠ lef-ke-y; cuidadora de luan: "Pichi luan choyüy!" ⚠ choyü- 'nacer/brotar' para crías.
 **Además**: 3 espacios de partida en la pantalla de inicio; ciclo día/noche (12 min) con atardecer/noche/amanecer en exteriores y grillos nocturnos; héroe visible en batalla (ataca y parpadea al recibir daño).
 - (Nov 21) Respuesta a «Chew tuwimi?» unificada en todos los pentukun: **"Santiago waria mew tuwün."** (antes el lof lafkenche decía "Santiago tuwün" y los otros lonkos "Lafken mapu tuwün"). Los dos héroes son wariache. ⚠ Confirmar la forma con "mew" (vs "Santiago tuwün" a secas).
+
+### Tanda 15 · el llamado de la kuku y Santiago ampliado (Nov 21)
+**El llamado** (se dispara en cualquier mapa al cumplir: Fütra Ngoyman vencido + 6 llum wekufü + Kaykayfilu):
+- **"Küpange, X! Küpatunge!"** '¡ven! ¡vuelve!' ⚠ küpa-tu-nge con -tu- restitutivo ('venir de vuelta'): confirmar que suena natural como llamado.
+- La kuku ahora vive en su propia ruka del lof lafkenche (**"Kuku ñi ruka"**), con el portal junto al kütral.
+- **"Akuymi, X. Kom dew kimimi."** 'llegaste; ya lo sabes todo' ⚠ dew + kim-i-mi: ¿mejor "Kom kimimi ta"?
+- **"Waria mew ka müley che. Yewelkülelu che."** 'en la ciudad también hay gente; gente que tiene vergüenza' ⚠ yewel-küle-lu (estativo + participio): confirmar la forma de yewen como verbo (¿yewe-n / yewel-?).
+- **wülngiñ** usado como 'puerta (de luz)' para el portal ⚠ wülngiñ es 'entrada/puerta' de ruka: ¿aceptable para un portal?
+**Santiago** (tres mapas urbanos: Plaza Wallmapu, la calle de la feria, la población con la ruka urbana y la cancha):
+- Jefe nuevo: **Yewen** 'vergüenza', figura de capucha que se tapa la boca; sellos: tripa- ('¡sal!'), llüka-kil ('¡no tengas miedo!'), ñam-kil ('¡no te pierdas!').
+- **"May. Yewelayan!"** 'sí, no tendré vergüenza' ⚠ yewel-a-la... la forma correcta del futuro negativo sería yewe(l)-la-ya-n: revisar orden de -la- y -a-.
+- **"Yewelkilnge"** 'no tengas vergüenza' ⚠ misma duda del tema verbal.
+- NPC nuevos con mezcla castellano/mapudungun (deliberada, registro urbano): casera de la feria (poñü, kofke, kachilla, "kiñe kilo, epu kilo"; **manshana** como préstamo), chofer de micro (**"Amuayu!"** 'vamos los dos'; **kareta** como préstamo), estudiante (**kimün**), transeúnte (**"Pewkayal!"** ⚠ confirmar como 'nos vemos').
+- Las cinco tareas de Santiago siguen igual; al completarlas aparece el Yewen en la cancha y al vencerlo se termina Santiago.

@@ -54,6 +54,8 @@ function questLines(){
     const sbs=['sb1','sb2','sb3','sb4','sb5','sb6'].filter(k=>F[k]).length;
     if(!F.chboss)Q('Münche lafken',0,'Una voz débil suena bajo el islote de las piedras del agua, en Willi mapu.','A faint voice sounds beneath the islet of the water stones, in Willi mapu.');
     if(sbs<6)Q('Pu llum wekufü '+sbs+'/6',0,'Seis males antiguos siguen escondidos en los rincones del mapu; el terreno los delata.','Six ancient evils remain hidden in the corners of the land; the ground gives them away.');
+    if(F.stgo_call&&!F.stgo_seen)Q('Kuku ñi ruka',0,'Tu kuku te llama desde su ruka, en el lof lafkenche. Allí te espera una puerta de luz.','Your kuku calls you from her ruka, in the Lafkenche lof. A door of light awaits you there.');
+    if(F.stgo_seen&&!F.stgo_done)Q('Santiago waria',0,'Ayuda a los wariache a hablar sin vergüenza. Cinco personas te necesitan; después, enfrenta al Yewen.','Help the wariache speak without shame. Five people need you; then face the Yewen.');
     if(F.epu_won&&F.chboss&&sbs>=6)Q('Mapu',1,'La tierra respira. Lo que queda es caminar y aprender.','The land breathes. What remains is to walk and to learn.');
   }
   const MQ=[['laf','Machi (Lafkenche)','pentukun','Saca hojas del foye solo de Fotra mapu, por el lado norte.','Take leaves from the lone foye of Fotra mapu, on the north side.'],
@@ -94,7 +96,7 @@ function mapaLines(){
   const ng=['ngen','ngen2','ngen3','ngen4','ngen5'].filter(k=>F[k]).length;
   const sbs=['sb1','sb2','sb3','sb4','sb5','sb6'].filter(k=>F[k]).length;
   ls.push(L('','Mapu',
-    'Ngen despiertos '+ng+'/5 · Llum wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoyman · '+(F.epu_won?'■':'□')+' Epunamun',
+    'Ngen despiertos '+ng+'/5 · Llum wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoyman · '+(F.epu_won?'■':'□')+' Epunamun · '+(F.yewen_won?'■':'□')+' Yewen',
     'Ngen awakened '+ng+'/5 · Hidden wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoyman · '+(F.epu_won?'■':'□')+' Epunamun'));
   return ls}
 /* ---------- vocabulary unlocked outside battle roots ---------- */

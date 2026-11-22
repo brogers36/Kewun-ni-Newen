@@ -305,7 +305,7 @@ function stopAmb(){for(const t of AMB.timers)clearInterval(t);AMB.timers=[];
   for(const n of AMB.nodes){try{n.stop&&n.stop()}catch(e){}try{n.disconnect&&n.disconnect()}catch(e){}}
   AMB.nodes=[];AMB.cur=null}
 function ambFor(bg){return({coast:'waves',field:'meadow',forest:'forest',rainforest:'forest',mawida:'forest',
-  mount:'wind',fjord:'wind',pampa:'pampa',deep:'under',cave:'cave',cave2:'cave',cave3:'cave',cave4:'cave',cave5:'cave'})[bg]||'night'}
+  mount:'wind',fjord:'wind',pampa:'pampa',waria:'city',deep:'under',cave:'cave',cave2:'cave',cave3:'cave',cave4:'cave',cave5:'cave'})[bg]||'night'}
 function playAmb(kind){
   if(AMB.cur===kind)return;stopAmb();if(!kind)return;
   if(!AU.c)return; // starts once audio is unlocked; next map change retries
@@ -335,6 +335,9 @@ function playAmb(kind){
     AMB.timers.push(setInterval(()=>{if(Math.random()<.6){chirp(140+Math.random()*120,380+Math.random()*220,.25,.03)}},1400))}
   else if(kind==='cave'){noise(140,1.2,.03,.04,.8);
     AMB.timers.push(setInterval(()=>{if(Math.random()<.4){chirp(900+Math.random()*500,300,.12,.04)}},3100))}
+  else if(kind==='city'){noise(180,.7,.026,.04,.8);noise(2400,1.3,.004,.15,.9);
+    AMB.timers.push(setInterval(()=>{const r=Math.random();if(r<.18){const b=380+Math.random()*120;chirp(b,b*.98,.22,.05);setTimeout(()=>chirp(b*1.02,b,.18,.04),260)}
+      else if(r<.32){const b=1600+Math.random()*700;chirp(b,b*1.2,.07,.03)}},2100))}
   else if(kind==='night'){AMB.timers.push(setInterval(()=>{if(Math.random()<.7){const b=3300+Math.random()*500;
     chirp(b,b*1.04,.06,.03);setTimeout(()=>chirp(b,b*1.04,.06,.025),110);setTimeout(()=>chirp(b,b*1.04,.06,.02),220)}},900))}
 }

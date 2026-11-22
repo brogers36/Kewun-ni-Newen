@@ -360,6 +360,11 @@ function enemyPhase(){
     if(e.t==='epunamun'){
       if(!e.parry&&Math.random()<.3){e.parry=1;fx.push('El Epunamun cruza sus dos lanzas y espera tu golpe.');fxe.push('The Epunamun crosses his two spears and waits for your blow.');continue}
       hitP(e,.85);hitP(e,.85,{es:' gira y golpea con la segunda lanza',en:' spins and strikes with the second spear'});continue}
+    if(e.t==='yewen'){
+      if(B.turn>0&&B.turn%4===1&&(S.sp||0)>0){S.sp--;fx.push('El Yewen susurra desde la capucha: «lo dices mal, mejor cállate». Las palabras se te atascan: pierdes un punto de newen (✦).');fxe.push('The Yewen whispers from inside the hood: "you say it wrong, better stay quiet". The words stick in your throat: you lose one newen point (✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')});continue}
+      if(B.turn>0&&B.turn%4===3){hitP(e,1.9,{es:' te mira por fin, y la mirada pesa como una mochila de piedras: se te hunden los hombros',en:' finally looks at you, and the look weighs like a backpack of stones: your shoulders sink'});hitsFx.push(()=>B.shake=8);continue}
+      if(!S.curse&&Math.random()<.25){S.curse=1;fx.push('El Yewen se ríe bajito, sin boca. Te arde la cara: quedas con maldición (fuerza −2). El lawen la quita.');fxe.push('The Yewen laughs quietly, without a mouth. Your face burns: you are cursed (strength −2). Lawen lifts it.');hitsFx.push(()=>sfx('bad'));continue}
+      hitP(e);continue}
     if(e.t==='kalku'){
       const ac=aliveE().filter(x=>x.t==='anchi').length;
       if(ac<1&&B.en.length<5&&Math.random()<.35){const ne=mkEnemy('anchi');B.en.push(ne);relabel();fx.push('El Fütra Kalku llama a su creación: ¡aparece '+ne.label+'!');fxe.push('The Fütra Kalku calls his creation: '+ne.label+' appears!');continue}
@@ -518,6 +523,12 @@ function endBattle(how){
       L('Epunamun','Tüfa tañi waiki. Yenge.','Esta es mi lanza. Llévala.','This is my spear. Carry it.'),
       Object.assign(L('','Epunamun ñi waiki!','El Epunamun te regala una de sus lanzas: tu fuerza sube +2 para siempre. Dice que la otra la guardará para pelear a tu lado, algún día, al otro lado de la niebla.','The Epunamun gives you one of his spears: your strength rises +2 for good. He says he will keep the other, to fight at your side one day, on the far side of the fog.'),{fx:()=>sfx('lvl')})],
       ()=>gainPiwke([N('Donde golpearon sus lanzas, algo rojo brilla en el suelo...','Where his spears struck, something red glints on the ground...')]));}
+  if(how==='win'&&o.sflag==='yewen_won'){S.flags.yewen_won=1;S.flags.stgo_done=1;persist();sfx('lvl');
+    return say([N('El Yewen no se deshace: se encoge. Las manos bajan de la boca, la capucha cae, y abajo hay una cara cualquiera, de cualquier esquina de Santiago. Te mira, y por primera vez no baja los ojos.','The Yewen does not break apart: it shrinks. The hands come down from the mouth, the hood falls back, and underneath there is an ordinary face, from any corner of Santiago. It looks at you, and for the first time it does not lower its eyes.'),
+      L('','Mari mari.','Lo dice bajito, mal pronunciado, y con todo el cuerpo. Después se va caminando por la calle, y en cada esquina alguien se lo devuelve.','It says it quietly, badly pronounced, and with its whole body. Then it walks off down the street, and on every corner someone says it back.'),
+      N('Y entonces lo notas: en la plaza, en la feria, en la población, en la ruka urbana... la gente se saluda en mapudungun. Chiquillos contando en el paradero. Una abuela enseñando. Un mural que dice MAPU.','And then you notice it: in the plaza, at the market, in the neighborhood, in the urban ruka... people greet each other in Mapudungun. Kids counting at the bus stop. A grandmother teaching. A mural that says MAPU.'),
+      L('','Waria mew ka mongeley taiñ dungun!','¡También en la ciudad vive nuestra lengua!','In the city, too, our language lives!'),
+      N('Santiago también es Wallmapu cuando se habla mapudungun. Tu viaje empezó aquí... y aquí vuelve a empezar, cada vez que alguien dice "mari mari". Yewelkilnge: no tengas vergüenza.','Santiago is Wallmapu too when Mapudungun is spoken. Your journey began here... and here it begins again, every time someone says "mari mari". Yewelkilnge: do not be ashamed.')],()=>gainPiwke([N('Donde estaba parado el Yewen, algo rojo brilla en el suelo...','Where the Yewen stood, something red glints on the ground...')]));}
   if(how==='win'&&o.sflag){S.flags[o.sflag]=1;persist();sfx('lvl');
     return say([N('El wekufü secreto se deshace en jirones de sombra que el viento se lleva.','The secret wekufü breaks apart into shreds of shadow that the wind carries away.'),
       L('','Newen!','Venciste a uno de los wekufü escondidos. Pocos pueden contarlo.','You defeated one of the hidden wekufü. Few can say the same.')],()=>gainPiwke([N('Donde estaba, algo rojo brilla en el suelo...','Where it stood, something red glints on the ground...')]));}

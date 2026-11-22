@@ -51,7 +51,8 @@ const MCHK=[
   {m:'Ngoyman · jefe final',es:'El corazón de la niebla: Ti Fütra Ngoyman (tres formas)',en:'The heart of the fog: Ti Fütra Ngoyman (three forms)',lvl:28,at:['g_ngoyman',8,9],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','sbosses']},
   {m:'Münche lafken · jardines',es:'Bajo el lago: los chumpall y sus problemas',en:'Under the lake: the chumpall and their troubles',lvl:28,at:['u_garden',3,7],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','finalwon']},
   {m:'Münche lafken · jefe (5 formas)',es:'El salón de los chumpall: el Kaykayfilu (cinco formas)',en:'The chumpall hall: the Kaykayfilu (five forms)',lvl:29,at:['u_throne',8,5],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','finalwon','chq']},
-  {m:'Santiago · retorno',es:'Todos los secretos completos; el portal a la waria',en:'All secrets complete; the portal to the city',lvl:30,at:['ngoyman',4,3],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','finalwon','sbosses','kalkudone','epuwon','chq','chdone']}];
+  {m:'Santiago · retorno',es:'Todos los secretos completos; el portal a la waria',en:'All secrets complete; the portal to the city',lvl:30,at:['l_ruka2',7,5],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','finalwon','sbosses','kalkudone','epuwon','chq','chdone','stgocall']},
+  {m:'Santiago · Yewen',es:'La waria: las cinco personas ayudadas; el Yewen espera en la cancha',en:'The city: the five people helped; the Yewen waits on the cancha',lvl:31,at:['s_poblacion',14,6],set:['intro','pentu','lafcave','lafdone','naglof','nagcave','nagdone','pewlof','pewcave','pewdone','willof','wilcave','wildone','puellof','puelcave','pueldone','ngoylands','finalwon','sbosses','kalkudone','epuwon','chq','chdone','stgocall','stgofive']}];
 const MSET={
   intro:s=>{s.flags.intro=1;s.roots.push('küpa')},
   pentu:s=>{Object.assign(s.flags,{pentu_prac:1,pentukun:1});s.roots.push('umawtu','nag');s.items.kulon+=2},
@@ -75,7 +76,9 @@ const MSET={
   chq:s=>{Object.assign(s.flags,{ch1:1,ch2:1,ch3:1,ch2q:1,ch_pearl:1})},
   chdone:s=>{Object.assign(s.flags,{chboss:1});s.gear.lafkenkura=1},
   epuwon:s=>{Object.assign(s.flags,{epu_won:1});s.gear.waiki=1},
-  kalkudone:s=>{Object.assign(s.flags,{sb6:1})}};
+  kalkudone:s=>{Object.assign(s.flags,{sb6:1})},
+  stgocall:s=>{Object.assign(s.flags,{stgo_call:1})},
+  stgofive:s=>{Object.assign(s.flags,{stgo_seen:1,st1:1,st2:1,st3:1,st4:1,st5:1,st_all:1})}};
 function mBuild(c){
   const s=newState(HERO);s.pieces=[];
   for(const k of c.set)MSET[k](s);

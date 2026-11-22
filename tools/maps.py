@@ -538,6 +538,8 @@ rkL[3][7]='F';rkL[2][3]='Z';rkL[5][4]='U';rkL[2][11]='C'
 rkN[3][7]='F';rkN[4][4]='U';rkN[5][11]='C';rkN[2][11]='V'
 rkW[3][7]='F';rkW[5][2]='C';rkW[2][11]='Z'
 P_['l_ruka1']=[''.join(r) for r in rkL]
+rkK=[r[:] for r in rk];rkK[5][3]='F';rkK[2][3]='Z';rkK[5][11]='U'
+P_['l_ruka2']=[''.join(r) for r in rkK]
 P_['n_ruka1']=[''.join(r) for r in rkN]
 P_['w_ruka1']=[''.join(r) for r in rkW]
 # --- p_lil: the lava crags (advanced Pewenche) ---
@@ -637,7 +639,7 @@ def bfs2(rows,start):
             X,Y=x+dx,y+dy
             if 0<=X<W and 0<=Y<H and (X,Y) not in seen and rows[Y][X] in OPEN2:seen.add((X,Y));st.append((X,Y))
     return seen
-STARTS={'p_rupu':(0,7),'p_lof':(0,9),'p_pewen':(0,7),'p_pire':(0,7),'p_pillan':(3,1),'p_ruka1':(6,7),'p_ruka2':(6,7),'pd1':(1,4),'pd2':(1,2),'pd3':(1,1),'p_degin':(6,11),'l_ruka1':(6,7),'n_ruka1':(6,7),'w_ruka1':(6,7)}
+STARTS={'p_rupu':(0,7),'p_lof':(0,9),'p_pewen':(0,7),'p_pire':(0,7),'p_pillan':(3,1),'p_ruka1':(6,7),'p_ruka2':(6,7),'pd1':(1,4),'pd2':(1,2),'pd3':(1,1),'p_degin':(6,11),'l_ruka1':(6,7),'l_ruka2':(6,7),'n_ruka1':(6,7),'w_ruka1':(6,7)}
 ALL=dict(P_);ALL['l_wapi']=L_['l_wapi']
 for k,st in STARTS.items():
     v=ALL[k];R2=bfs2(v,st)
@@ -1155,27 +1157,61 @@ for k,st in {'u_grotto':(4,2),'u_garden':(0,7),'u_deep':(0,7),'u_throne':(0,7)}.
 
 
 # ================= SANTIAGO: the return =================
-# s_plaza: a plaza in the city
-c=C(34,14)
-c.r(0,9,34,1,'=')
-c.p(0,9,'T')
-c.r(16,1,2,12,'=')
-c.r(4,1,8,4,'%');c.r(22,1,8,4,'%')
-c.r(14,6,6,2,'~');c.r(13,5,8,4,',');c.r(14,6,6,2,'~')
+# s_plaza: Plaza Wallmapu, the arrival (urban)
+def U(w,h):
+    c=C(w,h,',')
+    for x in range(w):c.g[0][x]=c.g[h-1][x]=','
+    for y in range(h):c.g[y][0]=c.g[y][w-1]=','
+    return c
+def blocks(c,y,h,spans,gapch='w'):
+    # spans: list of (x,w); the tile between spans becomes a railing so nobody slips into the alley
+    for (x,w) in spans:c.r(x,y,w,h,'h')
+    xs=sorted(spans)
+    for a,b in zip(xs,xs[1:]):
+        gx=a[0]+a[1]
+        if gx<b[0]:
+            for yy in range(y,y+h-1):c.p(gx,yy,',')
+            c.p(gx,y+h-1,gapch)
+c=U(36,16)
+blocks(c,0,3,[(0,5),(6,6),(13,4),(18,7),(26,5),(32,4)])
+c.r(0,4,36,2,'=')
+c.r(0,7,36,6,',')
+c.r(9,7,6,2,'Y');c.r(21,7,6,2,'Y');c.r(9,11,6,2,'Y');c.r(21,11,6,2,'Y')
+c.r(17,9,2,2,'~')
+c.p(16,8,'z');c.p(19,8,'z');c.p(16,11,'z');c.p(19,11,'z')
+for x in (4,12,24,31):c.p(x,6,'l')
+for x in (7,28):c.p(x,13,'l')
+c.p(15,7,'T');c.p(20,7,'T');c.p(15,12,'T');c.p(20,12,'T');c.p(3,9,'T');c.p(32,9,'T')
+blocks(c,14,2,[(0,5),(6,5),(12,5),(18,5),(24,5),(30,6)])
 c.p(3,10,'@')
-c.p(13,10,'V');c.p(20,11,'I')
-c.r(6,10,3,2,',')
-c.r(24,10,4,2,',')
+c.p(13,10,'V');c.p(24,10,'I')
+c.r(1,4,2,2,'c');c.r(30,4,2,2,'c')
 E_['s_plaza']=c.rows()
-# s_poblacion: the neighborhood with the urban ruka
-c=C(32,13)
-c.r(0,7,32,1,'=')
-c.p(31,7,'T')
-for (x,y) in [(3,2),(9,2),(15,2),(21,2)]:c.r(x,y,4,3,'%')
-for (x,y) in [(3,9),(9,9)]:c.r(x,y,4,3,'%')
-c.r(25,8,3,2,'R')
-c.r(16,9,6,3,',')
-c.p(28,2,'T');c.p(29,3,'T');c.p(27,11,'T')
+# s_calle: the commercial street, feria and bus stop (urban)
+c=U(40,14)
+blocks(c,0,2,[(0,4),(5,5),(11,4),(16,6),(23,5),(29,4),(34,6)])
+c.r(0,3,40,2,'=')
+c.p(2,2,'l');c.p(14,2,'l');c.p(27,2,'l');c.p(37,2,'l')
+c.r(5,3,2,1,'c');c.r(17,4,3,1,'c');c.r(31,3,2,1,'c')
+c.r(9,5,2,1,'o')
+c.p(20,5,'e');c.p(22,5,'e');c.p(24,5,'e');c.p(26,5,'e')
+c.p(4,5,'l');c.p(34,5,'l');c.p(16,5,'z');c.p(29,5,'z')
+c.r(2,7,15,6,'.');c.r(2,7,15,1,'w');c.r(2,12,15,1,'w');c.r(2,8,1,4,'w');c.r(16,8,1,4,'w');c.p(9,7,',');c.p(9,12,',')
+blocks(c,8,5,[(20,5),(26,6),(33,7)])
+c.r(18,13,22,1,',');c.p(19,10,'l');c.p(19,13,'T');c.p(1,13,'T');c.p(0,9,'T')
+E_['s_calle']=c.rows()
+# s_poblacion: the neighborhood, the urban ruka and the cancha (urban)
+c=U(34,14)
+blocks(c,0,2,[(0,5),(6,5),(12,5),(18,5),(24,5),(30,4)])
+c.r(0,3,34,2,'=')
+c.r(3,4,2,1,'c');c.r(22,3,2,1,'c')
+c.p(1,5,'l');c.p(12,5,'l');c.p(27,5,'l');c.p(7,5,'z')
+blocks(c,7,2,[(0,4),(5,4)])
+c.r(10,7,8,6,'Y');c.r(11,8,6,4,',');c.r(13,9,3,2,'R')
+c.r(10,7,8,1,'w');c.p(14,7,',');c.r(10,12,8,1,'w');c.p(14,12,',')
+c.r(20,7,12,6,'.');c.r(20,7,12,1,'w');c.r(20,12,12,1,'w');c.r(19,8,1,4,'w');c.r(32,8,1,4,'w');c.p(25,7,',');c.p(25,12,',')
+c.r(0,10,4,3,'h');c.r(5,10,4,3,'h');c.p(4,12,'w')
+c.p(9,13,'l');c.p(18,13,'l');c.p(33,10,'T');c.p(33,13,'T')
 E_['s_poblacion']=c.rows()
 # s_centro: the urban ruka cultural center
 g=[['%']*16 for _ in range(10)]
@@ -1184,7 +1220,7 @@ g[2][3]='Z';g[2][12]='V';g[5][11]='U';g[1][7]='F'
 carve0(g,7,8,2,1)
 carve0(g,7,9,2,1)
 E_['s_centro']=[''.join(r) for r in g]
-for k,st in {'s_plaza':(0,9),'s_poblacion':(0,7),'s_centro':(7,8)}.items():
+for k,st in {'s_plaza':(3,11),'s_calle':(0,3),'s_poblacion':(0,3),'s_centro':(7,8)}.items():
     rows=[r.replace('@',',') for r in E_[k]];R2=bfs2(rows,st)
     missing=[(x,y,rows[y][x]) for y in range(len(rows)) for x in range(len(rows[0])) if rows[y][x] in set('PCKSFMNIkgHBOExJD') and (x,y) not in R2]
     print(k,'reach',len(R2),'MISSING' if missing else 'ok',missing)

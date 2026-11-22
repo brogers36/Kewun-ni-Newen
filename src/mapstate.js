@@ -88,6 +88,20 @@ function gpix(gx,gy,f){
     if(ti<=2&&((v===3&&(u===0||u===3))||(v===4&&(u===1||u===2))))col=lerp3(col,[200,224,252],.6);
     if(h2(gx>>2,gy,f+50)<.012)return[236,246,255];
     return col}
+  if(M.urban&&g!=='~'){
+    if(g==='='){ // asphalt with a curb against the sidewalk and a faded centre line
+      const dc=edgeDist(tx,ty,lx,ly,x=>x===','||x==='Y'||x==='.');if(dc<1)return [150,150,156];if(dc<2)return [118,118,124];
+      const n=h2(gx,gy,61);let col=n<.06?[66,66,72]:n>.96?[88,88,94]:[76,76,82];
+      const hor=gAt(tx-1,ty)==='='&&gAt(tx+1,ty)==='=',ver=gAt(tx,ty-1)==='='&&gAt(tx,ty+1)==='=';
+      const wide=hor&&(gAt(tx,ty-1)==='='||gAt(tx,ty+1)==='='),wideV=ver&&(gAt(tx-1,ty)==='='||gAt(tx+1,ty)==='=');
+      if(wide&&gAt(tx,ty-1)==='='&&gAt(tx,ty+1)!=='='&&ly===0&&(gx%12)<7)col=[214,196,96];
+      else if(wideV&&gAt(tx-1,ty)==='='&&gAt(tx+1,ty)!=='='&&lx===0&&(gy%12)<7)col=[214,196,96];
+      if(h2(gx>>2,gy>>2,62)<.015)col=[58,58,64];return col}
+    if(g===','){const u=gx&15,v=gy&15;if(u===15||v===15)return [158,158,163];if((u===7||v===7)&&((gx>>4)+(gy>>4))%3===0)return [168,168,172];
+      const n=h2(gx,gy,63);if(n<.02)return [164,164,170];if(n>.985)return [190,190,194];return ((gx>>4)+(gy>>4))%2?[177,177,181]:[181,181,185]}
+    if(g==='.'){const n=vnoise(gx,gy,9,41);return ditherRamp([PL.D1,lerp3(PL.D1,PL.D2,.5),PL.D2,lerp3(PL.D2,PL.D3,.5)],n,gx,gy)}
+    if(g==='Y'){const de=edgeDist(tx,ty,lx,ly,x=>x!==null&&x!=='Y');if(de<1)return [120,110,80];return grassPix(gx,gy,PL.G2)}
+  }
   if(g==='.'||g==='='){
     const dg=edgeDist(tx,ty,lx,ly,isGrass),thr=1.6+((gx*7+gy*3)%3)*.7;
     if(dg<thr-1)return grassPix(gx,gy,PL.G2);if(dg<thr)return PL.G0;
@@ -135,6 +149,18 @@ function buildLayers(){
     if(ch==='T'){const tc=treeCanvas(Math.floor(h2(x,y,2)*3),M.trees);PROPS.push({y:y+.9,cvs:tc,dx:x*T+8-(tc.width>>1),dy:y*T+16-tc.height+(y===0?6:0),sh:[x*T+8,y*T+14,7,2]})}
     else if(ch==='#')PROPS.push({y:y+.8,cvs:rockCanvas(Math.floor(h2(x,y,2)*2)),dx:x*T,dy:y*T+2,sh:[x*T+8,y*T+14,7,2]});
     else if(ch==='V')PROPS.push({y:y+.9,cvs:boardCanvas(),dx:x*T-4,dy:y*T-6,sh:[x*T+8,y*T+15,10,2],board:1});
+    else if(ch==='l')PROPS.push({y:y+.9,cvs:lampCanvas(),dx:x*T+3,dy:y*T-18,sh:[x*T+8,y*T+15,4,2],lamp:1});
+    else if(ch==='z')PROPS.push({y:y+.9,cvs:benchCanvas(),dx:x*T,dy:y*T+4,sh:[x*T+8,y*T+15,8,2]});
+    else if(ch==='w')PROPS.push({y:y+.9,cvs:railCanvas(),dx:x*T,dy:y*T+3,sh:[x*T+8,y*T+15,8,1]});
+    else if(ch==='e')PROPS.push({y:y+.9,cvs:stallCanvas(Math.floor(h2(x,y,9)*6)),dx:x*T-2,dy:y*T-10,sh:[x*T+8,y*T+15,9,2]});
+    else if(ch==='o'&&(x===0||grid[y][x-1]!=='o'))PROPS.push({y:y+.9,cvs:shelterCanvas(),dx:x*T,dy:y*T-10,sh:[x*T+16,y*T+15,14,2]});
+    else if(ch==='c'&&(x===0||grid[y][x-1]!=='c')){let n=0;while(x+n<M.w&&grid[y][x+n]==='c')n++;PROPS.push({y:y+.9,cvs:vehicleCanvas(n,x*31+y*7),dx:x*T,dy:y*T-6,sh:[x*T+n*8,y*T+15,n*7,2]})}
+    else if(ch==='h'&&(x===0||grid[y][x-1]!=='h')&&(y===0||grid[y-1][x]!=='h')){
+      let bw=0,bh=0;while(x+bw<M.w&&grid[y][x+bw]==='h')bw++;while(y+bh<M.h&&grid[y+bh][x]==='h')bh++;
+      let door;if(M.doors)for(let k=0;k<bw;k++)if(M.doors[(x+k)+','+(y+bh-1)])door=k;
+      const bd=M.bld&&M.bld[x+','+y]||{};if(bd.door!==undefined)door=bd.door;
+      const bc=buildingCanvas(bw,bh,x*17+y*5+(M.seed||0),{door,shop:bd.shop,mural:bd.mural});
+      PROPS.push({y:y+bh-.1,cvs:bc,dx:x*T-1,dy:y*T+bh*16-bc.height+2,sh:[x*T+bw*8,y*T+bh*16-1,bw*8,2]})}
     else if(ch==='Z')PROPS.push({y:y+.9,loom:1,dx:x*T,dy:y*T-6,sh:[x*T+8,y*T+15,8,2]});
     else if(ch==='U')PROPS.push({y:y+.9,pot:1,dx:x*T,dy:y*T,sh:[x*T+8,y*T+14,7,2]});
     else if(ch==='M')PROPS.push({y:y+.9,cvs:kulonCanvas(Math.floor(h2(x,y,7)*2)),dx:x*T-2,dy:y*T-8,sh:[x*T+8,y*T+14,8,2]});
@@ -188,6 +214,7 @@ function loadMap(id,x,y,quiet){
   if(S.flags['gate:'+id])for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++){if(grid[yy][xx]==='G')grid[yy][xx]=M.floor;if(grid[yy][xx]==='O')grid[yy][xx]='q'}
   PZ={n:0,lit:new Set()};
   if(['sb1','sb2','sb3','sb4','sb5'].every(f=>S.flags[f]))S.flags.sbAll=1;
+  if(['st1','st2','st3','st4','st5'].every(f=>S.flags[f]))S.flags.st_all=1;
   if(id==='g_ngoyman'&&S.flags.gm_all&&!S.flags.lawW){S.flags.lawW=1;S.lawuses=S.lawuses||0}
   if(id==='w_wapi'&&S.flags['pz:w_wapi']&&!S.flags.wapiNpz&&!S.flags['pz:w_wapi:st']){S.flags['pz:w_wapi:st']=1;delete S.flags['pz:w_wapi']}
   {const doorOpen=(M.pz&&M.pz.done)?S.flags['pz:'+id+':st']:S.flags['pz:'+id];
@@ -198,7 +225,7 @@ function loadMap(id,x,y,quiet){
   if(S.flags.snow)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='^')grid[yy][xx]=M.floor;
   if(S.flags.bramble)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='Ñ')grid[yy][xx]=M.floor;
   if(S.flags.lelfun)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='D')grid[yy][xx]=M.floor;
-  if(id==='ngoyman'&&typeof secretsDone==='function'&&secretsDone())grid[2][3]='@';
+  if(id==='l_ruka2'&&typeof secretsDone==='function'&&secretsDone())grid[3][7]='@';
   buildLayers();
   ents=[];P.x=x;P.y=y;
   const [px0,py0]=placeNear(x,y);P.x=px0;P.y=py0;P.fx=P.x;P.fy=P.y;P.moving=false;

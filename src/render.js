@@ -112,6 +112,7 @@ function renderCut(){
   cutFx(c,i===2||i===3);
 }
 /* ---------- map ---------- */
+const CAM={x:0,y:0};
 const DYN=new Set(['@','^','Ñ','D','F','C','K','S','I','X','v','P','m','g','p','k','L','G','B','O','q','Q','N','J','H','E','A','j']);
 const BOB=new Set(['P','m','g','p','k']);
 function bubble(x,y,text){OV.push(()=>{ctx.font='bold 13px ui-monospace,Menlo,Consolas,monospace';const w=ctx.measureText(text).width+12,bx=Math.round(x*2-w/2),by=Math.round(y*2-26);
@@ -122,6 +123,7 @@ function renderMap(){
   const mw=M.w*T,mh=M.h*T;
   let cx=Math.round(P.fx*T+8-LW/2),cy=Math.round(P.fy*T+8-VH/2);
   cx=mw<=LW?-Math.floor((LW-mw)/2):Math.max(0,Math.min(mw-LW,cx));cy=mh<=VH?-Math.floor((VH-mh)/2):Math.max(0,Math.min(mh-VH,cy));
+  CAM.x=cx;CAM.y=cy;
   const wf=Math.floor(frame/18)%3,f4=Math.floor(frame/8)%4;
   c.drawImage(LAYERS[wf],-cx,VY-cy);
   const x0=Math.max(0,Math.floor(cx/T)-1),y0=Math.max(0,Math.floor(cy/T)-1),x1=Math.min(M.w-1,Math.ceil((cx+LW)/T)),y1=Math.min(M.h-1,Math.ceil((cy+VH)/T)+1);
@@ -176,6 +178,9 @@ function renderMap(){
       else if(e.look==='ngen3')drawNgen(c,sx+8,sy+15,1,frame,'pewen');
       else if(e.look==='ngen4')drawNgen(c,sx+8,sy+15,1,frame,'kuruf');
       else if(e.look==='ngen5')drawNgen(c,sx+8,sy+15,1,frame,'lelfun');
+      else if(e.look==='yewen'){const yc=enemyCanvas('yewen',34,Math.floor(frame/16)%2);ell(c,sx+8,sy+15,13,3,'rgba(0,0,0,.35)');
+        for(let k=0;k<3;k++){const ph=((frame+k*40)%120)/120;ell(c,sx+8+Math.sin(ph*6+k)*6,sy+8-ph*22,2+ph*3,(2+ph*3)*.7,'rgba(120,110,140,'+(.25*(1-ph)).toFixed(2)+')')}
+        c.drawImage(yc,sx+8-(yc.width>>1),sy+17-yc.height)}
       else if(e.look==='rewe'){ell(c,sx+8,sy+14,6,2,'rgba(0,0,0,.3)');const rc=reweCanvas();c.drawImage(rc,sx-1,sy+16-rc.height)}
       else if(e.look==='dog'){ell(c,sx+8,sy+14,6,2,'rgba(0,0,0,.3)');c.drawImage(dogSprite(e.mv?Math.floor(frame/6)%2:0,e.dir),sx,sy+4)}
       else{let fr=e.mv?Math.floor(frame/7)%4:0;if(e.act==='weave'||e.act==='teach')fr=Math.floor(frame/24)%2?1:0;
@@ -351,11 +356,37 @@ function pampaBG(){const [cvs,c]=mk(LW,LH);
   for(const [lx,ly] of [[52,150],[196,166]]){ell(c,lx,ly-10,5,7,'#b09a6a');ell(c,lx,ly-15,2.5,3,'#c8b283');R(c,lx-1,ly-21,2,6,'#b09a6a');ell(c,lx,ly-22,2,1.6,'#8a7448');R(c,lx-3,ly-4,2,5,'#9a845a');R(c,lx+2,ly-4,2,5,'#9a845a')}
   birds(c,[[70,30],[84,26],[96,33]]);
   return cvs}
+function wariaBG(){const [cvs,c]=mk(LW,LH);
+  // hazy Santiago sky: smog beige low, pale blue high
+  bands(c,0,92,['#8fb4d8','#a4c2de','#b8cfe2','#cad8e2','#d8dcd8','#e2ddd0']);
+  // the cordillera, far and snow-capped
+  ridge(c,70,26,5.1,'#a9a6b4');ridge(c,74,20,2.3,'#9a97a8');
+  for(let x=0;x<LW;x+=2){const y=Math.round(70-26*(.55+.3*Math.sin(x*.022+5.1)+.2*Math.sin(x*.062+10.2)+.12*Math.sin(x*.166+15.3)));R(c,x,y,2,4+((x>>3)%3),'#eef0f4');R(c,x,y+4+((x>>3)%3),2,1,'#c8cad4')}
+  // apartment blocks and houses along the horizon
+  const blk=[[0,62,30,'#b9b5b1'],[28,54,22,'#c89ba2'],[48,70,34,'#93b2c9'],[80,58,20,'#d7c47e'],[98,66,40,'#b9b5b1'],[136,50,26,'#9fc3a3'],[160,64,30,'#e4d7b6'],[188,56,18,'#c57d63'],[204,68,36,'#a8a0c8'],[238,60,18,'#d9b48c']];
+  for(const [x,y,w,col] of blk){R(c,x,y,w,98-y,col);R(c,x+w-2,y,2,98-y,'rgba(0,0,0,.18)');R(c,x,y,w,1,'#f0ece4');
+    for(let yy=y+4;yy<94;yy+=8)for(let xx=x+3;xx<x+w-4;xx+=7){R(c,xx,yy,4,4,'#2d2a2a');R(c,xx+1,yy+1,2,2,h2(xx,yy,5)<.15?'#f6d878':'#a9c9e2')}
+    if(h2(x,y,6)<.5){R(c,x+w-8,y-5,4,5,'#3c4650');R(c,x+w-8,y-6,4,1,'#5a6670')}if(h2(x,y,7)<.5){R(c,x+5,y-7,1,7,'#2a2a30');R(c,x+3,y-6,5,1,'#2a2a30')}}
+  // the concrete wall with the mural, then the cancha
+  R(c,0,96,LW,10,'#8e8e98');R(c,0,96,LW,1,'#b2b2bc');R(c,0,105,LW,1,'#5a5a66');
+  const wc=['#3870b8','#38a058','#e0a030','#c84848'];for(let k=0;k<4;k++){R(c,60+k*34,98,22,6,wc[k]);R(c,62+k*34,99,6,2,'#f3e9c8')}
+  R(c,20,97,10,8,'#f3e9c8');R(c,22,99,6,1,'#c84848');R(c,22,101,6,1,'#3870b8');R(c,200,98,16,6,'#3a3836');R(c,202,99,12,1,'#f0e040');
+  // sidewalk strip, then packed earth
+  R(c,0,106,LW,6,'#b4b4ba');for(let x=0;x<LW;x+=16)R(c,x,106,1,6,'#9a9aa0');R(c,0,111,LW,1,'#8a8a90');
+  R(c,0,112,LW,LH-112,'#b89868');
+  for(let y=114;y<LH;y+=2)for(let x=(y%7);x<LW;x+=5)if(h2(x,y,71)<.5)R(c,x,y,1,2,h2(x,y,72)<.5?'#c8a878':'#9a7c50');
+  for(let x=0;x<LW;x+=6)R(c,x,150,4,1,'#ece4d0');  // the painted line of the cancha
+  // a lamppost and a goal frame at the sides
+  R(c,232,78,2,34,'#3a3c44');R(c,232,78,1,34,'#5a5c66');R(c,229,73,8,5,'#4a4c56');R(c,230,74,6,3,'#ffe9a0');
+  R(c,6,118,1,22,'#e8e8e8');R(c,30,118,1,22,'#e8e8e8');R(c,6,118,25,1,'#e8e8e8');for(let y=120;y<140;y+=3)for(let x=8;x<30;x+=3)R(c,x,y,1,1,'#d8d8d8');
+  birds(c,[[150,22],[164,18]]);
+  return cvs}
 function mossify(cvs){const c=cvs.getContext('2d'),d=c.getImageData(0,0,cvs.width,cvs.height),a=d.data;
   for(let i=0;i<a.length;i+=4){const r=a[i],g=a[i+1],b=a[i+2];if(r>g+6&&r>b){a[i]=Math.round(g*.85);a[i+1]=Math.round(r*.92+4);a[i+2]=Math.round(b*.8+r*.18)}}c.putImageData(d,0,0);return cvs}
 function lushBG(cvs,area){
   const CF={
     field:{bands:[[99,107],[123,LH]],base:['#48a048','#68c058','#307c34','#58a848','#80c868','#48983c'],lite:'#64bc54',dark:'#2c7230',tuft:'#78d064',fl:['#f0e07a','#e8788a','#f8f8f8'],dap:1},
+    waria:{bands:[[113,LH]],base:['#b89868','#c8a878','#9a7c50'],lite:'#d0b080',dark:'#8a6c44',tuft:null,fl:null,peb:['#8a8a90','#e8e0d0','#6a6a70'],dap:.4},
     coast:{bands:[[121,LH]],base:['#ecd498','#d8bc80','#d0b070'],lite:'#f6e2ac',dark:'#c6a868',tuft:null,fl:null,peb:['#b89868','#f8ecd0','#9a8458'],dap:.6},
     forest:{bands:[[126,LH]],base:['#2a4a24','#3a6a30','#1c3418'],lite:'#3e7232',dark:'#17301a',tuft:'#548c40',fl:['#d85858','#f0f0e0'],dap:1.3},
     mount:{bands:[[101,LH]],base:['#e6edf6','#c4d0e2','#ffffff'],lite:'#ffffff',dark:'#c2cfdf',tuft:null,fl:null,peb:['#9aa8bc','#7a8aa0'],dap:.5},
@@ -398,7 +429,7 @@ function lushBG(cvs,area){
     R(c,x,y,2,1,col);R(c,x,y-1,1,1,col)}
 }
 function polishBG(cvs,area){
-  const c=cvs.getContext('2d'),hor=({field:96,coast:118,mount:98,crater:98,forest:122,cave:122,rainforest:100,fjord:100,pampa:92,deep:150}[area])||106;
+  const c=cvs.getContext('2d'),hor=({field:96,coast:118,mount:98,crater:98,forest:122,cave:122,rainforest:100,fjord:100,pampa:92,deep:150,waria:106}[area])||106;
   const id=c.getImageData(0,0,LW,LH),d=id.data;
   // de-band the sky: checker-blend rows whose colour step is small
   for(let y=1;y<hor-1;y++)for(let x=0;x<LW;x++){
@@ -437,6 +468,7 @@ function buildBGraw(area){
   if(area==='cave4')return fogify(buildBG('cave'));
   if(area==='cave5')return dustify(buildBG('cave'));
   if(area==='pampa')return pampaBG();
+  if(area==='waria')return wariaBG();
   if(area==='deep')return deepBG();
   if(area==='rainforest'||area==='fjord'){const [cvs,c]=mk(LW,LH),fj=area==='fjord';
     bands(c,0,100,fj?['#141c26','#1a2430','#222e3a','#2a3846','#344452','#3e505e']:['#5a6a78','#66788a','#728696','#8094a2','#8ea0ac','#9aaab4']);
@@ -851,7 +883,7 @@ function loopBody(ts){
   else if(mode==='battle'&&B)renderBattle();
   else if(mode==='cut')renderCut();
   else if(mode==='title')paintLand(lx,frame,false);
-  if(mode==='map'&&M)dayTint(lx);
+  if(mode==='map'&&M){dayTint(lx);if(M.urban&&typeof urbanNight==='function')urbanNight(lx,CAM.x,CAM.y)}
   if(fade>0&&mode==='map'){lx.fillStyle='rgba(0,0,0,'+(fade/16)+')';lx.fillRect(0,0,LW,LH);fade=Math.max(0,fade-steps)}
   ctx.drawImage(LO,0,0,W,H);
   for(const f of OV)f();

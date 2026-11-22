@@ -1175,6 +1175,42 @@ def ngoyam(fr):
     g.r(8,11,3,1,'k')
     for (x,y) in [(2,5+fr),(16,9-fr),(3,14),(15,16),(8,21)]:g.p(x,y,'s')
     g.outline();return g.rows()
+def yewen(fr):
+    # Yewen, shame: a tall hunched figure in a city hoodie, face sunk in the hood, hands clamped over the mouth
+    g=G(40,56);import math
+    sh=fr  # shiver
+    # long shadow pooled at the feet
+    g.e(20,53,13,2.5,'K')
+    # sneakers
+    g.r(13,49,6,3,'w');g.r(21+sh,49,6,3,'w');g.r(13,51,6,1,'W');g.r(21+sh,51,6,1,'W')
+    # legs: baggy dark trousers
+    g.r(13,34,6,15,'d');g.r(21,34,6,15,'d');g.r(13,34,2,15,'D');g.r(21,34,2,15,'D')
+    # hoodie body, hunched: narrow shoulders drawn forward
+    g.e(20,30,10,10,'h');g.r(10,22,20,12,'h')
+    g.r(10,22,3,14,'H');g.r(26,24,4,10,'H')
+    # kangaroo pocket
+    g.r(14,31,12,4,'H');g.r(14,31,12,1,'D')
+    # hood, oversized, pulled low
+    g.e(20,14,9,8,'h');g.r(11,12,18,8,'h');g.e(20,12,8,6,'H')
+    # the void inside the hood
+    g.e(20,15,5.5,4.5,'k');g.r(14,14,12,4,'k')
+    # downcast pale eyes, half-lidded
+    g.r(16,15+sh,2,1,'e');g.r(22,15+sh,2,1,'e');g.p(16,14+sh,'E');g.p(23,14+sh,'E')
+    # hands up over the mouth
+    g.e(16,19.5,3.6,3,'p');g.e(24,19.5,3.6,3,'p');g.r(13,19,14,3,'p');g.r(14,21,12,1,'P')
+    for x in (14,16,18,22,24,26):g.p(x,18,'P')
+    g.r(19,19,2,3,'P')
+    # thin arms rising to the hands
+    for y in range(22,33):
+        g.p(10-((y-22)//5),y,'h');g.p(11-((y-22)//5),y,'H')
+        g.p(29+((y-22)//5),y,'h');g.p(30+((y-22)//5),y,'H')
+    g.r(8,20,3,3,'h');g.r(29,20,3,3,'h')
+    # grey whispers leaking from the hood
+    for k in range(3):
+        x=int(20+math.sin(k*2.1+fr)*7);y=6-k*2-(fr%2)
+        g.p(x,y,'s');g.p(x+1,y-1,'S')
+    g.p(4,26+fr,'s');g.p(35,24-fr,'s');g.p(6,40,'S');g.p(33,42,'S')
+    g.outline();return g.rows()
 def kalku(fr):
     g=G(40,56);import math
     # feather cloak, widening, layered rows
@@ -1966,6 +2002,7 @@ PAL={
  'llufu4':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
  'llufu5':{'b':'#1e5a66','B':'#0e3440','s':'#3a8a96','w':'#bfe8ee','f':'#2aa8b8','F':'#116874','e':'#ffd84a','t':'#e8f4f0','g':'#64ffd8','G':'#1a8a70','k':'#061418','o':'#04100f','r':'#a0a8ae','R':'#636b73'},
  'ngoyam':{'w':'#cfd4da','s':'#9aa2ac','d':'#5e6670','k':'#1a1e26','e':'#9ad8ff','o':'#141820'},
+ 'yewen':{'h':'#6e6888','H':'#4c4766','d':'#3a3846','D':'#262430','k':'#0c0a12','e':'#e0d8f0','E':'#a098b0','p':'#c0b4b8','P':'#8e8288','w':'#e6e6ea','W':'#9a9aa2','s':'#8a8498','S':'#5e5868','K':'#0a0810','o':'#060608'},
  'kalku':{'f':'#23262e','F':'#111318','h':'#b8bcc2','H':'#8a8e96','p':'#d8cfc0','P':'#a89c8a','b':'#d8d0ba','B':'#a89e86','k':'#07080c','e':'#c080ff','o':'#060608'},
  'ngoyman1':{'w':'#b8c0cc','s':'#7e8896','d':'#363e4c','k':'#0a0c12','E':'#ffb24a','o':'#080a0e','r':'#b4420f'},
  'ngoyman2':{'s':'#8a909c','S':'#5a606c','d':'#aeb6c2','g':'#7affd0','G':'#2a9a74','k':'#14161c','o':'#0e1016'},
@@ -2065,6 +2102,7 @@ HI={
  'llufu3':{'glow':'egG','tex':{'b':'pore','B':'pore','s':'speck','f':'streak','F':'streak'}},
  'llufu4':{'glow':'egG','tex':{'b':'pore','B':'pore','s':'speck','f':'streak','F':'streak'}},
  'llufu5':{'glow':'egG','tex':{'b':'pore','B':'pore','s':'speck','f':'streak','F':'streak'}},
+ 'yewen':{'glow':'e','tex':{'h':'streak','H':'streak','s':'strand','S':'strand'}},
  'kalku':{'glow':'e','tex':{'f':'strand','F':'strand','h':'strand','H':'strand'}},
  'ngoyman1':{'glow':'E','tex':{'s':'streak','w':'streak','d':'streak'}},
  'ngoyman2':{'glow':'gG','tex':{'s':'crack','S':'crack','d':'streak'}},
@@ -2129,10 +2167,10 @@ def hires(name,rows,pal):
         out.append(r)
     return {v:k for k,v in cols.items()},out
 D={}
-BIG={'llufu1':2,'llufu2':2,'llufu3':2,'llufu4':2,'llufu5':2,'walichu':2,'epunamun':2,'chadikura':2,'ngoyam':2,'kalku':2,'ngoyman1':2,'ngoyman2':2,'ngoyman3':2,'ngoyman4':2,'ngoyman5':2,'mewlen':2,'kurutrewa':2,'fmewlen':2,'kurutoro':2,'chinifilu':2,'piwuchen':2,'wallipen':2,'trawko':2,'kowek':2,'mawek':2,'kamawetu':2,'basilisko':2,'kaleuche':2,'trelke':2,'witranalwe':2,'chonchon':2,'kutral':2,'pire':2,'kura':2,'fkura':2,'nirivilu':2,'nguruvilu':2,'cherrufe':2}
-for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe2),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('fkura',kura),('nirivilu',ngurufilu),('nguruvilu',ngurufilu),('cherrufe',cherrufe2),('trelke',trelke),('ngen_lafken',ngen_lafken),('ngen_mawida',ngen_mawida),('ngen_pewen',ngen_pewen),('kowek',kowek),('mawek',mawek),('kamawetu',kamawetu),('basilisko',basilisko),('kaleuche',kaleuche),('ngen_kuruf',ngen_kuruf),('chinifilu',chinifilu),('piwuchen',piwuchen),('wallipen',wallipen),('trawko',trawko),('luan',luan),('choyke',choyke),('mewlen',mewlen),('kurutrewa',kurutrewa),('fmewlen',fmewlen),('kurutoro',kurutoro),('walichu',walichu),('epunamun',epunamun),('chadikura',chadikura),('ngoyam',ngoyam),('kalku',kalku),('ngoyman1',ngoyman1),('ngoyman2',ngoyman2),('ngoyman3',ngoyman3),('ngoyman4',ngoyman4),('ngoyman5',ngoyman5),('llufu1',llufu1),('llufu2',llufu2),('llufu3',llufu3),('llufu4',llufu4),('llufu5',llufu5),('ngen_lelfun',ngen_lelfun)]:
-    D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':{'witranalwe':'150,230,170','cherrufe':'255,130,50','trelke':'150,200,120','kaleuche':'190,220,200','chinifilu':'170,180,130','piwuchen':'230,120,140','wallipen':'60,70,100','trawko':'190,220,140','walichu':'210,200,160','epunamun':'255,170,90','chadikura':'150,255,210','kalku':'170,110,230','fkura':'255,120,50','mewlen':'70,55,25','fmewlen':'60,46,20','pire':'70,100,170','ngoyman1':'110,150,90','ngoyman2':'100,160,100','ngoyman3':'110,150,90','ngoyman4':'90,130,70','ngoyman5':'130,170,100','llufu1':'80,200,190','llufu2':'80,200,190','llufu3':'80,200,190','llufu4':'120,255,215','llufu5':'110,230,210'}.get(name,0)}
-for name in ['nguruvilu','nirivilu','witranalwe','trelke','cherrufe','kaleuche','ngen_lafken','ngen_mawida','ngen_pewen','ngen_kuruf','chinifilu','piwuchen','wallipen','trawko','walichu','epunamun','chadikura','kalku','ngoyman1','ngoyman2','ngoyman3','ngoyman4','ngoyman5','llufu1','llufu2','llufu3','llufu4','llufu5','ngen_lelfun']:
+BIG={'llufu1':2,'llufu2':2,'llufu3':2,'llufu4':2,'llufu5':2,'walichu':2,'epunamun':2,'chadikura':2,'ngoyam':2,'kalku':2,'yewen':2,'ngoyman1':2,'ngoyman2':2,'ngoyman3':2,'ngoyman4':2,'ngoyman5':2,'mewlen':2,'kurutrewa':2,'fmewlen':2,'kurutoro':2,'chinifilu':2,'piwuchen':2,'wallipen':2,'trawko':2,'kowek':2,'mawek':2,'kamawetu':2,'basilisko':2,'kaleuche':2,'trelke':2,'witranalwe':2,'chonchon':2,'kutral':2,'pire':2,'kura':2,'fkura':2,'nirivilu':2,'nguruvilu':2,'cherrufe':2}
+for name,fn in [('kawellu',horse),('waka',cow),('ofisa',sheep),('witranalwe',witranalwe2),('chonchon',chonchon),('kutral',kutral),('pire',pire),('kura',kura),('fkura',kura),('nirivilu',ngurufilu),('nguruvilu',ngurufilu),('cherrufe',cherrufe2),('trelke',trelke),('ngen_lafken',ngen_lafken),('ngen_mawida',ngen_mawida),('ngen_pewen',ngen_pewen),('kowek',kowek),('mawek',mawek),('kamawetu',kamawetu),('basilisko',basilisko),('kaleuche',kaleuche),('ngen_kuruf',ngen_kuruf),('chinifilu',chinifilu),('piwuchen',piwuchen),('wallipen',wallipen),('trawko',trawko),('luan',luan),('choyke',choyke),('mewlen',mewlen),('kurutrewa',kurutrewa),('fmewlen',fmewlen),('kurutoro',kurutoro),('walichu',walichu),('epunamun',epunamun),('chadikura',chadikura),('ngoyam',ngoyam),('kalku',kalku),('yewen',yewen),('ngoyman1',ngoyman1),('ngoyman2',ngoyman2),('ngoyman3',ngoyman3),('ngoyman4',ngoyman4),('ngoyman5',ngoyman5),('llufu1',llufu1),('llufu2',llufu2),('llufu3',llufu3),('llufu4',llufu4),('llufu5',llufu5),('ngen_lelfun',ngen_lelfun)]:
+    D[name]={'pal':PAL[name],'f':[fn(0),fn(1)],'big':BIG.get(name,1),'aura':{'witranalwe':'150,230,170','cherrufe':'255,130,50','trelke':'150,200,120','kaleuche':'190,220,200','chinifilu':'170,180,130','piwuchen':'230,120,140','wallipen':'60,70,100','trawko':'190,220,140','walichu':'210,200,160','epunamun':'255,170,90','chadikura':'150,255,210','kalku':'170,110,230','yewen':'110,100,130','fkura':'255,120,50','mewlen':'70,55,25','fmewlen':'60,46,20','pire':'70,100,170','ngoyman1':'110,150,90','ngoyman2':'100,160,100','ngoyman3':'110,150,90','ngoyman4':'90,130,70','ngoyman5':'130,170,100','llufu1':'80,200,190','llufu2':'80,200,190','llufu3':'80,200,190','llufu4':'120,255,215','llufu5':'110,230,210'}.get(name,0)}
+for name in ['nguruvilu','nirivilu','witranalwe','trelke','cherrufe','kaleuche','ngen_lafken','ngen_mawida','ngen_pewen','ngen_kuruf','chinifilu','piwuchen','wallipen','trawko','walichu','epunamun','chadikura','kalku','yewen','ngoyman1','ngoyman2','ngoyman3','ngoyman4','ngoyman5','llufu1','llufu2','llufu3','llufu4','llufu5','ngen_lelfun']:
     fr=[];pal=None
     for f in D[name]['f']:
         p,rows=hires(name,f,PAL[name]);fr.append((p,rows))

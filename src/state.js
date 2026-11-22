@@ -94,6 +94,7 @@ const ET={
   kurutoro:{name:'kurü toro',hp:66,atk:11,xp:36,gold:[22,26],bs:72,armor:1,mini:1},
   walichu:{name:'Walichu',hp:200,atk:13,xp:130,gold:[120,120],boss:true,bs:112,dream:1},
   chadikura:{name:'Elëngasëm',hp:220,atk:17,xp:200,gold:[250,250],boss:true,bs:96,spres:1,armor:1,seals:['nepe','trafo','wüñotrekakil']},
+  yewen:{name:'Yewen',hp:260,atk:17,xp:300,gold:[400,400],boss:true,bs:100,spres:1,seals:['tripa','llükakil','ñamkil']},
   epunamun:{name:'Epunamun',hp:240,atk:14,xp:220,gold:[300,300],boss:true,bs:100,spres:1,seals:['umawtu','nepe','tranakil']},
   ngoyam:{name:'ngoyman am',hp:34,atk:12,xp:22,gold:[12,16],bs:46},
   kalku:{name:'Fütra Kalku',hp:250,atk:18,xp:260,gold:[350,350],boss:true,bs:92,spres:1,seals:['llüka','wüñotreka','ñamkil']},
