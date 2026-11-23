@@ -2354,6 +2354,12 @@ if os.path.exists(_kp):
         _a=D[_n]['aura'] if _n in D else 0
         D[_n]={'pal':_k['small']['pal'],'f':_k['small']['f'],'big':1,'aura':_a,'hand':1}
         D[_n+'@b']={'pal':_k['big']['pal'],'f':_k['big']['f'],'big':1,'aura':_a,'hand':1}
+_wp=os.path.join(os.path.dirname(os.path.abspath(__file__)),'waria.json')
+if os.path.exists(_wp):
+    for _n,_k in json.load(open(_wp)).items():
+        _a='120,170,220' if _n in ('ngoyngoyun','ngamlef','fillantu') else 0
+        D[_n]={'pal':_k['small']['pal'],'f':_k['small']['f'],'big':1,'aura':_a,'hand':1}
+        D[_n+'@b']={'pal':_k['big']['pal'],'f':_k['big']['f'],'big':1,'aura':_a,'hand':1}
 _hp=os.path.join(os.path.dirname(os.path.abspath(__file__)),'heroes.json')
 if os.path.exists(_hp):
     for _n,_h in json.load(open(_hp)).items():D['hero_'+_n]={'pal':_h['pal'],'f':_h['f'],'big':1,'aura':0,'hand':1}

@@ -37,9 +37,11 @@ const PALS={
   stgo:{C0:'#3a3a44',C1:'#5a5a66',C2:'#73737e',C3:'#8e8e98',CD:'#4a4a54',G0:'#1e4420',G1:'#2f6630',G2:'#428442',G3:'#6aa862',GY:'#4e8a4a',GL:'#80b878',GM:'#60a058',S0:'#7a7a80',S1:'#9a9aa2',S2:'#b2b2ba',S3:'#c8c8d0',D1:'#8a7050',D2:'#a28866',D3:'#bca380',FR:'#d84850',FY:'#f8d048',FW:'#ffffff'},
   munche:{C0:'#083038',C1:'#114a56',C2:'#1a5e6c',C3:'#2a7a88',CD:'#0c3a44',G0:'#0a3a42',G1:'#11525c',G2:'#1a6c76',G3:'#2e919a',GY:'#207a84',GL:'#48aab2',GM:'#2a8690',S0:'#1e5e74',S1:'#2a7a92',S2:'#3996ae',S3:'#52b2c8',W0:'#041824',W1:'#082836',W2:'#0e3a4c',W3:'#165064',WF:'#2a7a92',D1:'#1a5a6a',D2:'#247486',D3:'#3290a2',FR:'#ff8a9a',FY:'#ffe9a0',FW:'#d8fbff'},
   munchedeep:{C0:'#06242e',C1:'#0e3a48',C2:'#164c5c',C3:'#246478',CD:'#0a2e3a',G0:'#062830',G1:'#0a3a44',G2:'#104c58',G3:'#1c6874',GY:'#145866',GL:'#2a7e8c',GM:'#1a6472',S0:'#123e50',S1:'#1a5468',S2:'#246a80',S3:'#328298',W0:'#020e16',W1:'#041a26',W2:'#082634',W3:'#0e3444',WF:'#1a5468',D1:'#0e4050',D2:'#165264',D3:'#206678',FR:'#ff8a9a',FY:'#ffe9a0',FW:'#d8fbff'},
+  metro:{C0:'#14161c',C1:'#2c3038',C2:'#3c424c',C3:'#5a626e',CD:'#22262e'},
+  deptoin:{C0:'#2a1c12',C1:'#4a3420',C2:'#6a4c30',C3:'#8a6a44',CD:'#3a2818'},
   ngoycave:{C0:'#10141a',C1:'#242c38',C2:'#323c4a',C3:'#4c5868',CD:'#1c242e'},
   niebla:{G0:'#3a4440',G1:'#4e5a54',G2:'#64726a',G3:'#8a988e',GY:'#708076',GL:'#9aa89e',GM:'#7a8a80',D1:'#5a5a52',D2:'#6e6e64',D3:'#88887c',FR:'#a8b8c0',FY:'#c8d8d0',FW:'#e8f4f0'}};
-const WALLS={ruka:['#6a4a26','#9a7444','#84603a','#3a2812','#140c04'],williche:['#34464e','#5e7a84','#4a626a','#1c2a30','#0a1214'],lafken:['#5a4430','#8a7058','#78604a','#3c2c20','#201810'],pewenche:['#2e2224','#5a4448','#463438','#1a1214','#0a0606'],puelmapu:['#4a3a22','#7a6240','#604c30','#2a2012','#120c04'],ngoyman:['#2e3a4a','#54667e','#425264','#1a222e','#0a0e14'],chumpall:['#0e4a56','#2a8a9a','#1a6a7a','#062a34','#02141a'],santiago:['#7e7e88','#b2b2bc','#9898a2','#44444e','#1c1c22'],nagche:['#3c4c3e','#6e8a68','#5a7058','#243026','#0e160e']};
+const WALLS={ruka:['#6a4a26','#9a7444','#84603a','#3a2812','#140c04'],williche:['#34464e','#5e7a84','#4a626a','#1c2a30','#0a1214'],lafken:['#5a4430','#8a7058','#78604a','#3c2c20','#201810'],pewenche:['#2e2224','#5a4448','#463438','#1a1214','#0a0606'],puelmapu:['#4a3a22','#7a6240','#604c30','#2a2012','#120c04'],ngoyman:['#2e3a4a','#54667e','#425264','#1a222e','#0a0e14'],chumpall:['#0e4a56','#2a8a9a','#1a6a7a','#062a34','#02141a'],santiago:['#7e7e88','#b2b2bc','#9898a2','#44444e','#1c1c22'],nagche:['#3c4c3e','#6e8a68','#5a7058','#243026','#0e160e'],metro:['#c8ccd2','#e8ecf0','#d8dce2','#a0a6ae','#5a6068'],depto:['#d8c8a8','#efe4cc','#e2d4b8','#b8a688','#6a5a44']};
 function applyPal(){Object.assign(PL,PL0);const p=PALS[M.pal];if(p)for(const k in p)PL[k]=C3(p[k])}
 function gtype(ch){if(ch==='~'||ch==='v')return'~';if(ch==='.'||ch===','||ch==='='||ch==='_'||ch==='%'||ch==='"'||ch==='Y'||ch==='b')return ch;if(ch==='T'||ch==='W'||ch==='f')return',';return M.floor}
 function gAt(x,y){if(x<0||y<0||x>=M.w||y>=M.h)return null;return GT[y][x]}
@@ -238,6 +240,7 @@ function loadMap(id,x,y,quiet){TALKER=null;
   PZ={n:0,lit:new Set()};
   if(['sb1','sb2','sb3','sb4','sb5'].every(f=>S.flags[f]))S.flags.sbAll=1;
   if(['st1','st2','st3','st4','st5'].every(f=>S.flags[f]))S.flags.st_all=1;
+  if(typeof swCheck==='function')swCheck();
   if(id==='g_ngoyman'&&S.flags.gm_all&&!S.flags.lawW){S.flags.lawW=1;S.lawuses=S.lawuses||0}
   if(id==='w_wapi'&&S.flags['pz:w_wapi']&&!S.flags.wapiNpz&&!S.flags['pz:w_wapi:st']){S.flags['pz:w_wapi:st']=1;delete S.flags['pz:w_wapi']}
   {const doorOpen=(M.pz&&M.pz.done)?S.flags['pz:'+id+':st']:S.flags['pz:'+id];
@@ -249,7 +252,7 @@ function loadMap(id,x,y,quiet){TALKER=null;
   if(S.flags.snow)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='^')grid[yy][xx]=M.floor;
   if(S.flags.bramble)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='Ñ')grid[yy][xx]=M.floor;
   if(S.flags.lelfun)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='D')grid[yy][xx]=M.floor;
-  if(id==='l_ruka2'&&typeof secretsDone==='function'&&secretsDone())grid[3][7]='@';
+  if(id==='l_ruka2'&&typeof stgoOpen==='function'&&stgoOpen())grid[3][7]='@';
   buildLayers();
   ents=[];P.x=x;P.y=y;
   const [px0,py0]=placeNear(x,y);P.x=px0;P.y=py0;P.fx=P.x;P.fy=P.y;P.moving=false;
@@ -265,7 +268,7 @@ function loadMap(id,x,y,quiet){TALKER=null;
   if(typeof PAL!=='undefined')PAL=null;
   SCN=(M.scenes||[]).map(s=>Object.assign({},s,{pl:[0,1,2,3].map(i=>({x:s.x*T+s.w*T*(i<2?.3:.7),y:s.y*T+s.h*T*(.3+.4*(i%2)),dir:'right'}))}));
   S.map=id;fade=16;grace=40;
-  if(!quiet)showBanner(M.name,G(M.g));
+  if(!quiet)showBanner(typeof placeName==='function'?placeName(id):M.name,G(typeof placeGloss==='function'?placeGloss(id):M.g));
   setTimeout(()=>{if(!active&&mode==='map'&&typeof lofWarpIntro==='function')lofWarpIntro()},600);
   playSong(mapSong());
   if(typeof wxSpawn==='function')wxSpawn();

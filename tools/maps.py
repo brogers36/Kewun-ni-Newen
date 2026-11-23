@@ -1224,6 +1224,82 @@ g[2][3]='Z';g[2][12]='V';g[5][11]='U';g[1][7]='F'
 carve0(g,7,8,2,1)
 carve0(g,7,9,2,1)
 E_['s_centro']=[''.join(r) for r in g]
+# ---- the Santiago act: feria + radio (ngoyngoyün), Metro (ngamleftripael), blocks (fillantü)
+# s_feria: the big street market, west of the plaza; the radio station is on the top row
+c=U(40,14)
+blocks(c,0,3,[(0,6),(7,7),(15,5),(21,8),(30,4),(35,5)])
+c.r(0,4,40,2,'=')
+for x in (3,13,27,37):c.p(x,6,'l')
+for x in (5,7,9,11,13):c.p(x,8,'e')
+for x in (22,24,26,28,30,32):c.p(x,8,'e')
+for x in (6,9,12,25,28,31):c.p(x,11,'e')
+c.p(17,10,'z');c.p(35,10,'z');c.p(2,12,'T');c.p(38,12,'T');c.p(19,12,'T')
+c.r(1,4,2,1,'c');c.r(33,5,3,1,'c')
+E_['s_feria']=c.rows()
+# s_radio: the community radio booth
+g=[['%']*16 for _ in range(10)]
+carve0(g,1,1,14,7)
+g[1][7]='V'
+carve0(g,7,8,2,1);carve0(g,7,9,2,1)
+E_['s_radio']=[''.join(r) for r in g]
+# s_metro: the station concourse (entered from s_calle); a turnstile line splits it
+g=[['%']*22 for _ in range(10)]
+carve0(g,1,1,20,6)
+for y in range(1,7):g[y][12]='%'
+g[4][12]='_'
+g[2][19]='S'
+carve0(g,10,7,2,3)
+E_['s_metro']=[''.join(r) for r in g]
+# s_m1: the platform and the service tunnel
+g=[['%']*26 for _ in range(10)]
+carve0(g,1,1,24,3)
+carve0(g,0,2,1,1)
+carve0(g,3,4,2,4)
+carve0(g,3,8,17,1)
+carve0(g,12,5,5,3)
+carve0(g,21,4,3,5)
+for y in range(4,9):g[y][20]='%'
+g[8][20]='_'
+g[5][23]='C';g[7][22]='S'
+E_['s_m1']=[''.join(r) for r in g]
+# s_m2: the abandoned, half-flooded line
+g=[['%']*26 for _ in range(10)]
+carve0(g,1,1,4,8);carve0(g,0,4,1,1)
+carve0(g,5,4,16,1)
+carve0(g,6,1,14,3);carve0(g,9,1,8,2,'~')
+carve0(g,8,6,6,3)
+carve0(g,10,5,1,1)
+carve0(g,21,1,4,8)
+g[8][12]='C';g[7][23]='S'
+E_['s_m2']=[''.join(r) for r in g]
+# s_m3: the depot, where the line ends
+g=[['%']*24 for _ in range(11)]
+carve0(g,1,3,4,5);carve0(g,0,5,1,1)
+carve0(g,5,5,3,1)
+carve0(g,8,1,15,9)
+for (x,y) in [(11,3),(11,7),(19,3),(19,7)]:g[y][x]='%'
+g[1][21]='S'
+E_['s_m3']=[''.join(r) for r in g]
+# s_blocks: the apartment blocks, east of the población
+c=U(34,14)
+blocks(c,0,3,[(0,8),(9,8),(18,8),(27,7)])
+c.r(0,4,34,2,'=')
+c.r(3,7,6,3,'Y');c.r(25,7,6,3,'Y')
+c.p(12,8,'z');c.p(21,8,'z');c.p(16,7,'l');c.p(1,7,'l');c.p(32,7,'l')
+blocks(c,11,3,[(0,9),(10,6),(17,7),(25,9)])
+c.r(1,5,2,1,'c')
+E_['s_blocks']=c.rows()
+# s_depto: a family's flat (dinner) ; s_chuchu: the grandmother's flat (the phone)
+g=[['%']*14 for _ in range(9)]
+carve0(g,1,1,12,6);carve0(g,6,7,2,2)
+E_['s_depto']=[''.join(r) for r in g]
+g=[['%']*12 for _ in range(9)]
+carve0(g,1,1,10,6);carve0(g,5,7,2,2)
+E_['s_chuchu']=[''.join(r) for r in g]
+for k,st in {'s_feria':(39,4),'s_radio':(7,8),'s_metro':(10,8),'s_m1':(0,2),'s_m2':(0,4),'s_m3':(0,5),'s_blocks':(0,4),'s_depto':(6,8),'s_chuchu':(5,8)}.items():
+    rows=[r.replace('@',',') for r in E_[k]];R2=bfs2(rows,st)
+    missing=[(x,y,rows[y][x]) for y in range(len(rows)) for x in range(len(rows[0])) if rows[y][x] in set('PCKSFMNIkgHBOExJD') and (x,y) not in R2]
+    print(k,'reach',len(R2),'MISSING' if missing else 'ok',missing)
 for k,st in {'s_plaza':(3,11),'s_calle':(0,3),'s_poblacion':(0,3),'s_centro':(7,8)}.items():
     rows=[r.replace('@',',') for r in E_[k]];R2=bfs2(rows,st)
     missing=[(x,y,rows[y][x]) for y in range(len(rows)) for x in range(len(rows[0])) if rows[y][x] in set('PCKSFMNIkgHBOExJD') and (x,y) not in R2]

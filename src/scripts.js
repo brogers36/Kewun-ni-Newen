@@ -1258,7 +1258,7 @@ function ngoymanTalk(){
   if(S.flags.won)return say([L('Kushe ñi am','Kom mapu tukulpaturkey. Chaltu may, '+nm()+'.','Toda la tierra vuelve a recordar. Gracias, '+nm()+'.','All the land remembers again. Thank you, '+nm()+'.'),
     N('La figura de niebla ya casi no se ve: donde estaba, crece pasto nuevo. «Las tierras robadas siguen ahí, al oeste, si quieres volver a caminarlas. Y los que viven en ellas te recordarán siempre.»','The fog figure is barely visible now: where it stood, new grass is growing. "The stolen lands are still there, to the west, if you want to walk them again. And those who live in them will remember you always."')]
     .concat(!S.flags.chboss?[N('«Y escucha: en el lago williche, junto a la isla, hay un remolino que canta. Los chumpall, la gente del agua, necesitan ayuda. Baja con respeto.»','"And listen: in the Williche lake, beside the island, there is a whirlpool that sings. The chumpall, the water people, need help. Go down with respect."')]:[])
-    .concat(secretsDone()?[N('«¿Escuchaste esa voz? Tu kuku te llama desde su ruka, en el lof lafkenche. Ve: lo que te espera allá no está en estas tierras.»','"Did you hear that voice? Your kuku calls you from her ruka, in the Lafkenche lof. Go: what awaits you there is not in these lands."')]:[]));
+    .concat(stgoOpen()?[N('«¿Escuchaste esa voz? Tu kuku te llama desde su ruka, en el lof lafkenche. Ve: lo que te espera allá no está en estas tierras.»','"Did you hear that voice? Your kuku calls you from her ruka, in the Lafkenche lof. Go: what awaits you there is not in these lands."')]:[]));
   const n=freedN();
   const ls=[L('Kushe ñi am','Akuymi, pichi weche... Afpun rüpü mew akuymi.','Llegaste... Llegaste al final del camino.','You have come... You have come to the end of the road.'),
     N('La figura es apenas niebla con forma de persona. Pero te mira con un cariño muy viejo, y la niebla no se atreve a tocarla.','The figure is barely fog in the shape of a person. But it looks at you with a very old tenderness, and the fog does not dare touch it.'),
@@ -1442,7 +1442,8 @@ function portalMenu(){
     sfx('cast');
     if(toStgo){if(!S.flags.stgo_seen){S.flags.stgo_seen=1;persist();
       return say([N('Cruzas la luz... y el aire cambia: bocinas lejanas, olor a pan y a micro. Estás de vuelta donde naciste: Santiago, la waria.','You cross the light... and the air changes: distant horns, the smell of bread and buses. You are back where you were born: Santiago, the waria.'),
-        N('Pero algo es distinto: en una plaza de la ciudad, alguien pintó un letrero en mapudungun. La lengua te siguió hasta acá. Ayuda a los wariache a hacerla crecer.','But something is different: in a city plaza, someone has painted a sign in Mapudungun. The language followed you here. Help the wariache make it grow.')],()=>loadMap('s_plaza',3,11));}
+        N('Pero algo es distinto: en una plaza de la ciudad, alguien pintó un letrero en mapudungun. La lengua te siguió hasta acá. Ayuda a los wariache a hacerla crecer.','But something is different: in a city plaza, someone has painted a sign in Mapudungun. The language followed you here. Help the wariache make it grow.'),
+        N('Pero en la ciudad la lengua tiene tres silencios: el ruido de la feria (ngoyngoyün), la gente dispersa por el metro (ngamleftripael) y la costumbre de dejarla para después (mapudungukenoael fillantü). Al oeste de la plaza está la feria; el metro, en la calle; los blocks, al este de la población.','But in the city the language has three silences: the noise of the market (ngoyngoyün), the people scattered through the metro (ngamleftripael) and the habit of leaving it for later (mapudungukenoael fillantü). West of the plaza is the market; the metro, on the street; the blocks, east of the población.')],()=>loadMap('s_plaza',3,11));}
       loadMap('s_plaza',3,11)}
     else loadMap('l_ruka2',7,4)},true,true);
 }
@@ -1450,8 +1451,8 @@ function kukuHome(){
   const en=S.gloss==='en';
   if(S.flags.stgo_done)return say([L('Kuku','Waria mew ka mongeley taiñ dungun. Chaltu may, '+nm()+'.','También en la ciudad vive nuestra lengua. Gracias, '+nm()+'.','In the city, too, our language lives. Thank you, '+nm()+'.'),
     N('La kuku teje junto al kütral. «Cuando quieras, el portal sigue ahí. Las dos casas son tuyas.»','Your kuku weaves beside the fire. "Whenever you want, the portal is still there. Both homes are yours."')]);
-  if(secretsDone())return say([L('Kuku','Akuymi, '+nm()+'. Kom dew kimimi.','Llegaste, '+nm()+'. Ya lo sabes todo.','You came, '+nm()+'. Now you know it all.'),
-    N('«Despertaste a los ngen, venciste a los males escondidos, y hasta los chumpall te dicen amigo. Pero el camino no termina aquí.»','"You woke the ngen, you defeated the hidden evils, and even the chumpall call you friend. But the road does not end here."'),
+  if(stgoOpen())return say([L('Kuku','Akuymi, '+nm()+'.','Llegaste, '+nm()+'.','You came, '+nm()+'.'),
+    N('«Despertaste a los ngen y venciste al gran olvido. Pero el camino no termina aquí.»','"You woke the ngen and defeated the great forgetting. But the road does not end here."'),
     L('Kuku','Waria mew ka müley che. Yewelkülelu che.','En la ciudad también hay gente. Gente que tiene vergüenza.','In the city there are people too. People who feel ashamed.'),
     N('«Allá nadie se atreve a decir ni mari mari: la vergüenza (yewen) les cierra la boca. Lleva lo que aprendiste. Junto al kütral tejí un wülngiñ, una puerta de luz: te lleva a Santiago y te trae de vuelta cuando quieras.»','"There nobody dares to say even mari mari: shame (yewen) closes their mouths. Carry what you have learned. Beside the fire I wove a wülngiñ, a door of light: it takes you to Santiago and brings you back whenever you want."')]);
   say([L('Kuku','Konpange, '+nm()+'! Kümelen, eymi kay?','¡Pasa, '+nm()+'! Estoy bien, ¿y tú?','Come in, '+nm()+'! I am well, and you?'),
@@ -1462,6 +1463,8 @@ function stReward(flag,give,lines){
   give();S.flags[flag]=1;
   const all=stDone()===5;if(all)S.flags.st_all=1;
   persist();sfx('lvl');
+  if(all&&typeof swCheck==='function')swCheck();
+  if(all&&!S.flags.sw_all)return say(lines.concat([N('Cinco personas de la waria hablaron sin vergüenza. Pero la ciudad todavía tiene sus tres silencios: '+(3-swDone())+' siguen en pie.','Five people of the city spoke without shame. But the city still has its three silences: '+(3-swDone())+' still stand.')]));
   return say(lines.concat(all?[
     N('Cinco personas de la waria hablaron sin vergüenza. Pero al fondo de la población, en la cancha, se juntó una sombra: todo el yewen que les quitaste tiene que ir a alguna parte.','Five people of the city spoke without shame. But at the back of the neighborhood, on the cancha, a shadow has gathered: all the yewen you took from them has to go somewhere.'),
     L('','Yewen','Vergüenza. Es la última prueba: ve a la cancha y enfréntalo.','Shame. It is the last trial: go to the cancha and face it.')]:[]));

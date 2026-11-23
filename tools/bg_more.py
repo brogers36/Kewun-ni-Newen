@@ -530,5 +530,43 @@ def waria():   # Santiago: a city street at dusk, lit windows, wet asphalt
         bm = (abs(XX - cx) < 10) & (YY > cy - 20) & (YY < cy + 2); paint(s, bm, .3 + (XX - cx) / 20 + .2, P('#1a3020', '#24442c', '#305838', '#3e6e46'))
     return s, {'hz': HZ}
 
+def metro():   # Santiago: a Metro platform, tiled wall, a dark tunnel mouth, the rails, the yellow line
+    s = Pic(); WALL = P('#5a6068', '#6e757e', '#848b94', '#9aa1a9', '#b0b6bc', '#c6cbd0')
+    paint(s, YY < 112, .45 + (YY / 112) * .25 + fbm(XX / 3, YY / 3, 77) * .1, WALL)
+    for y in range(8, 112, 8):          # tile grout
+        for x in range(0, W): s.px(x, y, '#4a5058') if BAYF[y, x] < .8 else None
+    for x0 in range(0, W, 8):
+        for y in range(0, 112):
+            if (y // 8) % 2 == 0 and BAYF[y, x0] < .85: s.px(x0, y, '#4e545c')
+            elif (y // 8) % 2 == 1 and BAYF[y, (x0 + 4) % W] < .85: s.px((x0 + 4) % W, y, '#4e545c')
+    for y in range(60, 70):             # a coloured band along the wall
+        for x in range(0, W): s.px(x, y, '#c04040' if y < 68 else '#802828')
+    for (x0, x1) in [(150, 250)]:        # the blank station-name panel (named by the player in the game)
+        for y in range(28, 50):
+            for x in range(x0, x1): s.px(x, y, '#1e3c78' if 30 <= y < 48 and x0 + 2 <= x < x1 - 2 else '#d8dce4')
+        for x in range(x0 + 10, x1 - 10, 2): s.px(x, 39, '#3a5a98')
+    m = (abs(XX - 52) < 34) & (YY > 40) & (YY < 112) & (((XX - 52) / 34.0) ** 2 + ((YY - 112) / 72.0) ** 2 < 1)   # tunnel mouth
+    paint(s, m, .05 + ((YY - 40) / 72) * .15, P('#06070a', '#0c0e14', '#14171e', '#1c2028'))
+    for (lx, ly) in [(40, 96), (64, 96)]:   # two far headlights in the tunnel
+        for dy in range(3):
+            for dx in range(3): s.px(lx + dx, ly + dy, '#fff4c0' if (dx, dy) != (2, 2) else '#c0a060')
+    for x in range(0, W, 56):            # fluorescent tubes
+        for i in range(30): s.px(x + 10 + i, 4, '#f4fbff'); s.px(x + 10 + i, 5, '#c8e0ec')
+    pit = (YY >= 112) & (YY < 136)       # the track pit, rails catching the light
+    paint(s, pit, .1 + (YY - 112) / 24 * .2 + fbm(XX / 4, YY / 2, 90) * .1, P('#0e0f12', '#18191e', '#22242a', '#2e3038'))
+    for ry in (118, 130):
+        for x in range(0, W): s.px(x, ry, '#9aa0a8'); s.px(x, ry + 1, '#4a4e56')
+    for x in range(4, W, 14):
+        for y in range(116, 134): s.px(x, y, '#3a2c22') if y not in (118, 119, 130, 131) else None
+    ground(s, 136, P('#46484e', '#55575e', '#64666e', '#74767e', '#86888f', '#9a9ca2'), base=.35, pool=.5, cy=170, tex=.15)
+    for y in (138, 139, 140):            # the yellow safety line with its tactile dots
+        for x in range(0, W): s.px(x, y, '#e0b820' if y < 140 else '#a08010')
+    for x in range(2, W, 4): s.px(x, 142, '#c8c8cc')
+    for x in range(0, W): s.px(x, 136, '#2a2c30'); s.px(x, 137, '#b8bac0')
+    for cx in (330,):                    # a bench and a pillar framing the right
+        for y in range(0, 190):
+            for x in range(cx, cx + 18): s.px(x, y, '#7a8088' if x < cx + 4 else '#646a72' if x < cx + 14 else '#4e545c')
+    return s, {'hz': 112}
+
 ALL = [('field', field), ('forest', forest), ('mount', mount), ('crater', crater), ('rainforest', rainforest), ('fjord', fjord),
-       ('pampa', pampa), ('lagoon', lagoon), ('deep', deep), ('cave', cave), ('cave3', cave3), ('cave4', cave4), ('cave5', cave5), ('waria', waria)]
+       ('pampa', pampa), ('lagoon', lagoon), ('deep', deep), ('cave', cave), ('cave3', cave3), ('cave4', cave4), ('cave5', cave5), ('waria', waria), ('metro', metro)]

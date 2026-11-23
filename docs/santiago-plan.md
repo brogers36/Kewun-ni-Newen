@@ -71,3 +71,6 @@ Plus the existing plaza, calle, población and urban ruka.
 - At unnamed places (a station, a plaza, a canal, a hill in a park) the player picks parts from words they know.
 - Candidate patterns: modifier + head noun (e.g. colour/size + ko/leufu/mawida/kura); verb root + -we 'place for' (as in paliwe); noun + mapu.
 - A checker accepts or rejects by Brandon's rules; accepted names are saved and appear on that place's sign, banner and in the quest log.
+
+## Build status (Nov 23)
+Built and live: s_feria, s_radio, s_metro, s_m1, s_m2, s_m3, s_blocks, s_depto, s_chuchu; wirarün and dewü; the three wardens (working names = the pressure names); the naming checker; Yewen now waits for the five favours and the three wardens. Portal opens after Ti Fütra Ngoymatulfe. Pending from Brandon: warden names, act title, review of Tanda 25.

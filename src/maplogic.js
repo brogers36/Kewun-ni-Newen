@@ -110,7 +110,7 @@ function interact(){
   if(!inB(tx,ty))return;
   const c=grid[ty][tx],k=tx+','+ty;
   if(c==='F')return fireSave();
-  if(c==='I'&&M.signs&&M.signs[k])return say(M.signs[k]);
+  if(c==='I'&&M.signs&&M.signs[k])return typeof M.signs[k]==='function'?M.signs[k]():say(M.signs[k]);
   if(c==='C')return openChest(tx,ty,M.chests&&M.chests[k]);
   if(c==='K'&&M.konew&&M.konew[k])return konew(tx,ty,M.konew[k]);
   if(c==='Ł'&&M.tablets&&M.tablets[k])return tabletTalk(M.tablets[k]);
@@ -155,11 +155,11 @@ function npcStep(e){
 }
 function updateMap(){
   S.wtime=(S.wtime||0)+1;
-  if(S.wtime%45===0&&!S.flags.stgo_call&&!active&&!P.moving&&typeof secretsDone==='function'&&secretsDone()&&M.region!=='santiago'){
+  if(S.wtime%45===0&&!S.flags.stgo_call&&!active&&!P.moving&&typeof stgoOpen==='function'&&stgoOpen()&&M.region!=='santiago'){
     S.flags.stgo_call=1;persist();sfx('lvl');
     say([L('Kuku','Küpange, '+nm()+'! Küpatunge!','"¡Ven, '+nm()+'! ¡Vuelve!"','"Come, '+nm()+'! Come back!"'),
       N('La voz de tu kuku cruza todo el mapu y te encuentra donde estás. No es un sueño: te llama desde su ruka, en el lof lafkenche.','Your kuku\'s voice crosses the whole land and finds you where you stand. It is no dream: she calls you from her ruka, in the Lafkenche lof.'),
-      N('(küpa-tu-nge: «ven de vuelta». -tu- marca la vuelta, -nge le habla a una persona.) Los males escondidos ya cayeron y la tierra respira. Algo más te espera: vuelve donde todo empezó.','(küpa-tu-nge: "come back". -tu- marks the return, -nge speaks to one person.) The hidden evils have fallen and the land breathes. Something more awaits you: go back to where it all began.')]);
+      N('(küpa-tu-nge: «ven de vuelta». -tu- marca la vuelta, -nge le habla a una persona.) El gran olvido cayó y la tierra respira. Algo más te espera: vuelve donde todo empezó.','(küpa-tu-nge: "come back". -tu- marks the return, -nge speaks to one person.) The great forgetting has fallen and the land breathes. Something more awaits you: go back to where it all began.')]);
     return}
   if(S.wtime%150===0&&typeof playAmb==='function'){
     const d=dayPhase();playAmb(OUTBG[M.bg]&&d.name==='night'?'night':(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg)))}
