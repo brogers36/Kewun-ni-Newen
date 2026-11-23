@@ -448,25 +448,47 @@ function playAmb(kind){
    The tune itself is the same; the drum kit steps back. ---------- */
 const KULTRUN_SONGS=['battle','boss','nagBattle','nagBoss','pewBattle','pewBoss','wilBattle','wilBoss','puelBattle','puelBoss','deepBattle','deepBoss','ngoyBattle','ngoyBoss','ngoyFinal','yewenBoss','stgoBoss1','stgoBoss2','stgoBoss3'];
 (function kultrunize(){
+  // every beat of the old 4/4 tunes (two steps) becomes one kultrun beat of six fast subdivisions: the tune lands long-short (4+2),
+  // the kultrun strikes long-short under it, and new layers fill the six: a galloping distorted guitar, a running arpeggio, a shaker, kaskawilla
+  const pos=i=>Math.floor(i/2)*6+(i%2?4:0);
+  const conv=c=>{const at={};for(const k in c.at){const i=+k;at[pos(i)]=c.at[k].map(e=>({n:e.n,len:Math.max(1,pos(i+e.len)-pos(i))}))}return{at,len:c.len/2*6}};
+  const FIF={C:'G',Db:'Ab','C#':'G#',D:'A',Eb:'Bb','D#':'A#',E:'B',F:'C',Gb:'Db','F#':'C#',G:'D',Ab:'Eb','G#':'D#',A:'E',Bb:'F','A#':'F',B:'F#'};
+  const oct=(n,d)=>{const m=/^([A-G][#b]?)(\d)$/.exec(n);return m?m[1]+Math.max(1,Math.min(6,+m[2]+d)):n};
   for(const n of KULTRUN_SONGS){const so=SONGS[n];if(!so||so.kul)continue;so.kul=1;
-    const odd=so.ch.some(c=>c.t.split('|')[0].trim().split(/\s+/).length%2);   // a 7/8 song keeps its limp: kultrun only, no swing
-    if(!odd)so.tern=1;
-    so.bpm=Math.round(so.bpm*(n==='stgoBoss3'?.85:.76));   // slower: the kultrun sets the pace, not the fight
-    if(!so.ch.some(c=>c.dist)){   // songs with no guitars yet get them: the bass line doubled on a heavy, detuned distorted pair; the leads get a little grit
-      const bl=so.ch.find(c=>c.w==='triangle')||so.ch.find(c=>c.w==='sawtooth');
-      if(bl){so.ch.push(Object.assign({w:'sawtooth',v:.085,dist:2,det:9},parseTrack(bl.t)));so.ch.push(Object.assign({w:'sawtooth',v:.055,dist:2,det:-7},parseTrack(bl.t)))}
-      for(const c of so.ch)if(!c.d&&c!==bl&&(c.w==='square'||c.w==='sawtooth')&&!c.dist)c.dist=1}
-    for(const c of so.ch)if(c.d)c.v*=.7;
+    const odd=so.ch.some(c=>c.t.split('|')[0].trim().split(/\s+/).length%2);
+    if(n==='stgoBoss3'||odd){                       // the chonchón keeps the swung version Brandon liked; the 7/8 spider keeps its limp
+      if(n==='stgoBoss3'){so.tern=1;so.bpm=Math.round(so.bpm*.85)}else so.bpm=Math.round(so.bpm*.92);
+      for(const c of so.ch)if(c.d)c.v*=.7;
+      const bars=Math.max(1,Math.round(so.len/(odd?7:8))),bl=odd?7:8;
+      const add=(o,t)=>so.ch.push(Object.assign(o,parseTrack(t)));
+      add({d:1,v:.62},Array(bars).fill(odd?'K . u K . u u':'K u K u K u K u').join(' | '));add({d:1,v:.5},Array(bars).fill(odd?'j . . j . . .':'j . j . j . j .').join(' | '));
+      so.len=Math.max(...so.ch.map(c=>c.len));continue}
     const bass=so.ch.find(c=>c.w==='triangle')||so.ch.find(c=>!c.d);
-    const first=(bass.t.match(/[A-G][#b]?\d/)||['E2'])[0],root=first.replace(/\d/,''),bars=Math.max(1,Math.round(so.len/8));
-    const R=o=>root+o,FIF={C:'G',Db:'Ab','C#':'G#',D:'A',Eb:'Bb','D#':'A#',E:'B',F:'C',Gb:'Db','F#':'C#',G:'D',Ab:'Eb','G#':'D#',A:'E',Bb:'F','A#':'F',B:'F#'}[root]||'E';
-    const kul=odd?'K . u K . u u':'K u K u K u K u',bells=odd?'j . . j . . .':'j . j . j . j .';
-    const call=[R(3)+' - - - - - '+FIF+'3 -',R(4)+' - - - - - - -'];   // the horn's open tones: the root, its fifth, the octave
-    const tr=[];for(let b=0;b<bars;b++)tr.push(b<2?call[b]:(b===Math.floor(bars/2)?FIF+'3 - - - '+R(4)+' - - -':'. . . . . . . .'));
-    const add=(o,t)=>so.ch.push(Object.assign(o,parseTrack(t)));
-    add({d:1,v:.62},kul);add({d:1,v:.5},bells);
-    if(!odd){add({w:'trut',v:.075},tr.join(' | '));add({d:1,v:.5},Array.from({length:bars},(_,b)=>b%4===3?'. . . . . . p p':'. . . . . . . .').join(' | '))}
-    so.len=Math.max(...so.ch.map(c=>c.len))}})();
+    const L=so.len/2*6;
+    // the bass note under each beat, from the old bass line
+    const beats=so.len/2,roots=[];let last=(bass.t.match(/[A-G][#b]?\d/)||['E2'])[0];
+    for(let b=0;b<beats;b++){for(const i of [2*b,2*b+1]){const ev=bass.at[i%bass.len];if(ev&&ev[0])last=ev[0].n;if(i===2*b)roots[b]=last}}
+    const hadGtr=so.ch.some(c=>c.dist===2);
+    so.ch=so.ch.filter(c=>!(c.d&&false)).map(c=>{const k=conv(c);if(c.d){for(const q in k.at)k.at[q]=k.at[q].filter(e=>e.n!=='h');c.v*=.7}return Object.assign(c,k)});
+    for(const c of so.ch)if(!c.d&&(c.w==='square'||c.w==='sawtooth')&&!c.dist)c.dist=1;
+    const mk=(o,fn)=>{const at={};for(let i=0;i<L;i++){const e=fn(i);if(e)at[i]=[e]}so.ch.push(Object.assign(o,{at,len:L}))};
+    const R=i=>roots[Math.floor(i/6)%beats];
+    const nb=nn=>nn.replace(/\d/,''),r2=i=>{const r=R(i);return /\d/.test(r)&&+r.slice(-1)>=3?oct(r,-1):r};
+    if(!hadGtr){const G=[0,2,4,5];   // gallop: da . da . da-da
+      mk({w:'sawtooth',v:.085,dist:2,det:9},i=>G.includes(i%6)?{n:r2(i),len:1}:null);
+      mk({w:'sawtooth',v:.055,dist:2,det:-7},i=>G.includes(i%6)?{n:FIF[nb(r2(i))]+(+r2(i).slice(-1)),len:1}:null)}
+    const AR=[0,7,12,7,12,19];      // a running arpeggio on every subdivision: root, fifth, octave
+    mk({w:'square',v:.026,dist:1},i=>{const r=R(i),m=/^([A-G][#b]?)(\d)$/.exec(r);if(!m)return null;const f=nf(m[1]+(+m[2]+2))*Math.pow(2,AR[i%6]/12);
+      const names=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'],mi=Math.round(12*Math.log2(f/440))+69;return{n:names[mi%12]+(Math.floor(mi/12)-1),len:1}});
+    mk({d:1,v:.62},i=>i%6===0?{n:'K',len:1}:i%6===4?{n:'u',len:1}:null);             // kultrun: long-short
+    mk({d:1,v:.5},i=>i%6===0||i%6===3?{n:'j',len:1}:null);                            // kaskawilla
+    mk({d:1,v:.22},i=>i%6===0?null:{n:'h',len:1});                                      // shaker on the subdivisions
+    const bars=Math.max(1,Math.round(L/24)),root=nb(roots[0]||'E2');
+    mk({w:'trut',v:.075},i=>{const b=Math.floor(i/24),k=i%24;if(b===0&&k===0)return{n:root+'3',len:16};if(b===0&&k===16)return{n:FIF[root]+'3',len:8};if(b===1&&k===0)return{n:root+'4',len:20};
+      if(b===Math.floor(bars/2)&&k===0)return{n:FIF[root]+'3',len:10};if(b===Math.floor(bars/2)&&k===12)return{n:root+'4',len:12};return null});
+    mk({d:1,v:.5},i=>Math.floor(i/24)%4===3&&(i%24===20||i%24===22)?{n:'p',len:1}:null);   // pifilka
+    so.bpm=Math.round(n==='boss'||/Boss|Final/.test(n)?so.bpm*1.4:so.bpm*1.33);          // a kultrun beat of about 0.9 s (battles) / 0.8 s (bosses), six notes in each
+    so.len=L}})();
 function playSong(name){
   if(AU.name===name)return;AU.name=name;AU.song=SONGS[name]||null;AU.step=0;
   if(AU.c)AU.next=AU.c.currentTime+.06;
