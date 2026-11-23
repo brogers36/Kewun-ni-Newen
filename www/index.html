@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='5a74a1a-202611221719';
+window.KEWUN_BUILD='d069c92-202611221722';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -549,9 +549,9 @@ function stopAmb(){for(const t of AMB.timers)clearInterval(t);AMB.timers=[];
 function ambFor(bg){if(bg==='coast'&&typeof CUR!=='undefined'&&(CUR==='lof'||(M&&M.interior)))return 'wavesSoft';return({coast:'waves',field:'meadow',forest:'forest',rainforest:'forest',mawida:'forest',
   mount:'wind',fjord:'wind',pampa:'pampa',waria:'city',deep:'under',cave:'cave',cave2:'cave',cave3:'cave',cave4:'cave',cave5:'cave'})[bg]||'night'}
 function playAmb(kind){
-  if(AMB.cur===kind)return;stopAmb();if(!kind)return;
+  if(AMB.cur===kind)return;stopAmb();if(!kind)return;const full=kind,wxl=kind.split('|')[1];kind=kind.split('|')[0];
   if(!AU.c)return; // starts once audio is unlocked; next map change retries
-  AMB.cur=kind;const c=AU.c,g=c.createGain();g.connect(AU.m);AMB.nodes.push(g);
+  AMB.cur=full;const c=AU.c,g=c.createGain();g.connect(AU.m);AMB.nodes.push(g);
   const noise=(fq,q,vol,lfoHz,lfoAmt)=>{const src=c.createBufferSource();src.buffer=AU.noise;src.loop=true;
     const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=fq;f.Q.value=q;
     const ng=c.createGain();ng.gain.value=vol;src.connect(f);f.connect(ng);ng.connect(g);
@@ -563,6 +563,8 @@ function playAmb(kind){
     og.gain.setValueAtTime(0,t);og.gain.linearRampToValueAtTime(vol,t+dur*.3);og.gain.linearRampToValueAtTime(0,t+dur);
     o.connect(og);og.connect(g);o.start(t);o.stop(t+dur+.02)}catch(e){}};
   g.gain.value=.5;
+  if(wxl==='mawun'){noise(2600,.5,.018,.2,.3);noise(800,.7,.012,.1,.4)}
+  else if(wxl==='kuruf'){noise(320,.9,.028,.07,.9);noise(1000,1.2,.008,.17,.9)}
   if(kind==='waves'){noise(420,.6,.028,.11,.8);noise(1400,.8,.012,.07,.9)}
   else if(kind==='wavesSoft'){noise(420,.6,.014,.11,.8);noise(1400,.8,.004,.07,.9)}   // the Lafkenche lof: the sea further off, the wind softer
   else if(kind==='wind'){noise(300,.9,.03,.05,.85);noise(900,1.4,.008,.13,.9)}
@@ -2485,8 +2487,59 @@ function loadMap(id,x,y,quiet){TALKER=null;
   if(!quiet)showBanner(M.name,G(M.g));
   setTimeout(()=>{if(!active&&mode==='map'&&typeof lofWarpIntro==='function')lofWarpIntro()},600);
   playSong(mapSong());
-  if(typeof playAmb==='function')playAmb(ambFor(M.bg));
+  if(typeof wxSpawn==='function')wxSpawn();
+  if(typeof playAmb==='function')playAmb(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg));
   persist();
+}
+
+/* ---------- weather: each kind of land has its own sky that changes every few minutes.
+   Light on screen (never enough to hide secrets), named in Mapudungun when it changes, heard, talked about,
+   and some wekufü only come out in it. Heavy fog stays reserved for Ngoyman. ---------- */
+const WXT={coast:[['antu',4],['tromu',3],['mawun',2],['kuruf',1]],field:[['antu',45],['tromu',30],['mawun',20],['kuruf',5]],
+  forest:[['antu',40],['tromu',30],['mawun',30]],mount:[['antu',35],['pire',35],['kuruf',20],['tromu',10]],
+  rainforest:[['mawun',5],['tromu',3],['antu',2]],fjord:[['mawun',5],['tromu',3],['kuruf',2]],pampa:[['antu',45],['kuruf',45],['tromu',10]],
+  waria:[['antu',4],['tromu',3],['mawun',3]]};
+const WXL={antu:['Antü','Sale el sol','The sun is out'],tromu:['Tromü','Se nubla','Clouds roll in'],mawun:['Mawün','Llueve','It is raining'],
+  pire:['Pire','Nieva','It is snowing'],kuruf:['Kürüf','Sopla el viento','The wind is blowing']};
+const WXB={antu:['Antü!','Kümey antü.'],tromu:['Tromü...','Fütra tromü.'],mawun:['Mawün!','Fütra mawün!'],pire:['Pire!','Fütra pire!'],kuruf:['Kürüf!','Fütra kürüf!']};
+const WXE={mawun:'mawek',pire:'pire',kuruf:'chonchon'};   // wekufü that ride this weather
+const WXS={last:null,key:null,toast:0,txt:null};
+function wxKey(){if(!M||M.interior||M.dungeon||M.under||M.fog||!WXT[M.bg])return null;return M.bg}
+function wxNow(){const key=wxKey();if(!key)return null;S.wx=S.wx||{};let w=S.wx[key];const now=Date.now();
+  if(!w||now>w.u){const tb=WXT[key],tot=tb.reduce((a,b)=>a+b[1],0);let r=Math.random()*tot,k=tb[0][0];for(const [n,p] of tb){if((r-=p)<0){k=n;break}}
+    w={k,u:now+(180+Math.random()*240)*1000};S.wx[key]=w}
+  return w.k}
+function wxAmbKey(){const w=wxNow();return ambFor(M.bg)+(w==='mawun'||w==='kuruf'?'|'+w:'')}
+function wxTick(){const key=wxKey(),w=wxNow();
+  if(key!==WXS.key||w!==WXS.last){const changed=key===WXS.key&&WXS.last&&w;WXS.key=key;WXS.last=w;
+    if(w&&(changed||!S.flags['wxs_'+key+w])){S.flags['wxs_'+key+w]=1;S.flags.wx_book=1;WXS.txt=WXL[w];WXS.toast=200}
+    if(typeof playAmb==='function'&&mode==='map')playAmb(wxAmbKey())}
+  if(WXS.toast>0)WXS.toast--}
+function wxSpawn(){const w=wxNow(),t=w&&WXE[w];if(!t||!ET[t]||!ents.some(e=>e.kind==='enemy'))return;
+  for(let k=0;k<60;k++){const x=1+rnd(M.w-2),y=1+rnd(M.h-2);if(!WALK.has(grid[y][x])||Math.abs(x-P.x)+Math.abs(y-P.y)<6||ents.some(e=>e.x===x&&e.y===y))continue;
+    ents.push({kind:'enemy',x,y,fx:x,fy:y,ox:x,oy:y,party:t==='chonchon'?['chonchon','chonchon']:[t],cd:30+rnd(60),dir:'down',pi:0,wait:0,bt:rnd(400),wx:1});return}}
+function wxBubble(e,txt){const w=WXS.last;if(!w||!WXB[w]||e.kind!=='npc')return txt;return(Math.floor((frame+e.bt)/600)+e.bt)%3===0?WXB[w][e.bt%2]:txt}
+/* overworld: drawn inside atmos() in the map's own coordinates */
+function drawWxMap(c,w,ox,oy,W,H){
+  const wrapX=x=>((x%W)+W)%W,wrapY=y=>((y%H)+H)%H,P2=(n,fn)=>{for(let k=0;k<n;k++)fn(k,((k*9301+49297)%233280)/233280)};
+  if(w==='mawun'){c.fillStyle='rgba(190,210,235,.5)';P2(70,(k,r)=>{const x=wrapX(r*W*9-frame*1.2-ox),y=VY+wrapY(frame*4.2+k*37-oy);c.fillRect(Math.round(x),Math.round(y),1,4)});
+    P2(14,(k,r)=>{const t=(frame+k*23)%40;if(t<10){const x=wrapX(r*W*5-ox*1),y=VY+wrapY(k*61-oy);c.fillStyle='rgba(210,225,245,'+(.6-t*.05)+')';c.fillRect(Math.round(x)-Math.floor(t/3),Math.round(y),1+Math.floor(t/3)*2,1)}})}
+  else if(w==='pire'){P2(46,(k,r)=>{const x=wrapX(r*W*7+Math.sin(frame/50+k)*14-ox),y=VY+wrapY(frame*(.35+r*.4)+k*31-oy);c.fillStyle='rgba(90,110,150,.45)';c.fillRect(Math.round(x)+1,Math.round(y)+1,1,1);c.fillStyle=r>.6?'#ffffff':'rgba(240,246,255,.9)';c.fillRect(Math.round(x),Math.round(y),r>.8?2:1,r>.8?2:1)})}
+  else if(w==='kuruf'){P2(22,(k,r)=>{const x=wrapX(frame*(2.6+r*2)+r*W*6-ox),y=VY+wrapY(k*29+Math.sin(frame/14+k)*4-oy);c.fillStyle='rgba(235,240,250,.32)';c.fillRect(Math.round(x),Math.round(y),8+Math.round(r*10),1)});
+    P2(8,(k,r)=>{const x=wrapX(frame*(3+r*2)+r*W*4-ox),y=VY+wrapY(k*53+Math.sin(frame/7+k)*6-oy);c.fillStyle=k%2?'#9a7a30':'#6a9a40';c.fillRect(Math.round(x),Math.round(y),2,1);c.fillRect(Math.round(x)+1,Math.round(y)-((frame>>2)+k)%2,1,1)})}
+  else if(w==='tromu'){for(let k=0;k<3;k++){const cx=wrapX(frame*.18+k*W/3-ox*.6),cy=VY+40+k*55-((oy*.6)%60);
+    const g=dRad(0,0,10,0,0,60);g.addColorStop(0,'rgba(20,24,40,.16)');g.addColorStop(1,'rgba(20,24,40,0)');c.save();c.translate(Math.round(cx-70),Math.round(cy-40));c.scale(1,.6);g.fill(c,-60,-60,140,140);c.restore()}}
+  if(w==='mawun'||w==='tromu'){c.fillStyle=w==='mawun'?'rgba(30,40,60,.16)':'rgba(30,36,52,.08)';c.fillRect(0,VY,W,H)}
+  if(w==='pire'){c.fillStyle='rgba(220,230,250,.06)';c.fillRect(0,VY,W,H)}
+  if(WXS.toast>0&&WXS.txt){const a=Math.min(1,WXS.toast/30),t2=WXS.txt,y=VY+52;
+    OV.push(()=>{ctx.save();ctx.globalAlpha=a;txt(t2[0],LW/2,y,'#ffffff',18,'center');txt(S.gloss==='en'?t2[2]:t2[1],LW/2,y+11,'#d4f0e2',12,'center');ctx.restore()})}
+}
+/* battle: over the painted backdrop */
+function wxBattle(c,w){
+  if(w==='mawun'){for(let k=0;k<60;k++){const x=((k*29-Math.floor(frame*1.2))%LW+LW)%LW,y=Math.floor((k*47+frame*4.2)%LH);R(c,x,y,1,4,'rgba(190,210,235,.5)')}c.fillStyle='rgba(30,40,60,.16)';c.fillRect(0,0,LW,LH)}
+  else if(w==='pire'){for(let k=0;k<44;k++){const x=((k*53+Math.round(Math.sin(frame/40+k)*10))%LW+LW)%LW,y=Math.floor((k*31+frame*(.5+(k%5)*.1))%LH);R(c,x,y,k%4?1:2,k%4?1:2,'#ffffff')}}
+  else if(w==='kuruf'){for(let k=0;k<20;k++){const x=((frame*(3+(k%4))+k*61)%(LW+40))-20,y=(k*37)%(LH-40);R(c,Math.round(x),y,10+(k%3)*4,1,'rgba(235,240,250,.3)')}}
+  else if(w==='tromu'){c.fillStyle='rgba(30,36,52,.1)';c.fillRect(0,0,LW,LH)}
 }
 
 /* ============================================================
@@ -2653,7 +2706,7 @@ function updateMap(){
       N('(küpa-tu-nge: «ven de vuelta». -tu- marca la vuelta, -nge le habla a una persona.) Los males escondidos ya cayeron y la tierra respira. Algo más te espera: vuelve donde todo empezó.','(küpa-tu-nge: "come back". -tu- marks the return, -nge speaks to one person.) The hidden evils have fallen and the land breathes. Something more awaits you: go back to where it all began.')]);
     return}
   if(S.wtime%150===0&&typeof playAmb==='function'){
-    const d=dayPhase();playAmb(OUTBG[M.bg]&&d.name==='night'?'night':ambFor(M.bg))}
+    const d=dayPhase();playAmb(OUTBG[M.bg]&&d.name==='night'?'night':(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg)))}
   if(S.pw.speed>0)S.pw.speed--;if(S.pw.pewen>0)S.pw.pewen--;if(grace>0)grace--;
   if(P.moving){P.t+=P.spd;if(P.t>=1){P.moving=false;P.fx=P.x;P.fy=P.y;onStep()}else{P.fx=P.ox+(P.x-P.ox)*P.t;P.fy=P.oy+(P.y-P.oy)*P.t}}
   if(!P.moving&&!active&&mode==='map'){const d=heldDir();if(d)tryMove(d)}
@@ -4854,6 +4907,7 @@ function openBook(back){
 }
 /* the kuyfi chillka lessons go into the book once their stone is awake */
 for(const id of TAB_IDS){const T=TABLETS[id];BOOK['tab_'+id]={m:'Kuyfi chillka',es:T.t.es,en:T.t.en,req:'tab_'+id,lines:T.lines}}
+BOOK.wx={m:'Antü, mawün, pire',es:'El tiempo: sol, nube, lluvia, nieve, viento',en:'Weather: sun, cloud, rain, snow, wind',req:'wx_book',lines:[L('','Antü · Tromü · Mawün','sol · nube · lluvia','sun · cloud · rain'),L('','Pire · Kürüf','nieve · viento','snow · wind'),L('','Fütra mawün! · Fütra kürüf!','¡Mucha lluvia! · ¡Mucho viento!','Heavy rain! · Strong wind!')]};
 for(const id of TRW_IDS){const T=TRAWUN[id];BOOK['trw_'+id]={m:'Trawün',es:T.t.es,en:T.t.en,req:'trw_'+id,lines:T.sum}}
 
 /* ============================================================
@@ -4877,11 +4931,11 @@ const YEWEN_CALL={wenangkun:['la pena que se queda callada. Despiértala (nepe-)
   profe:['la escuela que prohibió la lengua. Su regla es dura como piedra: quiébrala (trafo-).','the school that banned the language. Its rule is hard as stone: break it (trafo-).'],
   ngoysum:['el gran olvido en persona, que vuelve cuando la palabra se te escapa. Te roba las palabras: ¡háblale fuerte!','the great forgetting itself, back because the word slipped away. It steals your words: speak to it loudly!']};
 function mkEnemy(t){const k=progK(),bs=ET[t].boss?.5:1,hp0=Math.round(ET[t].hp*(1+.07*k*bs)*(S.hm?1+(heroMul()*Math.max(1,atk()/heroExp().atk)-1)*(ET[t].boss?.75:1):1));return{t,hp:hp0,max:hp0,gr:0,sl:0,hit:0,dead:false,fadeT:0,fear:0,stun:0,tall:t==='witranalwe'||ET[t].tower?1:0,armor:ET[t].armor?1:0,burn:ET[t].fire?1:0,hidden:ET[t].hide?1:0,dreaming:ET[t].dream?1:0,dreamT:0,down:0,seals:ET[t].seals?ET[t].seals.slice():null}}
-function startBattle(party,o){o=o||{};
+function startBattle(party,o){o=o||{};const bwx=(typeof wxNow==='function'&&M)?wxNow():null;
   let snap=null;try{snap=document.createElement('canvas');snap.width=LW;snap.height=LH;const sg=snap.getContext('2d');sg.imageSmoothingEnabled=false;sg.drawImage(cv,0,0,LW,LH)}catch(e){snap=null}
   if(typeof stopAmb==='function')stopAmb();
   mode='battle';banner.style.display='none';held.up=held.down=held.left=held.right=0;
-  B={snap,wipe:snap?22:0,en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(M.fog&&M.bg!=='fjord'?'fog:':'')+M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
+  B={wx:bwx,snap,wipe:snap?22:0,en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(M.fog&&M.bg!=='fjord'?'fog:':'')+M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
   if(o.tut){B.en[0].hp=B.en[0].max=20}
   relabel();sfx('enc');if(snap)sfx('swirl');playSong(o.song||(o.final?'ngoyFinal':rsong(o.boss?'boss':'battle')));
   const alive=B.en.length,bt=party.find(t=>ET[t].boss);
@@ -5445,7 +5499,7 @@ function endBattle(how){
   if(how==='win'&&o.ent){ents=ents.filter(e=>e!==o.ent);if(o.ent.flag)S.flags[o.ent.flag]=1}
   B=null;persist();
   if(how!=='win'||!AU.song||(AU.name!=='win'&&AU.name!=='winS'))playSong(mapSong());
-  if(typeof playAmb==='function')playAmb(ambFor(M.bg));
+  if(typeof playAmb==='function')playAmb(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg));
   if(how==='win'&&o.sflag==='epu_won'){S.flags.epu_won=1;S.gear.waiki=1;persist();sfx('lvl');
     return say([N('El Epunamun baja las dos lanzas a la vez. No se deshace, no huye: te saluda, con las dos caras sonriendo.','The Epunamun lowers both spears at once. He does not break apart, he does not flee: he salutes you, both faces smiling.'),
       L('Epunamun','Tutelu llemay! Newentuleymi. Kimün may nieymi tati.','¡Lo lograste! Tienes fuerza. Y conocimiento, sí que tienes.','You did it! You are strong. And knowledge, you truly have.'),
@@ -5792,7 +5846,7 @@ function renderMap(){
       else{let fr=e.mv?Math.floor(frame/7)%4:0;if(e.act==='weave'||e.act==='teach')fr=Math.floor(frame/24)%2?1:0;
         drawChar(c,e.look,sx,sy,e.dir||'down',fr,e.seated,e.tn,e.ey2,e.hr2);
         if(e.act==='wood'){R(c,sx+(e.dir==='left'?9:1),sy-6,6,3,'#7a4a22');R(c,sx+(e.dir==='left'?9:1),sy-6,6,1,'#a87040')}}
-      if(e.bub&&(frame+e.bt)%600<400&&Math.abs(e.x-P.x)+Math.abs(e.y-P.y)<9)bubble(sx+8,sy-(e.seated?2:8),e.bub[Math.floor((frame+e.bt)/600)%e.bub.length])}
+      if(e.bub&&(frame+e.bt)%600<400&&Math.abs(e.x-P.x)+Math.abs(e.y-P.y)<9)bubble(sx+8,sy-(e.seated?2:8),wxBubble(e,e.bub[Math.floor((frame+e.bt)/600)%e.bub.length]))}
     else if(e.kind==='animal'){const ac=animalCanvas(e.look,e.mv?Math.floor(frame/8)%2:0,e.dir==='right'?'right':'left');ell(c,sx+8,sy+15,ac.width*.36,2,'rgba(0,0,0,.3)');c.drawImage(ac,sx+8-(ac.width>>1),sy+17-ac.height)}
     else{const t=e.party[0],sz=e.final?72:e.boss?30:e.mini?22:16,cvs=enemyCanvas(t,sz,Math.floor(frame/10)%2);
       const fly=ET[t].fly?6+Math.round(Math.sin(frame/8)*1.5):0;
@@ -6285,6 +6339,7 @@ function renderBattle(){
   const pa=B.area.replace('fog:',''),painted=!!PBGI[pa];
   if(!BG[B.area]||BG[B.area].width!==LW){const bg=buildBG(B.area);if(!painted||paintedBG(pa))BG[B.area]=bg;else{c.drawImage(bg,0,0)}}
   if(BG[B.area])c.drawImage(BG[B.area],0,0);if(painted&&paintedBG(pa)){animPainted(c,pa);if(B.area!==pa)for(let k=0;k<6;k++){const fx=((k*83+frame*.4)%(LW+120))-60;for(let d=0;d<5;d++)R(c,Math.round(fx+d*7),70+k*16+(d%2),46-d*8,2,'rgba(200,206,216,.14)')}}else animBG(B.area);
+  if(B.wx)wxBattle(c,B.wx);
   {// battle grade: soft-light contrast on the backdrop, a little haze where sky meets land, so the fighters pop off it
    const ar=B.area,dark=/cave|deep|crater|fog:|waria/.test(ar);if(!painted){c.save();c.globalCompositeOperation='soft-light';
    const g=dLin(0,0,0,LH);g.addColorStop(0,dark?'rgba(80,90,130,.5)':'rgba(150,140,120,.4)');g.addColorStop(.55,'rgba(128,128,128,0)');g.addColorStop(1,'rgba(50,40,80,.5)');g.fill(c,0,0,LW,LH);
@@ -6613,9 +6668,10 @@ function atmos(c){
   const indoor=M.interior||M.dungeon||/^cave/.test(M.bg)||M.under,urban=M.region==='santiago';
   const gloom=!!(M.fog&&!S.flags.won);
   const ox=CAM.x,oy=CAM.y,W=LW,H=VH;
+  wxTick();const wx=wxNow();
   c.save();
   // 1. sun shafts through open sky (they drift slowly; none indoors or in the fog)
-  if(!indoor&&!gloom&&!urban&&M.bg!=='fjord'){
+  if(!indoor&&!gloom&&!urban&&M.bg!=='fjord'&&(!wx||wx==='antu')){
     c.globalCompositeOperation='lighter';
     for(let k=0;k<4;k++){const bx=((k*97-ox*.3+frame*.05)%(W+140)+W+140)%(W+140)-70,w=18+(k%3)*10,al=.035+.02*Math.sin(frame/70+k*2);
       const g=dLin(0,VY,0,VY+H);g.addColorStop(0,'rgba(255,240,190,'+(Math.round(al*1.6*40)/40)+')');g.addColorStop(1,'rgba(255,240,190,0)');
@@ -6624,7 +6680,8 @@ function atmos(c){
   // 2. weather and drifting life
   const P=(n,fn)=>{for(let k=0;k<n;k++)fn(k,((k*9301+49297)%233280)/233280)};
   const wrapX=x=>((x%W)+W)%W,wrapY=y=>((y%H)+H)%H;
-  if(indoor){ // dust motes turning in the still air
+  if(wx&&wx!=='antu'&&wx!=='tromu'){drawWxMap(c,wx,ox,oy,W,H)}
+  else if(indoor){ // dust motes turning in the still air
     P(M.interior?10:14,(k,r)=>{const x=wrapX(r*W*3+Math.sin(frame/80+k)*10-ox*.5),y=VY+wrapY(k*37+Math.sin(frame/60+k*2)*8-frame*.06*(1+r)-oy*.5);
       c.fillStyle='rgba(255,240,210,'+(.18+.18*Math.sin(frame/25+k))+')';c.fillRect(Math.round(x),Math.round(y),1,1)})}
   else if(urban){ // smog high up, scraps of paper skittering on the wind
@@ -6643,6 +6700,7 @@ function atmos(c){
     P(16,(k,r)=>{const x=wrapX(r*W*5+Math.sin(frame/45+k)*16+frame*.12-ox),y=VY+wrapY(k*41+Math.sin(frame/33+k*2)*10-oy);if((frame+k*13)%60<46){c.fillStyle=M.bg==='coast'?'rgba(240,250,255,.7)':'rgba(255,248,180,.75)';c.fillRect(Math.round(x),Math.round(y),1,1)}});
     if(M.bg==='field')P(2,(k,r)=>{const t=frame*.5+k*200,x=wrapX(r*W*2+t*.6+Math.sin(t/13)*20-ox),y=VY+wrapY(40+k*70+Math.sin(t/7)*8-oy),f=Math.floor(frame/4+k)%2;c.fillStyle=k?'#f0d040':'#f4f4ff';
       c.fillRect(Math.round(x)-1-f,Math.round(y),1+f,1);c.fillRect(Math.round(x)+1,Math.round(y),1+f,1);c.fillStyle='#302010';c.fillRect(Math.round(x),Math.round(y),1,1)})}
+  if(wx==='antu'||wx==='tromu')drawWxMap(c,wx,ox,oy,W,H);
   // 3. colour grade: a soft-light pass that deepens shadows and warms highlights, tuned per place
   c.globalCompositeOperation='soft-light';
   const tint=gloom?'rgba(96,104,128,.55)':indoor?'rgba(140,118,96,.35)':urban?'rgba(128,122,130,.4)':M.bg==='mount'?'rgba(112,124,150,.35)':M.bg==='pampa'?'rgba(156,128,96,.38)':'rgba(146,132,104,.32)';

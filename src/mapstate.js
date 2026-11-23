@@ -268,6 +268,7 @@ function loadMap(id,x,y,quiet){TALKER=null;
   if(!quiet)showBanner(M.name,G(M.g));
   setTimeout(()=>{if(!active&&mode==='map'&&typeof lofWarpIntro==='function')lofWarpIntro()},600);
   playSong(mapSong());
-  if(typeof playAmb==='function')playAmb(ambFor(M.bg));
+  if(typeof wxSpawn==='function')wxSpawn();
+  if(typeof playAmb==='function')playAmb(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg));
   persist();
 }

@@ -429,3 +429,10 @@ Una ruka del trawün en cada lof (con un cartel tejido sobre la puerta). Un kime
 - Puelche · -ke-: amuken, amukeymi, amukey, iyaken; "Liwen küdawken. Pun umawtuken."; "mapudunguken"; la -ke- de "pingekey".
 - (Nov 22) Brandon: bienvenida del trawün **"Küme akunkonpayami fachi trawün, peñi/lamngen"** (hombres: peñi a hombres, lamngen a mujeres; mujeres: lamngen a todos; usa addr()). Opción "después" = **"Wüle müten"**. Lecciones alargadas (≈4 min), nuevas formas ⚠: pen/peymi/pey; ülkantun/ülkantuymi/ülkantuy; nütramkan; "Iñche Ñanku pingen. Eymi kay?"; "Iñchiw ñi chaw amuyu"; "Iñchiw ñi ñuke küdawiyu"; pu domo / pu wentru; "Pu domo ülkantuyngün"; amukilnge/amukilmu/amukilmün; amulaiñ/amuaiñ/amulayaiñ; "Chew mülimi? · Ruka mew mülen."; "Chumül amuaymi? · Wüle amuan."; "Kuyfi, kom che mapudungukefuy."; "Kom antü mapudunguken."
 - (Nov 22) Brandon: viento/olas del lof lafkenche más suaves.
+
+### Tanda 22 · el tiempo (Nov 22)
+Ciclo de tiempo por tipo de tierra (cambia cada 3-7 minutos reales). Todo ⚠:
+- Avisos al cambiar: **Antü** 'sale el sol', **Tromü** 'se nubla', **Mawün** 'llueve', **Pire** 'nieva', **Kürüf** 'sopla el viento' (uso los sustantivos solos; ¿prefieres formas verbales?).
+- Globos de la gente: "Antü!", "Kümey antü.", "Tromü...", "Fütra tromü.", "Mawün!", "Fütra mawün!", "Pire!", "Fütra pire!", "Kürüf!", "Fütra kürüf!".
+- Chillka: entrada "Antü, mawün, pire".
+- Wekufü del tiempo: con mawün aparece un mawün wekufü, con pire un pire wekufü, con kürüf una bandada de chonchon.

@@ -198,4 +198,5 @@ function openBook(back){
 }
 /* the kuyfi chillka lessons go into the book once their stone is awake */
 for(const id of TAB_IDS){const T=TABLETS[id];BOOK['tab_'+id]={m:'Kuyfi chillka',es:T.t.es,en:T.t.en,req:'tab_'+id,lines:T.lines}}
+BOOK.wx={m:'Antü, mawün, pire',es:'El tiempo: sol, nube, lluvia, nieve, viento',en:'Weather: sun, cloud, rain, snow, wind',req:'wx_book',lines:[L('','Antü · Tromü · Mawün','sol · nube · lluvia','sun · cloud · rain'),L('','Pire · Kürüf','nieve · viento','snow · wind'),L('','Fütra mawün! · Fütra kürüf!','¡Mucha lluvia! · ¡Mucho viento!','Heavy rain! · Strong wind!')]};
 for(const id of TRW_IDS){const T=TRAWUN[id];BOOK['trw_'+id]={m:'Trawün',es:T.t.es,en:T.t.en,req:'trw_'+id,lines:T.sum}}

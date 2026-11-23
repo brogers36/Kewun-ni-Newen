@@ -328,9 +328,9 @@ function stopAmb(){for(const t of AMB.timers)clearInterval(t);AMB.timers=[];
 function ambFor(bg){if(bg==='coast'&&typeof CUR!=='undefined'&&(CUR==='lof'||(M&&M.interior)))return 'wavesSoft';return({coast:'waves',field:'meadow',forest:'forest',rainforest:'forest',mawida:'forest',
   mount:'wind',fjord:'wind',pampa:'pampa',waria:'city',deep:'under',cave:'cave',cave2:'cave',cave3:'cave',cave4:'cave',cave5:'cave'})[bg]||'night'}
 function playAmb(kind){
-  if(AMB.cur===kind)return;stopAmb();if(!kind)return;
+  if(AMB.cur===kind)return;stopAmb();if(!kind)return;const full=kind,wxl=kind.split('|')[1];kind=kind.split('|')[0];
   if(!AU.c)return; // starts once audio is unlocked; next map change retries
-  AMB.cur=kind;const c=AU.c,g=c.createGain();g.connect(AU.m);AMB.nodes.push(g);
+  AMB.cur=full;const c=AU.c,g=c.createGain();g.connect(AU.m);AMB.nodes.push(g);
   const noise=(fq,q,vol,lfoHz,lfoAmt)=>{const src=c.createBufferSource();src.buffer=AU.noise;src.loop=true;
     const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=fq;f.Q.value=q;
     const ng=c.createGain();ng.gain.value=vol;src.connect(f);f.connect(ng);ng.connect(g);
@@ -342,6 +342,8 @@ function playAmb(kind){
     og.gain.setValueAtTime(0,t);og.gain.linearRampToValueAtTime(vol,t+dur*.3);og.gain.linearRampToValueAtTime(0,t+dur);
     o.connect(og);og.connect(g);o.start(t);o.stop(t+dur+.02)}catch(e){}};
   g.gain.value=.5;
+  if(wxl==='mawun'){noise(2600,.5,.018,.2,.3);noise(800,.7,.012,.1,.4)}
+  else if(wxl==='kuruf'){noise(320,.9,.028,.07,.9);noise(1000,1.2,.008,.17,.9)}
   if(kind==='waves'){noise(420,.6,.028,.11,.8);noise(1400,.8,.012,.07,.9)}
   else if(kind==='wavesSoft'){noise(420,.6,.014,.11,.8);noise(1400,.8,.004,.07,.9)}   // the Lafkenche lof: the sea further off, the wind softer
   else if(kind==='wind'){noise(300,.9,.03,.05,.85);noise(900,1.4,.008,.13,.9)}

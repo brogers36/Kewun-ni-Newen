@@ -187,7 +187,7 @@ function renderMap(){
       else{let fr=e.mv?Math.floor(frame/7)%4:0;if(e.act==='weave'||e.act==='teach')fr=Math.floor(frame/24)%2?1:0;
         drawChar(c,e.look,sx,sy,e.dir||'down',fr,e.seated,e.tn,e.ey2,e.hr2);
         if(e.act==='wood'){R(c,sx+(e.dir==='left'?9:1),sy-6,6,3,'#7a4a22');R(c,sx+(e.dir==='left'?9:1),sy-6,6,1,'#a87040')}}
-      if(e.bub&&(frame+e.bt)%600<400&&Math.abs(e.x-P.x)+Math.abs(e.y-P.y)<9)bubble(sx+8,sy-(e.seated?2:8),e.bub[Math.floor((frame+e.bt)/600)%e.bub.length])}
+      if(e.bub&&(frame+e.bt)%600<400&&Math.abs(e.x-P.x)+Math.abs(e.y-P.y)<9)bubble(sx+8,sy-(e.seated?2:8),wxBubble(e,e.bub[Math.floor((frame+e.bt)/600)%e.bub.length]))}
     else if(e.kind==='animal'){const ac=animalCanvas(e.look,e.mv?Math.floor(frame/8)%2:0,e.dir==='right'?'right':'left');ell(c,sx+8,sy+15,ac.width*.36,2,'rgba(0,0,0,.3)');c.drawImage(ac,sx+8-(ac.width>>1),sy+17-ac.height)}
     else{const t=e.party[0],sz=e.final?72:e.boss?30:e.mini?22:16,cvs=enemyCanvas(t,sz,Math.floor(frame/10)%2);
       const fly=ET[t].fly?6+Math.round(Math.sin(frame/8)*1.5):0;
@@ -680,6 +680,7 @@ function renderBattle(){
   const pa=B.area.replace('fog:',''),painted=!!PBGI[pa];
   if(!BG[B.area]||BG[B.area].width!==LW){const bg=buildBG(B.area);if(!painted||paintedBG(pa))BG[B.area]=bg;else{c.drawImage(bg,0,0)}}
   if(BG[B.area])c.drawImage(BG[B.area],0,0);if(painted&&paintedBG(pa)){animPainted(c,pa);if(B.area!==pa)for(let k=0;k<6;k++){const fx=((k*83+frame*.4)%(LW+120))-60;for(let d=0;d<5;d++)R(c,Math.round(fx+d*7),70+k*16+(d%2),46-d*8,2,'rgba(200,206,216,.14)')}}else animBG(B.area);
+  if(B.wx)wxBattle(c,B.wx);
   {// battle grade: soft-light contrast on the backdrop, a little haze where sky meets land, so the fighters pop off it
    const ar=B.area,dark=/cave|deep|crater|fog:|waria/.test(ar);if(!painted){c.save();c.globalCompositeOperation='soft-light';
    const g=dLin(0,0,0,LH);g.addColorStop(0,dark?'rgba(80,90,130,.5)':'rgba(150,140,120,.4)');g.addColorStop(.55,'rgba(128,128,128,0)');g.addColorStop(1,'rgba(50,40,80,.5)');g.fill(c,0,0,LW,LH);
@@ -1008,9 +1009,10 @@ function atmos(c){
   const indoor=M.interior||M.dungeon||/^cave/.test(M.bg)||M.under,urban=M.region==='santiago';
   const gloom=!!(M.fog&&!S.flags.won);
   const ox=CAM.x,oy=CAM.y,W=LW,H=VH;
+  wxTick();const wx=wxNow();
   c.save();
   // 1. sun shafts through open sky (they drift slowly; none indoors or in the fog)
-  if(!indoor&&!gloom&&!urban&&M.bg!=='fjord'){
+  if(!indoor&&!gloom&&!urban&&M.bg!=='fjord'&&(!wx||wx==='antu')){
     c.globalCompositeOperation='lighter';
     for(let k=0;k<4;k++){const bx=((k*97-ox*.3+frame*.05)%(W+140)+W+140)%(W+140)-70,w=18+(k%3)*10,al=.035+.02*Math.sin(frame/70+k*2);
       const g=dLin(0,VY,0,VY+H);g.addColorStop(0,'rgba(255,240,190,'+(Math.round(al*1.6*40)/40)+')');g.addColorStop(1,'rgba(255,240,190,0)');
@@ -1019,7 +1021,8 @@ function atmos(c){
   // 2. weather and drifting life
   const P=(n,fn)=>{for(let k=0;k<n;k++)fn(k,((k*9301+49297)%233280)/233280)};
   const wrapX=x=>((x%W)+W)%W,wrapY=y=>((y%H)+H)%H;
-  if(indoor){ // dust motes turning in the still air
+  if(wx&&wx!=='antu'&&wx!=='tromu'){drawWxMap(c,wx,ox,oy,W,H)}
+  else if(indoor){ // dust motes turning in the still air
     P(M.interior?10:14,(k,r)=>{const x=wrapX(r*W*3+Math.sin(frame/80+k)*10-ox*.5),y=VY+wrapY(k*37+Math.sin(frame/60+k*2)*8-frame*.06*(1+r)-oy*.5);
       c.fillStyle='rgba(255,240,210,'+(.18+.18*Math.sin(frame/25+k))+')';c.fillRect(Math.round(x),Math.round(y),1,1)})}
   else if(urban){ // smog high up, scraps of paper skittering on the wind
@@ -1038,6 +1041,7 @@ function atmos(c){
     P(16,(k,r)=>{const x=wrapX(r*W*5+Math.sin(frame/45+k)*16+frame*.12-ox),y=VY+wrapY(k*41+Math.sin(frame/33+k*2)*10-oy);if((frame+k*13)%60<46){c.fillStyle=M.bg==='coast'?'rgba(240,250,255,.7)':'rgba(255,248,180,.75)';c.fillRect(Math.round(x),Math.round(y),1,1)}});
     if(M.bg==='field')P(2,(k,r)=>{const t=frame*.5+k*200,x=wrapX(r*W*2+t*.6+Math.sin(t/13)*20-ox),y=VY+wrapY(40+k*70+Math.sin(t/7)*8-oy),f=Math.floor(frame/4+k)%2;c.fillStyle=k?'#f0d040':'#f4f4ff';
       c.fillRect(Math.round(x)-1-f,Math.round(y),1+f,1);c.fillRect(Math.round(x)+1,Math.round(y),1+f,1);c.fillStyle='#302010';c.fillRect(Math.round(x),Math.round(y),1,1)})}
+  if(wx==='antu'||wx==='tromu')drawWxMap(c,wx,ox,oy,W,H);
   // 3. colour grade: a soft-light pass that deepens shadows and warms highlights, tuned per place
   c.globalCompositeOperation='soft-light';
   const tint=gloom?'rgba(96,104,128,.55)':indoor?'rgba(140,118,96,.35)':urban?'rgba(128,122,130,.4)':M.bg==='mount'?'rgba(112,124,150,.35)':M.bg==='pampa'?'rgba(156,128,96,.38)':'rgba(146,132,104,.32)';
