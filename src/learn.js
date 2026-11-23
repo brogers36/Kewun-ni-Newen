@@ -207,6 +207,8 @@ function updatePalin(){
   // the player
   let dx=(held.right?1:0)-(held.left?1:0),dy=(held.down?1:0)-(held.up?1:0);
   if(dx||dy){const l=Math.hypot(dx,dy),sp=1.45;me.x+=dx/l*sp;me.y+=dy/l*sp;me.an++;me.dir=Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up')}
+  if(PG.touch===undefined)PG.touch=matchMedia('(pointer:coarse)').matches;
+  if(PG.touch&&!me.sw&&me.cd===0&&b.x>me.x-3&&Math.hypot(b.x-me.x,b.y-me.y+2)<12)me.sw=14;
   if(me.sw>0){me.sw--;if(me.sw>6&&me.cd===0&&Math.hypot(b.x-me.x,b.y-me.y+2)<15){palinHit(me,3,(held.up?-1.4:0)+(held.down?1.4:0)+(b.y-me.y)*.06,4.6);palinFx(me.x,me.y-26,'Tak!','#fff6c8')}}
   // the others: one chaser per team goes for the pali, the rest keep their lanes
   for(let tm=0;tm<2;tm++){const mates=PG.pl.filter(p=>p.team===tm&&!p.me),dirX=tm?-1:1;
@@ -308,7 +310,8 @@ function renderPalin(c){
   OV.push(()=>{txt(String(G.us),LW/2-14,13,'#8ab4ff',13,'center');txt('–',LW/2,13,'#ffffff',12,'center');txt(String(G.them),LW/2+14,13,'#ff9a8a',13,'center');
     if(cam<30)txt('◀ lafken',14-cam,T+PF.h+20,'#ffd0c0',9);if(cam>PF.w-LW-30)txt('puel ▶',PF.w-cam-14,T+PF.h+20,'#c8e0ff',9,'right');
     const left=Math.max(0,Math.ceil((12600-G.t)/3600));txt(left+"'",LW-8,13,'#ffffff',10,'right');
-    if(G.t<300)txt(S.gloss==='en'?'Arrows: move · A: strike · B: leave':'Flechas: moverse · A: golpear · B: salir',LW/2,LH-6,'#ffffff',9,'center');
+    if(G.t<420){const tc=matchMedia('(pointer:coarse)').matches,en2=S.gloss==='en';
+      txt(tc?(en2?'Drag to run · tap to strike · hold to leave':'Arrastra para correr · toca para golpear · mantén para salir'):(en2?'Arrows: move · A: strike · B: leave':'Flechas: moverse · A: golpear · B: salir'),LW/2,LH-6,'#ffffff',9,'center')}
     for(const f of G.fx){const x=f.x-cam,y=T+f.y-(70-f.life)*.3;txt(f.t,x,y,f.col,11,'center')}});
   if(G.intro>0){const a=Math.min(1,G.intro/24);c.fillStyle='rgba(0,0,0,'+a.toFixed(2)+')';c.fillRect(0,0,LW,LH);
     if(G.intro>8)OV.push(()=>txt('Palituaiñ!',LW/2,LH/2,'#ffe8a0',16,'center'))}

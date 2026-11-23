@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='9c12d5c-202611222329';
+window.KEWUN_BUILD='6b389fb-202611222338';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -2834,11 +2834,12 @@ function palEnd(){
   const stop=()=>{held.up=held.down=held.left=held.right=0};
   wrap.addEventListener('touchstart',e=>{
     auInit();
+    if(mode==='palin'&&PG&&!active&&tid!==null&&!onUI(e)){e.preventDefault();palinSwing();return}   // second finger while running = strike
     if(e.touches.length>=2){two=1;stop();if(lp){clearTimeout(lp);lp=null}return}
     if(onUI(e))return;
     e.preventDefault();
     const t=e.changedTouches[0];tid=t.identifier;x0=t.clientX;y0=t.clientY;t0=Date.now();moved=0;two=0;
-    lp=setTimeout(()=>{lp=null;if(!moved&&!two&&mode==='map'&&!active){tid=null;stop();openPause()}},600);
+    lp=setTimeout(()=>{lp=null;if(!moved&&!two&&!active){if(mode==='map'){tid=null;stop();openPause()}else if(mode==='palin'&&PG){tid=null;stop();palinQuit()}}},600);
   },{passive:false});
   const DEAD=24,SWITCH=1.4;   // bigger dead zone + hysteresis so small wobbles don't steer
   wrap.addEventListener('touchmove',e=>{
@@ -2847,6 +2848,11 @@ function palEnd(){
     if(!t)return;
     e.preventDefault();
     const dx=t.clientX-x0,dy=t.clientY-y0,dist=Math.hypot(dx,dy);
+    if(mode==='palin'&&PG&&!active){   // on the palin field: free 8-way running, like a joystick
+      if(dist>12){moved=1;if(lp){clearTimeout(lp);lp=null}stop();
+        if(Math.abs(dx)>dist*.38)held[dx>0?'right':'left']=1;if(Math.abs(dy)>dist*.38)held[dy>0?'down':'up']=1}
+      if(dist>60){const k=40/dist;x0=t.clientX-dx*k;y0=t.clientY-dy*k}
+      return}
     if(dist>DEAD){moved=1;if(lp){clearTimeout(lp);lp=null}
       if(mode==='map'&&!active){
         const ax=Math.abs(dx),ay=Math.abs(dy);
@@ -2871,6 +2877,7 @@ function palEnd(){
         // menu that has just opened under the finger and pick an option before the player sees it
         if(active){if(active.kind==='say'){if(e.cancelable)e.preventDefault();active.a()}}
         else if(mode==='map'){if(e.cancelable)e.preventDefault();interact()}
+        else if(mode==='palin'&&PG){if(e.cancelable)e.preventDefault();palinSwing()}
       }
       tid=null;stop();moved=0;
     }else if(fin){tid=null;stop()}
@@ -5270,6 +5277,8 @@ function updatePalin(){
   // the player
   let dx=(held.right?1:0)-(held.left?1:0),dy=(held.down?1:0)-(held.up?1:0);
   if(dx||dy){const l=Math.hypot(dx,dy),sp=1.45;me.x+=dx/l*sp;me.y+=dy/l*sp;me.an++;me.dir=Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up')}
+  if(PG.touch===undefined)PG.touch=matchMedia('(pointer:coarse)').matches;
+  if(PG.touch&&!me.sw&&me.cd===0&&b.x>me.x-3&&Math.hypot(b.x-me.x,b.y-me.y+2)<12)me.sw=14;
   if(me.sw>0){me.sw--;if(me.sw>6&&me.cd===0&&Math.hypot(b.x-me.x,b.y-me.y+2)<15){palinHit(me,3,(held.up?-1.4:0)+(held.down?1.4:0)+(b.y-me.y)*.06,4.6);palinFx(me.x,me.y-26,'Tak!','#fff6c8')}}
   // the others: one chaser per team goes for the pali, the rest keep their lanes
   for(let tm=0;tm<2;tm++){const mates=PG.pl.filter(p=>p.team===tm&&!p.me),dirX=tm?-1:1;
@@ -5371,7 +5380,8 @@ function renderPalin(c){
   OV.push(()=>{txt(String(G.us),LW/2-14,13,'#8ab4ff',13,'center');txt('–',LW/2,13,'#ffffff',12,'center');txt(String(G.them),LW/2+14,13,'#ff9a8a',13,'center');
     if(cam<30)txt('◀ lafken',14-cam,T+PF.h+20,'#ffd0c0',9);if(cam>PF.w-LW-30)txt('puel ▶',PF.w-cam-14,T+PF.h+20,'#c8e0ff',9,'right');
     const left=Math.max(0,Math.ceil((12600-G.t)/3600));txt(left+"'",LW-8,13,'#ffffff',10,'right');
-    if(G.t<300)txt(S.gloss==='en'?'Arrows: move · A: strike · B: leave':'Flechas: moverse · A: golpear · B: salir',LW/2,LH-6,'#ffffff',9,'center');
+    if(G.t<420){const tc=matchMedia('(pointer:coarse)').matches,en2=S.gloss==='en';
+      txt(tc?(en2?'Drag to run · tap to strike · hold to leave':'Arrastra para correr · toca para golpear · mantén para salir'):(en2?'Arrows: move · A: strike · B: leave':'Flechas: moverse · A: golpear · B: salir'),LW/2,LH-6,'#ffffff',9,'center')}
     for(const f of G.fx){const x=f.x-cam,y=T+f.y-(70-f.life)*.3;txt(f.t,x,y,f.col,11,'center')}});
   if(G.intro>0){const a=Math.min(1,G.intro/24);c.fillStyle='rgba(0,0,0,'+a.toFixed(2)+')';c.fillRect(0,0,LW,LH);
     if(G.intro>8)OV.push(()=>txt('Palituaiñ!',LW/2,LH/2,'#ffe8a0',16,'center'))}

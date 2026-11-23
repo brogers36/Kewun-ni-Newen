@@ -277,11 +277,12 @@ function palEnd(){
   const stop=()=>{held.up=held.down=held.left=held.right=0};
   wrap.addEventListener('touchstart',e=>{
     auInit();
+    if(mode==='palin'&&PG&&!active&&tid!==null&&!onUI(e)){e.preventDefault();palinSwing();return}   // second finger while running = strike
     if(e.touches.length>=2){two=1;stop();if(lp){clearTimeout(lp);lp=null}return}
     if(onUI(e))return;
     e.preventDefault();
     const t=e.changedTouches[0];tid=t.identifier;x0=t.clientX;y0=t.clientY;t0=Date.now();moved=0;two=0;
-    lp=setTimeout(()=>{lp=null;if(!moved&&!two&&mode==='map'&&!active){tid=null;stop();openPause()}},600);
+    lp=setTimeout(()=>{lp=null;if(!moved&&!two&&!active){if(mode==='map'){tid=null;stop();openPause()}else if(mode==='palin'&&PG){tid=null;stop();palinQuit()}}},600);
   },{passive:false});
   const DEAD=24,SWITCH=1.4;   // bigger dead zone + hysteresis so small wobbles don't steer
   wrap.addEventListener('touchmove',e=>{
@@ -290,6 +291,11 @@ function palEnd(){
     if(!t)return;
     e.preventDefault();
     const dx=t.clientX-x0,dy=t.clientY-y0,dist=Math.hypot(dx,dy);
+    if(mode==='palin'&&PG&&!active){   // on the palin field: free 8-way running, like a joystick
+      if(dist>12){moved=1;if(lp){clearTimeout(lp);lp=null}stop();
+        if(Math.abs(dx)>dist*.38)held[dx>0?'right':'left']=1;if(Math.abs(dy)>dist*.38)held[dy>0?'down':'up']=1}
+      if(dist>60){const k=40/dist;x0=t.clientX-dx*k;y0=t.clientY-dy*k}
+      return}
     if(dist>DEAD){moved=1;if(lp){clearTimeout(lp);lp=null}
       if(mode==='map'&&!active){
         const ax=Math.abs(dx),ay=Math.abs(dy);
@@ -314,6 +320,7 @@ function palEnd(){
         // menu that has just opened under the finger and pick an option before the player sees it
         if(active){if(active.kind==='say'){if(e.cancelable)e.preventDefault();active.a()}}
         else if(mode==='map'){if(e.cancelable)e.preventDefault();interact()}
+        else if(mode==='palin'&&PG){if(e.cancelable)e.preventDefault();palinSwing()}
       }
       tid=null;stop();moved=0;
     }else if(fin){tid=null;stop()}
