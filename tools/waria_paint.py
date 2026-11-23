@@ -378,110 +378,140 @@ R.update({k: [hx(c) for c in v] for k, v in {
     'clock': ['#2a2014', '#4a3a24', '#6e5a3a', '#94805a', '#bcaa82', '#e2d4ae', '#fbf2d8'],
     'cold':  ['#06181e', '#0c3038', '#145058', '#24787e', '#4aa4a8', '#8ad4d2', '#d8fbf6']}.items()})
 
-# ------------------------------------------------------------------ mapudungukenoael fillantü: the weight that sits on your tongue
+# ------------------------------------------------------------------ mapudungukenoael fillantü: a floating figure with wings of crossed-out days
+R.update({k: [hx(c) for c in v] for k, v in {
+    'muse':  ['#0f0a12', '#1c1420', '#2b2132', '#3d2f46', '#51405c', '#685474', '#816c8c', '#9c87a6', '#b9a6c0'],
+    'robe':  ['#08060a', '#120d15', '#1c1421', '#271c2e', '#33253c', '#41304b', '#52405c'],
+    'page2': ['#3a3228', '#5e5444', '#857a64', '#ab9f86', '#cdc2a6', '#e8dec4', '#faf4e2']}.items()})
+
+def page_feather(c, base, tip, w0, w1, lift, name, f=0, mark=True):
+    """a feather made of a calendar page: cream paper shaded along its length, a red header at the tip, days crossed out"""
+    (x0, y0), (x1, y1) = base, tip
+    L = math.hypot(x1 - x0, y1 - y0); ux, uy = (x1 - x0) / L, (y1 - y0) / L; nx, ny = -uy, ux
+    poly = [(x0 + nx * w0 / 2, y0 + ny * w0 / 2), (x1 + nx * w1 / 2, y1 + ny * w1 / 2), (x1 + ux * 2, y1 + uy * 2), (x1 - nx * w1 / 2, y1 - ny * w1 / 2), (x0 - nx * w0 / 2, y0 - ny * w0 / 2)]
+    m = c.mask(lambda d: d.polygon(poly, fill=1))
+    ys, xs = np.nonzero(m)
+    if not len(ys): return m
+    t = ((xs - x0) * ux + (ys - y0) * uy) / L; side = ((xs - x0) * nx + (ys - y0) * ny) / max(1, w1 / 2)
+    lum = .86 + lift - t * .26 - side * .12
+    ramp = R['page2']; idx = np.clip(np.floor(lum * (len(ramp) - 1) + (yp.BAYER[ys % 4, xs % 4] - .5) * .2).astype(int), 0, len(ramp) - 1)
+    c.rgb[ys, xs] = np.array(ramp)[idx]; c.a[ys, xs] = True; c.part[ys, xs] = name
+    edge = m & ~(np.roll(m, 1, 0) & np.roll(m, -1, 0) & np.roll(m, 1, 1) & np.roll(m, -1, 1))
+    ey, ex = np.nonzero(edge); c.rgb[ey, ex] = (c.rgb[ey, ex] * .45).astype(np.uint8)   # each page cut out from the next
+    hd = (t > .9) & ~edge[ys, xs]                           # the red header strip of the page
+    c.rgb[ys[hd], xs[hd]] = np.array([(150, 40, 34), (186, 58, 46), (212, 86, 66)])[np.clip((lum[hd] * 3).astype(int) - 1, 0, 2)]
+    for k in range(2, int(L * .8), 4):                        # rows of days, every one crossed out
+        cx_, cy_ = x0 + ux * k, y0 + uy * k
+        for q in (-1, 1):
+            X, Y = int(cx_ + nx * q * w0 / 5), int(cy_ + ny * q * w0 / 5)
+            if 0 <= X < yp.W and 0 <= Y < yp.H and c.part[Y, X] == name: c.px(X, Y, (120, 40, 36) if mark else ramp[2])
+    sp = [(int(x0 + ux * k), int(y0 + uy * k)) for k in range(0, int(L))]   # the shaft
+    for (X, Y) in sp:
+        if 0 <= X < yp.W and 0 <= Y < yp.H and c.part[Y, X] == name: c.px(X, Y, ramp[1])
+    return m
+
+def wing(c, shoulder, wrist, tip, n, side, lift, name, f):
+    """a wing: a bony arm from shoulder to wrist to tip, page-feathers fanning from it in three ranks,
+    long primaries at the tip swept outward, short coverts near the shoulder hanging down"""
+    bone = cr([shoulder, wrist, tip], 10)
+    for rank, (ln, w0, w1, lf) in enumerate([(50, 6, 11, 0), (34, 6, 10, .08), (20, 6, 9, .16)]):
+        cnt = n - rank * 2
+        for k in range(cnt):
+            t = .1 + .9 * k / max(1, cnt - 1); bx, by = bone[int(t * (len(bone) - 1))]
+            ang = math.radians(90 + side * (62 * t ** 1.2) + f * 3 * side)
+            L_ = ln * (.62 + .32 * t) * (1 if rank == 0 else .9)
+            page_feather(c, (bx, by), (bx + math.cos(ang) * L_, by + math.sin(ang) * L_), w0, w1, lift + lf, name, f)
+    taper(c, bone, 6, 3, R['muse'], lift=lift + .1, name=name + 'bone', bulge=1.2)
+
 def fillantu(f):
-    setsize(156, 144); c = Canvas()
-    # shadow that pools and crawls out from under it
-    for k in range(9):
-        x0 = 70 + k * 8; side = -1 if k < 5 else 1
-        pts = cr([(x0, 128), (x0 + side * 18, 134), (x0 + side * (34 + k * 3) + f * side * 2, 138 + (k % 2))], 6)
-        taper(c, pts, 8, 2, R['ash'][:5], lift=-.2, name='shade', bulge=.8)
-    # haunches and the hunched back, spine ridging along it
-    back = smooth_poly([(70, 52), (98, 40), (126, 52), (142, 82), (140, 112), (124, 132), (92, 136), (70, 124), (60, 96), (56, 70)], 7)
-    blob(c, R['ash'], lambda d: d.polygon(back, fill=1), bulge=1.25, lift=.02, name='body')
-    spine = cr([(74, 50), (98, 40), (120, 48), (134, 66), (140, 90)], 8)
-    for k, (x, y) in enumerate(spine[::3]):
-        r_ = 3.6 - k * .08
-        blob(c, R['gaunt'], lambda d, x=x, y=y, r_=r_: d.ellipse([x - r_, y - r_ - 1, x + r_, y + r_ - 1], fill=1), bulge=1.3, lift=.22, name='vert')
-    for k in range(6):                                    # ribs under thin skin
-        pts = cr([(84 + k * 8, 50 + k * 3), (80 + k * 7, 70 + k * 4), (88 + k * 6, 92 + k * 3)], 6)
-        for (x, y) in pts:
-            X, Y = int(x), int(y)
-            if c.part[Y, X] == 'body':
-                c.rgb[Y, X] = np.minimum(255, c.rgb[Y, X].astype(int) + 26).astype(np.uint8)
-                if c.part[Y + 1, X] == 'body': c.rgb[Y + 1, X] = (c.rgb[Y + 1, X] * .62).astype(np.uint8)
-    # sealed eyes along its flank: slits sewn shut
-    for (x, y) in [(102, 76), (116, 90), (96, 104), (124, 110)]:
-        for k in range(-5, 6):
-            Y = y + int(k * k / 14); c.px(x + k, Y, R['ash'][0]); c.px(x + k, Y - 1, R['gaunt'][4]); c.px(x + k, Y + 1, R['ash'][2])
-        for k in range(-4, 5, 3): c.px(x + k, y - 2 + int(k * k / 14), R['gaunt'][6]); c.px(x + k, y + 2 + int(k * k / 14), R['gaunt'][5])   # the stitches
-    # the far arm, a long thin forearm planted on the ground, claws splayed
-    taper(c, cr([(82, 64), (70, 88), (60, 112), (52, 126)], 6), 9, 6, R['ash'], lift=-.05, name='armF', bulge=1.2)
-    for k in range(4):
-        taper(c, [(52, 126), (44 + k * 5, 136), (40 + k * 6, 140)], 3, 1, R['nail'], lift=0, name='claw', bulge=1)
-    # neck reaching forward and down; the long head
-    taper(c, cr([(76, 54), (62, 50), (50, 54)], 6), 18, 14, R['gaunt'], lift=.12, name='neck', bulge=1.2)
-    head = [(54, 34), (60, 44), (58, 58), (54, 70), (46, 84), (38, 94), (28, 96), (20, 90), (16, 76), (15, 58), (20, 42), (34, 33)]
-    blob(c, R['gaunt'], lambda d: d.polygon(cr(head + [head[0]], 4), fill=1), bulge=1.35, lift=.06, name='head')
-    for (x0, y0, x1, y1) in [(20, 40, 44, 36), (22, 45, 46, 42), (26, 50, 42, 48)]:        # a furrowed brow
-        for t in np.linspace(0, 1, 26):
-            X, Y = int(x0 + (x1 - x0) * t), int(y0 + (y1 - y0) * t + math.sin(t * 9) * .8)
-            if c.part[Y, X] == 'head': c.rgb[Y, X] = (c.rgb[Y, X] * .7).astype(np.uint8); c.rgb[Y - 1, X] = np.minimum(255, c.rgb[Y - 1, X].astype(int) + 18).astype(np.uint8)
-    for (ex, ey) in [(26, 60), (44, 58)]:                 # sunken sockets under a heavy brow, a cold pinpoint in each
-        for y in range(ey - 9, ey - 5):
-            for x in range(ex - 8, ex + 8):
-                if c.part[y, x] == 'head': c.rgb[y, x] = (c.rgb[y, x] * (.55 + (ey - 5 - y) * .1)).astype(np.uint8)
-        blob(c, [(3, 2, 5), (8, 6, 11), (15, 12, 19), (24, 20, 28), (34, 29, 38)], lambda d, ex=ex, ey=ey: d.polygon([(ex - 8, ey - 1), (ex - 1, ey - 4), (ex + 7, ey - 3), (ex + 5, ey + 3), (ex - 4, ey + 4)], fill=1), bulge=.7, lift=-.15, name='socket')
-        c.px(ex + (1 if f else 0), ey, (214, 252, 250)); c.px(ex - 1 + (1 if f else 0), ey, (100, 184, 190)); c.px(ex + (1 if f else 0), ey + 1, (50, 110, 120))
-        for k in range(10):                               # hollow cheeks below
-            X, Y = ex - 4 + k, ey + 10 + int(abs(k - 5) * .5)
-            if c.part[Y, X] == 'head': c.rgb[Y, X] = (c.rgb[Y, X] * .6).astype(np.uint8)
-    G = R['gaunt']
-    facet(c, [(24, 44), (34, 36), (50, 37), (55, 46), (42, 49), (26, 51)], G[6])       # forehead
-    facet(c, [(55, 46), (59, 55), (56, 64), (51, 57)], G[2])                          # temple turning away
-    facet(c, [(17, 60), (24, 51), (26, 56), (19, 66)], G[7])                          # the lit temple
-    facet(c, [(18, 67), (29, 65), (33, 70), (22, 73)], G[7]); facet(c, [(42, 65), (53, 63), (55, 69), (45, 72)], G[4])   # cheekbones
-    facet(c, [(20, 74), (31, 74), (29, 81), (21, 81)], G[2]); facet(c, [(44, 74), (54, 72), (51, 80), (44, 80)], G[1])   # hollows
-    facet(c, [(22, 84), (50, 82), (46, 92), (31, 95)], G[4]); facet(c, [(30, 93), (40, 92), (38, 95), (31, 96)], G[6])     # jaw and chin
-    for x in range(20, 54): c.px(x, 50 + (1 if 30 < x < 42 else 0), G[7] if x < 36 else G[5])                            # brow ridge
-    for (ex, ey) in [(26, 60), (44, 58)]:
-        facet(c, [(ex - 8, ey - 1), (ex - 1, ey - 4), (ex + 7, ey - 3), (ex + 5, ey + 3), (ex - 4, ey + 4)], (8, 6, 11), 'socket')
-        for x in range(ex - 7, ex + 6): c.px(x, ey - 4 + (1 if x > ex else 0), (26, 22, 30))
-        c.px(ex + (1 if f else 0), ey, (214, 252, 250)); c.px(ex - 1 + (1 if f else 0), ey, (100, 184, 190)); c.px(ex + (1 if f else 0), ey + 1, (50, 110, 120))
-    for (x, y) in [(34, 72), (35, 72), (33, 73), (36, 73), (34, 74), (35, 74), (34, 75)]: c.px(x, y, (16, 12, 18))     # a nasal cavity
-    c.px(33, 71, G[7]); c.px(36, 75, G[2])
-    # the mouth: stretched ear to ear and zipped shut; teeth pressing through where the zip has given
-    mp = cr([(16, 88), (24, 85), (34, 84), (46, 85), (54, 89)], 6)
-    for k, (x, y) in enumerate(mp):
-        X, Y = int(x), int(y)
-        c.px(X, Y, R['zip'][3] if k % 2 else R['zip'][1]); c.px(X, Y - 1, R['zip'][2] if k % 2 else R['zip'][4]); c.px(X, Y + 1, R['zip'][1] if k % 2 else R['zip'][3])
-        if 10 < k < 18 and k % 3 == 0: c.px(X, Y - 2, (232, 222, 200)); c.px(X, Y + 2, (232, 222, 200))
-        if k % 4 == 0: c.px(X, Y - 3, R['gaunt'][2]); c.px(X, Y + 3, R['gaunt'][2])          # puckered skin at each stitch
-    blob(c, R['zip'], lambda d: d.rounded_rectangle([52, 85, 57, 93], 1, fill=1), bulge=.9, lift=.3, name='pull')
-    # the near arm: impossibly long fingers closed round a stopped clock
-    taper(c, cr([(70, 62), (60, 76), (52, 86)], 6), 10, 7, R['gaunt'], lift=.08, name='arm', bulge=1.2)
-    taper(c, cr([(52, 86), (42, 98), (30, 108)], 6), 7, 6, R['gaunt'], lift=.12, name='arm', bulge=1.2)
-    blob(c, R['gaunt'], lambda d: d.ellipse([47, 81, 57, 91], fill=1), bulge=1.3, lift=.15, name='elbow')
-    for t in np.linspace(0, 1, 12):                       # a tendon standing out on the forearm
-        c.px(int(50 - t * 18), int(88 + t * 18), R['gaunt'][7])
-    blob(c, R['clock'], lambda d: d.ellipse([8, 98, 34, 124], fill=1), bulge=1.1, lift=.15, name='clock')
-    blob(c, [(200, 196, 180), (226, 222, 206), (244, 240, 226)], lambda d: d.ellipse([12, 102, 30, 120], fill=1), bulge=.5, lift=.2, name='dial')
+    setsize(164, 152); c = Canvas()
+    fl = f                                                 # the whole figure bobs as it floats
+    # the far wing, spread up and back to the right, in shadow
+    wing(c, (96, 46 + fl), (122, 18 + fl), (140, 6 + fl), 9, -1, -.12, 'wingF', f)
+    # the near wing, spread toward the hero
+    wing(c, (68, 48 + fl), (42, 18 + fl), (24, 6 + fl), 9, 1, .1, 'wingN', f)
+    # wisps of shadow trailing from the hem, as if it were sinking
+    for k in range(7):
+        x0 = 58 + k * 8
+        taper(c, cr([(x0, 136 + fl), (x0 - 6 + k, 144), (x0 - 12 + k * 2 + f * 2, 151)], 5), 6, 1, R['robe'][:4], lift=-.1, name='wisp', bulge=.9)
+    # a heavy robe like a blanket, wrapped at the hips and pulled by a wind that is not there
+    robe = [(64, 80), (98, 80), (108, 98), (122, 122), (120, 142), (108, 136), (98, 148), (86, 138), (74, 148), (62, 138), (50, 146), (46, 126), (54, 100)]
+    blob(c, R['robe'], lambda d: d.polygon([(x, y + fl) for x, y in robe], fill=1), bulge=1.0, lift=.06, name='robe')
+    for (pts) in [[(70, 84), (62, 110), (56, 138)], [(82, 84), (80, 112), (84, 140)], [(92, 84), (100, 108), (110, 134)], [(66, 92), (88, 96), (104, 92)]]:
+        prev = None
+        for (x, y) in cr([(x, y + fl) for x, y in pts], 30):      # unbroken folds: a dark crease with a lit lip beside it
+            X, Y = int(round(x)), int(round(y))
+            if (X, Y) == prev: continue
+            prev = (X, Y)
+            if c.part[Y, X] == 'robe': c.px(X, Y, R['robe'][0]); c.px(X - 1, Y, R['robe'][5]); c.px(X + 1, Y, R['robe'][2])
+    for x in range(48, 122):                                # a frayed, darned hem
+        for y in range(120, 152):
+            if c.part[y, x] == 'robe' and (y + 1 >= 152 or c.part[y + 1, x] != 'robe'):
+                c.px(x, y, R['robe'][5] if x % 3 else R['robe'][1]); break
+    # torso: gaunt but corded with muscle
+    blob(c, R['muse'], lambda d: d.polygon([(64, 44 + fl), (98, 44 + fl), (96, 66 + fl), (92, 82 + fl), (70, 82 + fl), (66, 66 + fl)], fill=1), bulge=1.1, lift=.04, name='torso')
+    for (box, lift, nm_) in [((64, 44, 81, 58), .2, 'pec'), ((80, 44, 97, 58), .04, 'pec'),
+                             ((73, 58, 81, 64), .2, 'abs'), ((80, 58, 88, 64), .06, 'abs'), ((73, 64, 81, 70), .16, 'abs'), ((80, 64, 88, 70), .02, 'abs'),
+                             ((73, 70, 81, 77), .1, 'abs'), ((80, 70, 88, 77), -.02, 'abs'), ((65, 56, 73, 74), .08, 'obl'), ((88, 56, 96, 74), -.06, 'obl')]:
+        x0, y0, x1, y1 = box
+        blob(c, R['muse'], lambda d, x0=x0, y0=y0, x1=x1, y1=y1: d.ellipse([x0, y0 + fl, x1, y1 + fl], fill=1), bulge=1.25, lift=lift, name=nm_)
+    for k in range(4):                                      # ribs across the flank
+        for t in np.linspace(0, 1, 8):
+            X, Y = int(66 + t * 6), int(60 + k * 4 + t * 2 + fl)
+            if c.part[Y, X] in ('obl', 'torso'): c.px(X, Y, R['muse'][2]); c.px(X, Y - 1, R['muse'][6])
+    # shoulders and the far arm, raised, long fingers spread
+    blob(c, R['muse'], lambda d: d.ellipse([90, 40 + fl, 106, 56 + fl], fill=1), bulge=1.3, lift=-.02, name='delt')
+    taper(c, cr([(100, 48 + fl), (114, 42 + fl), (126, 38 + fl)], 6), 10, 8, R['muse'], lift=-.02, name='armF', bulge=1.25)
+    taper(c, cr([(126, 38 + fl), (136, 30 + fl), (142, 24 + fl)], 6), 8, 6, R['muse'], lift=0, name='armF', bulge=1.25)
+    for k in range(5):
+        a_ = math.radians(-110 + k * 26)
+        taper(c, [(142, 24 + fl), (142 + math.cos(a_) * 8, 24 + fl + math.sin(a_) * 8), (142 + math.cos(a_ + .3) * 15, 24 + fl + math.sin(a_ + .3) * 15)], 3, 1, R['muse'], lift=.05, name='fingF', bulge=1.1)
+    # the head, bowed a little toward the hero; shadow streaming back from it like hair
+    for k in range(6):
+        taper(c, cr([(84, 16 + fl + k * 2), (100, 14 + fl + k * 3 - f), (118, 18 + fl + k * 4), (132, 14 + fl + k * 5 + f * 2)], 5), 4, 1, R['robe'][1:6], lift=-.05, name='hair', bulge=1.0)
+    taper(c, [(80, 46 + fl), (78, 36 + fl)], 10, 9, R['muse'], lift=.1, name='neck', bulge=1.2)
+    head = [(76, 10), (86, 9), (92, 16), (92, 26), (88, 34), (82, 40), (75, 39), (70, 32), (69, 22), (71, 14)]
+    blob(c, R['muse'], lambda d: d.polygon(cr([(x, y + fl) for x, y in head] + [(head[0][0], head[0][1] + fl)], 4), fill=1), bulge=1.3, lift=.12, name='head')
+    G = R['muse']
+    facet(c, [(72, 15 + fl), (80, 10 + fl), (89, 13 + fl), (88, 20 + fl), (74, 21 + fl)], G[7])          # brow plane
+    facet(c, [(89, 13 + fl), (92, 18 + fl), (91, 28 + fl), (88, 23 + fl)], G[3])                         # temple turned away
+    facet(c, [(70, 24 + fl), (76, 26 + fl), (76, 31 + fl), (71, 31 + fl)], G[8])                         # lit cheekbone
+    facet(c, [(84, 26 + fl), (90, 25 + fl), (88, 31 + fl), (84, 31 + fl)], G[4])
+    facet(c, [(73, 33 + fl), (86, 33 + fl), (82, 39 + fl), (76, 39 + fl)], G[5])                         # jaw
+    for x in range(71, 90): c.px(x, 21 + fl, G[8] if x < 80 else G[6])                                  # brow ridge
+    for (ex, ey) in [(75, 24), (85, 23)]:
+        for x in range(ex - 3, ex + 4): c.px(x, ey + fl, (8, 6, 12)); c.px(x, ey + 1 + fl, (20, 14, 26))
+        c.px(ex + (1 if f else 0), ey + fl, (214, 252, 250)); c.px(ex - 1 + (1 if f else 0), ey + fl, (110, 190, 196))
+    for k, x in enumerate(range(71, 88)):                                                                 # the zipped mouth
+        y = 34 + fl + (1 if 74 < x < 84 else 0)
+        c.px(x, y, R['zip'][3] if k % 2 else R['zip'][1]); c.px(x, y - 1, R['zip'][2] if k % 2 else R['zip'][4])
+        if k % 3 == 0: c.px(x, y + 1, (232, 222, 200))
+    blob(c, R['zip'], lambda d: d.rounded_rectangle([86, 33 + fl, 89, 39 + fl], 1, fill=1), bulge=.9, lift=.3, name='pull')
+    # the near arm, reaching down toward the hero with a stopped clock in its fingers
+    blob(c, R['muse'], lambda d: d.ellipse([56, 40 + fl, 72, 56 + fl], fill=1), bulge=1.3, lift=.2, name='delt')
+    taper(c, cr([(62, 50 + fl), (52, 60 + fl), (46, 68 + fl)], 6), 10, 8, R['muse'], lift=.18, name='arm', bulge=1.25)
+    taper(c, cr([(46, 68 + fl), (38, 78 + fl), (32, 86 + fl)], 6), 8, 6, R['muse'], lift=.22, name='arm', bulge=1.25)
+    blob(c, R['clock'], lambda d: d.ellipse([12, 84 + fl, 34, 106 + fl], fill=1), bulge=1.1, lift=.15, name='clock')
+    blob(c, [(200, 196, 180), (226, 222, 206), (244, 240, 226)], lambda d: d.ellipse([15, 87 + fl, 31, 103 + fl], fill=1), bulge=.5, lift=.2, name='dial')
     for a in range(12):
-        X, Y = int(21 + math.cos(a * math.pi / 6) * 7), int(111 + math.sin(a * math.pi / 6) * 7); c.px(X, Y, (60, 50, 40))
-    for t in np.linspace(0, 1, 6): c.px(int(21 + t * 5), int(111 - t * 1), (30, 24, 20)); c.px(21, int(111 - t * 6), (30, 24, 20))   # frozen at "later"
-    for (x0, y0, x1, y1) in [(30, 108, 14, 104), (30, 108, 22, 100), (30, 108, 30, 100), (30, 108, 34, 112), (30, 110, 26, 124)]:
-        taper(c, cr([(x0, y0), ((x0 + x1) // 2, (y0 + y1) // 2 - 3), (x1, y1)], 5), 3, 2, R['gaunt'], lift=.15, name='finger', bulge=1.1)
-        c.px(x1, y1, R['nail'][1])
-    # a calendar page caught on its spine, every day crossed out
-    blob(c, R['paper'], lambda d: d.polygon([(110, 34 - f), (124, 32), (126, 48), (112, 50 - f)], fill=1), bulge=.4, lift=.2, name='page')
-    c.rect(112, 35 - f, 11, 3, (170, 50, 42))
-    for t in range(9): c.px(113 + t, 40 + t // 2, (150, 40, 34))
-    # cold screen-light: a crisp rim on every edge that faces the screen (left), two pixels deep
+        c.px(int(23 + math.cos(a * math.pi / 6) * 6), int(95 + fl + math.sin(a * math.pi / 6) * 6), (60, 50, 40))
+    for t in np.linspace(0, 1, 5): c.px(int(23 + t * 4), int(95 + fl - t), (30, 24, 20)); c.px(23, int(95 + fl - t * 5), (30, 24, 20))
+    for (x1, y1) in [(22, 84), (30, 84), (35, 92), (32, 100)]:
+        taper(c, cr([(32, 86 + fl), ((32 + x1) // 2 + 1, (86 + y1) // 2 + fl - 2), (x1, y1 + fl)], 5), 3, 2, R['muse'], lift=.2, name='finger', bulge=1.1)
+    # cold rim light on everything facing the hero
     lit = np.zeros((yp.H, yp.W), bool)
-    for dx in (1, 2, 3):
-        lit |= c.a & ~np.roll(c.a, dx, 1)
-    lit &= np.isin(c.part, ['head', 'neck', 'arm', 'finger', 'body', 'armF', 'vert', 'elbow'])
+    for dx in (1, 2): lit |= c.a & ~np.roll(c.a, dx, 1)
+    lit &= np.isin(c.part, ['head', 'neck', 'arm', 'finger', 'torso', 'pec', 'obl', 'delt', 'robe', 'abs'])
     ys, xs = np.nonzero(lit)
     for y, x in zip(ys, xs):
-        k = .55 if not c.a[y, x - 1] else .35
-        c.rgb[y, x] = (c.rgb[y, x] * (1 - k) + np.array((110, 205, 214)) * k).astype(np.uint8)
-    for (x, y) in [(14, 104), (22, 100), (30, 100), (34, 112), (26, 124)]:             # knuckles: a lit bump and its shadow
-        c.px(x, y, R['gaunt'][8]); c.px(x + 1, y + 1, R['gaunt'][2])
-    texture(c, ['body', 'head', 'neck', 'arm', 'armF', 'finger'], amt=.10, seed=4)
-    occlude(c, ['head', 'neck', 'arm'], ['body', 'armF'], r=4, k=.5)
-    speculars(c, ['clock', 'vert', 'head'], thr=.86, col=(236, 248, 246))
-    return finish(c, [('neck', 'body'), ('head', 'neck'), ('elbow', 'arm'), ('socket', 'head'), ('arm', 'body'), ('arm', 'neck'), ('armF', 'body'), ('vert', 'body'), ('finger', 'clock'), ('clock', 'arm'), ('claw', 'armF'), ('pull', 'head')],
-                  rim=(120, 210, 220), rimparts=('body', 'head', 'neck', 'arm', 'vert'))
+        k = .5 if not c.a[y, x - 1] else .3
+        c.rgb[y, x] = (c.rgb[y, x] * (1 - k) + np.array((120, 210, 220)) * k).astype(np.uint8)
+    occlude(c, ['arm', 'delt', 'torso', 'pec', 'robe'], ['wingN', 'wingNbone'], r=4, k=.55)
+    occlude(c, ['head', 'neck'], ['torso', 'pec', 'delt', 'hair'], r=3, k=.6)
+    speculars(c, ['clock', 'head', 'pec', 'delt'], thr=.9, col=(240, 236, 246))
+    return finish(c, [('pec', 'pec'), ('abs', 'abs'), ('pec', 'abs'), ('obl', 'abs'), ('obl', 'torso'), ('delt', 'torso'), ('delt', 'arm'), ('arm', 'torso'), ('neck', 'torso'), ('head', 'neck'),
+                      ('torso', 'robe'), ('finger', 'clock'), ('clock', 'arm'), ('armF', 'delt'), ('fingF', 'armF'), ('hair', 'head'), ('pull', 'head')],
+                  rim=(140, 120, 200), rimparts=('wingF', 'robe', 'armF', 'hair'))
 
 # ------------------------------------------------------------------ pañilwe üñüm: a drone, the metal bird of the city
 def drone(f):
