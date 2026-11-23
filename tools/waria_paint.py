@@ -480,30 +480,100 @@ def fillantu(f):
     taper(c, cr([(126, 38 + fl), (136, 30 + fl), (142, 24 + fl)], 6), 8, 6, R['muse'], lift=0, name='armF', bulge=1.25)
     taper(c, cr([(104, 45 + fl), (111, 42 + fl), (118, 39 + fl)], 6), 6, 4, R['muse'], lift=.14, name='bicepF', bulge=1.3)
     taper(c, cr([(129, 34 + fl), (134, 30 + fl), (138, 26 + fl)], 6), 5, 3, R['muse'], lift=.16, name='foreF', bulge=1.3)
-    for k in range(5):
-        a_ = math.radians(-110 + k * 26)
-        taper(c, [(142, 24 + fl), (142 + math.cos(a_) * 8, 24 + fl + math.sin(a_) * 8), (142 + math.cos(a_ + .3) * 15, 24 + fl + math.sin(a_ + .3) * 15)], 3, 1, R['muse'], lift=.05, name='fingF', bulge=1.1)
+    # the raised hand, painted joint by joint: a bony palm, long fingers splayed and hooked like claws
+    M = R['muse']
+    blob(c, M, lambda d: d.polygon([(134, 27 + fl), (136, 18 + fl), (143, 15 + fl), (150, 17 + fl), (152, 24 + fl), (144, 31 + fl)], fill=1), bulge=1.2, lift=.2, name='palmF')
+    for k, (bx, by) in enumerate([(139, 28), (141, 28), (144, 27), (147, 25)]):     # tendons running from wrist to knuckles
+        tx, ty = [(138, 18), (142, 16), (147, 17), (150, 20)][k]
+        for t in np.linspace(.15, .8, 7):
+            X, Y = int(round(bx + (tx - bx) * t)), int(round(by + (ty - by) * t + fl))
+            if c.part[Y, X] == 'palmF': c.px(X, Y, M[7]); c.px(X + 1, Y, M[3])
+    def bone_seg(x0, y0, x1, y1, w0, w1, name, tone):
+        """one finger bone: lit on the edge toward the upper left, dark on the far edge, painted pixel by pixel"""
+        L = max(1e-3, math.hypot(x1 - x0, y1 - y0)); ux, uy = (x1 - x0) / L, (y1 - y0) / L; nx, ny = -uy, ux
+        if nx * -.6 + ny * -.7 < 0: nx, ny = -nx, -ny           # n points toward the light
+        for yy in range(int(min(y0, y1) - 3), int(max(y0, y1) + 4)):
+            for xx in range(int(min(x0, x1) - 3), int(max(x0, x1) + 4)):
+                t = ((xx - x0) * ux + (yy - y0) * uy) / L
+                if t < -.15 or t > 1.1: continue
+                w = (w0 + (w1 - w0) * min(1, max(0, t))) / 2
+                o = (xx - x0) * nx + (yy - y0) * ny
+                if abs(o) > w + .25: continue
+                r_ = o / max(.6, w)
+                col = M[8 if r_ > .55 else 6 if r_ > .05 else 4 if r_ > -.5 else 2] if tone else M[7 if r_ > .55 else 5 if r_ > .05 else 3 if r_ > -.5 else 1]
+                c.px(xx, yy, col); c.part[yy, xx] = name
+    FING = [((135, 24), -172, [5, 4]), ((137, 18), -126, [5, 4, 3]), ((142, 16), -96, [5, 4, 3]), ((147, 17), -64, [5, 4, 3]), ((151, 21), -30, [4, 4, 3])]
+    for k in (4, 3, 2, 1, 0):                                   # back to front: the little finger first
+        (bx, by), ang, segs = FING[k]
+        x, y, a = bx, by + fl, math.radians(ang); joints = []
+        for q, L in enumerate(segs):
+            nx_, ny_ = x + math.cos(a) * L, y + math.sin(a) * L
+            last = q == len(segs) - 1
+            bone_seg(x, y, nx_, ny_, 3.6 - q * .5, 1.4 if last else 3.0 - q * .5, 'fingF%d' % k, k < 3)
+            joints.append((nx_, ny_)); x, y = nx_, ny_; a += math.radians(-18 if k == 0 else 20 if k > 2 else 14)
+        for (jx, jy) in joints[:-1]:                             # a knuckle: lit bump with a crease just past it
+            c.px(int(round(jx)), int(round(jy)), M[8] if k < 3 else M[7])
+        tx, ty = joints[-1]                                      # the nail: long, dark, hooked
+        c.px(int(round(tx)), int(round(ty)), R['nail'][1]); c.px(int(round(tx - math.cos(a) * 1.2)), int(round(ty - math.sin(a) * 1.2)), R['nail'][4])
+    hp_ = np.isin(c.part, ['palmF', 'fingF0', 'fingF1', 'fingF2', 'fingF3', 'fingF4'])   # cut the hand out from the wing behind it
+    ring = (np.roll(hp_, 1, 0) | np.roll(hp_, -1, 0) | np.roll(hp_, 1, 1) | np.roll(hp_, -1, 1)) & ~hp_ & np.isin(c.part, ['wingF', 'wingFbone'])
+    c.rgb[ring] = R['robe'][0]
+    occlude(c, ['palmF', 'fingF0', 'fingF1', 'fingF2', 'fingF3', 'fingF4', 'armF', 'foreF'], ['wingF', 'wingFbone'], r=4, k=.6)
     # the head, bowed a little toward the hero; shadow streaming back from it like hair
     for k in range(6):
-        taper(c, cr([(84, 16 + fl + k * 2), (100, 14 + fl + k * 3 - f), (118, 18 + fl + k * 4), (132, 14 + fl + k * 5 + f * 2)], 5), 4, 1, R['robe'][1:6], lift=-.05, name='hair', bulge=1.0)
+        taper(c, cr([(84, 16 + fl + k * 2), (100, 14 + fl + k * 3 - f), (112, 20 + fl + k * 4), (122, 20 + fl + k * 5 + f * 2)], 5), 4, 1, R['robe'][1:6], lift=-.05, name='hair', bulge=1.0)
     taper(c, [(80, 46 + fl), (78, 36 + fl)], 10, 9, R['muse'], lift=.1, name='neck', bulge=1.2)
-    head = [(76, 10), (86, 9), (92, 16), (92, 26), (88, 34), (82, 40), (75, 39), (70, 32), (69, 22), (71, 14)]
-    blob(c, R['muse'], lambda d: d.polygon(cr([(x, y + fl) for x, y in head] + [(head[0][0], head[0][1] + fl)], 4), fill=1), bulge=1.3, lift=.12, name='head')
-    G = R['muse']
-    facet(c, [(72, 15 + fl), (80, 10 + fl), (89, 13 + fl), (88, 20 + fl), (74, 21 + fl)], G[7])          # brow plane
-    facet(c, [(89, 13 + fl), (92, 18 + fl), (91, 28 + fl), (88, 23 + fl)], G[3])                         # temple turned away
-    facet(c, [(70, 24 + fl), (76, 26 + fl), (76, 31 + fl), (71, 31 + fl)], G[8])                         # lit cheekbone
-    facet(c, [(84, 26 + fl), (90, 25 + fl), (88, 31 + fl), (84, 31 + fl)], G[4])
-    facet(c, [(73, 33 + fl), (86, 33 + fl), (82, 39 + fl), (76, 39 + fl)], G[5])                         # jaw
-    for x in range(71, 90): c.px(x, 21 + fl, G[8] if x < 80 else G[6])                                  # brow ridge
-    for (ex, ey) in [(75, 24), (85, 23)]:
-        for x in range(ex - 3, ex + 4): c.px(x, ey + fl, (8, 6, 12)); c.px(x, ey + 1 + fl, (20, 14, 26))
-        c.px(ex + (1 if f else 0), ey + fl, (214, 252, 250)); c.px(ex - 1 + (1 if f else 0), ey + fl, (110, 190, 196))
-    for k, x in enumerate(range(71, 88)):                                                                 # the zipped mouth
-        y = 34 + fl + (1 if 74 < x < 84 else 0)
-        c.px(x, y, R['zip'][3] if k % 2 else R['zip'][1]); c.px(x, y - 1, R['zip'][2] if k % 2 else R['zip'][4])
-        if k % 3 == 0: c.px(x, y + 1, (232, 222, 200))
-    blob(c, R['zip'], lambda d: d.rounded_rectangle([86, 33 + fl, 89, 39 + fl], 1, fill=1), bulge=.9, lift=.3, name='pull')
+    # the head: a gaunt skull turned three-quarters toward the hero, shaded from a relief map so every plane catches the light
+    head = [(74, 7), (84, 5), (92, 9), (95, 17), (94, 27), (90, 35), (84, 41), (78, 44), (72, 43), (68, 37), (66, 29), (66, 21), (69, 12)]
+    hm = c.mask(lambda d: d.polygon(cr([(x, y + fl) for x, y in head] + [(head[0][0], head[0][1] + fl)], 4), fill=1))
+    dist = np.zeros(hm.shape); er = hm.copy()
+    for k in range(9):
+        dist += er; er = er & np.roll(er, 1, 0) & np.roll(er, -1, 0) & np.roll(er, 1, 1) & np.roll(er, -1, 1)
+    Y_, X_ = np.mgrid[0:yp.H, 0:yp.W].astype(float); Y_ -= fl
+    def g(cx_, cy_, sx, sy, amp): return amp * np.exp(-(((X_ - cx_) / sx) ** 2 + ((Y_ - cy_) / sy) ** 2))
+    h = np.sqrt(np.clip(dist / 9, 0, 1)) * 5.0
+    h += g(75, 18.5, 9, 1.6, 1.3)                                 # heavy brow ridge
+    h += g(73, 25, 1.4, 5, 1.5) + g(71, 30, 1.8, 1.6, 1.2)        # nose bridge and tip, jutting toward the hero
+    h -= g(70, 22.5, 2.2, 2.2, 1.9) + g(80, 22.5, 3.2, 2.6, 2.3)  # deep eye sockets, the near one larger
+    h += g(84, 28, 3.5, 2, 1.1) + g(68, 28, 1.6, 2, .7)           # cheekbones
+    h -= g(82, 33, 3.5, 3, 1.4) + g(89, 17, 3, 4, .8)             # hollow cheek, sunken temple
+    h += g(74, 35, 6, 1.6, .5) - g(74, 37.5, 6, 1, .5)            # the lips pressed shut over the zipper
+    h += g(74, 42, 4, 2, .8)                                      # a long chin
+    h -= g(77, 13, 1.2, 4, .4) + g(81, 13, 1.2, 4, .3)            # two furrows of a held frown
+    gx = np.roll(h, -1, 1) - np.roll(h, 1, 1); gy = np.roll(h, -1, 0) - np.roll(h, 1, 0)
+    nz = 2.0; nl = np.sqrt(gx ** 2 + gy ** 2 + nz ** 2)
+    Lx, Ly, Lz = -.55, -.62, .56
+    sh = (-gx * Lx - gy * Ly + nz * Lz) / nl
+    ys, xs = np.nonzero(hm)
+    v = sh[ys, xs] * 1.3 + .02 - np.clip(-h[ys, xs] + 1.5, 0, 3) * .08     # crevices get no light
+    v -= (xs - 66) / 30 * .22                                                 # the far side of the skull falls into shadow
+    idx = np.clip(np.floor(v * (len(M) - 1) + (yp.BAYER[ys % 4, xs % 4] - .5) * .7).astype(int), 0, len(M) - 1)
+    c.rgb[ys, xs] = np.array(M)[idx]; c.a[ys, xs] = True; c.part[ys, xs] = 'head'
+    P = lambda x, y, col: c.px(x, y + fl, col)
+    # eyes: dark wet slits deep in the sockets, a cold pinpoint in each, a lit lower lid
+    for (ex, ey, w) in [(70, 23, 2), (80, 23, 3)]:
+        for x in range(ex - w, ex + w + 1): P(x, ey, (6, 4, 10)); P(x, ey - 1, M[1])
+        P(ex - w - 1, ey, M[2]); P(ex + w + 1, ey, M[2])
+        for x in range(ex - w + 1, ex + w): P(x, ey + 1, M[5])
+        P(ex - (0 if f else 1), ey, (150, 226, 232)); P(ex + 1 - (0 if f else 1), ey, (96, 176, 186))
+    for x in range(67, 87): P(x, 19, M[8] if x < 78 else M[6]) if c.part[19 + fl, x] == 'head' else None   # lit edge of the brow
+    for (x, y) in [(71, 31), (72, 31)]: P(x, y, M[0])                                                     # nostril
+    P(70, 30, M[8]); P(71, 29, M[7])                                                                       # glint on the nose tip
+    for y in range(24, 30): P(74, y, M[3]) if y > 25 else None                                             # shadow side of the nose
+    for (x, y) in [(84, 30), (85, 31), (86, 32), (86, 33)]: P(x, y, M[2])                                  # crease under the cheekbone
+    # the zipper sewn through the mouth, the lips puckered around the teeth of it
+    for k, x in enumerate(range(68, 84)):
+        y = 36 + (1 if 71 < x < 80 else 0)
+        P(x, y, R['zip'][4] if k % 2 else R['zip'][2]); P(x, y + 1, R['zip'][1] if k % 2 else R['zip'][3])
+        P(x, y - 1, M[6] if x < 77 else M[4])                                                              # upper lip catching light
+        P(x, y + 2, M[1] if k % 2 else M[2])                                                               # lower lip in shadow
+        if k % 2 == 0: P(x, y - 2, (196, 180, 170)); P(x, y + 3, (150, 132, 124))                         # the stitches holding it
+    for x in range(69, 81, 3): P(x, 40, M[6])                                                              # chin catching light
+    for (x, y) in [(90, 18), (91, 20), (90, 22), (91, 24)]: P(x, y, M[3])                                   # a vein over the temple
+    blob(c, R['zip'], lambda d: d.rounded_rectangle([83, 36 + fl, 86, 42 + fl], 1, fill=1), bulge=.9, lift=.3, name='pull')
+    # an ear, small and flattened against the skull
+    blob(c, M, lambda d: d.ellipse([88, 23 + fl, 93, 31 + fl], fill=1), bulge=1.1, lift=-.1, name='ear')
+    P(90, 26, M[1]); P(90, 27, M[1]); P(89, 25, M[5])
     # the near arm, reaching down toward the hero with a stopped clock in its fingers
     blob(c, R['muse'], lambda d: d.ellipse([56, 40 + fl, 72, 56 + fl], fill=1), bulge=1.3, lift=.2, name='delt')
     taper(c, cr([(62, 50 + fl), (52, 60 + fl), (46, 68 + fl)], 6), 10, 8, R['muse'], lift=.18, name='arm', bulge=1.25)
@@ -554,17 +624,10 @@ def fillantu(f):
     for (x, y, col) in [(36, 78, 6), (37, 78, 7), (38, 79, 6), (35, 79, 4), (34, 80, 3)]:   # thumb pressed over the top
         c.px(x, y + fl, M[col]); c.part[y + fl, x] = 'finger'
     for x in range(30, 40): c.px(x, 92 + fl, M[0]) if c.part[92 + fl, x] in ('palm', 'finger') else None
-    # the raised hand: knuckles and long dark nails on each finger
-    for k in range(5):
-        a_ = math.radians(-110 + k * 26)
-        kx, ky = 142 + math.cos(a_) * 8, 24 + fl + math.sin(a_) * 8
-        tx, ty = 142 + math.cos(a_ + .3) * 15, 24 + fl + math.sin(a_ + .3) * 15
-        c.px(int(kx), int(ky), M[6]); c.px(int(kx) + 1, int(ky), M[3])
-        c.px(int(round(tx)), int(round(ty)), R['nail'][3]); c.px(int(round((tx * 2 + kx) / 3)), int(round((ty * 2 + ky) / 3)), M[1])
     # cold rim light on everything facing the hero
     lit = np.zeros((yp.H, yp.W), bool)
     for dx in (1, 2): lit |= c.a & ~np.roll(c.a, dx, 1)
-    lit &= np.isin(c.part, ['head', 'neck', 'arm', 'bicep', 'fore', 'finger', 'palm', 'torso', 'pec', 'obl', 'delt', 'robe', 'abs', 'staff'])
+    lit &= np.isin(c.part, ['head', 'ear', 'neck', 'arm', 'bicep', 'fore', 'finger', 'palm', 'torso', 'pec', 'obl', 'delt', 'robe', 'abs', 'staff'])
     ys, xs = np.nonzero(lit)
     for y, x in zip(ys, xs):
         k = .5 if not c.a[y, x - 1] else .3
@@ -574,7 +637,7 @@ def fillantu(f):
     speculars(c, ['clock', 'head', 'pec', 'delt', 'spike'], thr=.9, col=(220, 214, 232))
     texture(c, ['torso', 'pec', 'abs', 'obl', 'arm', 'armF', 'delt', 'head', 'robe'], amt=.08, seed=7)
     return finish(c, [('pec', 'pec'), ('abs', 'abs'), ('pec', 'abs'), ('obl', 'abs'), ('obl', 'torso'), ('delt', 'torso'), ('delt', 'arm'), ('arm', 'torso'), ('neck', 'torso'), ('head', 'neck'),
-                      ('torso', 'robe'), ('bicep', 'arm'), ('fore', 'arm'), ('bicepF', 'armF'), ('foreF', 'armF'), ('palm', 'arm'), ('staff', 'robe'), ('staff', 'arm'), ('spike', 'clock'), ('armF', 'delt'), ('fingF', 'armF'), ('hair', 'head'), ('pull', 'head')],
+                      ('torso', 'robe'), ('bicep', 'arm'), ('fore', 'arm'), ('bicepF', 'armF'), ('foreF', 'armF'), ('palm', 'arm'), ('staff', 'robe'), ('staff', 'arm'), ('spike', 'clock'), ('armF', 'delt'), ('hair', 'head'), ('pull', 'head'), ('ear', 'head'), ('palmF', 'foreF'), ('palmF', 'armF')] + [('fingF%d' % k, 'palmF') for k in range(5)] + [('fingF%d' % k, 'fingF%d' % (k + 1)) for k in range(4)],
                   rim=(140, 120, 200), rimparts=('wingF', 'robe', 'armF', 'hair'))
 
 # ------------------------------------------------------------------ pañilwe üñüm: a drone, the metal bird of the city
@@ -597,13 +660,41 @@ def drone(f):
     arcs(c, 37, 38, [3 + 2 * f], math.pi * .15, math.pi * .85, (250, 214, 120))
     return finish(c, [('cam', 'body'), ('lens', 'cam'), ('arm', 'body'), ('horn', 'body'), ('motor', 'arm')], rim=(180, 200, 230), rimparts=('body', 'cam', 'arm'))
 
+from PIL import Image
+def encode2(frames, keep=10):
+    """median cut leaves out small bright accents (an eye, a glint); reserve a few palette slots for the colours it maps worst"""
+    CH = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&()*+,-/:;<=>?@[]^_{|}~'
+    allpx = np.concatenate([f[f[..., 3] > 0][:, :3] for f in frames]).astype(int)
+    q = Image.fromarray(allpx.reshape(1, -1, 3).astype(np.uint8)).quantize(colors=len(CH) - keep, method=Image.Quantize.MEDIANCUT)
+    pal = [tuple(v) for v in np.array(q.getpalette()[:(len(CH) - keep) * 3]).reshape(-1, 3)]
+    uniq = np.unique(allpx, axis=0)
+    for _ in range(keep):
+        P_ = np.array(pal); d = ((uniq[:, None, :] - P_[None]) ** 2).sum(2).min(1)
+        k = int(d.argmax())
+        if d[k] < 900: break
+        pal.append(tuple(uniq[k]))
+    pal = np.array(pal)
+    out = []
+    for f in frames:
+        rows = []
+        for y in range(f.shape[0]):
+            r = ''
+            for x in range(f.shape[1]):
+                if f[y, x, 3] == 0: r += '.'; continue
+                d = ((pal - f[y, x, :3].astype(int)) ** 2).sum(1); r += CH[int(d.argmin())]
+            rows.append(r)
+        out.append(rows)
+    used = sorted({ch for rows in out for r in rows for ch in r if ch != '.'})
+    return {ch: '#%02x%02x%02x' % tuple(pal[CH.index(ch)]) for ch in used}, out
+
 if __name__ == '__main__':
     here = os.path.dirname(os.path.abspath(__file__)); out = {}
     from PIL import Image
     strip = []
     for name, fn in [('wirarun', wirarun), ('dewu', dewu), ('drone', drone), ('ngoyngoyun', ngoyngoyun), ('ngamlef', ngamlef), ('fillantu', fillantu)]:
         big = [fn(0), fn(1)]; small = [yp.half(b) for b in big]
-        pb, fb = yp.encode(big); ps, fs = yp.encode(small)
+        enc = encode2 if name == 'fillantu' else yp.encode
+        pb, fb = enc(big); ps, fs = enc(small)
         out[name] = {'big': {'pal': pb, 'f': fb}, 'small': {'pal': ps, 'f': fs}}
         im = Image.new('RGBA', (160, 150), (40, 50, 70, 255)); b0 = Image.fromarray(big[0]); im.paste(b0, ((160 - b0.width) // 2, 150 - b0.height), b0)
         strip.append(im)
