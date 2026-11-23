@@ -258,6 +258,13 @@ const SONGS={
   {w:'square',v:.05,t:'G3 B3 D4 B3 G3 B3 D4 B3 | C4 E4 G4 E4 C4 E4 G4 E4 | A3 C4 E4 C4 A3 C4 E4 C4 | G3 B3 D4 B3 G3 B3 D4 B3'},
   {w:'triangle',v:.4,t:'G2 - - - D3 - - - | C3 - - - G2 - - - | A2 - - - E3 - - - | G2 - - - D2 - - -'},
   {d:1,v:.22,t:'k . . . h . . . | k . h . s . . .'}]}),
+ wariaG:mkSong({bpm:128,loop:1,ch:[   // Santiago while its silences stand: C minor, a pulsing bass that will not settle, a clock ticking, a melody that keeps sinking
+  {w:'square',v:.07,t:'C5 - - - Eb5 - D5 - | C5 - - - G4 - - - | Ab4 - - - C5 - Bb4 - | G4 - - - - - - - | C5 - - - Eb5 - F5 - | Gb5 - - - F5 - Eb5 - | D5 - - - Eb5 - D5 - | C5 - - - B4 - - - | Eb5 - D5 - C5 - Bb4 - | Ab4 - - - G4 - - - | F4 - G4 - Ab4 - B4 - | C5 - - - - - - - | G5 - - - Gb5 - F5 - | Eb5 - - - D5 - - - | Db5 - C5 - B4 - C5 - | C5 - - - . - - -'},
+  {w:'triangle',v:.52,t:'C2 C2 C3 C2 C2 C2 C3 C2 | Ab1 Ab1 Ab2 Ab1 Ab1 Ab1 Ab2 Ab1 | F1 F1 F2 F1 F1 F1 F2 F1 | G1 G1 G2 G1 G1 G1 G2 G1 | C2 C2 C3 C2 C2 C2 C3 C2 | Gb1 Gb1 Gb2 Gb1 Gb1 Gb1 Gb2 Gb1 | Ab1 Ab1 Ab2 Ab1 G1 G1 G2 G1 | C2 C2 C3 C2 B1 B1 B2 B1'},
+  {w:'sawtooth',v:.035,t:'C3 - - - - - - - | Ab2 - - - - - - - | F2 - - - - - - - | G2 - - - B2 - - - | C3 - - - - - - - | Gb2 - - - - - - - | Ab2 - - - G2 - - - | C3 - - - B2 - - -'},
+  {w:'square',v:.028,t:'C4 Eb4 G4 Eb4 C4 Eb4 G4 Eb4 | C4 Eb4 Ab4 Eb4 C4 Eb4 Ab4 Eb4 | C4 F4 Ab4 F4 C4 F4 Ab4 F4 | B3 D4 G4 D4 B3 D4 G4 D4'},
+  {w:'sine',v:.05,t:'G6 . . . . . . . | . . . . G6 . . . | G6 . . . . . . . | . . . . G6 . . . '},
+  {d:1,v:.46,t:'k . h k s . h h | k . h k s h k h | k . h k s . h h | k h k h s . s s'}]}),
  waria:mkSong({bpm:112,loop:1,ch:[
   {w:'square',v:.08,t:'C5 - E5 G5 - E5 | A5 - G5 E5 - - | F5 - A5 C6 - A5 | G5 - E5 C5 - - | C5 - E5 G5 - A5 | B5 - A5 G5 - E5 | F5 - E5 D5 - B4 | C5 - - - - -'},
   {w:'triangle',v:.45,t:'C3 - G3 - C3 - | A2 - E3 - A2 - | F2 - C3 - F2 - | G2 - D3 - G2 -'},

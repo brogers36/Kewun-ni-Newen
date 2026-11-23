@@ -229,7 +229,9 @@ const lofsOpen=()=>Object.keys(LOFS).filter(r=>S&&S.flags[RFLAG[r]]);
 const awake=r=>!!S.flags[RFLAG[r]];
 const SONGSET={chumpall:{battle:'deepBattle',boss:'deepBoss'},ngoyman:{battle:'ngoyBattle',boss:'ngoyBoss'},puelmapu:{puel:'puel',puelG:'puelG',lof:'puelLof',lofG:'puelLofG',cave:'puelCave',battle:'puelBattle',boss:'puelBoss',ngen:'puelNgen'},williche:{lof:'wilLof',lofG:'wilLofG',cave:'wilCave',battle:'wilBattle',boss:'wilBoss',ngen:'wilNgen'},pewenche:{nag:'pew',nagG:'pewG',lof:'pewLof',lofG:'pewLofG',cave:'pewCave',battle:'pewBattle',boss:'pewBoss',ngen:'pewNgen'},nagche:{lof:'nagLof',lofG:'nagLofG',cave:'nagCave',battle:'nagBattle',boss:'nagBoss',ngen:'nagNgen'}};
 const rsong=n=>{const r=M&&M.region;return (SONGSET[r]&&SONGSET[r][n])||n};
-function mapSong(){const m=MAPS[CUR];if(m.ngenmap)return rsong(awake(m.region)?'ngen':'cave');const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'||s==='pew'||s==='wil'||s==='puel'))return rsong(s+'G');return rsong(s)}
+function mapSong(){const m=MAPS[CUR];
+  if(m.region==='santiago'&&!(S&&S.flags&&S.flags.yewen_won)&&(m.song==='waria'||m.song==='cave'))return 'wariaG';   // Santiago stays tense until every silence and Yewen have fallen
+  if(m.ngenmap)return rsong(awake(m.region)?'ngen':'cave');const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'||s==='pew'||s==='wil'||s==='puel'))return rsong(s+'G');return rsong(s)}
 function loadMap(id,x,y,quiet){TALKER=null;
   CUR=id;M=MAPS[id];
   grid=M.rows.map(r=>r.split(''));
