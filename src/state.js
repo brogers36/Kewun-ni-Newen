@@ -115,7 +115,7 @@ const ET={
   dewu:{name:'dewü',hp:34,atk:12,xp:22,gold:[11,15],bs:44,twice:1},
   ngoyngoyun:{name:'Ngoyngoyün',hp:230,atk:18,xp:220,gold:[250,250],boss:true,bs:140,spres:1,seals:['llako','umawtu','amutu']},
   ngamlef:{name:'Ngamleftripael',hp:250,atk:19,xp:240,gold:[260,260],boss:true,bs:132,spres:1,seals:['küpa','tripa','wüñotrekakil']},
-  fillantu:{name:'Mapudungukenoael fillantü',hp:270,atk:20,xp:260,gold:[280,280],boss:true,bs:138,spres:1,seals:['nepe','tripa','umawtukil']},
+  fillantu:{name:'Mapudungukenoael fillantü',hp:270,atk:20,xp:260,gold:[280,280],boss:true,bs:138,fly:true,spres:1,seals:['nepe','tripa','umawtukil']},
   epunamun:{name:'Epunamun',hp:240,atk:14,xp:220,gold:[300,300],boss:true,bs:100,spres:1,seals:['umawtu','nepe','tranakil']},
   ngoyam:{name:'ngoyman am',hp:34,atk:12,xp:22,gold:[12,16],bs:46},
   kalku:{name:'Fütra Kalku',hp:250,atk:18,xp:260,gold:[350,350],boss:true,bs:92,spres:1,seals:['llüka','wüñotreka','ñamkil']},

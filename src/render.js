@@ -713,7 +713,7 @@ function renderBattle(){
     else if(fi>=0){cx=150+fi*Math.max(30,sz+8);bse=98}
     else{const gm=grd.length,m=Math.max(1,gm-1),sp=Math.min(26,Math.round(46/m));cx=152+gi*12;bse=(gm===1?136:108)+gi*sp}
     let y=bse-cvs.height+4+Math.round(Math.sin(frame/16+i));if(y<4)y=4+Math.round(Math.sin(frame/16+i));
-    if(Tt.fly&&e.gr<=0)y-=26+Math.round(Math.sin(frame/9+i)*3);
+    if(Tt.fly&&e.gr<=0)y-=(Tt.boss?10:26)+Math.round(Math.sin(frame/9+i)*3);
     if(B.intro>0)y+=Math.round(B.intro*1.5);
     e.px=cx;e.py=y+cvs.height/3;
     if(/^ngoyman/.test(e.t)&&!e.dead){

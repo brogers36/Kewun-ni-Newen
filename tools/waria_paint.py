@@ -478,7 +478,7 @@ def ear_wing(c, root, lead, ribs, flap, lift, name, side):
 def fillantu(f):
     """a chonchón as big as a house: a kalku's head flying on its own ears, the mouth zipped shut so it cannot even cry"""
     setsize(164, 152); c = Canvas()
-    fl = f * 2; M = R['muse']
+    fl = f * 2 - 8; M = R['muse']                               # drawn high on the canvas: it hovers
     flap = 5 if f else -2                                       # the ears beat between the two frames
     # long lank hair hanging behind and below the head
     for k in range(16):
@@ -487,11 +487,11 @@ def fillantu(f):
         pts = [(x0, 38 + fl + abs(side_) * 8), (x0 + side_ * 12 + sw, 80 + fl), (x0 + side_ * 16 + sw * 1.5 - f * 2, 112 + fl), (x0 + side_ * 14 + sw * 2 - f * 3, 128 + (k * 7) % 12 + fl)]
         taper(c, cr(pts, 8), 4.5, 1, R['robe'][1:7], lift=-.05 + (k % 3) * .05, name='hair', bulge=1.0)
     # the far ear-wing (to the left of the face), a little foreshortened
-    ear_wing(c, (56, 64 + fl), [(56, 56 + fl), (44, 34 + fl), (24, 16 + fl), (4, 10 + fl)],
-             [(4, 30 + fl), (10, 50 + fl), (24, 66 + fl), (40, 78 + fl)], flap, -.04, 'wingF', -1)
+    ear_wing(c, (56, 64 + fl), [(56, 56 + fl), (42, 36 + fl), (22, 24 + fl), (4, 22 + fl)],
+             [(3, 40 + fl), (9, 58 + fl), (23, 70 + fl), (40, 80 + fl)], flap, -.04, 'wingF', -1)
     # the near ear-wing
-    ear_wing(c, (112, 62 + fl), [(112, 52 + fl), (126, 30 + fl), (146, 12 + fl), (162, 6 + fl)],
-             [(161, 26 + fl), (156, 48 + fl), (144, 66 + fl), (128, 78 + fl)], flap, .06, 'wingN', 1)
+    ear_wing(c, (112, 62 + fl), [(112, 52 + fl), (128, 34 + fl), (148, 22 + fl), (162, 20 + fl)],
+             [(162, 38 + fl), (157, 56 + fl), (145, 70 + fl), (128, 80 + fl)], flap, .06, 'wingN', 1)
     # the stopped clock, hung from the zipper pull on a chain, swinging under the chin
     sw = 2 if f else -2
     for k in range(7):
@@ -592,6 +592,35 @@ def fillantu(f):
     # chin and jaw
     for x in range(70, 84, 2): P(x, 112, M[8])
     line([(86, 117), (98, 108), (111, 89)], M[1], 30, 2)
+    # ---- finer detail
+    rs = np.random.RandomState(11)
+    for _ in range(26):                                              # age spots and blotches on the scalp and temples
+        x, y = rs.uniform(60, 112), rs.uniform(32, 56)
+        if c.part[int(y + fl), int(x)] == 'head':
+            P(x, y, M[3]); P(x + 1, y, M[4]) if rs.rand() < .5 else None
+    for (x, y) in [(101, 80), (58, 61)]: P(x, y, M[1]); P(x + 1, y, M[2])                      # moles
+    for k in range(14):                                              # sparse brow hairs, combed outward
+        for (bx, sgn, w0) in ((63, -1, 8), (91, 1, 10)):
+            t = k / 13; x = bx + (t - .5) * w0 * 2; y = 57.5 - math.sin(t * math.pi) * 2
+            P(x, y, M[1]); P(x + sgn * .8, y - .8, M[2]) if k % 2 else None
+    line([(58, 54), (63, 60), (67, 66), (66, 74), (63, 79)], M[7], 40); line([(58.8, 54), (63.8, 60), (67.8, 66), (66.8, 74), (63.8, 79)], M[2], 40)   # an old scar through the far brow and eye
+    for k in range(4): P(61 + k * 1.2, 57 + k * 2.6, (180, 164, 152)); P(65 - k * 1.2 + 1, 57 + k * 2.6, (180, 164, 152))   # its stitches
+    for k in range(3): line([(73, 63 + k * 2.2), (79, 62.4 + k * 2.2)], M[3], 10)        # creases across the bridge of the nose
+    for (ex, ey, w) in [(63, 68, 5), (91, 68, 7)]:
+        P(ex - w + 1, ey - 2, M[8]); P(ex + w - 1, ey - 2, M[6])                                   # wet glint on each lid
+        for k in range(-w, w + 1, 2): P(ex + k, ey - 3, M[0])                                       # lashes
+        for (x, y) in cr([(ex - w, ey + 7), (ex, ey + 8), (ex + w, ey + 6.5)], 30):              # the eyes' light falling faintly on the cheek
+            X, Y = int(round(x)), int(round(y + fl))
+            if c.part[Y, X] == 'head': c.rgb[Y, X] = (c.rgb[Y, X] * .75 + np.array((70, 150, 160)) * .25).astype(np.uint8)
+    for (x0, y0, x1, y1) in [(98, 84, 100, 96), (102, 82, 105, 92), (59, 84, 60, 94)]:          # deep vertical lines in the hollow cheeks
+        line([(x0, y0), (x1, y1)], M[1], 14); line([(x0 - 1, y0), (x1 - 1, y1)], M[5], 14)
+    line([(75, 93), (76, 99)], M[2], 8); line([(78, 93), (79, 99)], M[2], 8); line([(76.5, 93), (77.5, 99)], M[6], 8)   # the groove above the lip
+    line([(66, 101), (71, 99.6), (76, 100.4), (79, 99.4), (86, 100.2), (95, 101)], M[8], 50)           # the bow of the upper lip
+    line([(61, 107), (63, 112), (66, 116)], M[1], 14); line([(98, 107), (95, 113), (90, 117)], M[1], 14)  # lines dragging the mouth down to the chin
+    line([(71, 115), (76, 116.5), (81, 115)], M[3], 16); P(76, 113, M[8]); P(77, 113, M[7])          # the cleft and point of the chin
+    for k in range(9):                                                # stubble of hair at the temples, running back to the crown
+        for (hx_, sg) in ((57, -1), (112, 1)):
+            y = 44 + k * 2.2; P(hx_ - sg * (k % 2), y, R['robe'][3]); P(hx_ - sg * (1 + k % 2), y + 1, R['robe'][2])
     blob(c, R['zip'], lambda d: d.rounded_rectangle([84, 103 + fl, 89, 116 + fl], 1, fill=1), bulge=.9, lift=.3, name='pull')
     # cold rim light on edges facing the hero
     lit = np.zeros((yp.H, yp.W), bool)
