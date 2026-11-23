@@ -9,7 +9,7 @@ function engage(e){
   if(e.pre)say(e.pre,go);else go();
 }
 function relabel(){const cnt={},seen={};B.en.forEach(e=>cnt[e.t]=(cnt[e.t]||0)+1);
-  B.en.forEach(e=>{seen[e.t]=(seen[e.t]||0)+1;if(e.label)return;e.label=ET[e.t].name+(cnt[e.t]>1||ET[e.t].name==='laftrache'&&B.en.length>1?' '+'ABCDE'[seen[e.t]-1]:'')})}
+  B.en.forEach(e=>{seen[e.t]=(seen[e.t]||0)+1;if(e.label)return;e.label=GR(ET[e.t].name)+(cnt[e.t]>1||ET[e.t].name==='laftrache'&&B.en.length>1?' '+'ABCDE'[seen[e.t]-1]:'')})}
 function progK(){const F=S.flags||{};return ['ngen','ngen2','ngen3','ngen4','ngen5'].filter(k=>F[k]).length+(F.won?1:0)}
 const YEWEN_KIN=['wenangkun','illkun','llukalfe','ayentufe','profe'];
 const YEWEN_CALL={wenangkun:['la pena que se queda callada. Despiértala (nepe-).','the sorrow that keeps quiet. Wake it (nepe-).'],
@@ -155,6 +155,7 @@ function resolve(r,kil,tg,ei){
   const form=r+(kil?'kil':'')+ENDS[ei];
   const vg=VG[r],gl={es:(kil?vg.nes:vg.es)[ei],en:(kil?vg.nen:vg.en)[ei]};
   const lines=[L(S.name,form+'!',gl.es,gl.en)];
+  if(!coll||n>1)track('-nge / -mu / -mün',ei===need);
   if(ei!==need){
     sfx('bad');
     if(coll)lines.push(N('Los wekufü se miran confundidos. Les hablas a todos y son '+numP(n)+': para '+(n===2?'dos':'tres o más')+' se usa -'+ENDS[need]+'.',
@@ -539,6 +540,7 @@ function ngenQuiz(qb){
     const opts=Q.o.map((o,i)=>({m:Array.isArray(o)?(en?o[1]:o[0]):o,v:i}));
     for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
     choose({m:'«'+Q.m+'»',es:Q.es,en:Q.en},opts,v=>{
+      {const op=Q.o.map(o=>Array.isArray(o)?(en?o[1]:o[0]):o);track('pregunta del ngen',v===Q.a,{m:'«'+Q.m+'»',es:Q.es,en:Q.en},op,op[Q.a])}
       if(v===Q.a){sfx('lvl');B.flash=16;B.shake=10;qb.hp=0;B.qok=1;
         say([N('Respondes, y la palabra sale de ti como un golpe de luz. '+qb.label+' cae.','You answer, and the word leaves you like a blow of light. '+qb.label+' falls.')],victory);}
       else{sfx('bad');qb.stag=0;const rg=Math.max(4,Math.round(ET[qb.t].hp*(.15+Math.random()*.25)));qb.hp=Math.min(ET[qb.t].hp,qb.hp+rg);
@@ -547,6 +549,7 @@ function ngenQuiz(qb){
   });
 }
 function victory(){
+  S.beaten=S.beaten||{};S.beatW=S.beatW||{};B.en.forEach(e=>{S.beaten[e.t]=(S.beaten[e.t]||0)+1;if(typeof M!=='undefined'&&M&&M.name&&!S.beatW[e.t])S.beatW[e.t]=M.name});
   if(B.o.final){const st=B.en[0].t;
     if(st==='ngoyman1')return ngoyStage(2);
     if(st==='ngoyman2')return ngoyStage(3);
@@ -717,7 +720,8 @@ function lanForm(e){return +e.t.slice(-1)}
 function lanKewun(e){
   const en=S.gloss==='en',form=lanForm(e),n=S.hm?2+form:3;
   B.lanUsed=B.lanUsed||[];const left=LAN_LOFS.filter(l=>!B.lanUsed.includes(l[0])),lofP=(left.length?left:LAN_LOFS)[rnd((left.length?left:LAN_LOFS).length)];
-  const pool=lanPool(),qs=[];while(qs.length<n&&pool.length)qs.push(pool.splice(rnd(pool.length),1)[0]);
+  const pool=lanPool(),qs=[];for(const m of missList()){if(qs.length>=Math.ceil(n/2))break;if(m.q.m&&m.q.m[0]!=='⧉'&&m.t!=='palin'&&m.t!=='trafkintu (números)')qs.push({q:m.q,o:m.o.slice().sort(()=>Math.random()-.5),a:m.a})}
+  while(qs.length<n&&pool.length){const p=pool.splice(rnd(pool.length),1)[0];if(!qs.some(x=>x.q.m===p.q.m&&x.q.es===p.q.es))qs.push(p)}
   say([Object.assign(L(e.label,'Lan kewün!','¡Muerte de la lengua!','Death of the language!'),{fx:()=>{sfx('bad');B.flash=18;B.shake=14}}),
     N(e.label+' lanza el lan kewün sobre '+lanName({lof:lofP},false)+'. Si fallas una sola de sus '+n+' preguntas, ese lof olvidará todo su mapudungun: perderás 6 piwke y tu newen (la barra verde) no se cargará más contra esta forma.',
       e.label+' casts lan kewün on '+lanName({lof:lofP},true)+'. Miss even one of its '+n+' questions and that lof will forget all its Mapudungun: you will lose 6 hearts, and your newen (the green bar) will not charge again against this form.'),
@@ -726,7 +730,7 @@ function lanKewun(e){
     if(i>=qs.length)return win();
     const q=qs[i];
     choose(Object.assign({},q.q,{es:'('+(i+1)+'/'+qs.length+') '+(q.q.es||''),en:'('+(i+1)+'/'+qs.length+') '+(q.q.en||'')}),q.o.map(o=>({m:o,v:o})),v=>{
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');lose(q.a)}},false,true)}
+      track('lan kewün',v===q.a,q.q,q.o,q.a);if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');lose(q.a)}},false,true)}
   function lose(ans){
     B.lanUsed.push(lofP[0]);B.noSp=e;const d=6*HPQ;S.hp=Math.max(1,S.hp-d);
     B.lanScene={lof:lofP,good:0,t:0};

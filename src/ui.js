@@ -40,8 +40,10 @@ function say(lines,cb){
     const w=dlg.querySelector('.who'),m=dlg.querySelector('.m'),g=dlg.querySelector('.g'),pc=dlg.querySelector('.por');
     const pt=portraitFor(l);if(pt&&pc){pc.width=pt.width;pc.height=pt.height;pc.getContext('2d').drawImage(pt,0,0);dlg.classList.add('hasp')}else dlg.classList.remove('hasp');
     w.textContent=l.who||'';w.style.display=l.who?'':'none';
-    m.textContent=l.m||'';m.style.display=l.m?'':'none';
-    const gt=(S&&S.nogloss&&l.m)?'':G(l);g.textContent=gt;g.style.display=gt?'':'none';
+    m.textContent=GR(l.m)||'';m.style.display=l.m?'':'none';
+    const full=G(l),hid=!!(S&&S.nogloss&&l.m&&full);g.textContent=hid?'':full;g.style.display=full&&!hid?'':'none';
+    let rv=dlg.querySelector('.rv');if(!rv){rv=document.createElement('button');rv.className='rv';rv.textContent='?';dlg.appendChild(rv)}
+    rv.style.display=hid?'':'none';rv.onclick=e=>{e.stopPropagation();g.textContent=full;g.style.display='';rv.style.display='none';S.peek=(S.peek||0)+1};
     dlg.style.display='block';SAYT=performance.now();if(l.fx)l.fx();};
   active={kind:'say',a(){i++;if(i>=lines.length){dlg.style.display='none';active=null;cb&&cb()}else{sfx('move');show()}},b(){this.a()}};
   show();
@@ -52,19 +54,23 @@ function choose(prompt,opts,cb,cancel,one,onSel){
   const pe=menu.querySelector('.p'),le=menu.querySelector('.list');
   pe.innerHTML='';le.innerHTML='';le.classList.toggle('one',!!one);
   if(prompt){if(prompt.mh){const d=document.createElement('div');d.innerHTML=prompt.mh;d.style.lineHeight='1.7';pe.appendChild(d)}
-    if(prompt.m){const d=document.createElement('div');d.className='m';d.textContent=prompt.m;pe.appendChild(d)}
+    if(prompt.m){const d=document.createElement('div');d.className='m';d.textContent=GR(prompt.m);pe.appendChild(d)}
     const g=G(prompt);if(g){const d=document.createElement('div');d.className='g';d.textContent=g;pe.appendChild(d)}}
+  const ng=!!(S&&S.nogloss);
   let idx=opts.findIndex(o=>!o.dis);if(idx<0)idx=0;const t0=performance.now();
   const pick=k=>{menu.style.display='none';active=null;sfx('ok');cb(opts[k].v!==undefined?opts[k].v:k)};
   const btns=opts.map((o,k)=>{const b=document.createElement('button');b.className='opt';
-    b.innerHTML='<span class="om">'+esc(o.m||'')+'</span>'+(o.g?'<span class="og">'+esc(o.g)+'</span>':'');
+    const mp=o.m&&!_isEsp(o.m);b.innerHTML='<span class="om">'+esc(GRm(o.m||''))+'</span>'+(o.g?'<span class="og'+(ng&&mp?' hid':'')+'">'+esc(o.g)+'</span>':'');
     if(o.dis)b.disabled=true;b.onclick=()=>{if(!o.dis&&performance.now()-t0>250)pick(k)};
     b.onmouseenter=()=>{if(!o.dis&&idx!==k){idx=k;hl()}};le.appendChild(b);return b});
+  if(ng){const hide=[...pe.querySelectorAll('.g')].filter(()=>prompt&&prompt.m);hide.forEach(d=>d.classList.add('hid'));
+    if(hide.length||le.querySelector('.og.hid')){const rv=document.createElement('button');rv.className='rv';rv.textContent='?';
+      rv.onclick=e=>{e.stopPropagation();menu.querySelectorAll('.hid').forEach(d=>d.classList.remove('hid'));rv.remove();S.peek=(S.peek||0)+1};pe.appendChild(rv)}}
   const hl=()=>{btns.forEach((b,k)=>b.classList.toggle('sel',k===idx));if(onSel)onSel(idx,opts[idx])};
   active={kind:'menu',a(){if(!opts[idx].dis)pick(idx)},
     b(){if(cancel){menu.style.display='none';active=null;sfx('move');cb(null)}},
     mv(d){let n=idx;for(let t=0;t<opts.length;t++){n=(n+d+opts.length)%opts.length;if(!opts[n].dis)break}idx=n;sfx('move');hl();btns[idx].scrollIntoView({block:'nearest'})}};
   menu.style.display='block';menu.scrollTop=0;menu.style.setProperty('--st','0px');hl();
 }
-function showBanner(m,g){if(S&&S.nogloss&&m)g='';banner.querySelector('b').textContent=m;banner.querySelector('span').textContent=g;banner.style.display='block';clearTimeout(showBanner.t);showBanner.t=setTimeout(()=>banner.style.display='none',2200)}
+function showBanner(m,g){if(S&&S.nogloss&&m)g='';banner.querySelector('b').textContent=GR(m);banner.querySelector('span').textContent=g;banner.style.display='block';clearTimeout(showBanner.t);showBanner.t=setTimeout(()=>banner.style.display='none',2200)}
 

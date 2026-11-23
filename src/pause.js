@@ -10,10 +10,12 @@ function openPause(){
     {m:'Dungun',g:en?'Words learned':'Palabras aprendidas',v:'words'},
     {m:'Küdaw',g:en?'Quest log':'Misiones y pistas',v:'kudaw'},
     {m:'Mapa',g:en?'Progress by land':'Avance por tierra',v:'mapa'},
+    {m:'Kimeltun'+(missList().length?' · '+missList().length:''),g:en?'Practice, wekufü chillka, learning report':'Repaso, wekufü chillka, informe de aprendizaje',v:'kim'},
     {m:'Trariwe · '+(S.pieces||[]).length+'/5',g:en?'Pieces of the ancient sash':'Pedazos del trariwe antiguo',v:'trariwe'},
     {m:en?'Hints: '+(S.hints?'on':'off'):'Pistas: '+(S.hints?'sí':'no'),g:en?'Show how many each ending addresses':'Mostrar a cuántos se dirige cada terminación',v:'hints'},
     {m:en?'Gloss: English':'Glosa: Español',g:en?'Switch to Spanish':'Cambiar a inglés',v:'lang'},
     {m:'Re mapudungun: '+(S.nogloss?(en?'yes':'sí'):'no'),g:en?'Hide the translation of Mapudungun lines':'Ocultar la traducción de las líneas en mapudungun',v:'nogloss'},
+    {m:'Grafemario: '+GRAF_NAME[GRAF],g:en?'Unificado → Azümchefe → Ragileo':'Unificado → Azümchefe → Ragileo',v:'graf'},
     {m:AU.muted?(en?'Music: off':'Música: no'):(en?'Music: on':'Música: sí'),g:'N',v:'mus'},
     {m:en?'Title screen':'Volver al inicio',g:en?'Your progress is saved':'Se guarda tu avance',v:'title'},
     {m:en?'Close':'Cerrar',v:'x'}],v=>{
@@ -32,6 +34,8 @@ function openPause(){
         N('Con los cinco trokiñ, el trariwe completo podrá atravesar la niebla de Ti Fütra Ngoymatulfe, al oeste del camino del mar.','With all five trokiñ, the complete trariwe will be able to pass through the fog of Ti Fütra Ngoymatulfe, west of the sea road.')])}
     else if(v==='kudaw')say(questLines());
     else if(v==='mapa')say(mapaLines());
+    else if(v==='kim')openKim();
+    else if(v==='graf'){setGraf({u:'a',a:'r',r:'u'}[GRAF]);openPause()}
     else if(v==='nogloss'){S.nogloss=S.nogloss?0:1;persist();openPause()}
     else if(v==='book')openBook(()=>openPause());
     else if(v==='hints'){S.hints=!S.hints;persist();openPause()}
@@ -40,6 +44,14 @@ function openPause(){
   },true);
 }
 
+
+function openKim(){const en=S.gloss==='en',n=missList().length,b=Object.keys(S.beaten||{}).length;
+  choose({m:'Kimeltun',es:'Aprender',en:'Learning'},[
+    {m:'Ngüneduamün',g:(en?'Practice: 10 questions':'Repaso: 10 preguntas')+(n?(en?', '+n+' you have missed':', '+n+' que te han costado'):''),v:'p'},
+    {m:'Wekufü chillka · '+b,g:en?'The wekufü you have beaten':'Los wekufü que has vencido',v:'b'},
+    {m:en?'Learning report':'Informe de kimün',g:en?'For you or your teacher: copy or print':'Para ti o tu profe: copiar o imprimir',v:'r'},
+    {m:en?'Back':'Volver',v:'x'}],v=>{
+    if(v==='p')practice();else if(v==='b')openBestiary(openKim);else if(v==='r')openReport(openKim);else openPause()},true)}
 
 /* ---------- Küdaw: quest log ---------- */
 function questLines(){

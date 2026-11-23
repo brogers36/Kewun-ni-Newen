@@ -115,7 +115,7 @@ function renderCut(){
 const CAM={x:0,y:0};
 const DYN=new Set(['Ł','@','^','Ñ','D','F','C','K','S','I','X','v','P','m','g','p','k','L','G','B','O','q','Q','N','J','H','E','A','j']);
 const BOB=new Set(['P','m','g','p','k']);
-function bubble(x,y,text){OV.push(()=>{ctx.font='bold 13px ui-monospace,Menlo,Consolas,monospace';const w=ctx.measureText(text).width+12,bx=Math.round(x*2-w/2),by=Math.round(y*2-26);
+function bubble(x,y,text){text=GRm(text);OV.push(()=>{ctx.font='bold 13px ui-monospace,Menlo,Consolas,monospace';const w=ctx.measureText(text).width+12,bx=Math.round(x*2-w/2),by=Math.round(y*2-26);
   ctx.fillStyle='#181018';ctx.fillRect(bx-2,by-2,w+4,24);ctx.fillStyle='#fffaf0';ctx.fillRect(bx,by,w,20);ctx.fillStyle='#181018';ctx.fillRect(x*2-3,by+20,6,4);ctx.fillStyle='#fffaf0';ctx.fillRect(x*2-1,by+20,2,2);
   ctx.fillStyle='#2a1a3a';ctx.textAlign='center';ctx.fillText(text,x*2,by+15);ctx.textAlign='left'})}
 function renderMap(){
@@ -296,7 +296,7 @@ function renderMap(){
   if(M.bg==='lagoon'){c.fillStyle=S.flags.ngen?'rgba(120,200,255,.08)':'rgba(60,30,90,.22)';c.fillRect(0,VY,LW,VH)}
   atmos(c);
   if(CT)ctLight(c,glows);
-  drawHUD(c);
+  drawHUD(c);if(PALIN)drawPalin(c);
 }
 // palin wiño: a long wooden stick held at the hip, its curved head sweeping the ground
 function drawWino(c,hx,hy,tx,ty,d){

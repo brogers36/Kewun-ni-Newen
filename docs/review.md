@@ -437,3 +437,16 @@ Ciclo de tiempo por tipo de tierra (cambia cada 3-7 minutos reales). Todo ⚠:
 - Chillka: entrada "Antü, mawün, pire".
 - Wekufü del tiempo: con mawün aparece un mawün wekufü, con pire un pire wekufü, con kürüf una bandada de chonchon.
 - (Nov 22) Brandon: globos de la gente con verbos: **"Küme antüngey"**, **"Tromüley"**, **"Mawünküley"**, **"Alün mawi"**, **"Pireley"**, **"Kürüfküley"**.
+
+### Tanda 23 · aprender más (Nov 22)
+- **Grafemarios** (Menú → Grafemario: Unificado → Azümchefe → Ragileo). El juego está escrito en Unificado y se convierte al mostrarlo (diálogos, preguntas, opciones, globos, carteles, nombres de wekufü; no el nombre del jugador). ⚠ **Revisa las tablas**:
+  - Azümchefe: tr→tx, ng→g, g→q, d→z (ch, ll, ñ, ü sin cambio).
+  - Ragileo: tr→x, ch→c, ll→j, ng→g, g→q, ñ→h, ü→v, d→z. No convierto sh, ni las interdentales (l̲, n̲, t̲), que el juego no escribe.
+  - Ejemplo Ragileo: "Trawüleaiñ? Chumül amuaymi?" → "Xawvleaih? Cumvl amuaymi?"; "Llanka" → "Janka"; "Ñanku" → "Hanku". ¿Se convierten también los nombres propios mapuche?
+- **Ngüneduamün** 'repaso' (Menú → Kimeltun): 10 preguntas, primero las que el jugador ha fallado. ⚠ el nombre: ¿"ngüneduamün" (pensar, reflexionar) sirve para 'repasar', o prefieres otra palabra? "Kimeltun" para el submenú 'aprender/enseñar' ⚠.
+- **Armar verbos** (en el repaso y al final de cada trawün): küdaw- + -ymi → küdawimi; amu- + -yngu → amuyngu; amu- + -la- + -a- + -n → amulayan; amu- + -ke- + -ymi → amukeymi; iya- + -la- + -iñ → iyalaiñ; "Chumül amuaymi?". Reglas: consonante + -n → -ün, consonante + -y… → -i…, la + a → laya.
+- **Wekufü chillka**: una página por cada wekufü vencido: ⚠ "Fey ta X." 'este es X'; ⚠ "X mew müley." 'vive en X'. Las descripciones del folclor son mías, en castellano/inglés: revisa sobre todo anchümalleñ, wallepeñ, kamawetu, trawko, witranalwe, walichu, Elëngasëm.
+- **Palin** (Nagche lof, junto al corral): ⚠ "Palituaiñ?" '¿jugamos palin?'; ⚠ "Kom pu che!"; ⚠ "Pikun / Willi / Puel / Lafken püle!" 'hacia el norte/sur/este/oeste'; "Lefnge!", "Lefmu!", "Küpange!", "Amutunge!"; ⚠ "Kiñe / Epu / Küla raya!" (¿se dice "raya" en mapudungun para el punto del palin?); ⚠ "Iñchiñ wewiñ!" '¡ganamos!'; ⚠ "Ka antü!" '¡otro día!'; "palife" 'jugador de palin'.
+- **Trafkintu** (Puelche lof): ⚠ "Trafkintuaiñ?" '¿hacemos trafkintu?'; ⚠ "Kiñe kofke: mari ngülliw." (precio con números); ⚠ "Kimimi!" '¡sabes!'. Nota: uso ngülliw (piñón) como moneda, como en el resto del juego.
+- **Informe de kimün** para el profe: precisión por tema, raíces, lecciones, palabras más falladas; copiar o imprimir/PDF.
+- **Re mapudungun** ahora también oculta la traducción de las preguntas y de las opciones en mapudungun; un botón **?** la muestra (el informe cuenta cuántas veces se usó).

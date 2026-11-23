@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='c145879-202611221743';
+window.KEWUN_BUILD='04434f0-202611221837';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -49,7 +49,15 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #dlg .more{position:absolute;right:.6em;bottom:.3em;color:#e8d49a;animation:bl 1s infinite}
 @keyframes bl{50%{opacity:0}}
 #menu,#dlg{z-index:20}#menu{display:none;max-height:50%;overflow:auto}#menu::before{top:calc(4px + var(--st,0px));z-index:3}#menu::after{bottom:calc(4px - var(--st,0px));z-index:3}
-#menu .p{margin-bottom:.45em}
+#menu .p{margin-bottom:.45em;position:relative}
+.hid{display:none!important}
+.rv{position:absolute;right:6px;top:4px;z-index:4;width:1.9em;height:1.9em;border-radius:50%;border:2px solid #ffe8a0;background:#2a1a3a;color:#ffe8a0;font:bold 1em ui-monospace,monospace;cursor:pointer;padding:0}
+#menu .p .rv{top:-2px;right:0}
+#report{display:none;position:fixed;inset:0;z-index:40;background:rgba(8,6,20,.82);align-items:center;justify-content:center}
+#report .rb{background:#f8f2e4;color:#1a1020;max-width:min(92vw,720px);max-height:88vh;display:flex;flex-direction:column;border:4px solid #3a2a50;border-radius:6px}
+#report pre{margin:0;padding:14px;overflow:auto;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap}
+#report .rr{display:flex;gap:8px;padding:10px;border-top:2px solid #3a2a50;justify-content:flex-end}
+#report button{font:bold 14px ui-monospace,monospace;padding:8px 12px;background:#3a2a50;color:#ffe8a0;border:0;border-radius:4px;cursor:pointer}
 #menu .p .m{font-weight:bold;font-size:1.1em;color:#fff}
 #menu .p .g{color:#d4f0e2;font-style:italic;font-size:1.1em}
 #menu .list{display:grid;grid-template-columns:1fr 1fr;gap:.35em}
@@ -716,8 +724,10 @@ function say(lines,cb){
     const w=dlg.querySelector('.who'),m=dlg.querySelector('.m'),g=dlg.querySelector('.g'),pc=dlg.querySelector('.por');
     const pt=portraitFor(l);if(pt&&pc){pc.width=pt.width;pc.height=pt.height;pc.getContext('2d').drawImage(pt,0,0);dlg.classList.add('hasp')}else dlg.classList.remove('hasp');
     w.textContent=l.who||'';w.style.display=l.who?'':'none';
-    m.textContent=l.m||'';m.style.display=l.m?'':'none';
-    const gt=(S&&S.nogloss&&l.m)?'':G(l);g.textContent=gt;g.style.display=gt?'':'none';
+    m.textContent=GR(l.m)||'';m.style.display=l.m?'':'none';
+    const full=G(l),hid=!!(S&&S.nogloss&&l.m&&full);g.textContent=hid?'':full;g.style.display=full&&!hid?'':'none';
+    let rv=dlg.querySelector('.rv');if(!rv){rv=document.createElement('button');rv.className='rv';rv.textContent='?';dlg.appendChild(rv)}
+    rv.style.display=hid?'':'none';rv.onclick=e=>{e.stopPropagation();g.textContent=full;g.style.display='';rv.style.display='none';S.peek=(S.peek||0)+1};
     dlg.style.display='block';SAYT=performance.now();if(l.fx)l.fx();};
   active={kind:'say',a(){i++;if(i>=lines.length){dlg.style.display='none';active=null;cb&&cb()}else{sfx('move');show()}},b(){this.a()}};
   show();
@@ -728,21 +738,25 @@ function choose(prompt,opts,cb,cancel,one,onSel){
   const pe=menu.querySelector('.p'),le=menu.querySelector('.list');
   pe.innerHTML='';le.innerHTML='';le.classList.toggle('one',!!one);
   if(prompt){if(prompt.mh){const d=document.createElement('div');d.innerHTML=prompt.mh;d.style.lineHeight='1.7';pe.appendChild(d)}
-    if(prompt.m){const d=document.createElement('div');d.className='m';d.textContent=prompt.m;pe.appendChild(d)}
+    if(prompt.m){const d=document.createElement('div');d.className='m';d.textContent=GR(prompt.m);pe.appendChild(d)}
     const g=G(prompt);if(g){const d=document.createElement('div');d.className='g';d.textContent=g;pe.appendChild(d)}}
+  const ng=!!(S&&S.nogloss);
   let idx=opts.findIndex(o=>!o.dis);if(idx<0)idx=0;const t0=performance.now();
   const pick=k=>{menu.style.display='none';active=null;sfx('ok');cb(opts[k].v!==undefined?opts[k].v:k)};
   const btns=opts.map((o,k)=>{const b=document.createElement('button');b.className='opt';
-    b.innerHTML='<span class="om">'+esc(o.m||'')+'</span>'+(o.g?'<span class="og">'+esc(o.g)+'</span>':'');
+    const mp=o.m&&!_isEsp(o.m);b.innerHTML='<span class="om">'+esc(GRm(o.m||''))+'</span>'+(o.g?'<span class="og'+(ng&&mp?' hid':'')+'">'+esc(o.g)+'</span>':'');
     if(o.dis)b.disabled=true;b.onclick=()=>{if(!o.dis&&performance.now()-t0>250)pick(k)};
     b.onmouseenter=()=>{if(!o.dis&&idx!==k){idx=k;hl()}};le.appendChild(b);return b});
+  if(ng){const hide=[...pe.querySelectorAll('.g')].filter(()=>prompt&&prompt.m);hide.forEach(d=>d.classList.add('hid'));
+    if(hide.length||le.querySelector('.og.hid')){const rv=document.createElement('button');rv.className='rv';rv.textContent='?';
+      rv.onclick=e=>{e.stopPropagation();menu.querySelectorAll('.hid').forEach(d=>d.classList.remove('hid'));rv.remove();S.peek=(S.peek||0)+1};pe.appendChild(rv)}}
   const hl=()=>{btns.forEach((b,k)=>b.classList.toggle('sel',k===idx));if(onSel)onSel(idx,opts[idx])};
   active={kind:'menu',a(){if(!opts[idx].dis)pick(idx)},
     b(){if(cancel){menu.style.display='none';active=null;sfx('move');cb(null)}},
     mv(d){let n=idx;for(let t=0;t<opts.length;t++){n=(n+d+opts.length)%opts.length;if(!opts[n].dis)break}idx=n;sfx('move');hl();btns[idx].scrollIntoView({block:'nearest'})}};
   menu.style.display='block';menu.scrollTop=0;menu.style.setProperty('--st','0px');hl();
 }
-function showBanner(m,g){if(S&&S.nogloss&&m)g='';banner.querySelector('b').textContent=m;banner.querySelector('span').textContent=g;banner.style.display='block';clearTimeout(showBanner.t);showBanner.t=setTimeout(()=>banner.style.display='none',2200)}
+function showBanner(m,g){if(S&&S.nogloss&&m)g='';banner.querySelector('b').textContent=GR(m);banner.querySelector('span').textContent=g;banner.style.display='block';clearTimeout(showBanner.t);showBanner.t=setTimeout(()=>banner.style.display='none',2200)}
 
 
 /* ============================================================
@@ -1761,7 +1775,7 @@ n_rupu:{region:'nagche',name:'Nagche rüpü',g:{es:'El camino a los llanos',en:'
 n_lof:{region:'nagche',name:'Nagche lof',g:{es:'La comunidad de los llanos',en:'The lowland community'},floor:',',bg:'field',song:'lof',
  doors:{'3,3':{to:'n_ruka1',x:6,y:7},'10,6':{to:'n_trawun',x:6,y:7}},
  edges:{left:{to:'n_rupu',x:30,y:7},right:{to:'n_kullin',x:1,y:7,req:'nag_lonko',reqMsg:[N('Antes de seguir, habla con el lonko de este lof. Está junto al kütral.','Before you go on, speak with the lonko of this lof. He is by the fire.')]}},
- ents:[{id:'ntk',kind:'npc',look:'kona',x:11,y:3,dir:'down',fixed:1,talk:()=>nutkTalk('n_lof'),bub:['Nütramkayaiñ?','Mari mari!']},
+ ents:[{id:'palife',kind:'npc',look:'walker',x:31,y:7,dir:'left',fixed:1,talk:()=>palinTalk(),bub:['Palituaiñ?','Kom pu che!']},{id:'ntk',kind:'npc',look:'kona',x:11,y:3,dir:'down',fixed:1,talk:()=>nutkTalk('n_lof'),bub:['Nütramkayaiñ?','Mari mari!']},
    {id:'chuchu',kind:'npc',look:'kuku',fem:1,x:5,y:10,talk:()=>chuchuTalk(),bub:['Na küme mi küpan!']},
    {id:'nlonko',kind:'npc',look:'lonko2',x:18,y:7,talk:()=>nLonkoTalk(),bub:['Mari mari!']},
    {id:'machi_nag',kind:'npc',look:'machi',fem:1,x:19,y:5,dir:'down',fixed:1,talk:()=>machiTalk('nag'),bub:['Mari mari!','Lawen...']},
@@ -1906,7 +1920,7 @@ p_lil:{region:'pewenche',name:'Lil mapu',g:{es:'Los riscos de lava (zona difíci
  ents:[{kind:'enemy',x:10,y:5,party:['kutral','kutral','kutral']},{kind:'enemy',x:20,y:8,party:['fkura','kutral']},{kind:'enemy',x:7,y:10,party:['nirivilu','kutral','kura']},{kind:'enemy',x:28,y:5,party:['fkura','fkura']}]},
 p_pillan:{region:'pewenche',name:'Pillañ inaltu',g:{es:'Al pie del volcán',en:'At the foot of the volcano'},floor:',',bg:'mount',song:'pew',pal:'ash',trees:'pewen',
  edges:{left:{to:'p_pire',x:30,y:7},down:{to:'p_lil',x:16,y:1}},stairs:{to:'pd1',x:1,y:4},konew:{'3,4':K5},
- ents:[{id:'kona3',kind:'npc',look:'kona',x:24,y:8,talk:()=>kona3Talk(),bub:['Cherufe...']},
+ ents:[{id:'trafkintufe',kind:'npc',look:'seller',fem:1,x:10,y:8,dir:'down',fixed:1,talk:()=>trafkintuTalk(),bub:['Trafkintuaiñ?','Mari mari!']},{id:'kona3',kind:'npc',look:'kona',x:24,y:8,talk:()=>kona3Talk(),bub:['Cherufe...']},
    {kind:'enemy',x:8,y:3,party:['kutral','kutral','kura']},{kind:'enemy',x:17,y:9,party:['kura','kura']},{kind:'enemy',x:14,y:3,party:['kutral','pire','kutral']}]},
 pd1:{region:'pewenche',name:'Cherufe ñi ruka · 1',g:{es:'La morada del Cherufe (piso 1)',en:"The Cherufe's lair (floor 1)"},floor:'_',bg:'cave3',song:'cave',dungeon:1,pal:'pewcave',lava:1,
  edges:{left:{to:'p_pillan',x:28,y:4}},stairs:{to:'pd2',x:1,y:2},
@@ -3229,7 +3243,7 @@ function stoneTalk(id){
     if(i>=qs.length){S.flags[sf]=1;pzOpen();sfx('lvl');S.xp+=4;persist();return say([praise(),L('Kura','Tuteley! Amunge.','¡Muy bien! Pasa.','Well done! Go on through.'),N('La puerta de piedra se abre. +4 kimün.','The stone door opens. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat(S.hm?[]:[{m:'Chillka',g:S.gloss==='en'?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
       if(v==='_book')return openBook(()=>ask(i));
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');const hd=S.hm?heroHurt():0;say([L('Kura','Fey no...','Eso no...','Not that...'),N((hd?'La piedra te golpea (−'+hd+'). ':'')+'Vuelve a intentarlo desde el principio.',(hd?'The stone strikes you (−'+hd+'). ':'')+'Try again from the beginning.')],()=>ask(0))}},false,false)}
+      if(trk('kura (piedras)',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');const hd=S.hm?heroHurt():0;say([L('Kura','Fey no...','Eso no...','Not that...'),N((hd?'La piedra te golpea (−'+hd+'). ':'')+'Vuelve a intentarlo desde el principio.',(hd?'The stone strikes you (−'+hd+'). ':'')+'Try again from the beginning.')],()=>ask(0))}},false,false)}
 }
 const WARPS={lafkenche:[{m:'Lafken inaltu',es:'Entrada de la cueva (orilla)',en:'Cave entrance (lagoon shore)',to:['inaltu',21,5]},{m:'Lafkenche lof',es:'El lof de la costa',en:'The coast lof',to:['lof',17,9]}],
   nagche:[{m:'Fütra mawida',es:'Entrada de la guarida (monte)',en:'Lair entrance (forest)',to:['n_mawida',28,4]},{m:'Nagche lof',es:'El lof de los llanos',en:'The lowland lof',to:['n_lof',17,9]}],
@@ -3510,7 +3524,7 @@ function nweavTalk(){
         N('Te da epu mari (20) ngülliw y un lawen. +3 kimün.','She gives you epu mari (20) ngülliw and a lawen. +3 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_b'}]),v=>{
       if(v==='_b')return openBook(()=>ask(i));
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Domo','Fey no...','Eso no...','Not that one...')],()=>ask(0))}},false,false)}
+      if(trk('tejido',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Domo','Fey no...','Eso no...','Not that one...')],()=>ask(0))}},false,false)}
 }
 function pewKidsTalk(){
   const en=S.gloss==='en';
@@ -3826,7 +3840,7 @@ function nFisherTalk(){
       return say([praise(),L('Challwafe','Chaltu may! Wüle ka challwatuan.','¡Gracias! Mañana voy a pescar otra vez.','Thank you! Tomorrow I will fish again.'),N('Te da dos lawen y epu mari (20) ngülliw. +4 kimün.','He gives you two lawen and epu mari (20) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
       if(v==='_book')return openBook(()=>ask(i));
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Challwafe','Fey no...','Eso no...','Not that...'),N('Piensa: ¿ya pasó, o todavía no?','Think: has it already happened, or not yet?')],()=>ask(0))}},false,false)}
+      if(trk('pasado y futuro',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Challwafe','Fey no...','Eso no...','Not that...'),N('Piensa: ¿ya pasó, o todavía no?','Think: has it already happened, or not yet?')],()=>ask(0))}},false,false)}
 }
 function goTitle(){
   persist();active=null;menu.style.display='none';dlg.style.display='none';banner.style.display='none';B=null;
@@ -3916,7 +3930,7 @@ function arrieroTalk(){
       return say([praise(),L('Wentru','Kümey! Mapudungukeymi!','¡Bien! ¡Hablas mapudungun!','Good! You speak Mapudungun!'),N('Te da dos kofke y küla mari (30) ngülliw. +4 kimün.','He gives you two kofke and küla mari (30) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
       if(v==='_book')return openBook(()=>ask(i));
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Wentru','Fey no...','Eso no...','Not that...'),N('Piensa: ¿quién lo hace, y lo hace siempre?','Think: who does it, and do they always do it?')],()=>ask(0))}},false,false)}
+      if(trk('personas y -ke-',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Wentru','Fey no...','Eso no...','Not that...'),N('Piensa: ¿quién lo hace, y lo hace siempre?','Think: who does it, and do they always do it?')],()=>ask(0))}},false,false)}
 }
 function papayTalk(){
   say([L('Papay','Mari mari, '+addr(true)+'. Chumleymi?','Hola. ¿Cómo estás?','Hello. How are you?'),L(nm(),'Kümelen. Eymi kay?','Estoy bien. ¿Y tú?','I am well. And you?'),L('Papay','Iñche ka kümelen.','Yo también estoy bien.','I am well too.')]);
@@ -4006,7 +4020,7 @@ function timeTalk(){
       return say([praise(),L('Challwafe','Chaltu may!','¡Gracias!','Thank you!'),N('Te da un lawen, un kofke y küla mari (30) ngülliw. +4 kimün.','She gives you a lawen, a kofke and küla mari (30) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
       if(v==='_book')return openBook(()=>ask(i));
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Challwafe','Fey no...','Eso no...','Not that...'),N('Piensa: ¿ya pasó, o todavía no?','Think: has it already happened, or not yet?')],()=>ask(0))}},false,false)}
+      if(trk('pasado y futuro',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Challwafe','Fey no...','Eso no...','Not that...'),N('Piensa: ¿ya pasó, o todavía no?','Think: has it already happened, or not yet?')],()=>ask(0))}},false,false)}
 }
 function kona4Talk(){
   if(S.flags.ngen4)return say([L('Kona','Kaleuche ngelay! Ayüwün!','¡Ya no está el Kaleuche! ¡Qué feliz estoy!','The Kaleuche is gone! I am so happy!')]);
@@ -4104,7 +4118,7 @@ function malenTalk(){
     if(i>=qs.length){S.flags.puel_dir=1;S.items.lawen++;S.gold+=20;S.xp+=4;persist();sfx('lvl');
       return say([praise(),L('Domo','Kom kimimi! Chaltu may.','¡Los sabes todos! Gracias.','You know them all! Thank you.'),N('Te da un lawen y epu mari (20) ngülliw. +4 kimün.','She gives you a lawen and epu mari (20) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Domo','Fey no...','Eso no...','Not that...'),N('Piensa: ¿por dónde sale el sol? ¿Dónde queda el mar?','Think: where does the sun rise? Where is the sea?')],()=>ask(0))}},true,false)}
+    choose(q.q,o,v=>{if(trk('direcciones',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Domo','Fey no...','Eso no...','Not that...'),N('Piensa: ¿por dónde sale el sol? ¿Dónde queda el mar?','Think: where does the sun rise? Where is the sea?')],()=>ask(0))}},true,false)}
 }
 function charkiTalk(){
   const en=S.gloss==='en';
@@ -4118,7 +4132,7 @@ function charkiTalk(){
     if(i>=qs.length){S.flags.puel_food=1;S.items.kofke+=2;persist();sfx('lvl');
       return say([praise(),L('Domo','Kümey! Iaymi charki?','¡Bien! ¿Comes charki?','Good! Will you have some charki?'),N('Te da dos kofke para el camino.','She gives you two kofke for the road.')])}
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Domo','Fey no...','Eso no...','Not that...')],()=>ask(0))}},true,false)}
+    choose(q.q,o,v=>{if(trk('comida',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Domo','Fey no...','Eso no...','Not that...')],()=>ask(0))}},true,false)}
 }
 function kusheTalk(){
   const ls=[L('Kushe Millaray','Konpange, konpange!','¡Pasa, pasa!','Come in, come in!'),
@@ -4143,7 +4157,7 @@ function mallinTalk(){
       return say([praise(),L('Challwafe','Chaltu may!','¡Gracias!','Thank you!'),N('Te da un lawen, un kofke y küla mari (30) ngülliw. +4 kimün.','He gives you a lawen, a kofke and küla mari (30) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
       if(v==='_book')return openBook(()=>ask(i));
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Challwafe','Fey no...','Eso no...','Not that...'),N('Piensa: ¿fue allá, o vino acá?','Think: did he go there, or come here?')],()=>ask(0))}},false,false)}
+      if(trk('küpa- y amu-',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Challwafe','Fey no...','Eso no...','Not that...'),N('Piensa: ¿fue allá, o vino acá?','Think: did he go there, or come here?')],()=>ask(0))}},false,false)}
 }
 function chadifeTalk(){
   const ls=[L('Chadife','Mari mari, '+addr(true)+'. Chadi ngillakan.','Hola. Junto sal.','Hello. I gather salt.'),
@@ -4214,7 +4228,7 @@ function capQuiz(id,gm,label,intro,qs,who,whoen,reward,rewardEn,give){
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
     choose(q.q,o.concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
       if(v==='_book')return openBook(()=>ask(i));
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L(label,'Fey no...','Eso no...','Not that...'),N('La niebla se aprieta otra vez. Respira, y vuelve a empezar.','The fog tightens again. Breathe, and start over.')],()=>ask(0))}},false,false)}
+      if(trk('ngoyman (niebla)',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L(label,'Fey no...','Eso no...','Not that...'),N('La niebla se aprieta otra vez. Respira, y vuelve a empezar.','The fog tightens again. Breathe, and start over.')],()=>ask(0))}},false,false)}
 }
 function gLafTalk(){
   capQuiz('cap1','gm1','Pichiche',
@@ -4283,7 +4297,7 @@ function chGardenTalk(){
     if(i>=qs.length){S.flags.ch1=1;S.items.lawen++;S.gold+=40;persist();sfx('lvl');
       return say([praise(),L('Chumpall','Kom mongetuy!','¡Todo revive!','Everything comes back to life!'),N('Las algas se enderezan y los corales vuelven a brillar. Te da un lawen y meli mari (40) ngülliw.','The kelp straightens and the coral glows again. She gives you a lawen and meli mari (40) ngülliw.')])}
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Chumpall','Fey no...','Eso no...','Not that...')],()=>ask(0))}},true,false)}
+    choose(q.q,o,v=>{if(trk('chumpall',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Chumpall','Fey no...','Eso no...','Not that...')],()=>ask(0))}},true,false)}
 }
 function chChildTalk(){
   if(S.flags.ch2)return say([L('Pichi chumpall','Ñi lüq kura! Komütufinge!','¡Mi perla! ¡Mírala!','My pearl! Look at it!')]);
@@ -4311,7 +4325,7 @@ function chSingerTalk(){
     if(i>=qs.length){S.flags.ch3=1;S.items.kofke++;S.gold+=40;S.xp+=4;persist();sfx('lvl');
       return say([praise(),L('Chumpall ülkantufe','Taiñ ül wüñotrekay!','¡Nuestro canto volvió!','Our song has returned!'),N('El agua de la fosa se aquieta un momento, escuchando. Te da un kofke y meli mari (40) ngülliw. +4 kimün.','The water of the trench goes still for a moment, listening. She gives you a kofke and meli mari (40) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Chumpall ülkantufe','Fey no...','Eso no...','Not that...')],()=>ask(0))}},true,false)}
+    choose(q.q,o,v=>{if(trk('chumpall',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Chumpall ülkantufe','Fey no...','Eso no...','Not that...')],()=>ask(0))}},true,false)}
 }
 function chQueenTalk(){
   const en=S.gloss==='en';
@@ -4417,7 +4431,7 @@ function stKidsTalk(){
   function ask(i){
     if(i>=qs.length)return stReward('st1',()=>{S.gold+=20},[praise(),L('Pichikeche','Kiñe, epu, küla...!','¡Uno, dos, tres...!','One, two, three...!'),N('Los niños saltan la cuerda contando en mapudungun, cada vez más fuerte. Te dan epu mari (20) ngülliw de sus alcancías, muy serios.','The kids jump rope counting in Mapudungun, louder and louder. They give you epu mari (20) ngülliw from their piggy banks, very serious.')]);
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Pichiche','¿Seguro?...','¿Seguro?...','Are you sure?...')],()=>ask(0))}},true,false)}
+    choose(q.q,o,v=>{if(trk('Santiago',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Pichiche','¿Seguro?...','¿Seguro?...','Are you sure?...')],()=>ask(0))}},true,false)}
 }
 function stMuralTalk(){
   const en=S.gloss==='en';
@@ -4430,7 +4444,7 @@ function stMuralTalk(){
   function ask(i){
     if(i>=qs.length)return stReward('st3',()=>{S.gold+=30},[praise(),L('Muralista','¡Eso es! KO... MAPU... CHE...','¡Eso es! KO... MAPU... CHE...','That is it! KO... MAPU... CHE...'),N('Pinta las palabras enormes, de colores. La gente se para a mirarlas y las lee en voz alta. Te da küla mari (30) ngülliw.','She paints the words huge, in bright colors. People stop to look and read them out loud. She gives you küla mari (30) ngülliw.')]);
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Muralista','Mmm, no me suena...','Mmm, no me suena...','Hmm, that does not sound right...')],()=>ask(0))}},true,false)}
+    choose(q.q,o,v=>{if(trk('Santiago',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Muralista','Mmm, no me suena...','Mmm, no me suena...','Hmm, that does not sound right...')],()=>ask(0))}},true,false)}
 }
 function stAbuelaTalk(){
   if(S.flags.st2)return say([L('Papay','Tañi pu füchakeche ñi dungun, tañi pu pichikeche ñi dungun.','La lengua de mis abuelos, la lengua de mis nietos.','The language of my grandparents, the language of my grandchildren.'),N('La papay sonríe, tejiendo. Sus nietos practican el pentukuwün en un rincón de la ruka.','The papay smiles, weaving. Her grandchildren practice the pentukuwün in a corner of the ruka.')]);
@@ -4459,7 +4473,7 @@ function stLiderTalk(){
   function ask(i){
     if(i>=qs.length)return stReward('st4',()=>{S.items.lawen++},[praise(),L('Longko waria','Mari mari kom pu che!','¡Mari mari a toda la gente!','Mari mari to all the people!'),N('Lo dice fuerte, de corrido, y la ruka entera responde. Te da un lawen del huerto del centro.','He says it loud and clear, and the whole ruka answers. He gives you a lawen from the garden of the center.')]);
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Longko waria','Mmm, no es eso...','Mmm, no es eso...','Hmm, that is not it...')],()=>ask(0))}},true,false)}
+    choose(q.q,o,v=>{if(trk('Santiago',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Longko waria','Mmm, no es eso...','Mmm, no es eso...','Hmm, that is not it...')],()=>ask(0))}},true,false)}
 }
 function stTeenTalk(){
   const en=S.gloss==='en';
@@ -4472,7 +4486,7 @@ function stTeenTalk(){
   function ask(i){
     if(i>=qs.length)return stReward('st5',()=>{S.piwke++;if(S.piwke%4===0)S.hp=Math.min(maxHP(),S.hp+HPQ)},[praise(),L('Weche','Ya... voy a ir a la ruka el jueves.','Ya... voy a ir a la ruka el jueves.','Okay... I will go to the ruka on Thursday.'),N('Sonríe por primera vez, y practica bajito: "mari mari... mari mari...". Te regala algo que encontró y guardaba: un pedazo de piwke, rojo y brillante.','He smiles for the first time and practices under his breath: "mari mari... mari mari...". He gives you something he found and kept: a piwke piece, red and shining.')]);
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Weche','...no sé si eso me ayuda.','...no sé si eso me ayuda.','...I am not sure that helps.')],()=>ask(0))}},true,false)}
+    choose(q.q,o,v=>{if(trk('Santiago',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Weche','...no sé si eso me ayuda.','...no sé si eso me ayuda.','...I am not sure that helps.')],()=>ask(0))}},true,false)}
 }
 
 /* ---------- Kuyfi chillka: six ancient carved tablets, each a Mapudungun lesson. All six = the trarilongko ---------- */
@@ -4530,7 +4544,7 @@ function tabletTalk(id){
         ls.push(Object.assign(L('','Trarilongko!','Las seis piedras cantan a la vez, lejos y cerca. Del musgo cae un trarilongko antiguo, tejido con hilo que brilla. Te lo amarras en la frente: tu defensa sube +3.','The six stones sing at once, near and far. An ancient trarilongko falls from the moss, woven with shining thread. You tie it around your forehead: defense +3.'),{fx:()=>sfx('lvl')}))}
       return say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=T.qs[i],opts=q.o.map(o=>({m:o,v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
-    choose(q.q,opts,v=>{if(v===q.a){sfx('ok');ask(i+1)}
+    choose(q.q,opts,v=>{if(trk('kuyfi chillka',v,q)){sfx('ok');ask(i+1)}
       else{sfx('bad');const hd=S.hm?heroHurt():0;say([N((hd?'(−'+hd+') ':'')+'Los signos tiemblan y se apagan. La respuesta era: '+q.a+'. Lee la piedra otra vez.',(hd?'(−'+hd+') ':'')+'The signs tremble and go dark. The answer was: '+q.a+'. Read the stone again.')].concat(T.lines),()=>ask(0))}},false,true)}
 }
 
@@ -4569,7 +4583,7 @@ function nutkTalk(lofId){
         persist()}
       return say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const s=D.set[i],opts=s.o.map(o=>({m:sub(o),v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
-    choose(s.q,opts,v=>{if(v===s.a){sfx('ok');step(i+1)}
+    choose(s.q,opts,v=>{track('nütramkan',v===s.a,s.q,s.o.map(sub),sub(s.a));if(v===s.a){sfx('ok');step(i+1)}
       else{sfx('bad');say([L(D.who,'Feyta chi no...','Eso no...','Not that...'),N('Se podía decir: «'+sub(s.a)+'». Probemos otra vez.','You could say: «'+sub(s.a)+'». Let us try again.')],()=>step(i))}},false,true)}
 }
 
@@ -4685,12 +4699,14 @@ function trawunTalk(id){
      :L(who,'Küme akunkonpayami fachi trawün, '+ad+'.','Bienvenid'+fp+' a este trawün, '+(ad==='peñi'?'hermano':S.fem?'hermana':'hermano')+'. Siéntate junto al kütral: hoy aprendemos juntos.','Welcome to this trawün, '+(S.fem?'sister':'brother')+'. Sit by the kütral: today we learn together.')],()=>
     choose(Object.assign({},D.t,{m:'Trawüleaiñ?'}),[{m:'May',g:en?'Take the lesson (about 4 minutes)':'Tomar la lección (unos 4 minutos)',v:1},{m:'Wüle müten',g:en?'Later':'Después',v:0}],v=>{if(v)run(0)},true,true));
   function run(i){
-    const chunk=[];while(i<D.steps.length&&!D.steps[i].q){chunk.push(sub(D.steps[i]));i++}
+    const chunk=[];while(i<D.steps.length&&!D.steps[i].q&&!D.steps[i].b){chunk.push(sub(D.steps[i]));i++}
     const next=()=>{if(i>=D.steps.length)return finish();ask(D.steps[i],()=>run(i+1))};
     if(chunk.length)say(chunk,next);else next()}
   function ask(Q,cb){
+    if(Q.b)return buildVerb(Q.b,(ok,got)=>{if(ok){sfx('ok');say([L(who,'Kümey!','¡Muy bien!','Very good!'),Q.why],cb)}
+      else{sfx('bad');say([L(who,'Kangelu...','Casi...','Almost...'),N('Armaste «'+got+'».','You built "'+got+'".'),Q.why,N('Inténtalo de nuevo.','Try again.')],()=>ask(Q,cb))}});
     const opts=Q.o.map(o=>({m:o,v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
-    choose(sub(Q.q),opts,v=>{if(v===Q.a){sfx('ok');say([L(who,'Kümey!','¡Muy bien!','Very good!'),Q.why],cb)}
+    choose(sub(Q.q),opts,v=>{track('trawün',v===Q.a,Q.q,Q.o,Q.a);if(v===Q.a){sfx('ok');say([L(who,'Kümey!','¡Muy bien!','Very good!'),Q.why],cb)}
       else{sfx('bad');say([L(who,'Kangelu...','Casi...','Almost...'),Q.why,N('Inténtalo de nuevo.','Try again.')],()=>ask(Q,cb))}},false,true)}
   function finish(){
     const ls=[L(who,'Fey tati. Pewkayal!','Eso es todo por hoy. ¡Hasta luego!','That is all for today. See you later!'),N('Lo que aprendiste quedó escrito en tu chillka:','What you learned is now written in your chillka:')].concat(D.sum);
@@ -4719,10 +4735,12 @@ function openPause(){
     {m:'Dungun',g:en?'Words learned':'Palabras aprendidas',v:'words'},
     {m:'Küdaw',g:en?'Quest log':'Misiones y pistas',v:'kudaw'},
     {m:'Mapa',g:en?'Progress by land':'Avance por tierra',v:'mapa'},
+    {m:'Kimeltun'+(missList().length?' · '+missList().length:''),g:en?'Practice, wekufü chillka, learning report':'Repaso, wekufü chillka, informe de aprendizaje',v:'kim'},
     {m:'Trariwe · '+(S.pieces||[]).length+'/5',g:en?'Pieces of the ancient sash':'Pedazos del trariwe antiguo',v:'trariwe'},
     {m:en?'Hints: '+(S.hints?'on':'off'):'Pistas: '+(S.hints?'sí':'no'),g:en?'Show how many each ending addresses':'Mostrar a cuántos se dirige cada terminación',v:'hints'},
     {m:en?'Gloss: English':'Glosa: Español',g:en?'Switch to Spanish':'Cambiar a inglés',v:'lang'},
     {m:'Re mapudungun: '+(S.nogloss?(en?'yes':'sí'):'no'),g:en?'Hide the translation of Mapudungun lines':'Ocultar la traducción de las líneas en mapudungun',v:'nogloss'},
+    {m:'Grafemario: '+GRAF_NAME[GRAF],g:en?'Unificado → Azümchefe → Ragileo':'Unificado → Azümchefe → Ragileo',v:'graf'},
     {m:AU.muted?(en?'Music: off':'Música: no'):(en?'Music: on':'Música: sí'),g:'N',v:'mus'},
     {m:en?'Title screen':'Volver al inicio',g:en?'Your progress is saved':'Se guarda tu avance',v:'title'},
     {m:en?'Close':'Cerrar',v:'x'}],v=>{
@@ -4741,6 +4759,8 @@ function openPause(){
         N('Con los cinco trokiñ, el trariwe completo podrá atravesar la niebla de Ti Fütra Ngoymatulfe, al oeste del camino del mar.','With all five trokiñ, the complete trariwe will be able to pass through the fog of Ti Fütra Ngoymatulfe, west of the sea road.')])}
     else if(v==='kudaw')say(questLines());
     else if(v==='mapa')say(mapaLines());
+    else if(v==='kim')openKim();
+    else if(v==='graf'){setGraf({u:'a',a:'r',r:'u'}[GRAF]);openPause()}
     else if(v==='nogloss'){S.nogloss=S.nogloss?0:1;persist();openPause()}
     else if(v==='book')openBook(()=>openPause());
     else if(v==='hints'){S.hints=!S.hints;persist();openPause()}
@@ -4749,6 +4769,14 @@ function openPause(){
   },true);
 }
 
+
+function openKim(){const en=S.gloss==='en',n=missList().length,b=Object.keys(S.beaten||{}).length;
+  choose({m:'Kimeltun',es:'Aprender',en:'Learning'},[
+    {m:'Ngüneduamün',g:(en?'Practice: 10 questions':'Repaso: 10 preguntas')+(n?(en?', '+n+' you have missed':', '+n+' que te han costado'):''),v:'p'},
+    {m:'Wekufü chillka · '+b,g:en?'The wekufü you have beaten':'Los wekufü que has vencido',v:'b'},
+    {m:en?'Learning report':'Informe de kimün',g:en?'For you or your teacher: copy or print':'Para ti o tu profe: copiar o imprimir',v:'r'},
+    {m:en?'Back':'Volver',v:'x'}],v=>{
+    if(v==='p')practice();else if(v==='b')openBestiary(openKim);else if(v==='r')openReport(openKim);else openPause()},true)}
 
 /* ---------- Küdaw: quest log ---------- */
 function questLines(){
@@ -4910,6 +4938,249 @@ for(const id of TAB_IDS){const T=TABLETS[id];BOOK['tab_'+id]={m:'Kuyfi chillka',
 BOOK.wx={m:'Antü, mawün, pire',es:'El tiempo: sol, nube, lluvia, nieve, viento',en:'Weather: sun, cloud, rain, snow, wind',req:'wx_book',lines:[L('','Antü · Tromü · Mawün','sol · nube · lluvia','sun · cloud · rain'),L('','Pire · Kürüf','nieve · viento','snow · wind'),L('','Fütra mawün! · Fütra kürüf!','¡Mucha lluvia! · ¡Mucho viento!','Heavy rain! · Strong wind!')]};
 for(const id of TRW_IDS){const T=TRAWUN[id];BOOK['trw_'+id]={m:'Trawün',es:T.t.es,en:T.t.en,req:'trw_'+id,lines:T.sum}}
 
+/* ======================================================================
+   Learning layer: grafemarios, tracking what each player misses, the
+   Ngüneduamün practice page, verb building, the wekufü chillka, the
+   learning report for teachers, palin and trafkintu.
+   ====================================================================== */
+
+/* ---------- 1. grafemarios: the game is written in Unificado; Azümchefe and Ragileo are converted on display ---------- */
+let GRAF=(()=>{try{return localStorage.getItem('kw_graf')||'u'}catch(e){return 'u'}})();
+const GRAF_NAME={u:'Unificado',a:'Azümchefe',r:'Ragileo'};
+function setGraf(g){GRAF=g;try{localStorage.setItem('kw_graf',g)}catch(e){}}
+const _isEsp=s=>/[áéíóúÁÉÍÓÚ¿¡]/.test(s)||/\b(volver|cerrar|partida|normal|pistas|glosa|español|english|música|music|hints|gloss|title|close|back|desde|inicio|nuevo|juego|cancelar|salir|después|later|yes|on|off|sí|modo|consultar|libro|tomar|lección|todos|solo|menú|menu|cosas|items|go|map|mapa|ir|heal|sanar|learn|aprender|palabras|every|word|report|informe|game|start|empezar|region|ganar|pelea|win|battle|grafemario|play|jugar|continuar|continue|new|nueva|partida|the|to|of|de|la|el|del|un|una|y|you|your|tu|status|estado|quest|log|progress|avance)\b/i.test(s);
+function _cv(s,pairs){let o='';for(let i=0;i<s.length;){let hit=null;for(const [a,b] of pairs){if(s.substr(i,a.length).toLowerCase()===a){hit=[a,b];break}}
+  if(hit){const src=s.substr(i,hit[0].length),up=src[0]!==src[0].toLowerCase();o+=up?hit[1][0].toUpperCase()+hit[1].slice(1):hit[1];i+=hit[0].length}else{o+=s[i];i++}}return o}
+const GRAF_RULES={a:[['tr','tx'],['ng','g'],['g','q'],['d','z']],
+  r:[['tr','x'],['ch','c'],['ll','j'],['ng','g'],['g','q'],['ñ','h'],['ü','v'],['d','z']]};
+function GR(s){if(!s||GRAF==='u'||typeof s!=='string')return s;const nm=S&&S.name;if(nm&&s.includes(nm))return s.split(nm).map(x=>_cv(x,GRAF_RULES[GRAF])).join(nm);return _cv(s,GRAF_RULES[GRAF])}
+function GRm(s){return s&&!_isEsp(s)?GR(s):s}   // for menu options and bubbles, which can be Spanish UI text
+
+/* ---------- 2. tracking: accuracy by topic and the questions each player misses ---------- */
+function trk(t,v,q){const ok=v===q.a;track(t,ok,q.q,q.o,q.a);return ok}
+function _qkey(q){return (q.m||'')+'|'+(q.es||'')}
+function track(topic,ok,q,opts,ans){
+  S.acc=S.acc||{};const A=S.acc[topic]=S.acc[topic]||{c:0,t:0};A.t++;if(ok)A.c++;
+  if(!q||!opts||ans===undefined)return;S.miss=S.miss||{};const k=_qkey(q);
+  if(ok){const m=S.miss[k];if(m){m.n--;if(m.n<=0)delete S.miss[k]}}
+  else{const m=S.miss[k]||{q:{m:q.m||'',es:q.es||'',en:q.en||'',who:q.who||''},o:opts.slice(),a:ans,n:0,t:topic};m.n=Math.min(5,m.n+2);m.last=Date.now();S.miss[k]=m;
+    const ks=Object.keys(S.miss);if(ks.length>80){ks.sort((a,b)=>S.miss[a].last-S.miss[b].last);delete S.miss[ks[0]]}}}
+function missList(){return Object.values(S.miss||{}).sort((a,b)=>b.n-a.n||b.last-a.last)}
+
+/* ---------- 3. verb building: put a word together from its pieces ---------- */
+const VOW='aeiouü';
+function joinM(parts){let s=parts[0]||'';
+  for(let i=1;i<parts.length;i++){const m=parts[i];if(!m)continue;const cons=!VOW.includes(s[s.length-1]);
+    if(m==='a'&&/la$/.test(s))s+='ya';
+    else if(cons&&m==='n')s+='ün';
+    else if(cons&&m==='yu')s+='iyu';
+    else if(cons&&m[0]==='y')s+='i'+m.slice(1);
+    else s+=m}
+  return s}
+function buildVerb(Bq,cb){   // Bq: {q:{es,en}, slots:[[ {m,v} ...]...], target, words?:1}
+  const parts=[];const en=S.gloss==='en';
+  const show=()=>{const shown=Bq.words?parts.filter(Boolean).join(' '):joinM(parts);return shown?shown+'…':'___'};
+  const step=i=>{if(i>=Bq.slots.length){const got=Bq.words?parts.filter(Boolean).join(' '):joinM(parts);const ok=got===Bq.target;
+      track('armar verbos',ok,{m:'⧉ '+Bq.target,es:Bq.q.es,en:Bq.q.en},[Bq.target],Bq.target);
+      return cb(ok,got)}
+    choose({m:show(),es:Bq.q.es+(en?'':' Arma la palabra pieza por pieza.'),en:Bq.q.en+(en?' Build the word piece by piece.':'')},
+      Bq.slots[i].map(o=>({m:o.m,g:o.g,v:o.v})),v=>{parts[i]=v;sfx('move');step(i+1)},false,true)};
+  step(0)}
+
+/* ---------- 4. Ngüneduamün: a 10-question practice built from the player's own misses ---------- */
+const BUILDERS=[
+  {q:{es:'Arma «tú trabajas».',en:'Build "you work".'},slots:[[{m:'küdaw-',v:'küdaw'},{m:'amu-',v:'amu'},{m:'iya-',v:'iya'}],[{m:'-n',v:'n'},{m:'-ymi',v:'ymi'},{m:'-y',v:'y'}]],target:'küdawimi'},
+  {q:{es:'Arma «ellos dos van».',en:'Build "the two of them go".'},slots:[[{m:'amu-',v:'amu'},{m:'küdaw-',v:'küdaw'}],[{m:'-yu',v:'yu'},{m:'-iñ',v:'iñ'},{m:'-ymu',v:'ymu'},{m:'-yngu',v:'yngu'},{m:'-yngün',v:'yngün'}]],target:'amuyngu'},
+  {q:{es:'Arma «no iré».',en:'Build "I will not go".'},slots:[[{m:'amu-',v:'amu'}],[{m:'—',g:'nada',v:''},{m:'-la-',g:'no',v:'la'}],[{m:'—',g:'nada',v:''},{m:'-a-',g:'futuro',v:'a'}],[{m:'-n',v:'n'},{m:'-ymi',v:'ymi'},{m:'-y',v:'y'}]],target:'amulayan'},
+  {q:{es:'Arma «tú sueles ir».',en:'Build "you usually go".'},slots:[[{m:'amu-',v:'amu'},{m:'iya-',v:'iya'}],[{m:'—',g:'nada',v:''},{m:'-ke-',g:'costumbre',v:'ke'}],[{m:'-n',v:'n'},{m:'-ymi',v:'ymi'},{m:'-y',v:'y'}]],target:'amukeymi'},
+  {q:{es:'Arma «no comemos (muchos)».',en:'Build "we (many) do not eat".'},slots:[[{m:'iya-',v:'iya'},{m:'amu-',v:'amu'}],[{m:'—',g:'nada',v:''},{m:'-la-',g:'no',v:'la'}],[{m:'-iñ',v:'iñ'},{m:'-yu',v:'yu'},{m:'-ymün',v:'ymün'}]],target:'iyalaiñ'},
+  {q:{es:'Arma la pregunta «¿cuándo vas a ir?».',en:'Build the question "when will you go?".'},words:1,slots:[[{m:'Chumül',v:'Chumül'},{m:'Chew',v:'Chew'},{m:'Iney',v:'Iney'}],[{m:'amuaymi?',v:'amuaymi?'},{m:'amuan?',v:'amuan?'},{m:'mülimi?',v:'mülimi?'}]],target:'Chumül amuaymi?'}];
+function practice(back){
+  const en=S.gloss==='en',ms=missList();const qs=[];
+  for(const m of ms){if(qs.length>=7)break;if(!m.q.m||m.q.m[0]!=='⧉')qs.push({q:m.q,o:m.o,a:m.a,from:'miss'})}
+  const pool=typeof lanPool==='function'?lanPool():[];while(qs.length<8&&pool.length){const p=pool.splice(rnd(pool.length),1)[0];if(!qs.some(x=>_qkey(x.q)===_qkey(p.q)))qs.push(p)}
+  const bl=BUILDERS.slice();for(let k=0;k<2;k++)qs.splice(rnd(qs.length+1),0,{b:bl.splice(rnd(bl.length),1)[0]});
+  let ok=0;
+  say([L('','Ngüneduamün',ms.length?'Repaso: primero lo que te ha costado ('+ms.length+' pendientes), después un poco de todo.':'Repaso de lo aprendido en tu viaje.',ms.length?'Review: first what has been hard for you ('+ms.length+' pending), then a bit of everything.':'A review of what you have learned on your journey.')],()=>ask(0));
+  function ask(i){
+    if(i>=qs.length){const n=qs.length;S.xp+=ok;persist();return say([N(ok+'/'+n+' · +'+ok+' kimün.',ok+'/'+n+' · +'+ok+' kimün.'),L('',ok>=n-1?'Kümey!':'Kimnierpuken!',ok>=n-1?'¡Muy bien!':'¡Voy aprendiendo!',ok>=n-1?'Very good!':'I am learning!')],()=>{if(S.xp>=xpNeed())levelUpCheck();else back&&back()})}
+    const Q=qs[i];
+    if(Q.b)return buildVerb(Q.b,(good,got)=>{if(good){ok++;sfx('ok');say([L('','Kümey!',Q.b.target,Q.b.target)],()=>ask(i+1))}else{sfx('bad');say([N('Armaste «'+got+'». Era: '+Q.b.target+'.','You built "'+got+'". It was: '+Q.b.target+'.')],()=>ask(i+1))}});
+    const opts=Q.o.map(o=>({m:o,v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
+    choose(Object.assign({},Q.q,{es:'('+(i+1)+'/'+qs.length+') '+(Q.q.es||''),en:'('+(i+1)+'/'+qs.length+') '+(Q.q.en||'')}),opts,v=>{
+      const good=v===Q.a;track('ngüneduamün',good,Q.q,Q.o,Q.a);
+      if(good){ok++;sfx('ok');ask(i+1)}else{sfx('bad');say([N('Era: '+Q.a+'.','It was: '+Q.a+'.')],()=>ask(i+1))}},false,true)}
+}
+
+/* ---------- 5. wekufü chillka: a page for every creature you have beaten ---------- */
+const BEST={
+  laftrache:['Pequeños seres de la costa, del tamaño de una mano, que se esconden entre las rocas y molestan a quien pasa.','Little coastal beings, the size of a hand, who hide among the rocks and pester whoever passes.'],
+  chonchon:['Una cabeza que vuela con las orejas como alas, gritando «tue tue» de noche. Para muchos, es un kalku transformado.','A head that flies using its ears as wings, crying "tue tue" at night. Many say it is a kalku in disguise.'],
+  anchi:['El anchümalleñ: una lucecita con forma de niño que acompaña a los kalku y engaña a los caminantes.','The anchümalleñ: a little light shaped like a child that serves the kalku and leads walkers astray.'],
+  nidol:['El más grande de los laftrache, el que manda a los demás.','The biggest of the laftrache, the one who bosses the others.'],
+  piwichen:['Una culebra alada pequeña que chupa la sangre de los animales. Su grito asusta en la noche.','A small winged serpent that drinks the blood of animals. Its cry frightens people at night.'],
+  trelke:['Un cuero estirado que vive en el agua y envuelve a quien se acerca a la orilla.','A stretched hide that lives in the water and wraps up whoever comes near the shore.'],
+  kolokolo:['Un ratón o lagartija que nace de un huevo maldito y enferma a la gente de la casa.','A mouse or lizard hatched from a cursed egg that makes the people of the house fall ill.'],
+  fkolokolo:['Un kolokolo viejo y grande; su maldición pesa más.','An old, big kolokolo; its curse weighs heavier.'],
+  nguruvilu:['El ngürüfilu, «zorro-culebra»: vive en los ríos y arrastra al fondo a quien cruza.','The ngürüfilu, "fox-serpent": it lives in rivers and drags those who cross down to the bottom.'],
+  kutral:['Una chispa del volcán con ganas de quemar.','A spark from the volcano eager to burn.'],
+  pire:['Nieve que se levanta y camina: el frío de la cordillera hecho wekufü.','Snow that rises up and walks: the cold of the cordillera turned wekufü.'],
+  kura:['Una piedra con mala voluntad. Su cuerpo de roca aguanta los golpes.','A stone with ill will. Its rocky body takes a beating.'],
+  fkura:['La piedra grande de la que se desprenden los kura wekufü.','The big rock the kura wekufü break off from.'],
+  nirivilu:['El ñirifilu, culebra de los ñirres de la cordillera, rápida y venenosa.','The ñirifilu, serpent of the cordillera ñirre trees, fast and venomous.'],
+  cherrufe:['El Cherufe vive dentro de los volcanes. Hecho de lava y roca, lanza piedras de fuego.','The Cherufe lives inside volcanoes. Made of lava and rock, it hurls stones of fire.'],
+  kowek:['Agua que no corre por donde debe.','Water that does not run where it should.'],
+  mawek:['La lluvia cuando se enoja: viene con el mal tiempo.','The rain when it gets angry: it comes with bad weather.'],
+  kamawetu:['Un ternero con un cuerno brillante que nace en los ríos y corre hacia el mar, desbordando las aguas.','A calf with a shining horn born in the rivers that runs to the sea, flooding the waters.'],
+  basilisko:['Un gallo-culebra nacido de un huevo raro; con su aliento seca a la gente de la casa.','A rooster-serpent hatched from a strange egg; its breath withers the people of the house.'],
+  kaleuche:['El Kaleuche, barco fantasma que navega de noche entre la niebla, lleno de luces y música.','The Kaleuche, a ghost ship sailing at night in the fog, full of lights and music.'],
+  witranalwe:['Un espíritu alto y huesudo a caballo, que cuida los animales del kalku y castiga a quien se acerca.','A tall, bony spirit on horseback who guards the kalku\'s animals and punishes those who approach.'],
+  chinifilu:['La culebra de la ceniza: se enrosca en lo que se olvida.','The serpent of ash: it coils around what is forgotten.'],
+  piwuchen:['El gran piwüchen, culebra alada de los ríos del sur. Su silbido seca a los animales.','The great piwüchen, winged serpent of the southern rivers. Its whistle dries the animals.'],
+  wallipen:['El Wallepeñ: cabeza de ternero, cuerpo de oveja. Si una mujer encinta lo ve, el niño nace con sus marcas.','The Wallepeñ: calf\'s head, sheep\'s body. If a pregnant woman sees it, the child is born with its marks.'],
+  trawko:['El Trawko, hombre pequeño del bosque del sur, con hacha de piedra. Su mirada encanta.','The Trawko, a small man of the southern forest with a stone axe. His gaze enchants.'],
+  mewlen:['El remolino de viento que levanta polvo y se lleva lo que encuentra.','The whirlwind that raises dust and carries off what it finds.'],
+  kurutrewa:['El perro negro que aparece en los caminos de noche.','The black dog that appears on the roads at night.'],
+  fmewlen:['Un remolino grande, de los que se ven en la pampa.','A big whirlwind, the kind you see on the pampa.'],
+  kurutoro:['El toro negro, animal de los kalku.','The black bull, an animal of the kalku.'],
+  walichu:['El Walichu, espíritu del mal en tierras puelche. Trae enfermedad y mala suerte.','The Walichu, evil spirit of the Puelche lands. It brings sickness and bad luck.'],
+  chadikura:['Elëngasëm, gigante de piedra y sal de las tierras del este.','Elëngasëm, giant of stone and salt of the eastern lands.'],
+  wenangkun:['La pena que se queda callada.','The sorrow that keeps quiet.'],
+  illkun:['La rabia de que te hagan callar.','The rage at being silenced.'],
+  llukalfe:['El miedo que se agranda.','The fear that grows bigger.'],
+  ayentufe:['La burla del patio de la escuela.','The schoolyard mockery.'],
+  profe:['La escuela que prohibió la lengua.','The school that banned the language.'],
+  yewen:['La vergüenza de hablar la propia lengua. Es el último enemigo, y el más cercano.','The shame of speaking your own language. It is the last enemy, and the closest one.'],
+  epunamun:['El Epunamun, ngen de la guerra, de dos caras. No es malo: pone a prueba a los weichafe.','The Epunamun, ngen of war, with two faces. It is not evil: it tests the weichafe.'],
+  ngoyam:['Un alma perdida en la niebla, que ya no recuerda su nombre.','A soul lost in the fog, who no longer remembers its name.'],
+  kalku:['El Fütra Kalku, el gran brujo que trabaja para el olvido.','The Fütra Kalku, the great sorcerer who works for the forgetting.'],
+  ngoyman1:['Ti Fütra Ngoymatulfe, el gran olvido, el que hace olvidar las palabras.','Ti Fütra Ngoymatulfe, the great forgetting, the one who makes words be forgotten.'],
+  llufu1:['El Kaykayfilu, la gran culebra del agua. No es malo: despertó de su sueño y necesita volver a oír su canto.','The Kaykayfilu, the great serpent of the water. It is not evil: it woke from its sleep and needs to hear its song again.']};
+['ngoyman2','ngoyman3','ngoyman4','ngoyman5','ngoysum'].forEach(k=>BEST[k]=BEST.ngoyman1);['llufu2','llufu3','llufu4','llufu5'].forEach(k=>BEST[k]=BEST.llufu1);
+function bestWhere(t){if(S.beatW&&S.beatW[t])return S.beatW[t];for(const id in MAPS){const m=MAPS[id];for(const e of m.ents||[])if(e.kind==='enemy'&&e.party&&e.party.includes(t))return m.name}return null}
+function bestTips(t){const e=ET[t],es=[],en=[];
+  if(e.fly){es.push('vuela alto: primero bájalo con nagtu-');en.push('flies high: bring it down first with nagtu-')}
+  if(e.armor){es.push('su cuerpo duro aguanta los golpes');en.push('its hard body takes hits well')}
+  if(e.curse){es.push('maldice: lleva lawen');en.push('it curses: carry lawen')}
+  if(e.drain){es.push('te roba newen');en.push('it steals your newen')}
+  if(e.twice){es.push('ataca dos veces');en.push('it attacks twice')}
+  if(e.hide){es.push('se esconde');en.push('it hides')}
+  if(e.spres){es.push('resiste los golpes especiales');en.push('it resists special strikes')}
+  if(e.seals){es.push('barrera de luz: se rompe con '+e.seals.map(r=>r+'-').join(', '));en.push('light barrier: broken with '+e.seals.map(r=>r+'-').join(', '))}
+  if(typeof YEWEN_CALL!=='undefined'&&YEWEN_CALL[t]){const h=YEWEN_CALL[t];es.push(h[0]);en.push(h[1])}
+  return [es.join('; '),en.join('; ')]}
+function openBestiary(back){
+  const en=S.gloss==='en',seen=Object.keys(S.beaten||{}).filter(t=>ET[t]&&!/^ngoyman[2-5]$|^llufu[2-5]$/.test(t));
+  const total=Object.keys(ET).filter(t=>!/^ngoyman[2-5]$|^llufu[2-5]$|^ngoysum$/.test(t)).length;
+  if(!seen.length)return say([N('Todavía no has vencido a ningún wekufü. Cada uno que venzas tendrá su página aquí.','You have not beaten any wekufü yet. Each one you beat will get its page here.')],back);
+  choose({m:'Wekufü chillka · '+seen.length+'/'+total,es:'¿Qué página quieres leer?',en:'Which page do you want to read?'},
+    seen.map(t=>({m:ET[t].name,g:(ET[t].boss?'★ ':'')+'×'+S.beaten[t],v:t})).concat([{m:en?'Back':'Volver',v:'x'}]),t=>{
+    if(!t||t==='x')return back&&back();
+    const b=BEST[t]||['Un wekufü de estas tierras.','A wekufü of these lands.'],w=bestWhere(t),tp=bestTips(t);
+    const ls=[L('',GR('Fey ta '+ET[t].name+'.'),'Este es '+ET[t].name+'.','This is '+ET[t].name+'.')];
+    if(w)ls.push(L('',w+' mew müley.','Vive en '+w+'.','It lives in '+w+'.'));
+    ls.push(N(b[0],b[1]));if(tp[0])ls.push(N('Cómo vencerlo: '+tp[0]+'.','How to beat it: '+tp[1]+'.'));
+    ls.push(N('Lo has vencido '+S.beaten[t]+(S.beaten[t]>1?' veces.':' vez.'),'You have beaten it '+S.beaten[t]+' time'+(S.beaten[t]>1?'s.':'.')));
+    say(ls,()=>openBestiary(back))},true)}
+
+/* ---------- 6. learning report (for the player and for teachers) ---------- */
+function reportText(){
+  const en=S.gloss==='en',F=S.flags,yes=k=>F[k]?'✓':'·',acc=S.acc||{},mins=Math.round((S.wtime||0)/3600);
+  const rows=Object.keys(acc).sort().map(k=>{const a=acc[k];return '  '+k.padEnd(26)+String(a.c).padStart(4)+' / '+String(a.t).padEnd(4)+(a.t?Math.round(100*a.c/a.t)+'%':'')});
+  const ml=missList().slice(0,12).map(m=>'  '+(m.q.m||m.q.es||'').replace(/^⧉ /,'').slice(0,40).padEnd(42)+'→ '+m.a);
+  const trw=TRW_IDS.filter(k=>F['trw_'+k]).length+'/'+TRW_IDS.length;
+  const tabs=typeof TAB_IDS!=='undefined'?TAB_IDS.filter(t=>F['tab_'+t]).length:0;
+  const ntk=Object.keys(NUTK).filter(k=>F['ntk_'+k]).length;
+  const L1=en?['KIMÜN REPORT · Kewün ñi Newen','Player','Level','Play time','min','Ngen awakened','Verb roots','Trawün lessons','Kuyfi chillka','Nütramkan','Wekufü beaten','Accuracy by topic (correct / attempts)','Still to practise (most missed first)','Nothing pending: well done!']
+    :['INFORME DE KIMÜN · Kewün ñi Newen','Jugador/a','Nivel','Tiempo de juego','min','Ngen despertados','Raíces verbales','Lecciones del trawün','Kuyfi chillka','Nütramkan','Wekufü vencidos','Precisión por tema (aciertos / intentos)','Por practicar (lo más fallado primero)','Nada pendiente: ¡bien hecho!'];
+  return [L1[0],'',L1[1]+': '+S.name+(S.hm?' (weichafe)':''),L1[2]+': kimün '+S.lvl,L1[3]+': '+mins+' '+L1[4],
+    L1[5]+': '+['ngen','ngen2','ngen3','ngen4','ngen5'].filter(k=>F[k]).length+'/5'+(F.won?'  · Ti Fütra Ngoymatulfe ✓':''),
+    L1[6]+' ('+S.roots.length+'): '+S.roots.map(r=>r+'-').join(', '),L1[7]+': '+trw,L1[8]+': '+tabs+'/6',L1[9]+': '+ntk+'/'+Object.keys(NUTK).length,
+    L1[10]+': '+Object.keys(S.beaten||{}).length,(en?'Translations peeked at (Mapudungun-only mode)':'Traducciones consultadas (modo re mapudungun)')+': '+(S.peek||0)+(S.nogloss?'':(en?' · mode off':' · modo apagado')),'',L1[11]+':',...(rows.length?rows:['  —']),'',L1[12]+':',...(ml.length?ml:['  '+L1[13]]),'',new Date().toLocaleString()].join('\n')}
+function openReport(back){
+  const t=reportText(),en=S.gloss==='en';let ov=document.getElementById('report');
+  if(!ov){ov=document.createElement('div');ov.id='report';document.body.appendChild(ov)}
+  ov.innerHTML='<div class="rb"><pre></pre><div class="rr"><button data-a="copy"></button><button data-a="print"></button><button data-a="close"></button></div></div>';
+  ov.querySelector('pre').textContent=t;const bs=ov.querySelectorAll('button');
+  bs[0].textContent=en?'Copy':'Copiar';bs[1].textContent=en?'Print / PDF':'Imprimir / PDF';bs[2].textContent=en?'Close':'Cerrar';
+  ov.style.display='flex';active={kind:'report',a(){},b(){close()}};
+  const close=()=>{ov.style.display='none';active=null;back&&back()};
+  bs[0].onclick=()=>{(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{bs[0].textContent='✓'},()=>{const r=document.createRange();r.selectNodeContents(ov.querySelector('pre'));const sl=getSelection();sl.removeAllRanges();sl.addRange(r)})};
+  bs[1].onclick=()=>{const w=window.open('','_blank');if(!w){bs[1].textContent='✗';return}
+    w.document.write('<!DOCTYPE html><meta charset="utf-8"><title>Kimün report</title><pre style="font:14px/1.5 ui-monospace,Menlo,monospace;white-space:pre-wrap">'+esc(t)+'</pre><script>print()<\/script>');w.document.close()};
+  bs[2].onclick=close}
+
+/* ---------- 7. palin: call the plays in Mapudungun ---------- */
+let PALIN=null;
+const PALIN_PLAYS=[
+  {es:'¡La pali rueda hacia el norte!',en:'The pali rolls north!',a:'Pikun püle!'},
+  {es:'¡La pali se va hacia el sur!',en:'The pali heads south!',a:'Willi püle!'},
+  {es:'¡La pali corre hacia el este, hacia la raya rival!',en:'The pali runs east, toward the rival line!',a:'Puel püle!'},
+  {es:'¡La pali vuelve hacia el oeste!',en:'The pali comes back west!',a:'Lafken püle!'},
+  {es:'Tu compañera está lejos de la pali: ¡que corra!',en:'Your teammate is far from the pali: she must run!',a:'Lefnge!'},
+  {es:'Te rodean tres rivales: necesitas que tu compañero venga.',en:'Three rivals surround you: you need your teammate to come.',a:'Küpange!'},
+  {es:'Un rival se pega a ti: ¡que se vaya!',en:'A rival sticks to you: make him go away!',a:'Amutunge!'},
+  {es:'Tus dos compañeros están lejos: ¡que corran los dos!',en:'Both your teammates are far away: both must run!',a:'Lefmu!'}];
+const PALIN_OPTS=['Pikun püle!','Willi püle!','Puel püle!','Lafken püle!','Lefnge!','Lefmu!','Küpange!','Amutunge!'];
+function palinTalk(){
+  const en=S.gloss==='en',first=!S.flags.palin_won;
+  say([L('Palife','Mari mari! Palituaiñ?','¡Hola! ¿Jugamos palin? Nos falta una persona en el equipo.','Hello! Shall we play palin? Our team is one player short.')],()=>
+    choose({m:'Palituaiñ?',es:'¿Juegas palin?',en:'Play palin?'},[{m:'May',g:en?'Play a match':'Jugar un partido',v:1},{m:'Wüle müten',g:en?'Later':'Después',v:0}],v=>{if(!v)return;
+      say([N('El palin se juega con el wiño (el palo curvo) y la pali (la bola). Tu equipo empuja la pali hacia el puel, el este; el rival, hacia el lafken, el oeste.','Palin is played with the wiño (the curved stick) and the pali (the ball). Your team pushes the pali toward the puel, the east; the rivals push it toward the lafken, the west.'),
+        N('Tú gritas las jugadas: hacia dónde va la pali (pikun, willi, puel, lafken püle) y qué deben hacer tus compañeros. Tres rayas ganan.','You call the plays: where the pali goes (pikun, willi, puel, lafken püle) and what your teammates must do. Three points win.')],()=>{
+        PALIN={pos:0,us:0,them:0,n:0,t:0};play()})},true,true));
+  function play(){
+    if(PALIN.us>=3||PALIN.them>=3||PALIN.n>=15)return end();
+    const P2=PALIN_PLAYS[rnd(PALIN_PLAYS.length)];PALIN.n++;
+    const o=[P2.a];const others=PALIN_OPTS.filter(x=>x!==P2.a);while(o.length<3)o.push(others.splice(rnd(others.length),1)[0]);
+    for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
+    choose({es:P2.es,en:P2.en},o.map(x=>({m:x,v:x})),v=>{const ok=v===P2.a;track('palin',ok,{m:'',es:P2.es,en:P2.en},PALIN_OPTS.filter(x=>o.includes(x)),P2.a);
+      if(ok){sfx('ok');PALIN.pos++}else{sfx('bad');PALIN.pos--}
+      const ls=[L(S.name,v,ok?'¡Bien dicho! Tu equipo avanza.':'Tu equipo no entiende la jugada y pierde terreno.',ok?'Well called! Your team moves forward.':'Your team does not understand the call and loses ground.')];
+      if(!ok)ls.push(N('Se decía: '+P2.a,'The call was: '+P2.a));
+      if(PALIN.pos>=3){PALIN.us++;PALIN.pos=0;const nw=numW(PALIN.us);ls.push(L('Pu che',nw[0].toUpperCase()+nw.slice(1)+' raya!','¡Raya para tu equipo! Van '+PALIN.us+' a '+PALIN.them+'.','A point for your team! It is '+PALIN.us+' to '+PALIN.them+'.'))}
+      if(PALIN.pos<=-3){PALIN.them++;PALIN.pos=0;ls.push(N('Raya para el equipo rival. Van '+PALIN.us+' a '+PALIN.them+'.','A point for the rival team. It is '+PALIN.us+' to '+PALIN.them+'.'))}
+      say(ls,play)},false,true)}
+  function end(){const won=PALIN.us>PALIN.them;const ls=[];
+    if(won){ls.push(L('Palife','Iñchiñ wewiñ!','¡Ganamos!','We won!'));if(first){S.flags.palin_won=1;S.gold+=30;S.xp+=8;ls.push(N('+30 ngülliw · +8 kimün. Desde hoy te llaman palife, jugadora o jugador de palin.','+30 ngülliw · +8 kimün. From today they call you palife, a palin player.'))}}
+    else ls.push(L('Palife','Ka antü!','¡Otro día será! El palin se aprende jugando.','Another day! You learn palin by playing.'));
+    PALIN=null;persist();say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+}
+function drawPalin(c){if(!PALIN)return;const x0=Math.round(LW/2-70),y0=VY+50;
+  R(c,x0-4,y0-4,148,30,'rgba(12,10,30,.7)');R(c,x0,y0+8,140,6,'#4a7a2e');R(c,x0,y0+8,140,1,'#7aa848');
+  for(let k=-3;k<=3;k++)R(c,x0+70+k*20,y0+6,1,10,k===-3||k===3?'#f4e8c8':'rgba(244,232,200,.35)');
+  const bx=x0+70+PALIN.pos*20;R(c,bx-2,y0+9,4,4,'#f4f0e8');R(c,bx-1,y0+9,2,1,'#ffffff');
+  OV.push(()=>{txt('lafken',x0-2,y0+30,'#bfe3d0',9);txt('puel',x0+142,y0+30,'#bfe3d0',9,'right');txt(PALIN.us+' – '+PALIN.them,LW/2,y0+3,'#ffe8a0',12,'center')})}
+
+/* ---------- 8. trafkintu: trading with numbers in Mapudungun ---------- */
+function trafkintuTalk(){
+  const en=S.gloss==='en',first=!S.flags.traf_done;
+  say([L('Trafkintufe','Mari mari! Trafkintuaiñ?','¡Hola! ¿Hacemos trafkintu? Yo ofrezco, tú decides si el trato es justo.','Hello! Shall we do trafkintu? I make offers, you decide whether the deal is fair.'),
+    N('En el trafkintu se cambian cosas. Ella te dirá el precio en mapudungun. Si el precio es justo (como en la tienda o menos), acepta con «May». Si es un abuso, di «No».','In trafkintu people exchange goods. She will tell you the price in Mapudungun. If it is fair (shop price or less), accept with "May". If it is a rip-off, say "No".')],()=>{
+    let good=0,n=0;const items=['kulon','diwen','kofke','lawen','mate'];
+    const offer=()=>{if(n>=5)return end();n++;const it=items[rnd(items.length)],base=ITEMS[it].p,fair=Math.random()<.55;
+      const price=fair?Math.max(1,Math.round(base*(.5+Math.random()*.5))):Math.round(base*(2+Math.random()*2));
+      choose({m:'Kiñe '+ITEMS[it].m+': '+numW(price)+' ngülliw.',es:'(Tienes '+S.gold+' ngülliw. En la tienda vale '+base+'.) ¿Aceptas?',en:'(You have '+S.gold+' ngülliw. In the shop it costs '+base+'.) Do you accept?'},
+        [{m:'May',g:en?'Accept':'Acepto',v:1},{m:'No',g:en?'Decline':'No acepto',v:0}],v=>{
+        const right=fair?v===1:v===0;track('trafkintu (números)',right,{m:'Kiñe '+ITEMS[it].m+': '+numW(price)+' ngülliw.',es:'¿Cuántos ngülliw pide?',en:'How many ngülliw does she ask?'},[...new Set([String(price),String(base*3),String(price+7),String(Math.max(1,price-3))])].slice(0,3),String(price));
+        if(right)good++;
+        if(v===1){if(S.gold<price){sfx('bad');return say([N('No te alcanza: pide '+price+' y tienes '+S.gold+'.','You cannot afford it: she asks '+price+' and you have '+S.gold+'.')],offer)}
+          S.gold-=price;S.items[it]=(S.items[it]||0)+1;sfx(fair?'ok':'bad');
+          return say([fair?L('Trafkintufe','Kümey!','Buen trato para los dos.','A good deal for both of us.'):L('Trafkintufe','Hehe...','(Se ríe.) Pagaste '+price+'. ¡En la tienda valía '+base+'!','(She laughs.) You paid '+price+'. In the shop it was '+base+'!')],offer)}
+        sfx(fair?'bad':'ok');say([fair?N('Era un buen precio: '+price+' ('+numW(price)+').','That was a good price: '+price+' ('+numW(price)+').'):L('Trafkintufe','Kimimi!','¡No te dejas engañar! Pedía '+price+'.','You cannot be fooled! I was asking '+price+'.')],offer)},false,true)};
+    const end=()=>{const ls=[L('Trafkintufe','Pewkayal!',good+'/5 tratos bien decididos.',good+'/5 deals judged right.')];
+      if(good>=4&&first){S.flags.traf_done=1;S.items.lawen=(S.items.lawen||0)+2;sfx('lvl');ls.push(N('Te regala dos lawen: «Quien sabe contar en mapudungun no se deja engañar».','She gives you two lawen: "Whoever can count in Mapudungun is never fooled."'))}
+      persist();say(ls)};
+    offer()})}
+
+/* builder steps added to the five trawün lessons */
+[['lof',0,'küdaw- termina en consonante: -ymi se vuelve -imi. Küdawimi, tú trabajas.','küdaw- ends in a consonant: -ymi becomes -imi. Küdawimi, you work.'],
+ ['n_lof',1,'-yngu: ellos dos. Amuyngu, ellos dos van.','-yngu: the two of them. Amuyngu, the two of them go.'],
+ ['p_lof',2,'Primero -la- (no), después -a- (futuro): amu-la-a-n. Entre las dos a aparece una y: amulayan.','First -la- (not), then -a- (future): amu-la-a-n. Between the two a\'s a y appears: amulayan.'],
+ ['w_lof',5,'Chumül pregunta «cuándo», y amuaymi es «irás»: Chumül amuaymi?','Chumül asks "when", and amuaymi is "you will go": Chumül amuaymi?'],
+ ['e_lof',3,'-ke- va justo antes de la persona: amu-ke-ymi, amukeymi.','-ke- goes right before the person: amu-ke-ymi, amukeymi.']].forEach(([id,k,es,en])=>{
+  const T=TRAWUN[id];if(!T)return;T.steps.push({b:BUILDERS[k],why:N(es,en)})});
+
 /* ============================================================
    BATTLE
    ============================================================ */
@@ -4921,7 +5192,7 @@ function engage(e){
   if(e.pre)say(e.pre,go);else go();
 }
 function relabel(){const cnt={},seen={};B.en.forEach(e=>cnt[e.t]=(cnt[e.t]||0)+1);
-  B.en.forEach(e=>{seen[e.t]=(seen[e.t]||0)+1;if(e.label)return;e.label=ET[e.t].name+(cnt[e.t]>1||ET[e.t].name==='laftrache'&&B.en.length>1?' '+'ABCDE'[seen[e.t]-1]:'')})}
+  B.en.forEach(e=>{seen[e.t]=(seen[e.t]||0)+1;if(e.label)return;e.label=GR(ET[e.t].name)+(cnt[e.t]>1||ET[e.t].name==='laftrache'&&B.en.length>1?' '+'ABCDE'[seen[e.t]-1]:'')})}
 function progK(){const F=S.flags||{};return ['ngen','ngen2','ngen3','ngen4','ngen5'].filter(k=>F[k]).length+(F.won?1:0)}
 const YEWEN_KIN=['wenangkun','illkun','llukalfe','ayentufe','profe'];
 const YEWEN_CALL={wenangkun:['la pena que se queda callada. Despiértala (nepe-).','the sorrow that keeps quiet. Wake it (nepe-).'],
@@ -5067,6 +5338,7 @@ function resolve(r,kil,tg,ei){
   const form=r+(kil?'kil':'')+ENDS[ei];
   const vg=VG[r],gl={es:(kil?vg.nes:vg.es)[ei],en:(kil?vg.nen:vg.en)[ei]};
   const lines=[L(S.name,form+'!',gl.es,gl.en)];
+  if(!coll||n>1)track('-nge / -mu / -mün',ei===need);
   if(ei!==need){
     sfx('bad');
     if(coll)lines.push(N('Los wekufü se miran confundidos. Les hablas a todos y son '+numP(n)+': para '+(n===2?'dos':'tres o más')+' se usa -'+ENDS[need]+'.',
@@ -5451,6 +5723,7 @@ function ngenQuiz(qb){
     const opts=Q.o.map((o,i)=>({m:Array.isArray(o)?(en?o[1]:o[0]):o,v:i}));
     for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
     choose({m:'«'+Q.m+'»',es:Q.es,en:Q.en},opts,v=>{
+      {const op=Q.o.map(o=>Array.isArray(o)?(en?o[1]:o[0]):o);track('pregunta del ngen',v===Q.a,{m:'«'+Q.m+'»',es:Q.es,en:Q.en},op,op[Q.a])}
       if(v===Q.a){sfx('lvl');B.flash=16;B.shake=10;qb.hp=0;B.qok=1;
         say([N('Respondes, y la palabra sale de ti como un golpe de luz. '+qb.label+' cae.','You answer, and the word leaves you like a blow of light. '+qb.label+' falls.')],victory);}
       else{sfx('bad');qb.stag=0;const rg=Math.max(4,Math.round(ET[qb.t].hp*(.15+Math.random()*.25)));qb.hp=Math.min(ET[qb.t].hp,qb.hp+rg);
@@ -5459,6 +5732,7 @@ function ngenQuiz(qb){
   });
 }
 function victory(){
+  S.beaten=S.beaten||{};S.beatW=S.beatW||{};B.en.forEach(e=>{S.beaten[e.t]=(S.beaten[e.t]||0)+1;if(typeof M!=='undefined'&&M&&M.name&&!S.beatW[e.t])S.beatW[e.t]=M.name});
   if(B.o.final){const st=B.en[0].t;
     if(st==='ngoyman1')return ngoyStage(2);
     if(st==='ngoyman2')return ngoyStage(3);
@@ -5629,7 +5903,8 @@ function lanForm(e){return +e.t.slice(-1)}
 function lanKewun(e){
   const en=S.gloss==='en',form=lanForm(e),n=S.hm?2+form:3;
   B.lanUsed=B.lanUsed||[];const left=LAN_LOFS.filter(l=>!B.lanUsed.includes(l[0])),lofP=(left.length?left:LAN_LOFS)[rnd((left.length?left:LAN_LOFS).length)];
-  const pool=lanPool(),qs=[];while(qs.length<n&&pool.length)qs.push(pool.splice(rnd(pool.length),1)[0]);
+  const pool=lanPool(),qs=[];for(const m of missList()){if(qs.length>=Math.ceil(n/2))break;if(m.q.m&&m.q.m[0]!=='⧉'&&m.t!=='palin'&&m.t!=='trafkintu (números)')qs.push({q:m.q,o:m.o.slice().sort(()=>Math.random()-.5),a:m.a})}
+  while(qs.length<n&&pool.length){const p=pool.splice(rnd(pool.length),1)[0];if(!qs.some(x=>x.q.m===p.q.m&&x.q.es===p.q.es))qs.push(p)}
   say([Object.assign(L(e.label,'Lan kewün!','¡Muerte de la lengua!','Death of the language!'),{fx:()=>{sfx('bad');B.flash=18;B.shake=14}}),
     N(e.label+' lanza el lan kewün sobre '+lanName({lof:lofP},false)+'. Si fallas una sola de sus '+n+' preguntas, ese lof olvidará todo su mapudungun: perderás 6 piwke y tu newen (la barra verde) no se cargará más contra esta forma.',
       e.label+' casts lan kewün on '+lanName({lof:lofP},true)+'. Miss even one of its '+n+' questions and that lof will forget all its Mapudungun: you will lose 6 hearts, and your newen (the green bar) will not charge again against this form.'),
@@ -5638,7 +5913,7 @@ function lanKewun(e){
     if(i>=qs.length)return win();
     const q=qs[i];
     choose(Object.assign({},q.q,{es:'('+(i+1)+'/'+qs.length+') '+(q.q.es||''),en:'('+(i+1)+'/'+qs.length+') '+(q.q.en||'')}),q.o.map(o=>({m:o,v:o})),v=>{
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');lose(q.a)}},false,true)}
+      track('lan kewün',v===q.a,q.q,q.o,q.a);if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');lose(q.a)}},false,true)}
   function lose(ans){
     B.lanUsed.push(lofP[0]);B.noSp=e;const d=6*HPQ;S.hp=Math.max(1,S.hp-d);
     B.lanScene={lof:lofP,good:0,t:0};
@@ -5774,7 +6049,7 @@ function renderCut(){
 const CAM={x:0,y:0};
 const DYN=new Set(['Ł','@','^','Ñ','D','F','C','K','S','I','X','v','P','m','g','p','k','L','G','B','O','q','Q','N','J','H','E','A','j']);
 const BOB=new Set(['P','m','g','p','k']);
-function bubble(x,y,text){OV.push(()=>{ctx.font='bold 13px ui-monospace,Menlo,Consolas,monospace';const w=ctx.measureText(text).width+12,bx=Math.round(x*2-w/2),by=Math.round(y*2-26);
+function bubble(x,y,text){text=GRm(text);OV.push(()=>{ctx.font='bold 13px ui-monospace,Menlo,Consolas,monospace';const w=ctx.measureText(text).width+12,bx=Math.round(x*2-w/2),by=Math.round(y*2-26);
   ctx.fillStyle='#181018';ctx.fillRect(bx-2,by-2,w+4,24);ctx.fillStyle='#fffaf0';ctx.fillRect(bx,by,w,20);ctx.fillStyle='#181018';ctx.fillRect(x*2-3,by+20,6,4);ctx.fillStyle='#fffaf0';ctx.fillRect(x*2-1,by+20,2,2);
   ctx.fillStyle='#2a1a3a';ctx.textAlign='center';ctx.fillText(text,x*2,by+15);ctx.textAlign='left'})}
 function renderMap(){
@@ -5955,7 +6230,7 @@ function renderMap(){
   if(M.bg==='lagoon'){c.fillStyle=S.flags.ngen?'rgba(120,200,255,.08)':'rgba(60,30,90,.22)';c.fillRect(0,VY,LW,VH)}
   atmos(c);
   if(CT)ctLight(c,glows);
-  drawHUD(c);
+  drawHUD(c);if(PALIN)drawPalin(c);
 }
 // palin wiño: a long wooden stick held at the hip, its curved head sweeping the ground
 function drawWino(c,hx,hy,tx,ty,d){

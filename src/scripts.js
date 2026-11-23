@@ -324,7 +324,7 @@ function stoneTalk(id){
     if(i>=qs.length){S.flags[sf]=1;pzOpen();sfx('lvl');S.xp+=4;persist();return say([praise(),L('Kura','Tuteley! Amunge.','¡Muy bien! Pasa.','Well done! Go on through.'),N('La puerta de piedra se abre. +4 kimün.','The stone door opens. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat(S.hm?[]:[{m:'Chillka',g:S.gloss==='en'?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
       if(v==='_book')return openBook(()=>ask(i));
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');const hd=S.hm?heroHurt():0;say([L('Kura','Fey no...','Eso no...','Not that...'),N((hd?'La piedra te golpea (−'+hd+'). ':'')+'Vuelve a intentarlo desde el principio.',(hd?'The stone strikes you (−'+hd+'). ':'')+'Try again from the beginning.')],()=>ask(0))}},false,false)}
+      if(trk('kura (piedras)',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');const hd=S.hm?heroHurt():0;say([L('Kura','Fey no...','Eso no...','Not that...'),N((hd?'La piedra te golpea (−'+hd+'). ':'')+'Vuelve a intentarlo desde el principio.',(hd?'The stone strikes you (−'+hd+'). ':'')+'Try again from the beginning.')],()=>ask(0))}},false,false)}
 }
 const WARPS={lafkenche:[{m:'Lafken inaltu',es:'Entrada de la cueva (orilla)',en:'Cave entrance (lagoon shore)',to:['inaltu',21,5]},{m:'Lafkenche lof',es:'El lof de la costa',en:'The coast lof',to:['lof',17,9]}],
   nagche:[{m:'Fütra mawida',es:'Entrada de la guarida (monte)',en:'Lair entrance (forest)',to:['n_mawida',28,4]},{m:'Nagche lof',es:'El lof de los llanos',en:'The lowland lof',to:['n_lof',17,9]}],
@@ -605,7 +605,7 @@ function nweavTalk(){
         N('Te da epu mari (20) ngülliw y un lawen. +3 kimün.','She gives you epu mari (20) ngülliw and a lawen. +3 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_b'}]),v=>{
       if(v==='_b')return openBook(()=>ask(i));
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Domo','Fey no...','Eso no...','Not that one...')],()=>ask(0))}},false,false)}
+      if(trk('tejido',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Domo','Fey no...','Eso no...','Not that one...')],()=>ask(0))}},false,false)}
 }
 function pewKidsTalk(){
   const en=S.gloss==='en';
@@ -921,7 +921,7 @@ function nFisherTalk(){
       return say([praise(),L('Challwafe','Chaltu may! Wüle ka challwatuan.','¡Gracias! Mañana voy a pescar otra vez.','Thank you! Tomorrow I will fish again.'),N('Te da dos lawen y epu mari (20) ngülliw. +4 kimün.','He gives you two lawen and epu mari (20) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
       if(v==='_book')return openBook(()=>ask(i));
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Challwafe','Fey no...','Eso no...','Not that...'),N('Piensa: ¿ya pasó, o todavía no?','Think: has it already happened, or not yet?')],()=>ask(0))}},false,false)}
+      if(trk('pasado y futuro',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Challwafe','Fey no...','Eso no...','Not that...'),N('Piensa: ¿ya pasó, o todavía no?','Think: has it already happened, or not yet?')],()=>ask(0))}},false,false)}
 }
 function goTitle(){
   persist();active=null;menu.style.display='none';dlg.style.display='none';banner.style.display='none';B=null;
@@ -1011,7 +1011,7 @@ function arrieroTalk(){
       return say([praise(),L('Wentru','Kümey! Mapudungukeymi!','¡Bien! ¡Hablas mapudungun!','Good! You speak Mapudungun!'),N('Te da dos kofke y küla mari (30) ngülliw. +4 kimün.','He gives you two kofke and küla mari (30) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
       if(v==='_book')return openBook(()=>ask(i));
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Wentru','Fey no...','Eso no...','Not that...'),N('Piensa: ¿quién lo hace, y lo hace siempre?','Think: who does it, and do they always do it?')],()=>ask(0))}},false,false)}
+      if(trk('personas y -ke-',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Wentru','Fey no...','Eso no...','Not that...'),N('Piensa: ¿quién lo hace, y lo hace siempre?','Think: who does it, and do they always do it?')],()=>ask(0))}},false,false)}
 }
 function papayTalk(){
   say([L('Papay','Mari mari, '+addr(true)+'. Chumleymi?','Hola. ¿Cómo estás?','Hello. How are you?'),L(nm(),'Kümelen. Eymi kay?','Estoy bien. ¿Y tú?','I am well. And you?'),L('Papay','Iñche ka kümelen.','Yo también estoy bien.','I am well too.')]);
@@ -1101,7 +1101,7 @@ function timeTalk(){
       return say([praise(),L('Challwafe','Chaltu may!','¡Gracias!','Thank you!'),N('Te da un lawen, un kofke y küla mari (30) ngülliw. +4 kimün.','She gives you a lawen, a kofke and küla mari (30) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
       if(v==='_book')return openBook(()=>ask(i));
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Challwafe','Fey no...','Eso no...','Not that...'),N('Piensa: ¿ya pasó, o todavía no?','Think: has it already happened, or not yet?')],()=>ask(0))}},false,false)}
+      if(trk('pasado y futuro',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Challwafe','Fey no...','Eso no...','Not that...'),N('Piensa: ¿ya pasó, o todavía no?','Think: has it already happened, or not yet?')],()=>ask(0))}},false,false)}
 }
 function kona4Talk(){
   if(S.flags.ngen4)return say([L('Kona','Kaleuche ngelay! Ayüwün!','¡Ya no está el Kaleuche! ¡Qué feliz estoy!','The Kaleuche is gone! I am so happy!')]);
@@ -1199,7 +1199,7 @@ function malenTalk(){
     if(i>=qs.length){S.flags.puel_dir=1;S.items.lawen++;S.gold+=20;S.xp+=4;persist();sfx('lvl');
       return say([praise(),L('Domo','Kom kimimi! Chaltu may.','¡Los sabes todos! Gracias.','You know them all! Thank you.'),N('Te da un lawen y epu mari (20) ngülliw. +4 kimün.','She gives you a lawen and epu mari (20) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Domo','Fey no...','Eso no...','Not that...'),N('Piensa: ¿por dónde sale el sol? ¿Dónde queda el mar?','Think: where does the sun rise? Where is the sea?')],()=>ask(0))}},true,false)}
+    choose(q.q,o,v=>{if(trk('direcciones',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Domo','Fey no...','Eso no...','Not that...'),N('Piensa: ¿por dónde sale el sol? ¿Dónde queda el mar?','Think: where does the sun rise? Where is the sea?')],()=>ask(0))}},true,false)}
 }
 function charkiTalk(){
   const en=S.gloss==='en';
@@ -1213,7 +1213,7 @@ function charkiTalk(){
     if(i>=qs.length){S.flags.puel_food=1;S.items.kofke+=2;persist();sfx('lvl');
       return say([praise(),L('Domo','Kümey! Iaymi charki?','¡Bien! ¿Comes charki?','Good! Will you have some charki?'),N('Te da dos kofke para el camino.','She gives you two kofke for the road.')])}
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Domo','Fey no...','Eso no...','Not that...')],()=>ask(0))}},true,false)}
+    choose(q.q,o,v=>{if(trk('comida',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Domo','Fey no...','Eso no...','Not that...')],()=>ask(0))}},true,false)}
 }
 function kusheTalk(){
   const ls=[L('Kushe Millaray','Konpange, konpange!','¡Pasa, pasa!','Come in, come in!'),
@@ -1238,7 +1238,7 @@ function mallinTalk(){
       return say([praise(),L('Challwafe','Chaltu may!','¡Gracias!','Thank you!'),N('Te da un lawen, un kofke y küla mari (30) ngülliw. +4 kimün.','He gives you a lawen, a kofke and küla mari (30) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];choose(q.q,q.o.map(o=>({m:o,v:o})).concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
       if(v==='_book')return openBook(()=>ask(i));
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Challwafe','Fey no...','Eso no...','Not that...'),N('Piensa: ¿fue allá, o vino acá?','Think: did he go there, or come here?')],()=>ask(0))}},false,false)}
+      if(trk('küpa- y amu-',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Challwafe','Fey no...','Eso no...','Not that...'),N('Piensa: ¿fue allá, o vino acá?','Think: did he go there, or come here?')],()=>ask(0))}},false,false)}
 }
 function chadifeTalk(){
   const ls=[L('Chadife','Mari mari, '+addr(true)+'. Chadi ngillakan.','Hola. Junto sal.','Hello. I gather salt.'),
@@ -1309,7 +1309,7 @@ function capQuiz(id,gm,label,intro,qs,who,whoen,reward,rewardEn,give){
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
     choose(q.q,o.concat([{m:'Chillka',g:en?'Check the book':'Consultar el libro',v:'_book'}]),v=>{
       if(v==='_book')return openBook(()=>ask(i));
-      if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L(label,'Fey no...','Eso no...','Not that...'),N('La niebla se aprieta otra vez. Respira, y vuelve a empezar.','The fog tightens again. Breathe, and start over.')],()=>ask(0))}},false,false)}
+      if(trk('ngoyman (niebla)',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L(label,'Fey no...','Eso no...','Not that...'),N('La niebla se aprieta otra vez. Respira, y vuelve a empezar.','The fog tightens again. Breathe, and start over.')],()=>ask(0))}},false,false)}
 }
 function gLafTalk(){
   capQuiz('cap1','gm1','Pichiche',
@@ -1378,7 +1378,7 @@ function chGardenTalk(){
     if(i>=qs.length){S.flags.ch1=1;S.items.lawen++;S.gold+=40;persist();sfx('lvl');
       return say([praise(),L('Chumpall','Kom mongetuy!','¡Todo revive!','Everything comes back to life!'),N('Las algas se enderezan y los corales vuelven a brillar. Te da un lawen y meli mari (40) ngülliw.','The kelp straightens and the coral glows again. She gives you a lawen and meli mari (40) ngülliw.')])}
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Chumpall','Fey no...','Eso no...','Not that...')],()=>ask(0))}},true,false)}
+    choose(q.q,o,v=>{if(trk('chumpall',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Chumpall','Fey no...','Eso no...','Not that...')],()=>ask(0))}},true,false)}
 }
 function chChildTalk(){
   if(S.flags.ch2)return say([L('Pichi chumpall','Ñi lüq kura! Komütufinge!','¡Mi perla! ¡Mírala!','My pearl! Look at it!')]);
@@ -1406,7 +1406,7 @@ function chSingerTalk(){
     if(i>=qs.length){S.flags.ch3=1;S.items.kofke++;S.gold+=40;S.xp+=4;persist();sfx('lvl');
       return say([praise(),L('Chumpall ülkantufe','Taiñ ül wüñotrekay!','¡Nuestro canto volvió!','Our song has returned!'),N('El agua de la fosa se aquieta un momento, escuchando. Te da un kofke y meli mari (40) ngülliw. +4 kimün.','The water of the trench goes still for a moment, listening. She gives you a kofke and meli mari (40) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Chumpall ülkantufe','Fey no...','Eso no...','Not that...')],()=>ask(0))}},true,false)}
+    choose(q.q,o,v=>{if(trk('chumpall',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Chumpall ülkantufe','Fey no...','Eso no...','Not that...')],()=>ask(0))}},true,false)}
 }
 function chQueenTalk(){
   const en=S.gloss==='en';
@@ -1512,7 +1512,7 @@ function stKidsTalk(){
   function ask(i){
     if(i>=qs.length)return stReward('st1',()=>{S.gold+=20},[praise(),L('Pichikeche','Kiñe, epu, küla...!','¡Uno, dos, tres...!','One, two, three...!'),N('Los niños saltan la cuerda contando en mapudungun, cada vez más fuerte. Te dan epu mari (20) ngülliw de sus alcancías, muy serios.','The kids jump rope counting in Mapudungun, louder and louder. They give you epu mari (20) ngülliw from their piggy banks, very serious.')]);
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Pichiche','¿Seguro?...','¿Seguro?...','Are you sure?...')],()=>ask(0))}},true,false)}
+    choose(q.q,o,v=>{if(trk('Santiago',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Pichiche','¿Seguro?...','¿Seguro?...','Are you sure?...')],()=>ask(0))}},true,false)}
 }
 function stMuralTalk(){
   const en=S.gloss==='en';
@@ -1525,7 +1525,7 @@ function stMuralTalk(){
   function ask(i){
     if(i>=qs.length)return stReward('st3',()=>{S.gold+=30},[praise(),L('Muralista','¡Eso es! KO... MAPU... CHE...','¡Eso es! KO... MAPU... CHE...','That is it! KO... MAPU... CHE...'),N('Pinta las palabras enormes, de colores. La gente se para a mirarlas y las lee en voz alta. Te da küla mari (30) ngülliw.','She paints the words huge, in bright colors. People stop to look and read them out loud. She gives you küla mari (30) ngülliw.')]);
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Muralista','Mmm, no me suena...','Mmm, no me suena...','Hmm, that does not sound right...')],()=>ask(0))}},true,false)}
+    choose(q.q,o,v=>{if(trk('Santiago',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Muralista','Mmm, no me suena...','Mmm, no me suena...','Hmm, that does not sound right...')],()=>ask(0))}},true,false)}
 }
 function stAbuelaTalk(){
   if(S.flags.st2)return say([L('Papay','Tañi pu füchakeche ñi dungun, tañi pu pichikeche ñi dungun.','La lengua de mis abuelos, la lengua de mis nietos.','The language of my grandparents, the language of my grandchildren.'),N('La papay sonríe, tejiendo. Sus nietos practican el pentukuwün en un rincón de la ruka.','The papay smiles, weaving. Her grandchildren practice the pentukuwün in a corner of the ruka.')]);
@@ -1554,7 +1554,7 @@ function stLiderTalk(){
   function ask(i){
     if(i>=qs.length)return stReward('st4',()=>{S.items.lawen++},[praise(),L('Longko waria','Mari mari kom pu che!','¡Mari mari a toda la gente!','Mari mari to all the people!'),N('Lo dice fuerte, de corrido, y la ruka entera responde. Te da un lawen del huerto del centro.','He says it loud and clear, and the whole ruka answers. He gives you a lawen from the garden of the center.')]);
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Longko waria','Mmm, no es eso...','Mmm, no es eso...','Hmm, that is not it...')],()=>ask(0))}},true,false)}
+    choose(q.q,o,v=>{if(trk('Santiago',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Longko waria','Mmm, no es eso...','Mmm, no es eso...','Hmm, that is not it...')],()=>ask(0))}},true,false)}
 }
 function stTeenTalk(){
   const en=S.gloss==='en';
@@ -1567,7 +1567,7 @@ function stTeenTalk(){
   function ask(i){
     if(i>=qs.length)return stReward('st5',()=>{S.piwke++;if(S.piwke%4===0)S.hp=Math.min(maxHP(),S.hp+HPQ)},[praise(),L('Weche','Ya... voy a ir a la ruka el jueves.','Ya... voy a ir a la ruka el jueves.','Okay... I will go to the ruka on Thursday.'),N('Sonríe por primera vez, y practica bajito: "mari mari... mari mari...". Te regala algo que encontró y guardaba: un pedazo de piwke, rojo y brillante.','He smiles for the first time and practices under his breath: "mari mari... mari mari...". He gives you something he found and kept: a piwke piece, red and shining.')]);
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose(q.q,o,v=>{if(v===q.a){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Weche','...no sé si eso me ayuda.','...no sé si eso me ayuda.','...I am not sure that helps.')],()=>ask(0))}},true,false)}
+    choose(q.q,o,v=>{if(trk('Santiago',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Weche','...no sé si eso me ayuda.','...no sé si eso me ayuda.','...I am not sure that helps.')],()=>ask(0))}},true,false)}
 }
 
 /* ---------- Kuyfi chillka: six ancient carved tablets, each a Mapudungun lesson. All six = the trarilongko ---------- */
@@ -1625,7 +1625,7 @@ function tabletTalk(id){
         ls.push(Object.assign(L('','Trarilongko!','Las seis piedras cantan a la vez, lejos y cerca. Del musgo cae un trarilongko antiguo, tejido con hilo que brilla. Te lo amarras en la frente: tu defensa sube +3.','The six stones sing at once, near and far. An ancient trarilongko falls from the moss, woven with shining thread. You tie it around your forehead: defense +3.'),{fx:()=>sfx('lvl')}))}
       return say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=T.qs[i],opts=q.o.map(o=>({m:o,v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
-    choose(q.q,opts,v=>{if(v===q.a){sfx('ok');ask(i+1)}
+    choose(q.q,opts,v=>{if(trk('kuyfi chillka',v,q)){sfx('ok');ask(i+1)}
       else{sfx('bad');const hd=S.hm?heroHurt():0;say([N((hd?'(−'+hd+') ':'')+'Los signos tiemblan y se apagan. La respuesta era: '+q.a+'. Lee la piedra otra vez.',(hd?'(−'+hd+') ':'')+'The signs tremble and go dark. The answer was: '+q.a+'. Read the stone again.')].concat(T.lines),()=>ask(0))}},false,true)}
 }
 
@@ -1664,7 +1664,7 @@ function nutkTalk(lofId){
         persist()}
       return say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const s=D.set[i],opts=s.o.map(o=>({m:sub(o),v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
-    choose(s.q,opts,v=>{if(v===s.a){sfx('ok');step(i+1)}
+    choose(s.q,opts,v=>{track('nütramkan',v===s.a,s.q,s.o.map(sub),sub(s.a));if(v===s.a){sfx('ok');step(i+1)}
       else{sfx('bad');say([L(D.who,'Feyta chi no...','Eso no...','Not that...'),N('Se podía decir: «'+sub(s.a)+'». Probemos otra vez.','You could say: «'+sub(s.a)+'». Let us try again.')],()=>step(i))}},false,true)}
 }
 
@@ -1780,12 +1780,14 @@ function trawunTalk(id){
      :L(who,'Küme akunkonpayami fachi trawün, '+ad+'.','Bienvenid'+fp+' a este trawün, '+(ad==='peñi'?'hermano':S.fem?'hermana':'hermano')+'. Siéntate junto al kütral: hoy aprendemos juntos.','Welcome to this trawün, '+(S.fem?'sister':'brother')+'. Sit by the kütral: today we learn together.')],()=>
     choose(Object.assign({},D.t,{m:'Trawüleaiñ?'}),[{m:'May',g:en?'Take the lesson (about 4 minutes)':'Tomar la lección (unos 4 minutos)',v:1},{m:'Wüle müten',g:en?'Later':'Después',v:0}],v=>{if(v)run(0)},true,true));
   function run(i){
-    const chunk=[];while(i<D.steps.length&&!D.steps[i].q){chunk.push(sub(D.steps[i]));i++}
+    const chunk=[];while(i<D.steps.length&&!D.steps[i].q&&!D.steps[i].b){chunk.push(sub(D.steps[i]));i++}
     const next=()=>{if(i>=D.steps.length)return finish();ask(D.steps[i],()=>run(i+1))};
     if(chunk.length)say(chunk,next);else next()}
   function ask(Q,cb){
+    if(Q.b)return buildVerb(Q.b,(ok,got)=>{if(ok){sfx('ok');say([L(who,'Kümey!','¡Muy bien!','Very good!'),Q.why],cb)}
+      else{sfx('bad');say([L(who,'Kangelu...','Casi...','Almost...'),N('Armaste «'+got+'».','You built "'+got+'".'),Q.why,N('Inténtalo de nuevo.','Try again.')],()=>ask(Q,cb))}});
     const opts=Q.o.map(o=>({m:o,v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
-    choose(sub(Q.q),opts,v=>{if(v===Q.a){sfx('ok');say([L(who,'Kümey!','¡Muy bien!','Very good!'),Q.why],cb)}
+    choose(sub(Q.q),opts,v=>{track('trawün',v===Q.a,Q.q,Q.o,Q.a);if(v===Q.a){sfx('ok');say([L(who,'Kümey!','¡Muy bien!','Very good!'),Q.why],cb)}
       else{sfx('bad');say([L(who,'Kangelu...','Casi...','Almost...'),Q.why,N('Inténtalo de nuevo.','Try again.')],()=>ask(Q,cb))}},false,true)}
   function finish(){
     const ls=[L(who,'Fey tati. Pewkayal!','Eso es todo por hoy. ¡Hasta luego!','That is all for today. See you later!'),N('Lo que aprendiste quedó escrito en tu chillka:','What you learned is now written in your chillka:')].concat(D.sum);

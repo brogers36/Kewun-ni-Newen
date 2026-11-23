@@ -49,7 +49,15 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #dlg .more{position:absolute;right:.6em;bottom:.3em;color:#e8d49a;animation:bl 1s infinite}
 @keyframes bl{50%{opacity:0}}
 #menu,#dlg{z-index:20}#menu{display:none;max-height:50%;overflow:auto}#menu::before{top:calc(4px + var(--st,0px));z-index:3}#menu::after{bottom:calc(4px - var(--st,0px));z-index:3}
-#menu .p{margin-bottom:.45em}
+#menu .p{margin-bottom:.45em;position:relative}
+.hid{display:none!important}
+.rv{position:absolute;right:6px;top:4px;z-index:4;width:1.9em;height:1.9em;border-radius:50%;border:2px solid #ffe8a0;background:#2a1a3a;color:#ffe8a0;font:bold 1em ui-monospace,monospace;cursor:pointer;padding:0}
+#menu .p .rv{top:-2px;right:0}
+#report{display:none;position:fixed;inset:0;z-index:40;background:rgba(8,6,20,.82);align-items:center;justify-content:center}
+#report .rb{background:#f8f2e4;color:#1a1020;max-width:min(92vw,720px);max-height:88vh;display:flex;flex-direction:column;border:4px solid #3a2a50;border-radius:6px}
+#report pre{margin:0;padding:14px;overflow:auto;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap}
+#report .rr{display:flex;gap:8px;padding:10px;border-top:2px solid #3a2a50;justify-content:flex-end}
+#report button{font:bold 14px ui-monospace,monospace;padding:8px 12px;background:#3a2a50;color:#ffe8a0;border:0;border-radius:4px;cursor:pointer}
 #menu .p .m{font-weight:bold;font-size:1.1em;color:#fff}
 #menu .p .g{color:#d4f0e2;font-style:italic;font-size:1.1em}
 #menu .list{display:grid;grid-template-columns:1fr 1fr;gap:.35em}
