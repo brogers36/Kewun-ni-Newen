@@ -6,7 +6,7 @@ import json, os
 import numpy as np
 import yewen_paint as yp
 import hero_paint as hp
-from hero_paint import R, blob, legs, head, arm, finish, W, H
+from hero_paint import R, blob, legs, head, arm, finish, raise_arm, W, H
 from yewen_paint import Canvas, hx, taper
 
 X = {
@@ -20,7 +20,10 @@ X = {
 }
 X = {k: [hx(c) for c in v] for k, v in X.items()}
 
-def man(poncho, band_cols, hk='hair', old=False):
+LINES = {('face', 'hair'), ('fore', 'arm'), ('hand', 'fore'), ('armf', 'arm'), ('armh', 'armf'), ('armh', 'face'), ('armf', 'face'), ('armh', 'hair'),
+         ('farmf', 'farm'), ('farmh', 'farmf'), ('farmh', 'hair'), ('farmf', 'hair'), ('farm', 'hairB')}
+
+def man(poncho, band_cols, hk='hair', old=False, cheer=None):
     yp.W, yp.H = W, H; c = Canvas(); fr = 0
     legs(c, fr, False)
     blob(c, poncho, lambda d: d.polygon([(19, 25), (31, 25), (35, 36), (34, 52), (16, 52), (15, 36)], fill=1), bulge=0.8, lift=0.08, name='poncho')
@@ -30,12 +33,14 @@ def man(poncho, band_cols, hk='hair', old=False):
         for k, col in enumerate(band_cols):
             if c.part[yb + k, x] == 'poncho': c.px(x, yb + k, col)
     for x in range(16, 34): c.px(x, 51, band_cols[2]); c.px(x, 50, band_cols[1] if x % 2 else band_cols[0])
+    if cheer is not None: raise_arm(c, poncho, cheer, far=True)
     head(c, fr, False, hk=hk, old=old)
-    arm(c, fr, poncho)
-    c.inner_lines({('poncho', 'legF'), ('poncho', 'legB'), ('face', 'hair'), ('neck', 'poncho'), ('arm', 'poncho'), ('fore', 'arm'), ('hand', 'fore')})
+    if cheer is not None: raise_arm(c, poncho, cheer)
+    else: arm(c, fr, poncho)
+    c.inner_lines(LINES | {('poncho', 'legF'), ('poncho', 'legB'), ('neck', 'poncho'), ('arm', 'poncho'), ('farm', 'poncho')})
     c.outline(); return finish(c)
 
-def woman(dress, belt, shawl=None, pendant=False, folded=False, band=False):
+def woman(dress, belt, shawl=None, pendant=False, folded=False, band=False, cheer=None):
     yp.W, yp.H = W, H; c = Canvas(); fr = 0
     legs(c, fr, True)
     blob(c, dress, lambda d: d.polygon([(19, 25), (31, 25), (33, 40), (36, 66), (17, 66), (16, 40)], fill=1), bulge=0.8, lift=0.08, name='kupam')
@@ -47,6 +52,7 @@ def woman(dress, belt, shawl=None, pendant=False, folded=False, band=False):
         for k, col in enumerate((belt[4], belt[3], belt[2])):
             if c.part[42 + k, x] == 'kupam': c.px(x, 42 + k, col)
         if x % 3 == 0: c.px(x, 43, R['white'][3])
+    if cheer is not None: raise_arm(c, shawl or dress, cheer, far=True)
     head(c, fr, True, band=band)
     if shawl:
         blob(c, shawl, lambda d: d.polygon([(18, 25), (32, 25), (36, 31), (35, 40), (27, 38), (21, 36), (16, 34), (16, 29)], fill=1), bulge=0.9, lift=0.12, name='shawl')
@@ -60,29 +66,32 @@ def woman(dress, belt, shawl=None, pendant=False, folded=False, band=False):
         c.px(25, 17, R['silver'][4]); c.px(25, 18, R['silver'][2]); c.px(25, 19, R['silver'][4])
         for y in range(16, 19): c.px(31, y, R['red'][3])
     sl = shawl or dress
-    if folded:
+    if cheer is not None:
+        raise_arm(c, sl, cheer)
+    elif folded:
         taper(c, [(25, 30), (22, 37), (19, 41)], 6, 5, sl, lift=0.14, name='arm', bulge=1.0)
         blob(c, R['skin'], lambda d: d.ellipse([14, 38, 21, 44], fill=1), bulge=1.1, lift=0.25, name='hand')
         c.px(16, 40, R['skin'][2])
     else:
         arm(c, fr, sl)
-    c.inner_lines({('kupam', 'hairB'), ('face', 'hair'), ('neck', 'kupam'), ('neck', 'shawl'), ('shawl', 'kupam'), ('shawl', 'hairB'), ('arm', 'kupam'), ('arm', 'shawl'),
+    c.inner_lines(LINES | {('kupam', 'hairB'), ('face', 'hair'), ('farm', 'kupam'), ('farm', 'shawl'), ('neck', 'kupam'), ('neck', 'shawl'), ('shawl', 'kupam'), ('shawl', 'hairB'), ('arm', 'kupam'), ('arm', 'shawl'),
                    ('fore', 'arm'), ('hand', 'fore'), ('hand', 'arm'), ('silver', 'kupam'), ('tupu', 'shawl')})
     c.outline(); return finish(c)
 
-PEOPLE = {
-    'lonko':  lambda: man(X['blackp'], (R['red'][3], R['white'][3], R['red'][2]), hk='grey', old=True),
-    'wentru': lambda: man(X['brown'], (R['yellow'][3], R['red'][3], R['yellow'][2])),
-    'weaver': lambda: woman(X['green'], R['red']),
-    'cook':   lambda: woman(X['terra'], X['ochre'], shawl=X['oshawl'], folded=True),
-    'ulcha':  lambda: woman(X['teal'], R['belt'], pendant=True, band=True),
+PEOPLE = {   # three frames each: idle, fist high, fist pulled down (the pump)
+    'lonko':  lambda ch: man(X['blackp'], (R['red'][3], R['white'][3], R['red'][2]), hk='grey', old=True, cheer=ch),
+    'wentru': lambda ch: man(X['brown'], (R['yellow'][3], R['red'][3], R['yellow'][2]), cheer=ch),
+    'weaver': lambda ch: woman(X['green'], R['red'], cheer=ch),
+    'cook':   lambda ch: woman(X['terra'], X['ochre'], shawl=X['oshawl'], folded=True, cheer=ch),
+    'ulcha':  lambda ch: woman(X['teal'], R['belt'], pendant=True, band=True, cheer=ch),
+    'kuku':   lambda ch: hp.kuku(0, cheer=ch),
 }
 
 if __name__ == '__main__':
     from PIL import Image
     here = os.path.dirname(os.path.abspath(__file__)); out = {}; strip = []
     for n, fn in PEOPLE.items():
-        img = fn(); p, f = yp.encode([img]); out[n] = {'pal': p, 'f': f}; strip.append(img)
+        imgs = [fn(None), fn(0), fn(1)]; p, f = yp.encode(imgs); out[n] = {'pal': p, 'f': f}; strip += imgs
     s = np.concatenate(strip, axis=1); Image.fromarray(s).resize((s.shape[1] * 4, s.shape[0] * 4), Image.NEAREST).save('/home/claude/lofpeople.png')
     json.dump(out, open(os.path.join(here, 'lofpeople.json'), 'w'))
     print('ok')

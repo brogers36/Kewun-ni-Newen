@@ -128,7 +128,7 @@ def millaray(fr):
     c.inner_lines({('kupam', 'hairB'), ('face', 'hair'), ('neck', 'kupam'), ('arm', 'kupam'), ('fore', 'arm'), ('hand', 'fore'), ('silver', 'kupam')})
     c.outline(); return finish(c)
 
-def kuku(fr):
+def kuku(fr, cheer=None):
     # the grandmother: a little shorter and stooped, silver-white braid, deep purple küpam under a dark
     # ükülla shawl pinned with a silver tupu, red trariwe, hands folded in front. Same light and outline as the heroes.
     yp.W, yp.H = W, H; c = Canvas(); lx = 0; nod = 1 if fr in (1, 3) else 0
@@ -161,12 +161,28 @@ def kuku(fr):
     m = c.mask(lambda d: d.ellipse([18, 29, 23, 34], fill=1)); c.shade(m, R['silver'], bulge=1.1, lift=0.25, name='tupu')
     c.px(20, 30, R['silver'][5]); c.px(22, 28, R['silver'][3]); c.px(23, 27, R['silver'][2])
     for (x, y) in [(19, 35), (19, 37), (20, 39)]: c.px(x, y, R['silver'][3])
-    # arms bent, hands folded together at the waist
-    taper(c, [(25, 30), (22, 37), (19, 41)], 6, 5, R['kpurple'], lift=0.14, name='arm', bulge=1.0)
-    blob(c, R['skin'], lambda d: d.ellipse([14, 38, 21, 44], fill=1), bulge=1.1, lift=0.25, name='hand')
-    c.px(16, 40, R['skin'][2]); c.px(18, 41, R['skin'][2])
+    # arms bent, hands folded together at the waist (or, cheering, a fist raised high)
+    if cheer is not None: raise_arm(c, R['kpurple'], cheer)
+    else:
+        taper(c, [(25, 30), (22, 37), (19, 41)], 6, 5, R['kpurple'], lift=0.14, name='arm', bulge=1.0)
+        blob(c, R['skin'], lambda d: d.ellipse([14, 38, 21, 44], fill=1), bulge=1.1, lift=0.25, name='hand')
+        c.px(16, 40, R['skin'][2]); c.px(18, 41, R['skin'][2])
     c.inner_lines({('kupam', 'hairB'), ('face', 'hair'), ('neck', 'shawl'), ('shawl', 'kupam'), ('arm', 'shawl'), ('hand', 'arm'), ('tupu', 'shawl'), ('braid', 'shawl'), ('braid', 'kupam')})
     c.outline(); return finish(c)
+
+def raise_arm(c, sleeve, lvl, far=False):
+    """A fist raised in celebration: lvl 0 = arm thrust high, lvl 1 = pulled down (the pump).
+    far=True draws the other arm behind the head, darker."""
+    sx, sy = (28, 28) if far else (24, 29)
+    if lvl == 0: ex, ey, fx, fy = (sx + 3, sy - 13, sx + 1, sy - 25) if far else (sx - 8, sy - 10, sx - 13, sy - 23)
+    else:        ex, ey, fx, fy = (sx + 6, sy - 8, sx + 4, sy - 18) if far else (sx - 10, sy - 4, sx - 12, sy - 15)
+    lf = -0.25 if far else 0.15; nm = 'farm' if far else 'arm'
+    taper(c, [(sx, sy), (ex, ey)], 6, 5, sleeve, lift=lf, name=nm, bulge=1.0)
+    taper(c, [(ex, ey), (fx, fy + 2)], 5, 4, R['skin'], lift=lf + 0.05, name=nm + 'f', bulge=1.0)
+    m = c.mask(lambda d: d.ellipse([fx - 3, fy - 3, fx + 2, fy + 2], fill=1)); c.shade(m, R['skin'], bulge=1.15, lift=lf + 0.13, name=nm + 'h')
+    if not far:
+        for k in range(3): c.px(int(fx) - 3, int(fy) - 2 + k * 2 // 1 if k < 2 else int(fy) + 1, R['skin'][2])   # knuckles
+        c.px(int(fx) - 1, int(fy) - 3, R['skin'][5])
 
 def finish(c):
     rim = np.array((190, 210, 255))
