@@ -8,7 +8,7 @@
 let GRAF=(()=>{try{return localStorage.getItem('kw_graf')||'u'}catch(e){return 'u'}})();
 const GRAF_NAME={u:'Unificado',a:'Azümchefe',r:'Ragileo'};
 function setGraf(g){GRAF=g;try{localStorage.setItem('kw_graf',g)}catch(e){}}
-const _isEsp=s=>/[áéíóúÁÉÍÓÚ¿¡]/.test(s)||/\b(volver|cerrar|partida|normal|pistas|glosa|español|english|música|music|hints|gloss|title|close|back|desde|inicio|nuevo|juego|cancelar|salir|después|later|yes|on|off|sí|modo|consultar|libro|tomar|lección|todos|solo|menú|menu|cosas|items|go|map|mapa|ir|heal|sanar|learn|aprender|palabras|every|word|report|informe|game|start|empezar|region|ganar|pelea|win|battle|grafemario|play|jugar|continuar|continue|new|nueva|partida|the|to|of|de|la|el|del|un|una|y|you|your|tu|status|estado|quest|log|progress|avance)\b/i.test(s);
+const _isEsp=s=>/[áéíóúÁÉÍÓÚ¿¡]/.test(s)||/\b(volver|cerrar|partida|normal|pistas|glosa|español|english|música|music|hints|gloss|title|close|back|desde|inicio|nuevo|juego|cancelar|salir|después|later|yes|on|off|sí|modo|consultar|libro|tomar|lección|todos|solo|menú|menu|cosas|items|go|map|mapa|ir|heal|sanar|learn|aprender|palabras|every|word|report|informe|game|start|empezar|region|ganar|pelea|win|battle|grafemario|play|jugar|continuar|continue|new|nueva|partida|the|to|of|de|la|el|del|un|una|y|you|your|tu|status|estado|quest|log|progress|avance|settings)\b/i.test(s);
 function _cv(s,pairs){let o='';for(let i=0;i<s.length;){let hit=null;for(const [a,b] of pairs){if(s.substr(i,a.length).toLowerCase()===a){hit=[a,b];break}}
   if(hit){const src=s.substr(i,hit[0].length),up=src[0]!==src[0].toLowerCase();o+=up?hit[1][0].toUpperCase()+hit[1].slice(1):hit[1];i+=hit[0].length}else{o+=s[i];i++}}return o}
 const GRAF_RULES={a:[['tr','tx'],['ng','g'],['g','q'],['d','z']],
@@ -148,14 +148,14 @@ function reportText(){
   const en=S.gloss==='en',F=S.flags,yes=k=>F[k]?'✓':'·',acc=S.acc||{},mins=Math.round((S.wtime||0)/3600);
   const rows=Object.keys(acc).sort().map(k=>{const a=acc[k];return '  '+k.padEnd(26)+String(a.c).padStart(4)+' / '+String(a.t).padEnd(4)+(a.t?Math.round(100*a.c/a.t)+'%':'')});
   const ml=missList().slice(0,12).map(m=>'  '+(m.q.m||m.q.es||'').replace(/^⧉ /,'').slice(0,40).padEnd(42)+'→ '+m.a);
-  const trw=TRW_IDS.filter(k=>F['trw_'+k]).length+'/'+TRW_IDS.length;
+  const trw=TRW_IDS.filter(k=>F['trw_'+k]).length+'/'+TRW_IDS.length+' + '+TRW_IDS.filter(k=>F['trw2_'+k]).length+'/'+TRW_IDS.length;
   const tabs=typeof TAB_IDS!=='undefined'?TAB_IDS.filter(t=>F['tab_'+t]).length:0;
-  const ntk=Object.keys(NUTK).filter(k=>F['ntk_'+k]).length;
+  const ntk=Object.keys(NUTK).filter(k=>F['ntk_'+k]).length+Object.keys(NUTK2).filter(k=>F['ntk2_'+k]).length;
   const L1=en?['KIMÜN REPORT · Kewün ñi Newen','Player','Level','Play time','min','Ngen awakened','Verb roots','Trawün lessons','Kuyfi chillka','Nütramkan','Wekufü beaten','Accuracy by topic (correct / attempts)','Still to practise (most missed first)','Nothing pending: well done!']
     :['INFORME DE KIMÜN · Kewün ñi Newen','Jugador/a','Nivel','Tiempo de juego','min','Ngen despertados','Raíces verbales','Lecciones del trawün','Kuyfi chillka','Nütramkan','Wekufü vencidos','Precisión por tema (aciertos / intentos)','Por practicar (lo más fallado primero)','Nada pendiente: ¡bien hecho!'];
   return [L1[0],'',L1[1]+': '+S.name+(S.hm?' (weichafe)':''),L1[2]+': kimün '+S.lvl,L1[3]+': '+mins+' '+L1[4],
     L1[5]+': '+['ngen','ngen2','ngen3','ngen4','ngen5'].filter(k=>F[k]).length+'/5'+(F.won?'  · Ti Fütra Ngoymatulfe ✓':''),
-    L1[6]+' ('+S.roots.length+'): '+S.roots.map(r=>r+'-').join(', '),L1[7]+': '+trw,L1[8]+': '+tabs+'/6',L1[9]+': '+ntk+'/'+Object.keys(NUTK).length,
+    L1[6]+' ('+S.roots.length+'): '+S.roots.map(r=>r+'-').join(', '),L1[7]+': '+trw,L1[8]+': '+tabs+'/6',L1[9]+': '+ntk+'/'+(Object.keys(NUTK).length+Object.keys(NUTK2).length),
     L1[10]+': '+Object.keys(S.beaten||{}).length,(en?'Translations peeked at (Mapudungun-only mode)':'Traducciones consultadas (modo re mapudungun)')+': '+(S.peek||0)+(S.nogloss?'':(en?' · mode off':' · modo apagado')),'',L1[11]+':',...(rows.length?rows:['  —']),'',L1[12]+':',...(ml.length?ml:['  '+L1[13]]),'',new Date().toLocaleString()].join('\n')}
 function openReport(back){
   const t=reportText(),en=S.gloss==='en';let ov=document.getElementById('report');

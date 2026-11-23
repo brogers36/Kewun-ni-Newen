@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='e60281a-202611222233';
+window.KEWUN_BUILD='88379e2-202611222253';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -4569,20 +4569,50 @@ const NUTK={
     {q:L('Nawel','Chumngechi pingekey «caballo»?','¿Cómo se dice «caballo»?','How do you say «horse»?'),o:['Kawellu.','Trewa.','Choyke.'],a:'Kawellu.'},
     {q:L('Nawel','Epu ka küla: tunten?','Dos y tres: ¿cuánto es?','Two and three: how much?'),o:['Kechu.','Meli.','Kayu.'],a:'Kechu.'},
     {q:L('Nawel','Chew müley ta choyke?','¿Dónde está el ñandú?','Where is the rhea?'),o:['Lelfün mew.','Choyke pingen.','Kechu choyke.'],a:'Lelfün mew.'}]}};
+/* second conversation with each nütramkan partner, once the first is done (Tanda 24) */
+const NUTK2={
+  lof:[
+    {q:L('Ayelen','Iney tami üy?','¿Cuál es tu nombre?','What is your name?'),o:['Tañi üy @.','Tami üy @.','@ pingey.'],a:'Tañi üy @.'},
+    {q:L('Ayelen','Chew müley tami ruka?','¿Dónde está tu casa?','Where is your house?'),o:['Lafken mew müley.','Lafken mew amuan.','Lafken pingey.'],a:'Lafken mew müley.'},
+    {q:L('Ayelen','Lamngen nieymi?','¿Tienes hermanos?','Do you have siblings?'),o:['May, epu lamngen nien.','May, epu lamngen niey.','Epu lamngen pingen.'],a:'May, epu lamngen nien.'},
+    {q:L('Ayelen','Küdawkeymi?','¿Trabajas?','Do you work?'),o:['May, küdawken.','May, küdawkey.','Küdaw pingen.'],a:'May, küdawken.'}],
+  n_lof:[
+    {q:L('Kallfü','Tunten tripantu nieymi?','¿Cuántos años tienes?','How old are you?'),o:['Mari kechu tripantu nien.','Mari kechu tripantu niey.','Mari kechu pingen.'],a:'Mari kechu tripantu nien.'},
+    {q:L('Kallfü','Tunten kawellu niey tami chaw?','¿Cuántos caballos tiene tu papá?','How many horses does your father have?'),o:['Küla kawellu niey.','Küla kawellu nien.','Küla kawellu pingey.'],a:'Küla kawellu niey.'},
+    {q:L('Kallfü','Ayüymi ti palin?','¿Te gusta el palin?','Do you like palin?'),o:['May, ayüfiñ.','May, ayüy.','Palin pingen.'],a:'May, ayüfiñ.'},
+    {q:L('Kallfü','Wüle palituaiñ?','¿Jugamos palin mañana?','Shall we play palin tomorrow?'),o:['May, wüle.','Wiya.','Kuyfi.'],a:'May, wüle.'}],
+  p_lof:[
+    {q:L('Rayen','Iney pingey tami ñuke?','¿Cómo se llama tu mamá?','What is your mother called?'),o:['Tañi ñuke Kallfüray pingey.','Tami ñuke Kallfüray pingey.','Tañi ñuke Kallfüray pingen.'],a:'Tañi ñuke Kallfüray pingey.'},
+    {q:L('Rayen','Chew müley tami kuku?','¿Dónde está tu abuela (paterna)?','Where is your (paternal) grandmother?'),o:['Ruka mew müley.','Ruka mew amuan.','Ruka pingey.'],a:'Ruka mew müley.'},
+    {q:L('Rayen','Iney ta tami chuchu?','¿Quién es tu chuchu?','Who is your chuchu?'),o:['Tañi ñuke ñi ñuke.','Tañi chaw ñi ñuke.','Tañi ñuke ñi chaw.'],a:'Tañi ñuke ñi ñuke.'},
+    {q:L('Rayen','Pewkayal, @!','¡Hasta luego!','See you later!'),o:['Pewkayal!','Mari mari!','Kümelen.'],a:'Pewkayal!'}],
+  w_lof:[
+    {q:L('Millanao','Mawünküley?','¿Está lloviendo?','Is it raining?'),o:['May, mawünküley.','May, mawünkülen.','Mawün pingey.'],a:'May, mawünküley.'},
+    {q:L('Millanao','Anünge, @.','Siéntate.','Sit down.'),o:['Chaltu may.','Pewkayal.','Anüy.'],a:'Chaltu may.'},
+    {q:L('Millanao','Küdawküleymi?','¿Estás trabajando?','Are you working?'),o:['May, küdawkülen.','May, küdawküley.','Küdaw pingen.'],a:'May, küdawkülen.'},
+    {q:L('Millanao','Umawtuley tami kuku?','¿Tu abuela está durmiendo?','Is your grandmother sleeping?'),o:['May, umawtuley.','May, umawtulen.','Umawtu pingey.'],a:'May, umawtuley.'}],
+  e_lof:[
+    {q:L('Nawel','Chumül akuymi?','¿Cuándo llegaste?','When did you arrive?'),o:['Wiya akun.','Wüle akuan.','Wiya akuy.'],a:'Wiya akun.'},
+    {q:L('Nawel','Chumül amuaymi?','¿Cuándo te vas?','When will you leave?'),o:['Wüle amuan.','Wiya amun.','Wüle amuay.'],a:'Wüle amuan.'},
+    {q:L('Nawel','Fewla iyaymi?','¿Vas a comer ahora?','Will you eat now?'),o:['Wüla müten.','Wiya.','Kuyfi.'],a:'Wüla müten.'},
+    {q:L('Nawel','Pewkayal, @!','¡Hasta luego!','See you later!'),o:['Pewkayal!','Mari mari!','Fewla.'],a:'Pewkayal!'}]};
 function nutkTalk(lofId){
-  const D=NUTK[lofId],fl='ntk_'+lofId,done=!!S.flags[fl],nm=S.name;
+  const first=!!S.flags['ntk_'+lofId],two=first&&NUTK2[lofId];
+  let D=NUTK[lofId],fl='ntk_'+lofId,done=first;const nm=S.name;
+  if(two&&(!S.flags['ntk2_'+lofId]||Math.random()<.5)){D={who:D.who,set:NUTK2[lofId]};fl='ntk2_'+lofId;done=!!S.flags[fl]}
   const sub=s=>s.replace('@',nm);
   say([L(D.who,'Mari mari! Nütramkayaiñ?','¡Hola! ¿Conversamos? Estoy aprendiendo y quiero practicar.','Hello! Shall we talk? I am learning and I want to practise.')],()=>{
     choose(L('','Nütramkayaiñ?','¿Conversas con '+D.who+'?','Talk with '+D.who+'?'),[{m:'May',g:S.gloss==='en'?'Yes, let us talk':'Sí, conversemos',v:1},{m:'Ka mew',g:S.gloss==='en'?'Later':'Después',v:0}],v=>{if(v)step(0)},true,true)});
   function step(i){
     if(i>=D.set.length){const ls=[L(D.who,'Kümey! Pewkayal!','¡Muy bien! ¡Hasta luego!','Very good! See you later!')];
       if(!done){S.flags[fl]=1;S.gold+=15;S.xp+=6;sfx('lvl');ls.push(N('+15 ngülliw · +6 kimün.','+15 ngülliw · +6 kimün.'));
+        if(fl.startsWith('ntk2_')&&Object.keys(NUTK2).every(k=>S.flags['ntk2_'+k])&&!S.flags.ntk2_all){S.flags.ntk2_all=1;S.items.mate=(S.items.mate||0)+3;ls.push(N('Conversaste dos veces en los cinco lof. Te regalan tres mate más.','You have talked twice in all five lof. They give you three more mate.'))}
         const all=Object.keys(NUTK).every(k=>S.flags['ntk_'+k]);
         if(all&&!S.flags.ntk_all){S.flags.ntk_all=1;S.items.mate=(S.items.mate||0)+3;ls.push(N('Conversaste en los cinco lof. La gente joven te regala tres mate para el camino.','You have talked in all five lof. The young people give you three mate for the road.'))}
         persist()}
       return say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const s=D.set[i],opts=s.o.map(o=>({m:sub(o),v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
-    choose(s.q,opts,v=>{track('nütramkan',v===s.a,s.q,s.o.map(sub),sub(s.a));if(v===s.a){sfx('ok');step(i+1)}
+    const sq=Object.assign({},s.q,{m:sub(s.q.m)});choose(sq,opts,v=>{track('nütramkan',v===s.a,sq,s.o.map(sub),sub(s.a));if(v===s.a){sfx('ok');step(i+1)}
       else{sfx('bad');say([L(D.who,'Feyta chi no...','Eso no...','Not that...'),N('Se podía decir: «'+sub(s.a)+'». Probemos otra vez.','You could say: «'+sub(s.a)+'». Let us try again.')],()=>step(i))}},false,true)}
 }
 
@@ -4689,14 +4719,103 @@ const TRAWUN={
   L('Pu che','Kom antü mapudunguken!','(Todos lo dicen juntos, fuerte.)','(Everyone says it together, loudly.)'),
   {q:N('¿Cómo se dice «todos los días hablo mapudungun»?','How do you say "every day I speak Mapudungun"?'),o:['Kom antü mapudunguken.','Kuyfi mapudungukefun.','Wüle mapudunguan.'],a:'Kom antü mapudunguken.',why:N('Kom antü + -ke-: lo que haces todos los días.','Kom antü + -ke-: what you do every day.')}],
   sum:[L('','amuken · amukeymi · amukey','suelo ir · sueles ir · suele ir','I usually go · you usually go · he/she usually goes'),L('','liwen küdawken · pun umawtuken','en la mañana suelo trabajar · de noche suelo dormir','in the morning I usually work · at night I usually sleep')]}};
+/* ---------- second lesson in each trawün (all new Mapudungun flagged in docs/review.md, Tanda 24) ---------- */
+const TRAWUN2={
+ lof:{t:N('Tañi, tami, ñi: de quién es','Tañi, tami, ñi: whose it is'),steps:[
+  N('Para decir de quién es algo, el mapudungun pone una palabrita antes del sustantivo.','To say whose something is, Mapudungun puts a little word before the noun.'),
+  L('@','Tañi ruka.','Mi casa.','My house.'),
+  L('@','Tami ruka.','Tu casa.','Your house.'),
+  L('@','Ñi ruka.','Su casa (de él o de ella).','His or her house.'),
+  L('Pu che','Tañi ruka! Tami ruka! Ñi ruka!','(Todos repiten.)','(Everyone repeats.)'),
+  {q:N('¿Cómo se dice «tu casa»?','How do you say "your house"?'),o:['tañi ruka','tami ruka','ñi ruka'],a:'tami ruka',why:N('tami es «tu»: tami ruka.','tami is "your": tami ruka.')},
+  N('Cuando hablan rápido, muchos acortan: «ñi ruka» por tañi ruka, «mi ruka» por tami ruka. Ojo: ñi puede ser «mi» o «su»; se entiende por el contexto.','When people talk fast, many shorten them: "ñi ruka" for tañi ruka, "mi ruka" for tami ruka. Careful: ñi can mean "my" or "his/her"; context makes it clear.'),
+  N('Para «nosotros» y «ustedes» también cuenta el número de personas, como en los verbos.','For "we" and "you all" the number of people counts too, as with verbs.'),
+  L('@','Taiñ lof. Tamün lof.','Nuestro lof (de tres o más). El lof de ustedes (tres o más).','Our lof (three or more). Your lof (three or more of you).'),
+  N('¿Te acuerdas de lo que te dice la gente cuando te manda su newen? «Llownge taiñ newen»: recibe nuestra fuerza.','Remember what the people say when they send you their newen? "Llownge taiñ newen": receive our strength.'),
+  {q:L('@','Taiñ lof.','¿Qué quiere decir?','What does it mean?'),o:['Nuestro lof.','Tu lof.','Su lof.'],a:'Nuestro lof.',why:N('taiñ es «nuestro» (de tres o más).','taiñ is "our" (of three or more).')},
+  N('Con la familia se usa todo el tiempo. Chaw es «papá» y ñuke es «mamá».','It is used all the time with family. Chaw is "father" and ñuke is "mother".'),
+  L('@','Tañi chaw Lienlaf pingey. Tañi ñuke Rayen pingey.','Mi papá se llama Lienlaf. Mi mamá se llama Rayen.','My father is called Lienlaf. My mother is called Rayen.'),
+  {q:N('¿Cómo dices «tu mamá»?','How do you say "your mother"?'),o:['tami ñuke','tañi ñuke','taiñ ñuke'],a:'tami ñuke',why:N('tami + ñuke: tami ñuke.','tami + ñuke: tami ñuke.')},
+  N('Y una pregunta muy útil: «Iney tami üy?», ¿cuál es tu nombre? Üy es «nombre».','And a very useful question: "Iney tami üy?", what is your name? Üy is "name".'),
+  L('@','Iney tami üy? Tañi üy Ñanku.','¿Cuál es tu nombre? Mi nombre es Ñanku.','What is your name? My name is Ñanku.'),
+  {q:L('@','Iney tami üy?','Te preguntan tu nombre.','They ask your name.'),o:['Tañi üy @.','Tami üy @.','Ñi üy @.'],a:'Tañi üy @.',why:N('Es tu nombre: tañi üy.','It is your name: tañi üy.')}],
+  sum:[L('','tañi · tami · ñi · taiñ · tamün','mi · tu · su · nuestro · de ustedes','my · your · his/her · our · your (pl.)'),L('','Iney tami üy? · Tañi üy ...','¿Cuál es tu nombre? · Mi nombre es ...','What is your name? · My name is ...')]},
+ n_lof:{t:N('Tunten? Los números y nie- (tener)','Tunten? Numbers and nie- (to have)'),steps:[
+  N('Hoy contamos. Del uno al diez:','Today we count. From one to ten:'),
+  L('@','Kiñe, epu, küla, meli, kechu.','Uno, dos, tres, cuatro, cinco.','One, two, three, four, five.'),
+  L('@','Kayu, regle, pura, aylla, mari.','Seis, siete, ocho, nueve, diez.','Six, seven, eight, nine, ten.'),
+  L('Pu che','Kiñe, epu, küla, meli, kechu, kayu, regle, pura, aylla, mari!','(Todos cuentan juntos, y los niños gritan el mari.)','(Everyone counts together, and the children shout the mari.)'),
+  {q:N('¿Qué número es «meli»?','Which number is "meli"?'),o:['3','4','7'],a:'4',why:N('kiñe 1, epu 2, küla 3, meli 4.','kiñe 1, epu 2, küla 3, meli 4.')},
+  N('Después del diez, se suma: mari kiñe es 11, mari epu es 12. Para las decenas se multiplica: epu mari es 20, küla mari es 30. Y pataka es 100.','After ten, you add: mari kiñe is 11, mari epu is 12. For the tens you multiply: epu mari is 20, küla mari is 30. And pataka is 100.'),
+  L('@','Epu mari kechu.','Veinticinco: dos dieces y cinco.','Twenty-five: two tens and five.'),
+  {q:N('¿Cómo se dice 14?','How do you say 14?'),o:['mari meli','meli mari','meli'],a:'mari meli',why:N('Diez y cuatro: mari meli. «Meli mari» sería 40.','Ten and four: mari meli. "Meli mari" would be 40.')},
+  {q:N('¿Qué número es «küla mari epu»?','Which number is "küla mari epu"?'),o:['32','23','52'],a:'32',why:N('Tres dieces y dos: 32.','Three tens and two: 32.')},
+  N('Ahora el verbo nie-, «tener». Se conjuga como amu-: nien, nieymi, niey.','Now the verb nie-, "to have". It conjugates like amu-: nien, nieymi, niey.'),
+  L('@','Epu kawellu nien.','Tengo dos caballos.','I have two horses.'),
+  L('@','Tunten kawellu nieymi?','¿Cuántos caballos tienes?','How many horses do you have?'),
+  N('Fíjate: con un número, el sustantivo no cambia. Epu kawellu, küla waka: no hace falta marcar el plural.','Notice: with a number, the noun does not change. Epu kawellu, küla waka: no plural marking is needed.'),
+  {q:L('@','Küla waka ___ (él o ella)','Él o ella tiene tres vacas.','He or she has three cows.'),o:['nien','nieymi','niey'],a:'niey',why:N('-y es «él» o «ella»: niey.','-y is "he" or "she": niey.')},
+  N('Y la edad se dice con años, tripantu: «¿cuántos años tienes?»','And age is said with years, tripantu: "how many years do you have?"'),
+  L('@','Tunten tripantu nieymi? Mari aylla tripantu nien.','¿Cuántos años tienes? Tengo diecinueve años.','How old are you? I am nineteen.'),
+  {q:N('«Tengo doce años.»','"I am twelve."'),o:['Mari epu tripantu nien.','Epu mari tripantu nien.','Mari epu tripantu niey.'],a:'Mari epu tripantu nien.',why:N('12 es mari epu, y «yo tengo» es nien.','12 is mari epu, and "I have" is nien.')}],
+  sum:[L('','kiñe · epu · küla · meli · kechu · kayu · regle · pura · aylla · mari','1 · 2 · 3 · 4 · 5 · 6 · 7 · 8 · 9 · 10','1 · 2 · 3 · 4 · 5 · 6 · 7 · 8 · 9 · 10'),L('','mari kiñe 11 · epu mari 20 · pataka 100','','')
+   ,L('','nien · nieymi · niey · Tunten tripantu nieymi?','tengo · tienes · tiene · ¿Cuántos años tienes?','I have · you have · he/she has · How old are you?')]},
+ p_lof:{t:N('Chaw, ñuke, kuku: la familia','Chaw, ñuke, kuku: the family'),steps:[
+  N('Hoy hablamos de la familia, que en el lof es casi todo.','Today we talk about family, which in the lof is almost everything.'),
+  L('@','Chaw. Ñuke.','Papá. Mamá.','Father. Mother.'),
+  N('Los abuelos tienen nombres distintos según el lado de la familia.','Grandparents have different names depending on the side of the family.'),
+  L('@','Laku, kuku.','Por el lado del papá: el abuelo es laku, la abuela es kuku.','On the father\'s side: grandfather is laku, grandmother is kuku.'),
+  L('@','Cheche, chuchu.','Por el lado de la mamá: el abuelo es cheche, la abuela es chuchu.','On the mother\'s side: grandfather is cheche, grandmother is chuchu.'),
+  L('Pu che','Laku, kuku! Cheche, chuchu!','(Todos repiten, y una abuela se ríe.)','(Everyone repeats, and a grandmother laughs.)'),
+  {q:N('La mamá de tu papá es tu...','Your father\'s mother is your...'),o:['kuku','chuchu','ñuke'],a:'kuku',why:N('Lado del papá, abuela: kuku.','Father\'s side, grandmother: kuku.')},
+  {q:N('La mamá de tu mamá es tu...','Your mother\'s mother is your...'),o:['chuchu','kuku','laku'],a:'chuchu',why:N('Lado de la mamá, abuela: chuchu.','Mother\'s side, grandmother: chuchu.')},
+  N('Y algo bonito: el nieto le dice laku al abuelo, y el abuelo también le dice laku al nieto. La palabra va y vuelve.','And something lovely: a grandson calls his grandfather laku, and the grandfather calls his grandson laku too. The word goes both ways.'),
+  N('Entre hermanos: los hombres le dicen peñi a un hermano y lamngen a una hermana. Las mujeres les dicen lamngen a todos.','Between siblings: men call a brother peñi and a sister lamngen. Women call all of them lamngen.'),
+  {q:N('Una mujer le habla a su hermano. Le dice...','A woman speaks to her brother. She calls him...'),o:['lamngen','peñi','chaw'],a:'lamngen',why:N('Las mujeres dicen lamngen a todos sus hermanos.','Women say lamngen to all their siblings.')},
+  N('Y los hijos: el papá dice fotüm a su hijo y ñawe a su hija; la mamá dice püñeñ a su hijo o hija.','And children: a father calls his son fotüm and his daughter ñawe; a mother calls her son or daughter püñeñ.'),
+  L('@','Tañi ñawe Rayen pingey.','(Dice el papá:) Mi hija se llama Rayen.','(The father says:) My daughter is called Rayen.'),
+  {q:N('Una mamá habla de su hijo:','A mother speaks about her son:'),o:['tañi püñeñ','tañi fotüm','tañi ñawe'],a:'tañi püñeñ',why:N('Para la mamá, hijo o hija es püñeñ.','For a mother, son or daughter is püñeñ.')}],
+  sum:[L('','chaw · ñuke · laku · kuku · cheche · chuchu','papá · mamá · abuelo y abuela paternos · abuelo y abuela maternos','father · mother · paternal grandparents · maternal grandparents'),L('','peñi · lamngen · fotüm · ñawe · püñeñ','hermano (de hombre) · hermana o hermano · hijo y hija (del papá) · hijo o hija (de la mamá)','brother (of a man) · sister or sibling · son and daughter (of a father) · child (of a mother)')]},
+ w_lof:{t:N('-le- y -küle-: lo que está pasando','-le- and -küle-: what is going on'),steps:[
+  N('Para decir que algo está pasando ahora, o que alguien está en un estado, se agrega -le- al verbo.','To say something is going on now, or that someone is in a state, you add -le- to the verb.'),
+  L('@','Anülen.','Estoy sentado (anü-, sentarse).','I am sitting (anü-, sit down).'),
+  L('@','Umawtulen.','Estoy durmiendo.','I am sleeping.'),
+  N('Si la raíz termina en consonante, es -küle-:','If the root ends in a consonant, it is -küle-:'),
+  L('@','Küdawkülen.','Estoy trabajando.','I am working.'),
+  L('Pu che','Anülen! Küdawkülen!','(Todos repiten, sentados alrededor del fuego.)','(Everyone repeats, seated around the fire.)'),
+  {q:N('«Estoy trabajando.»','"I am working."'),o:['Küdawkülen.','Küdawün.','Küdawlen.'],a:'Küdawkülen.',why:N('küdaw- termina en consonante: -küle-. Küdawkülen.','küdaw- ends in a consonant: -küle-. Küdawkülen.')},
+  N('Las personas van al final, como siempre: anülen, anüleymi, anüley; anüleyu, nosotros dos.','The persons go at the end, as always: anülen, anüleymi, anüley; anüleyu, we two.'),
+  {q:L('@','Fey umawtuley.','¿Qué quiere decir?','What does it mean?'),o:['Está durmiendo.','Va a dormir.','Duerme siempre.'],a:'Está durmiendo.',why:N('-le- es lo que está pasando: está durmiendo.','-le- is what is going on: he or she is sleeping.')},
+  N('¿Has oído a la gente hablar del tiempo? Lo dicen así: mawünküley, está lloviendo; pireley, está nevando; kürüfküley, está corriendo viento.','Have you heard people talk about the weather? They say it like this: mawünküley, it is raining; pireley, it is snowing; kürüfküley, the wind is blowing.'),
+  {q:N('Afuera llueve. La gente dice:','It is raining outside. People say:'),o:['Mawünküley.','Mawünkülen.','Mawün.'],a:'Mawünküley.',why:N('mawün + -küle- + -y: mawünküley.','mawün + -küle- + -y: mawünküley.')},
+  {q:N('¿Cómo dices «estamos sentados» (nosotros dos)?','How do you say "we are sitting" (we two)?'),o:['Anüleyu.','Anülen.','Anüleymi.'],a:'Anüleyu.',why:N('-yu es «nosotros dos»: anüleyu.','-yu is "we two": anüleyu.')}],
+  sum:[L('','anülen · umawtulen · küdawkülen','estoy sentado · estoy durmiendo · estoy trabajando','I am sitting · I am sleeping · I am working'),L('','mawünküley · pireley · kürüfküley','está lloviendo · está nevando · corre viento','it is raining · it is snowing · the wind is blowing')]},
+ e_lof:{t:N('Wiya, fachantü, wüle: cuándo','Wiya, fachantü, wüle: when'),steps:[
+  N('Hoy hablamos del tiempo que pasa: ayer, hoy, mañana.','Today we talk about time passing: yesterday, today, tomorrow.'),
+  L('@','Wiya. Fachantü. Wüle.','Ayer. Hoy. Mañana.','Yesterday. Today. Tomorrow.'),
+  L('@','Fewla.','Ahora.','Now.'),
+  L('Pu che','Wiya, fachantü, wüle!','(Todos repiten.)','(Everyone repeats.)'),
+  N('Recuerda: el verbo sin marca habla de lo que pasa o de lo que ya pasó. Para el futuro se agrega -a-.','Remember: an unmarked verb tells what happens or what already happened. For the future you add -a-.'),
+  L('@','Wiya küdawün. Wüle küdawan.','Ayer trabajé. Mañana trabajaré.','Yesterday I worked. Tomorrow I will work.'),
+  {q:N('«Mañana iré.»','"Tomorrow I will go."'),o:['Wüle amuan.','Wiya amun.','Wüle amun.'],a:'Wüle amuan.',why:N('wüle (mañana) y -a- (futuro): wüle amuan.','wüle (tomorrow) and -a- (future): wüle amuan.')},
+  {q:L('@','Wiya pen kiñe choyke.','¿Qué quiere decir?','What does it mean?'),o:['Ayer vi un ñandú.','Mañana veré un ñandú.','Hoy veo dos ñandúes.'],a:'Ayer vi un ñandú.',why:N('wiya es «ayer» y pen es «vi».','wiya is "yesterday" and pen is "I saw".')},
+  N('Y hay más palabras de tiempo. Wüla es «después»: por eso, cuando no quieres algo todavía, dices «wüla müten», después nomás.','And there are more time words. Wüla is "later": that is why, when you do not want something yet, you say "wüla müten", just later.'),
+  N('Kuyfi es «hace mucho, antiguo». Las kuyfi chillka son las escrituras antiguas que brillan en las piedras.','Kuyfi is "long ago, ancient". The kuyfi chillka are the ancient writings that glow on the stones.'),
+  {q:N('Te ofrecen mate, pero ahora no quieres. Dices:','They offer you mate, but you do not want it now. You say:'),o:['Wüla müten.','Wiya.','Kuyfi.'],a:'Wüla müten.',why:N('Wüla müten: después nomás.','Wüla müten: just later.')},
+  {q:N('¿Qué quiere decir «fewla»?','What does "fewla" mean?'),o:['ahora','ayer','antiguo'],a:'ahora',why:N('Fewla es «ahora».','Fewla is "now".')},
+  L('@','Chumül amuaymi? Wüle amuan.','¿Cuándo vas a ir? Iré mañana.','When will you go? I will go tomorrow.')],
+  sum:[L('','wiya · fachantü · wüle · fewla','ayer · hoy · mañana · ahora','yesterday · today · tomorrow · now'),L('','wüla · kuyfi · wüla müten','después · hace mucho · después nomás','later · long ago · just later')]}};
 const TRW_IDS=Object.keys(TRAWUN);
 function trawunTalk(id){
-  const D=TRAWUN[id],who=TRW_T[id],en=S.gloss==='en',fl='trw_'+id,done=!!S.flags[fl];
+  let D=TRAWUN[id],fl='trw_'+id,done=!!S.flags[fl];const who=TRW_T[id],en=S.gloss==='en',D2=TRAWUN2[id],done2=!!S.flags['trw2_'+id];
   const sub=l=>l&&l.who==='@'?Object.assign({},l,{who:who}):l;
   const tf=TRW_F[id],ad=addr(tf),fp=S.fem?'a':'o';
-  say([done?L(who,'Mari mari, '+ad+'! Kimeltuaiñ.','¡Volviste! ¿Repasamos la lección?','You came back! Shall we go over the lesson?')
+  say([done?L(who,'Mari mari, '+ad+'! Kimeltuaiñ.','¡Volviste! ¿Qué aprendemos hoy?','You came back! What shall we learn today?')
      :L(who,'Küme akunkonpayami fachi trawün, '+ad+'.','Bienvenid'+fp+' a este trawün, '+(ad==='peñi'?'hermano':S.fem?'hermana':'hermano')+'. Siéntate junto al kütral: hoy aprendemos juntos.','Welcome to this trawün, '+(S.fem?'sister':'brother')+'. Sit by the kütral: today we learn together.')],()=>
-    choose(Object.assign({},D.t,{m:'Trawüleaiñ?'}),[{m:'May',g:en?'Take the lesson (about 4 minutes)':'Tomar la lección (unos 4 minutos)',v:1},{m:'Wüla müten',g:en?'Later':'Después',v:0}],v=>{if(v)run(0)},true,true));
+    !done?choose(Object.assign({},D.t,{m:'Trawüleaiñ?'}),[{m:'May',g:en?'Take the lesson (about 4 minutes)':'Tomar la lección (unos 4 minutos)',v:1},{m:'Wüla müten',g:en?'Later':'Después',v:0}],v=>{if(v)run(0)},true,true)
+    :choose({m:'Trawüleaiñ?',es:'¿Qué lección tomas?',en:'Which lesson do you take?'},[
+      {m:'Kiñe ✓',g:G(D.t),v:1},{m:'Epu'+(done2?' ✓':''),g:G(D2.t)+(done2?'':(en?' (new)':' (nueva)')),v:2},{m:'Wüla müten',g:en?'Later':'Después',v:0}],v=>{
+      if(v===2){D=D2;fl='trw2_'+id;done=done2}if(v)run(0)},true,true));
   function run(i){
     const chunk=[];while(i<D.steps.length&&!D.steps[i].q&&!D.steps[i].b){chunk.push(sub(D.steps[i]));i++}
     const next=()=>{if(i>=D.steps.length)return finish();ask(D.steps[i],()=>run(i+1))};
@@ -4704,12 +4823,13 @@ function trawunTalk(id){
   function ask(Q,cb){
     if(Q.b)return buildVerb(Q.b,(ok,got)=>{if(ok){sfx('ok');say([L(who,'Kümey!','¡Muy bien!','Very good!'),Q.why],cb)}
       else{sfx('bad');say([L(who,'Kangelu...','Casi...','Almost...'),N('Armaste «'+got+'».','You built "'+got+'".'),Q.why,N('Inténtalo de nuevo.','Try again.')],()=>ask(Q,cb))}});
-    const opts=Q.o.map(o=>({m:o,v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
-    choose(sub(Q.q),opts,v=>{track('trawün',v===Q.a,Q.q,Q.o,Q.a);if(v===Q.a){sfx('ok');say([L(who,'Kümey!','¡Muy bien!','Very good!'),Q.why],cb)}
+    const opts=Q.o.map(o=>({m:o.replace('@',S.name),v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
+    choose(sub(Q.q),opts,v=>{track('trawün',v===Q.a,Q.q,Q.o.map(o=>o.replace('@',S.name)),Q.a.replace('@',S.name));if(v===Q.a){sfx('ok');say([L(who,'Kümey!','¡Muy bien!','Very good!'),Q.why],cb)}
       else{sfx('bad');say([L(who,'Kangelu...','Casi...','Almost...'),Q.why,N('Inténtalo de nuevo.','Try again.')],()=>ask(Q,cb))}},false,true)}
   function finish(){
     const ls=[L(who,'Fey tati. Pewkayal!','Eso es todo por hoy. ¡Hasta luego!','That is all for today. See you later!'),N('Lo que aprendiste quedó escrito en tu chillka:','What you learned is now written in your chillka:')].concat(D.sum);
     if(!done){S.flags[fl]=1;S.xp+=10;S.gold+=20;sfx('lvl');ls.push(N('+10 kimün · +20 ngülliw.','+10 kimün · +20 ngülliw.'));
+      if(fl.startsWith('trw2_')&&TRW_IDS.every(k=>S.flags['trw2_'+k])&&!S.flags.trw2_all){S.flags.trw2_all=1;S.items.mate=(S.items.mate||0)+5;ls.push(N('Tomaste las segundas lecciones de los cinco trawün. Los kimeltuchefe te regalan cinco mate más.','You took the second lessons of all five trawün. The kimeltuchefe give you five more mate.'))}
       if(TRW_IDS.every(k=>S.flags['trw_'+k])&&!S.flags.trw_all){S.flags.trw_all=1;S.items.mate=(S.items.mate||0)+5;ls.push(N('Tomaste las lecciones de los cinco trawün. Los kimeltuchefe te regalan cinco mate: «Sigue aprendiendo, siempre».','You took the lessons of all five trawün. The kimeltuchefe give you five mate: "Keep learning, always."'))}
       persist()}
     say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
@@ -4736,11 +4856,7 @@ function openPause(){
     {m:'Mapa',g:en?'Progress by land':'Avance por tierra',v:'mapa'},
     {m:'Kimeltun'+(missList().length?' · '+missList().length:''),g:en?'Practice, wekufü chillka, learning report':'Repaso, wekufü chillka, informe de aprendizaje',v:'kim'},
     {m:'Trariwe · '+(S.pieces||[]).length+'/5',g:en?'Pieces of the ancient sash':'Pedazos del trariwe antiguo',v:'trariwe'},
-    {m:en?'Hints: '+(S.hints?'on':'off'):'Pistas: '+(S.hints?'sí':'no'),g:en?'Show how many each ending addresses':'Mostrar a cuántos se dirige cada terminación',v:'hints'},
-    {m:en?'Gloss: English':'Glosa: Español',g:en?'Switch to Spanish':'Cambiar a inglés',v:'lang'},
-    {m:'Re mapudungun: '+(S.nogloss?(en?'yes':'sí'):'no'),g:en?'Hide the translation of Mapudungun lines':'Ocultar la traducción de las líneas en mapudungun',v:'nogloss'},
-    {m:'Grafemario: '+GRAF_NAME[GRAF],g:en?'Unificado → Azümchefe → Ragileo':'Unificado → Azümchefe → Ragileo',v:'graf'},
-    {m:AU.muted?(en?'Music: off':'Música: no'):(en?'Music: on':'Música: sí'),g:en?'Turn the music on or off':'Encender o apagar la música',v:'mus'},
+    {m:en?'Settings':'Configuración',g:en?'Glosses, hints, grafemario, music':'Glosas, pistas, grafemario, música',v:'cfg'},
     {m:en?'Title screen':'Volver al inicio',g:en?'Your progress is saved':'Se guarda tu avance',v:'title'},
     {m:en?'Close':'Cerrar',v:'x'}],v=>{
     if(v==='title')return goTitle();
@@ -4759,16 +4875,25 @@ function openPause(){
     else if(v==='kudaw')say(questLines());
     else if(v==='mapa')say(mapaLines());
     else if(v==='kim')openKim();
-    else if(v==='graf'){setGraf({u:'a',a:'r',r:'u'}[GRAF]);openPause()}
-    else if(v==='nogloss'){S.nogloss=S.nogloss?0:1;persist();openPause()}
+    else if(v==='cfg')openCfg();
     else if(v==='book')openBook(()=>openPause());
-    else if(v==='hints'){S.hints=!S.hints;persist();openPause()}
-    else if(v==='lang'){S.gloss=S.gloss==='en'?'es':'en';LANG=S.gloss;persist();openPause()}
-    else if(v==='mus'){toggleMute();openPause()}
   },true);
 }
 
 
+function openCfg(){const en=S.gloss==='en';
+  choose({es:'Configuración',en:'Settings'},[    {m:en?'Hints: '+(S.hints?'on':'off'):'Pistas: '+(S.hints?'sí':'no'),g:en?'Show how many each ending addresses':'Mostrar a cuántos se dirige cada terminación',v:'hints'},
+    {m:en?'Gloss: English':'Glosa: Español',g:en?'Switch to Spanish':'Cambiar a inglés',v:'lang'},
+    {m:'Re mapudungun: '+(S.nogloss?(en?'yes':'sí'):'no'),g:en?'Hide the translation of Mapudungun lines':'Ocultar la traducción de las líneas en mapudungun',v:'nogloss'},
+    {m:'Grafemario: '+GRAF_NAME[GRAF],g:en?'Unificado → Azümchefe → Ragileo':'Unificado → Azümchefe → Ragileo',v:'graf'},
+    {m:AU.muted?(en?'Music: off':'Música: no'):(en?'Music: on':'Música: sí'),g:en?'Turn the music on or off':'Encender o apagar la música',v:'mus'},
+    {m:en?'Back':'Volver',v:'x'}],v=>{
+    if(v==='hints'){S.hints=!S.hints;persist();openCfg()}
+    else if(v==='lang'){S.gloss=S.gloss==='en'?'es':'en';LANG=S.gloss;persist();openCfg()}
+    else if(v==='nogloss'){S.nogloss=S.nogloss?0:1;persist();openCfg()}
+    else if(v==='graf'){setGraf({u:'a',a:'r',r:'u'}[GRAF]);openCfg()}
+    else if(v==='mus'){toggleMute();openCfg()}
+    else openPause()},true)}
 function openKim(){const en=S.gloss==='en',n=missList().length,b=Object.keys(S.beaten||{}).length;
   choose({m:'Kimeltun',es:'Aprender',en:'Learning'},[
     {m:'Wiñochillkatun',g:(en?'Practice: 10 questions':'Repaso: 10 preguntas')+(n?(en?', '+n+' you have missed':', '+n+' que te han costado'):''),v:'p'},
@@ -4947,7 +5072,7 @@ for(const id of TRW_IDS){const T=TRAWUN[id];BOOK['trw_'+id]={m:'Trawün',es:T.t.
 let GRAF=(()=>{try{return localStorage.getItem('kw_graf')||'u'}catch(e){return 'u'}})();
 const GRAF_NAME={u:'Unificado',a:'Azümchefe',r:'Ragileo'};
 function setGraf(g){GRAF=g;try{localStorage.setItem('kw_graf',g)}catch(e){}}
-const _isEsp=s=>/[áéíóúÁÉÍÓÚ¿¡]/.test(s)||/\b(volver|cerrar|partida|normal|pistas|glosa|español|english|música|music|hints|gloss|title|close|back|desde|inicio|nuevo|juego|cancelar|salir|después|later|yes|on|off|sí|modo|consultar|libro|tomar|lección|todos|solo|menú|menu|cosas|items|go|map|mapa|ir|heal|sanar|learn|aprender|palabras|every|word|report|informe|game|start|empezar|region|ganar|pelea|win|battle|grafemario|play|jugar|continuar|continue|new|nueva|partida|the|to|of|de|la|el|del|un|una|y|you|your|tu|status|estado|quest|log|progress|avance)\b/i.test(s);
+const _isEsp=s=>/[áéíóúÁÉÍÓÚ¿¡]/.test(s)||/\b(volver|cerrar|partida|normal|pistas|glosa|español|english|música|music|hints|gloss|title|close|back|desde|inicio|nuevo|juego|cancelar|salir|después|later|yes|on|off|sí|modo|consultar|libro|tomar|lección|todos|solo|menú|menu|cosas|items|go|map|mapa|ir|heal|sanar|learn|aprender|palabras|every|word|report|informe|game|start|empezar|region|ganar|pelea|win|battle|grafemario|play|jugar|continuar|continue|new|nueva|partida|the|to|of|de|la|el|del|un|una|y|you|your|tu|status|estado|quest|log|progress|avance|settings)\b/i.test(s);
 function _cv(s,pairs){let o='';for(let i=0;i<s.length;){let hit=null;for(const [a,b] of pairs){if(s.substr(i,a.length).toLowerCase()===a){hit=[a,b];break}}
   if(hit){const src=s.substr(i,hit[0].length),up=src[0]!==src[0].toLowerCase();o+=up?hit[1][0].toUpperCase()+hit[1].slice(1):hit[1];i+=hit[0].length}else{o+=s[i];i++}}return o}
 const GRAF_RULES={a:[['tr','tx'],['ng','g'],['g','q'],['d','z']],
@@ -5087,14 +5212,14 @@ function reportText(){
   const en=S.gloss==='en',F=S.flags,yes=k=>F[k]?'✓':'·',acc=S.acc||{},mins=Math.round((S.wtime||0)/3600);
   const rows=Object.keys(acc).sort().map(k=>{const a=acc[k];return '  '+k.padEnd(26)+String(a.c).padStart(4)+' / '+String(a.t).padEnd(4)+(a.t?Math.round(100*a.c/a.t)+'%':'')});
   const ml=missList().slice(0,12).map(m=>'  '+(m.q.m||m.q.es||'').replace(/^⧉ /,'').slice(0,40).padEnd(42)+'→ '+m.a);
-  const trw=TRW_IDS.filter(k=>F['trw_'+k]).length+'/'+TRW_IDS.length;
+  const trw=TRW_IDS.filter(k=>F['trw_'+k]).length+'/'+TRW_IDS.length+' + '+TRW_IDS.filter(k=>F['trw2_'+k]).length+'/'+TRW_IDS.length;
   const tabs=typeof TAB_IDS!=='undefined'?TAB_IDS.filter(t=>F['tab_'+t]).length:0;
-  const ntk=Object.keys(NUTK).filter(k=>F['ntk_'+k]).length;
+  const ntk=Object.keys(NUTK).filter(k=>F['ntk_'+k]).length+Object.keys(NUTK2).filter(k=>F['ntk2_'+k]).length;
   const L1=en?['KIMÜN REPORT · Kewün ñi Newen','Player','Level','Play time','min','Ngen awakened','Verb roots','Trawün lessons','Kuyfi chillka','Nütramkan','Wekufü beaten','Accuracy by topic (correct / attempts)','Still to practise (most missed first)','Nothing pending: well done!']
     :['INFORME DE KIMÜN · Kewün ñi Newen','Jugador/a','Nivel','Tiempo de juego','min','Ngen despertados','Raíces verbales','Lecciones del trawün','Kuyfi chillka','Nütramkan','Wekufü vencidos','Precisión por tema (aciertos / intentos)','Por practicar (lo más fallado primero)','Nada pendiente: ¡bien hecho!'];
   return [L1[0],'',L1[1]+': '+S.name+(S.hm?' (weichafe)':''),L1[2]+': kimün '+S.lvl,L1[3]+': '+mins+' '+L1[4],
     L1[5]+': '+['ngen','ngen2','ngen3','ngen4','ngen5'].filter(k=>F[k]).length+'/5'+(F.won?'  · Ti Fütra Ngoymatulfe ✓':''),
-    L1[6]+' ('+S.roots.length+'): '+S.roots.map(r=>r+'-').join(', '),L1[7]+': '+trw,L1[8]+': '+tabs+'/6',L1[9]+': '+ntk+'/'+Object.keys(NUTK).length,
+    L1[6]+' ('+S.roots.length+'): '+S.roots.map(r=>r+'-').join(', '),L1[7]+': '+trw,L1[8]+': '+tabs+'/6',L1[9]+': '+ntk+'/'+(Object.keys(NUTK).length+Object.keys(NUTK2).length),
     L1[10]+': '+Object.keys(S.beaten||{}).length,(en?'Translations peeked at (Mapudungun-only mode)':'Traducciones consultadas (modo re mapudungun)')+': '+(S.peek||0)+(S.nogloss?'':(en?' · mode off':' · modo apagado')),'',L1[11]+':',...(rows.length?rows:['  —']),'',L1[12]+':',...(ml.length?ml:['  '+L1[13]]),'',new Date().toLocaleString()].join('\n')}
 function openReport(back){
   const t=reportText(),en=S.gloss==='en';let ov=document.getElementById('report');
@@ -5896,7 +6021,7 @@ function lanPool(){const en=S.gloss==='en',P=[],sh=o=>{const a=o.slice();for(let
   for(const Q of NGENQ){const op=Q.o.map(o=>Array.isArray(o)?(en?o[1]:o[0]):o);P.push({q:{m:'«'+Q.m+'»',es:Q.es,en:Q.en},o:sh(op),a:op[Q.a]})}
   if(typeof STONES!=='undefined')for(const k in STONES)for(const q of STONES[k].qs.concat(STONES[k].hq?[STONES[k].hq]:[]))P.push({q:q.q,o:sh(q.o),a:q.a});
   if(typeof TABLETS!=='undefined')for(const k in TABLETS)for(const q of TABLETS[k].qs)P.push({q:q.q,o:sh(q.o),a:q.a});
-  if(typeof NUTK!=='undefined')for(const k in NUTK)for(const q of NUTK[k].set){const f=s=>s.replace('@',S.name);P.push({q:q.q,o:sh(q.o.map(f)),a:f(q.a)})}
+  if(typeof NUTK!=='undefined'){const f=s=>s.replace('@',S.name);for(const k in NUTK)for(const q of NUTK[k].set.concat(S.flags['ntk2_'+k]?NUTK2[k]:[]))P.push({q:Object.assign({},q.q,{m:f(q.q.m)}),o:sh(q.o.map(f)),a:f(q.a)})}
   return P}
 function lanForm(e){return +e.t.slice(-1)}
 function lanKewun(e){

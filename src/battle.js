@@ -714,7 +714,7 @@ function lanPool(){const en=S.gloss==='en',P=[],sh=o=>{const a=o.slice();for(let
   for(const Q of NGENQ){const op=Q.o.map(o=>Array.isArray(o)?(en?o[1]:o[0]):o);P.push({q:{m:'«'+Q.m+'»',es:Q.es,en:Q.en},o:sh(op),a:op[Q.a]})}
   if(typeof STONES!=='undefined')for(const k in STONES)for(const q of STONES[k].qs.concat(STONES[k].hq?[STONES[k].hq]:[]))P.push({q:q.q,o:sh(q.o),a:q.a});
   if(typeof TABLETS!=='undefined')for(const k in TABLETS)for(const q of TABLETS[k].qs)P.push({q:q.q,o:sh(q.o),a:q.a});
-  if(typeof NUTK!=='undefined')for(const k in NUTK)for(const q of NUTK[k].set){const f=s=>s.replace('@',S.name);P.push({q:q.q,o:sh(q.o.map(f)),a:f(q.a)})}
+  if(typeof NUTK!=='undefined'){const f=s=>s.replace('@',S.name);for(const k in NUTK)for(const q of NUTK[k].set.concat(S.flags['ntk2_'+k]?NUTK2[k]:[]))P.push({q:Object.assign({},q.q,{m:f(q.q.m)}),o:sh(q.o.map(f)),a:f(q.a)})}
   return P}
 function lanForm(e){return +e.t.slice(-1)}
 function lanKewun(e){
