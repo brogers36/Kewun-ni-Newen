@@ -708,7 +708,7 @@ function renderBattle(){
       else{const m=Math.max(1,grd.length-1),sp=Math.min(28,Math.round(44/m));cx=40+gi*12;bse=(grd.length===1?138:112)+gi*sp}}
     else if(bossI<0&&fls.length){cx=36+fi*Math.max(34,sz+10);bse=122+(fi%2)*22} // all airborne: a V across the sky
     else if(bossI<0){const m=Math.max(1,n-1),sp=Math.min(30,Math.round(52/m));cx=(n===1?60:40)+i*14;bse=(n===1?138:104)+i*sp}
-    else if(ET[e.t].boss){cx=72;bse=138}
+    else if(ET[e.t].boss){cx=Math.max(72,Math.round(cvs.width/2)-12);bse=138}   // very wide bosses step in so their far edge stays on screen
     else if(tall){cx=Math.round(104+(oi+1)*(LW-184)/(others.length+1));bse=138}
     else if(fi>=0){cx=150+fi*Math.max(30,sz+8);bse=98}
     else{const gm=grd.length,m=Math.max(1,gm-1),sp=Math.min(26,Math.round(46/m));cx=152+gi*12;bse=(gm===1?136:108)+gi*sp}

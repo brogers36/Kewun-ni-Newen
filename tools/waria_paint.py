@@ -477,6 +477,7 @@ def ear_wing(c, root, lead, ribs, flap, lift, name, side):
 
 def fillantu(f):
     """a chonchón as big as a house: a kalku's head flying on its own ears, the mouth zipped shut so it cannot even cry"""
+    OX = 16                                                      # the wings are painted on a wider canvas than the head
     setsize(164, 152); c = Canvas()
     fl = f * 2 - 8; M = R['muse']                               # drawn high on the canvas: it hovers
     flap = 5 if f else -2                                       # the ears beat between the two frames
@@ -486,12 +487,19 @@ def fillantu(f):
         sw = math.sin(k * 1.7) * 3
         pts = [(x0, 38 + fl + abs(side_) * 8), (x0 + side_ * 12 + sw, 80 + fl), (x0 + side_ * 16 + sw * 1.5 - f * 2, 112 + fl), (x0 + side_ * 14 + sw * 2 - f * 3, 128 + (k * 7) % 12 + fl)]
         taper(c, cr(pts, 8), 4.5, 1, R['robe'][1:7], lift=-.05 + (k % 3) * .05, name='hair', bulge=1.0)
+    ch = c
+    setsize(164 + OX * 2, 152); cw = Canvas()
+    def big(root, pts, sx=1.3, sy=1.15):                         # spread the wing out from its root
+        rx, ry = root; return [(rx + OX + (x - rx) * sx, ry + (y - ry) * sy) for x, y in pts]
     # the far ear-wing (to the left of the face), a little foreshortened
-    ear_wing(c, (56, 64 + fl), [(56, 56 + fl), (42, 36 + fl), (22, 24 + fl), (4, 22 + fl)],
-             [(3, 40 + fl), (9, 58 + fl), (23, 70 + fl), (40, 80 + fl)], flap, -.04, 'wingF', -1)
+    rF = (56, 64 + fl)
+    ear_wing(cw, (rF[0] + OX, rF[1]), big(rF, [(56, 56 + fl), (42, 36 + fl), (22, 24 + fl), (4, 22 + fl)]),
+             big(rF, [(3, 40 + fl), (9, 58 + fl), (23, 70 + fl), (40, 80 + fl)]), flap, -.04, 'wingF', -1)
     # the near ear-wing
-    ear_wing(c, (112, 62 + fl), [(112, 52 + fl), (128, 34 + fl), (148, 22 + fl), (162, 20 + fl)],
-             [(162, 38 + fl), (157, 56 + fl), (145, 70 + fl), (128, 80 + fl)], flap, .06, 'wingN', 1)
+    rN = (112, 62 + fl)
+    ear_wing(cw, (rN[0] + OX, rN[1]), big(rN, [(112, 52 + fl), (128, 34 + fl), (148, 22 + fl), (162, 20 + fl)]),
+             big(rN, [(162, 38 + fl), (157, 56 + fl), (145, 70 + fl), (128, 80 + fl)]), flap, .06, 'wingN', 1)
+    setsize(164, 152); c = Canvas()
     # the stopped clock, hung from the zipper pull on a chain, swinging under the chin
     sw = 2 if f else -2
     for k in range(7):
@@ -622,6 +630,12 @@ def fillantu(f):
         for (hx_, sg) in ((57, -1), (112, 1)):
             y = 44 + k * 2.2; P(hx_ - sg * (k % 2), y, R['robe'][3]); P(hx_ - sg * (1 + k % 2), y + 1, R['robe'][2])
     blob(c, R['zip'], lambda d: d.rounded_rectangle([84, 103 + fl, 89, 116 + fl], 1, fill=1), bulge=.9, lift=.3, name='pull')
+    # lay the three layers together: hair behind, then the wings, then the head with its chain and clock
+    setsize(164 + OX * 2, 152); C = Canvas()
+    for layer, ox in ((ch, OX), (cw, 0), (c, OX)):
+        h_, w_ = layer.a.shape; m = layer.a
+        C.rgb[:, ox:ox + w_][m] = layer.rgb[m]; C.a[:, ox:ox + w_][m] = True; C.part[:, ox:ox + w_][m] = layer.part[m]
+    c = C
     # cold rim light on edges facing the hero
     lit = np.zeros((yp.H, yp.W), bool)
     for dx in (1, 2): lit |= c.a & ~np.roll(c.a, dx, 1)
