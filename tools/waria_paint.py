@@ -110,161 +110,208 @@ R.update({k: [hx(c) for c in v] for k, v in {
     'skin2': ['#2a1a16', '#463026', '#664638', '#86604c', '#a67c64', '#c69a80'],
     'drone': ['#08090c', '#121419', '#1e2128', '#2c3039', '#3e434e', '#565c68', '#767d8a']}.items()})
 
-# ------------------------------------------------------------------ ngoyngoyün: the noise, a body of smoke sprouting horns
+# ------------------------------------------------------------------ helpers for the big wardens
+R.update({k: [hx(c) for c in v] for k, v in {
+    'steel': ['#0a0f0e', '#142020', '#1f3130', '#2c4442', '#3c5a56', '#527670', '#6e948c', '#94b6ac'],
+    'rust':  ['#1a0a04', '#36160a', '#562610', '#783a18', '#9a5224', '#bc6e36'],
+    'glow':  ['#3a0604', '#7a1008', '#c42410', '#f45a20', '#ffa050', '#ffe0a0', '#ffffff'],
+    'yglow': ['#3a2a04', '#7a5a08', '#c49410', '#f4c820', '#ffe870', '#fff8d0', '#ffffff'],
+    'bone':  ['#2a2620', '#4a443a', '#6c6456', '#8e8674', '#b0a892', '#d2cab2', '#eee8d4'],
+    'carap': ['#160406', '#30080c', '#4e1014', '#701a1c', '#922826', '#b23a30', '#d0583e'],
+    'flesh': ['#140818', '#24102c', '#381a42', '#4e265a', '#683474', '#844690', '#a462ac'],
+    'gum':   ['#2a0408', '#4e0a10', '#781818', '#a02a26', '#c8483a'],
+    'tongue':['#4a0c18', '#7a1a2a', '#a8303e', '#cc5058', '#e47a78'],
+    'eyeg':  ['#0e2a06', '#1e4a0c', '#327014', '#4c9a20', '#72c430', '#a6e454', '#e2ffa0']}.items()})
+
+def glow(c, x, y, r, ramp):
+    """a hot light: concentric rings from the core outwards, softly dithered at the rim"""
+    for yy in range(int(y - r - 2), int(y + r + 3)):
+        for xx in range(int(x - r - 2), int(x + r + 3)):
+            d = math.hypot(xx - x, yy - y) / r
+            if d < 1: c.px(xx, yy, ramp[min(len(ramp) - 1, int((1 - d) * len(ramp)))])
+            elif d < 1.35 and (xx + yy) % 2 == 0 and c.a[min(yp.H - 1, max(0, yy)), min(yp.W - 1, max(0, xx))]:
+                v = c.rgb[yy, xx].astype(float); c.rgb[yy, xx] = np.minimum(255, v * .6 + np.array(ramp[2]) * .5).astype(np.uint8)
+
+def ribbed(c, path, w0, w1, ramp, name, lift=.1, every=5):
+    """a segmented hose: a tapered tube with a dark seam and a lit ridge at every segment"""
+    taper(c, path, w0, w1, ramp, lift=lift, name=name, bulge=1.2)
+    acc = 0
+    for (x0, y0), (x1, y1) in zip(path, path[1:]):
+        seg = math.hypot(x1 - x0, y1 - y0); acc += seg
+        if acc >= every:
+            acc = 0; nx, ny = -(y1 - y0) / max(seg, .01), (x1 - x0) / max(seg, .01)
+            t = path.index((x1, y1)) / len(path); w = (w0 + (w1 - w0) * t) / 2
+            for k in np.linspace(-w, w, int(w * 2 + 2)):
+                X, Y = int(round(x1 + nx * k)), int(round(y1 + ny * k))
+                if 0 <= X < yp.W and 0 <= Y < yp.H and c.part[Y, X] == name:
+                    c.rgb[Y, X] = (c.rgb[Y, X] * .45).astype(np.uint8)
+                    X2, Y2 = int(round(x1 + nx * k - (x1 - x0) / max(seg, .01))), int(round(y1 + ny * k - (y1 - y0) / max(seg, .01)))
+                    if 0 <= X2 < yp.W and 0 <= Y2 < yp.H and c.part[Y2, X2] == name:
+                        c.rgb[Y2, X2] = np.minimum(255, c.rgb[Y2, X2].astype(int) + 40).astype(np.uint8)
+
+def rivets(c, pts, ramp):
+    for (x, y) in pts:
+        c.px(x, y, ramp[-1]); c.px(x + 1, y + 1, ramp[1]); c.px(x + 1, y, ramp[-3])
+
+def plate_lines(c, part, lines, k=.5):
+    for (x0, y0), (x1, y1) in lines:
+        n = int(max(abs(x1 - x0), abs(y1 - y0))) + 1
+        for t in np.linspace(0, 1, n):
+            X, Y = int(round(x0 + (x1 - x0) * t)), int(round(y0 + (y1 - y0) * t))
+            if 0 <= X < yp.W and 0 <= Y < yp.H and c.part[Y, X] == part:
+                c.rgb[Y, X] = (c.rgb[Y, X] * k).astype(np.uint8)
+                if Y > 0 and c.part[Y - 1, X] == part: c.rgb[Y - 1, X] = np.minimum(255, c.rgb[Y - 1, X].astype(int) + 30).astype(np.uint8)
+
+# ------------------------------------------------------------------ ngoyngoyün: a walking war-machine of loudspeakers
 def ngoyngoyun(f):
-    setsize(108, 116); c = Canvas()
-    # a crowd of half-formed faces at its base, mouths open, all talking at once
-    for k, (x, y) in enumerate([(12, 104), (28, 109), (46, 111), (64, 110), (82, 107), (98, 104), (20, 96), (90, 96)]):
-        blob(c, R['smoke'], lambda d, x=x, y=y: d.ellipse([x - 7, y - 9, x + 7, y + 6], fill=1), bulge=1.1, lift=0.12 + (k % 3) * .05, name='crowd')
-        mo = 1 + ((k + f) % 3)
-        c.rect(x - 1, y, 3, mo, R['throat'][1]); c.px(x - 1, y, R['throat'][4])
-        c.px(x - 3, y - 4, (150, 140, 180)); c.px(x + 2, y - 4, (150, 140, 180))
-    # the body: a column of smoke that swells and frays at the edges
-    body = smooth_poly([(54, 20), (76, 30), (84, 58), (80, 86), (90, 100), (54, 104), (18, 100), (28, 86), (24, 58), (32, 30)], 6)
-    blob(c, R['smoke'], lambda d: d.polygon(body, fill=1), bulge=1.0, lift=0.10, name='body')
-    rs = np.random.RandomState(5 + f)
-    for _ in range(40):                                    # wisps leaving the silhouette
-        x, y = rs.randint(18, 92), rs.randint(26, 100)
-        if not c.a[y, x]:
-            continue
-        for k in range(rs.randint(3, 7)): c.px(x + (k if x > 54 else -k), y - k // 2, R['smoke'][2 + (k % 2)])
-    # cables snaking out of the body, each ending in a brass horn, each horn shouting
-    horns = [((34, 50), [(26, 44), (18, 36)], (16, 30), -2.6),
-             ((74, 48), [(82, 42), (88, 34)], (92, 28), -0.5),
-             ((30, 76), [(22, 78)], (18, 74), 3.0),
-             ((80, 74), [(88, 76)], (90, 72), 0.2)]
-    for (st, mid, tip, ang) in horns:
-        path = cr([st] + mid + [tip], 6)
-        taper(c, path, 6, 4, R['rubber'], lift=0.1, name='cable', bulge=1.1)
-        a2 = ang + (0.12 if f else 0); ca, sa = math.cos(a2), math.sin(a2)
-        L2, Wd = 17, 9
-        poly = [(tip[0] - sa * 2, tip[1] + ca * 2), (tip[0] + sa * 2, tip[1] - ca * 2),
-                (tip[0] + ca * L2 + sa * Wd, tip[1] + sa * L2 - ca * Wd), (tip[0] + ca * L2 - sa * Wd, tip[1] + sa * L2 + ca * Wd)]
-        blob(c, R['brass'], lambda d, poly=poly: d.polygon(poly, fill=1), bulge=1.1, lift=0.18, name='horn')
-        mx, my = tip[0] + ca * L2, tip[1] + sa * L2
-        blob(c, R['throat'], lambda d, mx=mx, my=my: d.ellipse([mx - 3, my - 3, mx + 3, my + 3], fill=1), bulge=0.5, lift=-0.1, name='mouth')
-        arcs(c, mx, my, [5 + 3 * f, 10 + 3 * f], a2 - 0.6, a2 + 0.6, (252, 214, 120), step=0.1)
-    # the great horn-head, turned toward the hero, a throat full of teeth
-    fl = lambda x: 5 + 19 * ((72 - x) / 62.0) ** 2.2     # half-height of the flare at x
-    top = [(x, 24 - fl(x)) for x in range(72, 9, -3)]; bot = [(x, 24 + fl(x)) for x in range(10, 73, 3)]
-    blob(c, R['brass'], lambda d: d.polygon(top + bot, fill=1), bulge=1.1, lift=0.20, name='head')
-    for x in (62, 50, 38, 28):                             # rings round the horn
-        h2 = fl(x)
-        for y in range(int(24 - h2), int(24 + h2) + 1):
-            if 0 <= y < 116 and c.part[y, x] == 'head': c.px(x, y, R['brass'][2]); c.px(x + 1, y, R['brass'][7] if y < 24 else R['brass'][5])
-    blob(c, R['brass'], lambda d: d.ellipse([6, 0, 18, 48], fill=1), bulge=0.9, lift=0.3, name='rim')
-    blob(c, R['throat'], lambda d: d.ellipse([8, 3, 18, 45], fill=1), bulge=0.7, lift=-0.15, name='mouth')
-    for y in range(8, 45, 3):
-        x = 6 + int(abs(y - 26) / 6)
-        c.px(x, y, (236, 226, 204)); c.px(x + 1, y + 1, (190, 176, 150))
-    for y in range(18, 36): c.px(13 + int(math.sin(y / 3 + f) * 1.5), y, R['throat'][5])   # a tongue of hot light
-    # eyes: two embers glowing in the smoke under the horn
-    for (x, y) in [(46, 54), (58, 55)]:
-        c.rect(x, y, 4, 2, (255, 170, 60)); c.rect(x + 1, y, 2, 1, (255, 246, 210)); c.px(x - 1, y + 1, (120, 60, 30))
-    return finish(c, [('horn', 'cable'), ('mouth', 'horn'), ('mouth', 'rim'), ('rim', 'head'), ('cable', 'body'), ('head', 'body'), ('crowd', 'crowd'), ('crowd', 'body')],
-                  rim=(255, 196, 110), rimparts=('head', 'horn', 'body', 'cable'))
+    setsize(156, 144); c = Canvas()
+    bob = f
+    # four mechanical legs: thigh plates, piston shins, clawed feet
+    for (hx_, hy_, kx, ky, fx_, fy_, lift) in [(52, 92, 30, 108, 18, 138, .15), (104, 92, 128, 108, 140, 138, -.05), (66, 96, 56, 118, 50, 140, .05), (92, 96, 104, 118, 110, 140, -.08)]:
+        taper(c, [(hx_, hy_ + bob), (kx, ky)], 11, 9, R['steel'], lift=lift, name='thigh', bulge=1.2)
+        taper(c, [(kx, ky), (fx_, fy_ - 4)], 6, 5, R['steel'], lift=lift - .05, name='shin', bulge=1.1)
+        taper(c, [(kx + 2, ky + 2), ((kx + fx_) // 2 + 2, (ky + fy_) // 2)], 3, 3, R['bone'], lift=.2, name='piston', bulge=1.0)
+        glow(c, kx, ky, 3, R['glow'][1:5])
+        blob(c, R['steel'], lambda d, fx_=fx_, fy_=fy_: d.polygon([(fx_ - 10, fy_), (fx_ + 10, fy_), (fx_ + 6, fy_ - 7), (fx_ - 6, fy_ - 7)], fill=1), bulge=1.0, lift=lift, name='foot')
+        for k in (-8, 0, 8): c.px(fx_ + k, fy_ - 1, R['steel'][7]); c.px(fx_ + k, fy_, R['bone'][5])
+    # the hull: an armoured dome, riveted, rusting at the seams
+    hull = smooth_poly([(78, 34 + bob), (110, 42 + bob), (124, 66 + bob), (116, 94 + bob), (78, 104 + bob), (40, 94 + bob), (32, 66 + bob), (46, 42 + bob)], 6)
+    blob(c, R['steel'], lambda d: d.polygon(hull, fill=1), bulge=1.15, lift=.12, name='hull')
+    plate_lines(c, 'hull', [((40, 62 + bob), (118, 62 + bob)), ((44, 82 + bob), (114, 82 + bob)), ((78, 36 + bob), (78, 62 + bob)), ((60, 62 + bob), (56, 100 + bob)), ((98, 62 + bob), (102, 100 + bob))])
+    rivets(c, [(x, 60 + bob) for x in range(44, 116, 7)] + [(x, 80 + bob) for x in range(48, 112, 7)], R['steel'])
+    rs = np.random.RandomState(3)
+    for _ in range(70):                                   # rust streaks running down from the seams
+        x = rs.randint(40, 118); y0 = rs.choice([63, 83]) + bob
+        for k in range(rs.randint(2, 6)):
+            if c.part[y0 + k, x] == 'hull': c.px(x, y0 + k, R['rust'][rs.randint(1, 4)])
+    # the face: a great speaker-eye in a visor, and a grille of teeth below
+    blob(c, R['steel'], lambda d: d.ellipse([52, 42 + bob, 104, 76 + bob], fill=1), bulge=1.2, lift=.0, name='visor')
+    blob(c, R['rubber'], lambda d: d.ellipse([58, 46 + bob, 98, 72 + bob], fill=1), bulge=.8, lift=-.1, name='cone')
+    for r_ in (17, 12, 7):
+        for a in np.linspace(0, 2 * math.pi, 80):
+            X, Y = int(78 + math.cos(a) * r_), int(59 + bob + math.sin(a) * r_ * .62)
+            if c.part[Y, X] == 'cone': c.px(X, Y, R['rubber'][3] if a < math.pi else R['rubber'][1])
+    glow(c, 78, 59 + bob, 6, R['glow'])
+    for x in range(60, 98, 3):                            # the grille: a row of steel teeth
+        blob(c, R['bone'], lambda d, x=x: d.polygon([(x, 84 + bob), (x + 3, 84 + bob), (x + 1.5, 92 + bob + (2 if (x // 3 + f) % 2 else 0))], fill=1), bulge=.9, lift=.15, name='tooth')
+    blob(c, R['glow'][:4], lambda d: d.rectangle([60, 80 + bob, 97, 84 + bob], fill=1), bulge=.4, lift=.2, name='maw')
+    # stacks on the back, venting noise
+    for (x, h) in [(58, 18), (98, 22)]:
+        blob(c, R['steel'], lambda d, x=x, h=h: d.rounded_rectangle([x - 7, 40 - h + bob, x + 7, 46 + bob], 3, fill=1), bulge=1.2, lift=.18, name='stack')
+        for y in range(40 - h + bob + 2, 46 + bob, 4): c.px(x - 6, y, R['steel'][1]); c.px(x + 6, y, R['steel'][1])
+        arcs(c, x, 40 - h + bob, [4 + 3 * f, 9 + 3 * f], -math.pi * .85, -math.pi * .15, (252, 214, 120), step=.08)
+    # two ribbed arms: the near one swings a huge megaphone at the hero
+    ribbed(c, cr([(44, 58 + bob), (24, 46), (14, 62), (22, 82), (40, 90)], 7), 14, 11, R['steel'], 'armL', lift=.18)
+    ribbed(c, cr([(112, 58 + bob), (134, 44), (146, 58), (140, 80)], 7), 13, 10, R['steel'], 'armR', lift=-.05)
+    blob(c, R['brass'], lambda d: d.polygon([(46, 86), (42, 98), (10, 122 - 3 * f), (8, 96 + 3 * f), (36, 82)], fill=1), bulge=1.1, lift=.2, name='horn')
+    for x in (34, 24, 16):
+        for y in range(80, 124):
+            if c.part[y, x] == 'horn': c.px(x, y, R['brass'][2]); c.px(x + 1, y, R['brass'][6])
+    blob(c, R['brass'], lambda d: d.ellipse([4, 94 + 3 * f, 14, 124 - 3 * f], fill=1), bulge=1.0, lift=.3, name='hrim')
+    blob(c, R['throat'], lambda d: d.ellipse([5, 97 + 3 * f, 12, 121 - 3 * f], fill=1), bulge=.6, lift=-.1, name='mouth')
+    for y in range(100, 118, 3): c.px(7, y, (236, 226, 204))
+    blob(c, R['brass'], lambda d: d.polygon([(138, 76), (146, 78), (154, 104), (134, 100)], fill=1), bulge=1.1, lift=.0, name='horn')
+    blob(c, R['brass'], lambda d: d.ellipse([132, 96, 155, 106], fill=1), bulge=1.0, lift=.15, name='hrim')
+    blob(c, R['throat'], lambda d: d.ellipse([135, 98, 152, 104], fill=1), bulge=.6, lift=-.1, name='mouth')
+    arcs(c, 4, 109, [6 + 4 * f, 13 + 4 * f, 20 + 4 * f], math.pi * .62, math.pi * 1.38, (252, 214, 120), step=.06)
+    arcs(c, 143, 104, [4 + 3 * f, 9 + 3 * f], math.pi * .2, math.pi * .8, (252, 214, 120), step=.08)
+    return finish(c, [('visor', 'hull'), ('cone', 'visor'), ('tooth', 'maw'), ('armL', 'hull'), ('armR', 'hull'), ('horn', 'armL'), ('horn', 'armR'), ('mouth', 'hrim'), ('hrim', 'horn'), ('stack', 'hull'),
+                      ('thigh', 'hull'), ('shin', 'thigh'), ('foot', 'shin'), ('piston', 'shin')],
+                  rim=(255, 170, 90), rimparts=('hull', 'armR', 'thigh', 'shin', 'stack', 'visor'))
 
-# ------------------------------------------------------------------ ngamleftripael: the dispersion, a cloak unravelling into metro lines
+# ------------------------------------------------------------------ ngamleftripael: a carapaced spider of the lines, every leg pulling away
 def ngamlef(f):
-    setsize(108, 116); c = Canvas()
-    sp = 2 * f
-    # five streamers pouring from the hem and pulling away in five directions
-    streams = [([(46, 70), (34, 84), (18, 92), (2, 90 - sp)], LINES[0]),
-               ([(52, 74), (46, 92), (40, 106), (32, 114)], LINES[1]),
-               ([(58, 74), (64, 92), (72, 104), (84, 112)], LINES[2]),
-               ([(64, 70), (78, 82), (94, 86), (106, 80 - sp)], LINES[3]),
-               ([(56, 66), (62, 54), (82, 46), (100, 40 - sp)], LINES[4])]
-    for k, (pts, col) in enumerate(streams):
-        path = cr(pts, 7); ramp = [tuple(int(v * m) for v in col) for m in (.25, .4, .58, .78, 1.0)] + [tuple(min(255, int(v * 1.0 + 70)) for v in col)]
-        taper(c, path, 7, 3, ramp, lift=0.12, name='line%d' % k, bulge=1.1)
-        for t in (0.35, 0.65, 0.9):                       # stations along each line
-            x, y = path[int(t * (len(path) - 1))]; x, y = int(x), int(y)
-            c.rect(x - 1, y - 1, 3, 3, (250, 250, 250)); c.px(x, y, col)
-        x, y = path[-1]
-        for d in range(3):                                # the end frays into loose dots drifting off
-            dx = int((x - 54) / 18 * (d + 2 + f)); dy = int((y - 70) / 18 * (d + 2 + f))
-            if 0 <= int(x) + dx < 108 and 0 <= int(y) + dy < 116: c.px(int(x) + dx, int(y) + dy, col)
-    # a tall cloak, narrow at the shoulders, splitting at the hem
-    cloak = smooth_poly([(54, 22), (70, 28), (74, 50), (70, 72), (62, 78), (54, 70), (46, 78), (38, 72), (34, 50), (38, 28)], 6)
-    blob(c, R['navy2'], lambda d: d.polygon(cloak, fill=1), bulge=1.0, lift=0.12, name='cloak')
-    for (x0, x1) in [(46, 42), (54, 54), (62, 66)]:     # long folds
-        for y in range(36, 74):
-            t = (y - 36) / 38; x = int(round(x0 + (x1 - x0) * t))
-            if c.part[y, x] == 'cloak': c.px(x, y, R['navy2'][1]); c.px(x - 1, y, R['navy2'][4] if y % 3 else R['navy2'][3])
-    # arms flung wide, each hand letting a thread go
-    for (pts, lift) in [([(40, 32), (28, 34), (14, 28), (4, 22)], .2), ([(68, 32), (80, 34), (94, 28), (104, 22)], -.02)]:
-        taper(c, cr(pts, 6), 7, 4, R['navy2'], lift=lift, name='arm', bulge=1.0)
-        hx_, hy_ = pts[-1]
-        blob(c, R['mask2'], lambda d, hx_=hx_, hy_=hy_: d.ellipse([hx_ - 4, hy_ - 4, hx_ + 4, hy_ + 4], fill=1), bulge=1.1, lift=lift + .1, name='hand')
-        for t in np.linspace(0, 1, 10):
-            x = hx_ + (1 if hx_ > 54 else -1) * t * 10; y = hy_ - 6 - t * 8 + math.sin(t * 6 + f) * 2
-            if int(t * 10) % 2 == 0: c.px(int(x), int(y), (200, 210, 230))
-    # hood and a smooth pale mask with a map for a face: lines that meet at "you are here"
-    blob(c, R['navy2'], lambda d: d.ellipse([40, 2, 68, 32], fill=1), bulge=1.0, lift=0.14, name='hood')
-    blob(c, R['mask2'], lambda d: d.ellipse([45, 7, 63, 29], fill=1), bulge=1.2, lift=0.2, name='mask')
-    for k, (pts) in enumerate([[(47, 14), (52, 18), (58, 16), (62, 12)], [(49, 26), (54, 20), (57, 26)], [(54, 8), (54, 18), (55, 28)]]):
-        for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
-            for t in np.linspace(0, 1, 8): c.px(int(x0 + (x1 - x0) * t), int(y0 + (y1 - y0) * t), LINES[k + 1])
-    c.rect(53, 17, 3, 3, (230, 40, 40)); c.px(54, 18, (255, 220, 220))      # "you are here"
-    return finish(c, [('hood', 'mask'), ('arm', 'hand'), ('arm', 'cloak'), ('hood', 'cloak'), ('cloak', 'line0'), ('cloak', 'line3')],
-                  rim=(150, 190, 255), rimparts=('cloak', 'hood', 'arm', 'line3', 'line4'))
+    setsize(156, 132); c = Canvas()
+    LC = [(214, 52, 46), (236, 190, 40), (54, 160, 76), (58, 112, 210), (150, 78, 196)]
+    # eight long legs, each a metro line: plates of its colour, joints of bone, a red claw
+    legs = [((62, 62), (36, 40), (14, 54), (2, 80)), ((60, 70), (30, 66), (12, 90), (6, 118)), ((66, 78), (44, 92), (34, 116), (30, 130)), ((72, 80), (62, 102), (60, 122), (56, 132)),
+            ((96, 62), (120, 40), (142, 54), (154, 80)), ((98, 70), (126, 66), (144, 90), (150, 118)), ((92, 78), (112, 92), (122, 116), (126, 130)), ((86, 80), (96, 102), (98, 122), (102, 132))]
+    for k, (a, b, c2, d) in enumerate(legs):
+        col = LC[k % 5]; ramp = [tuple(int(v * m) for v in col) for m in (.18, .32, .5, .7, .88)] + [tuple(min(255, int(v + 60)) for v in col)]
+        dx = (-1 if a[0] < 80 else 1) * f
+        b2, c3, d2 = (b[0] + dx, b[1]), (c2[0] + dx * 2, c2[1]), (d[0] + dx * 2, d[1])
+        lift = .15 if a[0] < 80 else -.04
+        taper(c, [a, b2], 9, 8, ramp, lift=lift, name='leg', bulge=1.2)
+        taper(c, [b2, c3], 7, 6, ramp, lift=lift, name='leg', bulge=1.2)
+        glow(c, b2[0], b2[1], 3, R['bone'][2:])
+        blob(c, R['carap'], lambda d_, c3=c3, d2=d2: d_.polygon([(c3[0] - 3, c3[1]), (c3[0] + 3, c3[1]), (d2[0], d2[1])], fill=1), bulge=1.0, lift=lift + .05, name='claw')
+        for t in (.3, .7):                                 # stations: white rivets along each line
+            x, y = int(b2[0] + (c3[0] - b2[0]) * t), int(b2[1] + (c3[1] - b2[1]) * t); c.rect(x - 1, y - 1, 2, 2, (250, 250, 250))
+    # abdomen: a great armoured body of overlapping plates, banded like a map
+    blob(c, R['carap'], lambda d: d.ellipse([88, 28, 150, 82], fill=1), bulge=1.2, lift=.04, name='abd')
+    for k, x in enumerate(range(96, 148, 9)):
+        plate_lines(c, 'abd', [((x, 28), (x - 6, 82))], .55)
+        for y in range(34, 78, 6):
+            if c.part[y, x - 3 - (y - 30) // 10] == 'abd': c.px(x - 3 - (y - 30) // 10, y, LC[k % 5])
+    # thorax plates and a skull-like head, glowing eyes, fangs
+    blob(c, R['carap'], lambda d: d.ellipse([54, 44, 104, 88], fill=1), bulge=1.2, lift=.14, name='thx')
+    plate_lines(c, 'thx', [((60, 60), (100, 56)), ((58, 72), (102, 70)), ((80, 46), (78, 86))], .55)
+    rivets(c, [(64, 58), (72, 57), (88, 56), (96, 57), (66, 70), (94, 69)], R['bone'])
+    blob(c, R['bone'], lambda d: d.polygon(smooth_poly([(62, 64), (78, 58), (90, 64), (92, 82), (84, 98), (66, 98), (58, 84)], 5), fill=1), bulge=1.2, lift=.2, name='skull')
+    for (ex, ey) in [(68, 74), (84, 73)]:
+        blob(c, [(10, 6, 8), (24, 14, 14)], lambda d, ex=ex, ey=ey: d.ellipse([ex - 5, ey - 4, ex + 5, ey + 4], fill=1), bulge=.5, name='socket')
+        glow(c, ex, ey, 3, R['yglow'])
+    for x in range(64, 90, 3):                             # a jaw full of fangs
+        blob(c, R['bone'], lambda d, x=x: d.polygon([(x, 90), (x + 3, 90), (x + 1.5, 97 + (2 if x % 2 else 0) + f)], fill=1), bulge=.9, lift=.25, name='fang')
+    c.rect(66, 89, 22, 2, (20, 4, 6))
+    blob(c, R['carap'], lambda d: d.polygon([(56, 98), (48, 112), (62, 104)], fill=1), bulge=1.0, lift=.15, name='mand')
+    blob(c, R['carap'], lambda d: d.polygon([(96, 98), (104, 112), (90, 104)], fill=1), bulge=1.0, lift=.0, name='mand')
+    # threads snapping between the legs: the people pulled apart
+    for (x0, y0, x1, y1) in [(14, 54, 36, 40), (142, 54, 120, 40), (12, 90, 34, 116), (144, 90, 122, 116)]:
+        for t in np.linspace(0, 1, 18):
+            if int(t * 18 + f) % 3: c.px(int(x0 + (x1 - x0) * t), int(y0 + (y1 - y0) * t + math.sin(t * 8) * 2), (220, 226, 240))
+    return finish(c, [('skull', 'thx'), ('socket', 'skull'), ('fang', 'skull'), ('thx', 'abd'), ('leg', 'thx'), ('leg', 'abd'), ('claw', 'leg'), ('mand', 'skull')],
+                  rim=(255, 120, 90), rimparts=('abd', 'thx', 'skull', 'leg'))
 
-# ------------------------------------------------------------------ mapudungukenoael fillantü: the everyday silence, sunk in an armchair
+# ------------------------------------------------------------------ mapudungukenoael fillantü: a heap of mouths sewn shut, heavy eyes on stalks
 def fillantu(f):
-    setsize(108, 116); c = Canvas()
-    # the armchair, worn and deep
-    blob(c, R['chair'], lambda d: d.rounded_rectangle([14, 30, 94, 104], 14, fill=1), bulge=0.9, lift=0.0, name='chair')
-    for (x0, x1) in [(6, 26), (82, 102)]:
-        blob(c, R['chair'], lambda d, x0=x0, x1=x1: d.rounded_rectangle([x0, 62, x1, 108], 8, fill=1), bulge=1.1, lift=0.10 if x0 < 50 else -0.05, name='carm')
-    for x in range(20, 90, 5):
-        for y in range(34, 60):
-            if c.part[y, x] == 'chair' and y % 2: c.px(x, y, R['chair'][1])         # buttoned tufting
-    # a heavy body under a grey blanket, slumped
-    body = smooth_poly([(32, 44), (76, 44), (88, 70), (86, 100), (54, 110), (22, 100), (20, 70)], 6)
-    blob(c, R['blanket'], lambda d: d.polygon(body, fill=1), bulge=1.1, lift=0.10, name='body')
-    for (pts) in [[(34, 56), (30, 78), (32, 102)], [(54, 58), (52, 84), (54, 108)], [(74, 56), (78, 80), (76, 102)], [(40, 66), (54, 72), (68, 66)]]:
-        for (x0, y0), (x1, y1) in zip(cr(pts, 6), cr(pts, 6)[1:]):
-            x, y = int(x0), int(y0)
-            if c.part[y, x] == 'body': c.px(x, y, R['blanket'][1]); c.px(x + 1, y, R['blanket'][5])
-    for x in range(26, 84, 6):                                                        # a stitched hem
-        y = 98 + int(math.sin(x / 7) * 2)
-        if c.part[y, x] == 'body': c.px(x, y, R['blanket'][6]); c.px(x + 1, y, R['blanket'][6])
-    # the head, sinking into the shoulders, half-lit by a screen
-    blob(c, R['grey'], lambda d: d.ellipse([32, 6, 78, 52], fill=1), bulge=1.15, lift=0.16, name='head')
-    for (x, y) in [(40, 12), (52, 9), (64, 11)]: c.px(x, y, R['grey'][5]); c.px(x + 1, y, R['grey'][5])
-    for ex in (46, 64):
-        blob(c, [(10, 8, 12), (230, 240, 244), (250, 252, 255)], lambda d, ex=ex: d.ellipse([ex - 4, 27, ex + 4, 33], fill=1), bulge=0.5, name='eye')
-        c.px(ex - 1, 31, (30, 40, 50)); c.px(ex, 31, (30, 40, 50))
-        blob(c, R['grey'], lambda d, ex=ex: d.ellipse([ex - 6, 22 - f, ex + 6, 31 - f], fill=1), bulge=1.0, lift=0.22, name='lid')   # heavy lids
-        for x in range(ex - 5, ex + 6): c.px(x, 31 - f, R['grey'][0])
-    for x in range(40, 72):                                                           # the zip, closed tight
-        y = 42 + int(((x - 56) / 16) ** 2 * 2)
-        c.px(x, y, R['zip'][1]); c.px(x, y - 1, R['zip'][3] if x % 2 else R['zip'][2]); c.px(x, y + 1, R['zip'][2] if x % 2 else R['zip'][3])
-    blob(c, R['zip'], lambda d: d.rounded_rectangle([70, 40, 75, 49], 1, fill=1), bulge=0.8, lift=0.3, name='pull'); c.px(72, 46, R['zip'][0])
-    # hands: one limp with a remote, one on the armrest
-    blob(c, R['grey'], lambda d: d.ellipse([12, 80, 26, 92], fill=1), bulge=1.1, lift=0.2, name='hand')
-    blob(c, R['rubber'], lambda d: d.rounded_rectangle([6, 84, 14, 104], 2, fill=1), bulge=0.8, lift=0.2, name='remote')
-    for y in (87, 91, 95, 99): c.px(10, y, (210, 60, 50) if y == 87 else (120, 124, 134))
-    blob(c, R['grey'], lambda d: d.ellipse([84, 82, 98, 94], fill=1), bulge=1.1, lift=0.0, name='hand')
-    # the screen's cold light washing over its left side
-    bay = yp.BAYER
-    for y in range(8, 112):
-        for x in range(0, 70):
-            if c.a[y, x] and c.part[y, x] in ('body', 'head', 'lid', 'hand', 'carm', 'chair'):
-                k = 0.42 * max(0, 1 - x / 64) ** 1.4
-                if k > 0.04:
-                    k = round(k * 4 + (bay[y % 4][x % 4] - .5) * .6) / 4.0
-                    v = c.rgb[y, x].astype(float); c.rgb[y, x] = (v * (1 - k) + np.array((120, 205, 225)) * k).astype(np.uint8)
-    # calendar pages circling it, every day crossed out and put off
-    for k, (x, y) in enumerate([(2, 10), (90, 6), (96, 40), (0, 46)]):
-        y += (f * 2 if k % 2 else -f * 2)
-        blob(c, R['paper'], lambda d, x=x, y=y: d.polygon([(x, y + 1), (x + 11, y), (x + 12, y + 13), (x + 1, y + 14)], fill=1), bulge=0.4, lift=0.25, name='page')
-        c.rect(x + 1, y + 1, 10, 3, (196, 58, 48))
-        for gy in range(y + 6, y + 13, 3):
-            for gx in range(x + 2, x + 11, 3): c.px(gx, gy, (90, 84, 76))
-        for t in range(8): c.px(x + 2 + t, y + 5 + t, (190, 50, 40))
-    return finish(c, [('lid', 'eye'), ('head', 'body'), ('body', 'chair'), ('carm', 'chair'), ('hand', 'body'), ('remote', 'hand'), ('pull', 'head'), ('body', 'carm')],
-                  rim=(150, 215, 235), rimparts=('body', 'head', 'chair', 'carm'))
+    setsize(150, 140); c = Canvas()
+    # drooping tendrils underneath, dripping
+    for k, x in enumerate(range(30, 126, 12)):
+        taper(c, cr([(x, 104), (x - 4 + (k % 3) * 3, 118), (x - 2 + f * (1 if k % 2 else -1), 132 + (k % 3) * 2)], 6), 7, 2, R['flesh'], lift=-.05, name='tend', bulge=1.0)
+        if k % 2: c.px(x - 2, 136 + (k % 3), R['flesh'][5])
+    # the bloated body
+    body = smooth_poly([(76, 20), (112, 28), (138, 56), (136, 92), (112, 112), (76, 118), (40, 112), (16, 90), (14, 56), (40, 28)], 6)
+    blob(c, R['flesh'], lambda d: d.polygon(body, fill=1), bulge=1.25, lift=.12, name='body')
+    rs = np.random.RandomState(9)
+    for _ in range(160):                                  # mottled, veined skin
+        x, y = rs.randint(18, 136), rs.randint(24, 114)
+        if c.part[y, x] == 'body':
+            c.px(x, y, R['flesh'][rs.randint(1, 3)])
+            if rs.rand() < .3: c.px(x + 1, y + 1, R['flesh'][1])
+    # small mouths all over it, every one sewn shut with a zip
+    for (x, y, w) in [(36, 50, 14), (112, 46, 14), (30, 82, 12), (118, 80, 14), (58, 34, 10), (96, 32, 10)]:
+        blob(c, R['gum'], lambda d, x=x, y=y, w=w: d.ellipse([x - w // 2, y - 4, x + w // 2, y + 4], fill=1), bulge=1.0, lift=.05, name='lip')
+        for xx in range(x - w // 2 + 2, x + w // 2 - 1):
+            c.px(xx, y, R['zip'][2] if xx % 2 else R['zip'][3]); c.px(xx, y - 1 if xx % 2 else y + 1, R['zip'][1])
+        for xx in range(x - w // 2 + 2, x + w // 2 - 1, 3): c.px(xx, y + 2, (236, 226, 204))   # teeth pressing behind the zip
+    # the great maw: straining against a broken zip, teeth and a lolling tongue
+    blob(c, R['gum'], lambda d: d.ellipse([42, 62, 112, 108], fill=1), bulge=1.0, lift=.0, name='lip')
+    blob(c, [(8, 2, 4), (24, 4, 8), (44, 8, 14)], lambda d: d.ellipse([48, 70, 106, 102], fill=1), bulge=.6, lift=-.1, name='throat')
+    for k, x in enumerate(range(50, 104, 5)):              # upper and lower fangs
+        h = 8 + (k % 3) * 3
+        blob(c, R['bone'], lambda d, x=x, h=h: d.polygon([(x, 72), (x + 5, 72), (x + 2.5, 72 + h)], fill=1), bulge=.9, lift=.25, name='fang')
+        blob(c, R['bone'], lambda d, x=x, h=h: d.polygon([(x + 2, 101), (x + 7, 101), (x + 4.5, 101 - h + 2)], fill=1), bulge=.9, lift=.1, name='fang')
+    taper(c, cr([(72, 96), (66, 108), (58, 120 + 2 * f), (62, 128 + 2 * f)], 6), 12, 7, R['tongue'], lift=.15, name='tongue', bulge=1.1)
+    for x in range(44, 112):                               # the zip, torn open in the middle
+        if 64 < x < 92: continue
+        y = 70 + int(((x - 77) / 34.0) ** 2 * 6)
+        c.px(x, y, R['zip'][3] if x % 2 else R['zip'][2]); c.px(x, y + (1 if x % 2 else -1), R['zip'][1])
+    # eyestalks: heavy-lidded, always about to close
+    for k, (bx, by, ex, ey) in enumerate([(52, 30, 30, 8), (76, 22, 76, 4), (100, 30, 122, 8), (24, 52, 6, 36), (128, 54, 146, 38)]):
+        taper(c, cr([(bx, by), ((bx + ex) // 2 + (3 if k % 2 else -3), (by + ey) // 2), (ex, ey + 4)], 6), 6, 4, R['flesh'], lift=.15, name='stalk', bulge=1.1)
+        r_ = 7 if k == 1 else 6
+        blob(c, R['eyeg'], lambda d, ex=ex, ey=ey, r_=r_: d.ellipse([ex - r_, ey - r_ + 4, ex + r_, ey + r_ + 4], fill=1), bulge=1.2, lift=.2, name='eye')
+        c.rect(ex - 1, ey + 3, 3, 4, (10, 20, 6)); c.px(ex - 3, ey + 1, (240, 255, 220))
+        lid = 4 + f
+        blob(c, R['flesh'], lambda d, ex=ex, ey=ey, r_=r_, lid=lid: d.ellipse([ex - r_ - 1, ey - r_ + 3, ex + r_ + 1, ey - r_ + 3 + lid * 2], fill=1), bulge=1.0, lift=.25, name='lid')
+    # crossed-out calendar pages stuck to its hide
+    for (x, y, a) in [(122, 98, 1), (24, 100, -1)]:
+        blob(c, R['paper'], lambda d, x=x, y=y, a=a: d.polygon([(x, y), (x + 12, y + 2 * a), (x + 10 + 2 * a, y + 14), (x - 2, y + 12)], fill=1), bulge=.4, lift=.25, name='page')
+        c.rect(x + 1, y + 1, 9, 3, (196, 58, 48))
+        for t in range(8): c.px(x + 2 + t, y + 5 + t, (180, 40, 34))
+    return finish(c, [('lip', 'body'), ('throat', 'lip'), ('fang', 'throat'), ('fang', 'lip'), ('tongue', 'throat'), ('stalk', 'body'), ('eye', 'stalk'), ('lid', 'eye'), ('tend', 'body'), ('page', 'body')],
+                  rim=(200, 150, 255), rimparts=('body', 'stalk', 'tend', 'lid'))
 
 # ------------------------------------------------------------------ pañilwe üñüm: a drone, the metal bird of the city
 def drone(f):
@@ -294,9 +341,9 @@ if __name__ == '__main__':
         big = [fn(0), fn(1)]; small = [yp.half(b) for b in big]
         pb, fb = yp.encode(big); ps, fs = yp.encode(small)
         out[name] = {'big': {'pal': pb, 'f': fb}, 'small': {'pal': ps, 'f': fs}}
-        im = Image.new('RGBA', (120, 120), (40, 50, 70, 255)); b0 = Image.fromarray(big[0]); im.paste(b0, ((120 - b0.width) // 2, 120 - b0.height), b0)
+        im = Image.new('RGBA', (160, 150), (40, 50, 70, 255)); b0 = Image.fromarray(big[0]); im.paste(b0, ((160 - b0.width) // 2, 150 - b0.height), b0)
         strip.append(im)
-    sheet = Image.new('RGBA', (120 * len(strip), 120)); [sheet.paste(s, (i * 120, 0)) for i, s in enumerate(strip)]
-    sheet.resize((sheet.width * 3, 360), Image.NEAREST).save('/home/claude/waria_sheet.png')
+    sheet = Image.new('RGBA', (160 * len(strip), 150)); [sheet.paste(s, (i * 160, 0)) for i, s in enumerate(strip)]
+    sheet.resize((sheet.width * 3, 450), Image.NEAREST).save('/home/claude/waria_sheet.png')
     json.dump(out, open(os.path.join(here, 'waria.json'), 'w'))
     print('ok')
