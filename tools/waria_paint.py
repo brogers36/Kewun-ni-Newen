@@ -185,6 +185,20 @@ def ribbed(c, path, w0, w1, ramp, name, lift=.1, every=5):
                     if 0 <= X2 < yp.W and 0 <= Y2 < yp.H and c.part[Y2, X2] == name:
                         c.rgb[Y2, X2] = np.minimum(255, c.rgb[Y2, X2].astype(int) + 40).astype(np.uint8)
 
+def facet(c, poly, col, name=None):
+    """one flat plane of a form, filled with a single tone: the hand-cut planes that make a face read as solid"""
+    m = c.mask(lambda d: d.polygon(poly, fill=1)); c.rgb[m] = col; c.a[m] = True
+    if name: c.part[m] = name
+    return m
+def tooth3(c, x, y0, y1, ramp, name='fang'):
+    """a three-tone fang: lit left edge, mid face, shadowed right edge, a sharp tip"""
+    for y in range(y0, y1):
+        w = max(1, int(round(3 * (1 - (y - y0) / max(1, y1 - y0)))))
+        for k in range(w):
+            col = ramp[-1] if k == 0 else ramp[-3] if k == w - 1 and w > 1 else ramp[-2]
+            c.px(x + k, y, col); c.part[min(yp.H - 1, y), min(yp.W - 1, x + k)] = name
+    c.px(x, y1, ramp[2])
+
 def rivets(c, pts, ramp):
     for (x, y) in pts:
         c.px(x, y, ramp[-1]); c.px(x + 1, y + 1, ramp[1]); c.px(x + 1, y, ramp[-3])
@@ -227,10 +241,16 @@ def ngoyngoyun(f):
         for a in np.linspace(0, 2 * math.pi, 80):
             X, Y = int(78 + math.cos(a) * r_), int(59 + bob + math.sin(a) * r_ * .62)
             if c.part[Y, X] == 'cone': c.px(X, Y, R['rubber'][3] if a < math.pi else R['rubber'][1])
+    for r_ in (19, 14, 9):                                # each ring of the cone: a lit upper-left lip, a dark lower-right lip
+        for a in np.linspace(0, 2 * math.pi, 140):
+            X, Y = int(round(78 + math.cos(a) * r_)), int(round(59 + bob + math.sin(a) * r_ * .62))
+            lit = math.cos(a - 3.93) > .2
+            if c.part[Y, X] in ('cone', 'visor'): c.px(X, Y, R['rubber'][4] if lit else R['rubber'][0])
     glow(c, 78, 59 + bob, 6, R['glow'])
-    for x in range(60, 98, 3):                            # the grille: a row of steel teeth
-        blob(c, R['bone'], lambda d, x=x: d.polygon([(x, 84 + bob), (x + 3, 84 + bob), (x + 1.5, 92 + bob + (2 if (x // 3 + f) % 2 else 0))], fill=1), bulge=.9, lift=.15, name='tooth')
+    c.px(75, 56 + bob, (255, 255, 255)); c.px(76, 56 + bob, (255, 244, 220)); c.px(75, 57 + bob, (255, 244, 220))
     blob(c, R['glow'][:4], lambda d: d.rectangle([60, 80 + bob, 97, 84 + bob], fill=1), bulge=.4, lift=.2, name='maw')
+    for k, x in enumerate(range(60, 97, 3)): tooth3(c, x, 84 + bob, 91 + bob + (2 if (k + f) % 2 else 0), R['bone'], 'tooth')
+    for x in range(60, 98): c.px(x, 79 + bob, R['steel'][7]); c.px(x, 92 + bob, R['steel'][0]) if c.part[92 + bob, x] == 'hull' else None
     # stacks on the back, venting noise
     for (x, h) in [(58, 18), (98, 22)]:
         blob(c, R['steel'], lambda d, x=x, h=h: d.rounded_rectangle([x - 7, 40 - h + bob, x + 7, 46 + bob], 3, fill=1), bulge=1.2, lift=.18, name='stack')
@@ -289,13 +309,26 @@ def ngamlef(f):
     blob(c, R['carap'], lambda d: d.ellipse([54, 44, 104, 88], fill=1), bulge=1.2, lift=.14, name='thx')
     plate_lines(c, 'thx', [((60, 60), (100, 56)), ((58, 72), (102, 70)), ((80, 46), (78, 86))], .55)
     rivets(c, [(64, 58), (72, 57), (88, 56), (96, 57), (66, 70), (94, 69)], R['bone'])
-    blob(c, R['bone'], lambda d: d.polygon(smooth_poly([(62, 64), (78, 58), (90, 64), (92, 82), (84, 98), (66, 98), (58, 84)], 5), fill=1), bulge=1.2, lift=.2, name='skull')
-    for (ex, ey) in [(68, 74), (84, 73)]:
-        blob(c, [(10, 6, 8), (24, 14, 14)], lambda d, ex=ex, ey=ey: d.ellipse([ex - 5, ey - 4, ex + 5, ey + 4], fill=1), bulge=.5, name='socket')
-        glow(c, ex, ey, 3, R['yglow'])
-    for x in range(64, 90, 3):                             # a jaw full of fangs
-        blob(c, R['bone'], lambda d, x=x: d.polygon([(x, 90), (x + 3, 90), (x + 1.5, 97 + (2 if x % 2 else 0) + f)], fill=1), bulge=.9, lift=.25, name='fang')
-    c.rect(66, 89, 22, 2, (20, 4, 6))
+    B = R['bone']; K = (8, 5, 6)
+    blob(c, B, lambda d: d.polygon(smooth_poly([(62, 64), (78, 56), (92, 64), (94, 82), (86, 100), (66, 100), (58, 84)], 5), fill=1), bulge=1.2, lift=.2, name='skull')
+    facet(c, [(62, 66), (70, 59), (78, 57), (76, 64), (66, 70)], B[6]); facet(c, [(78, 57), (86, 59), (92, 65), (88, 70), (76, 64)], B[4])
+    facet(c, [(66, 70), (76, 64), (88, 70), (84, 72), (70, 73)], B[5]); facet(c, [(62, 66), (66, 70), (64, 80), (59, 78), (59, 70)], B[4])
+    facet(c, [(92, 65), (94, 72), (93, 80), (89, 79), (88, 70)], B[2])
+    for x in range(64, 76): c.px(x, 70 - (x - 64) // 8, B[6])
+    for x in range(80, 89): c.px(x, 70, B[5])
+    for (x0, y0) in [(70, 60), (71, 61), (72, 63), (72, 64), (73, 65)]: c.px(x0, y0, B[1])          # a crack across the crown
+    facet(c, [(62, 79), (71, 80), (74, 84), (66, 86), (60, 84)], B[5]); facet(c, [(60, 84), (66, 86), (65, 90), (61, 89)], B[2])
+    facet(c, [(82, 80), (91, 79), (92, 84), (86, 86), (80, 84)], B[3]); facet(c, [(86, 86), (92, 84), (91, 89), (87, 90)], B[1])
+    facet(c, [(66, 86), (74, 84), (80, 84), (86, 86), (85, 90), (67, 90)], B[4])
+    for poly in ([(63, 71), (73, 70), (74, 76), (70, 79), (64, 78)], [(80, 70), (89, 71), (89, 77), (84, 79), (80, 76)]):
+        facet(c, poly, K, 'socket'); xs_ = [p[0] for p in poly]; ys_ = [p[1] for p in poly]
+        for x in range(min(xs_) + 1, max(xs_)): c.px(x, min(ys_) + 1, (34, 26, 24))                  # the orbit's upper rim, in shadow
+    facet(c, [(76, 77), (78, 77), (80, 83), (74, 83)], K); c.px(77, 78, B[2])
+    for (ex, ey) in [(69, 74), (85, 74)]:
+        glow(c, ex, ey, 3, R['yglow']); c.px(ex - 1, ey - 1, (255, 255, 255))
+    c.rect(66, 90, 22, 1, K)
+    for k, x in enumerate(range(66, 87, 3)): tooth3(c, x, 91, 97 + (2 if (k + f) % 2 else 0), B)
+    facet(c, [(64, 99), (88, 99), (86, 102), (66, 102)], B[1])
     blob(c, R['carap'], lambda d: d.polygon([(56, 98), (48, 112), (62, 104)], fill=1), bulge=1.0, lift=.15, name='mand')
     blob(c, R['carap'], lambda d: d.polygon([(96, 98), (104, 112), (90, 104)], fill=1), bulge=1.0, lift=.0, name='mand')
     # threads snapping between the legs: the people pulled apart
@@ -393,7 +426,20 @@ def fillantu(f):
         for k in range(10):                               # hollow cheeks below
             X, Y = ex - 4 + k, ey + 10 + int(abs(k - 5) * .5)
             if c.part[Y, X] == 'head': c.rgb[Y, X] = (c.rgb[Y, X] * .6).astype(np.uint8)
-    for (x, y) in [(34, 72), (35, 72), (33, 73), (36, 73), (34, 74), (35, 74)]: c.px(x, y, (16, 12, 18))     # a nasal cavity
+    G = R['gaunt']
+    facet(c, [(24, 44), (34, 36), (50, 37), (55, 46), (42, 49), (26, 51)], G[6])       # forehead
+    facet(c, [(55, 46), (59, 55), (56, 64), (51, 57)], G[2])                          # temple turning away
+    facet(c, [(17, 60), (24, 51), (26, 56), (19, 66)], G[7])                          # the lit temple
+    facet(c, [(18, 67), (29, 65), (33, 70), (22, 73)], G[7]); facet(c, [(42, 65), (53, 63), (55, 69), (45, 72)], G[4])   # cheekbones
+    facet(c, [(20, 74), (31, 74), (29, 81), (21, 81)], G[2]); facet(c, [(44, 74), (54, 72), (51, 80), (44, 80)], G[1])   # hollows
+    facet(c, [(22, 84), (50, 82), (46, 92), (31, 95)], G[4]); facet(c, [(30, 93), (40, 92), (38, 95), (31, 96)], G[6])     # jaw and chin
+    for x in range(20, 54): c.px(x, 50 + (1 if 30 < x < 42 else 0), G[7] if x < 36 else G[5])                            # brow ridge
+    for (ex, ey) in [(26, 60), (44, 58)]:
+        facet(c, [(ex - 8, ey - 1), (ex - 1, ey - 4), (ex + 7, ey - 3), (ex + 5, ey + 3), (ex - 4, ey + 4)], (8, 6, 11), 'socket')
+        for x in range(ex - 7, ex + 6): c.px(x, ey - 4 + (1 if x > ex else 0), (26, 22, 30))
+        c.px(ex + (1 if f else 0), ey, (214, 252, 250)); c.px(ex - 1 + (1 if f else 0), ey, (100, 184, 190)); c.px(ex + (1 if f else 0), ey + 1, (50, 110, 120))
+    for (x, y) in [(34, 72), (35, 72), (33, 73), (36, 73), (34, 74), (35, 74), (34, 75)]: c.px(x, y, (16, 12, 18))     # a nasal cavity
+    c.px(33, 71, G[7]); c.px(36, 75, G[2])
     # the mouth: stretched ear to ear and zipped shut; teeth pressing through where the zip has given
     mp = cr([(16, 88), (24, 85), (34, 84), (46, 85), (54, 89)], 6)
     for k, (x, y) in enumerate(mp):
@@ -429,6 +475,8 @@ def fillantu(f):
     for y, x in zip(ys, xs):
         k = .55 if not c.a[y, x - 1] else .35
         c.rgb[y, x] = (c.rgb[y, x] * (1 - k) + np.array((110, 205, 214)) * k).astype(np.uint8)
+    for (x, y) in [(14, 104), (22, 100), (30, 100), (34, 112), (26, 124)]:             # knuckles: a lit bump and its shadow
+        c.px(x, y, R['gaunt'][8]); c.px(x + 1, y + 1, R['gaunt'][2])
     texture(c, ['body', 'head', 'neck', 'arm', 'armF', 'finger'], amt=.10, seed=4)
     occlude(c, ['head', 'neck', 'arm'], ['body', 'armF'], r=4, k=.5)
     speculars(c, ['clock', 'vert', 'head'], thr=.86, col=(236, 248, 246))

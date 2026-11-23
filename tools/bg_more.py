@@ -603,6 +603,19 @@ def metro():   # Santiago: a Metro platform, tiled wall, a tunnel mouth, the tra
     m = (((XX - 46) / 32.0) ** 2 + ((YY - 112) / 74.0) ** 2 < 1) & (YY < 112)   # tunnel mouth: depth in rings
     d = np.sqrt(((XX - 46) / 32.0) ** 2 + ((YY - 112) / 74.0) ** 2)
     paint(s, m, .02 + d * .32, P('#040508', '#090b10', '#10131a', '#181c24', '#22262f', '#2e333d'))
+    for x in range(98, 116):                             # a green exit sign glowing on the wall
+        for y in range(70, 77): s.px(x, y, '#1e8a4a' if 71 <= y <= 75 and 99 <= x <= 114 else '#e8ece8')
+    for x in range(101, 112, 2): s.px(x, 73, '#d8f8e0')
+    light_pool(s, 107, 73, 18, 9, '#60e090', k=.18, mask=YY < HZ)
+    for (cx_, cy_) in [(280, 84)]:                       # a station clock
+        for y in range(cy_ - 8, cy_ + 9):
+            for x in range(cx_ - 8, cx_ + 9):
+                d_ = math.hypot(x - cx_, y - cy_)
+                if d_ <= 8: s.px(x, y, '#2a2c32' if d_ > 7 else '#f4f4ee')
+        for t in range(6): s.px(cx_, cy_ - t, '#1a1a1e'); s.px(cx_ + t // 2, cy_ + t // 3, '#1a1a1e')
+        for a_ in range(12): s.px(cx_ + int(round(math.cos(a_ * math.pi / 6) * 6)), cy_ + int(round(math.sin(a_ * math.pi / 6) * 6)), '#5a5a60')
+    hz_m = m & (YY > 70)
+    s.p[hz_m] = np.clip(s.p[hz_m] * .85 + np.array([20, 24, 30]) * .15 * ((YY[hz_m] - 70) / 42.0)[:, None], 0, 255).astype(np.uint8)
     for ry in (108, 111):                                # rails running into the dark
         for x in range(16, 78):
             if m[ry, x]: s.px(x, ry, '#5a5e66' if ry == 108 else '#3a3e46')
@@ -641,6 +654,13 @@ def metro():   # Santiago: a Metro platform, tiled wall, a tunnel mouth, the tra
                 t = (x - cx) / 21; v = .15 + .75 * math.sin(math.pi * (t * .8 + .1)) ** 2 * (1 - t * .5)
                 s.px(x, y, s.ramp_at(x, y, P('#2c2e34', '#3e4048', '#52545c', '#686a72', '#80828a', '#9a9ca2'), v))
         light_pool(s, cx + 11, 206, 26, 6, '#000000', k=.5)
+    for (bx, by) in [(40, 196)]:                          # a steel bench in the foreground
+        for x in range(bx - 30, bx + 30):
+            for y in range(by - 4, by):
+                s.px(x, y, '#9aa0a8' if y == by - 4 else '#6a7078' if y < by - 1 else '#3a3e46')
+        for lx in (bx - 24, bx + 22):
+            for y in range(by, by + 14): s.px(lx, y, '#2a2c32'); s.px(lx + 1, y, '#4a4e56')
+        for x in range(bx - 28, bx + 28): s.px(x, by + 14, '#16161a')
     for y in range(146, H):                               # a wet sheen: the wall and the line repeated faintly upside down
         src = 2 * 140 - y
         if 0 <= src < HZ:
@@ -681,9 +701,16 @@ def feria():   # Santiago: the street market under striped tarps, late afternoon
                 sh = (.62 + .38 * (1 - (y - 70 - sag) / 16)) * (.86 + .14 * math.sin((x - cx) / 3.2))
                 s.p[y, x] = (np.array(col) * sh).astype(np.uint8); s.a[y, x] = True
             for y in range(86 + sag, 89 + sag): s.p[y, x] = (np.array(hx(c1)) * .45).astype(np.uint8)      # scalloped hem shadow
+            sc_ = 89 + sag + int(abs(math.sin((x - cx) / 3.0 * math.pi / 2)) * 3)
+            for y in range(89 + sag, sc_): s.p[y, x] = (np.array(hx(c1)) * .75).astype(np.uint8)          # the scalloped fringe
         for px_ in (cx - w0 // 2 + 2, cx + w0 // 2 - 2):
             for y in range(66, 132): s.px(px_, y, '#3a3a40'); s.px(px_ + 1, y, '#5a5a62')
     for y in range(89, 132): s.p[y] = (s.p[y] * .86).astype(np.uint8)                   # shade under the tarps
+    for x in range(W):                                    # a string of bulbs looping across the market
+        y = 64 + int(abs(math.sin(x / 44.0 * math.pi)) * 7); s.px(x, y, '#2a2420')
+        if x % 22 == 11:
+            for (dx, dy, cc) in [(0, 1, '#fff6c8'), (1, 1, '#ffe090'), (0, 2, '#ffd070'), (1, 2, '#e0a040')]: s.px(x + dx, y + dy, cc)
+            light_pool(s, x, y + 3, 9, 6, '#ffe0a0', k=.25)
     for k, cx in enumerate([40, 128, 212, 300, 384]):    # the vendors behind their tables
         vx = cx + (10 if k % 2 else -12); col = [P('#5a2a2a', '#7a3a34', '#9a5040', '#b86a54'), P('#2a3a5a', '#3a4e74', '#506a92', '#6a86ac'), P('#2a4a2a', '#3a623a', '#50804e', '#6a9a62')][k % 3]
         m_ = ((XX - vx) / 9.0) ** 2 + ((YY - 110) / 16.0) ** 2 < 1
@@ -698,10 +725,13 @@ def feria():   # Santiago: the street market under striped tarps, late afternoon
         for j, (col, hi) in enumerate([('#c22a1e', '#ff7a5a'), ('#e8c020', '#fff08a'), ('#2e5a24', '#6aa04a'), ('#e0701e', '#ffb060'), ('#6a2a5a', '#b06aa0')]):
             bx = cx - 30 + j * 13
             if not 0 <= bx < W - 12: continue
-            for (dx, dy) in [(1, 0), (4, 0), (7, 0), (10, 0), (2, -2), (5, -2), (8, -2), (4, -4), (7, -4)]:
-                pc = (k + j) % 5; c0, ch = [('#c22a1e', '#ff7a5a'), ('#e8c020', '#fff08a'), ('#2e5a24', '#6aa04a'), ('#e0701e', '#ffb060'), ('#6a2a5a', '#b06aa0')][pc]
-                for (a, b) in [(0, 0), (1, 0), (0, 1), (1, 1), (2, 0), (2, 1)]: s.px(bx + dx + a, 109 + dy + b, c0)
-                s.px(bx + dx, 109 + dy, ch)
+            pc = (k + j) % 5; c0, ch = [('#c22a1e', '#ff7a5a'), ('#e8c020', '#fff08a'), ('#2e5a24', '#6aa04a'), ('#e0701e', '#ffb060'), ('#6a2a5a', '#b06aa0')][pc]
+            dk = tuple(int(v * .5) for v in hx(c0))
+            for row, n_ in enumerate((4, 3, 2, 1)):           # a heap: each fruit lit on its upper left, shadowed below
+                for q in range(n_):
+                    fx_, fy_ = bx + 1 + row * 1.5 + q * 3, 110 - row * 2.4
+                    for (a, b) in [(0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (1, -1)]: s.px(int(fx_) + a, int(fy_) + b, c0)
+                    s.px(int(fx_), int(fy_) - 1 + 1, ch); s.px(int(fx_) + 2, int(fy_) + 1, dk)
             for y in range(102, 107):                     # a price card
                 for x in range(bx + 2, bx + 9): s.px(x, y, '#f4f0e4' if y > 102 else '#2a2a2a')
     ground(s, 132, P('#3a3634', '#4a4542', '#5a5450', '#6c6560', '#7e7670', '#928a82'), base=.36, pool=.55, cy=170, tex=.18)
@@ -766,6 +796,19 @@ def blocks():   # Santiago: the apartment blocks at dusk, the cordillera behind,
                 for (dx, dy, cc) in [(2, -3, '#3a7a3a'), (3, -4, '#5a9a4a'), (4, -3, '#3a7a3a'), (3, -2, '#2a5a2a'), (2, 0, '#8a4a2a'), (3, 0, '#8a4a2a'), (4, 0, '#6a3a1e')]: s.px(wx + dx, fy + 10 + dy, cc)
                 if (wx + fl) % 3 == 0:
                     for a_ in range(8): s.px(wx + 16 + int(math.cos(a_ * .5) * 3), fy + 4 + int(math.sin(a_ * .5) * 3), '#c8ccd4')
+    for (x0, x1) in [(-10, 120), (270, 410)]:              # a mural of stepped ñimin along the base of each block
+        for x in range(max(0, x0), min(W, x1)):
+            for y in range(136, 149):
+                u = (x - x0) % 16; v = y - 136; stp = abs(u - 8) <= (v if v < 7 else 12 - v)
+                band = ((x - x0) // 16) % 3
+                s.px(x, y, ['#b02a28', '#1c1414', '#e8e0cc'][band] if stp else ['#e8e0cc', '#b02a28', '#1c1414'][band])
+        for dx_ in (40, 96) if x0 < 0 else (36, 100):          # doorways
+            for y in range(122, 150):
+                for x in range(x0 + dx_, x0 + dx_ + 12): s.px(x, y, '#2a1e1a' if y > 124 else '#4a3a30')
+            light_pool(s, x0 + dx_ + 6, 120, 8, 4, '#ffd890', k=.4)
+    for (wx_, wy_) in [(30, 66), (318, 80), (362, 112), (74, 112)]:   # someone at a lit window
+        for (dx, dy) in [(5, 2), (6, 2), (4, 3), (5, 3), (6, 3), (7, 3), (5, 4), (6, 4), (3, 5), (4, 5), (5, 5), (6, 5), (7, 5), (8, 5), (3, 6), (4, 6), (5, 6), (6, 6), (7, 6), (8, 6)]:
+            s.px(wx_ + dx, wy_ + dy, '#3a2a20')
     for (y0, x0, x1) in [(82, 120, 270), (100, 120, 270)]:  # washing lines strung between the blocks
         for x in range(x0, x1):
             y = y0 + int(math.sin(math.pi * (x - x0) / (x1 - x0)) * 6); s.px(x, y, '#1a1418')
