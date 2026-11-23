@@ -680,7 +680,7 @@ function renderBattle(){
   c.save();c.translate(sh,0);
   const pa=B.area.replace('fog:',''),painted=!!PBGI[pa];
   if(!BG[B.area]||BG[B.area].width!==LW){const bg=buildBG(B.area);if(!painted||paintedBG(pa))BG[B.area]=bg;else{c.drawImage(bg,0,0)}}
-  if(BG[B.area])c.drawImage(BG[B.area],0,0);if(painted&&paintedBG(pa)){animPainted(c,pa);if(B.area!==pa)for(let k=0;k<6;k++){const fx=((k*83+frame*.4)%(LW+120))-60;for(let d=0;d<5;d++)R(c,Math.round(fx+d*7),70+k*16+(d%2),46-d*8,2,'rgba(200,206,216,.14)')}}else animBG(B.area);
+  if(BG[B.area])c.drawImage(BG[B.area],0,0);if(painted&&paintedBG(pa)){animPainted(c,pa.split('@')[0]);if(B.area!==pa)for(let k=0;k<6;k++){const fx=((k*83+frame*.4)%(LW+120))-60;for(let d=0;d<5;d++)R(c,Math.round(fx+d*7),70+k*16+(d%2),46-d*8,2,'rgba(200,206,216,.14)')}}else animBG(B.area);
   if(B.wx)wxBattle(c,B.wx);
   {// battle grade: soft-light contrast on the backdrop, a little haze where sky meets land, so the fighters pop off it
    const ar=B.area,dark=/cave|deep|crater|fog:|waria/.test(ar);if(!painted){c.save();c.globalCompositeOperation='soft-light';
@@ -780,7 +780,8 @@ function renderBattle(){
   if(!(PBGI[B.area.replace('fog:','')]&&paintedBG(B.area.replace('fog:','')))){if(!FG[B.area])FG[B.area]=buildFG(B.area);c.drawImage(FG[B.area],0,0)}
   c.restore();
   for(const p of B.parts){p.t--;p.x+=p.vx;p.y+=p.vy;p.vy+=.06;R(c,p.x,p.y,p.t>15?2:1,p.t>15?2:1,p.col)}B.parts=B.parts.filter(p=>p.t>0);
-  if(!B.en.some(e=>/^ngoyman/.test(e.t)&&!e.dead))dayTint(c);
+  if(!B.en.some(e=>/^ngoyman/.test(e.t)&&!e.dead)&&!/^(waria|feria|blocks)/.test(B.area))dayTint(c);   // the city backdrops already carry their hour
+  else if(/@night$/.test(B.area)){c.fillStyle='rgba(14,18,48,.16)';c.fillRect(0,0,LW,LH)}   // ...but the fighters still stand in the dark
   if(B.wipe>0&&B.snap){B.wipe--;
     const k=1-(B.wipe/22),rr=k*k*Math.max(LW,LH)*0.85;
     c.save();

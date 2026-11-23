@@ -22,8 +22,10 @@ function mkEnemy(t){const k=progK(),bs=ET[t].boss?.5:1,hp0=Math.round(ET[t].hp*(
 function startBattle(party,o){o=o||{};const bwx=(typeof wxNow==='function'&&M)?wxNow():null;
   let snap=null;try{snap=document.createElement('canvas');snap.width=LW;snap.height=LH;const sg=snap.getContext('2d');sg.imageSmoothingEnabled=false;sg.drawImage(cv,0,0,LW,LH)}catch(e){snap=null}
   if(typeof stopAmb==='function')stopAmb();
+  if(typeof playAmb==='function'&&(M.urban||M.bg==='metro')){playAmb(typeof wxAmbKey==='function'&&wxKey()?wxAmbKey():ambFor(M.bg));ambVol(.2)}   // the city keeps going, quieter, under the fight
   mode='battle';banner.style.display='none';held.up=held.down=held.left=held.right=0;
-  B={wx:bwx,snap,wipe:snap?22:0,en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(M.fog&&M.bg!=='fjord'?'fog:':'')+M.bg,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
+  const vph={day:'day',dusk:'dusk',night:'night',dawn:'dusk'}[typeof dayPhase==='function'?dayPhase().name:'day'],bgv=(typeof PAINTBG!=='undefined'&&PAINTBG[M.bg+'@'+vph])?M.bg+'@'+vph:M.bg;   // the city backdrops are painted for each time of day
+  B={wx:bwx,snap,wipe:snap?22:0,en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(M.fog&&M.bg!=='fjord'?'fog:':'')+bgv,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
   if(o.tut){B.en[0].hp=B.en[0].max=20}
   relabel();sfx('enc');if(snap)sfx('swirl');playSong(o.song||(o.final?'ngoyFinal':rsong(o.boss?'boss':'battle')));
   const alive=B.en.length,bt=party.find(t=>ET[t].boss);
@@ -591,7 +593,7 @@ function endBattle(how){
   B=null;persist();
   const entPost=how==='win'&&o.ent&&o.ent.post;
   if(how!=='win'||!AU.song||(AU.name!=='win'&&AU.name!=='winS'))playSong(mapSong());
-  if(typeof playAmb==='function')playAmb(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg));
+  if(typeof playAmb==='function'){playAmb(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg));ambVol(.5)}
   if(entPost)return o.ent.post();
   if(how==='win'&&o.sflag==='epu_won'){S.flags.epu_won=1;S.gear.waiki=1;persist();sfx('lvl');
     return say([N('El Epunamun baja las dos lanzas a la vez. No se deshace, no huye: te saluda, con las dos caras sonriendo.','The Epunamun lowers both spears at once. He does not break apart, he does not flee: he salutes you, both faces smiling.'),

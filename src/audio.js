@@ -331,12 +331,15 @@ const AMB={cur:null,nodes:[],timers:[]};
 function stopAmb(){for(const t of AMB.timers)clearInterval(t);AMB.timers=[];
   for(const n of AMB.nodes){try{n.stop&&n.stop()}catch(e){}try{n.disconnect&&n.disconnect()}catch(e){}}
   AMB.nodes=[];AMB.cur=null}
+const _nt=()=>(typeof dayPhase==='function'&&dayPhase().name==='night')?'-n':'';   // the city sounds different after dark
+function ambVol(v){if(AMB.g&&AU.c)AMB.g.gain.setTargetAtTime(v,AU.c.currentTime,.4)}
 function ambFor(bg){if(bg==='coast'&&typeof CUR!=='undefined'&&(CUR==='lof'||(M&&M.interior)))return 'wavesSoft';return({coast:'waves',field:'meadow',forest:'forest',rainforest:'forest',mawida:'forest',
-  mount:'wind',fjord:'wind',pampa:'pampa',waria:'city',feria:'city',blocks:'city',metro:'cave',deep:'under',cave:'cave',cave2:'cave',cave3:'cave',cave4:'cave',cave5:'cave'})[bg]||'night'}
+  mount:'wind',fjord:'wind',pampa:'pampa',waria:'city'+_nt(),feria:'feria'+_nt(),blocks:'blocks'+_nt(),metro:'metro',deep:'under',cave:'cave',cave2:'cave',cave3:'cave',cave4:'cave',cave5:'cave'})[bg]||'night'}
 function playAmb(kind){
   if(AMB.cur===kind)return;stopAmb();if(!kind)return;const full=kind,wxl=kind.split('|')[1];kind=kind.split('|')[0];
   if(!AU.c)return; // starts once audio is unlocked; next map change retries
-  AMB.cur=full;const c=AU.c,g=c.createGain();g.connect(AU.m);AMB.nodes.push(g);
+  AMB.cur=full;const c=AU.c,g=c.createGain();g.connect(AU.m);AMB.nodes.push(g);AMB.g=g;
+  const night=/-n$/.test(kind);kind=kind.replace(/-n$/,'');
   const noise=(fq,q,vol,lfoHz,lfoAmt)=>{const src=c.createBufferSource();src.buffer=AU.noise;src.loop=true;
     const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=fq;f.Q.value=q;
     const ng=c.createGain();ng.gain.value=vol;src.connect(f);f.connect(ng);ng.connect(g);
@@ -365,9 +368,49 @@ function playAmb(kind){
     AMB.timers.push(setInterval(()=>{if(Math.random()<.6){chirp(140+Math.random()*120,380+Math.random()*220,.25,.03)}},1400))}
   else if(kind==='cave'){noise(140,1.2,.03,.04,.8);
     AMB.timers.push(setInterval(()=>{if(Math.random()<.4){chirp(900+Math.random()*500,300,.12,.04)}},3100))}
-  else if(kind==='city'){noise(180,.7,.026,.04,.8);noise(2400,1.3,.004,.15,.9);
-    AMB.timers.push(setInterval(()=>{const r=Math.random();if(r<.18){const b=380+Math.random()*120;chirp(b,b*.98,.22,.05);setTimeout(()=>chirp(b*1.02,b,.18,.04),260)}
-      else if(r<.32){const b=1600+Math.random()*700;chirp(b,b*1.2,.07,.03)}},2100))}
+  else if(kind==='city'||kind==='feria'||kind==='blocks'){
+    // ---- Santiago: traffic, horns, buses, dogs, a far siren; the feria's crowd and pregones; music from a flat in the blocks
+    const t0=()=>c.currentTime,R_=Math.random;
+    const swoosh=(dur,vol,f0,f1)=>{try{const src=c.createBufferSource();src.buffer=AU.noise;const f=c.createBiquadFilter();f.type='bandpass';f.Q.value=1.2;
+      const og=c.createGain(),t=t0();f.frequency.setValueAtTime(f0,t);f.frequency.linearRampToValueAtTime(f1,t+dur*.55);f.frequency.linearRampToValueAtTime(f0*.8,t+dur);
+      og.gain.setValueAtTime(0,t);og.gain.linearRampToValueAtTime(vol,t+dur*.5);og.gain.linearRampToValueAtTime(0,t+dur);src.connect(f);f.connect(og);og.connect(g);src.start(t);src.stop(t+dur+.05)}catch(e){}};
+    const tone=(type,fq,dur,vol,lp,at)=>{try{const o=c.createOscillator(),og=c.createGain(),f=c.createBiquadFilter();o.type=type;f.type='lowpass';f.frequency.value=lp||1800;const t=t0()+(at||0);
+      o.frequency.setValueAtTime(fq,t);og.gain.setValueAtTime(0,t);og.gain.linearRampToValueAtTime(vol,t+.02);og.gain.setValueAtTime(vol,t+dur*.8);og.gain.linearRampToValueAtTime(0,t+dur);
+      o.connect(f);f.connect(og);og.connect(g);o.start(t);o.stop(t+dur+.05)}catch(e){}};
+    const glide=(type,f0,f1,dur,vol,lp,at)=>{try{const o=c.createOscillator(),og=c.createGain(),f=c.createBiquadFilter();o.type=type;f.type='lowpass';f.frequency.value=lp||1600;const t=t0()+(at||0);
+      o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f1,t+dur);og.gain.setValueAtTime(0,t);og.gain.linearRampToValueAtTime(vol,t+dur*.15);og.gain.linearRampToValueAtTime(0,t+dur);
+      o.connect(f);f.connect(og);og.connect(g);o.start(t);o.stop(t+dur+.05)}catch(e){}};
+    const hiss=(dur,vol,at)=>{try{const src=c.createBufferSource();src.buffer=AU.noise;const f=c.createBiquadFilter();f.type='highpass';f.frequency.value=3200;const og=c.createGain(),t=t0()+(at||0);
+      og.gain.setValueAtTime(vol,t);og.gain.exponentialRampToValueAtTime(.0005,t+dur);src.connect(f);f.connect(og);og.connect(g);src.start(t);src.stop(t+dur+.05)}catch(e){}};
+    const horn=()=>{const b=360+R_()*140,n=R_()<.4?2:1;for(let i=0;i<n;i++){tone('square',b,.22,.014,1400,i*.3);tone('square',b*1.26,.22,.01,1400,i*.3)}};
+    const bark=()=>{const n=1+Math.floor(R_()*3),b=260+R_()*160;for(let i=0;i<n;i++){glide('sawtooth',b*1.3,b*.8,.11,.02,900,i*.22);hiss(.06,.004,i*.22)}};
+    const siren=()=>{try{const o=c.createOscillator(),og=c.createGain(),t=t0(),f=c.createBiquadFilter();o.type='triangle';f.type='lowpass';f.frequency.value=1200;
+      for(let i=0;i<4;i++){o.frequency.setValueAtTime(640,t+i*1.6);o.frequency.linearRampToValueAtTime(900,t+i*1.6+.8);o.frequency.linearRampToValueAtTime(640,t+i*1.6+1.6)}
+      og.gain.setValueAtTime(0,t);og.gain.linearRampToValueAtTime(.008,t+2);og.gain.linearRampToValueAtTime(0,t+6.4);o.connect(f);f.connect(og);og.connect(g);o.start(t);o.stop(t+6.5)}catch(e){}};
+    const moto=()=>{glide('sawtooth',70,150,2.2,.012,500)};
+    const bus=()=>{swoosh(3.2,.03,120,320);hiss(.7,.012,2.4)};
+    // the bed: a low rumble of traffic that swells and fades, and the hum of the city
+    noise(110,.6,night?.012:.024,.05,.8);noise(420,.8,night?.004:.01,.09,.9);noise(2600,1.3,.003,.15,.9);
+    if(kind==='feria'&&!night){noise(700,.5,.016,.13,.9);noise(1500,.9,.006,.21,.9)}       // the crowd: many voices, no words
+    AMB.timers.push(setInterval(()=>{const r=R_();
+      if(r<(night?.12:.32))swoosh(1.8+R_()*1.4,night?.014:.024,260+R_()*120,700+R_()*500);   // a car going by
+      else if(r<(night?.15:.40))horn();
+      else if(r<(night?.18:.45))bus();
+      else if(r<(night?.30:.52))bark();
+      else if(r<(night?.34:.56))moto();
+      else if(r<(night?.37:.58))siren()},1500));
+    if(kind==='feria'&&!night)AMB.timers.push(setInterval(()=>{if(R_()<.55){   // a vendor's pregón: a sing-song call rising and falling
+      const b=220+R_()*90,seq=[[1,.22],[1.33,.18],[1.5,.3],[1.33,.18],[1,.4]];let at=0;for(const [m,d] of seq){glide('triangle',b*m,b*m*.98,d,.018,1400,at);at+=d*.9}}},2600));
+    if(kind==='blocks')AMB.timers.push(setInterval(()=>{if(R_()<(night?.6:.35)){   // cumbia leaking from an open window: a thump, a güiro, a bass line
+      const bpm=.42,bass=[98,98,123,110];for(let i=0;i<8;i++){glide('sine',90,45,.12,.03,300,i*bpm);if(i%2)hiss(.08,.004,i*bpm+bpm*.5);tone('triangle',bass[i%4],bpm*.8,.012,500,i*bpm)}}},4200));
+    if(night)AMB.timers.push(setInterval(()=>{if(R_()<.5){const b=3300+R_()*500;chirp(b,b*1.04,.06,.015);setTimeout(()=>chirp(b,b*1.04,.06,.012),110)}},1300))}
+  else if(kind==='metro'){noise(70,.8,.03,.03,.8);noise(240,1.1,.008,.06,.9);
+    // the Metro: the tunnel breathing, a train coming in with its rumble and squeal, the door chime, footsteps
+    AMB.timers.push(setInterval(()=>{if(Math.random()<.45){const t=c.currentTime;try{const src=c.createBufferSource();src.buffer=AU.noise;const f=c.createBiquadFilter();f.type='lowpass';f.frequency.setValueAtTime(120,t);f.frequency.linearRampToValueAtTime(600,t+3);f.frequency.linearRampToValueAtTime(150,t+6);
+        const og=c.createGain();og.gain.setValueAtTime(0,t);og.gain.linearRampToValueAtTime(.05,t+3);og.gain.linearRampToValueAtTime(0,t+6);src.connect(f);f.connect(og);og.connect(g);src.start(t);src.stop(t+6.1)}catch(e){}
+      setTimeout(()=>{chirp(2600,2400,.4,.012)},2600);
+      setTimeout(()=>{for(const [i,fq] of [[0,880],[1,698],[2,587]].map(a=>a)){setTimeout(()=>chirp(fq,fq*.995,.35,.025),i*260)}},3600)}},9000));
+    AMB.timers.push(setInterval(()=>{if(Math.random()<.5)for(let i=0;i<4;i++)setTimeout(()=>chirp(180,120,.04,.02),i*280)},2300))}
   else if(kind==='night'){AMB.timers.push(setInterval(()=>{if(Math.random()<.7){const b=3300+Math.random()*500;
     chirp(b,b*1.04,.06,.03);setTimeout(()=>chirp(b,b*1.04,.06,.025),110);setTimeout(()=>chirp(b,b*1.04,.06,.02),220)}},900))}
 }

@@ -497,9 +497,9 @@ def cave3(): return cave_base(BASALT, P('#140e0e', '#201616', '#2c1e1c', '#3a282
 def cave4(): return cave_base(P('#06100e', '#0c1a18', '#122624', '#1a3432', '#244442', '#305652'), P('#0c1614', '#14201e', '#1c2c28', '#263834', '#324642'), light='#9ae0d0', seed=4, water=True), {}
 def cave5(): return cave_base(CHENKE, P('#1c140c', '#2a1e12', '#3a2a1a', '#4a3822', '#5c482c'), light='#ffc070', seed=5, bones=True), {}
 
-def waria():   # Santiago: a street at dusk. Shopfronts and flats, a wide pavement, wet asphalt where the fight is
+def waria(tod=None):   # Santiago: a street at dusk. Shopfronts and flats, a wide pavement, wet asphalt where the fight is
     s = Pic(); HZ = 84; SW = 96; CURB = 118
-    sky(s, HZ, CITYSKY, sun=(220, 70, 90), warm='#ff8a50')
+    sky(s, HZ, CITYSKY, sun=(220, 70, 90), warm='#ff8a50'); sky_ref = s.p.copy(); s.a[:] = False
     r = np.random.RandomState(14)
     x = -10                                               # the far city: hazy blocks with a few lights
     while x < W + 10:
@@ -580,13 +580,28 @@ def waria():   # Santiago: a street at dusk. Shopfronts and flats, a wide paveme
             if 0 <= x < W: s.p[y, x] = (s.p[y, x] * .84).astype(np.uint8)
     for x in range(W):                                    # the curb: a lit top edge and its face
         s.px(x, CURB, '#a8a49c'); s.px(x, CURB + 1, '#6a6660'); s.px(x, CURB + 2, '#3a3834'); s.px(x, CURB + 3, '#1a1a1e')
-    ground(s, CURB + 4, ASPH, base=.28, pool=.55, cy=146, spread=30, tex=.12)
-    for y in range(CURB + 4, H):                          # wet asphalt mirrors the lit windows and the sky
+    rm = YY >= CURB + 4                                   # the road: smooth worn asphalt, darker toward the curb, a pool of light where the fight is
+    pl = np.exp(-(((XX - W * .52) / (W * .45)) ** 2 + ((YY - 146) / 34) ** 2))
+    paint(s, rm, .24 + pl * .42 + (fbm(XX / 14, (YY - CURB) / 3, 66, 3) - .5) * .12 - np.clip(1 - (YY - CURB) / 10, 0, 1) * .12, ASPH)
+    for k in range(5):                                    # patched seams
+        y = CURB + 14 + k * k * 4 + k * 6
+        if y < H:
+            for x in range(W):
+                if (x // 9 + k) % 5: s.p[y, x] = (s.p[y, x] * .88).astype(np.uint8)
+    refl = s.p[:SW].astype(float)                         # wet asphalt mirrors the lit windows and lamps: soft, smeared downward
+    refl = (refl + np.roll(refl, 1, 1) + np.roll(refl, -1, 1)) / 3
+    for y in range(CURB + 4, H):
         src = 2 * CURB - y
         if 0 <= src < SW:
-            k_ = .32 * (1 - (y - CURB) / (H - CURB)) ** 1.5
-            br_ = (s.p[src].mean(axis=1) > 150)[:, None]
-            s.p[y] = np.where(br_, (s.p[y] * (1 - k_ * .7) + s.p[src] * k_ * .7).astype(np.uint8), s.p[y])
+            row = (refl[src] + refl[max(0, src - 1)] + refl[max(0, src - 2)]) / 3
+            w_ = np.clip((row.mean(-1) - 120) / 90, 0, 1)[:, None] * .34 * (1 - (y - CURB) / (H - CURB)) ** 1.3
+            s.p[y] = np.clip(s.p[y] * (1 - w_) + row * w_, 0, 255).astype(np.uint8)
+    for (mx, my) in [(150, 176)]:                         # a manhole cover and oil stains
+        for y in range(my - 4, my + 5):
+            for x in range(mx - 10, mx + 11):
+                if ((x - mx) / 10) ** 2 + ((y - my) / 4) ** 2 < 1: s.px(x, y, '#26262e' if (x + y) % 3 else '#34343c')
+    for (ox_, oy_, orx, ory) in [(260, 160, 16, 3), (90, 190, 20, 4)]:
+        m_ = ((XX - ox_) / orx) ** 2 + ((YY - oy_) / ory) ** 2 < 1; s.p[m_] = (s.p[m_] * .78).astype(np.uint8)
     yy, k = CURB + 30, 0                                  # the lane line: dashes growing toward the viewer
     for x0 in range(-40, W + 40, 46):
         for y in range(CURB + 26, CURB + 32):
@@ -611,9 +626,66 @@ def waria():   # Santiago: a street at dusk. Shopfronts and flats, a wide paveme
         for y in range(by - 14, by):
             for x in range(bx - 6, bx + 6): s.px(x, y, ['#1a3a24', '#24502e', '#30663a', '#3e7a46'][min(3, max(0, (bx + 5 - x) // 3))] if y > by - 13 else '#122a1a')
         light_pool(s, bx, by + 1, 9, 2, '#000000', k=.5)
+    retime(s, tod, 'dusk', sky_ref, ['#f4cc78', '#d8a858', '#f6dc9a', '#d8b070', '#fff0b0', '#8aa8d0', '#c8a070'], HZ,
+           lamps=[(75, SW + 14, 46, 14), (333, SW + 14, 46, 14), (40, SW + 4, 40, 8), (130, SW + 4, 40, 8), (240, SW + 4, 40, 8), (350, SW + 4, 40, 8)], seed=14)
     vignette(s, .4)
-    finish_bg(s, cool='#241c3a', warm='#ffc890', k=.14, grain=.05, seed=14)
+    finish_bg(s, cool='#241c3a' if tod != 'day' else '#3a4a6a', warm='#ffc890' if tod != 'night' else '#b8c4e8', k=.14, grain=.04, seed=14)
     return s, {'hz': HZ, 'colors': 200}
+
+def _mix(a, b, t): return a * (1 - t) + b * t
+def retime(s, tod, base, sky_ref, emit, hz, lamps=(), seed=3):
+    """repaint a finished street scene for another time of day: a new sky, the light of that hour on everything,
+    and the lamps, windows and bulbs either glowing (night, dusk) or just glass and metal (day)"""
+    if tod is None or tod == base: return
+    p = s.p.astype(float)
+    sky = ~s.a & (YY < hz)                                  # whatever was never painted over after the sky
+    E = np.zeros((H, W), bool)
+    for col in emit: E |= np.abs(p - np.array(hx(col), float)).sum(-1) < 36
+    E &= ~sky
+    t = np.clip(YY / max(1, hz), 0, 1)[..., None]
+    rs = np.random.RandomState(seed)
+    if tod == 'night':
+        top, mid, low = np.array([4, 5, 14.]), np.array([14, 14, 34.]), np.array([52, 36, 54.])
+        sk = np.where(t < .7, _mix(top, mid, t / .7), _mix(mid, low, (t - .7) / .3))
+        sk += (BAYF[..., None] - .5) * 4
+        p[sky] = sk[sky]
+        for _ in range(90):
+            x, y = rs.randint(0, W), rs.randint(0, max(1, int(hz * .75)))
+            if sky[y, x]: p[y, x] = (236, 240, 255) if rs.rand() < .25 else (150, 160, 200)
+        non = ~E & ~sky
+        lum = p[non].mean(-1, keepdims=True)
+        p[non] = (p[non] * .55 + lum * .45) * np.array([.30, .34, .52]) + np.array([3, 4, 10.])
+        p[E] = np.clip(p[E] * 1.08 + 8, 0, 255)
+        halo = np.zeros((H, W), bool)
+        for d in (1, 2):
+            for dy, dx in ((-d, 0), (d, 0), (0, -d), (0, d)): halo |= np.roll(np.roll(E, dy, 0), dx, 1)
+        halo &= ~E & ~sky
+        p[halo] = _mix(p[halo], np.array([255, 196, 120.]), .22)
+        s.p = np.clip(p, 0, 255).astype(np.uint8)
+        for (lx, ly, rx, ry) in lamps: light_pool(s, lx, ly, rx, ry, '#ffcf80', k=.32)
+        return
+    if tod == 'day':
+        top, low = np.array([70, 128, 204.]), np.array([196, 218, 236.])
+        sk = _mix(top, low, t ** 1.4) + (BAYF[..., None] - .5) * 5
+        p[sky] = sk[sky]
+        for (cx, cy, rx, ry) in [(80, hz * .3, 40, 6), (250, hz * .18, 52, 7), (360, hz * .45, 30, 4)]:
+            d = ((XX - cx) / rx) ** 2 + ((YY - cy) / ry) ** 2 + (fbm(XX / 6, YY / 3, int(cx)) - .5) * 1.4
+            cm = sky & (d < 1)
+            p[cm] = _mix(p[cm], np.array([250, 252, 255.]) - (YY[cm] - cy)[:, None] * 3, .85)
+        non = ~E & ~sky
+        lum = p[non].mean(-1, keepdims=True)
+        p[non] = np.clip((p[non] * .62 + lum * .38) * np.array([1.36, 1.38, 1.40]) + 6, 0, 255)
+        g = p[E]; p[E] = _mix(g, np.array([92, 112, 138.]) + (rs.rand(len(g), 1) * 26), .82)   # glass reflecting the day sky
+        s.p = np.clip(p, 0, 255).astype(np.uint8); return
+    if tod == 'dusk':
+        top, mid, low = np.array([30, 28, 64.]), np.array([132, 70, 96.]), np.array([246, 168, 104.])
+        sk = np.where(t < .6, _mix(top, mid, t / .6), _mix(mid, low, (t - .6) / .4)) + (BAYF[..., None] - .5) * 4
+        p[sky] = sk[sky]
+        non = ~E & ~sky
+        p[non] = p[non] * np.array([.86, .66, .62]) + np.array([6, 0, 8.])
+        p[E] = np.clip(p[E] * 1.1 + 10, 0, 255)
+        s.p = np.clip(p, 0, 255).astype(np.uint8)
+        for (lx, ly, rx, ry) in lamps: light_pool(s, lx, ly, rx, ry, '#ffcf80', k=.2)
 
 def lift_scene(s, y_base, dy):
     """move everything painted above y_base up by dy rows, so the ground the fighters stand on starts higher
@@ -780,9 +852,9 @@ def metro():   # Santiago: a Metro platform. The far wall across the tracks, the
     finish_bg(s, cool='#24344c', warm='#fff0d0', k=.14, grain=.045, seed=11)
     return s, {'hz': HZ, 'colors': 200}
 
-def feria():   # Santiago: the street market under striped tarps, late afternoon
+def feria(tod=None):   # Santiago: the street market under striped tarps, late afternoon
     s = Pic(); HZ = 96
-    sky(s, HZ, P('#4a78b8', '#5a8cc8', '#6ea0d4', '#86b4de', '#a2c6e6', '#c2daee', '#e2ecf4'), sun=(330, 40, 90), warm='#ffe0a8')
+    sky(s, HZ, P('#4a78b8', '#5a8cc8', '#6ea0d4', '#86b4de', '#a2c6e6', '#c2daee', '#e2ecf4'), sun=(330, 40, 90), warm='#ffe0a8'); sky_ref = s.p.copy(); s.a[:] = False
     clouds(s, [(90, 30, 70, 10, 3), (250, 20, 60, 8, 4)], CLOUD, HZ)
     r = np.random.RandomState(8); x = -6
     FAC = [P('#7a5a4a', '#94705c', '#ae8870', '#c6a084', '#dab898'), P('#5a6a7a', '#6e8090', '#8498a8', '#9cb0be', '#b8c8d4'), P('#7a6a4a', '#94845c', '#ae9c70', '#c6b484', '#dacb9c')]
@@ -845,6 +917,7 @@ def feria():   # Santiago: the street market under striped tarps, late afternoon
             for y in range(102, 107):                     # a price card
                 for x in range(bx + 2, bx + 9): s.px(x, y, '#f4f0e4' if y > 102 else '#2a2a2a')
     lift_scene(s, 132, 24)                               # the market sits further back; the street in front is where the fight is
+    sky_ref[0:132 - 24] = sky_ref[24:132].copy(); HZ -= 24
     G0 = 108
     ground(s, G0, P('#34302e', '#423d3a', '#524c48', '#645d58', '#766e68', '#8a827a', '#9e958c'), base=.34, pool=.55, cy=150, spread=40, tex=.16)
     contact(s, G0, k=.55, h=7)
@@ -871,18 +944,69 @@ def feria():   # Santiago: the street market under striped tarps, late afternoon
         for x in range(cx - 16, cx + 16):
             for y in range(cy - 26, cy - 22):
                 if 0 <= x < W: s.px(x, y, ['#c22a1e', '#e8c020', '#3a7a2a'][(x // 3) % 3] if y > cy - 26 else '#2a1a10')
+    def crate(cx, cy, w=16, h=11, fruit=None):
+        for y in range(cy - h, cy):
+            for x in range(cx - w // 2, cx + w // 2):
+                s.px(x, y, '#9a7244' if y == cy - h else '#7a5630' if (y - cy) % 4 else '#4a3218')
+        for y in range(cy - h, cy): s.px(cx - w // 2, y, '#5a3e20'); s.px(cx + w // 2 - 1, y, '#3a2614')
+        if fruit:
+            for x in range(cx - w // 2 + 1, cx + w // 2 - 1):
+                s.px(x, cy - h - 1, fruit[x % 2]); s.px(x, cy - h - 2, fruit[0]) if x % 3 else None
+        light_pool(s, cx + 2, cy, w * .7, 2, '#000000', k=.5)
+    crate(20, 122, fruit=('#c22a1e', '#ff7a5a')); crate(36, 122, fruit=('#e8c020', '#fff08a')); crate(28, 111, fruit=('#3a7a2a', '#6aa04a'))
+    crate(360, 120, fruit=('#e0701e', '#ffb060')); crate(376, 120)
+    for (sx_, sy_) in [(112, 120), (122, 121), (117, 114)]:           # sacks of potatoes
+        for y in range(sy_ - 9, sy_):
+            for x in range(sx_ - 5, sx_ + 6):
+                if ((x - sx_) / 5.5) ** 2 + ((y - sy_ + 4.5) / 4.8) ** 2 < 1: s.px(x, y, '#b89a6a' if x < sx_ else '#8a7048')
+        s.px(sx_ - 1, sy_ - 9, '#5a4428'); s.px(sx_, sy_ - 9, '#5a4428')
+        light_pool(s, sx_ + 1, sy_, 7, 2, '#000000', k=.45)
+    for (cx, cy) in [(250, 118)]:                         # a vendor's tricycle cart, the box painted blue
+        for y in range(cy - 14, cy - 4):
+            for x in range(cx - 14, cx + 6): s.px(x, y, '#2e5ab0' if y > cy - 13 else '#e8e0cc')
+        for x in range(cx - 14, cx + 6): s.px(x, cy - 4, '#1a2a50')
+        for (wx_, r_) in [(cx - 10, 4), (cx + 2, 4), (cx + 14, 4)]:
+            for a_ in range(16): s.px(wx_ + int(round(math.cos(a_ * .39) * r_)), cy + int(round(math.sin(a_ * .39) * r_)), '#1a1a1e')
+            s.px(wx_, cy, '#8a8a90')
+        for y in range(cy - 10, cy): s.px(cx + 12, y, '#3a3a40')
+        for x in range(cx + 6, cx + 14): s.px(x, cy - 2, '#3a3a40')
+        for x in range(cx + 10, cx + 16): s.px(x, cy - 11, '#1a1a1e')
+        light_pool(s, cx, cy + 4, 22, 3, '#000000', k=.45)
+    for (dx_, dy_) in [(196, 126)]:                       # a street dog asleep in the sun
+        for y in range(dy_ - 5, dy_):
+            for x in range(dx_ - 9, dx_ + 7):
+                if ((x - dx_) / 8.5) ** 2 + ((y - dy_ + 2.5) / 3) ** 2 < 1: s.px(x, y, '#c8a070' if y < dy_ - 3 else '#9a7448')
+        for (x, y, c_) in [(dx_ + 7, dy_ - 4, '#c8a070'), (dx_ + 8, dy_ - 4, '#c8a070'), (dx_ + 9, dy_ - 3, '#9a7448'), (dx_ + 8, dy_ - 5, '#6a4a2a'), (dx_ + 9, dy_ - 2, '#2a1a10'), (dx_ - 10, dy_ - 2, '#9a7448'), (dx_ - 11, dy_ - 1, '#9a7448')]: s.px(x, y, c_)
+        light_pool(s, dx_, dy_, 10, 2, '#000000', k=.45)
+    for (chx, chy) in [(150, 116), (330, 128)]:            # red plastic chairs
+        for y in range(chy - 12, chy):
+            s.px(chx, y, '#b8282a'); s.px(chx + 7, y, '#8a1c1e') if y > chy - 6 else None
+        for x in range(chx, chx + 8): s.px(x, chy - 6, '#d83a34'); s.px(x, chy - 5, '#8a1c1e')
+        for y in range(chy - 6, chy): s.px(chx + 1, y, '#b8282a') if y > chy - 2 else None
+        light_pool(s, chx + 4, chy, 6, 2, '#000000', k=.4)
+    for (mx, my) in [(300, 150)]:                         # a manhole cover
+        for y in range(my - 4, my + 5):
+            for x in range(mx - 11, mx + 12):
+                if ((x - mx) / 11) ** 2 + ((y - my) / 4) ** 2 < 1: s.px(x, y, '#3a3634' if (x + y) % 3 else '#4a4542')
+    for (ox_, oy_, orx, ory) in [(80, 140, 18, 3), (230, 176, 24, 4)]:
+        m_ = ((XX - ox_) / orx) ** 2 + ((YY - oy_) / ory) ** 2 < 1; s.p[m_] = (s.p[m_] * .8).astype(np.uint8)
+    for k in range(60):                                   # cabbage leaves and onion skins
+        x, y = (k * 97) % W, G0 + 8 + (k * 53) % (H - G0 - 10)
+        c_ = ['#6aa04a', '#3a7a2a', '#d8c8a0', '#a04a30'][k % 4]
+        s.px(x, y, c_); s.px(x + 1, y, c_); s.px(x + 1, y + 1, '#2a2420')
     light_pool(s, 210, 140, 170, 40, '#ffe8b8', k=.12)
     for (sx_, w_) in [(60, 26), (230, 34)]:              # dusty shafts of sun slanting between the tarps
         m_ = (YY > 64) & (YY < 200) & (abs(XX - sx_ - (YY - 64) * .45) < w_ / 2)
         lvl = np.floor((1 - abs(XX - sx_ - (YY - 64) * .45) / (w_ / 2)) * 3 + BAYF) / 3
         kk = (np.clip(lvl, 0, 1) * .10)[m_][:, None]; s.p[m_] = np.clip(s.p[m_] * (1 - kk) + hx('#fff2c8') * kk, 0, 255).astype(np.uint8)
+    retime(s, tod, 'day', sky_ref, ['#fff6c8', '#ffe090', '#ffd070', '#e0a040'], HZ, lamps=[(x, 46 + int(abs(math.sin(x / 44.0 * math.pi)) * 7), 12, 8) for x in range(11, W, 22)], seed=12)
     vignette(s, .35)
-    finish_bg(s, cool='#2a3450', warm='#ffe2a8', k=.14, grain=.05, seed=12)
+    finish_bg(s, cool='#2a3450', warm='#ffe2a8' if tod != 'night' else '#b8c4e8', k=.14, grain=.04, seed=12)
     return s, {'hz': HZ, 'colors': 200}
 
-def blocks():   # Santiago: the apartment blocks at dusk, the cordillera behind, washing on the lines
+def blocks(tod=None):   # Santiago: the apartment blocks at dusk, the cordillera behind, washing on the lines
     s = Pic(); HZ = 104
-    sky(s, HZ, P('#1c1834', '#2a1e44', '#3e2650', '#5c3054', '#84405a', '#b45a5a', '#e08a5a', '#f6b86c'), sun=(200, 108, 120), warm='#ffc070')
+    sky(s, HZ, P('#1c1834', '#2a1e44', '#3e2650', '#5c3054', '#84405a', '#b45a5a', '#e08a5a', '#f6b86c'), sun=(200, 108, 120), warm='#ffc070'); sky_ref = s.p.copy(); s.a[:] = False
     def ridge2(x): return 86 - 18 * math.exp(-((x - 120) / 70.0) ** 2) - 24 * math.exp(-((x - 290) / 60.0) ** 2) + 3 * math.sin(x / 9.0) + 2 * math.sin(x / 4.1)
     for x in range(W):                                  # the Andes, snow catching the last light
         top = int(ridge2(x))
@@ -943,6 +1067,7 @@ def blocks():   # Santiago: the apartment blocks at dusk, the cordillera behind,
                 for dy in range(1, 9 + (x % 3) * 2):
                     for dx in range(6): s.px(x + dx, y + dy, col if dx < 5 else '#2a2028')
     lift_scene(s, 150, 42)                               # the blocks stand back across the courtyard
+    sky_ref[0:150 - 42] = sky_ref[42:150].copy()
     G0 = 108; HZ2 = HZ - 42
     ground(s, G0, P('#241e16', '#30281c', '#3e3424', '#4e422e', '#60523a', '#746446', '#887654'), base=.3, pool=.55, cy=148, spread=42, tex=.24)
     contact(s, G0, k=.6, h=8)
@@ -972,6 +1097,40 @@ def blocks():   # Santiago: the apartment blocks at dusk, the cordillera behind,
             for y in range(by, by + 8):
                 for x in range(lx, lx + 6): s.px(x, y, '#5a544c' if x < lx + 4 else '#3a3630')
         light_pool(s, bx, by + 9, 30, 4, '#000000', k=.5)
+    for k in range(9):                                    # half-buried tyres painted white and red, edging a little garden
+        tx_ = 268 + k * 7; ty_ = G0 + 18
+        for a_ in range(14):
+            x = tx_ + int(round(math.cos(a_ * .45) * 3)); y = ty_ - abs(int(round(math.sin(a_ * .45) * 4)))
+            s.px(x, y, '#e8e4dc' if k % 2 else '#c83a30'); s.px(x, y + 1, '#2a2622')
+        light_pool(s, tx_, ty_ + 1, 4, 1, '#000000', k=.4)
+    for k in range(6): s.px(270 + k * 10, G0 + 12, '#3a7a2a'); s.px(271 + k * 10, G0 + 11, '#5a9a4a'); s.px(272 + k * 10, G0 + 12, '#3a7a2a')
+    for (gx_, gy_) in [(52, G0 + 6), (60, G0 + 6), (82, G0 + 6)]:   # gas cylinders by the doorway
+        for y in range(gy_ - 12, gy_):
+            for x in range(gx_ - 3, gx_ + 4): s.px(x, y, ['#c8b030', '#e8d04a', '#a08a20', '#6a5a14'][min(3, abs(x - gx_ + 1))] if y > gy_ - 10 else '#4a4a50')
+        light_pool(s, gx_, gy_, 5, 1.5, '#000000', k=.5)
+    for (cx_, cy_) in [(178, G0 + 20)]:                    # a shopping cart someone left behind
+        for y in range(cy_ - 10, cy_ - 2):
+            for x in range(cx_ - 8, cx_ + 8):
+                if (x + y) % 3 == 0 or y in (cy_ - 10, cy_ - 3) or x in (cx_ - 8, cx_ + 7): s.px(x, y, '#9aa0a8')
+        for x in range(cx_ + 7, cx_ + 12): s.px(x, cy_ - 11, '#5a5e66')
+        for wx_ in (cx_ - 6, cx_ + 5): s.px(wx_, cy_, '#1a1a1e'); s.px(wx_, cy_ - 1, '#5a5e66')
+        light_pool(s, cx_, cy_ + 1, 10, 2, '#000000', k=.45)
+    for (dx_, dy_) in [(108, G0 + 30)]:                    # a quiltro curled up asleep
+        for y in range(dy_ - 5, dy_):
+            for x in range(dx_ - 7, dx_ + 7):
+                if ((x - dx_) / 7) ** 2 + ((y - dy_ + 2.5) / 3) ** 2 < 1: s.px(x, y, '#2a2420' if y < dy_ - 3 else '#1a1410')
+        s.px(dx_ - 6, dy_ - 5, '#2a2420'); s.px(dx_ - 5, dy_ - 6, '#2a2420')
+        light_pool(s, dx_, dy_, 9, 2, '#000000', k=.45)
+    for (bx_, by_) in [(30, G0 + 40)]:                     # a child's bike lying on its side
+        for a_ in range(14):
+            for (wx_) in (bx_ - 7, bx_ + 7): s.px(wx_ + int(round(math.cos(a_ * .45) * 4)), by_ - 4 + int(round(math.sin(a_ * .45) * 2)), '#1a1a1e')
+        for x in range(bx_ - 6, bx_ + 7): s.px(x, by_ - 5 - (x - bx_) // 6, '#3a7ad8')
+        light_pool(s, bx_, by_, 14, 2, '#000000', k=.4)
+    for k in range(3):                                    # a football, scuffed white
+        pass
+    for (fx_, fy_) in [(150, G0 + 22)]:
+        for y in range(fy_ - 3, fy_ + 1):
+            for x in range(fx_ - 2, fx_ + 2): s.px(x, y, '#e8e4dc' if (x + y) % 3 else '#3a3634')
     broadleaf(s, 214, G0 + 2, 40, 17, LEAF, P('#1a120c', '#2a1e14', '#3e2c1e', '#523a28'))
     light_pool(s, 214, G0 + 3, 16, 3, '#000000', k=.5)
     for k in range(80):                                  # patchy grass, bigger toward the viewer
@@ -994,9 +1153,13 @@ def blocks():   # Santiago: the apartment blocks at dusk, the cordillera behind,
         for x in range(max(0, x0 + 6), min(W, x1 - 6), 22):
             for y in range(20, G0 - 14):
                 if (y + x) % 11 < 2 and s.p[y, x].mean() > 50: s.p[y, x] = (s.p[y, x] * .88).astype(np.uint8)
+    retime(s, tod, 'dusk', sky_ref, ['#f8d27a', '#a07a3a', '#f0c878', '#fff0b8'], HZ - 42,
+           lamps=[(96, G0 + 20, 64, 24), (318, G0 + 20, 64, 24), (46, 80, 10, 4), (102, 80, 10, 4), (306, 80, 10, 4), (370, 80, 10, 4)], seed=13)
     vignette(s, .4)
-    finish_bg(s, cool='#2a2448', warm='#ffc890', k=.15, grain=.05, seed=13)
+    finish_bg(s, cool='#2a2448' if tod != 'day' else '#3a4a6a', warm='#ffc890' if tod != 'night' else '#b8c4e8', k=.15, grain=.04, seed=13)
     return s, {'hz': HZ, 'colors': 200}
 
 ALL = [('field', field), ('forest', forest), ('mount', mount), ('crater', crater), ('rainforest', rainforest), ('fjord', fjord),
-       ('pampa', pampa), ('lagoon', lagoon), ('deep', deep), ('cave', cave), ('cave3', cave3), ('cave4', cave4), ('cave5', cave5), ('waria', waria), ('metro', metro), ('feria', feria), ('blocks', blocks)]
+       ('pampa', pampa), ('lagoon', lagoon), ('deep', deep), ('cave', cave), ('cave3', cave3), ('cave4', cave4), ('cave5', cave5), ('waria', waria), ('metro', metro), ('feria', feria), ('blocks', blocks),
+       ('waria@day', lambda: waria('day')), ('waria@night', lambda: waria('night')), ('feria@dusk', lambda: feria('dusk')), ('feria@night', lambda: feria('night')),
+       ('blocks@day', lambda: blocks('day')), ('blocks@night', lambda: blocks('night'))]

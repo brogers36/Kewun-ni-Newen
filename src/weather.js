@@ -10,7 +10,8 @@ const WXL={antu:['Antü','Sale el sol','The sun is out'],tromu:['Tromü','Se nub
 const WXB={antu:['Küme antüngey!','Küme antüngey.'],tromu:['Tromüley.','Tromüley...'],mawun:['Mawünküley!','Alün mawi!'],pire:['Pireley!','Pireley...'],kuruf:['Kürüfküley!','Kürüfküley...']};
 const WXE={mawun:'mawek',pire:'pire',kuruf:'chonchon'};   // wekufü that ride this weather
 const WXS={last:null,key:null,toast:0,txt:null};
-function wxKey(){if(!M||M.interior||M.dungeon||M.under||M.fog||!WXT[M.bg])return null;return M.bg}
+const WXALIAS={feria:'waria',blocks:'waria'};   // the whole of Santiago shares one sky
+function wxKey(){if(!M||M.interior||M.dungeon||M.under||M.fog)return null;const k=WXALIAS[M.bg]||M.bg;return WXT[k]?k:null}
 function wxNow(){const key=wxKey();if(!key)return null;S.wx=S.wx||{};let w=S.wx[key];const now=Date.now();
   if(!w||now>w.u){const tb=WXT[key],tot=tb.reduce((a,b)=>a+b[1],0);let r=Math.random()*tot,k=tb[0][0];for(const [n,p] of tb){if((r-=p)<0){k=n;break}}
     w={k,u:now+(180+Math.random()*240)*1000};S.wx[key]=w}
@@ -46,4 +47,14 @@ function wxBattle(c,w){
   else if(w==='pire'){for(let k=0;k<44;k++){const x=((k*53+Math.round(Math.sin(frame/40+k)*10))%LW+LW)%LW,y=Math.floor((k*31+frame*(.5+(k%5)*.1))%LH);R(c,x,y,k%4?1:2,k%4?1:2,'#ffffff')}}
   else if(w==='kuruf'){for(let k=0;k<20;k++){const x=((frame*(3+(k%4))+k*61)%(LW+40))-20,y=(k*37)%(LH-40);R(c,Math.round(x),y,10+(k%3)*4,1,'rgba(235,240,250,.3)')}}
   else if(w==='tromu'){c.fillStyle='rgba(30,36,52,.1)';c.fillRect(0,0,LW,LH)}
+  if(B&&/^(waria|feria|blocks)/.test(B.area))wxCity(c,w);
+}
+/* the city's own weather on top: smog under a grey sky, rain splashing on the asphalt and running in the gutters */
+function wxCity(c,w){
+  if(w==='tromu'){const g=dLin(0,0,0,LH*.7);g.addColorStop(0,'rgba(120,104,96,.22)');g.addColorStop(.6,'rgba(140,120,100,.12)');g.addColorStop(1,'rgba(140,120,100,0)');g.fill(c,0,0,LW,Math.round(LH*.7))
+    for(let k=0;k<5;k++){const x=((k*97+frame*.15)%(LW+160))-80;c.fillStyle='rgba(150,134,120,.06)';c.fillRect(Math.round(x),30+k*14,120,6)}}
+  else if(w==='mawun'){for(let k=0;k<26;k++){const ph=(frame+k*13)%24,x=(k*71+Math.floor((frame+k*13)/24)*37)%LW,y=112+((k*29)%40);
+      if(ph<6){const r=1+ph/2;c.fillStyle='rgba(200,214,236,'+(.5-ph*.07).toFixed(2)+')';c.fillRect(Math.round(x-r),y,Math.round(r*2),1);if(ph<2){c.fillRect(x,y-2,1,1);c.fillRect(x-2,y-1,1,1);c.fillRect(x+2,y-1,1,1)}}}
+    const g=dLin(0,LH*.5,0,LH);g.addColorStop(0,'rgba(120,140,180,0)');g.addColorStop(1,'rgba(120,140,180,.12)');g.fill(c,0,LH/2,LW,LH/2)}
+  else if(w==='antu'&&dayPhase().name==='day'){c.save();c.globalCompositeOperation='lighter';const g=dRad(LW*.85,-20,10,LW*.85,-20,LW*.8);g.addColorStop(0,'rgba(255,236,190,.16)');g.addColorStop(1,'rgba(255,236,190,0)');g.fill(c,0,0,LW,LH);c.restore()}
 }

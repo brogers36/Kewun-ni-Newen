@@ -162,7 +162,7 @@ function updateMap(){
       N('(küpa-tu-nge: «ven de vuelta». -tu- marca la vuelta, -nge le habla a una persona.) El gran olvido cayó y la tierra respira. Algo más te espera: vuelve donde todo empezó.','(küpa-tu-nge: "come back". -tu- marks the return, -nge speaks to one person.) The great forgetting has fallen and the land breathes. Something more awaits you: go back to where it all began.')]);
     return}
   if(S.wtime%150===0&&typeof playAmb==='function'){
-    const d=dayPhase();playAmb(OUTBG[M.bg]&&d.name==='night'?'night':(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg)))}
+    const d=dayPhase();playAmb(OUTBG[M.bg]&&d.name==='night'&&!M.urban?'night':(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg)))}
   if(S.pw.speed>0)S.pw.speed--;if(S.pw.pewen>0)S.pw.pewen--;if(grace>0)grace--;
   if(P.moving){P.t+=P.spd;if(P.t>=1){P.moving=false;P.fx=P.x;P.fy=P.y;onStep()}else{P.fx=P.ox+(P.x-P.ox)*P.t;P.fy=P.oy+(P.y-P.oy)*P.t}}
   if(!P.moving&&!active&&mode==='map'){const d=heldDir();if(d)tryMove(d)}
