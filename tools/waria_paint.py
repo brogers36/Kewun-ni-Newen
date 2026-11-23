@@ -522,58 +522,92 @@ def fillantu(f):
     # the head, bowed a little toward the hero; shadow streaming back from it like hair
     for k in range(6):
         taper(c, cr([(84, 16 + fl + k * 2), (100, 14 + fl + k * 3 - f), (112, 20 + fl + k * 4), (122, 20 + fl + k * 5 + f * 2)], 5), 4, 1, R['robe'][1:6], lift=-.05, name='hair', bulge=1.0)
-    taper(c, [(80, 46 + fl), (78, 36 + fl)], 10, 9, R['muse'], lift=.1, name='neck', bulge=1.2)
-    # the head: a gaunt skull turned three-quarters toward the hero, shaded from a relief map so every plane catches the light
-    head = [(74, 7), (84, 5), (92, 9), (95, 17), (94, 27), (90, 35), (84, 41), (78, 44), (72, 43), (68, 37), (66, 29), (66, 21), (69, 12)]
+    taper(c, [(82, 46 + fl), (82, 40 + fl)], 12, 11, R['muse'], lift=.05, name='neck', bulge=1.2)
+    # the head: a gaunt skull, bowed and turned three-quarters toward the hero, shaded from a relief map so every plane catches the light
+    S = 1.3
+    T = lambda x, y: (80 + (x - 80) * S, 26 + (y - 24) * S)
+    head = [T(x, y) for x, y in [(74, 7), (84, 5), (92, 9), (95, 17), (94, 27), (90, 35), (84, 41), (78, 44), (72, 43), (68, 37), (66, 29), (66, 21), (69, 12)]]
     hm = c.mask(lambda d: d.polygon(cr([(x, y + fl) for x, y in head] + [(head[0][0], head[0][1] + fl)], 4), fill=1))
     dist = np.zeros(hm.shape); er = hm.copy()
-    for k in range(9):
+    for k in range(11):
         dist += er; er = er & np.roll(er, 1, 0) & np.roll(er, -1, 0) & np.roll(er, 1, 1) & np.roll(er, -1, 1)
     Y_, X_ = np.mgrid[0:yp.H, 0:yp.W].astype(float); Y_ -= fl
     def g(cx_, cy_, sx, sy, amp): return amp * np.exp(-(((X_ - cx_) / sx) ** 2 + ((Y_ - cy_) / sy) ** 2))
-    h = np.sqrt(np.clip(dist / 9, 0, 1)) * 5.0
-    h += g(75, 18.5, 9, 1.6, 1.3)                                 # heavy brow ridge
-    h += g(73, 25, 1.4, 5, 1.5) + g(71, 30, 1.8, 1.6, 1.2)        # nose bridge and tip, jutting toward the hero
-    h -= g(70, 22.5, 2.2, 2.2, 1.9) + g(80, 22.5, 3.2, 2.6, 2.3)  # deep eye sockets, the near one larger
-    h += g(84, 28, 3.5, 2, 1.1) + g(68, 28, 1.6, 2, .7)           # cheekbones
-    h -= g(82, 33, 3.5, 3, 1.4) + g(89, 17, 3, 4, .8)             # hollow cheek, sunken temple
-    h += g(74, 35, 6, 1.6, .5) - g(74, 37.5, 6, 1, .5)            # the lips pressed shut over the zipper
-    h += g(74, 42, 4, 2, .8)                                      # a long chin
-    h -= g(77, 13, 1.2, 4, .4) + g(81, 13, 1.2, 4, .3)            # two furrows of a held frown
+    def gl(x0, y0, x1, y1, w, amp):                              # a ridge or groove along a line
+        L = math.hypot(x1 - x0, y1 - y0); ux, uy = (x1 - x0) / L, (y1 - y0) / L
+        t = np.clip(((X_ - x0) * ux + (Y_ - y0) * uy) / L, 0, 1)
+        return amp * np.exp(-((X_ - (x0 + ux * L * t)) ** 2 + (Y_ - (y0 + uy * L * t)) ** 2) / w ** 2)
+    h = np.sqrt(np.clip(dist / 11, 0, 1)) * 6.5
+    h += gl(62, 20, 88, 20, 2.0, 1.6)                              # heavy brow ridge
+    h += gl(71, 21, 68.5, 33, 1.7, 1.7) + g(68, 34, 2.2, 2, 1.3)    # nose bridge and a hooked tip
+    h -= g(67, 25, 2.8, 2.6, 2.4) + g(80, 25, 4.0, 3.2, 2.8)      # deep eye sockets, the near one larger
+    h += g(86, 31, 4.5, 2.4, 1.3) + g(63, 31, 2, 2.4, .8)         # cheekbones
+    h -= g(83, 38, 4.5, 4, 1.8) + g(92, 17, 3.5, 5, 1.0)          # hollow cheek, sunken temple
+    h -= gl(71, 36, 66, 42, 1.0, .9) + gl(74, 36, 84, 43, 1.1, 1.0)   # the folds from nose to mouth
+    h += gl(64, 41, 85, 41, 1.3, .6) - gl(64, 44, 85, 44, .9, .6)  # lips pressed shut over the zipper
+    h += g(72, 49, 5, 2.2, 1.0)                                    # a long chin
+    h += gl(78, 49, 92, 37, 1.4, .7)                               # the jaw, sharp under the skin
+    h -= gl(73, 12, 74, 19, .8, .5) + gl(76, 12, 77, 19, .8, .45)  # furrows of a held frown
     gx = np.roll(h, -1, 1) - np.roll(h, 1, 1); gy = np.roll(h, -1, 0) - np.roll(h, 1, 0)
     nz = 2.0; nl = np.sqrt(gx ** 2 + gy ** 2 + nz ** 2)
     Lx, Ly, Lz = -.55, -.62, .56
     sh = (-gx * Lx - gy * Ly + nz * Lz) / nl
     ys, xs = np.nonzero(hm)
-    v = sh[ys, xs] * 1.3 + .02 - np.clip(-h[ys, xs] + 1.5, 0, 3) * .08     # crevices get no light
-    v -= (xs - 66) / 30 * .22                                                 # the far side of the skull falls into shadow
+    v = sh[ys, xs] * 1.3 + .08 - np.clip(-h[ys, xs] + 1.5, 0, 3) * .08
+    v -= (xs - 61) / 38 * .24                                      # the far side of the skull falls into shadow
     idx = np.clip(np.floor(v * (len(M) - 1) + (yp.BAYER[ys % 4, xs % 4] - .5) * .7).astype(int), 0, len(M) - 1)
     c.rgb[ys, xs] = np.array(M)[idx]; c.a[ys, xs] = True; c.part[ys, xs] = 'head'
-    P = lambda x, y, col: c.px(x, y + fl, col)
-    # eyes: dark wet slits deep in the sockets, a cold pinpoint in each, a lit lower lid
-    for (ex, ey, w) in [(70, 23, 2), (80, 23, 3)]:
-        for x in range(ex - w, ex + w + 1): P(x, ey, (6, 4, 10)); P(x, ey - 1, M[1])
-        P(ex - w - 1, ey, M[2]); P(ex + w + 1, ey, M[2])
-        for x in range(ex - w + 1, ex + w): P(x, ey + 1, M[5])
-        P(ex - (0 if f else 1), ey, (150, 226, 232)); P(ex + 1 - (0 if f else 1), ey, (96, 176, 186))
-    for x in range(67, 87): P(x, 19, M[8] if x < 78 else M[6]) if c.part[19 + fl, x] == 'head' else None   # lit edge of the brow
-    for (x, y) in [(71, 31), (72, 31)]: P(x, y, M[0])                                                     # nostril
-    P(70, 30, M[8]); P(71, 29, M[7])                                                                       # glint on the nose tip
-    for y in range(24, 30): P(74, y, M[3]) if y > 25 else None                                             # shadow side of the nose
-    for (x, y) in [(84, 30), (85, 31), (86, 32), (86, 33)]: P(x, y, M[2])                                  # crease under the cheekbone
-    # the zipper sewn through the mouth, the lips puckered around the teeth of it
-    for k, x in enumerate(range(68, 84)):
-        y = 36 + (1 if 71 < x < 80 else 0)
-        P(x, y, R['zip'][4] if k % 2 else R['zip'][2]); P(x, y + 1, R['zip'][1] if k % 2 else R['zip'][3])
-        P(x, y - 1, M[6] if x < 77 else M[4])                                                              # upper lip catching light
-        P(x, y + 2, M[1] if k % 2 else M[2])                                                               # lower lip in shadow
-        if k % 2 == 0: P(x, y - 2, (196, 180, 170)); P(x, y + 3, (150, 132, 124))                         # the stitches holding it
-    for x in range(69, 81, 3): P(x, 40, M[6])                                                              # chin catching light
-    for (x, y) in [(90, 18), (91, 20), (90, 22), (91, 24)]: P(x, y, M[3])                                   # a vein over the temple
-    blob(c, R['zip'], lambda d: d.rounded_rectangle([83, 36 + fl, 86, 42 + fl], 1, fill=1), bulge=.9, lift=.3, name='pull')
-    # an ear, small and flattened against the skull
-    blob(c, M, lambda d: d.ellipse([88, 23 + fl, 93, 31 + fl], fill=1), bulge=1.1, lift=-.1, name='ear')
-    P(90, 26, M[1]); P(90, 27, M[1]); P(89, 25, M[5])
+    def P(x, y, col):
+        X, Y = int(round(x)), int(round(y + fl))
+        if 0 <= Y < yp.H and 0 <= X < yp.W and c.part[Y, X] == 'head': c.px(X, Y, col)
+    def line(pts, col, n=24):
+        for (x, y) in cr(pts, n) if len(pts) > 2 else [(pts[0][0] + (pts[1][0] - pts[0][0]) * t, pts[0][1] + (pts[1][1] - pts[0][1]) * t) for t in np.linspace(0, 1, n)]:
+            P(x, y, col)
+    # tally scars cut into the scalp: days counted in groups of five, every group struck through
+    for gx0, gy0 in [(76, 7), (83, 6), (88, 10)]:
+        for k in range(4):
+            line([(gx0 + k * 1.6, gy0), (gx0 + k * 1.6 + .5, gy0 + 4)], M[7], 6); line([(gx0 + k * 1.6 + 1, gy0), (gx0 + k * 1.6 + 1.5, gy0 + 4)], M[2], 6)
+        line([(gx0 - 1, gy0 + 3.5), (gx0 + 6, gy0 + .5)], (120, 46, 52), 10)
+    # brows: the lit lip of the ridge, the frown between
+    line([(62, 20), (72, 19), (88, 20)], M[8], 40); line([(62, 21), (72, 20.5), (88, 21)], M[4], 40)
+    for x0 in (73, 76): line([(x0, 13), (x0 + 1, 18)], M[2], 6); line([(x0 - 1, 13), (x0, 18)], M[6], 6)
+    # eyes: lids, wet dark slits, a cold point of light, the bags of a long sleeplessness
+    for (ex, ey, w) in [(67, 25, 3), (80, 25, 4)]:
+        line([(ex - w - 1, ey), (ex, ey - 1.6), (ex + w + 1, ey)], M[1], 20)                  # upper lid
+        line([(ex - w, ey - 2.6), (ex, ey - 3.4), (ex + w, ey - 2.4)], M[3], 20)              # lid crease
+        for x in range(ex - w, ex + w + 1): P(x, ey, (6, 4, 10))
+        line([(ex - w, ey + 1), (ex, ey + 1.6), (ex + w, ey + 1)], M[5], 20)                  # lower lid catching light
+        line([(ex - w + 1, ey + 3), (ex + 1, ey + 3.8), (ex + w, ey + 2.6)], M[2], 20)        # the bag under it
+        P(ex - (0 if f else 1), ey, (150, 226, 232)); P(ex + 1 - (0 if f else 1), ey, (96, 176, 186)); P(ex - (0 if f else 1), ey + 1, (60, 110, 122))
+    for k in range(3): line([(85, 24 + k * 1.5), (88, 23 + k * 2.2)], M[3], 5)                # crow's feet at the near eye
+    # the nose: a lit ridge, the shadowed side, the wing of the nostril
+    line([(70.5, 21), (69.5, 27), (68, 32)], M[8], 16); line([(72.5, 23), (72, 29), (71, 33)], M[3], 14)
+    for yy in range(26, 36):                                       # the nose throws a shadow across the near cheek
+        for xx in range(72, 72 + int((yy - 25) * .45) + 2): P(xx, yy, M[1] if xx > 72 else M[2])
+    line([(70, 21.5), (69, 28), (67.5, 32.5)], M[8], 16); line([(69.5, 22), (68.5, 28), (67, 32)], M[7], 16)
+    for (x, y, col) in [(66, 33, 8), (67, 33, 8), (66, 34, 7), (67, 34, 6), (68, 34, 5), (66, 35, 3), (67, 35, 2)]: P(x, y, M[col])
+    for (x, y) in [(68, 35.5), (69, 35.5)]: P(x, y, M[0])
+    line([(70, 33), (71.5, 34.5), (70.5, 36)], M[2], 6)
+    # folds from nose to mouth, deep on the near side
+    line([(71, 36), (69, 39), (66, 41)], M[2], 10); line([(74, 36), (79, 38.5), (84, 42)], M[1], 16); line([(74, 35.5), (79, 37.6), (84, 41.2)], M[6], 16)
+    # the zipper sewn through the mouth, lips puckered around it, stitches crossing every tooth
+    for k, x in enumerate(range(64, 86)):
+        y = 42.5 + (.8 if 68 < x < 80 else 0)
+        P(x, y - 1.4, M[7] if x < 76 else M[5])
+        P(x, y, R['zip'][-1] if k % 2 else R['zip'][1]); P(x, y + 1, R['zip'][2] if k % 2 else R['zip'][-2])
+        P(x, y + 2.2, M[1] if k % 2 else M[2])
+        if k % 2 == 0: P(x, y - 2.4, (176, 160, 150)); P(x + 1, y + 3.2, (130, 114, 108))
+    P(64, 43, M[0]); P(85, 43, M[0])                                                          # corners pulled down
+    # chin and jaw
+    for x in range(68, 77, 2): P(x, 48, M[7])
+    line([(77, 51), (85, 46), (92, 38)], M[1], 20)
+    # veins branching over the sunken temple
+    line([(92, 12), (91, 16), (92.5, 20), (91.5, 24)], M[4], 14); line([(91, 16), (89, 18)], M[4], 4)
+    line([(93, 12), (92, 16), (93.5, 20)], M[6], 10)
+    blob(c, R['zip'], lambda d: d.rounded_rectangle([85, 42 + fl, 89, 50 + fl], 1, fill=1), bulge=.9, lift=.3, name='pull')
+    # an ear, flattened against the skull: the rim lit, the bowl dark
+    blob(c, M, lambda d: d.ellipse([90, 27 + fl, 97, 38 + fl], fill=1), bulge=1.1, lift=-.08, name='ear')
+    for (x, y, col) in [(92, 30, 1), (92, 31, 1), (93, 32, 1), (93, 33, 2), (92, 34, 3), (91, 29, 6), (91, 28, 5), (94, 29, 5)]: c.px(x, y + fl, M[col])
     # the near arm, reaching down toward the hero with a stopped clock in its fingers
     blob(c, R['muse'], lambda d: d.ellipse([56, 40 + fl, 72, 56 + fl], fill=1), bulge=1.3, lift=.2, name='delt')
     taper(c, cr([(62, 50 + fl), (52, 60 + fl), (46, 68 + fl)], 6), 10, 8, R['muse'], lift=.18, name='arm', bulge=1.25)
