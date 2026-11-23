@@ -79,7 +79,7 @@ function placeGloss(id){const M2=MAPS[id],n=S.names&&S.names[M2&&M2.spot];return
 function placeName(id){const n=S.names&&S.names[MAPS[id]&&MAPS[id].spot];return n?(MAPS[id].metroName?'Metro · ':'')+n.m:MAPS[id].name}
 
 /* ---------- maps ---------- */
-addMap('s_feria',Object.assign({},WARIA,{name:'Santiago · feria',g:{es:'La feria grande, junto a la plaza',en:'The big street market, by the plaza'},seed:5,
+addMap('s_feria',Object.assign({},WARIA,{bg:'feria',name:'Santiago · feria',g:{es:'La feria grande, junto a la plaza',en:'The big street market, by the plaza'},seed:5,
  edges:{right:{to:'s_plaza',x:1,y:3}},doors:{'24,2':{to:'s_radio',x:7,y:7}},
  bld:{'0,0':{shop:1,door:3},'7,0':{shop:1,door:2},'15,0':{shop:1,door:2},'21,0':{door:3},'30,0':{shop:1,door:1},'35,0':{shop:1,door:2}},
  ents:[{id:'casera2',kind:'npc',look:'cook',fem:1,x:16,y:8,dir:'down',fixed:1,talk:()=>feriaTalk(),bub:['¡A luca, a luca!','¡Lleve, lleve!']},
@@ -88,7 +88,7 @@ addMap('s_feria',Object.assign({},WARIA,{name:'Santiago · feria',g:{es:'La feri
    {id:'fabuela',kind:'npc',look:'kuku',fem:1,x:33,y:10,dir:'left',fixed:1,talk:()=>noiseTalk(2),bub:['Mari mari...','¿nadie?']},
    {id:'fkid',kind:'npc',look:'child',x:12,y:12,path:[[12,12],[24,12],[24,10],[12,10]],pause:40,talk:()=>noiseTalk(3),bub:['¡Mamá!']},
    {id:'fdog',kind:'npc',look:'dog',x:30,y:12,path:[[30,12],[36,12]],pause:60,talk:()=>dogTalk()},
-   {kind:'enemy',x:5,y:10,party:['wirarun'],flag:'sw1'},{kind:'enemy',x:36,y:8,party:['wirarun','wirarun'],flag:'sw1'},
+   {kind:'enemy',x:5,y:10,party:['wirarun'],flag:'sw1'},{kind:'enemy',x:36,y:8,party:['drone','wirarun'],flag:'sw1'},{kind:'enemy',x:26,y:12,party:['drone','drone'],flag:'sw1'},
    {id:'ngoyngoyun',kind:'enemy',x:20,y:10,party:['ngoyngoyun'],fixed:1,boss:1,req:'feria_ready',flag:'sw1',
     pre:[N('La radio, la feria, los parlantes, los gritos, las bocinas: todo el ruido se amontona en medio de la calle y se levanta como una torre que habla con mil bocas.','The radio, the market, the loudspeakers, the shouting, the horns: all the noise piles up in the middle of the street and rises like a tower talking with a thousand mouths.'),
       L('','Ngoyngoyün!','El ruido confuso, como de mucha gente junta. Ahí, entre tanto ruido, nadie escucha el mapudungun. Cálmalo (llako-), hazlo dormir (umawtu-) y que se vaya (amutu-).','Confused noise, like a crowd all talking at once. In so much noise, nobody hears Mapudungun. Calm it (llako-), put it to sleep (umawtu-) and make it go (amutu-).')],
@@ -108,14 +108,14 @@ addMap('s_m1',Object.assign({},METRO,{name:'Metro · andén',g:{es:'El andén y 
  ents:[{id:'spk1',kind:'npc',look:'weaver',fem:1,x:14,y:6,dir:'down',fixed:1,talk:()=>speakerTalk(1),bub:['...','Mari mari, mari mari...']},
    {id:'m1sign',kind:'npc',obj:'letrero',spot:'st_m1',x:12,y:1,fixed:1,talk:()=>nameSpot('st_m1')},
    {id:'torno2',kind:'npc',obj:'torno',x:20,y:8,fixed:1,flag:'torno2',talk:()=>tornoTalk(2)},
-   {kind:'enemy',x:8,y:8,party:['dewu','dewu']},{kind:'enemy',x:19,y:2,party:['dewu','wirarun']},{kind:'enemy',x:4,y:6,party:['dewu']}]}));
+   {kind:'enemy',x:8,y:8,party:['dewu','dewu']},{kind:'enemy',x:19,y:2,party:['drone','dewu']},{kind:'enemy',x:4,y:6,party:['dewu']}]}));
 addMap('s_m2',Object.assign({},METRO,{name:'Metro · línea abandonada',g:{es:'Una línea vieja, medio inundada',en:'An old line, half flooded'},spot:'st_m2',metroName:1,
  edges:{left:{to:'s_m1',x:21,y:7}},stairs:{to:'s_m3',x:1,y:5},chests:{'12,8':'numgift'},
  ents:[{id:'spk2',kind:'npc',look:'elder',x:10,y:7,dir:'down',seated:1,fixed:1,talk:()=>speakerTalk(2),bub:['Kuyfi...','¿alguien?']},
    {id:'m2sign',kind:'npc',obj:'letrero',spot:'st_m2',x:3,y:1,fixed:1,talk:()=>nameSpot('st_m2')},
-   {kind:'enemy',x:12,y:4,party:['dewu','dewu','wirarun']},{kind:'enemy',x:3,y:7,party:['wirarun','dewu']},{kind:'enemy',x:16,y:3,party:['dewu','dewu']},
-   {id:'m2mini',kind:'enemy',x:20,y:4,party:['dewu','wirarun','dewu'],fixed:1,mini:1,flag:'m2mini',
-    pre:[N('Desde la oscuridad del túnel salen chillidos y gritos de parlante: una banda entera de wekufü cuida el paso.','From the dark of the tunnel come squeals and loudspeaker shouts: a whole gang of wekufü guards the way.')]}]}));
+   {kind:'enemy',x:12,y:4,party:['dewu','dewu','wirarun']},{kind:'enemy',x:3,y:7,party:['wirarun','dewu']},{kind:'enemy',x:16,y:3,party:['drone','drone','dewu']},
+   {id:'m2mini',kind:'enemy',x:20,y:4,party:['drone','wirarun','drone'],fixed:1,mini:1,flag:'m2mini',
+    pre:[N('Desde la oscuridad del túnel llega un zumbido de hélices y gritos de parlante: drones y wekufü cuidan el paso.','From the dark of the tunnel comes a buzz of rotors and loudspeaker shouts: drones and wekufü guard the way.')]}]}));
 addMap('s_m3',Object.assign({},METRO,{name:'Metro · cocheras',g:{es:'Donde la línea termina',en:'Where the line ends'},
  edges:{left:{to:'s_m2',x:22,y:7}},stairs:{to:'s_metro',x:17,y:3},
  ents:[{id:'spk3',kind:'npc',look:'kona',x:21,y:8,dir:'left',fixed:1,talk:()=>speakerTalk(3),bub:['♪ ...','Mapudungun mew...']},
@@ -124,14 +124,14 @@ addMap('s_m3',Object.assign({},METRO,{name:'Metro · cocheras',g:{es:'Donde la l
     pre:[N('Cuando los tres hablantes se miran por fin, algo se interpone entre ellos: una figura hecha de líneas de metro que tiran cada una para su lado.','When the three speakers finally look at one another, something steps between them: a figure made of metro lines, each pulling its own way.'),
       L('','Pu mapuche ñi ngamleftripael!','La dispersión: la gente mapuche repartida por toda la ciudad, cada uno creyendo que está solo. Llámalos (küpa-), que salgan (tripa-), y que no retrocedan (wüñotreka-, en negativo).','The dispersion: the Mapuche people scattered across the whole city, each believing they are alone. Call them (küpa-), have them come out (tripa-), and do not let them step back (wüñotreka-, negated).')],
     post:()=>postWarden(2)}]}));
-addMap('s_blocks',Object.assign({},WARIA,{name:'Santiago · los blocks',g:{es:'Los departamentos, al este de la población',en:'The apartment blocks, east of the población'},seed:13,
+addMap('s_blocks',Object.assign({},WARIA,{bg:'blocks',name:'Santiago · los blocks',g:{es:'Los departamentos, al este de la población',en:'The apartment blocks, east of the población'},seed:13,
  edges:{left:{to:'s_poblacion',x:32,y:2}},doors:{'12,2':{to:'s_depto',x:6,y:6},'22,2':{to:'s_chuchu',x:5,y:6}},
  bld:{'0,0':{door:3},'9,0':{door:3},'18,0':{door:4},'27,0':{door:3},'0,11':{door:4},'10,11':{door:2},'17,11':{door:3},'25,11':{door:4}},
  ents:[{id:'bmama',kind:'npc',look:'cook',fem:1,x:6,y:6,path:[[6,6],[28,6]],pause:20,talk:()=>blocksTalk(0),bub:['¡Apúrate!','¡Llegamos tarde!']},
    {id:'bteen',kind:'npc',look:'childf',fem:1,x:21,y:9,dir:'left',fixed:1,talk:()=>blocksTalk(1),bub:['...','(audífonos)']},
    {id:'bkids',kind:'npc',look:'child',x:14,y:10,path:[[14,10],[20,10]],pause:30,talk:()=>blocksTalk(2),bub:['¡Pásamela!']},
    {id:'bviejo',kind:'npc',look:'elder',x:12,y:8,dir:'down',seated:1,fixed:1,talk:()=>blocksTalk(3),bub:['Mmm...']},
-   {kind:'enemy',x:30,y:10,party:['wirarun','dewu'],flag:'sw3'},
+   {kind:'enemy',x:30,y:10,party:['drone','wirarun'],flag:'sw3'},{kind:'enemy',x:6,y:10,party:['drone'],flag:'sw3'},
    {id:'fillantu',kind:'enemy',x:17,y:8,party:['fillantu'],fixed:1,boss:1,req:'blocks_ready',flag:'sw3',
     pre:[N('En el patio de los blocks, entre el ruido de las teles y los portazos, algo enorme y gris se acomoda y bosteza. Tiene la boca cerrada con un cierre.','In the courtyard of the blocks, among the noise of TVs and slammed doors, something huge and grey settles down and yawns. Its mouth is closed with a zipper.'),
       L('','Pu che ñi mapudungukenoael fillantü!','Que la gente no hable mapudungun todos los días. No odia la lengua: solo la deja para «después», siempre para después. Despiértalo (nepe-), sácalo afuera (tripa-) y que no se duerma (umawtu-, en negativo).','That people do not speak Mapudungun every day. It does not hate the language: it just leaves it for "later", always for later. Wake it (nepe-), bring it out (tripa-) and do not let it sleep (umawtu-, negated).')],
@@ -259,7 +259,7 @@ function dinnerTalk(){
       say([N('Los niños se ríen y repiten «küpamu, anümu» toda la cena, mandándose entre ellos. La mamá te guiña un ojo.','The children laugh and repeat "küpamu, anümu" all through dinner, bossing each other around. The mother winks at you.'),
         L('Ñuke','Fillantü!','¡Todos los días!','Every day!')].concat(S.flags.tel_ok?[N('Abajo, en el patio, algo enorme y gris se acomoda y bosteza.','Down in the courtyard, something huge and grey settles in and yawns.')]:[]))},'cena en mapudungun'))}
 function chuchuTalk(){
-  if(S.flags.tel_ok)return say([L('Chuchu','Kümelen, '+nm()+'. Fillantü mapudungun mew nütramkan tañi pu yall engün.','Estoy bien. Todos los días les hablo en mapudungun a mis nietos.','I am well. Every day I talk to my grandchildren in Mapudungun.')]);
+  if(S.flags.tel_ok)return say([L('Chuchu','Kümelen, '+nm()+'. Fillantü mapudungun mew nütramkakeiñ tañi pu yall iñchiñ.','Estoy bien. Todos los días conversamos en mapudungun, mis nietos y yo.','I am well. Every day my grandchildren and I talk in Mapudungun.')]);
   say([L('Chuchu','Mari mari, pichi weche.','Hola, jovencito.','Hello, young one.'),
     N('«Mis nietos viven al lado y casi no me hablan en mapudungun. Yo tampoco insisto: pienso que les da vergüenza, o que no les sirve. ¿Me ayudas a llamar a alguien que todavía lo habla todos los días? El teléfono está ahí.»','"My grandchildren live next door and hardly ever speak Mapudungun to me. I do not insist either: I think they feel ashamed, or that it is no use to them. Will you help me call someone who still speaks it every day? The phone is right there."')])}
 function phoneTalk(){
@@ -293,6 +293,7 @@ function postWarden(n){S.flags['sw'+n]=1;swCheck();persist();sfx('lvl');
 /* wekufü chillka pages for the city */
 Object.assign(BEST,{
   wirarun:['Un grito con patas: un parlante viejo que repite lo que oye, más fuerte y peor. Nace del ruido de la ciudad.','A shout on legs: an old loudspeaker that repeats what it hears, louder and worse. It is born of the city\'s noise.'],
+  drone:['Un dron: un pájaro de metal que zumba sobre la ciudad, mirando todo y repitiendo avisos por su parlante. Vuela alto: bájalo con nagtu-.','A drone: a metal bird buzzing over the city, watching everything and repeating announcements through its speaker. It flies high: bring it down with nagtu-.'],
   dewu:['El dewü (ratón) de los túneles del metro: rápido, mordedor, y siempre de a muchos.','The dewü (rat) of the metro tunnels: fast, biting, and always in numbers.'],
   ngoyngoyün:['Ngoyngoyün: el ruido confuso, como de mucha gente reunida. No odia el mapudungun: lo tapa.','Ngoyngoyün: confused noise, like a crowd all talking at once. It does not hate Mapudungun: it drowns it out.'],
   ngamlef:['Pu mapuche ñi ngamleftripael: la dispersión de la gente mapuche por la ciudad, cada uno creyéndose solo.','Pu mapuche ñi ngamleftripael: the scattering of the Mapuche people across the city, each one believing they are alone.'],

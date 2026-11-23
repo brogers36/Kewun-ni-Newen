@@ -111,6 +111,7 @@ const ET={
   profe:{name:'illamtufe kimeltulelu',hp:44,atk:12,xp:26,gold:[14,18],bs:64,mini:1,armor:true},
   yewen:{name:'Yewen',hp:300,atk:23,xp:300,gold:[400,400],boss:true,bs:100,spres:1,seals:['tripa','llükakil','ñamkil']},
   wirarun:{name:'wirarün',hp:40,atk:13,xp:24,gold:[12,16],bs:52},
+  drone:{name:'pañilwe üñüm',hp:30,atk:13,xp:22,gold:[11,15],bs:40,fly:true},
   dewu:{name:'dewü',hp:34,atk:12,xp:22,gold:[11,15],bs:44,twice:1},
   ngoyngoyun:{name:'Ngoyngoyün',hp:230,atk:18,xp:220,gold:[250,250],boss:true,bs:104,spres:1,seals:['llako','umawtu','amutu']},
   ngamlef:{name:'Ngamleftripael',hp:250,atk:19,xp:240,gold:[260,260],boss:true,bs:104,spres:1,seals:['küpa','tripa','wüñotrekakil']},

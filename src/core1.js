@@ -35,7 +35,7 @@ function setSlot(n){SLOT=n;try{localStorage.setItem(SAVE_KEY+'_slot',''+n)}catch
 let LANG='es',S=null,mode='title',frame=0,active=null,grace=0,fade=0,HERO='millaray';
 const rnd=n=>Math.floor(Math.random()*n);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const OUTBG={coast:1,field:1,forest:1,mount:1,pampa:1,rainforest:1,fjord:1,waria:1};
+const OUTBG={coast:1,field:1,forest:1,mount:1,pampa:1,rainforest:1,fjord:1,waria:1,feria:1,blocks:1};
 function dayPhase(){
   const CYC=43200,t=(((S&&S.wtime)||0)%CYC)/CYC; // 12-minute cycle of play time
   const ramp=(a,b)=>Math.max(0,Math.min(1,(t-a)/(b-a)));

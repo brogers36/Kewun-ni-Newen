@@ -332,7 +332,7 @@ function stopAmb(){for(const t of AMB.timers)clearInterval(t);AMB.timers=[];
   for(const n of AMB.nodes){try{n.stop&&n.stop()}catch(e){}try{n.disconnect&&n.disconnect()}catch(e){}}
   AMB.nodes=[];AMB.cur=null}
 function ambFor(bg){if(bg==='coast'&&typeof CUR!=='undefined'&&(CUR==='lof'||(M&&M.interior)))return 'wavesSoft';return({coast:'waves',field:'meadow',forest:'forest',rainforest:'forest',mawida:'forest',
-  mount:'wind',fjord:'wind',pampa:'pampa',waria:'city',deep:'under',cave:'cave',cave2:'cave',cave3:'cave',cave4:'cave',cave5:'cave'})[bg]||'night'}
+  mount:'wind',fjord:'wind',pampa:'pampa',waria:'city',feria:'city',blocks:'city',metro:'cave',deep:'under',cave:'cave',cave2:'cave',cave3:'cave',cave4:'cave',cave5:'cave'})[bg]||'night'}
 function playAmb(kind){
   if(AMB.cur===kind)return;stopAmb();if(!kind)return;const full=kind,wxl=kind.split('|')[1];kind=kind.split('|')[0];
   if(!AU.c)return; // starts once audio is unlocked; next map change retries

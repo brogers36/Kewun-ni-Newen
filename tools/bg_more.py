@@ -530,43 +530,200 @@ def waria():   # Santiago: a city street at dusk, lit windows, wet asphalt
         bm = (abs(XX - cx) < 10) & (YY > cy - 20) & (YY < cy + 2); paint(s, bm, .3 + (XX - cx) / 20 + .2, P('#1a3020', '#24442c', '#305838', '#3e6e46'))
     return s, {'hz': HZ}
 
-def metro():   # Santiago: a Metro platform, tiled wall, a dark tunnel mouth, the rails, the yellow line
-    s = Pic(); WALL = P('#5a6068', '#6e757e', '#848b94', '#9aa1a9', '#b0b6bc', '#c6cbd0')
-    paint(s, YY < 112, .45 + (YY / 112) * .25 + fbm(XX / 3, YY / 3, 77) * .1, WALL)
-    for y in range(8, 112, 8):          # tile grout
-        for x in range(0, W): s.px(x, y, '#4a5058') if BAYF[y, x] < .8 else None
-    for x0 in range(0, W, 8):
-        for y in range(0, 112):
-            if (y // 8) % 2 == 0 and BAYF[y, x0] < .85: s.px(x0, y, '#4e545c')
-            elif (y // 8) % 2 == 1 and BAYF[y, (x0 + 4) % W] < .85: s.px((x0 + 4) % W, y, '#4e545c')
-    for y in range(60, 70):             # a coloured band along the wall
-        for x in range(0, W): s.px(x, y, '#c04040' if y < 68 else '#802828')
-    for (x0, x1) in [(150, 250)]:        # the blank station-name panel (named by the player in the game)
-        for y in range(28, 50):
-            for x in range(x0, x1): s.px(x, y, '#1e3c78' if 30 <= y < 48 and x0 + 2 <= x < x1 - 2 else '#d8dce4')
-        for x in range(x0 + 10, x1 - 10, 2): s.px(x, 39, '#3a5a98')
-    m = (abs(XX - 52) < 34) & (YY > 40) & (YY < 112) & (((XX - 52) / 34.0) ** 2 + ((YY - 112) / 72.0) ** 2 < 1)   # tunnel mouth
-    paint(s, m, .05 + ((YY - 40) / 72) * .15, P('#06070a', '#0c0e14', '#14171e', '#1c2028'))
-    for (lx, ly) in [(40, 96), (64, 96)]:   # two far headlights in the tunnel
+def light_pool(s, cx, cy, rx, ry, col, k=.22, mask=None):
+    d = np.hypot((XX - cx) / rx, (YY - cy) / ry); lvl = np.floor(np.clip(1 - d, 0, 1) * 5 + BAYF) / 5
+    m = lvl > 0
+    if mask is not None: m &= mask
+    kk = (lvl[m] * k)[:, None]; s.p[m] = np.clip(s.p[m] * (1 - kk) + hx(col) * kk, 0, 255).astype(np.uint8)
+
+def metro():   # Santiago: a Metro platform, tiled wall, a tunnel mouth, the track pit, a polished floor
+    s = Pic(); HZ = 112
+    TILE = P('#6c6a62', '#7e7c72', '#918e84', '#a5a296', '#b8b5a8', '#cac7ba', '#dcd9cc')
+    r = np.random.RandomState(31)
+    jit = np.zeros((H, W))
+    for ty in range(0, HZ, 8):                       # each tile its own faint tone
+        for tx in range(-4, W, 12):
+            ox = 6 if (ty // 8) % 2 else 0
+            jit[ty:ty + 8, max(0, tx + ox):max(0, tx + ox + 12)] = r.rand() * .08
+    paint(s, YY < HZ, .30 + YY / HZ * .22 + jit + fbm(XX / 5, YY / 5, 77) * .06, TILE)
+    for y in range(0, HZ, 8):
+        for x in range(W):
+            if BAYF[y, x] < .9: s.p[y, x] = (s.p[y, x] * .78).astype(np.uint8)
+    for y in range(HZ):
+        ox = 6 if (y // 8) % 2 else 0
+        for x in range(ox, W, 12): s.p[y, x] = (s.p[y, x] * .82).astype(np.uint8)
+    paint(s, YY < 14, .08 + YY / 14 * .2, P('#16171b', '#202228', '#2c2e36', '#3a3c46'))       # ceiling beam
+    for y in range(58, 68):                          # the line colour, a red band
+        for x in range(W): s.p[y, x] = hx('#b83a34') if y < 66 else hx('#7a2420')
+    for x in range(W): s.p[58, x] = hx('#e06a5c')
+    for (x0, x1, poster) in [(132, 268, None), (296, 344, 'cordillera'), (60, 0, None)][:2]:
+        if poster is None:                               # the station-name panel, blank until the player names it
+            for y in range(24, 50):
+                for x in range(x0, x1): s.px(x, y, '#e6e8ec' if not (26 <= y < 48 and x0 + 2 <= x < x1 - 2) else ('#1e3c78' if y < 44 else '#16305e'))
+            for x in range(x0 + 2, x1 - 2): s.px(x, 26, '#3a5a9a')
+        else:                                            # a framed poster: the cordillera at dawn
+            for y in range(20, 54):
+                for x in range(x0, x1):
+                    edge = y in (20, 53) or x in (x0, x1 - 1)
+                    t = (y - 20) / 34; col = '#2a2a30' if edge else ('#f0b070' if y < 30 else '#d07a5a' if y < 38 else '#5a4a6a')
+                    if not edge and y >= 32 and abs(x - (x0 + 20)) < (y - 30) * 1.4: col = '#3a3450' if y > 36 else '#f4f0f0'
+                    s.px(x, y, col)
+    m = (((XX - 46) / 32.0) ** 2 + ((YY - 112) / 74.0) ** 2 < 1) & (YY < 112)   # tunnel mouth: depth in rings
+    d = np.sqrt(((XX - 46) / 32.0) ** 2 + ((YY - 112) / 74.0) ** 2)
+    paint(s, m, .02 + d * .32, P('#040508', '#090b10', '#10131a', '#181c24', '#22262f', '#2e333d'))
+    for (lx, ly) in [(38, 98), (54, 98)]:
         for dy in range(3):
-            for dx in range(3): s.px(lx + dx, ly + dy, '#fff4c0' if (dx, dy) != (2, 2) else '#c0a060')
-    for x in range(0, W, 56):            # fluorescent tubes
-        for i in range(30): s.px(x + 10 + i, 4, '#f4fbff'); s.px(x + 10 + i, 5, '#c8e0ec')
-    pit = (YY >= 112) & (YY < 136)       # the track pit, rails catching the light
-    paint(s, pit, .1 + (YY - 112) / 24 * .2 + fbm(XX / 4, YY / 2, 90) * .1, P('#0e0f12', '#18191e', '#22242a', '#2e3038'))
-    for ry in (118, 130):
-        for x in range(0, W): s.px(x, ry, '#9aa0a8'); s.px(x, ry + 1, '#4a4e56')
-    for x in range(4, W, 14):
-        for y in range(116, 134): s.px(x, y, '#3a2c22') if y not in (118, 119, 130, 131) else None
-    ground(s, 136, P('#46484e', '#55575e', '#64666e', '#74767e', '#86888f', '#9a9ca2'), base=.35, pool=.5, cy=170, tex=.15)
-    for y in (138, 139, 140):            # the yellow safety line with its tactile dots
-        for x in range(0, W): s.px(x, y, '#e0b820' if y < 140 else '#a08010')
-    for x in range(2, W, 4): s.px(x, 142, '#c8c8cc')
-    for x in range(0, W): s.px(x, 136, '#2a2c30'); s.px(x, 137, '#b8bac0')
-    for cx in (330,):                    # a bench and a pillar framing the right
-        for y in range(0, 190):
-            for x in range(cx, cx + 18): s.px(x, y, '#7a8088' if x < cx + 4 else '#646a72' if x < cx + 14 else '#4e545c')
-    return s, {'hz': 112}
+            for dx in range(3): s.px(lx + dx, ly + dy, '#fffbe0' if dx == 1 or dy == 1 else '#c8a860')
+        light_pool(s, lx + 1, ly + 1, 14, 8, '#ffe8a0', k=.35, mask=m)
+    for k, x in enumerate(range(70, W, 64)):              # fluorescent tubes and the light they throw on the tiles
+        for i2 in range(34):
+            s.px(x + i2, 15, '#ffffff'); s.px(x + i2, 16, '#d8ecf4'); s.px(x + i2, 14, '#5a5e68')
+        light_pool(s, x + 17, 20, 48, 46, '#f4fbff', k=.20, mask=(YY < HZ) & (YY > 16))
+    pit = (YY >= HZ) & (YY < 138)                         # ballast, sleepers, rails
+    paint(s, pit, .08 + (YY - HZ) / 26 * .18 + fbm(XX / 1.6, YY / 1.4, 90) * .22, P('#0c0c0e', '#16161a', '#202026', '#2c2c32', '#3a3a40', '#48484e'))
+    for x in range(3, W, 13):
+        for y in range(118, 135):
+            if y not in (120, 121, 131, 132): s.px(x, y, '#2e2418'); s.px(x + 1, y, '#3e3020'); s.px(x + 2, y, '#241c12')
+    for ry in (119, 130):
+        for x in range(W): s.px(x, ry - 1, '#d2d6dc'); s.px(x, ry, '#8a9098'); s.px(x, ry + 1, '#3e4248')
+    for x in range(W):                                    # the platform lip, tactile strip and yellow line
+        s.px(x, 138, '#1a1a1e'); s.px(x, 139, '#c2c4c8'); s.px(x, 140, '#9a9ca2')
+        for y in (141, 142, 143): s.px(x, y, '#e8bc1c' if y < 143 else '#a68410')
+        if x % 3 == 0: s.px(x, 145, '#d8d8dc')
+    FLOOR = P('#2c2c32', '#38383f', '#45454d', '#53535c', '#63636c', '#75757e', '#8a8a92')
+    ground(s, 146, FLOOR, base=.32, pool=.55, cy=178, tex=.08)
+    for y in range(146, H, 14):                           # granite tile joints, in perspective
+        for x in range(W): s.p[y, x] = (s.p[y, x] * .8).astype(np.uint8)
+    for x0 in range(-200, W + 200, 40):
+        for y in range(146, H):
+            x = int(W / 2 + (x0 - W / 2) * (1 + (y - 146) / 60))
+            if 0 <= x < W: s.p[y, x] = (s.p[y, x] * .82).astype(np.uint8)
+    for k, x in enumerate(range(70, W, 64)):              # the tubes reflected softly in the polished floor
+        light_pool(s, x + 17, 160, 26, 10, '#c8ccd6', k=.22, mask=YY > 146)
+    for cx in (338,):                                     # a round pillar framing the right side
+        for y in range(0, 200):
+            for x in range(cx, cx + 22):
+                t = (x - cx) / 21; v = .15 + .75 * math.sin(math.pi * (t * .8 + .1)) ** 2 * (1 - t * .5)
+                s.px(x, y, s.ramp_at(x, y, P('#2c2e34', '#3e4048', '#52545c', '#686a72', '#80828a', '#9a9ca2'), v))
+        light_pool(s, cx + 11, 206, 26, 6, '#000000', k=.5)
+    vignette(s, .45)
+    return s, {'hz': HZ}
+
+def feria():   # Santiago: the street market under striped tarps, late afternoon
+    s = Pic(); HZ = 96
+    sky(s, HZ, P('#4a78b8', '#5a8cc8', '#6ea0d4', '#86b4de', '#a2c6e6', '#c2daee', '#e2ecf4'), sun=(330, 40, 90), warm='#ffe0a8')
+    clouds(s, [(90, 30, 70, 10, 3), (250, 20, 60, 8, 4)], CLOUD, HZ)
+    r = np.random.RandomState(8); x = -6
+    FAC = [P('#7a5a4a', '#94705c', '#ae8870', '#c6a084', '#dab898'), P('#5a6a7a', '#6e8090', '#8498a8', '#9cb0be', '#b8c8d4'), P('#7a6a4a', '#94845c', '#ae9c70', '#c6b484', '#dacb9c')]
+    while x < W:                                       # low houses and shops behind the market
+        bw = r.randint(40, 70); bh = r.randint(28, 46); ramp = FAC[r.randint(0, 3)]
+        m = (XX >= x) & (XX < x + bw) & (YY >= HZ - bh) & (YY < HZ + 6)
+        paint(s, m, .35 + (XX - x) / bw * .3, ramp)
+        for wy in range(HZ - bh + 6, HZ - 2, 12):
+            for wx in range(x + 5, x + bw - 8, 12):
+                for dy in range(7):
+                    for dx in range(6): s.px(wx + dx, wy + dy, '#2a3442' if dy < 6 else '#8a7a6a')
+                s.px(wx + 1, wy + 1, '#7a92aa')
+        x += bw + r.randint(0, 4)
+    paint(s, (YY >= HZ) & (YY < 132), .25 + fbm(XX / 4, YY / 3, 41) * .25 + (YY - HZ) / 40 * .1, P('#2a201a', '#3a2c22', '#4c3a2c', '#5e4a38', '#725c46'))   # the shaded stalls behind
+    for x in range(0, W, 9):
+        for y in range(HZ + 4, 112):
+            if (x // 9) % 3 == 0: s.px(x, y, '#6a5440') if y % 4 else None                 # sacks and boxes stacked in the back
+    TARPS = [('#c83a30', '#f2ece0'), ('#2e64b0', '#eef2f6'), ('#3a9a58', '#eef4ec'), ('#e0a030', '#fff4dc'), ('#c83a30', '#f2ece0')]
+    for k, (cx, w0) in enumerate([(40, 90), (128, 86), (212, 92), (300, 88), (384, 80)]):   # striped tarps sagging between poles
+        c1, c2 = TARPS[k]
+        for x in range(cx - w0 // 2, cx + w0 // 2):
+            if not 0 <= x < W: continue
+            t = (x - (cx - w0 // 2)) / w0; sag = int(math.sin(math.pi * t) * 6)
+            for y in range(70 + sag, 86 + sag):
+                col = hx(c1) if ((x - cx) // 6) % 2 == 0 else hx(c2)
+                sh = .62 + .38 * (1 - (y - 70 - sag) / 16)
+                s.p[y, x] = (np.array(col) * sh).astype(np.uint8); s.a[y, x] = True
+            for y in range(86 + sag, 89 + sag): s.p[y, x] = (np.array(hx(c1)) * .45).astype(np.uint8)      # scalloped hem shadow
+        for px_ in (cx - w0 // 2 + 2, cx + w0 // 2 - 2):
+            for y in range(66, 132): s.px(px_, y, '#3a3a40'); s.px(px_ + 1, y, '#5a5a62')
+    for y in range(89, 132): s.p[y] = (s.p[y] * .86).astype(np.uint8)                   # shade under the tarps
+    for k, cx in enumerate([40, 128, 212, 300, 384]):    # tables of produce
+        for y in range(112, 126):
+            for x in range(cx - 34, cx + 34):
+                if 0 <= x < W: s.px(x, y, '#6a4628' if y > 113 else '#8a5e36')
+        for j, (col, hi) in enumerate([('#c22a1e', '#ff7a5a'), ('#e8c020', '#fff08a'), ('#2e5a24', '#6aa04a'), ('#e0701e', '#ffb060'), ('#6a2a5a', '#b06aa0')]):
+            bx = cx - 30 + j * 13
+            if not 0 <= bx < W - 12: continue
+            for (dx, dy) in [(1, 0), (4, 0), (7, 0), (10, 0), (2, -2), (5, -2), (8, -2), (4, -4), (7, -4)]:
+                pc = (k + j) % 5; c0, ch = [('#c22a1e', '#ff7a5a'), ('#e8c020', '#fff08a'), ('#2e5a24', '#6aa04a'), ('#e0701e', '#ffb060'), ('#6a2a5a', '#b06aa0')][pc]
+                for (a, b) in [(0, 0), (1, 0), (0, 1), (1, 1), (2, 0), (2, 1)]: s.px(bx + dx + a, 109 + dy + b, c0)
+                s.px(bx + dx, 109 + dy, ch)
+            for y in range(102, 107):                     # a price card
+                for x in range(bx + 2, bx + 9): s.px(x, y, '#f4f0e4' if y > 102 else '#2a2a2a')
+    ground(s, 132, P('#3a3634', '#4a4542', '#5a5450', '#6c6560', '#7e7670', '#928a82'), base=.36, pool=.55, cy=170, tex=.18)
+    for k in range(30):                                 # leaves and dropped fruit on the asphalt
+        x, y = r.randint(0, W), r.randint(136, H - 4); col = ['#3a7a2a', '#c23a24', '#d8b030', '#7a5a3a'][k % 4]
+        s.px(x, y, col); s.px(x + 1, y, col)
+    for (cx, cy) in [(26, 200), (372, 196)]:              # crates framing the front
+        for y in range(cy - 22, cy + 2):
+            for x in range(cx - 16, cx + 16):
+                if 0 <= x < W: s.px(x, y, '#8a6438' if (y - cy) % 6 else '#5a3e20')
+        for x in range(cx - 16, cx + 16):
+            for y in range(cy - 26, cy - 22):
+                if 0 <= x < W: s.px(x, y, ['#c22a1e', '#e8c020', '#3a7a2a'][(x // 3) % 3] if y > cy - 26 else '#2a1a10')
+    light_pool(s, 210, 150, 170, 40, '#ffe8b8', k=.12)
+    vignette(s, .35)
+    return s, {'hz': HZ}
+
+def blocks():   # Santiago: the apartment blocks at dusk, the cordillera behind, washing on the lines
+    s = Pic(); HZ = 104
+    sky(s, HZ, P('#1c1834', '#2a1e44', '#3e2650', '#5c3054', '#84405a', '#b45a5a', '#e08a5a', '#f6b86c'), sun=(200, 108, 120), warm='#ffc070')
+    def ridge2(x): return 86 - 18 * math.exp(-((x - 120) / 70.0) ** 2) - 24 * math.exp(-((x - 290) / 60.0) ** 2) + 3 * math.sin(x / 9.0) + 2 * math.sin(x / 4.1)
+    for x in range(W):                                  # the Andes, snow catching the last light
+        top = int(ridge2(x))
+        for y in range(top, HZ):
+            t = (y - top) / max(1, HZ - top)
+            col = '#f4c8b0' if y - top < 4 and top < 70 else ('#5a3a5a' if t < .4 else '#3e2a48')
+            if y - top < 4 and top < 70 and BAYF[y, x] > .7: col = '#c08a8a'
+            s.px(x, y, col)
+    r2 = np.random.RandomState(12); x = 100
+    while x < 290:                                       # far blocks between the two near ones
+        bw = r2.randint(30, 50); bh = r2.randint(20, 40)
+        m = (XX >= x) & (XX < x + bw) & (YY >= HZ + 8 - bh) & (YY < 152)
+        paint(s, m, .2 + (XX - x) / bw * .2, P('#1c1828', '#26203a', '#30284a', '#3a3258'))
+        for wy in range(HZ + 12 - bh, 146, 8):
+            for wx in range(x + 3, x + bw - 4, 7):
+                if r2.rand() < .3: s.px(wx, wy, '#f0c878'); s.px(wx + 1, wy, '#f0c878')
+        x += bw + r2.randint(0, 3)
+    paint(s, (YY >= HZ) & (YY < 152) & ~s.a, .2 + (YY - HZ) / 48 * .3, P('#1c1828', '#241e32', '#2c243a', '#342a40'))
+    BLK = [P('#3a2a2a', '#5a3e3a', '#7a564c', '#9a7060', '#b88a74', '#d0a488'), P('#2e2e3a', '#46465a', '#5e5e76', '#787892', '#9494ac', '#b0b0c4')]
+    for k, (x0, w0, h0) in enumerate([(-10, 130, 84), (270, 140, 92)]):     # two blocks, four floors each
+        ramp = BLK[k]; top = 150 - h0
+        m = (XX >= x0) & (XX < x0 + w0) & (YY >= top) & (YY < 150)
+        paint(s, m, .3 + ((XX - x0) / w0) * (.35 if k else -.15) + .25 * (k == 0) + fbm(XX / 3, YY / 3, 11 + k) * .08, ramp)
+        for fl in range(4):
+            fy = top + 6 + fl * (h0 // 4)
+            for wx in range(x0 + 8, x0 + w0 - 12, 22):
+                lit = r_ = (fl * 7 + wx) % 5 < 2
+                for dy in range(10):
+                    for dx in range(12): s.px(wx + dx, fy + dy, ('#f8d27a' if dy < 9 else '#a07a3a') if lit else ('#1e2030' if dy < 9 else '#4a4a5a'))
+                if lit: light_pool(s, wx + 6, fy + 14, 12, 5, '#ffd27a', k=.25)
+                for dx in range(-2, 16): s.px(wx + dx, fy + 11, '#2a2a30'); s.px(wx + dx, fy + 13, '#2a2a30') if dx % 3 == 0 else None   # balcony rail
+            for x in range(x0, x0 + w0): s.px(x, fy + 15, '#2a2028')
+    for (y0, x0, x1) in [(82, 120, 270), (100, 120, 270)]:  # washing lines strung between the blocks
+        for x in range(x0, x1):
+            y = y0 + int(math.sin(math.pi * (x - x0) / (x1 - x0)) * 6); s.px(x, y, '#1a1418')
+            if (x - x0) % 14 == 3:
+                col = ['#d83a3a', '#3a7ad8', '#f0f0e8', '#e8c030', '#3aa05a'][(x // 14) % 5]
+                for dy in range(1, 9 + (x % 3) * 2):
+                    for dx in range(6): s.px(x + dx, y + dy, col if dx < 5 else '#2a2028')
+    ground(s, 150, P('#2a2418', '#3a3020', '#4a3e2a', '#5c4e36', '#6e5e44', '#827054'), base=.3, pool=.5, cy=180, tex=.25)
+    for k in range(60):                                  # patchy grass
+        x = (k * 67) % W; y = 156 + (k * 31) % 60
+        for i2 in range(3): s.px(x + i2, y, '#3a5a2a'); s.px(x + i2 + 1, y - 1, '#5a7a3a') if i2 == 1 else None
+    for lx in (96, 318):                                 # lampposts lighting the courtyard
+        for y in range(70, 158): s.px(lx, y, '#1e1e24'); s.px(lx + 1, y, '#3a3a44')
+        for dy in range(4):
+            for dx in range(7): s.px(lx - 3 + dx, 66 + dy, '#fff0b8' if dy > 0 else '#2a2a30')
+        light_pool(s, lx, 170, 60, 26, '#ffd890', k=.25)
+    vignette(s, .4)
+    return s, {'hz': HZ}
 
 ALL = [('field', field), ('forest', forest), ('mount', mount), ('crater', crater), ('rainforest', rainforest), ('fjord', fjord),
-       ('pampa', pampa), ('lagoon', lagoon), ('deep', deep), ('cave', cave), ('cave3', cave3), ('cave4', cave4), ('cave5', cave5), ('waria', waria), ('metro', metro)]
+       ('pampa', pampa), ('lagoon', lagoon), ('deep', deep), ('cave', cave), ('cave3', cave3), ('cave4', cave4), ('cave5', cave5), ('waria', waria), ('metro', metro), ('feria', feria), ('blocks', blocks)]

@@ -755,7 +755,7 @@ function renderBattle(){
     const col=!tall&&!ET[e.t].boss&&(bossI<0?n>1:others.length>1)&&!(fi>=0&&bossI<0&&!grd.length);
     const bw2=col?28:bw,bx2=col?Math.round(cx+sz/2+6):bx,by2=col?bse-10:by;
     R(c,bx2-1,by2-1,bw2+2,5,'#181018');R(c,bx2,by2,bw2,3,'#4a1a1f');R(c,bx2,by2,Math.max(0,Math.round(bw2*e.hp/e.max)),3,'#f07028');R(c,bx2,by2,Math.max(0,Math.round(bw2*e.hp/e.max)),1,'#ffb070');
-    if(col)OV.push(()=>txt(e.label,bx2,by2-3,'#ffffff',12,'left'));else OV.push(()=>txt(e.label,cx,by2+13,'#ffffff',13,'center'));
+    if(col)OV.push(()=>txt(e.label,bx2,by2-3,'#ffffff',e.label.length>11?9:12,'left'));else OV.push(()=>txt(e.label,cx,by2+13,'#ffffff',13,'center'));
     const tg=B.cursor==='all'||B.cursor===B.en.indexOf(e);
     if(tg&&frame%20<15){const ay=y-8+Math.round(Math.sin(frame/5)*2);for(let k=0;k<5;k++){R(c,cx-5+k,ay+k,11-k*2,1,'#ffe040');R(c,cx-6+k,ay+k,1,1,'#181018');R(c,cx+5-k,ay+k,1,1,'#181018')}R(c,cx-6,ay-1,13,1,'#181018')}
   });
@@ -1101,6 +1101,13 @@ function animPainted(c,a){const G2=PAINTBG[a].geo||{},ox=Math.round((LW-400)/2),
   else if(/^cave/.test(a)){motes(14,a==='cave4'?'#9ae0d0':'#e8d0a0',20,200,.05,-.04,50);
     for(const tx of [70,330]){const x=tx+ox,fl=(F>>2)%3;R(c,x-1,56-fl,4,2,'#ffb04a');R(c,x,54-fl,2,2,'#ffe08a')}
     const dy=Math.floor(F*1.4)%110;R(c,140+ox,dy,1,3,'#9ad0f0');R(c,262+ox,(dy+55)%110,1,3,'#9ad0f0')}
+  else if(a==='metro'){if((F>>3)%37===0)R(c,0,0,LW,LH,'rgba(255,255,255,.05)');            // a tube that flickers now and then
+    const tx=((F*3)%(LW*3))-LW;if(tx>-60&&tx<LW){c.fillStyle='rgba(255,240,190,.10)';c.fillRect(ox+14,60,62,52)}          // a train's lights sweeping the tunnel
+    motes(10,'#c8ccd6',20,140,.06,.03,60)}
+  else if(a==='feria'){motes(14,'#fff4d0',60,200,.12,-.04,50);
+    for(let k=0;k<5;k++){const cx=[40,128,212,300,384][k]+ox,sw=Math.round(Math.sin(F/26+k)*1.2);R(c,cx-30,86+sw,60,1,'rgba(0,0,0,.18)')}}
+  else if(a==='blocks'){for(let k=0;k<6;k++)if(((F>>5)+k*7)%23===0)R(c,ox+[30,74,300,344,322,52][k],[78,98,70,90,110,118][k],12,9,'rgba(255,214,130,.35)');
+    motes(10,'#ffe0a0',80,200,.05,-.03,40)}
   else if(a==='waria'){for(let k=0;k<26;k++){const x=((k*37+Math.floor(F*.5))%LW),y=Math.floor((k*53+F*2.6)%LH);R(c,x,y,1,2,'rgba(190,200,220,.4)')}
     const hx2=((F*2)%(LW+80))-40;R(c,Math.round(hx2),152,4,2,'#fff4c0');R(c,Math.round(hx2)+18,152,4,2,'#fff4c0');R(c,Math.round(LW-hx2*.8),158,4,2,'#ff4030')}
 }
