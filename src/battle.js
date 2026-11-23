@@ -5,7 +5,7 @@ let B=null;
 const SUMMONP=Object.keys(ET).filter(k=>!ET[k].boss);
 function engage(e){
   if(grace>0||active)return;
-  const go=()=>startBattle(e.party,{ent:e,boss:e.boss,mini:e.mini,final:e.final,chain:e.chain});
+  const go=()=>startBattle(e.party,{ent:e,boss:e.boss,mini:e.mini,final:e.final,chain:e.chain,song:e.song});
   if(e.pre)say(e.pre,go);else go();
 }
 function relabel(){const cnt={},seen={};B.en.forEach(e=>cnt[e.t]=(cnt[e.t]||0)+1);

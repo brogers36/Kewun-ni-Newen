@@ -89,7 +89,7 @@ addMap('s_feria',Object.assign({},WARIA,{bg:'feria',name:'Santiago · feria',g:{
    {id:'fkid',kind:'npc',look:'child',x:12,y:12,path:[[12,12],[24,12],[24,10],[12,10]],pause:40,talk:()=>noiseTalk(3),bub:['¡Mamá!']},
    {id:'fdog',kind:'npc',look:'dog',x:30,y:12,path:[[30,12],[36,12]],pause:60,talk:()=>dogTalk()},
    {kind:'enemy',x:5,y:10,party:['wirarun'],flag:'sw1'},{kind:'enemy',x:36,y:8,party:['drone','wirarun'],flag:'sw1'},{kind:'enemy',x:26,y:12,party:['drone','drone'],flag:'sw1'},
-   {id:'ngoyngoyun',kind:'enemy',x:20,y:10,party:['ngoyngoyun'],fixed:1,boss:1,req:'feria_ready',flag:'sw1',
+   {id:'ngoyngoyun',song:'stgoBoss1',kind:'enemy',x:20,y:10,party:['ngoyngoyun'],fixed:1,boss:1,req:'feria_ready',flag:'sw1',
     pre:[N('La radio, la feria, los parlantes, los gritos, las bocinas: todo el ruido se amontona en medio de la calle y se levanta como una torre que habla con mil bocas.','The radio, the market, the loudspeakers, the shouting, the horns: all the noise piles up in the middle of the street and rises like a tower talking with a thousand mouths.'),
       L('','Ngoyngoyün!','El ruido confuso, como de mucha gente junta. Ahí, entre tanto ruido, nadie escucha el mapudungun. Cálmalo (llako-), hazlo dormir (umawtu-) y que se vaya (amutu-).','Confused noise, like a crowd all talking at once. In so much noise, nobody hears Mapudungun. Calm it (llako-), put it to sleep (umawtu-) and make it go (amutu-).')],
     post:()=>postWarden(1)}]}));
@@ -120,7 +120,7 @@ addMap('s_m3',Object.assign({},METRO,{name:'Metro · cocheras',g:{es:'Donde la l
  edges:{left:{to:'s_m2',x:22,y:7}},stairs:{to:'s_metro',x:17,y:3},
  ents:[{id:'spk3',kind:'npc',look:'kona',x:21,y:8,dir:'left',fixed:1,talk:()=>speakerTalk(3),bub:['♪ ...','Mapudungun mew...']},
    {kind:'enemy',x:3,y:4,party:['dewu','wirarun']},
-   {id:'ngamlef',kind:'enemy',x:15,y:5,party:['ngamlef'],fixed:1,boss:1,req:'spk_all',flag:'sw2',
+   {id:'ngamlef',song:'stgoBoss2',kind:'enemy',x:15,y:5,party:['ngamlef'],fixed:1,boss:1,req:'spk_all',flag:'sw2',
     pre:[N('Cuando los tres hablantes se miran por fin, algo se interpone entre ellos: una figura hecha de líneas de metro que tiran cada una para su lado.','When the three speakers finally look at one another, something steps between them: a figure made of metro lines, each pulling its own way.'),
       L('','Pu mapuche ñi ngamleftripael!','La dispersión: la gente mapuche repartida por toda la ciudad, cada uno creyendo que está solo. Llámalos (küpa-), que salgan (tripa-), y que no retrocedan (wüñotreka-, en negativo).','The dispersion: the Mapuche people scattered across the whole city, each believing they are alone. Call them (küpa-), have them come out (tripa-), and do not let them step back (wüñotreka-, negated).')],
     post:()=>postWarden(2)}]}));
@@ -132,7 +132,7 @@ addMap('s_blocks',Object.assign({},WARIA,{bg:'blocks',name:'Santiago · los bloc
    {id:'bkids',kind:'npc',look:'child',x:14,y:10,path:[[14,10],[20,10]],pause:30,talk:()=>blocksTalk(2),bub:['¡Pásamela!']},
    {id:'bviejo',kind:'npc',look:'elder',x:12,y:8,dir:'down',seated:1,fixed:1,talk:()=>blocksTalk(3),bub:['Mmm...']},
    {kind:'enemy',x:30,y:10,party:['drone','wirarun'],flag:'sw3'},{kind:'enemy',x:6,y:10,party:['drone'],flag:'sw3'},
-   {id:'fillantu',kind:'enemy',x:17,y:8,party:['fillantu'],fixed:1,boss:1,req:'blocks_ready',flag:'sw3',
+   {id:'fillantu',song:'stgoBoss3',kind:'enemy',x:17,y:8,party:['fillantu'],fixed:1,boss:1,req:'blocks_ready',flag:'sw3',
     pre:[N('En el patio de los blocks, entre el ruido de las teles y los portazos, baja de la oscuridad una cabeza enorme que aletea con las orejas: un chonchón grande como una casa. Tiene la boca cerrada con un cierre; ni siquiera puede gritar «tue tue».','In the courtyard of the blocks, among the noise of TVs and slammed doors, a huge head drops out of the dark, beating its ears like wings: a chonchón as big as a house. Its mouth is closed with a zipper; it cannot even cry "tue tue".'),
       L('','Pu che ñi mapudungukenoael fillantü!','Que la gente no hable mapudungun todos los días. No odia la lengua: solo la deja para «después», siempre para después. Despiértalo (nepe-), sácalo afuera (tripa-) y que no se duerma (umawtu-, en negativo).','That people do not speak Mapudungun every day. It does not hate the language: it just leaves it for "later", always for later. Wake it (nepe-), bring it out (tripa-) and do not let it sleep (umawtu-, negated).')],
     post:()=>postWarden(3)}]}));
