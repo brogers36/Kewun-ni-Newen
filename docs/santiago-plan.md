@@ -55,3 +55,19 @@ Plus the existing plaza, calle, población and urban ruka.
 2. Are the three pressures (noise, erasure of names, no time at home) the right ones? Any to swap?
 3. Mapudungun names for the three wardens and the act title.
 4. Which place names go in the Metro, with their etymologies.
+
+## Brandon's answers (Nov 23)
+1. Open Santiago right after Ti Fütra Ngoymatulfe. Brandon will design a separate new level for "all secrets".
+2. Noise is kept: **ngoyngoyün** ('hacer ruido confuso, p. ej. mucha gente reunida'). Erasure and "no time at home" are out; replacements proposed below.
+3. Warden names and act title: Brandon, once the other two pressures are settled.
+4. Place names: no fixed etymologies. The player **builds names** from words learned in Santiago; if the name is grammatically sound, it sticks (shows on signs and banners in that save).
+
+## Replacement pressures (proposed)
+- **Dispersion**: speakers scattered across a huge city, each thinking they are the only one. Fits the Metro: each station has a speaker to find and connect; the warden keeps them apart.
+- **Display only** (folklorization): Mapudungun on signs, menus and souvenirs, used for "mari mari" and nothing more. The warden freezes words into decorations; you beat it by holding real conversations.
+- Rejected on purpose: any boss that treats loanwords or code-mixing as the enemy (purism).
+
+## Naming feature (draft mechanics, rules to be supplied by Brandon)
+- At unnamed places (a station, a plaza, a canal, a hill in a park) the player picks parts from words they know.
+- Candidate patterns: modifier + head noun (e.g. colour/size + ko/leufu/mawida/kura); verb root + -we 'place for' (as in paliwe); noun + mapu.
+- A checker accepts or rejects by Brandon's rules; accepted names are saved and appear on that place's sign, banner and in the quest log.
