@@ -117,6 +117,12 @@ const SONGS={
   {w:'triangle',v:.55,t:'A2 A3 A2 A2 A3 A2 | G2 G3 G2 G2 G3 G2 | F2 F3 F2 F2 F3 F2 | E2 E3 E2 E2 E3 E2'},
   {w:'square',v:.04,t:'A4 C5 E5 A4 C5 E5 | G4 B4 D5 G4 B4 D5 | F4 A4 C5 F4 A4 C5 | E4 G#4 B4 E4 G#4 B4'},
   {d:1,v:.55,t:'k . h k s h | k . h k s s'}]}),
+ palin:mkSong({bpm:152,loop:1,ch:[   // palin match: bright, driving, kultrun-and-trutruka feel (not the battle theme)
+  {w:'square',v:.11,t:'D5 - F#5 A5 B5 A5 F#5 - | E5 - D5 E5 F#5 - - - | A5 - B5 A5 F#5 E5 D5 - | E5 - F#5 - A5 - - - | B5 - A5 B5 D6 - B5 A5 | F#5 - E5 F#5 A5 - - - | B5 A5 F#5 E5 D5 E5 F#5 A5 | D5 - - - D6 - - -'},
+  {w:'triangle',v:.55,t:'D2 D3 D2 D3 D2 D3 A2 D3 | E2 E3 E2 E3 A2 A3 A2 A3 | D2 D3 D2 D3 G2 G3 G2 G3 | A2 A3 A2 A3 A2 A3 E2 A2 | G2 G3 G2 G3 D2 D3 D2 D3 | A2 A3 A2 A3 E2 E3 E2 E3 | G2 G3 A2 A3 B2 B3 A2 A3 | D2 D3 D2 D3 A2 - - -'},
+  {w:'sawtooth',v:.05,t:'. - - - - - - - | . - - - - - - - | . - - - - - - - | A3 - - - - - - - | . - - - - - - - | . - - - - - - - | . - - - - - - - | D4 - - - D4 - - -'},
+  {w:'square',v:.035,t:'F#4 A4 D5 A4 F#4 A4 D5 A4 | E4 A4 C#5 A4 E4 A4 C#5 A4 | D4 G4 B4 G4 D4 G4 B4 G4 | E4 A4 C#5 A4 E4 A4 C#5 A4'},
+  {d:1,v:.55,t:'k . h k s . h . | k . h k s . k s'}]}),
  nagBoss:mkSong({bpm:138,loop:1,ch:[
   {w:'sawtooth',v:.06,t:'E5 - F5 - E5 - D5 - | E5 - - - B4 - - - | E5 - F5 - G5 - F5 - | E5 - D5 - C5 - B4 - | C5 - D5 - E5 - F5 - | G5 - F5 - E5 - D5 - | F5 - - - E5 - - - | E5 - - - - - - -'},
   {w:'triangle',v:.55,t:'E2 E2 E3 E2 F2 F2 F3 F2 | E2 E2 E3 E2 D2 D2 D3 D2 | C2 C2 C3 C2 D2 D2 D3 D2 | E2 E2 E3 E2 F2 E2 D2 E2'},

@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='7158e96-202611222338';
+window.KEWUN_BUILD='98489a5-202611230014';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -346,6 +346,12 @@ const SONGS={
   {w:'triangle',v:.55,t:'A2 A3 A2 A2 A3 A2 | G2 G3 G2 G2 G3 G2 | F2 F3 F2 F2 F3 F2 | E2 E3 E2 E2 E3 E2'},
   {w:'square',v:.04,t:'A4 C5 E5 A4 C5 E5 | G4 B4 D5 G4 B4 D5 | F4 A4 C5 F4 A4 C5 | E4 G#4 B4 E4 G#4 B4'},
   {d:1,v:.55,t:'k . h k s h | k . h k s s'}]}),
+ palin:mkSong({bpm:152,loop:1,ch:[   // palin match: bright, driving, kultrun-and-trutruka feel (not the battle theme)
+  {w:'square',v:.11,t:'D5 - F#5 A5 B5 A5 F#5 - | E5 - D5 E5 F#5 - - - | A5 - B5 A5 F#5 E5 D5 - | E5 - F#5 - A5 - - - | B5 - A5 B5 D6 - B5 A5 | F#5 - E5 F#5 A5 - - - | B5 A5 F#5 E5 D5 E5 F#5 A5 | D5 - - - D6 - - -'},
+  {w:'triangle',v:.55,t:'D2 D3 D2 D3 D2 D3 A2 D3 | E2 E3 E2 E3 A2 A3 A2 A3 | D2 D3 D2 D3 G2 G3 G2 G3 | A2 A3 A2 A3 A2 A3 E2 A2 | G2 G3 G2 G3 D2 D3 D2 D3 | A2 A3 A2 A3 E2 E3 E2 E3 | G2 G3 A2 A3 B2 B3 A2 A3 | D2 D3 D2 D3 A2 - - -'},
+  {w:'sawtooth',v:.05,t:'. - - - - - - - | . - - - - - - - | . - - - - - - - | A3 - - - - - - - | . - - - - - - - | . - - - - - - - | . - - - - - - - | D4 - - - D4 - - -'},
+  {w:'square',v:.035,t:'F#4 A4 D5 A4 F#4 A4 D5 A4 | E4 A4 C#5 A4 E4 A4 C#5 A4 | D4 G4 B4 G4 D4 G4 B4 G4 | E4 A4 C#5 A4 E4 A4 C#5 A4'},
+  {d:1,v:.55,t:'k . h k s . h . | k . h k s . k s'}]}),
  nagBoss:mkSong({bpm:138,loop:1,ch:[
   {w:'sawtooth',v:.06,t:'E5 - F5 - E5 - D5 - | E5 - - - B4 - - - | E5 - F5 - G5 - F5 - | E5 - D5 - C5 - B4 - | C5 - D5 - E5 - F5 - | G5 - F5 - E5 - D5 - | F5 - - - E5 - - - | E5 - - - - - - -'},
   {w:'triangle',v:.55,t:'E2 E2 E3 E2 F2 F2 F3 F2 | E2 E2 E3 E2 D2 D2 D3 D2 | C2 C2 C3 C2 D2 D2 D3 D2 | E2 E2 E3 E2 F2 E2 D2 E2'},
@@ -5259,7 +5265,7 @@ function palinStart(){
     pl:[mk(0,heroLook(),cx-26,cy,1),mk(0,'walker',cx-70,cy-42),mk(0,'child',cx-70,cy+42),
         mk(1,'kona',cx+26,cy),mk(1,'fisher',cx+70,cy-42),mk(1,'lonko2',cx+70,cy+42)]};
   held.up=held.down=held.left=held.right=0;banner.style.display='none';
-  mode='palin';sfx('enc');playSong('nagBattle');
+  mode='palin';sfx('enc');playSong('palin');
 }
 function palinReset(){const cx=PF.w/2,cy=PF.h/2,b=PG.ball;b.x=cx;b.y=cy;b.vx=b.vy=0;
   for(const p of PG.pl){p.x=p.hx=p.x===undefined?cx:p.hx;p.y=p.hy;p.sw=p.cd=p.boost=p.stun=p.conf=0}

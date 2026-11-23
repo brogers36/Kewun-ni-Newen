@@ -189,7 +189,7 @@ function palinStart(){
     pl:[mk(0,heroLook(),cx-26,cy,1),mk(0,'walker',cx-70,cy-42),mk(0,'child',cx-70,cy+42),
         mk(1,'kona',cx+26,cy),mk(1,'fisher',cx+70,cy-42),mk(1,'lonko2',cx+70,cy+42)]};
   held.up=held.down=held.left=held.right=0;banner.style.display='none';
-  mode='palin';sfx('enc');playSong('nagBattle');
+  mode='palin';sfx('enc');playSong('palin');
 }
 function palinReset(){const cx=PF.w/2,cy=PF.h/2,b=PG.ball;b.x=cx;b.y=cy;b.vx=b.vy=0;
   for(const p of PG.pl){p.x=p.hx=p.x===undefined?cx:p.hx;p.y=p.hy;p.sw=p.cd=p.boost=p.stun=p.conf=0}
