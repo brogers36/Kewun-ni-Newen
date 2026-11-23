@@ -325,7 +325,7 @@ const AMB={cur:null,nodes:[],timers:[]};
 function stopAmb(){for(const t of AMB.timers)clearInterval(t);AMB.timers=[];
   for(const n of AMB.nodes){try{n.stop&&n.stop()}catch(e){}try{n.disconnect&&n.disconnect()}catch(e){}}
   AMB.nodes=[];AMB.cur=null}
-function ambFor(bg){return({coast:'waves',field:'meadow',forest:'forest',rainforest:'forest',mawida:'forest',
+function ambFor(bg){if(bg==='coast'&&typeof CUR!=='undefined'&&(CUR==='lof'||(M&&M.interior)))return 'wavesSoft';return({coast:'waves',field:'meadow',forest:'forest',rainforest:'forest',mawida:'forest',
   mount:'wind',fjord:'wind',pampa:'pampa',waria:'city',deep:'under',cave:'cave',cave2:'cave',cave3:'cave',cave4:'cave',cave5:'cave'})[bg]||'night'}
 function playAmb(kind){
   if(AMB.cur===kind)return;stopAmb();if(!kind)return;
@@ -343,6 +343,7 @@ function playAmb(kind){
     o.connect(og);og.connect(g);o.start(t);o.stop(t+dur+.02)}catch(e){}};
   g.gain.value=.5;
   if(kind==='waves'){noise(420,.6,.028,.11,.8);noise(1400,.8,.012,.07,.9)}
+  else if(kind==='wavesSoft'){noise(420,.6,.014,.11,.8);noise(1400,.8,.004,.07,.9)}   // the Lafkenche lof: the sea further off, the wind softer
   else if(kind==='wind'){noise(300,.9,.03,.05,.85);noise(900,1.4,.008,.13,.9)}
   else if(kind==='meadow'){noise(1100,1.2,.006,.09,.7);
     AMB.timers.push(setInterval(()=>{if(Math.random()<.5){const b=2200+Math.random()*1200;
