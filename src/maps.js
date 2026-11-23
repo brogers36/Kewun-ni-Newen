@@ -274,7 +274,7 @@ p_lil:{region:'pewenche',name:'Lil mapu',g:{es:'Los riscos de lava (zona difíci
  ents:[{kind:'enemy',x:10,y:5,party:['kutral','kutral','kutral']},{kind:'enemy',x:20,y:8,party:['fkura','kutral']},{kind:'enemy',x:7,y:10,party:['nirivilu','kutral','kura']},{kind:'enemy',x:28,y:5,party:['fkura','fkura']}]},
 p_pillan:{region:'pewenche',name:'Pillañ inaltu',g:{es:'Al pie del volcán',en:'At the foot of the volcano'},floor:',',bg:'mount',song:'pew',pal:'ash',trees:'pewen',
  edges:{left:{to:'p_pire',x:30,y:7},down:{to:'p_lil',x:16,y:1}},stairs:{to:'pd1',x:1,y:4},konew:{'3,4':K5},
- ents:[{id:'trafkintufe',kind:'npc',look:'seller',fem:1,x:10,y:8,dir:'down',fixed:1,talk:()=>trafkintuTalk(),bub:['Trafkintuaiñ?','Mari mari!']},{id:'kona3',kind:'npc',look:'kona',x:24,y:8,talk:()=>kona3Talk(),bub:['Cherufe...']},
+ ents:[{id:'trafkintufe',kind:'npc',look:'seller',fem:1,x:10,y:8,dir:'down',fixed:1,talk:()=>trafkintuTalk(),bub:['Trafkintuayu?','Mari mari!']},{id:'kona3',kind:'npc',look:'kona',x:24,y:8,talk:()=>kona3Talk(),bub:['Cherufe...']},
    {kind:'enemy',x:8,y:3,party:['kutral','kutral','kura']},{kind:'enemy',x:17,y:9,party:['kura','kura']},{kind:'enemy',x:14,y:3,party:['kutral','pire','kutral']}]},
 pd1:{region:'pewenche',name:'Cherufe ñi ruka · 1',g:{es:'La morada del Cherufe (piso 1)',en:"The Cherufe's lair (floor 1)"},floor:'_',bg:'cave3',song:'cave',dungeon:1,pal:'pewcave',lava:1,
  edges:{left:{to:'p_pillan',x:28,y:4}},stairs:{to:'pd2',x:1,y:2},

@@ -450,3 +450,4 @@ Ciclo de tiempo por tipo de tierra (cambia cada 3-7 minutos reales). Todo ⚠:
 - **Trafkintu** (Puelche lof): ⚠ "Trafkintuaiñ?" '¿hacemos trafkintu?'; ⚠ "Kiñe kofke: mari ngülliw." (precio con números); ⚠ "Kimimi!" '¡sabes!'. Nota: uso ngülliw (piñón) como moneda, como en el resto del juego.
 - **Informe de kimün** para el profe: precisión por tema, raíces, lecciones, palabras más falladas; copiar o imprimir/PDF.
 - **Re mapudungun** ahora también oculta la traducción de las preguntas y de las opciones en mapudungun; un botón **?** la muestra (el informe cuenta cuántas veces se usó).
+- (Nov 22) Brandon: el repaso se llama **"Wiñochillkatun"**. Trafkintu entre dos: **"Trafkintuayu?"** (entre muchos sería "Trafkintuaiñ?"). El punto del palin: se usan **"raya"** y **"tripal"** (el juego alterna: "Kiñe tripal!", "Epu raya!"…). Ragileo también **f→b**. Brandon aprueba las tablas de grafemarios y la conversión de nombres propios.

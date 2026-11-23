@@ -1,6 +1,6 @@
 /* ======================================================================
    Learning layer: grafemarios, tracking what each player misses, the
-   Ngüneduamün practice page, verb building, the wekufü chillka, the
+   Wiñochillkatun practice page, verb building, the wekufü chillka, the
    learning report for teachers, palin and trafkintu.
    ====================================================================== */
 
@@ -12,7 +12,7 @@ const _isEsp=s=>/[áéíóúÁÉÍÓÚ¿¡]/.test(s)||/\b(volver|cerrar|partida|
 function _cv(s,pairs){let o='';for(let i=0;i<s.length;){let hit=null;for(const [a,b] of pairs){if(s.substr(i,a.length).toLowerCase()===a){hit=[a,b];break}}
   if(hit){const src=s.substr(i,hit[0].length),up=src[0]!==src[0].toLowerCase();o+=up?hit[1][0].toUpperCase()+hit[1].slice(1):hit[1];i+=hit[0].length}else{o+=s[i];i++}}return o}
 const GRAF_RULES={a:[['tr','tx'],['ng','g'],['g','q'],['d','z']],
-  r:[['tr','x'],['ch','c'],['ll','j'],['ng','g'],['g','q'],['ñ','h'],['ü','v'],['d','z']]};
+  r:[['tr','x'],['ch','c'],['ll','j'],['ng','g'],['g','q'],['ñ','h'],['ü','v'],['d','z'],['f','b']]};
 function GR(s){if(!s||GRAF==='u'||typeof s!=='string')return s;const nm=S&&S.name;if(nm&&s.includes(nm))return s.split(nm).map(x=>_cv(x,GRAF_RULES[GRAF])).join(nm);return _cv(s,GRAF_RULES[GRAF])}
 function GRm(s){return s&&!_isEsp(s)?GR(s):s}   // for menu options and bubbles, which can be Spanish UI text
 
@@ -47,7 +47,7 @@ function buildVerb(Bq,cb){   // Bq: {q:{es,en}, slots:[[ {m,v} ...]...], target,
       Bq.slots[i].map(o=>({m:o.m,g:o.g,v:o.v})),v=>{parts[i]=v;sfx('move');step(i+1)},false,true)};
   step(0)}
 
-/* ---------- 4. Ngüneduamün: a 10-question practice built from the player's own misses ---------- */
+/* ---------- 4. Wiñochillkatun: a 10-question practice built from the player's own misses ---------- */
 const BUILDERS=[
   {q:{es:'Arma «tú trabajas».',en:'Build "you work".'},slots:[[{m:'küdaw-',v:'küdaw'},{m:'amu-',v:'amu'},{m:'iya-',v:'iya'}],[{m:'-n',v:'n'},{m:'-ymi',v:'ymi'},{m:'-y',v:'y'}]],target:'küdawimi'},
   {q:{es:'Arma «ellos dos van».',en:'Build "the two of them go".'},slots:[[{m:'amu-',v:'amu'},{m:'küdaw-',v:'küdaw'}],[{m:'-yu',v:'yu'},{m:'-iñ',v:'iñ'},{m:'-ymu',v:'ymu'},{m:'-yngu',v:'yngu'},{m:'-yngün',v:'yngün'}]],target:'amuyngu'},
@@ -61,14 +61,14 @@ function practice(back){
   const pool=typeof lanPool==='function'?lanPool():[];while(qs.length<8&&pool.length){const p=pool.splice(rnd(pool.length),1)[0];if(!qs.some(x=>_qkey(x.q)===_qkey(p.q)))qs.push(p)}
   const bl=BUILDERS.slice();for(let k=0;k<2;k++)qs.splice(rnd(qs.length+1),0,{b:bl.splice(rnd(bl.length),1)[0]});
   let ok=0;
-  say([L('','Ngüneduamün',ms.length?'Repaso: primero lo que te ha costado ('+ms.length+' pendientes), después un poco de todo.':'Repaso de lo aprendido en tu viaje.',ms.length?'Review: first what has been hard for you ('+ms.length+' pending), then a bit of everything.':'A review of what you have learned on your journey.')],()=>ask(0));
+  say([L('','Wiñochillkatun',ms.length?'Repaso: primero lo que te ha costado ('+ms.length+' pendientes), después un poco de todo.':'Repaso de lo aprendido en tu viaje.',ms.length?'Review: first what has been hard for you ('+ms.length+' pending), then a bit of everything.':'A review of what you have learned on your journey.')],()=>ask(0));
   function ask(i){
     if(i>=qs.length){const n=qs.length;S.xp+=ok;persist();return say([N(ok+'/'+n+' · +'+ok+' kimün.',ok+'/'+n+' · +'+ok+' kimün.'),L('',ok>=n-1?'Kümey!':'Kimnierpuken!',ok>=n-1?'¡Muy bien!':'¡Voy aprendiendo!',ok>=n-1?'Very good!':'I am learning!')],()=>{if(S.xp>=xpNeed())levelUpCheck();else back&&back()})}
     const Q=qs[i];
     if(Q.b)return buildVerb(Q.b,(good,got)=>{if(good){ok++;sfx('ok');say([L('','Kümey!',Q.b.target,Q.b.target)],()=>ask(i+1))}else{sfx('bad');say([N('Armaste «'+got+'». Era: '+Q.b.target+'.','You built "'+got+'". It was: '+Q.b.target+'.')],()=>ask(i+1))}});
     const opts=Q.o.map(o=>({m:o,v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
     choose(Object.assign({},Q.q,{es:'('+(i+1)+'/'+qs.length+') '+(Q.q.es||''),en:'('+(i+1)+'/'+qs.length+') '+(Q.q.en||'')}),opts,v=>{
-      const good=v===Q.a;track('ngüneduamün',good,Q.q,Q.o,Q.a);
+      const good=v===Q.a;track('wiñochillkatun',good,Q.q,Q.o,Q.a);
       if(good){ok++;sfx('ok');ask(i+1)}else{sfx('bad');say([N('Era: '+Q.a+'.','It was: '+Q.a+'.')],()=>ask(i+1))}},false,true)}
 }
 
@@ -198,7 +198,7 @@ function palinTalk(){
       if(ok){sfx('ok');PALIN.pos++}else{sfx('bad');PALIN.pos--}
       const ls=[L(S.name,v,ok?'¡Bien dicho! Tu equipo avanza.':'Tu equipo no entiende la jugada y pierde terreno.',ok?'Well called! Your team moves forward.':'Your team does not understand the call and loses ground.')];
       if(!ok)ls.push(N('Se decía: '+P2.a,'The call was: '+P2.a));
-      if(PALIN.pos>=3){PALIN.us++;PALIN.pos=0;const nw=numW(PALIN.us);ls.push(L('Pu che',nw[0].toUpperCase()+nw.slice(1)+' raya!','¡Raya para tu equipo! Van '+PALIN.us+' a '+PALIN.them+'.','A point for your team! It is '+PALIN.us+' to '+PALIN.them+'.'))}
+      if(PALIN.pos>=3){PALIN.us++;PALIN.pos=0;const nw=numW(PALIN.us);ls.push(L('Pu che',nw[0].toUpperCase()+nw.slice(1)+(PALIN.us%2?' tripal!':' raya!'),'¡Raya para tu equipo! Van '+PALIN.us+' a '+PALIN.them+'.','A point for your team! It is '+PALIN.us+' to '+PALIN.them+'.'))}
       if(PALIN.pos<=-3){PALIN.them++;PALIN.pos=0;ls.push(N('Raya para el equipo rival. Van '+PALIN.us+' a '+PALIN.them+'.','A point for the rival team. It is '+PALIN.us+' to '+PALIN.them+'.'))}
       say(ls,play)},false,true)}
   function end(){const won=PALIN.us>PALIN.them;const ls=[];
@@ -215,7 +215,7 @@ function drawPalin(c){if(!PALIN)return;const x0=Math.round(LW/2-70),y0=VY+50;
 /* ---------- 8. trafkintu: trading with numbers in Mapudungun ---------- */
 function trafkintuTalk(){
   const en=S.gloss==='en',first=!S.flags.traf_done;
-  say([L('Trafkintufe','Mari mari! Trafkintuaiñ?','¡Hola! ¿Hacemos trafkintu? Yo ofrezco, tú decides si el trato es justo.','Hello! Shall we do trafkintu? I make offers, you decide whether the deal is fair.'),
+  say([L('Trafkintufe','Mari mari! Trafkintuayu?','¡Hola! ¿Hacemos trafkintu? Yo ofrezco, tú decides si el trato es justo.','Hello! Shall we do trafkintu? I make offers, you decide whether the deal is fair.'),
     N('En el trafkintu se cambian cosas. Ella te dirá el precio en mapudungun. Si el precio es justo (como en la tienda o menos), acepta con «May». Si es un abuso, di «No».','In trafkintu people exchange goods. She will tell you the price in Mapudungun. If it is fair (shop price or less), accept with "May". If it is a rip-off, say "No".')],()=>{
     let good=0,n=0;const items=['kulon','diwen','kofke','lawen','mate'];
     const offer=()=>{if(n>=5)return end();n++;const it=items[rnd(items.length)],base=ITEMS[it].p,fair=Math.random()<.55;

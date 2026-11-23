@@ -47,7 +47,7 @@ function openPause(){
 
 function openKim(){const en=S.gloss==='en',n=missList().length,b=Object.keys(S.beaten||{}).length;
   choose({m:'Kimeltun',es:'Aprender',en:'Learning'},[
-    {m:'Ngüneduamün',g:(en?'Practice: 10 questions':'Repaso: 10 preguntas')+(n?(en?', '+n+' you have missed':', '+n+' que te han costado'):''),v:'p'},
+    {m:'Wiñochillkatun',g:(en?'Practice: 10 questions':'Repaso: 10 preguntas')+(n?(en?', '+n+' you have missed':', '+n+' que te han costado'):''),v:'p'},
     {m:'Wekufü chillka · '+b,g:en?'The wekufü you have beaten':'Los wekufü que has vencido',v:'b'},
     {m:en?'Learning report':'Informe de kimün',g:en?'For you or your teacher: copy or print':'Para ti o tu profe: copiar o imprimir',v:'r'},
     {m:en?'Back':'Volver',v:'x'}],v=>{
