@@ -25,6 +25,42 @@ R = {k: [hx(c) for c in v] for k, v in R.items()}
 LINES = [(220, 50, 50), (240, 200, 40), (60, 170, 80), (60, 120, 220), (160, 80, 200)]   # metro-map colours
 
 def setsize(w, h): yp.W, yp.H = w, h
+
+# ---- a crisper shading model for the city wekufü: hard-surface parts get flat faces with a sharp bevel,
+#      organic parts a firm rounded form; light is banded with only a whisper of dither, and contrast is pushed
+HARD = ('stack', 'thigh', 'shin', 'foot', 'horn', 'hrim', 'mand', 'claw', 'leg', 'fang', 'tooth', 'cam', 'motor', 'clock', 'pull', 'page', 'armL', 'armR', 'cable', 'box', 'socket', 'piston')
+from scipy.ndimage import distance_transform_edt as _edt, gaussian_filter as _gf
+def _shade2(s, m, ramp, bulge=1.0, lift=0.0, flat=0.0, name=''):
+    """hard parts: flat faces with a sharp bevel; round parts: a firm form cut into a few hard bands with a sharp terminator
+    and a band of reflected light along the shadow-side rim. Almost no dither: edges stay crisp."""
+    if not m.any(): return
+    H_, W_ = yp.H, yp.W
+    d = _edt(m)
+    hard = name in HARD or name.startswith('line') or name.startswith('coat')
+    if hard:
+        h = _gf(np.minimum(d, 2.6 * bulge) * 1.2, .5)
+    else:
+        Rr = max(2.0, d.max()); h = _gf((np.clip(d / Rr, 0, 1) ** .55) * Rr * bulge, 1.1)
+    gy, gx = np.gradient(h)
+    n = np.dstack([-gx, -gy, np.ones_like(h) * (0.9 if hard else 0.75)]); n /= np.linalg.norm(n, axis=2, keepdims=True)
+    lum = (n @ yp.LIGHT - 0.15) / 0.85
+    ys, xs = np.nonzero(m); cy, cx = ys.mean(), xs.mean(); sy, sx = max(4, ys.std()), max(4, xs.std())
+    yy, xx = np.mgrid[0:H_, 0:W_]
+    lum = lum - ((yy - cy) / sy) * .06 - ((xx - cx) / sx) * .05
+    lum = (lum - .45) * 1.45 + .45 + lift - yy / H_ * .05
+    k = len(ramp)
+    if hard:
+        t = np.clip(lum, 0, .999) * (k - 1); bay = yp.BAYER[yy % 4, xx % 4]
+        idx = np.clip(np.floor(t + (bay - .5) * .18).astype(int), 0, k - 1)
+    else:
+        bands = min(k, 6); t = np.clip(lum, 0, .999) * bands
+        b_ = np.floor(t).astype(int)                              # hard bands, no dither
+        idx = np.clip(np.round(b_ * (k - 1) / max(1, bands - 1)).astype(int), 0, k - 1)
+        rim = (d <= 2.2) & (b_ <= 1) & ((gx > .05) | (gy > .05))  # reflected light on the shadow side
+        idx[rim] = np.minimum(k - 1, idx[rim] + 2)
+    cols = np.array(ramp)[idx]
+    s.rgb[m] = cols[m]; s.a[m] = True; s.part[m] = name
+yp.Canvas.shade = _shade2
 def blob(c, ramp, fn, bulge=1.0, lift=0.0, name=''):
     m = c.mask(fn); c.shade(m, ramp, bulge=bulge, lift=lift, name=name); return m
 def finish(c, seams, rim=None, rimparts=()):
@@ -246,8 +282,9 @@ def ngamlef(f):
     blob(c, R['carap'], lambda d: d.ellipse([88, 28, 150, 82], fill=1), bulge=1.2, lift=.04, name='abd')
     for k, x in enumerate(range(96, 148, 9)):
         plate_lines(c, 'abd', [((x, 28), (x - 6, 82))], .55)
-        for y in range(34, 78, 6):
-            if c.part[y, x - 3 - (y - 30) // 10] == 'abd': c.px(x - 3 - (y - 30) // 10, y, LC[k % 5])
+        for y in range(30, 82):                                # each plate edged with one metro line, unbroken
+            X = x + 2 - int((y - 28) * 6 / 54)
+            if c.part[y, X] == 'abd': c.px(X, y, tuple(int(v * .85) for v in LC[k % 5]))
     # thorax plates and a skull-like head, glowing eyes, fangs
     blob(c, R['carap'], lambda d: d.ellipse([54, 44, 104, 88], fill=1), bulge=1.2, lift=.14, name='thx')
     plate_lines(c, 'thx', [((60, 60), (100, 56)), ((58, 72), (102, 70)), ((80, 46), (78, 86))], .55)
@@ -275,6 +312,7 @@ def ngamlef(f):
 
 # ------------------------------------------------------------------ texture and light passes shared by the wardens
 def texture(c, parts, amt=.07, seed=1, scale=1.0):
+    amt *= .35
     """per-pixel grain on the named parts: pores, scratches, grit; brighter on lit pixels, quieter in shadow"""
     rs = np.random.RandomState(seed); n = rs.rand(yp.H, yp.W)
     from scipy.ndimage import gaussian_filter as gf
@@ -331,15 +369,16 @@ def fillantu(f):
                 if c.part[Y + 1, X] == 'body': c.rgb[Y + 1, X] = (c.rgb[Y + 1, X] * .62).astype(np.uint8)
     # sealed eyes along its flank: slits sewn shut
     for (x, y) in [(102, 76), (116, 90), (96, 104), (124, 110)]:
-        for k in range(-4, 5): c.px(x + k, y + int(k * k / 12), R['ash'][0])
-        for k in range(-4, 5, 2): c.px(x + k, y - 1 + int(k * k / 12), R['gaunt'][7]); c.px(x + k, y + 1 + int(k * k / 12), R['gaunt'][6])
+        for k in range(-5, 6):
+            Y = y + int(k * k / 14); c.px(x + k, Y, R['ash'][0]); c.px(x + k, Y - 1, R['gaunt'][4]); c.px(x + k, Y + 1, R['ash'][2])
+        for k in range(-4, 5, 3): c.px(x + k, y - 2 + int(k * k / 14), R['gaunt'][6]); c.px(x + k, y + 2 + int(k * k / 14), R['gaunt'][5])   # the stitches
     # the far arm, a long thin forearm planted on the ground, claws splayed
     taper(c, cr([(82, 64), (70, 88), (60, 112), (52, 126)], 6), 9, 6, R['ash'], lift=-.05, name='armF', bulge=1.2)
     for k in range(4):
         taper(c, [(52, 126), (44 + k * 5, 136), (40 + k * 6, 140)], 3, 1, R['nail'], lift=0, name='claw', bulge=1)
     # neck reaching forward and down; the long head
     taper(c, cr([(76, 54), (62, 50), (50, 54)], 6), 18, 14, R['gaunt'], lift=.12, name='neck', bulge=1.2)
-    head = [(54, 32), (60, 42), (58, 58), (52, 72), (44, 86), (36, 96), (26, 98), (18, 90), (14, 74), (12, 56), (18, 40), (34, 30)]
+    head = [(54, 34), (60, 44), (58, 58), (54, 70), (46, 84), (38, 94), (28, 96), (20, 90), (16, 76), (15, 58), (20, 42), (34, 33)]
     blob(c, R['gaunt'], lambda d: d.polygon(cr(head + [head[0]], 4), fill=1), bulge=1.35, lift=.06, name='head')
     for (x0, y0, x1, y1) in [(20, 40, 44, 36), (22, 45, 46, 42), (26, 50, 42, 48)]:        # a furrowed brow
         for t in np.linspace(0, 1, 26):
@@ -349,20 +388,20 @@ def fillantu(f):
         for y in range(ey - 9, ey - 5):
             for x in range(ex - 8, ex + 8):
                 if c.part[y, x] == 'head': c.rgb[y, x] = (c.rgb[y, x] * (.55 + (ey - 5 - y) * .1)).astype(np.uint8)
-        blob(c, [(3, 2, 5), (8, 6, 11), (15, 12, 19), (24, 20, 28), (34, 29, 38)], lambda d, ex=ex, ey=ey: d.polygon([(ex - 8, ey - 3), (ex + 2, ey - 6), (ex + 7, ey - 2), (ex + 5, ey + 6), (ex - 5, ey + 7)], fill=1), bulge=.7, lift=-.15, name='socket')
+        blob(c, [(3, 2, 5), (8, 6, 11), (15, 12, 19), (24, 20, 28), (34, 29, 38)], lambda d, ex=ex, ey=ey: d.polygon([(ex - 8, ey - 1), (ex - 1, ey - 4), (ex + 7, ey - 3), (ex + 5, ey + 3), (ex - 4, ey + 4)], fill=1), bulge=.7, lift=-.15, name='socket')
         c.px(ex + (1 if f else 0), ey, (214, 252, 250)); c.px(ex - 1 + (1 if f else 0), ey, (100, 184, 190)); c.px(ex + (1 if f else 0), ey + 1, (50, 110, 120))
         for k in range(10):                               # hollow cheeks below
             X, Y = ex - 4 + k, ey + 10 + int(abs(k - 5) * .5)
             if c.part[Y, X] == 'head': c.rgb[Y, X] = (c.rgb[Y, X] * .6).astype(np.uint8)
     for (x, y) in [(34, 72), (35, 72), (33, 73), (36, 73), (34, 74), (35, 74)]: c.px(x, y, (16, 12, 18))     # a nasal cavity
     # the mouth: stretched ear to ear and zipped shut; teeth pressing through where the zip has given
-    mp = cr([(16, 80), (24, 87), (34, 90), (46, 86), (54, 78)], 6)
+    mp = cr([(16, 88), (24, 85), (34, 84), (46, 85), (54, 89)], 6)
     for k, (x, y) in enumerate(mp):
         X, Y = int(x), int(y)
         c.px(X, Y, R['zip'][3] if k % 2 else R['zip'][1]); c.px(X, Y - 1, R['zip'][2] if k % 2 else R['zip'][4]); c.px(X, Y + 1, R['zip'][1] if k % 2 else R['zip'][3])
         if 10 < k < 18 and k % 3 == 0: c.px(X, Y - 2, (232, 222, 200)); c.px(X, Y + 2, (232, 222, 200))
         if k % 4 == 0: c.px(X, Y - 3, R['gaunt'][2]); c.px(X, Y + 3, R['gaunt'][2])          # puckered skin at each stitch
-    blob(c, R['zip'], lambda d: d.rounded_rectangle([52, 74, 57, 82], 1, fill=1), bulge=.9, lift=.3, name='pull')
+    blob(c, R['zip'], lambda d: d.rounded_rectangle([52, 85, 57, 93], 1, fill=1), bulge=.9, lift=.3, name='pull')
     # the near arm: impossibly long fingers closed round a stopped clock
     taper(c, cr([(70, 62), (60, 76), (52, 86)], 6), 10, 7, R['gaunt'], lift=.08, name='arm', bulge=1.2)
     taper(c, cr([(52, 86), (42, 98), (30, 108)], 6), 7, 6, R['gaunt'], lift=.12, name='arm', bulge=1.2)
@@ -381,14 +420,15 @@ def fillantu(f):
     blob(c, R['paper'], lambda d: d.polygon([(110, 34 - f), (124, 32), (126, 48), (112, 50 - f)], fill=1), bulge=.4, lift=.2, name='page')
     c.rect(112, 35 - f, 11, 3, (170, 50, 42))
     for t in range(9): c.px(113 + t, 40 + t // 2, (150, 40, 34))
-    # cold screen-light from the left on everything that faces the hero
-    for y in range(yp.H):
-        for x in range(0, 90):
-            if c.a[y, x] and c.part[y, x] in ('head', 'neck', 'arm', 'finger', 'body', 'armF', 'vert'):
-                k = .32 * max(0, 1 - x / 80) ** 1.6
-                if k > .05:
-                    k = round(k * 5 + (yp.BAYER[y % 4][x % 4] - .5) * .5) / 5.0
-                    c.rgb[y, x] = (c.rgb[y, x] * (1 - k) + np.array((96, 190, 200)) * k).astype(np.uint8)
+    # cold screen-light: a crisp rim on every edge that faces the screen (left), two pixels deep
+    lit = np.zeros((yp.H, yp.W), bool)
+    for dx in (1, 2, 3):
+        lit |= c.a & ~np.roll(c.a, dx, 1)
+    lit &= np.isin(c.part, ['head', 'neck', 'arm', 'finger', 'body', 'armF', 'vert', 'elbow'])
+    ys, xs = np.nonzero(lit)
+    for y, x in zip(ys, xs):
+        k = .55 if not c.a[y, x - 1] else .35
+        c.rgb[y, x] = (c.rgb[y, x] * (1 - k) + np.array((110, 205, 214)) * k).astype(np.uint8)
     texture(c, ['body', 'head', 'neck', 'arm', 'armF', 'finger'], amt=.10, seed=4)
     occlude(c, ['head', 'neck', 'arm'], ['body', 'armF'], r=4, k=.5)
     speculars(c, ['clock', 'vert', 'head'], thr=.86, col=(236, 248, 246))
