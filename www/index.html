@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='d634914-202611222253';
+window.KEWUN_BUILD='fa25ee9-202611222305';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -3304,7 +3304,7 @@ function runPentukun(practice){
     {q:L(sp,'Chumleymi?','¿Cómo estás?','How are you?'),
      ex:N('Luego te pregunta cómo estás. "Kümelen" es "estoy bien", y "Eymi kay?" devuelve la pregunta: "¿y tú?".','Then you are asked how you are. "Kümelen" means "I am well", and "Eymi kay?" returns the question: "and you?".'),
      o:[{m:'Kümelen. Eymi kay?',es:'Estoy bien. ¿Y tú?',en:'I am well. And you?',ok:1},{m:'Iñche pingen.',es:'Yo me llamo... (incompleto)',en:'My name is... (incomplete)'},{m:'Amunge!',es:'¡Vete!',en:'Go away!'}]},
-    {q:L(sp,'Iñche ka kümelen. Iney pingeymi?','Yo también estoy bien. ¿Cómo te llamas?','I am well too. What is your name?'),
+    {q:L(sp,'Iñche ka kümelen. Iney pingeymi am?','Yo también estoy bien. ¿Cómo te llamas?','I am well too. What is your name?'),
      ex:N('Después, tu nombre. Se dice "Iñche ___ pingen": "yo me llamo ___".','Next, your name. You say "Iñche ___ pingen": "my name is ___".'),
      o:[{m:'Iñche '+nm()+' pingen.',es:'Me llamo '+nm()+'.',en:'My name is '+nm()+'.',ok:1},{m:nm()+' pingeymi.',es:'Tú te llamas '+nm()+'.',en:'Your name is '+nm()+'.'},{m:'Kümelen.',es:'Estoy bien.',en:'I am well.'}]},
     {q:L(sp,'Chew tuwimi?','¿De dónde eres?','Where are you from?'),
@@ -4063,7 +4063,7 @@ function eLonkoTalk(){
   const steps=[
     {q:L('Lonko','Mari mari. Chumleymi am?','Hola. ¿Cómo estás?','Hello. How are you?'),
      o:[{m:'Kümelen, chaltu. Eymi kay?',es:'Estoy bien, gracias. ¿Y usted?',en:'I am well, thank you. And you?',ok:1},{m:'Kümeleymi.',es:'Tú estás bien.',en:'You are well.'},{m:'Chew tuwimi?',es:'¿De dónde eres?',en:'Where are you from?'}]},
-    {q:L('Lonko','Iñche ka kümelen. Iney pingeymi?','Yo también estoy bien. ¿Cómo te llamas?','I am well too. What is your name?'),
+    {q:L('Lonko','Iñche ka kümelen. Iney pingeymi am?','Yo también estoy bien. ¿Cómo te llamas?','I am well too. What is your name?'),
      o:[{m:'0 pingen.',es:'Me llamo 0.',en:'My name is 0.',ok:1},{m:'0 pingeymi.',es:'Tú te llamas 0.',en:'Your name is 0.'},{m:'0 pingey.',es:'Él se llama 0.',en:'His name is 0.'}]},
     {q:L('Lonko','Chumngelu küpaymi faw?','¿Por qué viniste hasta acá?','Why did you come all this way?'),
      o:[{m:'Ngen kintupan.',es:'Vine (hacia acá) a buscar al ngen.',en:'I came here looking for the ngen.',ok:1},{m:'Ngen kintuy.',es:'Él busca al ngen.',en:'He is looking for the ngen.'},{m:'Ngen kintulan.',es:'No busco al ngen.',en:'I am not looking for the ngen.'}]}];
@@ -4552,7 +4552,7 @@ const NUTK={
   lof:{who:'Ayelen',set:[
     {q:L('Ayelen','Mari mari!','Te saluda.','She greets you.'),o:['Mari mari!','Pewkayal!','Chaltu may!'],a:'Mari mari!'},
     {q:L('Ayelen','Chumleymi?','¿Cómo estás?','How are you?'),o:['Kümelen, eymi kay?','Fewla.','Ruka mew.'],a:'Kümelen, eymi kay?'},
-    {q:L('Ayelen','Iney pingeymi?','¿Cómo te llamas?','What is your name?'),o:['@ pingen.','Kümelen.','Lafken mew.'],a:'@ pingen.'}]},
+    {q:L('Ayelen','Iney pingeymi am?','¿Cómo te llamas?','What is your name?'),o:['Iñche @ pingen.','Kümelen.','Lafken mew.'],a:'Iñche @ pingen.'}]},
   n_lof:{who:'Kallfü',set:[
     {q:L('Kallfü','Chew tuwimi?','¿De dónde eres?','Where are you from?'),o:['Lafken mew tuwün.','Lafken mew amuan.','Lafken pingen.'],a:'Lafken mew tuwün.'},
     {q:L('Kallfü','Chew amuaymi?','¿Adónde vas?','Where are you going?'),o:['Mawida mew amuan.','Mawida mew tuwün.','Mawida pingen.'],a:'Mawida mew amuan.'},
@@ -4572,7 +4572,6 @@ const NUTK={
 /* second conversation with each nütramkan partner, once the first is done (Tanda 24) */
 const NUTK2={
   lof:[
-    {q:L('Ayelen','Iney tami üy?','¿Cuál es tu nombre?','What is your name?'),o:['Tañi üy @.','Tami üy @.','@ pingey.'],a:'Tañi üy @.'},
     {q:L('Ayelen','Chew müley tami ruka?','¿Dónde está tu casa?','Where is your house?'),o:['Lafken mew müley.','Lafken mew amuan.','Lafken pingey.'],a:'Lafken mew müley.'},
     {q:L('Ayelen','Lamngen nieymi?','¿Tienes hermanos?','Do you have siblings?'),o:['May, epu lamngen nien.','May, epu lamngen niey.','Epu lamngen pingen.'],a:'May, epu lamngen nien.'},
     {q:L('Ayelen','Küdawkeymi?','¿Trabajas?','Do you work?'),o:['May, küdawken.','May, küdawkey.','Küdaw pingen.'],a:'May, küdawken.'}],
@@ -4584,7 +4583,7 @@ const NUTK2={
   p_lof:[
     {q:L('Rayen','Iney pingey tami ñuke?','¿Cómo se llama tu mamá?','What is your mother called?'),o:['Tañi ñuke Kallfüray pingey.','Tami ñuke Kallfüray pingey.','Tañi ñuke Kallfüray pingen.'],a:'Tañi ñuke Kallfüray pingey.'},
     {q:L('Rayen','Chew müley tami kuku?','¿Dónde está tu abuela (paterna)?','Where is your (paternal) grandmother?'),o:['Ruka mew müley.','Ruka mew amuan.','Ruka pingey.'],a:'Ruka mew müley.'},
-    {q:L('Rayen','Iney ta tami chuchu?','¿Quién es tu chuchu?','Who is your chuchu?'),o:['Tañi ñuke ñi ñuke.','Tañi chaw ñi ñuke.','Tañi ñuke ñi chaw.'],a:'Tañi ñuke ñi ñuke.'},
+    {q:L('Rayen','Iney am tami chuchu?','¿Quién es tu chuchu?','Who is your chuchu?'),o:['Tañi ñuke ñi ñuke.','Tañi chaw ñi ñuke.','Tañi ñuke ñi chaw.'],a:'Tañi ñuke ñi ñuke.'},
     {q:L('Rayen','Pewkayal, @!','¡Hasta luego!','See you later!'),o:['Pewkayal!','Mari mari!','Kümelen.'],a:'Pewkayal!'}],
   w_lof:[
     {q:L('Millanao','Mawünküley?','¿Está lloviendo?','Is it raining?'),o:['May, mawünküley.','May, mawünkülen.','Mawün pingey.'],a:'May, mawünküley.'},
@@ -4686,7 +4685,7 @@ const TRAWUN={
   L('@','Chem? · Iney? · Chew?','¿Qué? · ¿Quién? · ¿Dónde?','What? · Who? · Where?'),
   L('@','Chumül? · Tunten? · Chumngechi?','¿Cuándo? · ¿Cuánto? · ¿Cómo?','When? · How much? · How?'),
   L('Pu che','Chem? Iney? Chew? Chumül? Tunten?','(Todos repiten.)','(Everyone repeats.)'),
-  L('@','Iney pingeymi? · Chew mülimi?','¿Cómo te llamas? (¿Quién te llaman?) · ¿Dónde estás?','What is your name? · Where are you?'),
+  L('@','Iney pingeymi am? · Chew mülimi?','¿Cómo te llamas? (¿Quién te llaman?) · ¿Dónde estás?','What is your name? · Where are you?'),
   {q:N('¿Cómo preguntas «¿dónde estás?»?','How do you ask "where are you?"'),o:['Chem mülimi?','Chew mülimi?','Iney mülimi?'],a:'Chew mülimi?',why:N('Chew es «dónde».','Chew is "where".')},
   L('@','Tunten tripantu nieymi?','¿Cuántos años tienes?','How old are you?'),
   {q:L('@','Tunten tripantu nieymi?','¿Qué te están preguntando?','What are they asking you?'),o:['¿Cuántos años tienes?','¿Dónde vives?','¿Cómo te llamas?'],a:'¿Cuántos años tienes?',why:N('Tunten es «cuánto»; tripantu es «año».','Tunten is "how much"; tripantu is "year".')},
@@ -4736,10 +4735,10 @@ const TRAWUN2={
   N('Con la familia se usa todo el tiempo. Chaw es «papá» y ñuke es «mamá».','It is used all the time with family. Chaw is "father" and ñuke is "mother".'),
   L('@','Tañi chaw Lienlaf pingey. Tañi ñuke Rayen pingey.','Mi papá se llama Lienlaf. Mi mamá se llama Rayen.','My father is called Lienlaf. My mother is called Rayen.'),
   {q:N('¿Cómo dices «tu mamá»?','How do you say "your mother"?'),o:['tami ñuke','tañi ñuke','taiñ ñuke'],a:'tami ñuke',why:N('tami + ñuke: tami ñuke.','tami + ñuke: tami ñuke.')},
-  N('Y una pregunta muy útil: «Iney tami üy?», ¿cuál es tu nombre? Üy es «nombre».','And a very useful question: "Iney tami üy?", what is your name? Üy is "name".'),
-  L('@','Iney tami üy? Tañi üy Ñanku.','¿Cuál es tu nombre? Mi nombre es Ñanku.','What is your name? My name is Ñanku.'),
-  {q:L('@','Iney tami üy?','Te preguntan tu nombre.','They ask your name.'),o:['Tañi üy @.','Tami üy @.','Ñi üy @.'],a:'Tañi üy @.',why:N('Es tu nombre: tañi üy.','It is your name: tañi üy.')}],
-  sum:[L('','tañi · tami · ñi · taiñ · tamün','mi · tu · su · nuestro · de ustedes','my · your · his/her · our · your (pl.)'),L('','Iney tami üy? · Tañi üy ...','¿Cuál es tu nombre? · Mi nombre es ...','What is your name? · My name is ...')]},
+  N('Y para preguntar el nombre, no se usa un posesivo: se pregunta «¿cómo te dicen?».','And to ask someone\'s name you do not use a possessive: you ask "what are you called?".'),
+  L('@','Iney pingeymi am? Iñche Ñanku pingen.','¿Cómo te llamas? Yo me llamo Ñanku.','What is your name? My name is Ñanku.'),
+  {q:L('@','Iney pingeymi am?','Te preguntan tu nombre.','They ask your name.'),o:['Iñche @ pingen.','Eymi @ pingeymi.','Fey @ pingey.'],a:'Iñche @ pingen.',why:N('Hablas de ti: iñche … pingen.','You are talking about yourself: iñche … pingen.')}],
+  sum:[L('','tañi · tami · ñi · taiñ · tamün','mi · tu · su · nuestro · de ustedes','my · your · his/her · our · your (pl.)'),L('','Iney pingeymi am? · Iñche ... pingen','¿Cómo te llamas? · Yo me llamo ...','What is your name? · My name is ...')]},
  n_lof:{t:N('Tunten? Los números y nie- (tener)','Tunten? Numbers and nie- (to have)'),steps:[
   N('Hoy contamos. Del uno al diez:','Today we count. From one to ten:'),
   L('@','Kiñe, epu, küla, meli, kechu.','Uno, dos, tres, cuatro, cinco.','One, two, three, four, five.'),
