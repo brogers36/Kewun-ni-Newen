@@ -45,7 +45,7 @@ def legs(c, fr, dress):
         blob(c, R['boot'], lambda d, x=x: d.polygon([(x - 2, 66), (x + 4, 66), (x + 4, 72), (x - 6, 72), (x - 6, 70)], fill=1), bulge=0.9, lift=lift, name=nm)
         c.px(x - 5, 70, R['boot'][4]); c.rect(x - 6, 72, 11, 1, R['boot'][0])
 
-def head(c, fr, long_hair, hk='hair', old=False):
+def head(c, fr, long_hair, hk='hair', old=False, band=True):
     _, _, lean, _ = pose(fr); lx = -lean
     # hair mass behind the head (and down the back for Millaray)
     if long_hair:
@@ -69,6 +69,7 @@ def head(c, fr, long_hair, hk='hair', old=False):
         c.px(19 + lx, 7, R['skin'][3]); c.px(21 + lx, 7, R['skin'][3])
         for k in range(4): c.px(26 + k + lx, 10 + k, R[hk][4])
     # trarilonko: red band with yellow stepped pattern
+    if not band: return
     for x in range(17, 33):
         y = 8 + (1 if x > 26 else 0)
         c.px(x + lx, y, R['red'][3]); c.px(x + lx, y + 1, R['red'][2])

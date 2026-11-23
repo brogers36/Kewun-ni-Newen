@@ -183,6 +183,7 @@ function lanName(L,en){const pe=LAN_LAND[L.lof[0]].pe;return en?'the '+pe[0].toU
 /* the lof people in the lan kewün scenes use the same painted, battle-size bodies as the battle screen */
 const LANBIG={};
 function lanBig(lk,d){const k=lk+d;if(LANBIG[k])return LANBIG[k];
+  if(typeof SPR2!=='undefined'&&SPR2['hero_'+lk]){const t=tplCanvas('hero_'+lk,0,1);return LANBIG[k]=d==='left'?t:mirror(t)}
   return LANBIG[k]=ctCharSpriteBig(lk,d,0)}
 function drawLanScene(c,L){
   const t=++L.t,good=L.good,a=Math.min(1,t/24),en=S.gloss==='en',LD=LAN_LAND[L.lof[0]];
@@ -202,7 +203,7 @@ function drawLanScene(c,L){
   caFire(c,LW*.5,138,frame,good?1.5:.45);
   if(!good){for(let k=0;k<3;k++)ell(c,LW*.5+Math.sin(frame/20+k)*3,128-k*7-(frame/3+k*9)%14,2+k,2+k,'rgba(150,150,160,.35)')}
   // the people of the lof around the fire
-  const ppl=[['kuku','right',-114],['lonko','right',-80],['weaver','right',-46],['child','left',44],['cook','left',78],['childf','left',112]];
+  const ppl=[['kuku','right',-114],['lof_lonko','right',-80],['lof_weaver','right',-46],['lof_wentru','left',44],['lof_cook','left',78],['lof_ulcha','left',112]];
   for(let k=0;k<ppl.length;k++){const [lk,d,dx]=ppl[k];let x;
     let s=lanBig(lk,d);if(!good)s=lanGrey(s);
     const sw=s.width,shh=s.height,x2=Math.round(LW*.5+dx-sw/2);x=x2;

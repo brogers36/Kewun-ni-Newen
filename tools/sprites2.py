@@ -2357,6 +2357,9 @@ if os.path.exists(_kp):
 _hp=os.path.join(os.path.dirname(os.path.abspath(__file__)),'heroes.json')
 if os.path.exists(_hp):
     for _n,_h in json.load(open(_hp)).items():D['hero_'+_n]={'pal':_h['pal'],'f':_h['f'],'big':1,'aura':0,'hand':1}
+_lp=os.path.join(os.path.dirname(os.path.abspath(__file__)),'lofpeople.json')
+if os.path.exists(_lp):
+    for _n,_h in json.load(open(_lp)).items():D['hero_lof_'+_n]={'pal':_h['pal'],'f':_h['f'],'big':1,'aura':0,'hand':1}
 # every boss and every form of the final boss: repainted with the Yewen's 3D method (tools/repaint.py)
 import repaint as _rp, yewen_paint as _yp
 _BOSSES=['trelke','cherrufe','kaleuche','witranalwe','chinifilu','piwuchen','wallipen','trawko','walichu','chadikura','epunamun','kalku',
