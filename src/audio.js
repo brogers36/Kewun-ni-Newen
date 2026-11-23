@@ -487,7 +487,7 @@ const KULTRUN_SONGS=['battle','boss','nagBattle','nagBoss','pewBattle','pewBoss'
     mk({w:'trut',v:.075},i=>{const b=Math.floor(i/24),k=i%24;if(b===0&&k===0)return{n:root+'3',len:16};if(b===0&&k===16)return{n:FIF[root]+'3',len:8};if(b===1&&k===0)return{n:root+'4',len:20};
       if(b===Math.floor(bars/2)&&k===0)return{n:FIF[root]+'3',len:10};if(b===Math.floor(bars/2)&&k===12)return{n:root+'4',len:12};return null});
     mk({d:1,v:.5},i=>Math.floor(i/24)%4===3&&(i%24===20||i%24===22)?{n:'p',len:1}:null);   // pifilka
-    so.bpm=Math.round(n==='boss'||/Boss|Final/.test(n)?so.bpm*1.4:so.bpm*1.33);          // a kultrun beat of about 0.9 s (battles) / 0.8 s (bosses), six notes in each
+    so.bpm=Math.round((n==='boss'||/Boss|Final/.test(n)?so.bpm*1.4:so.bpm*1.33)*1.12);          // a kultrun beat of about 0.9 s (battles) / 0.8 s (bosses), six notes in each
     so.len=L}})();
 function playSong(name){
   if(AU.name===name)return;AU.name=name;AU.song=SONGS[name]||null;AU.step=0;
