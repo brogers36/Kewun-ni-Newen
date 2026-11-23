@@ -978,15 +978,16 @@ function drawWard(c,cx,cy,sz,n,frame,seed){
     // soft dome body
     c.beginPath();c.ellipse(cx,cy,rx,ry,0,0,6.283);c.clip();
     const gr=c.createRadialGradient(cx,cy-ry*.35,ry*.1,cx,cy,rx);
-    gr.addColorStop(0,'rgba('+r+','+g+','+b+','+(.02+.03*pulse)+')');gr.addColorStop(.72,'rgba('+r+','+g+','+b+','+(.07+.05*pulse)+')');gr.addColorStop(1,'rgba('+r+','+g+','+b+','+(.2+.08*pulse)+')');
+    const fa=sz>=100?.3:1;   // big bosses keep their own dark painting; the shell reads from its rim and runes
+    gr.addColorStop(0,'rgba('+r+','+g+','+b+','+(.01+.015*pulse)*fa+')');gr.addColorStop(.72,'rgba('+r+','+g+','+b+','+(.035+.03*pulse)*fa+')');gr.addColorStop(1,'rgba('+r+','+g+','+b+','+(.1+.05*pulse)*fa+')');
     c.fillStyle=gr;c.fillRect(cx-rx,cy-ry,rx*2,ry*2);
     // drifting hex lattice of light
-    if(k===0){c.globalAlpha=.07+.05*pulse;c.fillStyle='rgb('+r+','+g+','+b+')';const hs=9,off=(frame*.25)%(hs*2);
+    if(k===0){c.globalAlpha=(.045+.035*pulse)*(sz>=100?.5:1);c.fillStyle='rgb('+r+','+g+','+b+')';const hs=9,off=(frame*.25)%(hs*2);
       for(let yy=-ry-hs;yy<ry+hs;yy+=hs*.87)for(let xx=-rx-hs*2;xx<rx+hs*2;xx+=hs*1.5){const row=Math.round((yy+ry)/(hs*.87));const px=Math.round(cx+xx+(row%2?hs*.75:0)+off-hs),py=Math.round(cy+yy);
         c.fillRect(px,py,4,1);c.fillRect(px-1,py+1,1,3);c.fillRect(px+4,py+1,1,3);c.fillRect(px,py+4,4,1)}
       c.globalAlpha=1}
     // refraction sweep
-    const sw=((frame*1.6+k*40)%(rx*4))-rx*1.5;c.globalAlpha=.22;c.fillStyle='#ffffff';
+    const sw=((frame*1.6+k*40)%(rx*4))-rx*1.5;c.globalAlpha=sz>=100?.12:.22;c.fillStyle='#ffffff';
     for(let d=0;d<6;d++)c.fillRect(Math.round(cx+sw+d-(d>2?1:0)),cy-ry,1+(d>1&&d<4?1:0),ry*2);
     c.globalAlpha=1;c.restore();
     // crisp pixel rim with a travelling highlight
