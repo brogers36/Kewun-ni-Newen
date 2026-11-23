@@ -436,3 +436,4 @@ Ciclo de tiempo por tipo de tierra (cambia cada 3-7 minutos reales). Todo ⚠:
 - Globos de la gente: "Antü!", "Kümey antü.", "Tromü...", "Fütra tromü.", "Mawün!", "Fütra mawün!", "Pire!", "Fütra pire!", "Kürüf!", "Fütra kürüf!".
 - Chillka: entrada "Antü, mawün, pire".
 - Wekufü del tiempo: con mawün aparece un mawün wekufü, con pire un pire wekufü, con kürüf una bandada de chonchon.
+- (Nov 22) Brandon: globos de la gente con verbos: **"Küme antüngey"**, **"Tromüley"**, **"Mawünküley"**, **"Alün mawi"**, **"Pireley"**, **"Kürüfküley"**.

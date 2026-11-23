@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='5e17fa0-202611221722';
+window.KEWUN_BUILD='151961a-202611221743';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -2501,7 +2501,7 @@ const WXT={coast:[['antu',4],['tromu',3],['mawun',2],['kuruf',1]],field:[['antu'
   waria:[['antu',4],['tromu',3],['mawun',3]]};
 const WXL={antu:['Antü','Sale el sol','The sun is out'],tromu:['Tromü','Se nubla','Clouds roll in'],mawun:['Mawün','Llueve','It is raining'],
   pire:['Pire','Nieva','It is snowing'],kuruf:['Kürüf','Sopla el viento','The wind is blowing']};
-const WXB={antu:['Antü!','Kümey antü.'],tromu:['Tromü...','Fütra tromü.'],mawun:['Mawün!','Fütra mawün!'],pire:['Pire!','Fütra pire!'],kuruf:['Kürüf!','Fütra kürüf!']};
+const WXB={antu:['Küme antüngey!','Küme antüngey.'],tromu:['Tromüley.','Tromüley...'],mawun:['Mawünküley!','Alün mawi!'],pire:['Pireley!','Pireley...'],kuruf:['Kürüfküley!','Kürüfküley...']};
 const WXE={mawun:'mawek',pire:'pire',kuruf:'chonchon'};   // wekufü that ride this weather
 const WXS={last:null,key:null,toast:0,txt:null};
 function wxKey(){if(!M||M.interior||M.dungeon||M.under||M.fog||!WXT[M.bg])return null;return M.bg}

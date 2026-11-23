@@ -7,7 +7,7 @@ const WXT={coast:[['antu',4],['tromu',3],['mawun',2],['kuruf',1]],field:[['antu'
   waria:[['antu',4],['tromu',3],['mawun',3]]};
 const WXL={antu:['Antü','Sale el sol','The sun is out'],tromu:['Tromü','Se nubla','Clouds roll in'],mawun:['Mawün','Llueve','It is raining'],
   pire:['Pire','Nieva','It is snowing'],kuruf:['Kürüf','Sopla el viento','The wind is blowing']};
-const WXB={antu:['Antü!','Kümey antü.'],tromu:['Tromü...','Fütra tromü.'],mawun:['Mawün!','Fütra mawün!'],pire:['Pire!','Fütra pire!'],kuruf:['Kürüf!','Fütra kürüf!']};
+const WXB={antu:['Küme antüngey!','Küme antüngey.'],tromu:['Tromüley.','Tromüley...'],mawun:['Mawünküley!','Alün mawi!'],pire:['Pireley!','Pireley...'],kuruf:['Kürüfküley!','Kürüfküley...']};
 const WXE={mawun:'mawek',pire:'pire',kuruf:'chonchon'};   // wekufü that ride this weather
 const WXS={last:null,key:null,toast:0,txt:null};
 function wxKey(){if(!M||M.interior||M.dungeon||M.under||M.fog||!WXT[M.bg])return null;return M.bg}
