@@ -1103,11 +1103,11 @@ function animPainted(c,a){const G2=PAINTBG[a].geo||{},ox=Math.round((LW-400)/2),
     for(const tx of [70,330]){const x=tx+ox,fl=(F>>2)%3;R(c,x-1,56-fl,4,2,'#ffb04a');R(c,x,54-fl,2,2,'#ffe08a')}
     const dy=Math.floor(F*1.4)%110;R(c,140+ox,dy,1,3,'#9ad0f0');R(c,262+ox,(dy+55)%110,1,3,'#9ad0f0')}
   else if(a==='metro'){if((F>>3)%37===0)R(c,0,0,LW,LH,'rgba(255,255,255,.05)');            // a tube that flickers now and then
-    const tx=((F*3)%(LW*3))-LW;if(tx>-60&&tx<LW){c.fillStyle='rgba(255,240,190,.10)';c.fillRect(ox+14,60,62,52)}          // a train's lights sweeping the tunnel
+    const tx=((F*3)%(LW*3))-LW;if(tx>-60&&tx<LW){c.fillStyle='rgba(255,240,190,.10)';c.fillRect(ox+18,34,56,46)}          // a train's lights sweeping the tunnel
     motes(10,'#c8ccd6',20,140,.06,.03,60)}
   else if(a==='feria'){motes(14,'#fff4d0',60,200,.12,-.04,50);
-    for(let k=0;k<5;k++){const cx=[40,128,212,300,384][k]+ox,sw=Math.round(Math.sin(F/26+k)*1.2);R(c,cx-30,86+sw,60,1,'rgba(0,0,0,.18)')}}
-  else if(a==='blocks'){for(let k=0;k<6;k++)if(((F>>5)+k*7)%23===0)R(c,ox+[30,74,300,344,322,52][k],[78,98,70,90,110,118][k],12,9,'rgba(255,214,130,.35)');
+    for(let k=0;k<5;k++){const cx=[40,128,212,300,384][k]+ox,sw=Math.round(Math.sin(F/26+k)*1.2);R(c,cx-30,62+sw,60,1,'rgba(0,0,0,.18)')}}
+  else if(a==='blocks'){for(let k=0;k<6;k++)if(((F>>5)+k*7)%23===0)R(c,ox+[30,74,300,344,322,52][k],[36,56,28,48,68,76][k],12,9,'rgba(255,214,130,.35)');
     motes(10,'#ffe0a0',80,200,.05,-.03,40)}
   else if(a==='waria'){for(let k=0;k<26;k++){const x=((k*37+Math.floor(F*.5))%LW),y=Math.floor((k*53+F*2.6)%LH);R(c,x,y,1,2,'rgba(190,200,220,.4)')}
     const hx2=((F*2)%(LW+80))-40;R(c,Math.round(hx2),152,4,2,'#fff4c0');R(c,Math.round(hx2)+18,152,4,2,'#fff4c0');R(c,Math.round(LW-hx2*.8),158,4,2,'#ff4030')}

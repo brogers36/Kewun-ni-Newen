@@ -497,38 +497,135 @@ def cave3(): return cave_base(BASALT, P('#140e0e', '#201616', '#2c1e1c', '#3a282
 def cave4(): return cave_base(P('#06100e', '#0c1a18', '#122624', '#1a3432', '#244442', '#305652'), P('#0c1614', '#14201e', '#1c2c28', '#263834', '#324642'), light='#9ae0d0', seed=4, water=True), {}
 def cave5(): return cave_base(CHENKE, P('#1c140c', '#2a1e12', '#3a2a1a', '#4a3822', '#5c482c'), light='#ffc070', seed=5, bones=True), {}
 
-def waria():   # Santiago: a city street at dusk, lit windows, wet asphalt
-    s = Pic(); HZ = 88
-    sky(s, HZ, CITYSKY, sun=(200, 84, 80), warm='#ff8a50')
+def waria():   # Santiago: a street at dusk. Shopfronts and flats, a wide pavement, wet asphalt where the fight is
+    s = Pic(); HZ = 84; SW = 96; CURB = 118
+    sky(s, HZ, CITYSKY, sun=(220, 70, 90), warm='#ff8a50')
     r = np.random.RandomState(14)
-    x = -10
-    while x < W + 10:   # building silhouettes, two depths
-        bw = r.randint(26, 54); bh = r.randint(20, 70)
-        m = (XX >= x) & (XX < x + bw) & (YY >= HZ - bh) & (YY < 118)
-        paint(s, m, .15 + (XX - x) / bw * .25 + fbm(XX / 2, YY / 2, x + 300) * .1, BRICK if r.rand() < .5 else ASPH)
-        for wy in range(HZ - bh + 4, 112, 7):
-            for wx in range(x + 3, x + bw - 4, 6):
-                if r.rand() < .55:
-                    c = '#f8d070' if r.rand() < .6 else '#8ab0d8'
-                    for dy in range(3):
-                        for dx in range(3): s.px(wx + dx, wy + dy, c if dy < 2 else '#a07a30')
-        x += bw + r.randint(0, 6)
-    ground(s, 116, ASPH, base=.25, pool=.5, cy=144)
-    for y in range(118, H):   # wet asphalt mirrors the windows and the sky
-        for xx in range(0, W):
-            src = 232 - y
-            if 0 <= src < 116 and BAYF[y, xx] < .25 and (s.p[src, xx] > 180).any(): s.p[y, xx] = (s.p[y, xx] * .5 + s.p[src, xx] * .5).astype(np.uint8)
-    for x in range(0, W, 30): [s.px(x + i, 150, '#d8c860') for i in range(14)]   # lane marks
-    for lx in (88, 316):   # street lamps
-        for y in range(60, 140): s.px(lx, y, '#2a2a30'); s.px(lx + 1, y, '#44444c')
-        for i in range(8): s.px(lx + 1 + i, 60, '#44444c')
+    x = -10                                               # the far city: hazy blocks with a few lights
+    while x < W + 10:
+        bw = r.randint(18, 40); bh = r.randint(14, 46)
+        m = (XX >= x) & (XX < x + bw) & (YY >= HZ - bh) & (YY < SW)
+        paint(s, m, .32 + (XX - x) / bw * .1, P('#2a1e30', '#33243a', '#3c2a44', '#46304c'))
+        for wy in range(HZ - bh + 3, SW - 4, 5):
+            for wx in range(x + 2, x + bw - 2, 4):
+                if r.rand() < .18: s.px(wx, wy, '#c8a070')
+        x += bw + r.randint(0, 4)
+    for k, (y0, y1) in enumerate([(20, 34), (26, 44), (30, 40)]):    # cables strung across the street, sagging
+        for x in range(W):
+            t = x / W; y = int(y0 + (y1 - y0) * t + math.sin(math.pi * ((x % 200) / 200)) * 8)
+            s.px(x, y, '#120c14')
+    FAC = [P('#3a2a2a', '#4e3834', '#644a42', '#7c5e52', '#947464', '#ac8a78'),
+           P('#2e3040', '#3c3e52', '#4c5066', '#5e647a', '#727a90', '#8890a6'),
+           P('#3a3428', '#4c4434', '#605642', '#766a52', '#8c8064', '#a49678'),
+           P('#2a3434', '#364444', '#465656', '#586a68', '#6c7e7a', '#84948e')]
+    AWN = [('#b83a30', '#efe6d4'), ('#2e5a9a', '#e6ecf2'), ('#2e7a4a', '#e8f0e4'), ('#c8862a', '#f6ead0')]
+    x = -6; bi = 0
+    while x < W:                                          # the near buildings along the street
+        bw = [96, 74, 104, 82, 90][bi % 5]; top = [18, 32, 10, 26, 22][bi % 5]; ramp = FAC[bi % 4]
+        m = (XX >= x) & (XX < x + bw) & (YY >= top) & (YY < SW)
+        paint(s, m, .28 + (XX - x) / bw * .28 + fbm(XX / 2.5, YY / 2.5, 20 + bi) * .1, ramp)
+        for xx in range(max(0, x), min(W, x + bw)):       # a cornice along the roofline, and its shadow
+            s.px(xx, top, ramp[5]); s.px(xx, top + 1, ramp[4]); s.px(xx, top + 2, ramp[0]); s.px(xx, top + 3, ramp[1])
+        if bi % 2 == 0:                                   # a water tank and an aerial on the roof
+            tx = x + bw // 3
+            for yy in range(top - 9, top):
+                for xx in range(tx, tx + 10): s.px(xx, yy, '#3a3a44' if xx < tx + 7 else '#24242c')
+            for yy in range(top - 18, top - 9): s.px(tx + 14, yy, '#1a1a20')
+            for xx in range(tx + 10, tx + 19): s.px(xx, top - 15, '#1a1a20')
+        for fy in range(top + 6, 72, 14):                 # floors of flats: framed windows, a ledge under each row
+            for wx in range(x + 6, x + bw - 10, 15):
+                kind = (wx * 7 + fy * 3 + bi) % 7
+                glass = '#f4cc78' if kind < 2 else '#8aa8d0' if kind == 2 else '#1a1c26'
+                for dy in range(9):
+                    for dx in range(8):
+                        col = glass if 0 < dx < 7 and 0 < dy < 8 else ramp[1]
+                        if kind == 3 and 0 < dy < 8 and 0 < dx < 4: col = '#a0504a'    # a red curtain half drawn
+                        if kind < 2 and dy > 4 and 0 < dx < 7: col = '#d8a858'
+                        s.px(wx + dx, fy + dy, col)
+                if kind < 3: light_pool(s, wx + 4, fy + 4, 9, 7, '#ffd890' if kind < 2 else '#9ac0f0', k=.12, mask=m)
+                for dx in range(-1, 9): s.px(wx + dx, fy + 9, ramp[5]); s.px(wx + dx, fy + 10, ramp[0])
+        sy = 76                                           # the shop at street level
+        c1, c2 = AWN[bi % 4]
+        for yy in range(sy, SW):
+            for xx in range(max(0, x + 4), min(W, x + bw - 4)):
+                win = sy + 7 <= yy < SW - 2 and (xx - x) % 40 < 30
+                s.px(xx, yy, ('#f6dc9a' if yy < sy + 14 else '#d8b070') if win and bi % 3 != 1 else ('#4a4a52' if (yy % 2) else '#3a3a42') if bi % 3 == 1 else ramp[1])
+        for xx in range(max(0, x + 2), min(W, x + bw - 2)):   # a striped awning with its shadow
+            for yy in range(sy - 6, sy + 1):
+                s.px(xx, yy, c1 if ((xx - x) // 5) % 2 else c2)
+                if yy == sy - 6: s.px(xx, yy, '#1a1418')
+            s.px(xx, sy + 1, '#1a1418'); s.px(xx, sy + 2, '#2a2228')
+        for xx in range(x + 10, x + 40):                  # a sign board above the awning
+            for yy in range(sy - 14, sy - 8): s.px(xx, yy, ['#e8d8b0', '#c83a30', '#2e5a9a', '#e8c030'][bi % 4] if yy > sy - 14 else '#1a1418')
+        for k in range(5): s.px(x + 13 + k * 5, sy - 11, '#1a1418'); s.px(x + 14 + k * 5, sy - 11, '#1a1418')
+        if bi % 3 != 1: light_pool(s, x + bw // 2, SW + 4, bw * .5, 10, '#ffd890', k=.25)
+        x += bw; bi += 1
+    for x in range(150, 198):                             # a mural of stepped ñimin painted over a blank side wall
+        for y in range(38, 72):
+            if x in (150, 197) or y in (38, 71): s.px(x, y, '#1a1418'); continue
+            u = (x - 151) % 16; v = (y - 39) % 12; stp = abs(u - 8) <= (v if v < 6 else 12 - v)
+            band = ((x - 151) // 16 + (y - 39) // 12) % 3
+            col = hx(['#a02a28', '#1c1414', '#d8d0bc'][band] if stp else ['#d8d0bc', '#a02a28', '#1c1414'][band])
+            wear = .82 + .18 * fbm(np.array([[x / 3]]), np.array([[y / 3]]), 5)[0, 0]
+            s.px(x, y, tuple(int(c_ * wear) for c_ in col))
+        s.px(x, 72, '#2a2224')
+    contact(s, SW, k=.5, h=4)
+    PAVE = P('#3a3836', '#4a4744', '#5a5652', '#6c6762', '#7e7872', '#928b84')
+    paint(s, (YY >= SW) & (YY < CURB), .4 + (YY - SW) / 22 * .12 + fbm(XX / 3, YY / 1.5, 61) * .12, PAVE)
+    for y in (SW + 5, SW + 11, CURB - 1):                 # paving slabs in perspective
+        for x in range(W): s.p[y, x] = (s.p[y, x] * .8).astype(np.uint8)
+    for x0 in range(-200, W + 200, 20):
+        for y in range(SW, CURB):
+            x = int(W / 2 + (x0 - W / 2) * (1 + (y - SW) / 30))
+            if 0 <= x < W: s.p[y, x] = (s.p[y, x] * .84).astype(np.uint8)
+    for x in range(W):                                    # the curb: a lit top edge and its face
+        s.px(x, CURB, '#a8a49c'); s.px(x, CURB + 1, '#6a6660'); s.px(x, CURB + 2, '#3a3834'); s.px(x, CURB + 3, '#1a1a1e')
+    ground(s, CURB + 4, ASPH, base=.28, pool=.55, cy=146, spread=30, tex=.12)
+    for y in range(CURB + 4, H):                          # wet asphalt mirrors the lit windows and the sky
+        src = 2 * CURB - y
+        if 0 <= src < SW:
+            k_ = .32 * (1 - (y - CURB) / (H - CURB)) ** 1.5
+            br_ = (s.p[src].mean(axis=1) > 150)[:, None]
+            s.p[y] = np.where(br_, (s.p[y] * (1 - k_ * .7) + s.p[src] * k_ * .7).astype(np.uint8), s.p[y])
+    yy, k = CURB + 30, 0                                  # the lane line: dashes growing toward the viewer
+    for x0 in range(-40, W + 40, 46):
+        for y in range(CURB + 26, CURB + 32):
+            x = int(W / 2 + (x0 - W / 2) * (1 + (y - CURB) / 50))
+            for i2 in range(18 + (y - CURB) // 4):
+                if 0 <= x + i2 < W: s.p[y, x + i2] = (s.p[y, x + i2] * .45 + np.array(hx('#d8c860')) * .55).astype(np.uint8)
+    for lx in (64, 322):                                  # street lamps on the pavement
+        for y in range(26, SW + 12): s.px(lx, y, '#1e1e24'); s.px(lx + 1, y, '#3a3a44')
+        for i2 in range(10): s.px(lx + 1 + i2, 26 - i2 // 4, '#3a3a44')
         for dy in range(3):
-            for dx in range(5): s.px(lx + 6 + dx, 61 + dy, '#fff0b0')
-        d = np.hypot(XX - lx - 8, (YY - 120) * .6); lvl = np.floor(np.clip(1 - d / 50, 0, 1) * 4 + BAYF)
-        m = (lvl > 0) & (YY > 62); k = (lvl[m] * .08)[:, None]; s.p[m] = (s.p[m] * (1 - k) + hx('#ffd27a') * k).astype(np.uint8)
-    for cx, cy, sd in [(60, 210, 1), (350, 212, 2)]:   # curb and a bin
-        bm = (abs(XX - cx) < 10) & (YY > cy - 20) & (YY < cy + 2); paint(s, bm, .3 + (XX - cx) / 20 + .2, P('#1a3020', '#24442c', '#305838', '#3e6e46'))
-    return s, {'hz': HZ}
+            for dx in range(6): s.px(lx + 8 + dx, 24 + dy, '#fff0b0' if dy else '#2a2a30')
+        m_ = (YY > 27) & (YY < SW + 30) & (abs(XX - lx - 11) < (YY - 27) * .5)
+        lvl = np.floor(np.clip(1 - abs(XX - lx - 11) / np.maximum(1, (YY - 27) * .5), 0, 1) * 3 + BAYF) / 3
+        kk = (lvl * .1)[m_][:, None]; s.p[m_] = np.clip(s.p[m_] * (1 - kk) + hx('#ffe0a0') * kk, 0, 255).astype(np.uint8)
+        light_pool(s, lx + 11, SW + 14, 46, 14, '#ffd27a', k=.3)
+        light_pool(s, lx + 4, SW + 13, 6, 2, '#000000', k=.5)
+    broadleaf(s, 232, SW + 6, 40, 21, LEAF, P('#1a120c', '#2a1e14', '#3e2c1e', '#523a28'))   # a street tree in its square of earth
+    for x in range(222, 244):
+        for y in range(SW + 4, SW + 8): s.px(x, y, '#2a2018' if 223 < x < 243 and y < SW + 7 else '#5a5650')
+    light_pool(s, 232, SW + 7, 18, 3, '#000000', k=.45)
+    for (bx, by) in [(352, 104)]:                         # a green bin on the pavement
+        for y in range(by - 14, by):
+            for x in range(bx - 6, bx + 6): s.px(x, y, ['#1a3a24', '#24502e', '#30663a', '#3e7a46'][min(3, max(0, (bx + 5 - x) // 3))] if y > by - 13 else '#122a1a')
+        light_pool(s, bx, by + 1, 9, 2, '#000000', k=.5)
+    vignette(s, .4)
+    finish_bg(s, cool='#241c3a', warm='#ffc890', k=.14, grain=.05, seed=14)
+    return s, {'hz': HZ, 'colors': 200}
+
+def lift_scene(s, y_base, dy):
+    """move everything painted above y_base up by dy rows, so the ground the fighters stand on starts higher
+    and they no longer seem to stand on the foot of a wall"""
+    s.p[0:y_base - dy] = s.p[dy:y_base].copy(); s.a[0:y_base - dy] = s.a[dy:y_base].copy()
+
+def contact(s, y, k=.45, h=5, mask=None):
+    """the darkening where a wall or stall meets the ground (ambient occlusion along a base line)"""
+    for i in range(h):
+        row = s.p[y + i].astype(float); kk = k * (1 - i / h) ** 1.5
+        if mask is not None: kk = kk * mask
+        s.p[y + i] = np.clip(row * (1 - (kk if np.isscalar(kk) else kk[:, None])), 0, 255).astype(np.uint8)
 
 def light_pool(s, cx, cy, rx, ry, col, k=.22, mask=None):
     d = np.hypot((XX - cx) / rx, (YY - cy) / ry); lvl = np.floor(np.clip(1 - d, 0, 1) * 5 + BAYF) / 5
@@ -547,125 +644,138 @@ def finish_bg(s, cool='#2a3a5a', warm='#ffd8a0', k=.16, grain=.05, seed=1, bloom
     halo &= ~br; p[halo] = p[halo] * .7 + 255 * .3 * np.array([1, .96, .86])
     s.p = np.clip(p, 0, 255).astype(np.uint8)
 
-def metro():   # Santiago: a Metro platform, tiled wall, a tunnel mouth, the track pit, a polished floor
-    s = Pic(); HZ = 112
+def metro():   # Santiago: a Metro platform. The far wall across the tracks, the track pit, and the near platform the fighters stand on
+    s = Pic(); HZ = 80                                   # foot of the far wall
     TILE = P('#6c6a62', '#7e7c72', '#918e84', '#a5a296', '#b8b5a8', '#cac7ba', '#dcd9cc')
     r = np.random.RandomState(31)
     jit = np.zeros((H, W))
-    for ty in range(0, HZ, 8):                       # each tile its own faint tone
-        for tx in range(-4, W, 12):
-            ox = 6 if (ty // 8) % 2 else 0
-            jit[ty:ty + 8, max(0, tx + ox):max(0, tx + ox + 12)] = r.rand() * .08
+    for ty in range(0, HZ, 7):                       # each tile its own faint tone
+        for tx in range(-4, W, 11):
+            ox = 5 if (ty // 7) % 2 else 0
+            jit[ty:ty + 7, max(0, tx + ox):max(0, tx + ox + 11)] = r.rand() * .08
     paint(s, YY < HZ, .30 + YY / HZ * .22 + jit + fbm(XX / 5, YY / 5, 77) * .06, TILE)
-    for y in range(0, HZ, 8):
+    for y in range(0, HZ, 7):
         for x in range(W):
             if BAYF[y, x] < .9: s.p[y, x] = (s.p[y, x] * .78).astype(np.uint8)
     for y in range(HZ):
-        ox = 6 if (y // 8) % 2 else 0
-        for x in range(ox, W, 12): s.p[y, x] = (s.p[y, x] * .82).astype(np.uint8)
-    for ty in range(0, HZ, 8):                       # each tile bevelled: a lit top-left edge, a dark lower-right
-        ox = 6 if (ty // 8) % 2 else 0
-        for tx in range(ox - 12, W, 12):
-            for x in range(max(0, tx + 1), min(W, tx + 11)): s.p[ty + 1, x] = np.minimum(255, s.p[ty + 1, x].astype(int) + 14)
-            for y in range(ty + 1, min(HZ, ty + 7)):
+        ox = 5 if (y // 7) % 2 else 0
+        for x in range(ox, W, 11): s.p[y, x] = (s.p[y, x] * .82).astype(np.uint8)
+    for ty in range(0, HZ, 7):                       # each tile bevelled: a lit top-left edge, a dark lower-right
+        ox = 5 if (ty // 7) % 2 else 0
+        for tx in range(ox - 11, W, 11):
+            for x in range(max(0, tx + 1), min(W, tx + 10)): s.p[ty + 1, x] = np.minimum(255, s.p[ty + 1, x].astype(int) + 14)
+            for y in range(ty + 1, min(HZ, ty + 6)):
                 if 0 <= tx + 1 < W: s.p[y, tx + 1] = np.minimum(255, s.p[y, tx + 1].astype(int) + 10)
-                if 0 <= tx + 11 < W: s.p[y, tx + 11] = (s.p[y, tx + 11] * .9).astype(np.uint8)
-    grime = (YY > 84) & (YY < HZ)
-    k_ = ((YY - 84) / 28.0) ** 1.6 * .45 * (1 + fbm(XX / 6, YY / 2, 55) - .5)
+                if 0 <= tx + 10 < W: s.p[y, tx + 10] = (s.p[y, tx + 10] * .9).astype(np.uint8)
+    grime = (YY > 58) & (YY < HZ)
+    k_ = ((YY - 58) / 22.0) ** 1.6 * .5 * (1 + fbm(XX / 6, YY / 2, 55) - .5)
     s.p[grime] = (s.p[grime] * (1 - k_[grime, None]) + hx('#3a3228') * k_[grime, None]).astype(np.uint8)
-    paint(s, YY < 14, .08 + YY / 14 * .2, P('#16171b', '#202228', '#2c2e36', '#3a3c46'))       # ceiling beam
+    for x in range(4, W, 37):                        # streaks where water has run down the tiles
+        for y in range(48, HZ):
+            if (x * 3 + y) % 5 and s.p[y, x].mean() > 60: s.p[y, x] = (s.p[y, x] * .9).astype(np.uint8)
+    paint(s, YY < 11, .08 + YY / 11 * .2, P('#16171b', '#202228', '#2c2e36', '#3a3c46'))       # ceiling beam
     for x in range(W):                               # a conduit and cable tray under the beam
-        s.px(x, 10, '#4a4e56'); s.px(x, 11, '#2a2c32'); s.px(x, 12, '#16171b') if x % 40 else None
+        s.px(x, 8, '#4a4e56'); s.px(x, 9, '#2a2c32'); s.px(x, 10, '#16171b') if x % 40 else None
         if x % 40 == 0:
-            for y in range(8, 14): s.px(x, y, '#6a6e76')
-    for y in range(58, 68):                          # the line colour, a red band
-        for x in range(W): s.p[y, x] = hx('#b83a34') if y < 66 else hx('#7a2420')
-    for x in range(W): s.p[58, x] = hx('#e06a5c')
+            for y in range(6, 11): s.px(x, y, '#6a6e76')
+    for y in range(47, 54):                          # the line colour, a red band
+        for x in range(W): s.p[y, x] = hx('#b83a34') if y < 52 else hx('#7a2420')
+    for x in range(W): s.p[47, x] = hx('#e06a5c')
     for (x0, x1, poster) in [(132, 268, None), (296, 344, 'cordillera'), (92, 124, 'trariwe')]:
         if poster is None:                               # the station-name panel, blank until the player names it
-            for y in range(24, 50):
-                for x in range(x0, x1): s.px(x, y, '#e6e8ec' if not (26 <= y < 48 and x0 + 2 <= x < x1 - 2) else ('#1e3c78' if y < 44 else '#16305e'))
-            for x in range(x0 + 2, x1 - 2): s.px(x, 26, '#3a5a9a')
+            for y in range(18, 40):
+                for x in range(x0, x1): s.px(x, y, '#e6e8ec' if not (20 <= y < 38 and x0 + 2 <= x < x1 - 2) else ('#1e3c78' if y < 34 else '#16305e'))
+            for x in range(x0 + 2, x1 - 2): s.px(x, 20, '#3a5a9a')
+            for x in range(x0 + 1, x1 + 1): s.px(x, 40, '#4a4a44')            # its shadow on the tiles
         elif poster == 'trariwe':                        # a poster of a woven trariwe pattern
-            for y in range(22, 54):
+            for y in range(16, 44):
                 for x in range(x0, x1):
-                    edge = y in (22, 53) or x in (x0, x1 - 1)
-                    band = ((y - 22) // 6) % 3; step = abs(((x - x0) % 10) - 5) < ((y - 22) % 6)
+                    edge = y in (16, 43) or x in (x0, x1 - 1)
+                    band = ((y - 16) // 6) % 3; step = abs(((x - x0) % 10) - 5) < ((y - 16) % 6)
                     col = '#2a2a30' if edge else ['#b02a28', '#1c1414', '#e8e0cc'][band] if step else ['#e8e0cc', '#b02a28', '#1c1414'][band]
                     s.px(x, y, col)
         else:                                            # a framed poster: the cordillera at dawn
-            for y in range(20, 54):
+            for y in range(14, 44):
                 for x in range(x0, x1):
-                    edge = y in (20, 53) or x in (x0, x1 - 1)
-                    t = (y - 20) / 34; col = '#2a2a30' if edge else ('#f0b070' if y < 30 else '#d07a5a' if y < 38 else '#5a4a6a')
-                    if not edge and y >= 32 and abs(x - (x0 + 20)) < (y - 30) * 1.4: col = '#3a3450' if y > 36 else '#f4f0f0'
+                    edge = y in (14, 43) or x in (x0, x1 - 1)
+                    col = '#2a2a30' if edge else ('#f0b070' if y < 23 else '#d07a5a' if y < 30 else '#5a4a6a')
+                    if not edge and y >= 25 and abs(x - (x0 + 20)) < (y - 23) * 1.4: col = '#3a3450' if y > 29 else '#f4f0f0'
                     s.px(x, y, col)
-    m = (((XX - 46) / 32.0) ** 2 + ((YY - 112) / 74.0) ** 2 < 1) & (YY < 112)   # tunnel mouth: depth in rings
-    d = np.sqrt(((XX - 46) / 32.0) ** 2 + ((YY - 112) / 74.0) ** 2)
+    m = (((XX - 46) / 30.0) ** 2 + ((YY - HZ) / 60.0) ** 2 < 1) & (YY < HZ + 18)   # tunnel mouth: depth in rings
+    d = np.sqrt(((XX - 46) / 30.0) ** 2 + ((YY - HZ) / 60.0) ** 2)
     paint(s, m, .02 + d * .32, P('#040508', '#090b10', '#10131a', '#181c24', '#22262f', '#2e333d'))
     for x in range(98, 116):                             # a green exit sign glowing on the wall
-        for y in range(70, 77): s.px(x, y, '#1e8a4a' if 71 <= y <= 75 and 99 <= x <= 114 else '#e8ece8')
-    for x in range(101, 112, 2): s.px(x, 73, '#d8f8e0')
-    light_pool(s, 107, 73, 18, 9, '#60e090', k=.18, mask=YY < HZ)
-    for (cx_, cy_) in [(280, 84)]:                       # a station clock
-        for y in range(cy_ - 8, cy_ + 9):
-            for x in range(cx_ - 8, cx_ + 9):
+        for y in range(58, 65): s.px(x, y, '#1e8a4a' if 59 <= y <= 63 and 99 <= x <= 114 else '#e8ece8')
+    for x in range(101, 112, 2): s.px(x, 61, '#d8f8e0')
+    light_pool(s, 107, 61, 18, 9, '#60e090', k=.18, mask=YY < HZ)
+    for (cx_, cy_) in [(280, 64)]:                       # a station clock
+        for y in range(cy_ - 7, cy_ + 8):
+            for x in range(cx_ - 7, cx_ + 8):
                 d_ = math.hypot(x - cx_, y - cy_)
-                if d_ <= 8: s.px(x, y, '#2a2c32' if d_ > 7 else '#f4f4ee')
-        for t in range(6): s.px(cx_, cy_ - t, '#1a1a1e'); s.px(cx_ + t // 2, cy_ + t // 3, '#1a1a1e')
-        for a_ in range(12): s.px(cx_ + int(round(math.cos(a_ * math.pi / 6) * 6)), cy_ + int(round(math.sin(a_ * math.pi / 6) * 6)), '#5a5a60')
-    hz_m = m & (YY > 70)
-    s.p[hz_m] = np.clip(s.p[hz_m] * .85 + np.array([20, 24, 30]) * .15 * ((YY[hz_m] - 70) / 42.0)[:, None], 0, 255).astype(np.uint8)
-    for ry in (108, 111):                                # rails running into the dark
-        for x in range(16, 78):
-            if m[ry, x]: s.px(x, ry, '#5a5e66' if ry == 108 else '#3a3e46')
-    for (lx, ly) in [(38, 98), (54, 98)]:
+                if d_ <= 7: s.px(x, y, '#2a2c32' if d_ > 6 else '#f4f4ee')
+        for t in range(5): s.px(cx_, cy_ - t, '#1a1a1e'); s.px(cx_ + t // 2, cy_ + t // 3, '#1a1a1e')
+        for a_ in range(12): s.px(cx_ + int(round(math.cos(a_ * math.pi / 6) * 5)), cy_ + int(round(math.sin(a_ * math.pi / 6) * 5)), '#5a5a60')
+    for (lx, ly) in [(38, 70), (54, 70)]:                # a train's lights far down the tunnel
         for dy in range(3):
             for dx in range(3): s.px(lx + dx, ly + dy, '#fffbe0' if dx == 1 or dy == 1 else '#c8a860')
         light_pool(s, lx + 1, ly + 1, 14, 8, '#ffe8a0', k=.35, mask=m)
     for k, x in enumerate(range(70, W, 64)):              # fluorescent tubes and the light they throw on the tiles
         for i2 in range(34):
-            s.px(x + i2, 15, '#ffffff'); s.px(x + i2, 16, '#d8ecf4'); s.px(x + i2, 14, '#5a5e68')
-        light_pool(s, x + 17, 20, 48, 46, '#f4fbff', k=.20, mask=(YY < HZ) & (YY > 16))
-    pit = (YY >= HZ) & (YY < 138)                         # ballast, sleepers, rails
-    paint(s, pit, .08 + (YY - HZ) / 26 * .18 + fbm(XX / 1.6, YY / 1.4, 90) * .22, P('#0c0c0e', '#16161a', '#202026', '#2c2c32', '#3a3a40', '#48484e'))
-    for x in range(3, W, 13):
-        for y in range(118, 135):
-            if y not in (120, 121, 131, 132): s.px(x, y, '#2e2418'); s.px(x + 1, y, '#3e3020'); s.px(x + 2, y, '#241c12')
-    for ry in (119, 130):
-        for x in range(W): s.px(x, ry - 1, '#d2d6dc'); s.px(x, ry, '#8a9098'); s.px(x, ry + 1, '#3e4248')
-    for x in range(W):                                    # the platform lip, tactile strip and yellow line
-        s.px(x, 138, '#1a1a1e'); s.px(x, 139, '#c2c4c8'); s.px(x, 140, '#9a9ca2')
-        for y in (141, 142, 143): s.px(x, y, '#e8bc1c' if y < 143 else '#a68410')
-        if x % 3 == 0: s.px(x, 145, '#d8d8dc')
+            s.px(x + i2, 12, '#ffffff'); s.px(x + i2, 13, '#d8ecf4'); s.px(x + i2, 11, '#5a5e68')
+        light_pool(s, x + 17, 18, 48, 38, '#f4fbff', k=.20, mask=(YY < HZ) & (YY > 13))
+    PIT = HZ + 18                                         # the track pit: ballast, sleepers, rails
+    pit = (YY >= HZ) & (YY < PIT) & ~m
+    paint(s, pit, .06 + (YY - HZ) / 18 * .2 + fbm(XX / 1.6, YY / 1.4, 90) * .22, P('#0c0c0e', '#16161a', '#202026', '#2c2c32', '#3a3a40', '#48484e'))
+    for x in range(3, W, 12):
+        for y in range(HZ + 4, PIT - 1):
+            if not m[y, x] and y not in (HZ + 6, HZ + 13): s.px(x, y, '#2e2418'); s.px(x + 1, y, '#3e3020'); s.px(x + 2, y, '#241c12')
+    for ry in (HZ + 6, HZ + 13):
+        for x in range(W):
+            if not m[ry, x]: s.px(x, ry - 1, '#d2d6dc'); s.px(x, ry, '#8a9098'); s.px(x, ry + 1, '#3e4248')
+    for x in range(W):                                    # the far side of the pit: a dark wall under the platform lip
+        for y in range(HZ, HZ + 3):
+            if not m[y, x]: s.p[y, x] = (s.p[y, x] * .5).astype(np.uint8)
+    LIP = PIT                                             # the near platform: concrete lip, tactile strip and yellow line
+    for x in range(W):
+        s.px(x, LIP, '#0e0e12'); s.px(x, LIP + 1, '#c2c4c8'); s.px(x, LIP + 2, '#9a9ca2')
+        for y in (LIP + 3, LIP + 4, LIP + 5): s.px(x, y, '#e8bc1c' if y < LIP + 5 else '#a68410')
+        for y in range(LIP + 6, LIP + 10): s.px(x, y, '#8c8a80' if (x + y) % 3 else '#a8a698')
     FLOOR = P('#2c2c32', '#38383f', '#45454d', '#53535c', '#63636c', '#75757e', '#8a8a92')
-    ground(s, 146, FLOOR, base=.32, pool=.55, cy=178, tex=.08)
-    for y in range(146, H, 14):                           # granite tile joints, in perspective
-        for x in range(W): s.p[y, x] = (s.p[y, x] * .8).astype(np.uint8)
-    for x0 in range(-200, W + 200, 40):
-        for y in range(146, H):
-            x = int(W / 2 + (x0 - W / 2) * (1 + (y - 146) / 60))
-            if 0 <= x < W: s.p[y, x] = (s.p[y, x] * .82).astype(np.uint8)
+    F0 = LIP + 10
+    ground(s, F0, FLOOR, base=.32, pool=.6, cy=140, spread=34, tex=.08)
+    yy, k = F0 + 4, 0                                     # granite tile joints, in perspective
+    while yy < H:
+        for x in range(W): s.p[int(yy), x] = (s.p[int(yy), x] * .8).astype(np.uint8)
+        yy += 4 + k * 3; k += 1
+    for x0 in range(-300, W + 300, 34):
+        for y in range(F0, H):
+            x = int(W / 2 + (x0 - W / 2) * (1 + (y - F0) / 40))
+            if 0 <= x < W: s.p[y, x] = (s.p[y, x] * .84).astype(np.uint8)
+    for y in range(F0, H):                                # a wet sheen: the wall and the line repeated faintly upside down
+        src = 2 * LIP - y - 18
+        if 0 <= src < HZ:
+            row = (s.p[src].astype(int) + np.roll(s.p[src], 1, 0) + np.roll(s.p[src], -1, 0)) // 3; k_ = .08 * (1 - (y - F0) / (H - F0))
+            s.p[y] = (s.p[y] * (1 - k_) + row * k_).astype(np.uint8)
     for k, x in enumerate(range(70, W, 64)):              # the tubes reflected softly in the polished floor
-        light_pool(s, x + 17, 160, 26, 10, '#c8ccd6', k=.22, mask=YY > 146)
-    for cx in (338,):                                     # a round pillar framing the right side
-        for y in range(0, 200):
-            for x in range(cx, cx + 22):
-                t = (x - cx) / 21; v = .15 + .75 * math.sin(math.pi * (t * .8 + .1)) ** 2 * (1 - t * .5)
+        light_pool(s, x + 17, F0 + 12, 26, 6, '#c8ccd6', k=.22, mask=YY > F0)
+    for (cx, wdt) in ((338, 22),):                        # a round pillar standing on the near platform
+        for y in range(0, 206):
+            for x in range(cx, cx + wdt):
+                t = (x - cx) / (wdt - 1); v = .15 + .75 * math.sin(math.pi * (t * .8 + .1)) ** 2 * (1 - t * .5)
                 s.px(x, y, s.ramp_at(x, y, P('#2c2e34', '#3e4048', '#52545c', '#686a72', '#80828a', '#9a9ca2'), v))
-        light_pool(s, cx + 11, 206, 26, 6, '#000000', k=.5)
-    for (bx, by) in [(40, 196)]:                          # a steel bench in the foreground
+        light_pool(s, cx + 11, 207, 28, 6, '#000000', k=.55)
+    for (bx, by) in [(40, 200)]:                          # a steel bench in the foreground
         for x in range(bx - 30, bx + 30):
             for y in range(by - 4, by):
                 s.px(x, y, '#9aa0a8' if y == by - 4 else '#6a7078' if y < by - 1 else '#3a3e46')
         for lx in (bx - 24, bx + 22):
             for y in range(by, by + 14): s.px(lx, y, '#2a2c32'); s.px(lx + 1, y, '#4a4e56')
-        for x in range(bx - 28, bx + 28): s.px(x, by + 14, '#16161a')
-    for y in range(146, H):                               # a wet sheen: the wall and the line repeated faintly upside down
-        src = 2 * 140 - y
-        if 0 <= src < HZ:
-            row = s.p[src]; k_ = .16 * (1 - (y - 146) / 78)
-            s.p[y] = (s.p[y] * (1 - k_) + row * k_).astype(np.uint8)
+        light_pool(s, bx, by + 15, 34, 4, '#000000', k=.5)
+    r2 = np.random.RandomState(9)
+    for _ in range(40):                                   # a few dropped tickets and gum spots on the granite
+        x, y = r2.randint(0, W), r2.randint(F0 + 6, H - 3)
+        if r2.rand() < .5: s.px(x, y, '#2a2a2e'); s.px(x + 1, y, '#2a2a2e')
+        else: s.px(x, y, '#d8d4c4'); s.px(x + 1, y, '#b8b4a4')
     vignette(s, .45)
     finish_bg(s, cool='#24344c', warm='#fff0d0', k=.14, grain=.045, seed=11)
     return s, {'hz': HZ, 'colors': 200}
@@ -734,9 +844,25 @@ def feria():   # Santiago: the street market under striped tarps, late afternoon
                     s.px(int(fx_), int(fy_) - 1 + 1, ch); s.px(int(fx_) + 2, int(fy_) + 1, dk)
             for y in range(102, 107):                     # a price card
                 for x in range(bx + 2, bx + 9): s.px(x, y, '#f4f0e4' if y > 102 else '#2a2a2a')
-    ground(s, 132, P('#3a3634', '#4a4542', '#5a5450', '#6c6560', '#7e7670', '#928a82'), base=.36, pool=.55, cy=170, tex=.18)
-    for k in range(30):                                 # leaves and dropped fruit on the asphalt
-        x, y = r.randint(0, W), r.randint(136, H - 4); col = ['#3a7a2a', '#c23a24', '#d8b030', '#7a5a3a'][k % 4]
+    lift_scene(s, 132, 24)                               # the market sits further back; the street in front is where the fight is
+    G0 = 108
+    ground(s, G0, P('#34302e', '#423d3a', '#524c48', '#645d58', '#766e68', '#8a827a', '#9e958c'), base=.34, pool=.55, cy=150, spread=40, tex=.16)
+    contact(s, G0, k=.55, h=7)
+    for k in range(9):                                   # the asphalt patched and cracked, seams in perspective
+        y = int(G0 + 4 + k * k * 1.6 + k * 3)
+        if y < H:
+            for x in range(W):
+                if (x * 7 + k * 13) % 23 < 15: s.p[y, x] = (s.p[y, x] * .86).astype(np.uint8)
+    for x0 in range(-300, W + 300, 70):
+        for y in range(G0, H):
+            x = int(W / 2 + (x0 - W / 2) * (1 + (y - G0) / 26))
+            if 0 <= x < W and (y // 3) % 4: s.p[y, x] = (s.p[y, x] * .9).astype(np.uint8)
+    for k in range(5):                                   # crushed boxes and a hose near the stalls
+        bx = 30 + k * 84
+        for y in range(G0 + 2, G0 + 7):
+            for x in range(bx, bx + 12): s.px(x, y, '#8a6a40' if y == G0 + 2 else '#6a4e2c' if y < G0 + 6 else '#2a2018')
+    for k in range(40):                                 # leaves and dropped fruit on the asphalt
+        x, y = r.randint(0, W), r.randint(G0 + 4, H - 4); col = ['#3a7a2a', '#c23a24', '#d8b030', '#7a5a3a'][k % 4]
         s.px(x, y, col); s.px(x + 1, y, col)
     for (cx, cy) in [(26, 200), (372, 196)]:              # crates framing the front
         for y in range(cy - 22, cy + 2):
@@ -745,10 +871,10 @@ def feria():   # Santiago: the street market under striped tarps, late afternoon
         for x in range(cx - 16, cx + 16):
             for y in range(cy - 26, cy - 22):
                 if 0 <= x < W: s.px(x, y, ['#c22a1e', '#e8c020', '#3a7a2a'][(x // 3) % 3] if y > cy - 26 else '#2a1a10')
-    light_pool(s, 210, 150, 170, 40, '#ffe8b8', k=.12)
-    for (sx_, w_) in [(70, 26), (240, 34)]:              # dusty shafts of sun slanting between the tarps
-        m_ = (YY > 88) & (YY < 200) & (abs(XX - sx_ - (YY - 88) * .45) < w_ / 2)
-        lvl = np.floor((1 - abs(XX - sx_ - (YY - 88) * .45) / (w_ / 2)) * 3 + BAYF) / 3
+    light_pool(s, 210, 140, 170, 40, '#ffe8b8', k=.12)
+    for (sx_, w_) in [(60, 26), (230, 34)]:              # dusty shafts of sun slanting between the tarps
+        m_ = (YY > 64) & (YY < 200) & (abs(XX - sx_ - (YY - 64) * .45) < w_ / 2)
+        lvl = np.floor((1 - abs(XX - sx_ - (YY - 64) * .45) / (w_ / 2)) * 3 + BAYF) / 3
         kk = (np.clip(lvl, 0, 1) * .10)[m_][:, None]; s.p[m_] = np.clip(s.p[m_] * (1 - kk) + hx('#fff2c8') * kk, 0, 255).astype(np.uint8)
     vignette(s, .35)
     finish_bg(s, cool='#2a3450', warm='#ffe2a8', k=.14, grain=.05, seed=12)
@@ -816,24 +942,58 @@ def blocks():   # Santiago: the apartment blocks at dusk, the cordillera behind,
                 col = ['#d83a3a', '#3a7ad8', '#f0f0e8', '#e8c030', '#3aa05a'][(x // 14) % 5]
                 for dy in range(1, 9 + (x % 3) * 2):
                     for dx in range(6): s.px(x + dx, y + dy, col if dx < 5 else '#2a2028')
-    ground(s, 150, P('#2a2418', '#3a3020', '#4a3e2a', '#5c4e36', '#6e5e44', '#827054'), base=.3, pool=.5, cy=180, tex=.25)
-    for (px_, py_, pw, ph) in [(150, 176, 40, 6), (250, 196, 54, 7), (60, 206, 30, 5)]:   # puddles holding the dusk sky
+    lift_scene(s, 150, 42)                               # the blocks stand back across the courtyard
+    G0 = 108; HZ2 = HZ - 42
+    ground(s, G0, P('#241e16', '#30281c', '#3e3424', '#4e422e', '#60523a', '#746446', '#887654'), base=.3, pool=.55, cy=148, spread=42, tex=.24)
+    contact(s, G0, k=.6, h=8)
+    for (x0, x1) in [(0, 120), (270, W)]:                  # a concrete apron along the foot of each block
+        for y in range(G0, G0 + 6):
+            for x in range(x0, x1): s.p[y, x] = (s.p[y, x] * .5 + np.array(hx('#6a6460' if y > G0 else '#2a2624')) * .5).astype(np.uint8)
+    for k in range(7):                                   # a worn dirt path crossing the courtyard toward the viewer
+        y0_ = G0 + 6 + k * 16
+        w_ = 18 + k * 9; cx_ = 200 + k * 6
+        m_ = (YY >= y0_) & (YY < y0_ + 16) & (abs(XX - cx_ - (YY - y0_) * .4) < w_)
+        s.p[m_] = np.clip(s.p[m_] * 1.12 + 6, 0, 255).astype(np.uint8)
+    for (px_, py_, pw, ph) in [(150, 134, 34, 4), (262, 160, 50, 6), (56, 190, 32, 5)]:   # puddles holding the dusk sky
         pm = ((XX - px_) / pw) ** 2 + ((YY - py_) / ph) ** 2 < 1
-        src = np.clip(2 * 150 - YY - 50, 0, HZ - 1).astype(int)
-        s.p[pm] = (s.p[pm] * .3 + s.p[src[pm], XX[pm].astype(int)] * .7).astype(np.uint8)
+        src = np.clip((YY - (py_ - ph)) * 2, 0, 14).astype(int)
+        s.p[pm] = (s.p[pm] * .35 + s.p[src[pm], XX[pm].astype(int)] * .65).astype(np.uint8)
         for x in range(int(px_ - pw * .7), int(px_ + pw * .7), 3): s.px(x, py_ - ph + 1, '#f0b890')
-    broadleaf(s, 214, 152, 46, 17, LEAF, P('#1a120c', '#2a1e14', '#3e2c1e', '#523a28'))
-    for k in range(60):                                  # patchy grass
-        x = (k * 67) % W; y = 156 + (k * 31) % 60
-        for i2 in range(3): s.px(x + i2, y, '#3a5a2a'); s.px(x + i2 + 1, y - 1, '#5a7a3a') if i2 == 1 else None
+    for (gx, gw) in [(128, 34)]:                          # a battered goal for the neighbourhood pichanga
+        for y in range(G0 - 14, G0 + 3): s.px(gx, y, '#d8d8d0'); s.px(gx + 1, y, '#8a8a84'); s.px(gx + gw, y, '#d8d8d0'); s.px(gx + gw + 1, y, '#8a8a84')
+        for x in range(gx, gx + gw + 2): s.px(x, G0 - 14, '#d8d8d0'); s.px(x, G0 - 13, '#8a8a84')
+        for x in range(gx + 2, gx + gw, 3):
+            for y in range(G0 - 12, G0 + 2, 3): s.px(x, y, '#6a6a68')
+        light_pool(s, gx + gw // 2, G0 + 3, gw * .6, 2, '#000000', k=.4)
+    for (bx, by) in [(330, 170)]:                          # a concrete bench, chipped at the corners
+        for y in range(by - 8, by):
+            for x in range(bx - 22, bx + 22): s.px(x, y, '#a49c90' if y == by - 8 else '#7a7268' if y < by - 5 else '#4a443e')
+        for lx in (bx - 18, bx + 12):
+            for y in range(by, by + 8):
+                for x in range(lx, lx + 6): s.px(x, y, '#5a544c' if x < lx + 4 else '#3a3630')
+        light_pool(s, bx, by + 9, 30, 4, '#000000', k=.5)
+    broadleaf(s, 214, G0 + 2, 40, 17, LEAF, P('#1a120c', '#2a1e14', '#3e2c1e', '#523a28'))
+    light_pool(s, 214, G0 + 3, 16, 3, '#000000', k=.5)
+    for k in range(80):                                  # patchy grass, bigger toward the viewer
+        x = (k * 67) % W; y = G0 + 6 + (k * 31) % (H - G0 - 8); n_ = 2 + (y - G0) // 30
+        for i2 in range(n_): s.px(x + i2, y, '#3a5a2a'); s.px(x + i2, y - 1, '#5a7a3a') if i2 % 2 else None
+    r3 = np.random.RandomState(5)
+    for k in range(24):                                  # litter: a bottle cap, paper, a lost toy
+        x, y = r3.randint(0, W), r3.randint(G0 + 8, H - 4); col = ['#c8ccd4', '#e8e0cc', '#c83a30', '#3a7ad8'][k % 4]
+        s.px(x, y, col); s.px(x + 1, y + 1, '#1a1410')
     for lx in (96, 318):                                 # lampposts lighting the courtyard
-        for y in range(70, 158): s.px(lx, y, '#1e1e24'); s.px(lx + 1, y, '#3a3a44')
+        for y in range(34, G0 + 14): s.px(lx, y, '#1e1e24'); s.px(lx + 1, y, '#3a3a44')
         for dy in range(4):
-            for dx in range(7): s.px(lx - 3 + dx, 66 + dy, '#fff0b8' if dy > 0 else '#2a2a30')
-        light_pool(s, lx, 170, 60, 26, '#ffd890', k=.25)
+            for dx in range(7): s.px(lx - 3 + dx, 30 + dy, '#fff0b8' if dy > 0 else '#2a2a30')
+        light_pool(s, lx, G0 + 20, 64, 24, '#ffd890', k=.28)
+        light_pool(s, lx + 5, G0 + 15, 10, 2, '#000000', k=.5)
     for x0 in (-10, 270):                                    # stucco texture on the near blocks
-        m_ = (XX >= x0) & (XX < x0 + 140) & (YY > 58) & (YY < 150)
+        m_ = (XX >= x0) & (XX < x0 + 140) & (YY > 14) & (YY < G0)
         s.p[m_] = np.clip(s.p[m_] * (1 + (fbm(XX / 1.3, YY / 1.3, 70)[m_, None] - .5) * .16), 0, 255).astype(np.uint8)
+    for (x0, x1) in [(-10, 120), (270, 410)]:              # water stains running down from each balcony
+        for x in range(max(0, x0 + 6), min(W, x1 - 6), 22):
+            for y in range(20, G0 - 14):
+                if (y + x) % 11 < 2 and s.p[y, x].mean() > 50: s.p[y, x] = (s.p[y, x] * .88).astype(np.uint8)
     vignette(s, .4)
     finish_bg(s, cool='#2a2448', warm='#ffc890', k=.15, grain=.05, seed=13)
     return s, {'hz': HZ, 'colors': 200}
