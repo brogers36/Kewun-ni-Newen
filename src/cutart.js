@@ -180,6 +180,10 @@ function lanGrey(cvs){const k='g'+(cvs.__id||(cvs.__id=Math.random()));if(LANC[k
   const d=c.getImageData(0,0,cv.width,cv.height),a=d.data;for(let p=0;p<a.length;p+=4){const l=.3*a[p]+.59*a[p+1]+.11*a[p+2];a[p]=l*.78+12;a[p+1]=l*.8+14;a[p+2]=l*.88+22}
   c.putImageData(d,0,0);return LANC[k]=cv}
 function lanName(L,en){const pe=LAN_LAND[L.lof[0]].pe;return en?'the '+pe[0].toUpperCase()+pe.slice(1)+' lof':'el lof de los '+pe}
+/* the lof people in the lan kewün scenes use the same painted, battle-size bodies as the battle screen */
+const LANBIG={};
+function lanBig(lk,d){const k=lk+d;if(LANBIG[k])return LANBIG[k];
+  return LANBIG[k]=ctCharSpriteBig(lk,d,0)}
 function drawLanScene(c,L){
   const t=++L.t,good=L.good,a=Math.min(1,t/24),en=S.gloss==='en',LD=LAN_LAND[L.lof[0]];
   c.save();c.globalAlpha=a;
@@ -198,10 +202,11 @@ function drawLanScene(c,L){
   caFire(c,LW*.5,138,frame,good?1.5:.45);
   if(!good){for(let k=0;k<3;k++)ell(c,LW*.5+Math.sin(frame/20+k)*3,128-k*7-(frame/3+k*9)%14,2+k,2+k,'rgba(150,150,160,.35)')}
   // the people of the lof around the fire
-  const ppl=[['kuku','right',-92],['lonko','right',-64],['weaver','right',-36],['child','left',22],['cook','left',50],['childf','left',78]];
-  for(let k=0;k<ppl.length;k++){const [lk,d,dx]=ppl[k],x=Math.round(LW*.5+dx-16);
-    let s=ctCharSprite(lk,good?'down':d,good?Math.floor(frame/10+k)%4:0);if(!good)s=lanGrey(s);
-    const by=140+(good?-Math.max(0,Math.round(Math.sin(frame/9+k)*3)):(k%2)),sw=s.width*2,shh=s.height*2,shake=!good&&(frame+k*13)%50<6?((frame%2)?1:-1):0;
+  const ppl=[['kuku','right',-114],['lonko','right',-80],['weaver','right',-46],['child','left',44],['cook','left',78],['childf','left',112]];
+  for(let k=0;k<ppl.length;k++){const [lk,d,dx]=ppl[k];let x;
+    let s=lanBig(lk,d);if(!good)s=lanGrey(s);
+    const sw=s.width,shh=s.height,x2=Math.round(LW*.5+dx-sw/2);x=x2;
+    const by=144+(good?-Math.max(0,Math.round(Math.sin(frame/9+k)*3)):(k%2)),shake=!good&&(frame+k*13)%50<6?((frame%2)?1:-1):0;
     if(good){c.save();c.globalCompositeOperation='lighter';const g=c.createRadialGradient(x+16,by-22,3,x+16,by-22,40);g.addColorStop(0,'rgba(255,226,130,'+(.42+.12*Math.sin(frame/8+k))+')');g.addColorStop(1,'rgba(255,200,90,0)');c.fillStyle=g;c.fillRect(x-26,by-64,84,74);c.restore()}
     ell(c,x+sw/2,by-1,12,3,'rgba(0,0,0,.3)');c.drawImage(s,x+shake,by-shh,sw,shh);
     if(good){ // rim of light on each body
