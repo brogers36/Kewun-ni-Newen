@@ -170,47 +170,149 @@ function openReport(back){
     w.document.write('<!DOCTYPE html><meta charset="utf-8"><title>Kimün report</title><pre style="font:14px/1.5 ui-monospace,Menlo,monospace;white-space:pre-wrap">'+esc(t)+'</pre><script>print()<\/script>');w.document.close()};
   bs[2].onclick=close}
 
-/* ---------- 7. palin: call the plays in Mapudungun ---------- */
-let PALIN=null;
-const PALIN_PLAYS=[
-  {es:'¡La pali rueda hacia el norte!',en:'The pali rolls north!',a:'Pikun püle!'},
-  {es:'¡La pali se va hacia el sur!',en:'The pali heads south!',a:'Willi püle!'},
-  {es:'¡La pali corre hacia el este, hacia la raya rival!',en:'The pali runs east, toward the rival line!',a:'Puel püle!'},
-  {es:'¡La pali vuelve hacia el oeste!',en:'The pali comes back west!',a:'Lafken püle!'},
-  {es:'Tu compañera está lejos de la pali: ¡que corra!',en:'Your teammate is far from the pali: she must run!',a:'Lefnge!'},
-  {es:'Te rodean tres rivales: necesitas que tu compañero venga.',en:'Three rivals surround you: you need your teammate to come.',a:'Küpange!'},
-  {es:'Un rival se pega a ti: ¡que se vaya!',en:'A rival sticks to you: make him go away!',a:'Amutunge!'},
-  {es:'Tus dos compañeros están lejos: ¡que corran los dos!',en:'Both your teammates are far away: both must run!',a:'Lefmu!'}];
+/* ---------- 7. palin: a real match on its own field. You run and strike the pali with your wiño;
+   every few seconds the play stops and you call it to your team in Mapudungun. ---------- */
+let PG=null;
+const PF={w:520,h:146,top:50};
 const PALIN_OPTS=['Pikun püle!','Willi püle!','Puel püle!','Lafken püle!','Lefnge!','Lefmu!','Küpange!','Amutunge!'];
 function palinTalk(){
-  const en=S.gloss==='en',first=!S.flags.palin_won;
+  const en=S.gloss==='en';
   say([L('Palife','Mari mari! Palituaiñ?','¡Hola! ¿Jugamos palin? Nos falta una persona en el equipo.','Hello! Shall we play palin? Our team is one player short.')],()=>
     choose({m:'Palituaiñ?',es:'¿Juegas palin?',en:'Play palin?'},[{m:'May',g:en?'Play a match':'Jugar un partido',v:1},{m:'Wüla müten',g:en?'Later':'Después',v:0}],v=>{if(!v)return;
-      say([N('El palin se juega con el wiño (el palo curvo) y la pali (la bola). Tu equipo empuja la pali hacia el puel, el este; el rival, hacia el lafken, el oeste.','Palin is played with the wiño (the curved stick) and the pali (the ball). Your team pushes the pali toward the puel, the east; the rivals push it toward the lafken, the west.'),
-        N('Tú gritas las jugadas: hacia dónde va la pali (pikun, willi, puel, lafken püle) y qué deben hacer tus compañeros. Tres rayas ganan.','You call the plays: where the pali goes (pikun, willi, puel, lafken püle) and what your teammates must do. Three points win.')],()=>{
-        PALIN={pos:0,us:0,them:0,n:0,t:0};play()})},true,true));
-  function play(){
-    if(PALIN.us>=3||PALIN.them>=3||PALIN.n>=15)return end();
-    const P2=PALIN_PLAYS[rnd(PALIN_PLAYS.length)];PALIN.n++;
-    const o=[P2.a];const others=PALIN_OPTS.filter(x=>x!==P2.a);while(o.length<3)o.push(others.splice(rnd(others.length),1)[0]);
-    for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
-    choose({es:P2.es,en:P2.en},o.map(x=>({m:x,v:x})),v=>{const ok=v===P2.a;track('palin',ok,{m:'',es:P2.es,en:P2.en},PALIN_OPTS.filter(x=>o.includes(x)),P2.a);
-      if(ok){sfx('ok');PALIN.pos++}else{sfx('bad');PALIN.pos--}
-      const ls=[L(S.name,v,ok?'¡Bien dicho! Tu equipo avanza.':'Tu equipo no entiende la jugada y pierde terreno.',ok?'Well called! Your team moves forward.':'Your team does not understand the call and loses ground.')];
-      if(!ok)ls.push(N('Se decía: '+P2.a,'The call was: '+P2.a));
-      if(PALIN.pos>=3){PALIN.us++;PALIN.pos=0;const nw=numW(PALIN.us);ls.push(L('Pu che',nw[0].toUpperCase()+nw.slice(1)+(PALIN.us%2?' tripal!':' raya!'),'¡Raya para tu equipo! Van '+PALIN.us+' a '+PALIN.them+'.','A point for your team! It is '+PALIN.us+' to '+PALIN.them+'.'))}
-      if(PALIN.pos<=-3){PALIN.them++;PALIN.pos=0;ls.push(N('Raya para el equipo rival. Van '+PALIN.us+' a '+PALIN.them+'.','A point for the rival team. It is '+PALIN.us+' to '+PALIN.them+'.'))}
-      say(ls,play)},false,true)}
-  function end(){const won=PALIN.us>PALIN.them;const ls=[];
-    if(won){ls.push(L('Palife','Iñchiñ wewiñ!','¡Ganamos!','We won!'));if(first){S.flags.palin_won=1;S.gold+=30;S.xp+=8;ls.push(N('+30 ngülliw · +8 kimün. Desde hoy te llaman palife, jugadora o jugador de palin.','+30 ngülliw · +8 kimün. From today they call you palife, a palin player.'))}}
-    else ls.push(L('Palife','Ka antü!','¡Otro día será! El palin se aprende jugando.','Another day! You learn palin by playing.'));
-    PALIN=null;persist();say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+      say([N('El palin se juega con el wiño (el palo curvo) y la pali (la bola). Tu equipo empuja la pali hacia el puel, el este; el otro equipo, hacia el lafken, el oeste. Si la pali cruza la raya del fondo, es tripal o raya. Tres ganan.','Palin is played with the wiño (the curved stick) and the pali (the ball). Your team drives the pali toward the puel, the east; the other team toward the lafken, the west. When the pali crosses the end line it is a tripal, or raya. Three win.'),
+        N('Muévete con las flechas. Golpea la pali con A cuando esté a tu lado. De vez en cuando el juego se detiene: grita la jugada a tu equipo en mapudungun. Si aciertas, te ayudan.','Move with the arrows. Strike the pali with A when it is beside you. Every so often play stops: shout the call to your team in Mapudungun. Call it right and they help you.')],palinStart)},true,true));
 }
-function drawPalin(c){if(!PALIN)return;const x0=Math.round(LW/2-70),y0=VY+50;
-  R(c,x0-4,y0-4,148,30,'rgba(12,10,30,.7)');R(c,x0,y0+8,140,6,'#4a7a2e');R(c,x0,y0+8,140,1,'#7aa848');
-  for(let k=-3;k<=3;k++)R(c,x0+70+k*20,y0+6,1,10,k===-3||k===3?'#f4e8c8':'rgba(244,232,200,.35)');
-  const bx=x0+70+PALIN.pos*20;R(c,bx-2,y0+9,4,4,'#f4f0e8');R(c,bx-1,y0+9,2,1,'#ffffff');
-  OV.push(()=>{txt('lafken',x0-2,y0+30,'#bfe3d0',9);txt('puel',x0+142,y0+30,'#bfe3d0',9,'right');txt(PALIN.us+' – '+PALIN.them,LW/2,y0+3,'#ffe8a0',12,'center')})}
+function palinStart(){
+  const mk=(team,look,x,y,me)=>({team,look,x,y,hx:x,hy:y,me:!!me,dir:team?'left':'right',fr:0,an:0,sw:0,cd:0,boost:0,stun:0,conf:0});
+  const cx=PF.w/2,cy=PF.h/2,hm=S.hm?1.12:1;
+  PG={t:0,us:0,them:0,ball:{x:cx,y:cy,vx:0,vy:0},cam:cx-LW/2,intro:48,next:420,zone:0,fx:[],hm,
+    pl:[mk(0,heroLook(),cx-26,cy,1),mk(0,'walker',cx-70,cy-42),mk(0,'child',cx-70,cy+42),
+        mk(1,'kona',cx+26,cy),mk(1,'fisher',cx+70,cy-42),mk(1,'lonko2',cx+70,cy+42)]};
+  held.up=held.down=held.left=held.right=0;banner.style.display='none';
+  mode='palin';sfx('enc');playSong('nagBattle');
+}
+function palinReset(){const cx=PF.w/2,cy=PF.h/2,b=PG.ball;b.x=cx;b.y=cy;b.vx=b.vy=0;
+  for(const p of PG.pl){p.x=p.hx=p.x===undefined?cx:p.hx;p.y=p.hy;p.sw=p.cd=p.boost=p.stun=p.conf=0}
+  const H=[[cx-26,cy],[cx-70,cy-42],[cx-70,cy+42],[cx+26,cy],[cx+70,cy-42],[cx+70,cy+42]];PG.pl.forEach((p,k)=>{p.x=H[k][0];p.y=H[k][1]});PG.intro=36}
+function palinFx(x,y,t,col){PG.fx.push({x,y,t,col:col||'#ffe8a0',life:70})}
+function palinSwing(){const me=PG.pl[0];if(me.sw||PG.intro)return;me.sw=14;sfx('move')}
+function palinQuit(){const en=S.gloss==='en';
+  choose({es:'¿Dejar el partido?',en:'Leave the match?'},[{m:en?'Keep playing':'Seguir jugando',v:0},{m:en?'Leave the match':'Salir del partido',v:1}],v=>{if(v)palinEnd(true)},true,true)}
+function palinHit(p,dx,dy,pow){const b=PG.ball,l=Math.hypot(dx,dy)||1;b.vx=dx/l*pow;b.vy=dy/l*pow;p.cd=26;sfx('hit')}
+function updatePalin(){
+  if(!PG||active)return;const b=PG.ball,me=PG.pl[0];PG.t++;
+  for(const f of PG.fx)f.life--;PG.fx=PG.fx.filter(f=>f.life>0);
+  PG.cam+=(Math.max(0,Math.min(PF.w-LW,b.x-LW/2))-PG.cam)*.08;
+  if(PG.intro>0){PG.intro--;if(PG.intro===1)palinFx(b.x,b.y-30,'Palin!','#ffffff');return}
+  // the player
+  let dx=(held.right?1:0)-(held.left?1:0),dy=(held.down?1:0)-(held.up?1:0);
+  if(dx||dy){const l=Math.hypot(dx,dy),sp=1.45;me.x+=dx/l*sp;me.y+=dy/l*sp;me.an++;me.dir=Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up')}
+  if(me.sw>0){me.sw--;if(me.sw>6&&me.cd===0&&Math.hypot(b.x-me.x,b.y-me.y+2)<15){palinHit(me,3,(held.up?-1.4:0)+(held.down?1.4:0)+(b.y-me.y)*.06,4.6);palinFx(me.x,me.y-26,'Tak!','#fff6c8')}}
+  // the others: one chaser per team goes for the pali, the rest keep their lanes
+  for(let tm=0;tm<2;tm++){const mates=PG.pl.filter(p=>p.team===tm&&!p.me),dirX=tm?-1:1;
+    const ch=mates.slice().sort((a,c)=>Math.hypot(a.x-b.x,a.y-b.y)-Math.hypot(c.x-b.x,c.y-b.y))[0];
+    for(const p of mates){
+      if(p.stun>0){p.stun--;continue}if(p.conf>0){p.conf--;continue}
+      let tx,ty;if(p===ch||p.boost>0){tx=b.x-dirX*7;ty=b.y}else{tx=Math.max(20,Math.min(PF.w-20,b.x-dirX*44));ty=p.hy}
+      const ddx=tx-p.x,ddy=ty-p.y,d=Math.hypot(ddx,ddy),sp=(tm?1.02*PG.hm:.98)*(p.boost>0?1.7:1);
+      if(p.boost>0)p.boost--;
+      if(d>1){p.x+=ddx/d*Math.min(sp,d);p.y+=ddy/d*Math.min(sp,d);p.an++;p.dir=Math.abs(ddx)>=Math.abs(ddy)?(ddx>0?'right':'left'):(ddy>0?'down':'up')}
+      if(p.cd>0)p.cd--;
+      if(p.cd===0&&Math.hypot(b.x-p.x,b.y-p.y)<11&&(tm?p.x>b.x-4:p.x<b.x+4)){p.sw=12;palinHit(p,dirX*3,(Math.random()-.5)*2+(PF.h/2-b.y)*.012,tm?3.6*PG.hm:3.5)}
+      if(p.sw>0)p.sw--}}
+  if(me.cd>0)me.cd--;
+  for(const p of PG.pl){p.x=Math.max(4,Math.min(PF.w-4,p.x));p.y=Math.max(6,Math.min(PF.h-2,p.y))}
+  // the pali
+  b.x+=b.vx;b.y+=b.vy;b.vx*=.978;b.vy*=.978;
+  if(b.y<4){b.y=4;b.vy=Math.abs(b.vy)*.7}if(b.y>PF.h-4){b.y=PF.h-4;b.vy=-Math.abs(b.vy)*.7}
+  const z=b.x<PF.w*.3?-1:b.x>PF.w*.7?1:0;
+  if(z!==PG.zone){PG.zone=z;if(z)palinFx(b.x,-6,z>0?'Puel püle!':'Lafken püle!',z>0?'#bfe3ff':'#ffb8a8')}
+  if(b.x>PF.w-8||b.x<8){const ours=b.x>PF.w/2;if(ours)PG.us++;else PG.them++;sfx(ours?'lvl':'bad');
+    const n=ours?PG.us:PG.them,nw=numW(n),w=(PG.us+PG.them)%2?' tripal!':' raya!',sc=PG.us+' – '+PG.them;
+    const ls=[ours?L('Pu che',nw[0].toUpperCase()+nw.slice(1)+w,'¡Punto para tu equipo! '+sc+'.','A point for your team! '+sc+'.'):N('Punto para el otro equipo. '+sc+'.','A point for the other team. '+sc+'.')];
+    if(PG.us>=3||PG.them>=3)return say(ls,()=>palinEnd());
+    palinReset();return say(ls)}
+  if(PG.t>12600)return palinEnd();
+  if(--PG.next<=0)palinCall()}
+function palinCall(){
+  PG.next=420+rnd(300);const b=PG.ball,me=PG.pl[0],en=S.gloss==='en';
+  const mates=PG.pl.filter(p=>p.team===0&&!p.me),riv=PG.pl.filter(p=>p.team===1);
+  const far=mates.filter(p=>Math.hypot(p.x-b.x,p.y-b.y)>70),near=riv.filter(p=>Math.hypot(p.x-me.x,p.y-me.y)<34);
+  let a,es,enq,act;
+  if(near.length>=2){a='Küpange!';es='Te rodean dos rivales. Necesitas que un compañero venga a ti.';enq='Two rivals surround you. You need a teammate to come to you.';
+    act=()=>{const m=mates.sort((p,q)=>Math.hypot(p.x-me.x,p.y-me.y)-Math.hypot(q.x-me.x,q.y-me.y))[0];m.boost=240;m.x=(m.x+me.x)/2;near.forEach(r=>r.stun=70)}}
+  else if(near.length===1){a='Amutunge!';es='Un rival se te pega. ¡Que se vaya!';enq='A rival is sticking to you. Make him go away!';act=()=>{const r=near[0];r.stun=150;r.x+=r.x>me.x?26:-26}}
+  else if(far.length===2){a='Lefmu!';es='Tus dos compañeros están lejos de la pali. ¡Que corran los dos!';enq='Both your teammates are far from the pali. Both must run!';act=()=>mates.forEach(m=>m.boost=300)}
+  else if(far.length===1){a='Lefnge!';es='Un compañero está lejos de la pali. ¡Que corra!';enq='A teammate is far from the pali. He must run!';act=()=>far[0].boost=300}
+  else if(b.y<PF.h*.3||b.y>PF.h*.7){const up=b.y<PF.h*.3;a=up?'Pikun püle!':'Willi püle!';es=up?'La pali se va hacia el norte, arriba. Avisa a tu equipo.':'La pali se va hacia el sur, abajo. Avisa a tu equipo.';enq=up?'The pali is heading north, up. Tell your team.':'The pali is heading south, down. Tell your team.';act=()=>mates.forEach(m=>m.boost=200)}
+  else{const fw=b.vx>=0;a=fw?'Puel püle!':'Lafken püle!';es=fw?'La pali corre hacia el este, hacia la raya rival. ¡Avisa!':'La pali vuelve hacia el oeste, hacia tu raya. ¡Avisa!';enq=fw?'The pali runs east, toward the rival line. Call it!':'The pali is coming back west, toward your line. Call it!';act=()=>mates.forEach(m=>m.boost=200)}
+  const o=[a],oth=PALIN_OPTS.filter(x=>x!==a);while(o.length<3)o.push(oth.splice(rnd(oth.length),1)[0]);
+  for(let i=o.length-1;i>0;i--){const j=rnd(i+1);[o[i],o[j]]=[o[j],o[i]]}
+  sfx('swirl');
+  choose({es:es,en:enq},o.map(x=>({m:x,v:x})),v=>{const ok=v===a;track('palin',ok,{m:'',es,en:enq},o,a);
+    if(ok){sfx('ok');act();palinFx(me.x,me.y-30,v,'#ffe8a0');palinFx(me.x,me.y-44,en?'They heard you!':'¡Te escucharon!','#b8ffb0')}
+    else{sfx('bad');mates.forEach(m=>m.conf=100);palinFx(me.x,me.y-30,v,'#ffb0a0');palinFx(me.x,me.y-44,(en?'It was: ':'Era: ')+a,'#ffd0c0')}},false,true)}
+function palinEnd(quit){
+  const won=PG&&!quit&&PG.us>PG.them,first=!S.flags.palin_won,ls=[];
+  if(!quit){if(won){ls.push(L('Palife','Iñchiñ wewiñ!','¡Ganamos!','We won!'));if(first){S.flags.palin_won=1;S.gold+=30;S.xp+=8;ls.push(N('+30 ngülliw · +8 kimün. Desde hoy te llaman palife, jugadora o jugador de palin.','+30 ngülliw · +8 kimün. From today they call you palife, a palin player.'))}}
+    else ls.push(L('Palife','Ka antü!','¡Otro día será! El palin se aprende jugando.','Another day! You learn palin by playing.'))}
+  PG=null;mode='map';grace=30;held.up=held.down=held.left=held.right=0;AU.name=null;playSong(mapSong());
+  if(typeof playAmb==='function')playAmb(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg));
+  persist();if(ls.length)say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
+/* the field: mown grass, chalk lines, the crowd of the lof along the top, a fence along the bottom */
+const PALC={};
+function palinGround(){if(PALC.g)return PALC.g;const [cv,c]=mk(PF.w,PF.h);
+  for(let x=0;x<PF.w;x++)for(let y=0;y<PF.h;y++){const st=Math.floor(x/26)%2,n=((x*7349+y*1931)%97)/97,v=(st?0:1)+(n>.82?1:n<.12?-1:0);
+    c.fillStyle=['#2f5a22','#3a6a28','#44782e','#4f8636'][Math.max(0,Math.min(3,v+1))];c.fillRect(x,y,1,1)}
+  for(let k=0;k<260;k++){const x=(k*131)%PF.w,y=(k*71)%PF.h;c.fillStyle=k%3?'#5a9440':'#28501c';c.fillRect(x,y,1,2)}
+  c.fillStyle='rgba(244,236,210,.85)';c.fillRect(0,0,PF.w,1);c.fillRect(0,PF.h-1,PF.w,1);c.fillRect(8,0,2,PF.h);c.fillRect(PF.w-10,0,2,PF.h);
+  c.fillStyle='rgba(244,236,210,.35)';for(let y=0;y<PF.h;y+=6)c.fillRect(PF.w/2,y,1,3);
+  return PALC.g=cv}
+const PAL_CROWD=['kuku','lonko','weaver','child','cook','childf','walker','elder','kona','child','weaver','lonko2'];
+function renderPalin(c){
+  const G=PG,cam=Math.round(G.cam),T=PF.top;
+  c.fillStyle='#1c3414';c.fillRect(0,0,LW,LH);
+  // crowd bank and trees beyond
+  for(let x=-((cam*.5)%40);x<LW+40;x+=40){ell(c,x+20,14,26,16,'#16301a');ell(c,x+8,20,16,12,'#1e3c20')}
+  R(c,0,28,LW,T-28,'#2a4a1e');
+  for(let k=0;k<PAL_CROWD.length*3;k++){const wx=20+k*44-cam*.9,x=Math.round(wx);if(x<-20||x>LW+4)continue;
+    const cheer=G.zone===1||G.fx.some(f=>f.t==='Palin!'),fr=cheer&&(frame>>3)%2?1:0,s=ctCharSprite(PAL_CROWD[k%PAL_CROWD.length],'down',fr);
+    c.drawImage(s,x,T-s.height-2+(cheer&&(frame+k*5)%20<10?-1:0))}
+  R(c,0,T-3,LW,3,'#6a4a2a');for(let x=-(cam%12);x<LW;x+=12)R(c,x,T-7,2,7,'#5a3c20');
+  c.drawImage(palinGround(),cam,0,LW,PF.h,0,T,LW,PF.h);
+  R(c,0,T+PF.h,LW,LH-T-PF.h,'#24401a');for(let x=-(cam%10);x<LW;x+=10){R(c,x,T+PF.h+3,2,10,'#6a4a2a');R(c,x,T+PF.h+5,10,1,'#5a3c20')}
+  // pali shadow, players by depth, pali
+  const b=G.ball,bx=Math.round(b.x-cam),by=Math.round(T+b.y);
+  const L2=G.pl.slice().sort((p,q)=>p.y-q.y);let ballDrawn=false;
+  const drawBall=()=>{ell(c,bx,by+1,3,1.5,'rgba(0,0,0,.35)');const sp=Math.hypot(b.vx,b.vy);if(sp>1.5){c.fillStyle='rgba(255,250,230,.35)';c.fillRect(Math.round(bx-b.vx*2)-1,Math.round(by-2-b.vy*2),2,2)}
+    R(c,bx-2,by-7,4,1,'#2a1a10');R(c,bx-3,by-6,6,4,'#2a1a10');R(c,bx-2,by-2,4,1,'#2a1a10');R(c,bx-4,by-5,8,2,'#2a1a10');
+    R(c,bx-2,by-6,4,4,'#e6d8b4');R(c,bx-3,by-5,6,2,'#e6d8b4');R(c,bx-2,by-6,2,1,'#ffffff');R(c,bx-3,by-5,1,1,'#fff6dc');R(c,bx+1,by-3,2,1,'#a8906a');R(c,bx+2,by-4,1,1,'#a8906a');ballDrawn=true};
+  for(const p of L2){if(!ballDrawn&&b.y<p.y)drawBall();
+    const x=Math.round(p.x-cam),y=Math.round(T+p.y);if(x<-20||x>LW+20)continue;
+    const s=ctCharSprite(p.look,p.dir,p.sw?2:(p.an>>3)%4);ell(c,x,y,7,2.5,'rgba(0,0,0,.32)');
+    c.drawImage(s,x-Math.round(s.width/2),y-s.height+1);
+    R(c,x-4,y-s.height+5,8,1,p.team?'#d83a2a':'#3a6ad8');           // team headband colour
+    // the wiño: a curved stick held low in front, swung through when striking
+    const fd=p.dir==='left'?-1:p.dir==='right'?1:(p.team?-1:1),k=p.sw?Math.max(0,p.sw-6)/8:0,hx=x+fd*4,hy=y-8;
+    const ex=hx+fd*Math.round(9-10*k),ey=hy+Math.round(7-9*k);
+    for(let t=0;t<=1;t+=.1){const sx=Math.round(hx+(ex-hx)*t),sy=Math.round(hy+(ey-hy)*t);R(c,sx-1,sy-1,3,3,'#1e1008')}
+    for(let t=0;t<=1;t+=.1){const sx=Math.round(hx+(ex-hx)*t),sy=Math.round(hy+(ey-hy)*t);R(c,sx,sy,1,1,t<.5?'#c08a48':'#9a6a34')}
+    R(c,ex-(fd>0?0:3),ey-1,4,3,'#1e1008');R(c,ex-(fd>0?0:2),ey,3,1,'#b07a3c');
+    if(p.me)txt('▼',x,y-s.height-3,'#ffe060',10,'center');
+    if(p.conf>0&&(frame>>4)%2)txt('?',x,y-s.height-3,'#ffffff',10,'center');
+    if(p.boost>0&&frame%6<3)R(c,x-fd*8,y-4,3,1,'rgba(255,255,255,.6)');
+    if(p.stun>0)txt('…',x,y-s.height-3,'#dddddd',10,'center')}
+  if(!ballDrawn)drawBall();
+  // scoreboard and labels
+  R(c,LW/2-34,2,68,15,'rgba(10,8,24,.75)');
+  OV.push(()=>{txt(String(G.us),LW/2-14,13,'#8ab4ff',13,'center');txt('–',LW/2,13,'#ffffff',12,'center');txt(String(G.them),LW/2+14,13,'#ff9a8a',13,'center');
+    if(cam<30)txt('◀ lafken',14-cam,T+PF.h+20,'#ffd0c0',9);if(cam>PF.w-LW-30)txt('puel ▶',PF.w-cam-14,T+PF.h+20,'#c8e0ff',9,'right');
+    const left=Math.max(0,Math.ceil((12600-G.t)/3600));txt(left+"'",LW-8,13,'#ffffff',10,'right');
+    if(G.t<300)txt(S.gloss==='en'?'Arrows: move · A: strike · B: leave':'Flechas: moverse · A: golpear · B: salir',LW/2,LH-6,'#ffffff',9,'center');
+    for(const f of G.fx){const x=f.x-cam,y=T+f.y-(70-f.life)*.3;txt(f.t,x,y,f.col,11,'center')}});
+  if(G.intro>0){const a=Math.min(1,G.intro/24);c.fillStyle='rgba(0,0,0,'+a.toFixed(2)+')';c.fillRect(0,0,LW,LH);
+    if(G.intro>8)OV.push(()=>txt('Palituaiñ!',LW/2,LH/2,'#ffe8a0',16,'center'))}
+}
 
 /* ---------- 8. trafkintu: trading with numbers in Mapudungun ---------- */
 function trafkintuTalk(){

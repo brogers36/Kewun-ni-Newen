@@ -296,7 +296,7 @@ function renderMap(){
   if(M.bg==='lagoon'){c.fillStyle=S.flags.ngen?'rgba(120,200,255,.08)':'rgba(60,30,90,.22)';c.fillRect(0,VY,LW,VH)}
   atmos(c);
   if(CT)ctLight(c,glows);
-  drawHUD(c);if(PALIN)drawPalin(c);
+  drawHUD(c);
 }
 // palin wiño: a long wooden stick held at the hip, its curved head sweeping the ground
 function drawWino(c,hx,hy,tx,ty,d){
@@ -950,11 +950,13 @@ function loopBody(ts){
   while(_acc>=1000/60&&steps<4){_acc-=1000/60;steps++;
     frame++;
     if(mode==='map'&&M)updateMap();
+    else if(mode==='palin'&&PG)updatePalin();
   }
   if(!steps)return;
   OV=[];
   if(mode==='map'&&M)renderMap();
   else if(mode==='battle'&&B){renderBattle();if(B.lanScene){OV=[];drawLanScene(lx,B.lanScene)}}
+  else if(mode==='palin'&&PG)renderPalin(lx);
   else if(mode==='cut')renderCut();
   else if(mode==='title')paintLand(lx,frame,false);
   if(mode==='map'&&M){dayTint(lx);if(M.urban&&typeof urbanNight==='function')urbanNight(lx,CAM.x,CAM.y)}

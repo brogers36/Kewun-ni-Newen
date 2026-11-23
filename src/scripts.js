@@ -90,7 +90,7 @@ function konaTalk(){
   if(CUR==='lof')return choose(L('Kona','Palin awkantuayu?','¿Jugamos un palin?','Shall we play palin?'),
     [{m:'May!',g:S.gloss==='en'?'Yes, let us play':'Sí, juguemos',v:1},
      {m:'Ka antü.',g:S.gloss==='en'?'Another day':'Otro día',v:0}],v=>{
-      if(v)return say([N('Reglas: golpea la pali con A/Z (o tócala caminando) y llévala hasta el final derecho de la cancha. El primero a 3 gana.','Rules: strike the pali with A/Z (or nudge it by walking) and take it to the right end of the field. First to 3 wins.')],()=>palStart());
+      if(v)return say([N('Vamos a la cancha. Muévete con las flechas y golpea la pali con A/Z; llévala hasta la raya del puel, a la derecha. De vez en cuando, grita la jugada a tu equipo en mapudungun. El primero a 3 gana.','Off to the field. Move with the arrows and strike the pali with A/Z; take it to the puel line, on the right. Every so often, shout the call to your team in Mapudungun. First to 3 wins.')],()=>palinStart());
       konaIdle()},true);
   konaIdle()}
 function konaIdle(){say([
