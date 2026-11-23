@@ -451,7 +451,11 @@ const KULTRUN_SONGS=['battle','boss','nagBattle','nagBoss','pewBattle','pewBoss'
   for(const n of KULTRUN_SONGS){const so=SONGS[n];if(!so||so.kul)continue;so.kul=1;
     const odd=so.ch.some(c=>c.t.split('|')[0].trim().split(/\s+/).length%2);   // a 7/8 song keeps its limp: kultrun only, no swing
     if(!odd)so.tern=1;
-    so.bpm=Math.round(so.bpm*.85);   // a little slower: the kultrun sets the pace, not the fight
+    so.bpm=Math.round(so.bpm*(n==='stgoBoss3'?.85:.76));   // slower: the kultrun sets the pace, not the fight
+    if(!so.ch.some(c=>c.dist)){   // songs with no guitars yet get them: the bass line doubled on a heavy, detuned distorted pair; the leads get a little grit
+      const bl=so.ch.find(c=>c.w==='triangle')||so.ch.find(c=>c.w==='sawtooth');
+      if(bl){so.ch.push(Object.assign({w:'sawtooth',v:.085,dist:2,det:9},parseTrack(bl.t)));so.ch.push(Object.assign({w:'sawtooth',v:.055,dist:2,det:-7},parseTrack(bl.t)))}
+      for(const c of so.ch)if(!c.d&&c!==bl&&(c.w==='square'||c.w==='sawtooth')&&!c.dist)c.dist=1}
     for(const c of so.ch)if(c.d)c.v*=.7;
     const bass=so.ch.find(c=>c.w==='triangle')||so.ch.find(c=>!c.d);
     const first=(bass.t.match(/[A-G][#b]?\d/)||['E2'])[0],root=first.replace(/\d/,''),bars=Math.max(1,Math.round(so.len/8));
