@@ -15,7 +15,6 @@ const N=(es,en)=>({es,en});
 const PRAISE=[{m:'Kümey!',es:'¡Bien!',en:'Good!'},{m:'Tuteley!',es:'¡Muy bien hecho!',en:'Well done!'}];
 let praiseI=0;const praise=()=>{const p=PRAISE[praiseI++%2];return L('',p.m,p.es,p.en)};
 const dlg=$('dlg'),menu=$('menu'),hud=$('hud'),banner=$('banner');
-menu.addEventListener('scroll',()=>menu.style.setProperty('--st',menu.scrollTop+'px'));
 let TALKER=null;
 const WHOLOOK={Kuku:'kuku',Lonko:'lonko',Machi:'machi',Papay:'kuku'};
 const PORT={};
@@ -70,7 +69,7 @@ function choose(prompt,opts,cb,cancel,one,onSel){
   active={kind:'menu',a(){if(!opts[idx].dis)pick(idx)},
     b(){if(cancel){menu.style.display='none';active=null;sfx('move');cb(null)}},
     mv(d){let n=idx;for(let t=0;t<opts.length;t++){n=(n+d+opts.length)%opts.length;if(!opts[n].dis)break}idx=n;sfx('move');hl();btns[idx].scrollIntoView({block:'nearest'})}};
-  menu.style.display='block';menu.scrollTop=0;menu.style.setProperty('--st','0px');hl();
+  menu.style.display='flex';le.scrollTop=0;pe.scrollTop=0;hl();
 }
 function showBanner(m,g){if(S&&S.nogloss&&m)g='';banner.querySelector('b').textContent=GR(m);banner.querySelector('span').textContent=g;banner.style.display='block';clearTimeout(showBanner.t);showBanner.t=setTimeout(()=>banner.style.display='none',2200)}
 

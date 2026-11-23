@@ -48,11 +48,11 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #dlg .g{color:#dce6ff;font-style:italic;line-height:1.35;font-size:1.14em}
 #dlg .more{position:absolute;right:.6em;bottom:.3em;color:#e8d49a;animation:bl 1s infinite}
 @keyframes bl{50%{opacity:0}}
-#menu,#dlg{z-index:20}#menu{display:none;max-height:50%;overflow:auto}#menu::before{top:calc(4px + var(--st,0px));z-index:3}#menu::after{bottom:calc(4px - var(--st,0px));z-index:3}
+#menu,#dlg{z-index:20}#menu{display:none;max-height:50%;overflow:hidden;flex-direction:column}#menu::before,#menu::after{z-index:3}#menu .p{flex:0 1 auto;overflow-y:auto;min-height:1.6em}#menu .list{flex:1 1 auto;min-height:3.4em;overflow-y:auto;padding:2px 2px 4px}
 #menu .p{margin-bottom:.45em;position:relative}
 .hid{display:none!important}
 .rv{position:absolute;right:6px;top:4px;z-index:4;width:1.9em;height:1.9em;border-radius:50%;border:2px solid #ffe8a0;background:#2a1a3a;color:#ffe8a0;font:bold 1em ui-monospace,monospace;cursor:pointer;padding:0}
-#menu .p .rv{top:-2px;right:0}
+#menu .p .rv{top:0;right:0}
 #report{display:none;position:fixed;inset:0;z-index:40;background:rgba(8,6,20,.82);align-items:center;justify-content:center}
 #report .rb{background:#f8f2e4;color:#1a1020;max-width:min(92vw,720px);max-height:88vh;display:flex;flex-direction:column;border:4px solid #3a2a50;border-radius:6px}
 #report pre{margin:0;padding:14px;overflow:auto;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap}
