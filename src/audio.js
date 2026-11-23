@@ -443,6 +443,25 @@ function playAmb(kind){
   else if(kind==='night'){AMB.timers.push(setInterval(()=>{if(Math.random()<.7){const b=3300+Math.random()*500;
     chirp(b,b*1.04,.06,.03);setTimeout(()=>chirp(b,b*1.04,.06,.025),110);setTimeout(()=>chirp(b,b*1.04,.06,.02),220)}},900))}
 }
+/* ---------- the battle songs in a Mapuche cadence: each pair of steps swings long-short (a ternary pulse),
+   the kultrun beats that gallop under everything, kaskawilla on the beat, and the trutruka calls at the top of each loop.
+   The tune itself is the same; the drum kit steps back. ---------- */
+const KULTRUN_SONGS=['battle','boss','nagBattle','nagBoss','pewBattle','pewBoss','wilBattle','wilBoss','puelBattle','puelBoss','deepBattle','deepBoss','ngoyBattle','ngoyBoss','ngoyFinal','yewenBoss','stgoBoss1','stgoBoss2','stgoBoss3'];
+(function kultrunize(){
+  for(const n of KULTRUN_SONGS){const so=SONGS[n];if(!so||so.kul)continue;so.kul=1;
+    const odd=so.ch.some(c=>c.t.split('|')[0].trim().split(/\s+/).length%2);   // a 7/8 song keeps its limp: kultrun only, no swing
+    if(!odd)so.tern=1;
+    for(const c of so.ch)if(c.d)c.v*=.7;
+    const bass=so.ch.find(c=>c.w==='triangle')||so.ch.find(c=>!c.d);
+    const first=(bass.t.match(/[A-G][#b]?\d/)||['E2'])[0],root=first.replace(/\d/,''),bars=Math.max(1,Math.round(so.len/8));
+    const R=o=>root+o,FIF={C:'G',Db:'Ab','C#':'G#',D:'A',Eb:'Bb','D#':'A#',E:'B',F:'C',Gb:'Db','F#':'C#',G:'D',Ab:'Eb','G#':'D#',A:'E',Bb:'F','A#':'F',B:'F#'}[root]||'E';
+    const kul=odd?'K . u K . u u':'K u K u K u K u',bells=odd?'j . . j . . .':'j . j . j . j .';
+    const call=[R(3)+' - - - - - '+FIF+'3 -',R(4)+' - - - - - - -'];   // the horn's open tones: the root, its fifth, the octave
+    const tr=[];for(let b=0;b<bars;b++)tr.push(b<2?call[b]:(b===Math.floor(bars/2)?FIF+'3 - - - '+R(4)+' - - -':'. . . . . . . .'));
+    const add=(o,t)=>so.ch.push(Object.assign(o,parseTrack(t)));
+    add({d:1,v:.62},kul);add({d:1,v:.5},bells);
+    if(!odd){add({w:'trut',v:.075},tr.join(' | '));add({d:1,v:.5},Array.from({length:bars},(_,b)=>b%4===3?'. . . . . . p p':'. . . . . . . .').join(' | '))}
+    so.len=Math.max(...so.ch.map(c=>c.len))}})();
 function playSong(name){
   if(AU.name===name)return;AU.name=name;AU.song=SONGS[name]||null;AU.step=0;
   if(AU.c)AU.next=AU.c.currentTime+.06;
@@ -452,17 +471,37 @@ function tick(){
   if(AU.next<AU.c.currentTime-.05)AU.next=AU.c.currentTime+.05;
   while(AU.next<AU.c.currentTime+.35){
     for(const ch of so.ch){const ev=ch.at[AU.step%ch.len];if(ev)for(const e of ev)playNote(ch,e,AU.next,sd)}
-    AU.step++;AU.next+=sd;
+    AU.step++;AU.next+=so.tern?sd*(AU.step%2?4/3:2/3):sd;   // tern: each pair of steps becomes long-short, the kultrun's gallop
     if(!so.loop&&AU.step>=so.len){AU.song=null;AU.name=null;if(so.after){const n=so.after;so.after=null;playSong(n())}return}
   }
 }
 function playNote(ch,e,t,sd){
   const c=AU.c;
   if(ch.d){
+    if(e.n==='K'||e.n==='u'){   // kultrun: a deep skin struck with a stick, the bowl ringing under it
+      const st=e.n==='K'?1:.5,o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.setValueAtTime(e.n==='K'?110:150,t);o.frequency.exponentialRampToValueAtTime(e.n==='K'?58:95,t+.18);
+      g.gain.setValueAtTime(ch.v*1.25*st,t);g.gain.exponentialRampToValueAtTime(.001,t+(e.n==='K'?.3:.14));o.connect(g);g.connect(AU.mus);o.start(t);o.stop(t+.34);
+      const o2=c.createOscillator(),g2=c.createGain();o2.type='triangle';o2.frequency.setValueAtTime(230,t);o2.frequency.exponentialRampToValueAtTime(150,t+.12);
+      g2.gain.setValueAtTime(ch.v*.35*st,t);g2.gain.exponentialRampToValueAtTime(.001,t+.16);o2.connect(g2);g2.connect(AU.mus);o2.start(t);o2.stop(t+.2);
+      const s=c.createBufferSource();s.buffer=AU.noise;const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=e.n==='K'?700:1100;f.Q.value=1.4;const gn=c.createGain();
+      gn.gain.setValueAtTime(ch.v*.55*st,t);gn.gain.exponentialRampToValueAtTime(.001,t+.05);s.connect(f);f.connect(gn);gn.connect(AU.mus);s.start(t,Math.random()*.5);s.stop(t+.07);return}
+    if(e.n==='j'){              // kaskawilla: little bronze bells shaken on the beat
+      for(let q=0;q<3;q++){const tt=t+q*.022,fq=[5400,6900,8300][q];const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=fq*(1+Math.random()*.02);
+        g.gain.setValueAtTime(ch.v*.16,tt);g.gain.exponentialRampToValueAtTime(.001,tt+.09);o.connect(g);g.connect(AU.mus);o.start(tt);o.stop(tt+.1)}
+      const s=c.createBufferSource();s.buffer=AU.noise;const f=c.createBiquadFilter();f.type='highpass';f.frequency.value=6500;const gn=c.createGain();
+      gn.gain.setValueAtTime(ch.v*.22,t);gn.gain.exponentialRampToValueAtTime(.001,t+.08);s.connect(f);f.connect(gn);gn.connect(AU.mus);s.start(t,Math.random()*.5);s.stop(t+.09);return}
+    if(e.n==='p'){              // pifilka: one shrill breath
+      const o=c.createOscillator(),g=c.createGain();o.type='square';o.frequency.setValueAtTime(2350,t);o.frequency.linearRampToValueAtTime(2450,t+.1);const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=3600;
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(ch.v*.09,t+.015);g.gain.exponentialRampToValueAtTime(.001,t+.16);o.connect(lp);lp.connect(g);g.connect(AU.mus);o.start(t);o.stop(t+.18);return}
     if(e.n==='k'){const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(40,t+.12);g.gain.setValueAtTime(ch.v,t);g.gain.exponentialRampToValueAtTime(.001,t+.14);o.connect(g);g.connect(AU.mus);o.start(t);o.stop(t+.15)}
     else{const s=c.createBufferSource();s.buffer=AU.noise;const f=c.createBiquadFilter();f.type='highpass';f.frequency.value=e.n==='h'?7000:e.n==='c'?4200:1600;const g=c.createGain();const dur=e.n==='h'?.04:e.n==='c'?.9:.12;
       g.gain.setValueAtTime(ch.v*(e.n==='h'?.35:e.n==='c'?.6:.7),t);g.gain.exponentialRampToValueAtTime(.001,t+dur);s.connect(f);f.connect(g);g.connect(AU.mus);s.start(t,Math.random()*.5);s.stop(t+dur+.01)}
     return}
+  if(ch.w==='trut'){           // trutruka: a long horn, a brassy buzz that scoops up into the note
+    const o=c.createOscillator(),g=c.createGain(),bp=c.createBiquadFilter(),lp=c.createBiquadFilter(),dur=e.len*sd,fq=nf(e.n);o.type='sawtooth';
+    o.frequency.setValueAtTime(fq*.94,t);o.frequency.exponentialRampToValueAtTime(fq,t+.09);bp.type='peaking';bp.frequency.value=fq*3;bp.Q.value=1.2;bp.gain.value=8;lp.type='lowpass';lp.frequency.setValueAtTime(700,t);lp.frequency.linearRampToValueAtTime(2200,t+.2);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(ch.v,t+.06);g.gain.setValueAtTime(ch.v*.9,t+dur*.8);g.gain.linearRampToValueAtTime(0,t+dur);
+    o.connect(bp);bp.connect(lp);lp.connect(g);g.connect(AU.mus);o.start(t);o.stop(t+dur+.02);return}
   const o=c.createOscillator(),g=c.createGain();o.type=ch.w;o.frequency.value=nf(e.n);
   const dur=e.len*sd;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(ch.v,t+.008);g.gain.linearRampToValueAtTime(ch.v*.65,t+Math.min(.12,dur*.5));
   g.gain.setValueAtTime(ch.v*.65,t+dur*.85);g.gain.linearRampToValueAtTime(0,t+dur*.98);
