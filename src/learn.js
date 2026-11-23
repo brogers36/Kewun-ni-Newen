@@ -185,7 +185,7 @@ const PALIN_OPTS=['Pikun püle!','Willi püle!','Puel püle!','Lafken püle!','L
 function palinTalk(){
   const en=S.gloss==='en',first=!S.flags.palin_won;
   say([L('Palife','Mari mari! Palituaiñ?','¡Hola! ¿Jugamos palin? Nos falta una persona en el equipo.','Hello! Shall we play palin? Our team is one player short.')],()=>
-    choose({m:'Palituaiñ?',es:'¿Juegas palin?',en:'Play palin?'},[{m:'May',g:en?'Play a match':'Jugar un partido',v:1},{m:'Wüle müten',g:en?'Later':'Después',v:0}],v=>{if(!v)return;
+    choose({m:'Palituaiñ?',es:'¿Juegas palin?',en:'Play palin?'},[{m:'May',g:en?'Play a match':'Jugar un partido',v:1},{m:'Wüla müten',g:en?'Later':'Después',v:0}],v=>{if(!v)return;
       say([N('El palin se juega con el wiño (el palo curvo) y la pali (la bola). Tu equipo empuja la pali hacia el puel, el este; el rival, hacia el lafken, el oeste.','Palin is played with the wiño (the curved stick) and the pali (the ball). Your team pushes the pali toward the puel, the east; the rivals push it toward the lafken, the west.'),
         N('Tú gritas las jugadas: hacia dónde va la pali (pikun, willi, puel, lafken püle) y qué deben hacer tus compañeros. Tres rayas ganan.','You call the plays: where the pali goes (pikun, willi, puel, lafken püle) and what your teammates must do. Three points win.')],()=>{
         PALIN={pos:0,us:0,them:0,n:0,t:0};play()})},true,true));

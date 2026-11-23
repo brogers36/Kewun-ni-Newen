@@ -427,7 +427,7 @@ Una ruka del trawün en cada lof (con un cartel tejido sobre la puerta). Un kime
 - Pewenche · -la- y -a-: amulan, amulaymi, amulay, amuan, amuaymi, amulayan, iyalan; "kimlan" / "kimuan".
 - Williche · preguntas: chem, iney, chew, chumül, tunten, chumngechi; "Iney pingeymi?", "Chew mülimi?", "Tunten tripantu nieymi?", "Chumngechi pingekey «casa»? · Ruka pingekey.", "ko pingekey".
 - Puelche · -ke-: amuken, amukeymi, amukey, iyaken; "Liwen küdawken. Pun umawtuken."; "mapudunguken"; la -ke- de "pingekey".
-- (Nov 22) Brandon: bienvenida del trawün **"Küme akunkonpayami fachi trawün, peñi/lamngen"** (hombres: peñi a hombres, lamngen a mujeres; mujeres: lamngen a todos; usa addr()). Opción "después" = **"Wüle müten"**. Lecciones alargadas (≈4 min), nuevas formas ⚠: pen/peymi/pey; ülkantun/ülkantuymi/ülkantuy; nütramkan; "Iñche Ñanku pingen. Eymi kay?"; "Iñchiw ñi chaw amuyu"; "Iñchiw ñi ñuke küdawiyu"; pu domo / pu wentru; "Pu domo ülkantuyngün"; amukilnge/amukilmu/amukilmün; amulaiñ/amuaiñ/amulayaiñ; "Chew mülimi? · Ruka mew mülen."; "Chumül amuaymi? · Wüle amuan."; "Kuyfi, kom che mapudungukefuy."; "Kom antü mapudunguken."
+- (Nov 22) Brandon: bienvenida del trawün **"Küme akunkonpayami fachi trawün, peñi/lamngen"** (hombres: peñi a hombres, lamngen a mujeres; mujeres: lamngen a todos; usa addr()). Opción "después" = **"Wüla müten"**. Lecciones alargadas (≈4 min), nuevas formas ⚠: pen/peymi/pey; ülkantun/ülkantuymi/ülkantuy; nütramkan; "Iñche Ñanku pingen. Eymi kay?"; "Iñchiw ñi chaw amuyu"; "Iñchiw ñi ñuke küdawiyu"; pu domo / pu wentru; "Pu domo ülkantuyngün"; amukilnge/amukilmu/amukilmün; amulaiñ/amuaiñ/amulayaiñ; "Chew mülimi? · Ruka mew mülen."; "Chumül amuaymi? · Wüle amuan."; "Kuyfi, kom che mapudungukefuy."; "Kom antü mapudunguken."
 - (Nov 22) Brandon: viento/olas del lof lafkenche más suaves.
 
 ### Tanda 22 · el tiempo (Nov 22)
@@ -451,3 +451,4 @@ Ciclo de tiempo por tipo de tierra (cambia cada 3-7 minutos reales). Todo ⚠:
 - **Informe de kimün** para el profe: precisión por tema, raíces, lecciones, palabras más falladas; copiar o imprimir/PDF.
 - **Re mapudungun** ahora también oculta la traducción de las preguntas y de las opciones en mapudungun; un botón **?** la muestra (el informe cuenta cuántas veces se usó).
 - (Nov 22) Brandon: el repaso se llama **"Wiñochillkatun"**. Trafkintu entre dos: **"Trafkintuayu?"** (entre muchos sería "Trafkintuaiñ?"). El punto del palin: se usan **"raya"** y **"tripal"** (el juego alterna: "Kiñe tripal!", "Epu raya!"…). Ragileo también **f→b**. Brandon aprueba las tablas de grafemarios y la conversión de nombres propios.
+- (Nov 22) Brandon: corrige **"Wüla müten"** (no "Wüle müten") en las opciones del trawün y del palin.

@@ -1778,7 +1778,7 @@ function trawunTalk(id){
   const tf=TRW_F[id],ad=addr(tf),fp=S.fem?'a':'o';
   say([done?L(who,'Mari mari, '+ad+'! Kimeltuaiñ.','¡Volviste! ¿Repasamos la lección?','You came back! Shall we go over the lesson?')
      :L(who,'Küme akunkonpayami fachi trawün, '+ad+'.','Bienvenid'+fp+' a este trawün, '+(ad==='peñi'?'hermano':S.fem?'hermana':'hermano')+'. Siéntate junto al kütral: hoy aprendemos juntos.','Welcome to this trawün, '+(S.fem?'sister':'brother')+'. Sit by the kütral: today we learn together.')],()=>
-    choose(Object.assign({},D.t,{m:'Trawüleaiñ?'}),[{m:'May',g:en?'Take the lesson (about 4 minutes)':'Tomar la lección (unos 4 minutos)',v:1},{m:'Wüle müten',g:en?'Later':'Después',v:0}],v=>{if(v)run(0)},true,true));
+    choose(Object.assign({},D.t,{m:'Trawüleaiñ?'}),[{m:'May',g:en?'Take the lesson (about 4 minutes)':'Tomar la lección (unos 4 minutos)',v:1},{m:'Wüla müten',g:en?'Later':'Después',v:0}],v=>{if(v)run(0)},true,true));
   function run(i){
     const chunk=[];while(i<D.steps.length&&!D.steps[i].q&&!D.steps[i].b){chunk.push(sub(D.steps[i]));i++}
     const next=()=>{if(i>=D.steps.length)return finish();ask(D.steps[i],()=>run(i+1))};
