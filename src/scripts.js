@@ -616,8 +616,8 @@ function pewKidsTalk(){
       S.items.kofke-=2;S.flags.pew_kidd=1;persist();sfx('lvl');
       say([L('Pichiche','Chaltu may!','¡Gracias!','Thank you!'),
         N('Los dos niños comen felices. Después, en secreto: «Al lado de la ruka grande del este enterramos un tesoro. ¡Escarba ahí!»','The two children eat happily. Then, in a whisper: "Beside the big ruka in the east we buried a treasure. Dig there!"')])},true,true);
-  say([L('Pichiche','Ngülliw ayüken! Kofke kay!','¡Me gustan los piñones! ¡Y el pan!','I love pewen nuts! And bread!'),
-    L('Pichiche','Epu kofke nielmi, eluen!','Si tienes dos panes, ¡dame!','If you have two breads, give them to us!'),
+  say([L('Pichiche','Ngülliw ayükefiñ! Kofke kafey!','¡Me gustan los piñones! ¡Y el pan!','I love pewen nuts! And bread!'),
+    L('Pichiche','Epu kofke nielmi, eluaen!','Si tienes dos panes, ¡dame!','If you have two breads, give them to us!'),
     N('Los kofke se compran donde el ngillakafe, o te los regala quien hace pan.','Kofke can be bought from the trader, or given by whoever is baking.')]);
 }
 function mushayTalk(){
@@ -732,13 +732,13 @@ function kintulTalk(){
 function rayenTalk(){
   if(!S.flags.pew_ngu1){S.flags.pew_ngu1=1;S.gold+=10;persist();sfx('pick');
     return say([L('Papay Rayen','Mari mari, '+addr(true)+'! Konpange, konpange!','¡Hola! ¡Pasa, pasa!','Hello! Come in, come in!'),
-      L('Papay Rayen','Kütral mew ngülliw kotüken.','Estoy tostando ngülliw (piñones) al fuego.','I am toasting ngülliw (pewen nuts) on the fire.'),
+      L('Papay Rayen','Kütral mew ngülliw kotülefiñ.','Estoy tostando ngülliw (piñones) al fuego.','I am toasting ngülliw (pewen nuts) on the fire.'),
       N('El ngülliw es la semilla del pewen: comida, harina y hasta moneda en estas tierras. Te convida un puñado tostado: mari (10) ngülliw.','The ngülliw is the seed of the pewen tree: food, flour, even money in these lands. She treats you to a toasted handful: mari (10) ngülliw.'),
-      L('Papay Rayen','Yenge tüfachi ngülliw arriero mew. Rüpü mew müley.','Lleva estos piñones al arriero. Está en el camino, con sus caballos.','Take these pewen nuts to the muleteer. He is on the road, with his horses.'),
+      L('Papay Rayen','Yenge tüfachi ngülliw arriero mew. Rüpü mew müley ñi pu kawellu engün.','Lleva estos piñones al arriero. Está en el camino, con sus caballos.','Take these pewen nuts to the muleteer. He is on the road, with his horses.'),
       N('Fíjate en yenge: ye- es «llevar» y -nge la orden: «¡lleva!».','Notice yenge: ye- is «carry» and -nge the command: «carry!».')]);}
   if(!S.flags.pew_ngu2)return say([L('Papay Rayen','Arriero mew amunge! Rüpü mew müley.','¡Ve donde el arriero! Está en el camino.','Go to the muleteer! He is on the road.')]);
   say([L('Papay Rayen','Chaltu may, '+addr(true)+'!','¡Gracias!','Thank you!'),
-    L('Papay Rayen','Ürkütunge kütral mew.','Descansa junto al fuego.','Rest by the fire.')]);
+    L('Papay Rayen','Ürkütunge inaltu kütral mew.','Descansa junto al fuego.','Rest by the fire.')]);
 }
 function nawelTalk(){
   if(S.flags.pew_llawe)return say([L('Chachay Nawel','Fewla kümelkalen. Chaltu may!','Ahora estoy mejor. ¡Gracias!','I am better now. Thank you!'),
@@ -939,7 +939,7 @@ function lakuTalk(){
       N('Así se pregunta: chem (qué), iney (quién), chew (dónde), chumül (cuándo), chumten (cuánto). Tu chillka las tiene en «Chem, iney, chew».','This is how you ask: chem (what), iney (who), chew (where), chumül (when), chumten (how much). Your chillka has them under «Chem, iney, chew».'),
       L('Laku','Lonko mew amunge. Kütral mew inaltuley.','Ve donde el lonko. Está junto al kütral.','Go to the lonko. He is by the fire.')]);}
   const ls=[L('Laku','Mari mari, '+nm()+'!','¡Hola, '+nm()+'!','Hello, '+nm()+'!')];
-  if(S.flags.ngen3)ls.push(L('Laku','Ngen-pewen nepey! Ayüwün.','¡Ngen-pewen despertó! Estoy feliz.','Ngen-pewen has woken up! I am happy.'));
+  if(S.flags.ngen3)ls.push(L('Laku','Ngen-pewen nepey! Ayüwkülen.','¡Ngen-pewen despertó! Estoy feliz.','Ngen-pewen has woken up! I am happy.'));
   else ls.push(N('El pillañ (el volcán) queda al este, pasando el bosque de pewenes y los campos de nieve.','The pillañ (the volcano) lies to the east, past the pewen forest and the snowfields.'));
   say(ls);
 }
@@ -998,14 +998,14 @@ function arrieroTalk(){
   if(S.flags.pew_ngu1&&!S.flags.pew_ngu2){S.flags.pew_ngu2=1;persist();sfx('lvl');
     return say([N('Le entregas los ngülliw tostados de la papay Rayen.','You hand him papay Rayen\'s toasted pewen nuts.'),
       L('Wentru','Chaltu may! Kümey ngülliw!','¡Gracias! ¡Qué ricos piñones!','Thank you! What good pewen nuts!'),
-      L('Wentru','Allkütunge: pewen mapu mew, epu fütra pewen müley, rüpü ñi willi püle.','Escucha: en el bosque hay dos pewenes gemelos, al sur del camino.','Listen: in the forest there are two twin pewen trees, south of the road.'),
+      L('Wentru','Allkütunge: pewen mapu mew, epu fütra pewen müley, willi püle rüpü mew.','Escucha: en el bosque hay dos pewenes gemelos, al sur del camino.','Listen: in the forest there are two twin pewen trees, south of the road.'),
       N('«Mis caballos siempre escarban justo entre esos dos árboles. Algo brilla ahí abajo. Busca justo en medio.»','"My horses always paw at the ground right between those two trees. Something shines down there. Search right in the middle."')]);}
-  if(S.flags.pew_ke)return say([L('Wentru','Kawellu mew amuken. Pewkayal!','Yo ando a caballo. ¡Hasta luego!','I ride on horseback. See you later!')]);
-  const qs=[{q:L('Wentru','Pu pewenche ngülliw i___','Los pewenche comen piñones (siempre, de costumbre).','The Pewenche eat pewen nuts (always, as a habit).'),o:['iyngün','ikeyngün','ikey'],a:'ikeyngün'},
+  if(S.flags.pew_ke)return say([L('Wentru','Kawellutulen. Pewkayal!','Yo ando a caballo. ¡Hasta luego!','I ride on horseback. See you later!')]);
+  const qs=[{q:L('Wentru','Pu pewenche ngülliw___','Los pewenche comen piñones (siempre, de costumbre).','The Pewenche eat pewen nuts (always, as a habit).'),o:['iyngün','tuyngün','ikey'],a:'tuyngün'},
     {q:L('Wentru','Iñche mapudungu___','Yo hablo mapudungun (siempre, de costumbre).','I speak Mapudungun (always, as a habit).'),o:['mapudungun','mapudunguken','mapudungukey'],a:'mapudunguken'},
-    {q:L('Wentru','Eymi kawellu mew amu___','Tú andas a caballo (siempre, de costumbre).','You ride on horseback (always, as a habit).'),o:['amuymi','amukeymi','amuken'],a:'amukeymi'}];
-  say([L('Wentru','Mari mari, '+addr(false)+'. Kawellu mew amuken.','Hola. Yo ando a caballo.','Hello. I ride on horseback.'),
-    N('Fíjate en amuken: -ke- dice lo que alguien hace siempre, por costumbre. El arriero quiere ver si lo entiendes. Tu chillka lo explica en «-ke-».','Notice amuken: -ke- says what someone always does, as a habit. The muleteer wants to see if you understand. Your chillka explains it under «-ke-».')],()=>ask(0));
+    {q:L('Wentru','Eymi kawellu___','Tú andas a caballo (siempre, de costumbre).','You ride on horseback (always, as a habit).'),o:['amuymi','tukeymi','amuken'],a:'tukeymi'}];
+  say([L('Wentru','Mari mari, '+addr(false)+'. Kawellutulen.','Hola. Yo ando a caballo.','Hello. I ride on horseback.'),
+    N('-ke- dice lo que alguien hace siempre, por costumbre. El arriero quiere ver si lo entiendes. Tu chillka lo explica en «-ke-».','-ke- says what someone always does, as a habit. The muleteer wants to see if you understand. Your chillka explains it under «-ke-».')],()=>ask(0));
   function ask(i){
     if(i>=qs.length){S.flags.pew_ke=1;S.items.kofke+=2;S.gold+=30;S.xp+=4;persist();sfx('lvl');
       return say([praise(),L('Wentru','Kümey! Mapudungukeymi!','¡Bien! ¡Hablas mapudungun!','Good! You speak Mapudungun!'),N('Te da dos kofke y küla mari (30) ngülliw. +4 kimün.','He gives you two kofke and küla mari (30) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
@@ -1020,7 +1020,7 @@ function trutTalk(){
   say([L('Weche wentru','Trutruka ayüken.','Me gusta la trutruka.','I love the trutruka.'),N('La trutruka es un instrumento largo de colihue con un cuerno en la punta. Suena en las ceremonias y en las fiestas.','The trutruka is a long instrument made of colihue cane with a horn at the end. It sounds at ceremonies and celebrations.')]);
 }
 function kona3Talk(){
-  if(S.flags.ngen3)return say([L('Kona','Cherufe ngelay! Ayüwün!','¡Ya no está el Cherufe! ¡Qué feliz estoy!','The Cherufe is gone! I am so happy!')]);
+  if(S.flags.ngen3)return say([L('Kona','Amutuy Cherufe! Ayüwkülen!','¡Se fue el Cherufe! ¡Qué feliz estoy!','The Cherufe has gone! I am so happy!')]);
   say([L('Kona','Cherufe müley pillañ mew. Kütralngey ka kurangey!','El Cherufe está en el volcán. ¡Es fuego y es piedra!','The Cherufe is in the volcano. It is fire and it is stone!'),
     N('La entrada está entre las rocas, subiendo al este. Dicen que adentro hay piedras con números muy grandes y otra que hace preguntas.','The entrance is among the rocks, up to the east. They say inside there are stones with very big numbers and another one that asks questions.')]);
 }
