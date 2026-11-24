@@ -31,7 +31,7 @@ function endCutLines(){const n=nm();return[
 function startEndCut(){$('ui').classList.add('cutm');mode='cut';ECUT={i:0,t:0,L:endCutLines()};$('skip').style.display='block';AU.name=null;playSong('ending');nextEndCut()}
 function nextEndCut(){if(!ECUT)return;if(ECUT.i>=ECUT.L.length)return endEndCut();ECUT.t=0;const ls=ECUT.L[ECUT.i];say(ls,()=>{if(!ECUT)return;ECUT.i++;nextEndCut()})}
 /* the end credits: a film ("Kelluaeyu") that plays once the ending is over, with its own skip button */
-function playCredits(done){
+function playCredits(done){gcEvent('creditos','Créditos finales');
   let fin=false;const end=()=>{if(fin)return;fin=true;try{v.pause()}catch(e){}ov.remove();done()};
   const ov=document.createElement('div');ov.id='credits';ov.style.cssText='position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center';
   const v=document.createElement('video');v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';

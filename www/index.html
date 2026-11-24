@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='4e8a73c-202611241219';
+window.KEWUN_BUILD='cdf7379-202611241228';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -229,6 +229,14 @@ const h2=(x,y,s)=>{let n=(Math.imul(x|0,374761393)+Math.imul(y|0,668265263)+Math
 const hexRGB=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
 const GA=(m,f)=>S&&S.fem?f:m;
 const addr=npcFem=>(S&&S.fem)||npcFem?'lamngen':'peñi';
+
+/* GoatCounter (same account as the other apps): page views and a few game events, only on the public site */
+function gcCount(path,title,ev){if(location.protocol!=='https:'||location.hostname!=='brogers36.github.io'||window.KEWUN_MASTER)return;
+  try{new Image().src='https://brogers36.goatcounter.com/count?p='+encodeURIComponent(path)+'&t='+encodeURIComponent(title||'')+(ev?'&e=true':'&r='+encodeURIComponent(document.referrer||''))+
+    '&s='+encodeURIComponent(screen.width+','+screen.height+','+(window.devicePixelRatio||1))+'&rnd='+Math.random().toString(36).slice(2)}catch(e){}}
+function gcEvent(name,title){gcCount('kewun-'+name,title||name,true)}
+gcCount(location.pathname||'/',document.title,false);
+window.addEventListener('appinstalled',()=>gcEvent('app-instalada','Kewün Newen: app instalada'));
 
 /* ============================================================
    AUDIO: chiptune sequencer + sound effects (all original)
@@ -2639,6 +2647,7 @@ function mapSong(){const m=MAPS[CUR];
   if(m.ngenmap)return rsong(awake(m.region)?'ngen':'cave');const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'||s==='pew'||s==='wil'||s==='puel'))return rsong(s+'G');return rsong(s)}
 function loadMap(id,x,y,quiet){TALKER=null;
   CUR=id;M=MAPS[id];
+  if(S&&S.flags&&M&&M.region&&!S.flags['gc_'+M.region]){S.flags['gc_'+M.region]=1;gcEvent('region-'+M.region,'Región: '+M.region)}
   grid=M.rows.map(r=>r.split(''));
   for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++){const c=grid[yy][xx];
     if((c==='P'||c==='C'||c==='K'||c==='k'||c==='L'||c==='x')&&S.flags['t:'+id+':'+xx+','+yy])grid[yy][xx]=M.floor;}
@@ -3108,7 +3117,7 @@ function endCutLines(){const n=nm();return[
 function startEndCut(){$('ui').classList.add('cutm');mode='cut';ECUT={i:0,t:0,L:endCutLines()};$('skip').style.display='block';AU.name=null;playSong('ending');nextEndCut()}
 function nextEndCut(){if(!ECUT)return;if(ECUT.i>=ECUT.L.length)return endEndCut();ECUT.t=0;const ls=ECUT.L[ECUT.i];say(ls,()=>{if(!ECUT)return;ECUT.i++;nextEndCut()})}
 /* the end credits: a film ("Kelluaeyu") that plays once the ending is over, with its own skip button */
-function playCredits(done){
+function playCredits(done){gcEvent('creditos','Créditos finales');
   let fin=false;const end=()=>{if(fin)return;fin=true;try{v.pause()}catch(e){}ov.remove();done()};
   const ov=document.createElement('div');ov.id='credits';ov.style.cssText='position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center';
   const v=document.createElement('video');v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
@@ -8544,10 +8553,10 @@ function slotPick(forNew,cb){
         return}
       cb(v)},true)}
 function contSlot(n){
-  setSlot(n);const sv=loadSave(n);if(!sv)return;
+  setSlot(n);const sv=loadSave(n);if(!sv)return;gcEvent('continuar','Continuar partida');
   S=Object.assign(newState(sv.hero||'llanka'),sv);S.items.diwen=S.items.diwen||0;S.gear=S.gear||{};S.gloss=LANG;S.pw={speed:0,pewen:0,gold:0};S.roots=S.roots.map(r=>r==='amu'?'amutu':r==='wiñotu'?'wüñotreka':r==='nag'?'nagtu':r).filter(r=>ROOTS[r]);if(S.last)S.last=null;$('title').style.display='none';mode='map';AU.name=null;loadMap(MAPS[S.map]?S.map:'rupu',S.x,S.y);
 }
-function newGo(src){slotPick(true,n=>{setSlot(n);S=src?heroState(src):newState(HERO);persist();$('title').style.display='none';startCut()})}
+function newGo(src){slotPick(true,n=>{setSlot(n);S=src?heroState(src):newState(HERO);persist();gcEvent('nuevo-'+(S.hero||HERO),'Juego nuevo: '+((HEROES[S.hero]||{}).name||S.hero));$('title').style.display='none';startCut()})}
 $('bNew').onclick=()=>{auInit();const won=[1,2,3].filter(n=>{const v=loadSave(n);return v&&v.flags&&v.flags.won});
   if(!won.length)return newGo(null);
   const en=LANG==='en';

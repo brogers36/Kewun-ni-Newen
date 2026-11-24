@@ -76,3 +76,11 @@ const h2=(x,y,s)=>{let n=(Math.imul(x|0,374761393)+Math.imul(y|0,668265263)+Math
 const hexRGB=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
 const GA=(m,f)=>S&&S.fem?f:m;
 const addr=npcFem=>(S&&S.fem)||npcFem?'lamngen':'peñi';
+
+/* GoatCounter (same account as the other apps): page views and a few game events, only on the public site */
+function gcCount(path,title,ev){if(location.protocol!=='https:'||location.hostname!=='brogers36.github.io'||window.KEWUN_MASTER)return;
+  try{new Image().src='https://brogers36.goatcounter.com/count?p='+encodeURIComponent(path)+'&t='+encodeURIComponent(title||'')+(ev?'&e=true':'&r='+encodeURIComponent(document.referrer||''))+
+    '&s='+encodeURIComponent(screen.width+','+screen.height+','+(window.devicePixelRatio||1))+'&rnd='+Math.random().toString(36).slice(2)}catch(e){}}
+function gcEvent(name,title){gcCount('kewun-'+name,title||name,true)}
+gcCount(location.pathname||'/',document.title,false);
+window.addEventListener('appinstalled',()=>gcEvent('app-instalada','Kewün Newen: app instalada'));
