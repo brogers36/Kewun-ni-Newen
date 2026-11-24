@@ -91,6 +91,13 @@ function questLines(){
     else if(F['mql_'+r])Q(t,0,hes,hen);
     else if(F['mq_'+r])Q(t,0,'Habla con el lonko: él tiene su parte.','Speak with the lonko: he has his part.');
   }
+  if(F.nico_d)Q('Nico',1,'Nico se presentó con el lonko lafkenche.','Nico introduced himself to the Lafkenche lonko.');
+  else if(F.nico_t)Q('Nico',0,'Nico te espera en el lof lafkenche, junto al lonko.','Nico is waiting for you in the Lafkenche lof, beside the lonko.');
+  else if(F.nico_q)Q('Nico',0,'Ayuda a Nico a ensayar su presentación, en el camino del mar.','Help Nico practise his introduction, on the sea road.');
+  if(F.seba_d)Q('Seba',1,'El Kiltro volvió con Seba.','Kiltro is back with Seba.');
+  else if(F.seba_dog)Q('Seba',0,'El Kiltro volvió al lof nagche: ve a ver a Seba.','Kiltro ran back to the Nagche lof: go and see Seba.');
+  else if(F.seba_q)Q('Seba',0,'El perro de Seba anda por los campos de los animales. Llámalo en mapudungun.','Seba\'s dog is out in the animal fields. Call him in Mapudungun.');
+  if(F.nacho_d)Q('Nacho',1,'La chuchu de Nacho recibió su audio.','Nacho\'s chuchu got his voice message.');
   if(F.l_diwd)Q('Diweñ',1,'El diweñfe quedó contento.','The diweñ gatherer is happy.');
   else if(F.l_diwq)Q('Diweñ',0,'Junta tres diweñes en Fotra mapu para el diweñfe.','Gather three diweñ in Fotra mapu for the diweñfe.');
   if(F.n_lawd)Q('Lawen kachu',1,'La lawentuchefe tiene sus hierbas.','The healer has her herbs.');
