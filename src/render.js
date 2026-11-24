@@ -298,7 +298,7 @@ function renderMap(){
   if(M.bg==='lagoon'){c.fillStyle=S.flags.ngen?'rgba(120,200,255,.08)':'rgba(60,30,90,.22)';c.fillRect(0,VY,LW,VH)}
   atmos(c);
   if(CT)ctLight(c,glows);
-  if(typeof ngOverlay==='function')ngOverlay(c,cx,cy);   // Ngoyün mapu: the grey goes over the light too
+  if(typeof ngOverlay==='function')ngOverlay(c,cx,cy);   // Upewtuwün mapu: the grey goes over the light too
   drawHUD(c);
 }
 // palin wiño: a long wooden stick held at the hip, its curved head sweeping the ground

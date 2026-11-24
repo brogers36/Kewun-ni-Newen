@@ -1,5 +1,5 @@
 /* ======================================================================
-   NGOYÜN MAPU, the secret level (opens once every secret is done:
+   UPEWTUWÜN MAPU, the secret level (opens once every secret is done:
    the six hidden wekufü, Münche lafken, Ti Fütra Ngoymatulfe, the
    Epunamun and the Yewen). Your shadow walks away from you on the sea
    road and into a grey crack: inside is the land where everything you
@@ -22,13 +22,13 @@ const llawName=()=>S.name+' ñi llawfeñ';
 const NGY={floor:',',bg:'coast',region:'ngoyun',ngoyun:1,fog:1};
 function addNgMap(id,def){def.rows=MAPROWS[id];def.w=def.rows[0].length;def.h=def.rows.length;MAPS[id]=def}
 const LLAW_LOCK=[N('Una niebla gris, fina como ceniza, cierra el camino. Detrás de ella todo está borrado: primero hay que devolverle sus palabras a este lugar.','A grey mist, fine as ash, closes the road. Beyond it everything is erased: first this place needs its words back.')];
-addNgMap('y_rupu',Object.assign({},NGY,{floor:'.',name:'Ngoyün rüpü',g:{es:'El camino del olvido',en:'The road of forgetting'},song:'coast',
+addNgMap('y_rupu',Object.assign({},NGY,{floor:'.',name:'Upewtuwün rüpü',g:{es:'El camino del olvido',en:'The road of forgetting'},song:'coast',
  edges:{left:{to:'rupu',x:5,y:5},right:{to:'y_lof',x:1,y:9,req:'yfull:y_rupu',reqMsg:LLAW_LOCK}},
  signs:{'4,4':()=>ngSign('4,4'),'13,5':()=>ngSign('13,5'),'20,4':()=>ngSign('20,4'),'27,4':()=>ngSign('27,4')},
  ngspots:{'4,4':[4,4],'13,5':[13,5],'20,4':[20,4],'27,4':[27,4]},
  ents:[{id:'ykuku',kind:'npc',look:'kuku',fem:1,x:3,y:5,dir:'right',fixed:1,talk:()=>yKukuTalk()},
    {kind:'enemy',x:15,y:9,party:['ngoyam','ngoyam']},{kind:'enemy',x:22,y:3,party:['ngoyam','ngoyam','ngoyam']}]}));
-addNgMap('y_lof',Object.assign({},NGY,{name:'Ngoyün lof',g:{es:'La comunidad del olvido',en:'The community of forgetting'},song:'lof',pave:1,
+addNgMap('y_lof',Object.assign({},NGY,{name:'Upewtuwün lof',g:{es:'La comunidad del olvido',en:'The community of forgetting'},song:'lof',pave:1,
  doors:{'3,8':{to:'y_ruka',x:6,y:7,req:'yfull:y_lof',reqMsg:[N('La puerta de la ruka de tu kuku está tapada con niebla gris. Adentro, alguien respira con tu mismo ritmo.','The door of your kuku\'s ruka is stopped up with grey mist. Inside, someone is breathing at your own pace.'),
    N('Primero devuélvele sus palabras a la gente del lof.','First give the people of the lof their words back.')]}},
  edges:{left:{to:'y_rupu',x:28,y:6}},
@@ -44,7 +44,7 @@ addNgMap('y_lof',Object.assign({},NGY,{name:'Ngoyün lof',g:{es:'La comunidad de
    {id:'ypichi1',kind:'npc',look:'child',x:28,y:13,dir:'right',fixed:1,talk:()=>ngKid()},
    {id:'ypichi2',kind:'npc',look:'childf',fem:1,x:28,y:14,dir:'right',fixed:1,talk:()=>ngKid()},
    {kind:'enemy',x:20,y:13,party:['ngoyam','ngoyam','ngoyam']}]}));
-addNgMap('y_ruka',Object.assign({},NGY,{floor:'_',name:'Ngoyün ruka',g:{es:'La ruka del olvido',en:'The ruka of forgetting'},song:'lof',pal:'rukain',wall:'ruka',interior:1,
+addNgMap('y_ruka',Object.assign({},NGY,{floor:'_',name:'Upewtuwün ruka',g:{es:'La ruka del olvido',en:'The ruka of forgetting'},song:'lof',pal:'rukain',wall:'ruka',interior:1,
  edges:{down:{to:'y_lof',x:3,y:9}},ngspots:{},
  ents:[{id:'yllaw',kind:'npc',look:'llawfen',x:5,y:4,dir:'down',fixed:1,flag:'llaw_won',talk:()=>llawTalk()}]}));
 // the crack on the real sea road, once the shadow has walked off
@@ -87,7 +87,7 @@ function ngSign(k){const D=NGSIGN[k],w=D.pre+D.gap+D.suf,en=S.gloss==='en';
   const q={m:D.pre+'_'+D.suf,es:'Una piedra tallada, gris, borrada por el olvido. Falta una letra. ('+D.es+')',en:'A grey carved stone, worn away by forgetting. One letter is missing. ('+D.en+')'};
   const opts=D.o.map(g=>D.pre+g+D.suf);
   const ask=()=>choose(q,ngShuf(opts).map(o=>({m:o,v:o})),v=>{
-    const ok=v===w;track('ngoyün mapu (letras)',ok,q,opts,w);
+    const ok=v===w;track('upewtuwün mapu (letras)',ok,q,opts,w);
     if(ok)return ngRestore(k,[Object.assign(L('',w,'«'+D.es+'». La letra vuelve a su lugar, y alrededor de la piedra el mundo recupera su color.','"'+D.en+'". The letter returns to its place, and around the stone the world gets its colour back.'),{fx:()=>sfx('cast')})]
       .concat(D.note?[N(D.note[0],D.note[1])]:[]));
     sfx('bad');say([N('Las letras se deshacen como ceniza. No era esa.','The letters crumble like ash. That was not it.')],ask)},false,true);
@@ -119,7 +119,7 @@ function ngPerson(id){const D=NGPEOPLE[id],en=S.gloss==='en';
   if(ngDone('y_lof',id))return say([L(D.who,D.full,D.fes,D.fen)]);
   const q={m:D.pre+'___'+D.post,es:D.es,en:D.en,who:D.who};
   const ask=()=>choose(q,ngShuf(D.o).map(o=>({m:o,v:o})),v=>{
-    const ok=v===D.a;track('ngoyün mapu (palabras)',ok,q,D.o,D.a);
+    const ok=v===D.a;track('upewtuwün mapu (palabras)',ok,q,D.o,D.a);
     if(ok)return ngRestore(id,[Object.assign(L(D.who,D.full,D.fes,D.fen),{fx:()=>sfx('cast')}),N('El color le vuelve a la cara, a la ropa, al suelo que pisa.','Colour comes back to their face, their clothes, the ground they stand on.')]
       .concat(D.after.map(l=>l.m&&l.m.includes('@')?Object.assign({},l,{who:S.name,m:l.m.replace('@',S.name)}):l)));
     sfx('bad');say([N('La palabra no encaja: la frase se queda gris.','The word does not fit: the sentence stays grey.')],ask)},false,true);
@@ -132,7 +132,7 @@ function ngKid(){
 function crackTalk(){const en=S.gloss==='en';
   say([N(S.flags.llaw_won?'La grieta sigue ahí, pero ya no es gris: adentro se ve el color del camino y del lof.':'Una grieta gris en el aire, del alto de una persona. Por ella se fue tu sombra. Adentro no hay color, y las palabras flotan como ceniza.',
     S.flags.llaw_won?'The crack is still there, but it is no longer grey: inside you can see the colours of the road and the lof.':'A grey crack in the air, the height of a person. Your shadow went through it. Inside there is no colour, and words drift like ash.')],()=>
-    choose({m:'Ngoyün mapu',es:'¿Entras?',en:'Go in?'},[{m:en?'Go in':'Entrar',v:1},{m:en?'Not yet':'Todavía no',v:0}],v=>{
+    choose({m:'Upewtuwün mapu',es:'¿Entras?',en:'Go in?'},[{m:en?'Go in':'Entrar',v:1},{m:en?'Not yet':'Todavía no',v:0}],v=>{
       if(!v)return;sfx('swirl');loadMap('y_rupu',1,6)},true,true))}
 function llawIntro(){
   S.flags.llaw_seen=1;persist();
@@ -146,7 +146,7 @@ loadMap=function(id){const r=_ngLoadMap.apply(this,arguments);
   if(id==='rupu'&&allSecrets()&&!S.flags.llaw_seen)setTimeout(()=>{if(!active&&mode==='map'&&CUR==='rupu')llawIntro()},700);
   if(MAPS[id]&&MAPS[id].ngoyun&&!S.flags['ng_in:'+id]){S.flags['ng_in:'+id]=1;persist();
     const T={y_rupu:[N('Todo es gris. El mar no se mueve, el fuego no da calor. Es el camino del mar, el primero... pero alguien le borró los colores y las letras.','Everything is grey. The sea does not move, the fire gives no warmth. It is the sea road, the very first one... but someone has erased its colours and its letters.'),
-        N('Por el aire flotan letras sueltas, como ceniza. Estás en Ngoyün mapu: aquí viene a parar todo lo que se olvida.','Loose letters drift through the air like ash. You are in Ngoyün mapu: everything that is forgotten ends up here.')],
+        N('Por el aire flotan letras sueltas, como ceniza. Estás en Upewtuwün mapu: aquí viene a parar todo lo que se olvida.','Loose letters drift through the air like ash. You are in Upewtuwün mapu: everything that is forgotten ends up here.')],
       y_lof:[N('El lof de siempre, en gris. La gente está en sus lugares, pero quieta, con la boca abierta a medio decir algo. A cada uno le falta una palabra.','The same old lof, in grey. The people are in their places, but still, their mouths open halfway through saying something. Each of them is missing a word.')],
       y_ruka:[]}[id];
     if(T&&T.length)setTimeout(()=>{if(!active&&mode==='map')say(T)},650)}
@@ -193,7 +193,7 @@ function llawPool(n){const qs=[];
   return qs}
 function llawKewun(e){
   const qs=llawPool(3),mine=qs.filter(q=>q.mine).length;
-  say([Object.assign(L(e.label,'Ngoyün!','¡Olvido!','Forgetting!'),{fx:()=>{sfx('bad');B.flash=14;B.shake=10}}),
+  say([Object.assign(L(e.label,'Upewtuwün!','¡Olvido!','Forgetting!'),{fx:()=>{sfx('bad');B.flash=14;B.shake=10}}),
     N(mine?'Tu sombra te devuelve '+(mine===qs.length?'las preguntas':mine+' de las preguntas')+' que fallaste en tu viaje. Cada respuesta correcta la hiere; cada error la alimenta y te cuesta 2 piwke.':'Tu sombra casi no tiene olvidos tuyos que devolverte: te pregunta lo que aprendiste. Cada respuesta correcta la hiere; cada error la alimenta y te cuesta 2 piwke.',
       mine?'Your shadow hands back '+(mine===qs.length?'the questions':mine+' of the questions')+' you missed on your journey. Every right answer wounds it; every mistake feeds it and costs you 2 hearts.':'Your shadow has almost none of your forgettings to hand back: it asks you what you learned. Every right answer wounds it; every mistake feeds it and costs you 2 hearts.')],()=>ask(0));
   function ask(i){

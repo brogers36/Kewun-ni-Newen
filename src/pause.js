@@ -122,8 +122,8 @@ function mapaLines(){
   const ng=['ngen','ngen2','ngen3','ngen4','ngen5'].filter(k=>F[k]).length;
   const sbs=['sb1','sb2','sb3','sb4','sb5','sb6'].filter(k=>F[k]).length;
   ls.push(L('','Mapu',
-    'Ngen despiertos '+ng+'/5 · Llum wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoymatulfe · '+(F.epu_won?'■':'□')+' Epunamun · '+(F.yewen_won?'■':'□')+' Yewen'+(F.llaw_seen?' · '+(F.llaw_won?'■':'□')+' Ngoyün mapu':''),
-    'Ngen awakened '+ng+'/5 · Hidden wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoymatulfe · '+(F.epu_won?'■':'□')+' Epunamun · '+(F.yewen_won?'■':'□')+' Yewen'+(F.llaw_seen?' · '+(F.llaw_won?'■':'□')+' Ngoyün mapu':'')));
+    'Ngen despiertos '+ng+'/5 · Llum wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoymatulfe · '+(F.epu_won?'■':'□')+' Epunamun · '+(F.yewen_won?'■':'□')+' Yewen'+(F.llaw_seen?' · '+(F.llaw_won?'■':'□')+' Upewtuwün mapu':''),
+    'Ngen awakened '+ng+'/5 · Hidden wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoymatulfe · '+(F.epu_won?'■':'□')+' Epunamun · '+(F.yewen_won?'■':'□')+' Yewen'+(F.llaw_seen?' · '+(F.llaw_won?'■':'□')+' Upewtuwün mapu':'')));
   if(S.hm)ls.push(L('','Weichafe'+(S.hm>1?' ×'+S.hm:''),'Modo héroe: conservas tu kimün y tus cosas, pero los wekufü crecen contigo y las pruebas no dan pistas.','Hero mode: you keep your kimün and your things, but the wekufü grow with you and the trials give no hints.'));
   return ls}
 /* ---------- vocabulary unlocked outside battle roots ---------- */
