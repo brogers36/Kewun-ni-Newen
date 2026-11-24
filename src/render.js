@@ -758,7 +758,7 @@ function renderBattle(){
     const col=!tall&&!ET[e.t].boss&&(bossI<0?n>1:others.length>1)&&!(fi>=0&&bossI<0&&!grd.length);
     const bw2=col?28:bw,bx2=col?Math.round(cx+sz/2+6):bx,by2=col?bse-10:by;
     R(c,bx2-1,by2-1,bw2+2,5,'#181018');R(c,bx2,by2,bw2,3,'#4a1a1f');R(c,bx2,by2,Math.max(0,Math.round(bw2*e.hp/e.max)),3,'#f07028');R(c,bx2,by2,Math.max(0,Math.round(bw2*e.hp/e.max)),1,'#ffb070');
-    if(col)OV.push(()=>txt(e.label,bx2,by2-3,'#ffffff',e.label.length>11?9:12,'left'));else OV.push(()=>txt(e.label,cx,by2+13,'#ffffff',13,'center'));
+    if(!window.FILM){if(col)OV.push(()=>txt(e.label,bx2,by2-3,'#ffffff',e.label.length>11?9:12,'left'));else OV.push(()=>txt(e.label,cx,by2+13,'#ffffff',13,'center'))}
     const tg=B.cursor==='all'||B.cursor===B.en.indexOf(e);
     if(tg&&frame%20<15){const ay=y-8+Math.round(Math.sin(frame/5)*2);for(let k=0;k<5;k++){R(c,cx-5+k,ay+k,11-k*2,1,'#ffe040');R(c,cx-6+k,ay+k,1,1,'#181018');R(c,cx+5-k,ay+k,1,1,'#181018')}R(c,cx-6,ay-1,13,1,'#181018')}
   });
@@ -796,6 +796,7 @@ function renderBattle(){
     c.strokeStyle='rgba(255,255,255,'+(.5*(1-k)).toFixed(2)+')';c.lineWidth=3;
     c.beginPath();c.ellipse(LW/2,LH/2,Math.max(.01,rr),Math.max(.01,rr*.78),0,0,6.283);c.stroke();c.lineWidth=1;
     if(B.wipe<=0)B.snap=null}
+  if(!window.FILM){   // FILM: the credits recorder hides the HUD
   // hero panel (LttP-style box)
   const hrows=Math.ceil(Math.min(40,Math.ceil(maxHP()/HPQ))/8);
   const pw=100,ph=Math.max(32,hrows*8+18),px=LW-pw-4,py=4; // compact, top-right above the hero; grows with the heart rows
@@ -806,6 +807,7 @@ function renderBattle(){
   for(let i=0;i<hearts;i++){const q=Math.max(0,Math.min(4,hp-i*HPQ)),col=i%8,row=Math.floor(i/8);drawHeart(c,px+26+col*8,py+13+row*8,q)}
   OV.push(()=>{txt(S.name,px+26,py+10,'#ffffff',11);txt(Math.max(0,S.hp)+'/'+mx,px+pw-13,py+10,'#c8d0ff',10,'right')});
   if(S.hp/mx<=.25&&frame%30<15){R(c,px,py,pw,1,'#ff4040');R(c,px,py+ph-1,pw,1,'#ff4040')}
+  }
   B.pops=B.pops.filter(p=>p.t>0);for(const p of B.pops){p.t--;const pp=p;OV.push(()=>txt(pp.txt,pp.x,pp.y-(50-pp.t)*.45,pp.col,20,'center'))}
   if(B.flash>0){c.fillStyle='rgba(255,255,255,'+(B.flash/16)+')';c.fillRect(0,0,LW,LH);B.flash--}
   if(B.red>0){c.fillStyle='rgba(255,0,0,'+(B.red/30)+')';c.fillRect(0,0,LW,LH);B.red--}

@@ -33,7 +33,9 @@ const MOOD={
   dusk:{sky:['#140e30','#2a1648','#4a2058','#7a2c60','#b44a5c','#e8744e','#ffae58'],sun:null,far:'#3e2c66',farRim:'#7a5c9a',far2:'#2e2050',volc:['#4e3a7a','#382a5e','#e8d8f0'],hill:'#1e3424',hillRim:'#3a5a3a',tree:'#0e2014',hill2:'#14281a',sea:['#7a4a8a','#5a3a7a','#3e2a66','#2c1e52'],sand:'#c8a070',foam:'#ffe0c0',sand2:'#a07a50'},
   gold:{sky:['#2a3a78','#3c5a9e','#5a86c0','#8ab0d4','#d8c8a8','#f8d890','#ffe8b0'],sun:null,far:'#5a6eac',farRim:'#a8b8e0',far2:'#4a5a98',volc:['#7a88c4','#5a68a8','#ffffff'],hill:'#3a7040',hillRim:'#68a85a',tree:'#1e4a26',hill2:'#2a5a30',sea:['#5aa0e4','#4a88d4','#3a70c0','#2c5aa8'],sand:'#f4dca0',foam:'#ffffff',sand2:'#d8bc80'}};
 MOOD.dusk.stars=1;
-function landLayer(mood){return caLayer('land_'+mood,LW,LH,(c,w,h)=>{const P=Object.assign({},MOOD[mood]);if(mood==='dawn')P.sun=[w-60,128];if(mood==='gold')P.sun=[w-70,118];if(mood==='dusk')P.sun=[w-50,132];caLand(c,w,h,P)})}
+/* painted backdrops (tools/cut_paint.py) when they have loaded; the flat layers stay as the fallback */
+function paintedLayer(pk){const im=PBGI[pk];return caLayer('p_'+pk,LW,LH,(c,w)=>c.drawImage(im,Math.round((w-im.naturalWidth)/2),0))}
+function landLayer(mood){if(typeof paintedBG==='function'&&paintedBG('cut_'+mood))return paintedLayer('cut_'+mood);return caLayer('land_'+mood,LW,LH,(c,w,h)=>{const P=Object.assign({},MOOD[mood]);if(mood==='dawn')P.sun=[w-60,128];if(mood==='gold')P.sun=[w-70,118];if(mood==='dusk')P.sun=[w-50,132];caLand(c,w,h,P)})}
 function caRukas(c,list,t,smoke){for(const [x,y,s] of list){const rk=rukaCanvas(3,2);const W2=rk.cvs.width*s,H2=rk.cvs.height*s;ell(c,x+W2/2,y+H2-2,W2*.45,4,'rgba(0,0,0,.28)');c.drawImage(rk.cvs,x,y,W2,H2);
   if(smoke)for(let k=0;k<6;k++){const a=((t+k*22+x)%150)/150;ell(c,x+(rk.smoke[0]+rk.ox)*s+Math.sin(a*6+k)*3,y+(rk.smoke[1]+rk.oy)*s-a*40,2+a*6,2+a*5,'rgba(215,215,225,'+(.45-a*.42)+')')}}}
 function caFire(c,x,y,t,s){s=s||1;
@@ -47,7 +49,7 @@ function caFire(c,x,y,t,s){s=s||1;
   ell(c,x,y-3*s,4*s,2*s,'#fff2b8');
   for(let k=0;k<6;k++){const a=((t+k*23)%80)/80;R(c,x+Math.sin(a*9+k)*7*s,y-14*s-a*40,1,1,'rgba(255,200,120,'+(1-a)+')')}}
 function caFog(c,t,a,dir){for(let k=0;k<9;k++){const x=((t*(.25+k%3*.12)*(dir||1)+k*97)%(LW+260))-130,y=60+((k*41)%130);for(const [r,al] of [[90,.10],[64,.12],[40,.14]])ell(c,x,y,r,r*.42,'rgba(214,214,226,'+(al*a)+')')}}
-function cityLayer(kind){return caLayer('city_'+kind,LW,LH,(c,w,h)=>{
+function cityLayer(kind){if(typeof paintedBG==='function'&&paintedBG('cutcity_'+kind))return paintedLayer('cutcity_'+kind);return caLayer('city_'+kind,LW,LH,(c,w,h)=>{
   const night=kind==='night';
   bands(c,0,180,night?['#05040f','#0a0a20','#120f30','#1a1640','#221c4e','#2c2458']:['#24204e','#4a3a78','#8a5a8a','#d07a7a','#f4a070','#ffd090','#fff0c0']);
   if(night)for(let k=0;k<70;k++)R(c,(k*97)%w,(k*37)%90,1,1,k%4?'#ffffff99':'#fff');
@@ -66,7 +68,7 @@ function cityLayer(kind){return caLayer('city_'+kind,LW,LH,(c,w,h)=>{
   R(c,0,180,w,4,night?'#3a3656':'#b4a4a4');R(c,0,184,w,h-184,night?'#1c1a30':'#5a5060');
   for(let x=0;x<w;x+=18)R(c,x,203,9,1,night?'#6a6040':'#e8d070');
 })}
-function caLetterbox(c,t,max){const b=Math.min(12,Math.round(t/3)),bb=Math.min(38,Math.round(t/1.2));R(c,0,0,LW,b,'#000');R(c,0,LH-bb,LW,bb,'#000');R(c,0,LH-bb,LW,1,'rgba(226,194,122,.45)')}
+function caLetterbox(c,t,max){if(window.FILM)return;const b=Math.min(12,Math.round(t/3)),bb=Math.min(38,Math.round(t/1.2));R(c,0,0,LW,b,'#000');R(c,0,LH-bb,LW,bb,'#000');R(c,0,LH-bb,LW,1,'rgba(226,194,122,.45)')}
 let CUTSNAP=null,CUTKEY=null,CUTFADE=0;
 function caXfade(c,key){ // cross-fade from the previous shot
   if(key!==CUTKEY){if(CUTKEY!==null){CUTSNAP=CUTSNAP||document.createElement('canvas');CUTSNAP.width=LW;CUTSNAP.height=LH;CUTSNAP.getContext('2d').drawImage(LO,0,0);CUTFADE=36}CUTKEY=key}}
@@ -95,7 +97,7 @@ function renderCut(){
     caFog(c,frame,.4+a*.6);
     if(t>120){c.globalAlpha=Math.min(.35,(t-120)/400);const ng=enemyCanvas('ngoyman1',100,Math.floor(frame/20)%2);c.drawImage(ng,LW*.15,40,ng.width*1.4,ng.height*1.4);c.globalAlpha=1}}
   else if(i===2){ // Santiago at night: you, on a balcony in the rain, with a few words of your kuku's
-    c.drawImage(cityLayer('night'),0,0);ell(c,LW*.82,35,11,11,'#f4f0d8');ell(c,LW*.82+4,32,9,9,'#0c0a24');
+    c.drawImage(cityLayer('night'),0,0);if(!paintedBG('cutcity_night')){ell(c,LW*.82,35,11,11,'#f4f0d8');ell(c,LW*.82+4,32,9,9,'#0c0a24')}
     for(let k=0;k<3;k++){const x=((frame*1.2+k*170)%(LW+60))-30;R(c,x,196,10,3,'#f0e0a0');R(c,x+10,197,2,1,'#fff');R(c,x-2,197,2,1,'#e04040')}
     {const hs=cutChar(heroLook(),'up',0);ell(c,ox+128,178,hs.width*.5,3,'rgba(0,0,0,.35)');c.drawImage(hs,ox+128-hs.width/2,178-hs.height)}
     R(c,ox+60,160,136,3,'#4a4668');R(c,ox+60,160,136,1,'#6a6690');for(let k=0;k<17;k++)R(c,ox+62+k*8,163,1,17,'#3a3656');R(c,ox+60,180,136,2,'#4a4668');
@@ -103,7 +105,7 @@ function renderCut(){
     if(frame%300<4){c.fillStyle='rgba(205,215,255,.22)';c.fillRect(0,0,LW,LH)}
     for(let k=0;k<5;k++){const a=((frame/60+k*.2)%1);OV.push(()=>txt(['ü','ñ','ng','tr','ll'][k],ox+113+k*8+Math.sin(a*6+k)*4,60-a*40,'rgba(255,240,200,'+(1-a)*.85+')',16,'center'))}}
   else if(i===3){ // the ngen sleep; the wekufü wake
-    bands(c,0,LH,['#123a66','#0e3058','#0a2648','#081e3a','#06162c','#040c1c']);
+    if(paintedBG('deep')){c.drawImage(paintedLayer('deep'),0,0);c.fillStyle='rgba(6,20,48,.35)';c.fillRect(0,0,LW,LH)}else bands(c,0,LH,['#123a66','#0e3058','#0a2648','#081e3a','#06162c','#040c1c']);
     for(let k=0;k<Math.ceil(LW/50);k++){const x=18+k*54+Math.round(Math.sin(frame/50+k)*12);c.fillStyle='rgba(130,190,255,'+(0.06+0.04*Math.sin(frame/35+k*2))+')';c.beginPath();c.moveTo(x,0);c.lineTo(x+20,0);c.lineTo(x+60,LH);c.lineTo(x+20,LH);c.closePath();c.fill()}
     for(let k=0;k<40;k++){const y=LH-((frame*.3+k*31)%LH);ell(c,(k*67)%LW+Math.sin(frame/20+k)*2,y,1+(k%2),1+(k%2),'#8ac0f0')}
     const gl=Math.max(.15,.6+.25*Math.sin(frame/30)-Math.min(.35,t/400));c.globalAlpha=gl;drawNgen(c,LW/2,206,3.5,frame);c.globalAlpha=1;
@@ -136,7 +138,7 @@ function renderEndCut(){
     for(let k=0;k<18;k++){const a2=((frame*.5+k*29)%160)/160;ell(c,20+(k*53)%(LW-30),160-a2*130,1.5,1.5,'rgba(255,240,180,'+(1-a2)+')')}
     for(let k=0;k<3;k++){const bx=((frame*.3+k*90)%(LW+40))-20,by=30+k*12;condor(c,bx,by,Math.sin(frame/12+k))}}
   else if(i===2){ // Santiago at dawn: the words arrive like warm rain
-    c.drawImage(cityLayer('dawn'),0,0);for(const [r,a] of [[60,.08],[36,.14],[20,.22]])ell(c,LW*.78,92,r,r,'rgba(255,220,150,'+a+')');ell(c,LW*.78,92,12,12,'#fff0c0');
+    c.drawImage(cityLayer('dawn'),0,0);if(!paintedBG('cutcity_dawn')){for(const [r,a] of [[60,.08],[36,.14],[20,.22]])ell(c,LW*.78,92,r,r,'rgba(255,220,150,'+a+')');ell(c,LW*.78,92,12,12,'#fff0c0')}
     // the mural on the street wall
     const mx=Math.round(LW*.12),mw=Math.round(LW*.36);R(c,mx,166,mw,14,'#e8dcc0');R(c,mx,166,mw,1,'#fff6e0');
     const cols=['#3870b8','#38a058','#e0a030','#c84848'];for(let k=0;k<4;k++)R(c,mx+4+k*(mw-8)/4,169,(mw-8)/4-3,8,cols[k]);
