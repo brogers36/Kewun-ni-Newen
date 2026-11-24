@@ -97,6 +97,8 @@ function questLines(){
   if(F.seba_d)Q('Seba',1,'El Kiltro volvió con Seba.','Kiltro is back with Seba.');
   else if(F.seba_dog)Q('Seba',0,'El Kiltro volvió al lof nagche: ve a ver a Seba.','Kiltro ran back to the Nagche lof: go and see Seba.');
   else if(F.seba_q)Q('Seba',0,'El perro de Seba anda por los campos de los animales. Llámalo en mapudungun.','Seba\'s dog is out in the animal fields. Call him in Mapudungun.');
+  if(F.carmen_d)Q('Carmen Lienkura',1,'El mushay de Carmen está listo para el trawün.','Carmen\'s mushay is ready for the trawün.');
+  else if(F.carmen_q)Q('Carmen Lienkura',0,'Llévale tres külon (maqui) a Carmen, en el lof williche ('+(S.items.kulon||0)+'/3).','Take three külon (maqui) to Carmen, in the Williche lof ('+(S.items.kulon||0)+'/3).');
   if(F.nacho_d)Q('Nacho',1,'La chuchu de Nacho recibió su audio.','Nacho\'s chuchu got his voice message.');
   if(F.l_diwd)Q('Diweñ',1,'El diweñfe quedó contento.','The diweñ gatherer is happy.');
   else if(F.l_diwq)Q('Diweñ',0,'Junta tres diweñes en Fotra mapu para el diweñfe.','Gather three diweñ in Fotra mapu for the diweñfe.');

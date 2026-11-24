@@ -80,3 +80,30 @@ function nachoTalk(){const en=S.gloss==='en';
           N('El celular vibra casi al tiro: la chuchu le contesta con un audio de cinco minutos. Nacho se ríe y se pone colorado.','The phone buzzes almost at once: his chuchu answers with a five-minute voice message. Nacho laughs and turns red.'),
           L('Nacho','Chaltu may, '+addr(false)+'!','«Toma, para ti: yo invito las sopaipillas la próxima vez.»','"Here, this is for you: the sopaipillas are on me next time."'),
           L('','+'+numW(60)+' ngülliw','Ganas '+numP(60)+' ngülliw.','You get '+numP(60)+' ngülliw.')])},'Nacho (audio)')},true,true))}
+
+/* ---------- Carmen Lienkura (Williche lof): the külon for the mushay. Her first words are Brandon's own, shown without a translation on purpose. ---------- */
+LOOKS.carmen={t:'F',c:'#2a4a8a',C:'#1a305e',r:'#d83030'};
+MAPS.w_lof.ents.push({id:'carmen',kind:'npc',look:'carmen',fem:1,x:12,y:8,dir:'down',fixed:1,talk:()=>carmenTalk(),bub:['Mari mari!','Külon...']});
+const CARMEN='Carmen Lienkura';
+function carmenTalk(){const en=S.gloss==='en',have=S.items.kulon||0;
+  if(S.flags.carmen_d)return say([L(CARMEN,'Mari mari, '+addr(true)+'!','«El mushay quedó rico. Esta noche, en el trawün, brindamos por ti.»','"The mushay turned out lovely. Tonight, at the trawün, we will drink to you."')]);
+  if(S.flags.carmen_q){
+    if(have<3)return say([L(CARMEN,'Küla külon elumuen.','«Dame tres külon.» Tienes '+numP(have)+'. Hay külon en los arbustos del monte, y también se venden en las tiendas.','"Give me three külon." You have '+numP(have)+'. There are külon on the bushes in the forest, and the shops sell them too.')]);
+    const q={m:'',es:'Le pasas los tres külon a Carmen. ¿Qué le dices?',en:'You hand Carmen the three külon. What do you say?'},o=['Küla külon elueyu.','Küla külon elumuen.','Küla külon nien.'],a='Küla külon elueyu.';
+    const ask=()=>choose(q,o.slice().sort(()=>Math.random()-.5).map(x=>({m:x,v:x})),v=>{track('Carmen (dar)',v===a,q,o,a);
+      if(v!==a){sfx('bad');return say([N(v==='Küla külon elumuen.'?'Carmen se ríe: «¿Me los estás pidiendo a mí?». Elumuen es «dame»: lo dice quien pide. Quien da dice elueyu, «te doy».':'«Küla külon nien» es «tengo tres külon»: es verdad, pero se los estás dando. Quien da dice elueyu, «te doy».',
+        v==='Küla külon elumuen.'?'Carmen laughs: "Are you asking me for them?" Elumuen is "give me": the one who asks says it. The one who gives says elueyu, "I give you".':'"Küla külon nien" is "I have three külon": true, but you are giving them to her. The one who gives says elueyu, "I give you".')],ask)}
+      S.items.kulon-=3;S.flags.carmen_d=1;S.gold+=50;S.items.mate=(S.items.mate||0)+2;persist();sfx('lvl');
+      say([L(S.name,'Küla külon elueyu.','Te doy tres külon.','I give you three külon.'),
+        L(CARMEN,'Chaltu may, '+addr(true)+'!','«¡Justo los que faltaban!» Muele los frutitos morados en una fuente de madera y el agua se pone color vino.','"Just the ones I was missing!" She grinds the little purple berries in a wooden bowl and the water turns the colour of wine.'),
+        N('«Toma, para el camino: un poco de mate, y unos ngülliw que me sobraron del mercado.»','"Here, for the road: some mate, and a few ngülliw I had left over from the market."'),
+        L('','+'+numW(50)+' ngülliw · epu mate','Ganas '+numP(50)+' ngülliw y dos mate.','You get '+numP(50)+' ngülliw and two mate.')])},false,true);
+    return ask()}
+  say([L(CARMEN,"Feypienew fentreke che 'Rume küme adngerkey feychi dewmalfilu tüfachi awkantun' pingerken. Pewmangele pepi kimnieafiñ kiñe antü.",'',''),
+    N('Carmen se ríe sola y sigue revolviendo una olla vacía.','Carmen laughs to herself and keeps stirring an empty pot.'),
+    N('«Perdona, mari mari. Soy Carmen. Estoy preparando mushay, la bebida de külon (maqui), para el trawün de esta noche... pero me faltan los külon.»','"Sorry, mari mari. I\'m Carmen. I\'m making mushay, the külon (maqui) drink, for tonight\'s trawün... but I\'m out of külon."'),
+    L(CARMEN,'Küla külon elumuen.','Dame tres külon (maqui).','Give me three külon (maqui berries).')],()=>
+    choose(L(CARMEN,'','¿Le traes tres külon?','Will you bring her three külon?'),[{m:'May',g:en?'Yes, I will bring them':'Sí, se los traigo',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{
+      if(!v)return say([L(CARMEN,'','«Aquí estaré, con mi olla vacía.»','"I will be here, with my empty pot."')]);
+      S.flags.carmen_q=1;persist();
+      say([L(CARMEN,'Chaltu may!','«Gracias. Hay külon en los arbustos del monte, y en las tiendas los venden.»','"Thank you. There are külon on the bushes in the forest, and the shops sell them."')])},true,true))}
