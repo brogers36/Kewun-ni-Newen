@@ -215,17 +215,34 @@ function llawLast(qb){const en=S.gloss==='en';
         return say([N('Esta vez no se te olvida. Tu sombra cierra los ojos y sonríe.','This time you do not forget. Your shadow closes its eyes and smiles.')],victory)}
       sfx('bad');qb.stag=0;const rg=Math.round(qb.max*.2);qb.hp=Math.min(qb.max,qb.hp+rg);
       say([N('Otra vez se te escapa. La respuesta era: '+q.a+'. Tu sombra se levanta, más fuerte (+'+rg+').','It slips away again. The answer was: '+q.a+'. Your shadow gets up, stronger (+'+rg+').')],battleMenu)},false,true))}
+let LLAWFX=null;   // the shadow fading and coming back to you, after the fight: {t0, sx, sy} (frame it began, the shadow's tile)
 function llawWon(){const lw=llawName();
-  S.flags.llaw_won=1;S.flags.kimche=1;for(const id of ['y_rupu','y_lof','y_ruka'])S.flags['yfull:'+id]=1;
-  YWF={t:frame+30,x:5,y:4,id:CUR};persist();sfx('lvl');KIMCHE=undefined;ents=ents.filter(e=>e.id!=='yllaw');
-  say([N('Tu sombra no se deshace. Se queda quieta frente a ti, respirando a tu mismo ritmo, y por primera vez sonríe.','Your shadow does not break apart. It stands still before you, breathing at your own pace, and for the first time it smiles.'),
+  S.flags.llaw_won=1;S.flags.kimche=1;persist();sfx('lvl');KIMCHE=undefined;
+  const sh=ents.find(e=>e.id==='yllaw');
+  say([N('Te mira un largo rato, respirando a tu mismo ritmo... y por primera vez sonríe.','It looks at you for a long while, breathing at your own pace... and for the first time it smiles.'),
     L(lw,'Ka iñche eymi.','Yo también soy tú.','I am you, too.'),
     L(S.name,'Amuayu, tañi llawfeñ.','Vámonos los dos, sombra mía.','Let us go, the two of us, my shadow.'),
-    Object.assign(N('Le das la mano. Tu sombra la toma... y se tiende a tus pies, donde siempre estuvo. Las palabras que guardaba vuelven contigo: ya no son olvidos, son cosas que aprendiste dos veces.','You hold out your hand. Your shadow takes it... and lies down at your feet, where it always was. The words it kept come back with you: they are no longer things you forgot, they are things you learned twice.'),{fx:()=>sfx('cast')}),
-    N('El color vuelve a la ruka, al lof y al camino del mar. Afuera, la gente del lof se saluda: «Mari mari!»','Colour comes back to the ruka, the lof and the sea road. Outside, the people of the lof greet one another: «Mari mari!»'),
-    Object.assign(L('','Kimche!','Desde hoy te llaman kimche: la persona que sabe. No porque nunca olvide, sino porque vuelve a aprender lo que olvida.','From today they call you kimche: the one who knows. Not because they never forget, but because they learn again what they forget.'),{fx:()=>sfx('lvl')}),
-    N('Tu sombra te sigue a todas partes. Ahora también en la pantalla de inicio.','Your shadow follows you everywhere. Now on the title screen, too.')],()=>gainPiwke([N('Donde estaba tu sombra, algo rojo brilla en el suelo...','Where your shadow stood, something red glints on the ground...')]))}
-
+    N('Le tiendes la mano.','You hold out your hand.')],()=>{
+    // the shadow fades slowly, drifts across the floor as a wisp of dark, and settles back at your feet
+    LLAWFX={t0:frame,sx:sh?sh.x:5,sy:sh?sh.y:4};active={kind:'wait',a(){},b(){}};sfx('swirl');
+    setTimeout(()=>sfx('cast'),2700);
+    setTimeout(()=>{active=null;ents=ents.filter(e=>e.id!=='yllaw');
+      for(const id of ['y_rupu','y_lof','y_ruka'])S.flags['yfull:'+id]=1;YWF={t:frame,x:P.x,y:P.y,id:CUR};persist();sfx('lvl');
+      setTimeout(()=>playSong(mapSong()),600);
+      say([N('Tu sombra vuelve a tus pies, donde siempre estuvo. Las palabras que guardaba vuelven contigo: ya no son olvidos, son cosas que aprendiste dos veces.','Your shadow comes back to your feet, where it always was. The words it kept come back with you: they are no longer things you forgot, they are things you learned twice.'),
+        N('El color vuelve a la ruka, al lof y al camino del mar. Afuera, la gente del lof se saluda: «Mari mari!»','Colour comes back to the ruka, the lof and the sea road. Outside, the people of the lof greet one another: «Mari mari!»'),
+        Object.assign(L('','Kimche!','Desde hoy te llaman kimche: la persona que sabe. No porque nunca olvide, sino porque vuelve a aprender lo que olvida.','From today they call you kimche: the one who knows. Not because they never forget, but because they learn again what they forget.'),{fx:()=>sfx('lvl')}),
+        N('Tu sombra te sigue a todas partes. Ahora también en la pantalla de inicio.','Your shadow follows you everywhere. Now on the title screen, too.')],()=>{LLAWFX=null;gainPiwke([N('Donde estaba tu sombra, algo rojo brilla en el suelo...','Where your shadow stood, something red glints on the ground...')])})},5200)})}
+function drawLlawReturn(c){// called from the shadow's own draw: fade (0-150), the wisp crossing to you (150-240), settling at your feet (240-310)
+  const e=frame-LLAWFX.t0,ox=LLAWFX.sx*T+8-CAM.x,oy=LLAWFX.sy*T+14-CAM.y+VY,px=Math.round(P.fx*T+8-CAM.x),py=Math.round(P.fy*T+15-CAM.y+VY);
+  if(e>=150&&e<240){const t=(e-150)/90,k=t*t*(3-2*t),x=ox+(px-ox)*k,y=oy+(py-oy)*k-Math.sin(k*Math.PI)*10;
+    for(let i=0;i<12;i++){const tt=Math.max(0,k-i*.03),xx=ox+(px-ox)*tt,yy=oy+(py-oy)*tt-Math.sin(tt*Math.PI)*18;ell(c,xx,yy,6-i*.4,4.5-i*.3,'rgba(20,12,34,'+(.6-i*.045).toFixed(2)+')')}
+    ell(c,x,y-Math.sin(k*Math.PI)*8,10,8,'rgba(150,120,230,.28)');ell(c,x,y-Math.sin(k*Math.PI)*8,6,5,'rgba(16,10,28,.9)');ell(c,x-1.5,y-1.5-Math.sin(k*Math.PI)*8,2,1.6,'rgba(200,180,255,.75)')}
+  if(e>=240){const t=Math.min(1,(e-240)/70),src=ctCharSprite(heroLook(),P.dir||'down',0),sil=silhouette(src,'R'+heroLook()+(P.dir||'down'),'rgba(18,10,30,1)');
+    // the shadow lies down on the floor behind you, long at first, then shortens to an ordinary shadow
+    if(t<1){const r=4+t*16;c.strokeStyle='rgba(180,150,255,'+(.7*(1-t)).toFixed(2)+')';c.lineWidth=1.5;c.beginPath();c.ellipse(px,py,r,r*.45,0,0,6.283);c.stroke()}   // a ring of light where it lands
+    c.save();c.globalAlpha=.85*(1-t*.5);c.translate(px,py);c.transform(1,0,-.9*(1-t)-.3,-.32-.25*(1-t),0,0);c.drawImage(sil,-sil.width/2,-sil.height);c.restore();
+    if(t<1)for(let k=0;k<5;k++){const a=k*1.26+e/9;R(c,Math.round(px+Math.cos(a)*(9-t*6)),Math.round(py-2+Math.sin(a)*(4-t*2)),1,1,'rgba(190,170,250,'+(.7*(1-t)).toFixed(2)+')')}}}
 /* ---------- drawing: the grey, the colour coming back, the crack and the shadow ---------- */
 let NGOC=null;
 function ngOverlay(c,cx,cy){
@@ -281,10 +298,11 @@ function drawLlawMap(c,e,sx,sy){
       for(let k=6;k>=0;k--){const yy=Y-26+k*4.2;c.lineTo(X+((k%2)?w*.4:-w)-1,yy)}c.closePath();c.fill()}
     for(let k=0;k<4;k++){const ph=((frame*.6+k*30)%120)/120;OV.push(()=>ash(['ng','ü','tr','ll'][k],X+Math.sin(ph*5+k)*8,Y-14-ph*22,(.75*(1-ph)).toFixed(2),9))}
     return}
+  if(LLAWFX&&e.id==='yllaw'){const el=frame-LLAWFX.t0;drawLlawReturn(c);if(el>=150)return;c.save();c.globalAlpha=Math.max(0,1-el/150);}
   const src=ctCharSprite(heroLook(),e.dir||'down',0),sil=silhouette(src,'M'+heroLook()+(e.dir||'down'),'rgba(16,10,26,.9)','#6a5a9a');
   ell(c,sx+9,sy+15,7,2.4,'rgba(0,0,0,.35)');
   for(let k=0;k<3;k++){const ph=((frame+k*40)%120)/120;ell(c,sx+8+Math.sin(ph*6+k)*5,sy+6-ph*18,1.5+ph*2,(1.5+ph*2)*.7,'rgba(110,96,150,'+(.3*(1-ph)).toFixed(2)+')')}
-  c.drawImage(sil,sx-2,sy+15-src.height)}
+  c.drawImage(sil,sx-2,sy+15-src.height);if(LLAWFX&&e.id==='yllaw')c.restore()}
 // battle backdrop in the grey: drained of colour (the fighters keep theirs)
 function ngBattleGrey(c){if(!B||!B.grey)return;c.save();c.globalCompositeOperation='saturation';c.fillStyle='#808080';c.fillRect(0,0,LW,LH);c.globalCompositeOperation='source-over';c.fillStyle='rgba(60,60,70,.18)';c.fillRect(0,0,LW,LH);c.restore()}
 
