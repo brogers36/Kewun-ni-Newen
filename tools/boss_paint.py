@@ -1016,59 +1016,107 @@ def ngoyman3(f):
     parts = ['foot', 'shin', 'thigh', 'hip', 'belly', 'chest', 'arm', 'fist', 'shoulder', 'head']
     return finish(c, [(p_, q) for p_ in parts for q in parts if p_ != q], rim=(230, 190, 110), rimparts=tuple(parts))
 
+R.update({k: [hx(c) for c in v] for k, v in {
+    'dusk':  ['#030106', '#08040e', '#0f0918', '#181024', '#221832', '#2e2242', '#3c2e54', '#4c3c68'],
+    'dfire': ['#1a0410', '#3a0820', '#6a1030', '#a0183e', '#d83a50', '#ff8a90']}.items()})
 def ngoyman4(f):
-    """Füta Dumiñ: the great darkness, not a body but a fog: a column of smoke that thins at every edge, arms that are
-    only drifts of it, and in the thickest dark a crown of red eyes"""
+    """Füta Dumiñ: the great darkness. A hooded shape of night painted like the Yewen (sculpted hood and shoulders,
+    a high collar of shadow, horns of smoke, clawed hands, dark ghostfire behind it) that dissolves into fog below
+    the chest and at every edge, so it never quite has a body."""
     setsize(112, 144)
     from scipy.ndimage import gaussian_filter as gf
     H_, W_ = 144, 112
     yy, xx = np.mgrid[0:H_, 0:W_].astype(float)
+    bay = yp.BAYER[yy.astype(int) % 4, xx.astype(int) % 4]
+    ph = f * .7
+    # ---- the fog: a density field churned by noise; its edges dither away into nothing
     dens = np.zeros((H_, W_))
     def puff(x, y, r, k=1.0):
-        dens[:] = np.maximum(dens, k * np.exp(-((xx - x) ** 2 + (yy - y - 6) ** 2) / (2 * r * r)))
-    ph = f * .7
-    # the column: thick at the head and shoulders, thinning and fraying toward the ground
+        dens[:] = np.maximum(dens, k * np.exp(-((xx - x) ** 2 + (yy - y) ** 2) / (2 * r * r)))
     for t in np.linspace(0, 1, 40):
-        y = 22 + t * 110; x = 56 + math.sin(t * 5 + ph) * 4 * t
-        puff(x, y, 16 - t * 7, 1.2 - t * .5)
-    puff(56, 20, 12, 1.4); puff(56, 40, 17, 1.25)
-    # arms of drifting smoke reaching out and curling down
+        puff(56 + math.sin(t * 5 + ph) * 4 * t, 50 + t * 88, 18 - t * 9, 1.15 - t * .55)
+    arm = {}
     for side in (-1, 1):
+        P = []
         for t in np.linspace(0, 1, 34):
-            x = 56 + side * (12 + t * 42); y = 38 - math.sin(t * 2.6) * 14 + t * t * 44 + math.sin(t * 7 + ph + side) * 3
-            puff(x, y, 7.5 - t * 4.5, 1.05 - t * .4)
-    # loose wisps rising off it
+            x = 56 + side * (14 + t * 36); y = 46 - math.sin(t * 2.6) * 14 + t * t * 34 + math.sin(t * 7 + ph + side) * 2
+            puff(x, y, 7.5 - t * 3.5, 1.0 - t * .3); P.append((x, y))
+        arm[side] = P
     for k in range(9):
-        x0 = 20 + k * 9; y0 = 30 + (k * 37) % 70
-        for t in np.linspace(0, 1, 12):
-            puff(x0 + math.sin(t * 4 + k + ph) * 5, y0 - t * 18, 3 - t * 2, .5 - t * .3)
-    # the fog itself: churned by noise that drifts between the frames
+        x0 = 18 + k * 9.5; y0 = 50 + (k * 37) % 70
+        for t in np.linspace(0, 1, 12): puff(x0 + math.sin(t * 4 + k + ph) * 5, y0 - t * 18, 3 - t * 2, .5 - t * .3)
     rs = np.random.RandomState(4)
-    n1 = gf(rs.rand(H_ + 8, W_ + 8), 3.0); n2 = gf(rs.rand(H_ + 8, W_ + 8), 1.2)
-    o = 2 + f * 3
+    n1 = gf(rs.rand(H_ + 8, W_ + 8), 3.0); n2 = gf(rs.rand(H_ + 8, W_ + 8), 1.2); o = 2 + f * 3
     n = (n1[o:o + H_, 2:2 + W_] - n1.mean()) / n1.std() * .5 + (n2[2:2 + H_, o:o + W_] - n2.mean()) / n2.std() * .22
     D = dens * (1 + n * .45) - .04 * n
-    bay = yp.BAYER[yy.astype(int) % 4, xx.astype(int) % 4]
-    a = D > (.2 + (bay - .5) * .3)                                # edges dither away into nothing
-    ramp = [hx(c_) for c_ in ['#010003', '#04020a', '#090512', '#100a1c', '#1a1228', '#251a36', '#332646', '#443658']]
-    # thick dark at the core, thin fog lighter (lit faintly from above-left) at the edges
-    gy, gx = np.gradient(gf(D, 1.5))
-    lit = np.clip(-(gx + gy) * 4, -.5, .5)
+    fog = D > (.2 + (bay - .5) * .3)
+    gy, gx = np.gradient(gf(D, 1.5)); lit = np.clip(-(gx + gy) * 4, -.5, .5)
+    Dk = R['dusk']; DS = [hx(x) for x in ['#05020a', '#0c0716', '#160e24', '#221834', '#302446', '#40325a', '#52436e', '#685888', '#8270a4']]
     t = np.clip(1 - (D - .2) / .7, 0, 1) ** 1.3 * .85 + lit * .35 + n * .08
-    idx = np.clip(np.floor(t * (len(ramp) - 1) + (bay - .5) * .5).astype(int), 0, len(ramp) - 1)
-    img = np.zeros((H_, W_, 4), np.uint8)
-    img[..., :3] = np.array(ramp)[idx]; img[..., 3] = a * 255
-    c = Canvas(); c.rgb = img[..., :3].copy(); c.a = a.copy(); c.part[a] = 'fog'
+    fogc = np.array(Dk)[np.clip(np.floor(t * (len(Dk) - 1) + (bay - .5) * .5).astype(int), 0, len(Dk) - 1)]
+
+    # ---- the figure, painted on its own canvas
+    c = Canvas()
+    # ghostfire of the dark behind it, as the Yewen's burns behind him
+    for (x0, y0, L, amp, p0, w) in [(32, 50, 26, 4, .4, 3), (80, 50, 28, 4, 2.2, 3), (24, 58, 18, 3, 4.0, 2.2), (88, 58, 18, 3, 1.0, 2.2)]:
+        yp.flame(c, x0, y0, L, amp, p0 + f * .8, w, ramp=R['dfire'])
+    # horns of smoke: long, curling back, thinning to nothing
+    for side in (-1, 1):
+        pts = cr([(56 + side * 10, 18), (56 + side * 20, 8), (56 + side * 32, 4), (56 + side * 40, 10)], 8)
+        taper(c, pts, 6, 1.2, DS, lift=.3 if side < 0 else .12, name='horn', bulge=1.2)
+    # shoulders: a broad mass of solid dark, sculpted, sinking into the fog
+    blob(c, DS, lambda d: d.polygon(smooth_poly([(24, 58), (34, 40), (56, 34), (78, 40), (88, 58), (78, 70), (56, 74), (34, 70)], 6), fill=1), bulge=1.15, lift=.34, name='shoulder')
+    for (x0, x1) in [(40, 36), (48, 46), (64, 66), (72, 76)]:                 # folds of shadow-cloth running down
+        line(c, [(x0, 44), (x1, 70)], DS[1], 'shoulder'); line(c, [(x0 - 1, 45), (x1 - 1, 70)], DS[5], 'shoulder')
+    # a high collar of shadow round the hood, jagged like the Yewen's
+    blob(c, DS, lambda d: d.polygon([(30, 52), (26, 30), (33, 34), (34, 18), (42, 32), (56, 36), (70, 32), (78, 18), (79, 34), (86, 30), (82, 52)], fill=1), bulge=.8, lift=.2, name='collar')
+    # the hood: tall, pointed, deeply shaded; the face inside it is a hollow of night
+    blob(c, DS, lambda d: d.polygon(smooth_poly([(56, 8), (66, 16), (72, 30), (70, 44), (56, 50), (42, 44), (40, 30), (46, 16)], 6), fill=1), bulge=1.3, lift=.38, name='hood')
+    for y in range(12, 46):                                               # the hood's seam and a lit fold on its left
+        if c.part[y, 56] == 'hood': c.px(56, y, DS[2])
+        X = 47 + (y - 12) // 9
+        if c.part[y, X] == 'hood': c.px(X, y, DS[7])
+    blob(c, R['void'], lambda d: d.polygon(smooth_poly([(56, 20), (65, 26), (66, 38), (56, 46), (46, 38), (47, 26)], 5), fill=1), bulge=.5, lift=0, name='face')
     Rg = R['redg']
-    # the eyes: a crown of red embers in the thickest dark of the head
-    for (ex, ey, r) in [(50, 18, 2.6), (62, 18, 2.6), (56, 13, 2.0), (45, 23, 1.6), (67, 23, 1.6), (56, 23, 1.4)]:
-        glow(c, ex, ey + 6 + (1 if f else 0), r, Rg); c.px(int(ex) - 1, int(ey) + 6, (255, 236, 230))
+    for (ex, ey, r) in [(51, 31, 2.4), (61, 31, 2.4), (56, 26, 1.8), (48, 37, 1.5), (64, 37, 1.5), (56, 36, 1.3)]:
+        glow(c, ex, ey + (1 if f else 0), r, Rg); c.px(int(ex) - 1, int(ey), (255, 236, 230))
+    # hands at the end of the drifts of smoke: long fingers, red-black nails
+    for side in (-1, 1):
+        hx_, hy_ = arm[side][28]
+        blob(c, DS, lambda d, hx_=hx_, hy_=hy_: d.ellipse([hx_ - 5, hy_ - 4, hx_ + 5, hy_ + 5], fill=1), bulge=1.25, lift=.28 if side < 0 else .1, name='hand')
+        for k in range(4):
+            bx = hx_ - 4 + k * 2.6; a = math.radians(90 + side * (-28 + k * 16))
+            tip = (bx + math.cos(a) * 12, hy_ + 3 + math.sin(a) * 13)
+            taper(c, cr([(bx, hy_ + 3), (bx + math.cos(a) * 6 + side * 1.5, hy_ + 3 + math.sin(a) * 7), tip], 5), 3, 1.2, DS, lift=.25 if side < 0 else .08, name='finger', bulge=1.2)
+            c.px(int(tip[0]), int(tip[1]), R['dfire'][3]); c.px(int(tip[0]), int(tip[1]) - 1, R['dfire'][2])
+    c.inner_lines({('hood', 'collar'), ('collar', 'shoulder'), ('face', 'hood'), ('horn', 'collar'), ('finger', 'hand'), ('hand', 'finger')})
+    solid = c.a & (c.part != 'fire')
+    c.outline()
+    rim = np.array((200, 50, 80))                                        # a dark crimson rim light from the ghostfire, as on the Yewen
+    for y in range(H_):
+        for x in range(2, W_ - 2):
+            if c.a[y, x] and c.a[y, x + 1] and not c.a[y, x + 2] and c.part[y, x] in ('hood', 'collar', 'shoulder', 'horn', 'hand', 'finger'):
+                c.rgb[y, x] = (c.rgb[y, x] * .45 + rim * .55).astype(np.uint8)
+    texture(c, ['hood', 'collar', 'shoulder', 'hand', 'finger'], amt=.08, seed=44)
+    speculars(c, ['hood', 'collar', 'shoulder', 'horn'], thr=.9, col=(150, 120, 190))
+    # ---- compose: fog first, then the figure; below the shoulders the fog veils the figure again, thinning upward
+    out = np.zeros((H_, W_, 4), np.uint8)
+    fire = c.a & (c.part == 'fire')
+    out[fire, :3] = c.rgb[fire]; out[fire, 3] = 255
+    thin = fog & fire & (D < .5) & (bay < .5)                            # where the fog is thin the fire shows through it
+    out[fog & ~thin, :3] = fogc[fog & ~thin]; out[fog, 3] = 255
+    fig = c.a.copy() & (c.part != 'fire')
+    veil = fog & fig & (c.part == 'shoulder') & (bay < np.clip((yy - 60) / 14, 0, 1))
+    take = fig & ~veil
+    out[take, :3] = c.rgb[take]; out[take, 3] = 255
+    for sd in (-1, 1):                                                     # the horns' tips fray into smoke
+        hm = (c.part == 'horn') & (np.abs(xx - 56) > 30) & (bay < .45)
+        out[hm, 3] = 0
     # swallowed words: faint red sparks drifting in the fog
-    ys, xs = np.nonzero(a & (D > .5))
+    ys, xs = np.nonzero(fog & ~fig & (D > .45))
     rs2 = np.random.RandomState(7 + f)
     for i in rs2.choice(len(ys), 16, replace=False):
-        if ys[i] > 34: c.px(xs[i], ys[i], Rg[2] if i % 2 else Rg[1])
-    out = np.zeros((H_, W_, 4), np.uint8); out[..., :3] = c.rgb; out[..., 3] = c.a * 255
+        out[ys[i], xs[i], :3] = Rg[2] if i % 2 else Rg[1]
     return out
 
 def ngoyman5(f):
@@ -1414,7 +1462,8 @@ def ngoyman1(f):
 def ngoyman5(f):
     return oldpolish('ngoyman5', f, R['bone2'], rim=(240, 200, 100), seed=65, gamma=.85, accb=1.3)
 
-SPRITES = {'trelke': trelke, 'cherrufe': cherrufe, 'kaleuche': kaleuche, 'witranalwe': witranalwe, 'chinifilu': chinifilu, 'piwuchen': piwuchen, 'wallipen': wallipen, 'trawko': trawko, 'walichu': walichu, 'chadikura': chadikura, 'epunamun': epunamun, 'kalku': kalku, 'ngoyman1': ngoyman1, 'ngoyman2': ngoyman2, 'ngoyman3': ngoyman3, 'ngoyman4': ngoyman4, 'ngoyman5': ngoyman5,
+SPRITES = {'trelke': trelke, 'cherrufe': cherrufe, 'kaleuche': kaleuche, 'witranalwe': witranalwe, 'chinifilu': chinifilu, 'piwuchen': piwuchen, 'wallipen': wallipen, 'trawko': trawko, 'walichu': walichu, 'chadikura': chadikura, 'epunamun': epunamun, 'kalku': kalku, 'ngoyman1': ngoyman1, 'ngoyman2': ngoyman3, 'ngoyman3': ngoyman2,   # in the game the golem is the second form and the heart the third
+           'ngoyman4': ngoyman4, 'ngoyman5': ngoyman5,
            'llufu1': llufu1, 'llufu2': llufu2, 'llufu3': llufu3, 'llufu4': llufu4, 'llufu5': llufu5}
 
 if __name__ == '__main__':
