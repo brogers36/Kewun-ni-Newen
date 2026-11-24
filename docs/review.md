@@ -515,7 +515,7 @@ Brandon terminó las pestañas 0 Apertura, 1 Lafkenche y 2 Nagche de docs/Kewun_
 Aplicado tal como lo marcaste (16 correcciones; la fila 5, «Müley Walichu!», ya decía «Wefi Walichu!» por tu regla anterior):
 - Luan ayükefiñ! Müna kümekengey. · Choyke matu lefkey! (glosa: «corre rápido») · Luan kuydaken.
 - Kom mapu ayüwküley. · Walichu miawmiawpai. (glosa: «anda dando vueltas por aquí»)
-- Kintulaen, chaltu! Llingüdkülechi achu mew müley. (también «Kintulaen» en la pichi chumpall, misma frase) ⚠ ¿«achu» o «kachu»?
+- Kintulaen, chaltu! Llingüdkülechi kachu mew müley. (también «Kintulaen» en la pichi chumpall, misma frase; «kachu» confirmado)
 - Charki müley! Ilayaymi am? · Chem am ta "ilo"? · Chem am ta "iyael"? · Kümey! Charkitukeymi am?
 - ngen mülerkefuy · fey kom ñamürpay · Wüle ka yepayan ko. · Lifngey ti chadi! · Amutuy Walichu! Lelfün karüngewetuay.
-⚠ «Chem am "challwa"?» quedó sin «ta» (lo marcaste OK), a diferencia de las otras dos preguntas de la misma cocinera.
+«Chem am ta "X"?» ahora es uniforme en todo el juego (14 preguntas: la cocinera, los chumpall y las preguntas del ngen en batalla).

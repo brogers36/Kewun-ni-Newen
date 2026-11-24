@@ -1184,7 +1184,7 @@ function choykeKidTalk(){
   S.flags.puel_kidq=1;persist();
   say([L('Pichiche','Mari mari! Choyke pichuñ nien... niefun.','¡Hola! Tengo una pluma de choyke... tenía.','Hello! I have a choyke plume... I had one.'),
     N('El niño bailaba el choyke purun, el baile del ñandú, con una pluma larga y gris. Pero el viento se la llevó a la pampa del este.','The boy was dancing the choyke purun, the rhea dance, with a long grey feather. But the wind carried it off to the eastern grassland.'),
-    L('Pichiche','Kintulaen, chaltu! Llingüdkülechi achu mew müley.','¡Búscamela, porfa! Está en el pasto aplastado.','Please find it for me! It is in the flattened grass.')]);
+    L('Pichiche','Kintulaen, chaltu! Llingüdkülechi kachu mew müley.','¡Búscamela, porfa! Está en el pasto aplastado.','Please find it for me! It is in the flattened grass.')]);
 }
 function malenTalk(){
   const en=S.gloss==='en';
@@ -1205,7 +1205,7 @@ function charkiTalk(){
   const en=S.gloss==='en';
   if(S.flags.puel_food)return say([L('Domo','Charki müley! Ilayaymi am?','¡Hay charki! ¿Vas a comer?','There is charki! Will you eat?')]);
   const qs=[{q:L('Domo','Chem am ta "ilo"?','¿Qué es "ilo"?','What is "ilo"?'),o:[en?'meat':'carne',en?'bread':'pan',en?'water':'agua'],a:en?'meat':'carne'},
-    {q:L('Domo','Chem am "challwa"?','¿Qué es "challwa"?','What is "challwa"?'),o:[en?'potato':'papa',en?'fish':'pescado',en?'salt':'sal'],a:en?'fish':'pescado'},
+    {q:L('Domo','Chem am ta "challwa"?','¿Qué es "challwa"?','What is "challwa"?'),o:[en?'potato':'papa',en?'fish':'pescado',en?'salt':'sal'],a:en?'fish':'pescado'},
     {q:L('Domo','Chem am ta "iyael"?','¿Qué es "iyael"?','What is "iyael"?'),o:[en?'food':'comida',en?'fire':'fuego',en?'house':'casa'],a:en?'food':'comida'}];
   say([L('Domo','Mari mari! Charki dewmalen: angkümka ilo.','¡Hola! Estoy haciendo charki: carne secada al sol.','Hello! I am making charki: sun-dried meat.'),
     N('En la pampa, la carne se seca al sol y al viento para que dure todo el año. Mientras corta, te pregunta palabras de comida.','On the plains, meat is dried in the sun and wind so it lasts all year. While she cuts, she asks you food words.')],()=>ask(0));
@@ -1368,9 +1368,9 @@ function gPuelTalk(){
 function chGardenTalk(){
   const en=S.gloss==='en';
   if(S.flags.ch1)return say([L('Chumpall','Taiñ tukukawe mongeley. Chaltu may!','Nuestro jardín está vivo. ¡Gracias!','Our garden is alive. Thank you!')]);
-  const qs=[{q:L('Chumpall','Chem am "ko"?','¿Qué es "ko"?','What is "ko"?'),o:[en?'water':'agua',en?'fire':'fuego',en?'stone':'piedra'],a:en?'water':'agua'},
-    {q:L('Chumpall','Chem am "challwa"?','¿Qué es "challwa"?','What is "challwa"?'),o:[en?'bird':'pájaro',en?'fish':'pescado',en?'wave':'ola'],a:en?'fish':'pescado'},
-    {q:L('Chumpall','Chem am "lafken"?','¿Qué es "lafken"?','What is "lafken"?'),o:[en?'the sea, the lake':'el mar, el lago',en?'the rain':'la lluvia',en?'the river':'el río'],a:en?'the sea, the lake':'el mar, el lago'}];
+  const qs=[{q:L('Chumpall','Chem am ta "ko"?','¿Qué es "ko"?','What is "ko"?'),o:[en?'water':'agua',en?'fire':'fuego',en?'stone':'piedra'],a:en?'water':'agua'},
+    {q:L('Chumpall','Chem am ta "challwa"?','¿Qué es "challwa"?','What is "challwa"?'),o:[en?'bird':'pájaro',en?'fish':'pescado',en?'wave':'ola'],a:en?'fish':'pescado'},
+    {q:L('Chumpall','Chem am ta "lafken"?','¿Qué es "lafken"?','What is "lafken"?'),o:[en?'the sea, the lake':'el mar, el lago',en?'the rain':'la lluvia',en?'the river':'el río'],a:en?'the sea, the lake':'el mar, el lago'}];
   say([L('Chumpall','Mari mari, wenüy. Iñche chumpall ngen.','Hola, amiga o amigo. Yo soy chumpall.','Hello, friend. I am a chumpall.'),
     N('La chumpall jardinera cuida huertas de algas y corales. Desde que despertó el Kaykayfilu, sus plantas olvidan sus nombres... y sin nombre, se marchitan. Devuélveselos.','The chumpall gardener tends beds of kelp and coral. Since the Kaykayfilu woke, her plants forget their names... and without a name, they wither. Give the names back.'),
     N('«No es un wekufü», te dice. «Es la gran serpiente de las aguas, la de los relatos antiguos. Dormía en paz con el ül que le cantábamos. El olvido se llevó ese canto, y sin él no puede dormir.»','"It is not a wekufü," she tells you. "It is the great serpent of the waters, the one of the old tellings. It slept in peace with the ül we sang to it. The forgetting took that song, and without it, it cannot sleep."')],()=>ask(0));

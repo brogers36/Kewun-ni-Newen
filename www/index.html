@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='2569abc-202611241232';
+window.KEWUN_BUILD='88e4c52-202611241233';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -4323,7 +4323,7 @@ function choykeKidTalk(){
   S.flags.puel_kidq=1;persist();
   say([L('Pichiche','Mari mari! Choyke pichuñ nien... niefun.','¡Hola! Tengo una pluma de choyke... tenía.','Hello! I have a choyke plume... I had one.'),
     N('El niño bailaba el choyke purun, el baile del ñandú, con una pluma larga y gris. Pero el viento se la llevó a la pampa del este.','The boy was dancing the choyke purun, the rhea dance, with a long grey feather. But the wind carried it off to the eastern grassland.'),
-    L('Pichiche','Kintulaen, chaltu! Llingüdkülechi achu mew müley.','¡Búscamela, porfa! Está en el pasto aplastado.','Please find it for me! It is in the flattened grass.')]);
+    L('Pichiche','Kintulaen, chaltu! Llingüdkülechi kachu mew müley.','¡Búscamela, porfa! Está en el pasto aplastado.','Please find it for me! It is in the flattened grass.')]);
 }
 function malenTalk(){
   const en=S.gloss==='en';
@@ -4344,7 +4344,7 @@ function charkiTalk(){
   const en=S.gloss==='en';
   if(S.flags.puel_food)return say([L('Domo','Charki müley! Ilayaymi am?','¡Hay charki! ¿Vas a comer?','There is charki! Will you eat?')]);
   const qs=[{q:L('Domo','Chem am ta "ilo"?','¿Qué es "ilo"?','What is "ilo"?'),o:[en?'meat':'carne',en?'bread':'pan',en?'water':'agua'],a:en?'meat':'carne'},
-    {q:L('Domo','Chem am "challwa"?','¿Qué es "challwa"?','What is "challwa"?'),o:[en?'potato':'papa',en?'fish':'pescado',en?'salt':'sal'],a:en?'fish':'pescado'},
+    {q:L('Domo','Chem am ta "challwa"?','¿Qué es "challwa"?','What is "challwa"?'),o:[en?'potato':'papa',en?'fish':'pescado',en?'salt':'sal'],a:en?'fish':'pescado'},
     {q:L('Domo','Chem am ta "iyael"?','¿Qué es "iyael"?','What is "iyael"?'),o:[en?'food':'comida',en?'fire':'fuego',en?'house':'casa'],a:en?'food':'comida'}];
   say([L('Domo','Mari mari! Charki dewmalen: angkümka ilo.','¡Hola! Estoy haciendo charki: carne secada al sol.','Hello! I am making charki: sun-dried meat.'),
     N('En la pampa, la carne se seca al sol y al viento para que dure todo el año. Mientras corta, te pregunta palabras de comida.','On the plains, meat is dried in the sun and wind so it lasts all year. While she cuts, she asks you food words.')],()=>ask(0));
@@ -4507,9 +4507,9 @@ function gPuelTalk(){
 function chGardenTalk(){
   const en=S.gloss==='en';
   if(S.flags.ch1)return say([L('Chumpall','Taiñ tukukawe mongeley. Chaltu may!','Nuestro jardín está vivo. ¡Gracias!','Our garden is alive. Thank you!')]);
-  const qs=[{q:L('Chumpall','Chem am "ko"?','¿Qué es "ko"?','What is "ko"?'),o:[en?'water':'agua',en?'fire':'fuego',en?'stone':'piedra'],a:en?'water':'agua'},
-    {q:L('Chumpall','Chem am "challwa"?','¿Qué es "challwa"?','What is "challwa"?'),o:[en?'bird':'pájaro',en?'fish':'pescado',en?'wave':'ola'],a:en?'fish':'pescado'},
-    {q:L('Chumpall','Chem am "lafken"?','¿Qué es "lafken"?','What is "lafken"?'),o:[en?'the sea, the lake':'el mar, el lago',en?'the rain':'la lluvia',en?'the river':'el río'],a:en?'the sea, the lake':'el mar, el lago'}];
+  const qs=[{q:L('Chumpall','Chem am ta "ko"?','¿Qué es "ko"?','What is "ko"?'),o:[en?'water':'agua',en?'fire':'fuego',en?'stone':'piedra'],a:en?'water':'agua'},
+    {q:L('Chumpall','Chem am ta "challwa"?','¿Qué es "challwa"?','What is "challwa"?'),o:[en?'bird':'pájaro',en?'fish':'pescado',en?'wave':'ola'],a:en?'fish':'pescado'},
+    {q:L('Chumpall','Chem am ta "lafken"?','¿Qué es "lafken"?','What is "lafken"?'),o:[en?'the sea, the lake':'el mar, el lago',en?'the rain':'la lluvia',en?'the river':'el río'],a:en?'the sea, the lake':'el mar, el lago'}];
   say([L('Chumpall','Mari mari, wenüy. Iñche chumpall ngen.','Hola, amiga o amigo. Yo soy chumpall.','Hello, friend. I am a chumpall.'),
     N('La chumpall jardinera cuida huertas de algas y corales. Desde que despertó el Kaykayfilu, sus plantas olvidan sus nombres... y sin nombre, se marchitan. Devuélveselos.','The chumpall gardener tends beds of kelp and coral. Since the Kaykayfilu woke, her plants forget their names... and without a name, they wither. Give the names back.'),
     N('«No es un wekufü», te dice. «Es la gran serpiente de las aguas, la de los relatos antiguos. Dormía en paz con el ül que le cantábamos. El olvido se llevó ese canto, y sin él no puede dormir.»','"It is not a wekufü," she tells you. "It is the great serpent of the waters, the one of the old tellings. It slept in peace with the ül we sang to it. The forgetting took that song, and without it, it cannot sleep."')],()=>ask(0));
@@ -6476,14 +6476,14 @@ const NGENQ=[
   {m:'mi chaw',es:'¿Qué significa?',en:'What does it mean?',o:[['tu padre','your father'],['mi padre','my father'],['su padre','their father']],a:0},
   {m:'taiñ mapu',es:'¿Qué significa?',en:'What does it mean?',o:[['nuestra tierra','our land'],['mi tierra','my land'],['tu tierra','your land']],a:0},
   {m:'pu che',es:'¿Qué significa?',en:'What does it mean?',o:[['las personas','the people'],['una persona','one person'],['la tierra','the land']],a:0},
-  {m:'Chem am "challwa"?',es:'',en:'',o:[['el pez','fish'],['el fuego','fire'],['la lluvia','rain']],a:0},
-  {m:'Chem am "kütral"?',es:'',en:'',o:[['el fuego','fire'],['la piedra','stone'],['el viento','wind']],a:0},
-  {m:'Chem am "mawün"?',es:'',en:'',o:[['la lluvia','rain'],['la nieve','snow'],['el mar','the sea']],a:0},
-  {m:'Chem am "kürüf"?',es:'',en:'',o:[['el viento','wind'],['el sol','the sun'],['el canto','the song']],a:0},
-  {m:'Chem am "wangülen"?',es:'',en:'',o:[['la estrella','star'],['la luna','moon'],['la noche','night']],a:0},
-  {m:'Chem am "piwke"?',es:'',en:'',o:[['el corazón','the heart'],['la cabeza','the head'],['la mano','the hand']],a:0},
-  {m:'Chem am "newen"?',es:'',en:'',o:[['la fuerza','strength'],['el miedo','fear'],['el sueño','sleep']],a:0},
-  {m:'Chem am "kimün"?',es:'',en:'',o:[['el conocimiento','knowledge'],['el olvido','forgetting'],['la comida','food']],a:0},
+  {m:'Chem am ta "challwa"?',es:'',en:'',o:[['el pez','fish'],['el fuego','fire'],['la lluvia','rain']],a:0},
+  {m:'Chem am ta "kütral"?',es:'',en:'',o:[['el fuego','fire'],['la piedra','stone'],['el viento','wind']],a:0},
+  {m:'Chem am ta "mawün"?',es:'',en:'',o:[['la lluvia','rain'],['la nieve','snow'],['el mar','the sea']],a:0},
+  {m:'Chem am ta "kürüf"?',es:'',en:'',o:[['el viento','wind'],['el sol','the sun'],['el canto','the song']],a:0},
+  {m:'Chem am ta "wangülen"?',es:'',en:'',o:[['la estrella','star'],['la luna','moon'],['la noche','night']],a:0},
+  {m:'Chem am ta "piwke"?',es:'',en:'',o:[['el corazón','the heart'],['la cabeza','the head'],['la mano','the hand']],a:0},
+  {m:'Chem am ta "newen"?',es:'',en:'',o:[['la fuerza','strength'],['el miedo','fear'],['el sueño','sleep']],a:0},
+  {m:'Chem am ta "kimün"?',es:'',en:'',o:[['el conocimiento','knowledge'],['el olvido','forgetting'],['la comida','food']],a:0},
   {m:'epu mari kiñe',es:'¿Qué número es?',en:'Which number is it?',o:['21','12','31'],a:0},
   {m:'küla mari',es:'¿Qué número es?',en:'Which number is it?',o:['30','13','33'],a:0},
   {m:'kiñe pataka',es:'¿Qué número es?',en:'Which number is it?',o:['100','10','1000'],a:0}];
