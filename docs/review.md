@@ -540,3 +540,7 @@ Aplicado tal como lo marcaste (17; «Wefi Ti Fütra Ngoymatulfe!» y «Chem am t
 - Taiñ ül wüñomongeturkey. Chaltu may. (las dos líneas de la ülkantufe) · Taiñ lafken ül ñamürkey.
 - Taiñ lafken montulürkey (también en la línea de la ñidol después de la batalla, misma frase). · Eymi iñchiñ rumel wenüyyeayiñ.
 - Eymi iñchiñ weychayafiyiñ? · May, weychayafiyiñ! · Faw müleaiñ.
+
+## Pestañas 0–6 completas (24 nov)
+- Carmen: «Küla külon elumuen.» → «Küla külon eluaen.» (las dos líneas; glosa «Me vas a dar tres külon»). La opción incorrecta de su pregunta y la explicación pasan a «eluaen», para que coincidan con lo que ella dice.
+- «Elumuen kofke» (Santiago, pedir el pan) sigue igual: no estaba en tus correcciones.
