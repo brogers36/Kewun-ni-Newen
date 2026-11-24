@@ -14,8 +14,9 @@ function allSecrets(){const F=S&&S.flags;return !!(F&&['sb1','sb2','sb3','sb4','
 const llawName=()=>S.name+' ñi llawfeñ';
 
 /* ---------- the three grey places: copies of where the journey began ---------- */
+// the stones of the sea road stand on open sand above the road, clear of the tree canopies
 {const cp=(id,src,fix)=>{const rows=MAPROWS[src].map(r=>r.split(''));fix(rows);MAPROWS[id]=rows.map(r=>r.join(''))};
- cp('y_rupu','rupu',r=>{r[10][0]=',';r[11][9]=',';for(const [x,y] of [[5,5],[12,7],[20,4],[26,7]])r[y][x]='I'});
+ cp('y_rupu','rupu',r=>{r[10][0]=',';r[11][9]=',';for(const [x,y] of [[4,4],[13,5],[20,4],[27,4]])r[y][x]='I'});
  cp('y_lof','lof',r=>{r[1][32]=','});
  cp('y_ruka','l_ruka2',r=>{});}
 const NGY={floor:',',bg:'coast',region:'ngoyun',ngoyun:1,fog:1};
@@ -23,8 +24,8 @@ function addNgMap(id,def){def.rows=MAPROWS[id];def.w=def.rows[0].length;def.h=de
 const LLAW_LOCK=[N('Una niebla gris, fina como ceniza, cierra el camino. Detrás de ella todo está borrado: primero hay que devolverle sus palabras a este lugar.','A grey mist, fine as ash, closes the road. Beyond it everything is erased: first this place needs its words back.')];
 addNgMap('y_rupu',Object.assign({},NGY,{floor:'.',name:'Ngoyün rüpü',g:{es:'El camino del olvido',en:'The road of forgetting'},song:'coast',
  edges:{left:{to:'rupu',x:5,y:5},right:{to:'y_lof',x:1,y:9,req:'yfull:y_rupu',reqMsg:LLAW_LOCK}},
- signs:{'5,5':()=>ngSign('5,5'),'12,7':()=>ngSign('12,7'),'20,4':()=>ngSign('20,4'),'26,7':()=>ngSign('26,7')},
- ngspots:{'5,5':[5,5],'12,7':[12,7],'20,4':[20,4],'26,7':[26,7]},
+ signs:{'4,4':()=>ngSign('4,4'),'13,5':()=>ngSign('13,5'),'20,4':()=>ngSign('20,4'),'27,4':()=>ngSign('27,4')},
+ ngspots:{'4,4':[4,4],'13,5':[13,5],'20,4':[20,4],'27,4':[27,4]},
  ents:[{id:'ykuku',kind:'npc',look:'kuku',fem:1,x:3,y:5,dir:'right',fixed:1,talk:()=>yKukuTalk()},
    {kind:'enemy',x:15,y:9,party:['ngoyam','ngoyam']},{kind:'enemy',x:22,y:3,party:['ngoyam','ngoyam','ngoyam']}]}));
 addNgMap('y_lof',Object.assign({},NGY,{name:'Ngoyün lof',g:{es:'La comunidad del olvido',en:'The community of forgetting'},song:'lof',pave:1,
@@ -73,12 +74,12 @@ function ngMapDone(id){
 
 /* ---------- the carved stones of the sea road: a letter is missing ---------- */
 const NGSIGN={
-  '5,5':{pre:'ant',gap:'ü',suf:'',o:['ü','u','e','i'],es:'el sol',en:'the sun',
+  '4,4':{pre:'ant',gap:'ü',suf:'',o:['ü','u','e','i'],es:'el sol',en:'the sun',
     note:['La ü es la sexta vocal del mapudungun: no es u, ni i, ni e.','ü is the sixth vowel of Mapudungun: it is not u, or i, or e.']},
-  '12,7':{pre:'',gap:'tr',suf:'ewa',o:['tr','ch','t','r'],es:'el perro',en:'the dog',
+  '13,5':{pre:'',gap:'tr',suf:'ewa',o:['tr','ch','t','r'],es:'el perro',en:'the dog',
     note:['tr es un solo sonido, como en trewa y en trariwe: no es ch ni t.','tr is a single sound, as in trewa and trariwe: it is not ch or t.']},
   '20,4':{pre:'la',gap:'f',suf:'ken',o:['f','p','w','ng'],es:'el mar',en:'the sea',note:null},
-  '26,7':{pre:'',gap:'ll',suf:'awfeñ',o:['ll','l','y','ch'],es:'la sombra',en:'the shadow',
+  '27,4':{pre:'',gap:'ll',suf:'awfeñ',o:['ll','l','y','ch'],es:'la sombra',en:'the shadow',
     note:['Llawfeñ: la sombra. La tuya pasó por aquí y siguió hacia el este.','Llawfeñ: the shadow. Yours came this way and went on east.']}};
 function ngShuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
 function ngSign(k){const D=NGSIGN[k],w=D.pre+D.gap+D.suf,en=S.gloss==='en';
@@ -241,6 +242,8 @@ function ngOverlay(c,cx,cy){
   if(anim!==null&&anim>0)hole(YWF.x*T+8-cx,YWF.y*T+8-cy+VY,anim*7);
   hole(Math.round(P.fx*T+8-cx),Math.round(P.fy*T+4-cy+VY),15);   // you are the one thing here that keeps its colour
   c.save();c.globalCompositeOperation='saturation';c.drawImage(ov,0,0);c.globalCompositeOperation='source-over';c.globalAlpha=.16;c.drawImage(ov,0,0);c.restore();
+  for(const k in (M.ngspots||{}))if(!ngDone(CUR,k)&&M.signs&&M.signs[k]){const [x,y]=M.ngspots[k],X=x*T+8-cx,Y=y*T-cy+VY-3,al=(.55+.4*Math.sin(frame/14+x)).toFixed(2);
+    OV.push(()=>ash('?',X,Y,al,11))}   // a soft glint over each stone that still has a letter missing
   if(!full){// loose letters drifting up like ash
     const LET=['a','e','i','o','u','ü','ng','tr','ch','ll','ñ','w','f','k','l','m','p','y'];
     for(let k=0;k<12;k++){const ph=((frame*.5+k*61)%240)/240,X=((k*97+Math.floor(k*k*13))%LW),Y=VY+VH-ph*VH*1.1;

@@ -61,7 +61,7 @@ const MCHK=[
    {m:'Ngoyün mapu · jefe secreto (tu sombra)',es:'Camino y lof restaurados: tu sombra espera en la ruka de tu kuku',en:'Road and lof restored: your shadow waits in your kuku\'s ruka',lvl:32,at:['y_ruka',6,7],set:yw.concat(['ngoyrest'])})}
 const MSET={
   yewenwon:s=>{Object.assign(s.flags,{yewen_won:1,stgo_done:1,stgo_seen:1})},
-  ngoyrest:s=>{Object.assign(s.flags,{llaw_seen:1,'yfull:y_rupu':1,'yfull:y_lof':1,'ng_in:y_rupu':1,'ng_in:y_lof':1});for(const k of ['5,5','12,7','20,4','26,7'])s.flags['yw:y_rupu:'+k]=1;for(const k of ['yteach','ycook','yweave','ylonko','ymom'])s.flags['yw:y_lof:'+k]=1},
+  ngoyrest:s=>{Object.assign(s.flags,{llaw_seen:1,'yfull:y_rupu':1,'yfull:y_lof':1,'ng_in:y_rupu':1,'ng_in:y_lof':1});for(const k of ['4,4','13,5','20,4','27,4'])s.flags['yw:y_rupu:'+k]=1;for(const k of ['yteach','ycook','yweave','ylonko','ymom'])s.flags['yw:y_lof:'+k]=1},
   intro:s=>{s.flags.intro=1;s.roots.push('küpa')},
   pentu:s=>{Object.assign(s.flags,{pentu_prac:1,pentukun:1});s.roots.push('umawtu','nagtu');s.items.kulon+=2},
   lafcave:s=>{Object.assign(s.flags,{rune_kil:1,mini1:1,mini2:1,mini3:1,'pz:d1':1,'pz:d2':1});s.runes.push('kil');s.items.lawen+=2;s.items.kofke+=2},
