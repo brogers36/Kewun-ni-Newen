@@ -153,7 +153,7 @@ function reportText(){
   const ntk=Object.keys(NUTK).filter(k=>F['ntk_'+k]).length+Object.keys(NUTK2).filter(k=>F['ntk2_'+k]).length;
   const L1=en?['KIMÜN REPORT · Kewün Newen','Player','Level','Play time','min','Ngen awakened','Verb roots','Trawün lessons','Kuyfi chillka','Nütramkan','Wekufü beaten','Accuracy by topic (correct / attempts)','Still to practise (most missed first)','Nothing pending: well done!']
     :['INFORME DE KIMÜN · Kewün Newen','Jugador/a','Nivel','Tiempo de juego','min','Ngen despertados','Raíces verbales','Lecciones del trawün','Kuyfi chillka','Nütramkan','Wekufü vencidos','Precisión por tema (aciertos / intentos)','Por practicar (lo más fallado primero)','Nada pendiente: ¡bien hecho!'];
-  return [L1[0],'',L1[1]+': '+S.name+(S.hm?' (weichafe)':''),L1[2]+': kimün '+S.lvl,L1[3]+': '+mins+' '+L1[4],
+  return [L1[0],'',L1[1]+': '+S.name+(S.flags.kimche?' · kimche':'')+(S.hm?' (weichafe)':''),L1[2]+': kimün '+S.lvl,L1[3]+': '+mins+' '+L1[4],
     L1[5]+': '+['ngen','ngen2','ngen3','ngen4','ngen5'].filter(k=>F[k]).length+'/5'+(F.won?'  · Ti Fütra Ngoymatulfe ✓':''),
     L1[6]+' ('+S.roots.length+'): '+S.roots.map(r=>r+'-').join(', '),L1[7]+': '+trw,L1[8]+': '+tabs+'/6',L1[9]+': '+ntk+'/'+(Object.keys(NUTK).length+Object.keys(NUTK2).length),
     L1[10]+': '+Object.keys(S.beaten||{}).length,(en?'Translations peeked at (Mapudungun-only mode)':'Traducciones consultadas (modo re mapudungun)')+': '+(S.peek||0)+(S.nogloss?'':(en?' · mode off':' · modo apagado')),'',L1[11]+':',...(rows.length?rows:['  —']),'',L1[12]+':',...(ml.length?ml:['  '+L1[13]]),'',new Date().toLocaleString()].join('\n')}

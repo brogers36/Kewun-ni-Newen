@@ -45,6 +45,7 @@ function battleMenu(){
   if(B&&B.ngenA&&!B.ngenA.done)return;
   if(B&&B.o.tut&&tutStep())return;
   if(B&&B.lanPending){const le=B.lanPending;B.lanPending=null;if(!le.dead)return lanKewun(le)}
+  if(B&&B.llawPending){const le=B.llawPending;B.llawPending=null;if(!le.dead&&le.hp>0)return llawKewun(le)}
   const en=S.gloss==='en';B.cursor=null;
   choose({es:'¿Qué haces? (Hay '+aliveE().length+')',en:'What do you do? ('+aliveE().length+' left)'},[
     ...(B.lanBoon?[{m:'Epu wiño!',g:en?'Gift of the lof: a double wiño strike, no newen needed (this turn only)':'Regalo del lof: doble golpe de wiño, sin gastar newen (solo este turno)',v:'ww'}]:[]),
@@ -371,6 +372,7 @@ function enemyPhase(){
       if(roll<.32&&B.turn>0){B.tele=true;fx.push('Trelke-wekufü se estira, listo para envolverte.');fxe.push('Trelke-wekufü stretches out, ready to wrap you up.');continue}
       if(roll<.52&&laf<1&&B.en.length<5){const ne=mkEnemy('laftrache');B.en.push(ne);relabel();fx.push('¡Trelke-wekufü llama a '+ne.label+'!');fxe.push('Trelke-wekufü calls up '+ne.label+'!');continue}
       hitP(e);continue}
+    if(e.t==='llawfen'){llawTurn(e,hitP,fx,fxe,hitsFx);continue}
     const SBK={chinifilu:['El Chiñifilu te salpica con el barro podrido del fondo','The Chiñifilu splashes you with the rotten mud of the deep'],
       piwuchen:['El Piwüchen alcanza a rozarte el cuello con su boca de aguja','The Piwüchen grazes your neck with its needle mouth'],
       wallipen:['La sombra torcida del Wallepeñ te pasa por encima','The Wallepeñ\'s crooked shadow passes over you'],
@@ -561,7 +563,7 @@ function victory(){
     const nx={llufu1:'llufu2',llufu2:'llufu3',llufu3:'llufu4',llufu4:'llufu5'}[st&&st.t];
     if(nx)return llufuStage(nx);}
   {const qb=B.en.find(e=>ET[e.t].boss);
-   if(qb&&!B.qok){qb.dead=false;qb.fadeT=0;qb.hit=0;qb.hp=1;qb.stag=1;return ngenQuiz(qb)}}
+   if(qb&&!B.qok){qb.dead=false;qb.fadeT=0;qb.hit=0;qb.hp=1;qb.stag=1;return qb.t==='llawfen'?llawLast(qb):ngenQuiz(qb)}}
   {const vb=B.en.find(e=>ET[e.t].boss);
    if(vb&&!B.ngenA&&B.o.chain!=='llufu'&&vb.t!=='epunamun'){
      if(vb.t==='ngoyman5'){vb.stag=1;B.ngenA={t:0,e:vb,kind:'final'};document.getElementById('dlg').style.display='none';active=null;sfx('cast');return}
@@ -607,6 +609,7 @@ function endBattle(how){
       N('Y entonces lo notas: en la plaza, en la feria, en la población, en la ruka urbana... la gente se saluda en mapudungun. Chiquillos contando en el paradero. Una abuela enseñando. Un mural que dice MAPU.','And then you notice it: in the plaza, at the market, in the neighborhood, in the urban ruka... people greet each other in Mapudungun. Kids counting at the bus stop. A grandmother teaching. A mural that says MAPU.'),
       L('','Waria mew ka mongeley taiñ dungun!','¡También en la ciudad vive nuestra lengua!','In the city, too, our language lives!'),
       N('Santiago también es Wallmapu cuando se habla mapudungun. Tu viaje empezó aquí... y aquí vuelve a empezar, cada vez que alguien dice "mari mari". Yewelkilnge: no tengas vergüenza.','Santiago is Wallmapu too when Mapudungun is spoken. Your journey began here... and here it begins again, every time someone says "mari mari". Yewelkilnge: do not be ashamed.')],()=>gainPiwke([N('Donde estaba parado el Yewen, algo rojo brilla en el suelo...','Where the Yewen stood, something red glints on the ground...')]));}
+  if(how==='win'&&o.sflag==='llaw_won')return llawWon();
   if(how==='win'&&o.sflag){S.flags[o.sflag]=1;persist();sfx('lvl');
     return say([N('El wekufü secreto se deshace en jirones de sombra que el viento se lleva.','The secret wekufü breaks apart into shreds of shadow that the wind carries away.'),
       L('','Newen!','Venciste a uno de los wekufü escondidos. Pocos pueden contarlo.','You defeated one of the hidden wekufü. Few can say the same.')],()=>gainPiwke([N('Donde estaba, algo rojo brilla en el suelo...','Where it stood, something red glints on the ground...')]));}

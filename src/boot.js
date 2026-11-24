@@ -43,7 +43,7 @@ $('title').addEventListener('pointerdown',()=>{auInit();if(!AU.name)playSong('in
 playSong('intro');
 function slotLabel(n){const v=loadSave(n);if(!v)return LANG==='es'?'vacío':'empty';
   const mp=(typeof MAPS!=='undefined'&&MAPS[v.map]&&MAPS[v.map].name)||'';
-  return (v.name||'')+(v.hm?' · weichafe'+(v.hm>1?' ×'+v.hm:''):'')+' · kimün '+(v.lvl||1)+(mp?' · '+mp:'')}
+  return (v.name||'')+(v.flags&&v.flags.kimche?' · kimche':'')+(v.hm?' · weichafe'+(v.hm>1?' ×'+v.hm:''):'')+' · kimün '+(v.lvl||1)+(mp?' · '+mp:'')}
 function slotPick(forNew,cb){
   choose({es:forNew?'Nueva partida, ¿en qué espacio?':'¿Qué partida sigues?',en:forNew?'New game: which slot?':'Continue which save?'},
     [1,2,3].map(n=>({m:(loadSave(n)?'■':'□')+' '+n,g:slotLabel(n),v:n,dis:!forNew&&!loadSave(n)}))

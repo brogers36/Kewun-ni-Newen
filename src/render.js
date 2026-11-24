@@ -183,6 +183,7 @@ function renderMap(){
         for(let k=0;k<3;k++){const ph=((frame+k*40)%120)/120;ell(c,sx+8+Math.sin(ph*6+k)*6,sy+8-ph*22,2+ph*3,(2+ph*3)*.7,'rgba(120,110,140,'+(.25*(1-ph)).toFixed(2)+')')}
         c.drawImage(yc,sx+8-(yc.width>>1),sy+17-yc.height)}
       else if(e.look==='rewe'){ell(c,sx+8,sy+14,6,2,'rgba(0,0,0,.3)');const rc=reweCanvas();c.drawImage(rc,sx-1,sy+16-rc.height)}
+      else if(e.look==='llawfen'||e.look==='llawcrack')drawLlawMap(c,e,sx,sy);
       else if(e.obj)drawObj(c,e.obj,sx,sy,e);
       else if(e.look==='dog'){ell(c,sx+8,sy+14,6,2,'rgba(0,0,0,.3)');c.drawImage(dogSprite(e.mv?Math.floor(frame/6)%2:0,e.dir),sx,sy+4)}
       else{let fr=e.mv?Math.floor(frame/7)%4:0;if(e.act==='weave'||e.act==='teach')fr=Math.floor(frame/24)%2?1:0;
@@ -297,6 +298,7 @@ function renderMap(){
   if(M.bg==='lagoon'){c.fillStyle=S.flags.ngen?'rgba(120,200,255,.08)':'rgba(60,30,90,.22)';c.fillRect(0,VY,LW,VH)}
   atmos(c);
   if(CT)ctLight(c,glows);
+  if(typeof ngOverlay==='function')ngOverlay(c,cx,cy);   // Ngoyün mapu: the grey goes over the light too
   drawHUD(c);
 }
 // palin wiño: a long wooden stick held at the hip, its curved head sweeping the ground
@@ -682,6 +684,7 @@ function renderBattle(){
   if(!BG[B.area]||BG[B.area].width!==LW){const bg=buildBG(B.area);if(!painted||paintedBG(pa))BG[B.area]=bg;else{c.drawImage(bg,0,0)}}
   if(BG[B.area])c.drawImage(BG[B.area],0,0);if(painted&&paintedBG(pa)){animPainted(c,pa.split('@')[0]);if(B.area!==pa)for(let k=0;k<6;k++){const fx=((k*83+frame*.4)%(LW+120))-60;for(let d=0;d<5;d++)R(c,Math.round(fx+d*7),70+k*16+(d%2),46-d*8,2,'rgba(200,206,216,.14)')}}else animBG(B.area);
   if(B.wx)wxBattle(c,B.wx);
+  if(B.grey)ngBattleGrey(c);
   {// battle grade: soft-light contrast on the backdrop, a little haze where sky meets land, so the fighters pop off it
    const ar=B.area,dark=/cave|deep|crater|fog:|waria/.test(ar);if(!painted){c.save();c.globalCompositeOperation='soft-light';
    const g=dLin(0,0,0,LH);g.addColorStop(0,dark?'rgba(80,90,130,.5)':'rgba(150,140,120,.4)');g.addColorStop(.55,'rgba(128,128,128,0)');g.addColorStop(1,'rgba(50,40,80,.5)');g.fill(c,0,0,LW,LH);
@@ -960,7 +963,7 @@ function loopBody(ts){
   else if(mode==='battle'&&B){renderBattle();if(B.lanScene){OV=[];drawLanScene(lx,B.lanScene)}}
   else if(mode==='palin'&&PG)renderPalin(lx);
   else if(mode==='cut')renderCut();
-  else if(mode==='title')paintLand(lx,frame,false);
+  else if(mode==='title'){paintLand(lx,frame,false);if(typeof titleKimche==='function')titleKimche(lx,frame)}
   if(mode==='map'&&M){dayTint(lx);if(M.urban&&typeof urbanNight==='function')urbanNight(lx,CAM.x,CAM.y)}
   if(fade>0&&mode==='map'){lx.fillStyle='rgba(0,0,0,'+(fade/16)+')';lx.fillRect(0,0,LW,LH);fade=Math.max(0,fade-steps)}
   present();

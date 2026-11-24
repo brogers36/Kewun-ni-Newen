@@ -293,6 +293,7 @@ function withFeet(src,fr){
     shoe(mid-6,mid-2,0);shoe(mid+1,mid+5,fr?1:0)}
   return cv}
 function enemyCanvas(t,size,fr){
+  if(t==='llawfen'&&typeof llawCanvas==='function')return llawCanvas(size,fr);
   const key='s3:'+t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];
   const raw=enemyCanvasRaw(t,size,fr),sp=typeof SPR2!=='undefined'&&SPR2[t]?((size>=40&&SPR2[t+'@b'])||SPR2[t]):null;return ECACHE[key]=(sp&&sp.hand)?raw:repaintSmall(raw,{amp:.9,capG:Math.max(4,Math.min(raw.width,raw.height)/3.4),capP:4})}
 function enemyCanvasRaw(t,size,fr){

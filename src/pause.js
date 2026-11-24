@@ -77,6 +77,7 @@ function questLines(){
       Q('Ngamleftripael',!!F.sw2,F.spk_all?'Los tres hablantes se encontraron. Algo los separa en las cocheras.':'En el metro (entrada en la calle): encuentra a los hablantes perdidos ('+['spk1','spk2','spk3'].filter(k=>F[k]).length+'/3).',F.spk_all?'The three speakers have found each other. Something keeps them apart in the depot.':'In the metro (entrance on the street): find the lost speakers ('+['spk1','spk2','spk3'].filter(k=>F[k]).length+'/3).');
       {const r=F.cena_ok&&F.tel_ok;Q('Mapudungukenoael fillantü',!!F.sw3,r?'Algo gris bosteza en el patio de los blocks.':'En los blocks, al este de la población: ayuda a una familia en la cena y a una chuchu con el teléfono.',r?'Something grey is yawning in the courtyard of the blocks.':'In the blocks, east of the población: help a family at dinner and a chuchu with the phone.')}
       Q('Santiago waria',0,'Ayuda a los wariache a hablar sin vergüenza ('+['st1','st2','st3','st4','st5'].filter(k=>F[k]).length+'/5). Cuando caigan los tres silencios, enfrenta al Yewen.','Help the wariache speak without shame ('+['st1','st2','st3','st4','st5'].filter(k=>F[k]).length+'/5). When the three silences fall, face the Yewen.')}
+    if(F.llaw_seen&&!F.llaw_won)Q('Llawfeñ',0,'Tu sombra ya no te sigue: se metió en una grieta gris en el camino del mar, donde empezó tu viaje.','Your shadow no longer follows you: it stepped into a grey crack on the sea road, where your journey began.');
     if(F.epu_won&&F.chboss&&sbs>=6)Q('Mapu',1,'La tierra respira. Lo que queda es caminar y aprender.','The land breathes. What remains is to walk and to learn.');
   }
   const MQ=[['laf','Machi (Lafkenche)','pentukun','Saca hojas del foye solo de Fotra mapu, por el lado norte.','Take leaves from the lone foye of Fotra mapu, on the north side.'],
@@ -121,8 +122,8 @@ function mapaLines(){
   const ng=['ngen','ngen2','ngen3','ngen4','ngen5'].filter(k=>F[k]).length;
   const sbs=['sb1','sb2','sb3','sb4','sb5','sb6'].filter(k=>F[k]).length;
   ls.push(L('','Mapu',
-    'Ngen despiertos '+ng+'/5 · Llum wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoymatulfe · '+(F.epu_won?'■':'□')+' Epunamun · '+(F.yewen_won?'■':'□')+' Yewen',
-    'Ngen awakened '+ng+'/5 · Hidden wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoymatulfe · '+(F.epu_won?'■':'□')+' Epunamun'));
+    'Ngen despiertos '+ng+'/5 · Llum wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoymatulfe · '+(F.epu_won?'■':'□')+' Epunamun · '+(F.yewen_won?'■':'□')+' Yewen'+(F.llaw_seen?' · '+(F.llaw_won?'■':'□')+' Ngoyün mapu':''),
+    'Ngen awakened '+ng+'/5 · Hidden wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoymatulfe · '+(F.epu_won?'■':'□')+' Epunamun · '+(F.yewen_won?'■':'□')+' Yewen'+(F.llaw_seen?' · '+(F.llaw_won?'■':'□')+' Ngoyün mapu':'')));
   if(S.hm)ls.push(L('','Weichafe'+(S.hm>1?' ×'+S.hm:''),'Modo héroe: conservas tu kimün y tus cosas, pero los wekufü crecen contigo y las pruebas no dan pistas.','Hero mode: you keep your kimün and your things, but the wekufü grow with you and the trials give no hints.'));
   return ls}
 /* ---------- vocabulary unlocked outside battle roots ---------- */

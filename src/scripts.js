@@ -1432,7 +1432,6 @@ function chQueenTalk(){
 }
 
 /* ================= SANTIAGO: the return ================= */
-function secretsDone(){return !!(S.flags.won&&S.flags.sb1&&S.flags.sb2&&S.flags.sb3&&S.flags.sb4&&S.flags.sb5&&S.flags.sb6&&S.flags.chboss)}
 function portalMenu(){
   const en=S.gloss==='en',toStgo=M.region!=='santiago';
   choose(L('','Wülngiñ','Un portal de luz tranquila, tejido como un trariwe.','A portal of calm light, woven like a trariwe.'),

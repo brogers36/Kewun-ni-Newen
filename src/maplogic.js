@@ -39,7 +39,7 @@ function tryMove(d){
   const e=entAt(nx,ny);
   if(e){if(e.kind==='enemy')engage(e);return}
   const c=grid[ny][nx];
-  if(M.doors&&M.doors[nx+','+ny]&&d==='up'){const D=M.doors[nx+','+ny];sfx('door');loadMap(D.to,D.x,D.y);return}
+  if(M.doors&&M.doors[nx+','+ny]&&d==='up'){const D=M.doors[nx+','+ny];if(D.req&&!S.flags[D.req]){if(!P.bump){P.bump=1;say(D.reqMsg)}return}sfx('door');loadMap(D.to,D.x,D.y);return}
   if(c==='B')return pushBlock(nx,ny,dx,dy);
   if(c==='L')return unlock(nx,ny);
   if(c==='E'){if(!P.bump){P.bump=1;say([N('Una puerta de piedra tallada. No se mueve: algo cerca debe abrirla.','A carved stone door. It will not move: something nearby must open it.')])}return}

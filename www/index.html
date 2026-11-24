@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='05d904b-202611231828';
+window.KEWUN_BUILD='a583689-202611231923';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -1378,6 +1378,7 @@ function withFeet(src,fr){
     shoe(mid-6,mid-2,0);shoe(mid+1,mid+5,fr?1:0)}
   return cv}
 function enemyCanvas(t,size,fr){
+  if(t==='llawfen'&&typeof llawCanvas==='function')return llawCanvas(size,fr);
   const key='s3:'+t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];
   const raw=enemyCanvasRaw(t,size,fr),sp=typeof SPR2!=='undefined'&&SPR2[t]?((size>=40&&SPR2[t+'@b'])||SPR2[t]):null;return ECACHE[key]=(sp&&sp.hand)?raw:repaintSmall(raw,{amp:.9,capG:Math.max(4,Math.min(raw.width,raw.height)/3.4),capP:4})}
 function enemyCanvasRaw(t,size,fr){
@@ -2777,7 +2778,7 @@ function tryMove(d){
   const e=entAt(nx,ny);
   if(e){if(e.kind==='enemy')engage(e);return}
   const c=grid[ny][nx];
-  if(M.doors&&M.doors[nx+','+ny]&&d==='up'){const D=M.doors[nx+','+ny];sfx('door');loadMap(D.to,D.x,D.y);return}
+  if(M.doors&&M.doors[nx+','+ny]&&d==='up'){const D=M.doors[nx+','+ny];if(D.req&&!S.flags[D.req]){if(!P.bump){P.bump=1;say(D.reqMsg)}return}sfx('door');loadMap(D.to,D.x,D.y);return}
   if(c==='B')return pushBlock(nx,ny,dx,dy);
   if(c==='L')return unlock(nx,ny);
   if(c==='E'){if(!P.bump){P.bump=1;say([N('Una puerta de piedra tallada. No se mueve: algo cerca debe abrirla.','A carved stone door. It will not move: something nearby must open it.')])}return}
@@ -4554,7 +4555,6 @@ function chQueenTalk(){
 }
 
 /* ================= SANTIAGO: the return ================= */
-function secretsDone(){return !!(S.flags.won&&S.flags.sb1&&S.flags.sb2&&S.flags.sb3&&S.flags.sb4&&S.flags.sb5&&S.flags.sb6&&S.flags.chboss)}
 function portalMenu(){
   const en=S.gloss==='en',toStgo=M.region!=='santiago';
   choose(L('','Wülngiñ','Un portal de luz tranquila, tejido como un trariwe.','A portal of calm light, woven like a trariwe.'),
@@ -5127,6 +5127,7 @@ function questLines(){
       Q('Ngamleftripael',!!F.sw2,F.spk_all?'Los tres hablantes se encontraron. Algo los separa en las cocheras.':'En el metro (entrada en la calle): encuentra a los hablantes perdidos ('+['spk1','spk2','spk3'].filter(k=>F[k]).length+'/3).',F.spk_all?'The three speakers have found each other. Something keeps them apart in the depot.':'In the metro (entrance on the street): find the lost speakers ('+['spk1','spk2','spk3'].filter(k=>F[k]).length+'/3).');
       {const r=F.cena_ok&&F.tel_ok;Q('Mapudungukenoael fillantü',!!F.sw3,r?'Algo gris bosteza en el patio de los blocks.':'En los blocks, al este de la población: ayuda a una familia en la cena y a una chuchu con el teléfono.',r?'Something grey is yawning in the courtyard of the blocks.':'In the blocks, east of the población: help a family at dinner and a chuchu with the phone.')}
       Q('Santiago waria',0,'Ayuda a los wariache a hablar sin vergüenza ('+['st1','st2','st3','st4','st5'].filter(k=>F[k]).length+'/5). Cuando caigan los tres silencios, enfrenta al Yewen.','Help the wariache speak without shame ('+['st1','st2','st3','st4','st5'].filter(k=>F[k]).length+'/5). When the three silences fall, face the Yewen.')}
+    if(F.llaw_seen&&!F.llaw_won)Q('Llawfeñ',0,'Tu sombra ya no te sigue: se metió en una grieta gris en el camino del mar, donde empezó tu viaje.','Your shadow no longer follows you: it stepped into a grey crack on the sea road, where your journey began.');
     if(F.epu_won&&F.chboss&&sbs>=6)Q('Mapu',1,'La tierra respira. Lo que queda es caminar y aprender.','The land breathes. What remains is to walk and to learn.');
   }
   const MQ=[['laf','Machi (Lafkenche)','pentukun','Saca hojas del foye solo de Fotra mapu, por el lado norte.','Take leaves from the lone foye of Fotra mapu, on the north side.'],
@@ -5171,8 +5172,8 @@ function mapaLines(){
   const ng=['ngen','ngen2','ngen3','ngen4','ngen5'].filter(k=>F[k]).length;
   const sbs=['sb1','sb2','sb3','sb4','sb5','sb6'].filter(k=>F[k]).length;
   ls.push(L('','Mapu',
-    'Ngen despiertos '+ng+'/5 · Llum wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoymatulfe · '+(F.epu_won?'■':'□')+' Epunamun · '+(F.yewen_won?'■':'□')+' Yewen',
-    'Ngen awakened '+ng+'/5 · Hidden wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoymatulfe · '+(F.epu_won?'■':'□')+' Epunamun'));
+    'Ngen despiertos '+ng+'/5 · Llum wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoymatulfe · '+(F.epu_won?'■':'□')+' Epunamun · '+(F.yewen_won?'■':'□')+' Yewen'+(F.llaw_seen?' · '+(F.llaw_won?'■':'□')+' Ngoyün mapu':''),
+    'Ngen awakened '+ng+'/5 · Hidden wekufü '+sbs+'/6 · '+(F.chboss?'■':'□')+' Münche lafken · '+(F.won?'■':'□')+' Fütra Ngoymatulfe · '+(F.epu_won?'■':'□')+' Epunamun · '+(F.yewen_won?'■':'□')+' Yewen'+(F.llaw_seen?' · '+(F.llaw_won?'■':'□')+' Ngoyün mapu':'')));
   if(S.hm)ls.push(L('','Weichafe'+(S.hm>1?' ×'+S.hm:''),'Modo héroe: conservas tu kimün y tus cosas, pero los wekufü crecen contigo y las pruebas no dan pistas.','Hero mode: you keep your kimün and your things, but the wekufü grow with you and the trials give no hints.'));
   return ls}
 /* ---------- vocabulary unlocked outside battle roots ---------- */
@@ -5427,7 +5428,7 @@ function reportText(){
   const ntk=Object.keys(NUTK).filter(k=>F['ntk_'+k]).length+Object.keys(NUTK2).filter(k=>F['ntk2_'+k]).length;
   const L1=en?['KIMÜN REPORT · Kewün Newen','Player','Level','Play time','min','Ngen awakened','Verb roots','Trawün lessons','Kuyfi chillka','Nütramkan','Wekufü beaten','Accuracy by topic (correct / attempts)','Still to practise (most missed first)','Nothing pending: well done!']
     :['INFORME DE KIMÜN · Kewün Newen','Jugador/a','Nivel','Tiempo de juego','min','Ngen despertados','Raíces verbales','Lecciones del trawün','Kuyfi chillka','Nütramkan','Wekufü vencidos','Precisión por tema (aciertos / intentos)','Por practicar (lo más fallado primero)','Nada pendiente: ¡bien hecho!'];
-  return [L1[0],'',L1[1]+': '+S.name+(S.hm?' (weichafe)':''),L1[2]+': kimün '+S.lvl,L1[3]+': '+mins+' '+L1[4],
+  return [L1[0],'',L1[1]+': '+S.name+(S.flags.kimche?' · kimche':'')+(S.hm?' (weichafe)':''),L1[2]+': kimün '+S.lvl,L1[3]+': '+mins+' '+L1[4],
     L1[5]+': '+['ngen','ngen2','ngen3','ngen4','ngen5'].filter(k=>F[k]).length+'/5'+(F.won?'  · Ti Fütra Ngoymatulfe ✓':''),
     L1[6]+' ('+S.roots.length+'): '+S.roots.map(r=>r+'-').join(', '),L1[7]+': '+trw,L1[8]+': '+tabs+'/6',L1[9]+': '+ntk+'/'+(Object.keys(NUTK).length+Object.keys(NUTK2).length),
     L1[10]+': '+Object.keys(S.beaten||{}).length,(en?'Translations peeked at (Mapudungun-only mode)':'Traducciones consultadas (modo re mapudungun)')+': '+(S.peek||0)+(S.nogloss?'':(en?' · mode off':' · modo apagado')),'',L1[11]+':',...(rows.length?rows:['  —']),'',L1[12]+':',...(ml.length?ml:['  '+L1[13]]),'',new Date().toLocaleString()].join('\n')}
@@ -5969,6 +5970,7 @@ function battleMenu(){
   if(B&&B.ngenA&&!B.ngenA.done)return;
   if(B&&B.o.tut&&tutStep())return;
   if(B&&B.lanPending){const le=B.lanPending;B.lanPending=null;if(!le.dead)return lanKewun(le)}
+  if(B&&B.llawPending){const le=B.llawPending;B.llawPending=null;if(!le.dead&&le.hp>0)return llawKewun(le)}
   const en=S.gloss==='en';B.cursor=null;
   choose({es:'¿Qué haces? (Hay '+aliveE().length+')',en:'What do you do? ('+aliveE().length+' left)'},[
     ...(B.lanBoon?[{m:'Epu wiño!',g:en?'Gift of the lof: a double wiño strike, no newen needed (this turn only)':'Regalo del lof: doble golpe de wiño, sin gastar newen (solo este turno)',v:'ww'}]:[]),
@@ -6295,6 +6297,7 @@ function enemyPhase(){
       if(roll<.32&&B.turn>0){B.tele=true;fx.push('Trelke-wekufü se estira, listo para envolverte.');fxe.push('Trelke-wekufü stretches out, ready to wrap you up.');continue}
       if(roll<.52&&laf<1&&B.en.length<5){const ne=mkEnemy('laftrache');B.en.push(ne);relabel();fx.push('¡Trelke-wekufü llama a '+ne.label+'!');fxe.push('Trelke-wekufü calls up '+ne.label+'!');continue}
       hitP(e);continue}
+    if(e.t==='llawfen'){llawTurn(e,hitP,fx,fxe,hitsFx);continue}
     const SBK={chinifilu:['El Chiñifilu te salpica con el barro podrido del fondo','The Chiñifilu splashes you with the rotten mud of the deep'],
       piwuchen:['El Piwüchen alcanza a rozarte el cuello con su boca de aguja','The Piwüchen grazes your neck with its needle mouth'],
       wallipen:['La sombra torcida del Wallepeñ te pasa por encima','The Wallepeñ\'s crooked shadow passes over you'],
@@ -6485,7 +6488,7 @@ function victory(){
     const nx={llufu1:'llufu2',llufu2:'llufu3',llufu3:'llufu4',llufu4:'llufu5'}[st&&st.t];
     if(nx)return llufuStage(nx);}
   {const qb=B.en.find(e=>ET[e.t].boss);
-   if(qb&&!B.qok){qb.dead=false;qb.fadeT=0;qb.hit=0;qb.hp=1;qb.stag=1;return ngenQuiz(qb)}}
+   if(qb&&!B.qok){qb.dead=false;qb.fadeT=0;qb.hit=0;qb.hp=1;qb.stag=1;return qb.t==='llawfen'?llawLast(qb):ngenQuiz(qb)}}
   {const vb=B.en.find(e=>ET[e.t].boss);
    if(vb&&!B.ngenA&&B.o.chain!=='llufu'&&vb.t!=='epunamun'){
      if(vb.t==='ngoyman5'){vb.stag=1;B.ngenA={t:0,e:vb,kind:'final'};document.getElementById('dlg').style.display='none';active=null;sfx('cast');return}
@@ -6531,6 +6534,7 @@ function endBattle(how){
       N('Y entonces lo notas: en la plaza, en la feria, en la población, en la ruka urbana... la gente se saluda en mapudungun. Chiquillos contando en el paradero. Una abuela enseñando. Un mural que dice MAPU.','And then you notice it: in the plaza, at the market, in the neighborhood, in the urban ruka... people greet each other in Mapudungun. Kids counting at the bus stop. A grandmother teaching. A mural that says MAPU.'),
       L('','Waria mew ka mongeley taiñ dungun!','¡También en la ciudad vive nuestra lengua!','In the city, too, our language lives!'),
       N('Santiago también es Wallmapu cuando se habla mapudungun. Tu viaje empezó aquí... y aquí vuelve a empezar, cada vez que alguien dice "mari mari". Yewelkilnge: no tengas vergüenza.','Santiago is Wallmapu too when Mapudungun is spoken. Your journey began here... and here it begins again, every time someone says "mari mari". Yewelkilnge: do not be ashamed.')],()=>gainPiwke([N('Donde estaba parado el Yewen, algo rojo brilla en el suelo...','Where the Yewen stood, something red glints on the ground...')]));}
+  if(how==='win'&&o.sflag==='llaw_won')return llawWon();
   if(how==='win'&&o.sflag){S.flags[o.sflag]=1;persist();sfx('lvl');
     return say([N('El wekufü secreto se deshace en jirones de sombra que el viento se lleva.','The secret wekufü breaks apart into shreds of shadow that the wind carries away.'),
       L('','Newen!','Venciste a uno de los wekufü escondidos. Pocos pueden contarlo.','You defeated one of the hidden wekufü. Few can say the same.')],()=>gainPiwke([N('Donde estaba, algo rojo brilla en el suelo...','Where it stood, something red glints on the ground...')]));}
@@ -6676,6 +6680,303 @@ function lanKewun(e){
       Object.assign(N('El newen del lof te llega en un río de luz: recuperas todos tus piwke, y tus manos sostienen dos wiño a la vez.','The lof\'s newen reaches you in a river of light: all your hearts return, and your hands hold two wiño at once.'),{fx:()=>{B.lanScene=null;S.hp=maxHP();sfx('heal');spark(60,30,'#ffe890',30)}})],
       ()=>{B.lanScene=null;S.hp=maxHP();B.lanBoon=1;battleMenu()})}
 }
+
+/* ======================================================================
+   NGOYÜN MAPU, the secret level (opens once every secret is done:
+   the six hidden wekufü, Münche lafken, Ti Fütra Ngoymatulfe, the
+   Epunamun and the Yewen). Your shadow walks away from you on the sea
+   road and into a grey crack: inside is the land where everything you
+   forgot goes. Its places are grey copies of the first ones (the sea
+   road, the Lafkenche lof, your kuku's ruka). Each word you put back
+   brings colour back around it; at the end your shadow fights you with
+   the questions you missed most.
+   All new Mapudungun is listed in docs/review.md (Tanda 26) with ⚠.
+   ====================================================================== */
+ET.llawfen={name:'llawfeñ',hp:320,atk:22,xp:300,gold:[300,300],boss:true,bs:110,spres:1,seals:['umawtu','nepe','tripakil']};
+function allSecrets(){const F=S&&S.flags;return !!(F&&['sb1','sb2','sb3','sb4','sb5','sb6'].every(k=>F[k])&&F.chboss&&F.won&&F.epu_won&&F.yewen_won)}
+const llawName=()=>S.name+' ñi llawfeñ';
+
+/* ---------- the three grey places: copies of where the journey began ---------- */
+{const cp=(id,src,fix)=>{const rows=MAPROWS[src].map(r=>r.split(''));fix(rows);MAPROWS[id]=rows.map(r=>r.join(''))};
+ cp('y_rupu','rupu',r=>{r[10][0]=',';r[11][9]=',';for(const [x,y] of [[5,5],[12,7],[20,4],[26,7]])r[y][x]='I'});
+ cp('y_lof','lof',r=>{r[1][32]=','});
+ cp('y_ruka','l_ruka2',r=>{});}
+const NGY={floor:',',bg:'coast',region:'ngoyun',ngoyun:1,fog:1};
+function addNgMap(id,def){def.rows=MAPROWS[id];def.w=def.rows[0].length;def.h=def.rows.length;MAPS[id]=def}
+const LLAW_LOCK=[N('Una niebla gris, fina como ceniza, cierra el camino. Detrás de ella todo está borrado: primero hay que devolverle sus palabras a este lugar.','A grey mist, fine as ash, closes the road. Beyond it everything is erased: first this place needs its words back.')];
+addNgMap('y_rupu',Object.assign({},NGY,{floor:'.',name:'Ngoyün rüpü',g:{es:'El camino del olvido',en:'The road of forgetting'},song:'coast',
+ edges:{left:{to:'rupu',x:5,y:5},right:{to:'y_lof',x:1,y:9,req:'yfull:y_rupu',reqMsg:LLAW_LOCK}},
+ signs:{'5,5':()=>ngSign('5,5'),'12,7':()=>ngSign('12,7'),'20,4':()=>ngSign('20,4'),'26,7':()=>ngSign('26,7')},
+ ngspots:{'5,5':[5,5],'12,7':[12,7],'20,4':[20,4],'26,7':[26,7]},
+ ents:[{id:'ykuku',kind:'npc',look:'kuku',fem:1,x:3,y:5,dir:'right',fixed:1,talk:()=>yKukuTalk()},
+   {kind:'enemy',x:15,y:9,party:['ngoyam','ngoyam']},{kind:'enemy',x:22,y:3,party:['ngoyam','ngoyam','ngoyam']}]}));
+addNgMap('y_lof',Object.assign({},NGY,{name:'Ngoyün lof',g:{es:'La comunidad del olvido',en:'The community of forgetting'},song:'lof',pave:1,
+ doors:{'3,8':{to:'y_ruka',x:6,y:7,req:'yfull:y_lof',reqMsg:[N('La puerta de la ruka de tu kuku está tapada con niebla gris. Adentro, alguien respira con tu mismo ritmo.','The door of your kuku\'s ruka is stopped up with grey mist. Inside, someone is breathing at your own pace.'),
+   N('Primero devuélvele sus palabras a la gente del lof.','First give the people of the lof their words back.')]}},
+ edges:{left:{to:'y_rupu',x:28,y:6}},
+ ngspots:{yteach:[13,13],ycook:[24,8],yweave:[6,3],ylonko:[18,7],ymom:[30,13]},
+ ents:[{id:'yteach',kind:'npc',look:'teacher',fem:1,x:13,y:12,dir:'down',act:'teach',fixed:1,talk:()=>ngPerson('yteach')},
+   {id:'ykid1',kind:'npc',look:'child',x:12,y:14,dir:'up',seated:1,fixed:1,talk:()=>ngKid()},
+   {id:'ykid2',kind:'npc',look:'childf',fem:1,x:13,y:14,dir:'up',seated:1,fixed:1,talk:()=>ngKid()},
+   {id:'ykid3',kind:'npc',look:'child',x:14,y:14,dir:'up',seated:1,fixed:1,talk:()=>ngKid()},
+   {id:'ycook',kind:'npc',look:'cook',fem:1,x:24,y:8,dir:'down',act:'cook',fixed:1,talk:()=>ngPerson('ycook')},
+   {id:'yweave',kind:'npc',look:'weaver',fem:1,x:6,y:3,dir:'up',act:'weave',fixed:1,talk:()=>ngPerson('yweave')},
+   {id:'ylonko',kind:'npc',look:'lonko',x:18,y:7,dir:'down',fixed:1,talk:()=>ngPerson('ylonko')},
+   {id:'ymom',kind:'npc',look:'fisherw',fem:1,x:30,y:13,dir:'left',fixed:1,talk:()=>ngPerson('ymom')},
+   {id:'ypichi1',kind:'npc',look:'child',x:28,y:13,dir:'right',fixed:1,talk:()=>ngKid()},
+   {id:'ypichi2',kind:'npc',look:'childf',fem:1,x:28,y:14,dir:'right',fixed:1,talk:()=>ngKid()},
+   {kind:'enemy',x:20,y:13,party:['ngoyam','ngoyam','ngoyam']}]}));
+addNgMap('y_ruka',Object.assign({},NGY,{floor:'_',name:'Ngoyün ruka',g:{es:'La ruka del olvido',en:'The ruka of forgetting'},song:'lof',pal:'rukain',wall:'ruka',interior:1,
+ edges:{down:{to:'y_lof',x:3,y:9}},ngspots:{},
+ ents:[{id:'yllaw',kind:'npc',look:'llawfen',x:5,y:4,dir:'down',fixed:1,flag:'llaw_won',talk:()=>llawTalk()}]}));
+// the crack on the real sea road, once the shadow has walked off
+MAPS.rupu.ents.push({id:'llawcrack',kind:'npc',look:'llawcrack',x:5,y:4,fixed:1,req:'llaw_seen',talk:()=>crackTalk()});
+SONGSET.ngoyun={battle:'ngoyBattle',boss:'ngoyBoss'};
+
+/* ---------- state: which words are back ---------- */
+const ngKey=(id,k)=>'yw:'+id+':'+k;
+const ngDone=(id,k)=>!!S.flags[ngKey(id,k)];
+const ngFull=id=>!!S.flags['yfull:'+id];
+const YWT={};   // when each spot got its word back (frame), for the colour animation; spots already back when a map loads show in full
+let YWF=null;   // {t, x, y}: the whole map turning back to colour
+function ngRestore(k,after){
+  S.flags[ngKey(CUR,k)]=1;YWT[CUR+':'+k]=frame;sfx('lvl');
+  const sp=Object.keys(M.ngspots);
+  if(sp.every(q=>ngDone(CUR,q))&&!ngFull(CUR)){S.flags['yfull:'+CUR]=1;const p=M.ngspots[k];YWF={t:frame+40,x:p[0],y:p[1],id:CUR}}
+  persist();
+  if(ngFull(CUR)&&YWF&&YWF.id===CUR)return say(after,()=>ngMapDone(CUR));
+  say(after)}
+function ngMapDone(id){
+  setTimeout(()=>playSong(mapSong()),900);
+  if(id==='y_rupu')return say([N('La última letra vuelve a su lugar... y el color corre por el camino como agua: el mar se pone azul, la arena dorada, el fuego naranja.','The last letter returns to its place... and colour runs down the road like water: the sea turns blue, the sand golden, the fire orange.'),
+    N('La niebla del este se abre. Allá, gris todavía, está el lof donde aprendiste a presentarte.','The mist to the east opens. Over there, still grey, is the lof where you learned to introduce yourself.')]);
+  if(id==='y_lof')return say([N('Toda la gente del lof se mira, como despertando de un sueño largo. Alguien se ríe. Alguien dice «mari mari», y otro le contesta.','All the people of the lof look at one another, as if waking from a long sleep. Someone laughs. Someone says «mari mari», and someone else answers.'),
+    N('La niebla de la puerta de la ruka de tu kuku se deshace. Adentro, tu sombra te espera.','The mist over the door of your kuku\'s ruka dissolves. Inside, your shadow is waiting for you.')]);
+}
+
+/* ---------- the carved stones of the sea road: a letter is missing ---------- */
+const NGSIGN={
+  '5,5':{pre:'ant',gap:'ü',suf:'',o:['ü','u','e','i'],es:'el sol',en:'the sun',
+    note:['La ü es la sexta vocal del mapudungun: no es u, ni i, ni e.','ü is the sixth vowel of Mapudungun: it is not u, or i, or e.']},
+  '12,7':{pre:'',gap:'tr',suf:'ewa',o:['tr','ch','t','r'],es:'el perro',en:'the dog',
+    note:['tr es un solo sonido, como en trewa y en trariwe: no es ch ni t.','tr is a single sound, as in trewa and trariwe: it is not ch or t.']},
+  '20,4':{pre:'la',gap:'f',suf:'ken',o:['f','p','w','ng'],es:'el mar',en:'the sea',note:null},
+  '26,7':{pre:'',gap:'ll',suf:'awfeñ',o:['ll','l','y','ch'],es:'la sombra',en:'the shadow',
+    note:['Llawfeñ: la sombra. La tuya pasó por aquí y siguió hacia el este.','Llawfeñ: the shadow. Yours came this way and went on east.']}};
+function ngShuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+function ngSign(k){const D=NGSIGN[k],w=D.pre+D.gap+D.suf,en=S.gloss==='en';
+  if(ngDone(CUR,k))return say([L('Kura',w,'Una piedra tallada: «'+w+'», '+D.es+'. Las letras brillan.','A carved stone: «'+w+'», '+D.en+'. The letters glow.')]);
+  const q={m:D.pre+'_'+D.suf,es:'Una piedra tallada, gris, borrada por el olvido. Falta una letra. ('+D.es+')',en:'A grey carved stone, worn away by forgetting. One letter is missing. ('+D.en+')'};
+  const opts=D.o.map(g=>D.pre+g+D.suf);
+  const ask=()=>choose(q,ngShuf(opts).map(o=>({m:o,v:o})),v=>{
+    const ok=v===w;track('ngoyün mapu (letras)',ok,q,opts,w);
+    if(ok)return ngRestore(k,[Object.assign(L('',w,'«'+D.es+'». La letra vuelve a su lugar, y alrededor de la piedra el mundo recupera su color.','"'+D.en+'". The letter returns to its place, and around the stone the world gets its colour back.'),{fx:()=>sfx('cast')})]
+      .concat(D.note?[N(D.note[0],D.note[1])]:[]));
+    sfx('bad');say([N('Las letras se deshacen como ceniza. No era esa.','The letters crumble like ash. That was not it.')],ask)},false,true);
+  ask()}
+function yKukuTalk(){
+  if(ngFull('y_rupu'))return say([L('Kuku','Mari mari, '+nm()+'!','Te reconoce. Sonríe como el primer día, cuando te esperaba en este mismo camino.','She recognizes you. She smiles like on the first day, when she waited for you on this same road.'),
+    N('«Anda, anda. Tu sombra se fue hacia el lof.»','"Go on, go on. Your shadow went toward the lof."')]);
+  say([N('Una figura gris, igual a tu kuku, mira el mar donde la viste por primera vez. No te ve. Mueve los labios, pero no le sale ninguna palabra.','A grey figure, just like your kuku, looks at the sea where you first saw her. She does not see you. Her lips move, but no word comes out.'),
+    N('Alrededor, las piedras talladas del camino están borradas. Quizás si les devuelves sus letras...','All around, the carved stones of the road are worn away. Perhaps if you give them back their letters...')])}
+
+/* ---------- the people of the grey lof: each has lost one word ---------- */
+const NGPEOPLE={
+  yteach:{who:'Kimeltufe',pre:'Kiñe, epu, ',post:', meli!',a:'küla',o:['küla','kechu','mari','epu'],es:'«¡Uno, dos, ___, cuatro!» La profesora cuenta con los niños, y en el tercer número se quedan todos callados.',en:'"One, two, ___, four!" The teacher counts with the children, and at the third number they all fall silent.',
+    full:'Kiñe, epu, küla, meli!',fes:'¡Uno, dos, tres, cuatro!',fen:'One, two, three, four!',
+    after:[N('Los niños repiten el número a gritos, felices, y siguen contando hasta mari.','The children shout the number back, happily, and keep counting up to mari.')]},
+  ycook:{who:'Iyaelfe',pre:'Elumuen ',post:'.',a:'kofke',o:['kofke','kütral','lafken','ruka'],es:'Tiene la masa en las manos y te mira con los ojos vacíos: «Dame ___». No se acuerda de cómo se llama lo que está haciendo.',en:'She has the dough in her hands and looks at you with empty eyes: "Give me ___". She does not remember what the thing she is making is called.',
+    full:'Elumuen kofke.',fes:'Dame pan.',fen:'Give me bread.',
+    after:[N('Se ríe de sí misma y te pasa un pedazo caliente. Huele a horno de barro.','She laughs at herself and hands you a warm piece. It smells of the clay oven.')]},
+  yweave:{who:'Ngürekafe',pre:'Iney ',post:' am?',a:'pingeymi',o:['pingeymi','pingen','pingey','pingeyu'],es:'La tejedora levanta la vista del witral: «¿Cómo ___?». Quiere preguntarte tu nombre, pero la palabra se le quedó en el telar.',en:'The weaver looks up from the witral: "What ___?" She wants to ask your name, but the word got caught in the loom.',
+    full:'Iney pingeymi am?',fes:'¿Cómo te llamas?',fen:'What is your name?',
+    after:[L(null,'Iñche @ pingen.','Le dices tu nombre.','You tell her your name.'),N('Lo repite despacio, y lo teje en una esquina de la faja.','She repeats it slowly, and weaves it into a corner of the sash.')]},
+  ylonko:{who:'Lonko',pre:'Fewla mapudungun mew ',post:'!',a:'nütramkayaiñ',o:['nütramkayaiñ','nütramkayan','nütramkaymi','nütramkay'],es:'El lonko abre los brazos para hablarle a todo el lof: «¡Ahora vamos a ___ en mapudungun!»... y el verbo no le sale.',en:'The lonko opens his arms to speak to the whole lof: "Now let us all ___ in Mapudungun!"... and the verb will not come.',
+    full:'Fewla mapudungun mew nütramkayaiñ!',fes:'¡Ahora vamos a conversar en mapudungun!',fen:'Now let us talk in Mapudungun!',
+    after:[N('Le habla a todos, no a uno: -iñ, «nosotros». El lof entero contesta a la vez.','He is speaking to everyone, not to one: -iñ, "we". The whole lof answers at once.')]},
+  ymom:{who:'Ñuke',pre:'Iyael! ',post:'',a:'Küpamu!',o:['Küpamu!','Küpange!','Küpamün!','Küpan!'],es:'La mamá llama a sus dos hijos a comer: «¡A comer! ¡___!» Los niños esperan, quietos, a que termine la frase.',en:'The mother calls her two children to eat: "Food! ___!" The children wait, still, for her to finish.',
+    full:'Iyael! Küpamu!',fes:'¡A comer! ¡Vengan (ustedes dos)!',fen:'Food! Come (you two)!',
+    after:[N('Son dos: -mu. Los niños corren hacia ella riéndose.','There are two of them: -mu. The children run to her, laughing.')]}};
+function ngPerson(id){const D=NGPEOPLE[id],en=S.gloss==='en';
+  if(ngDone('y_lof',id))return say([L(D.who,D.full,D.fes,D.fen)]);
+  const q={m:D.pre+'___'+D.post,es:D.es,en:D.en,who:D.who};
+  const ask=()=>choose(q,ngShuf(D.o).map(o=>({m:o,v:o})),v=>{
+    const ok=v===D.a;track('ngoyün mapu (palabras)',ok,q,D.o,D.a);
+    if(ok)return ngRestore(id,[Object.assign(L(D.who,D.full,D.fes,D.fen),{fx:()=>sfx('cast')}),N('El color le vuelve a la cara, a la ropa, al suelo que pisa.','Colour comes back to their face, their clothes, the ground they stand on.')]
+      .concat(D.after.map(l=>l.m&&l.m.includes('@')?Object.assign({},l,{who:S.name,m:l.m.replace('@',S.name)}):l)));
+    sfx('bad');say([N('La palabra no encaja: la frase se queda gris.','The word does not fit: the sentence stays grey.')],ask)},false,true);
+  say([N(D.es,D.en)],ask)}
+function ngKid(){
+  if(ngFull('y_lof'))return say([L('Pichiche','Mari mari!','¡Hola!','Hello!')]);
+  say([N('Un niño gris, quieto, esperando que alguien termine de hablar.','A grey child, still, waiting for someone to finish speaking.')])}
+
+/* ---------- the crack on the sea road ---------- */
+function crackTalk(){const en=S.gloss==='en';
+  say([N(S.flags.llaw_won?'La grieta sigue ahí, pero ya no es gris: adentro se ve el color del camino y del lof.':'Una grieta gris en el aire, del alto de una persona. Por ella se fue tu sombra. Adentro no hay color, y las palabras flotan como ceniza.',
+    S.flags.llaw_won?'The crack is still there, but it is no longer grey: inside you can see the colours of the road and the lof.':'A grey crack in the air, the height of a person. Your shadow went through it. Inside there is no colour, and words drift like ash.')],()=>
+    choose({m:'Ngoyün mapu',es:'¿Entras?',en:'Go in?'},[{m:en?'Go in':'Entrar',v:1},{m:en?'Not yet':'Todavía no',v:0}],v=>{
+      if(!v)return;sfx('swirl');loadMap('y_rupu',1,6)},true,true))}
+function llawIntro(){
+  S.flags.llaw_seen=1;persist();
+  const def=MAPS.rupu.ents.find(e=>e.id==='llawcrack');
+  say([N('Algo es distinto en el camino del mar, donde empezó tu viaje. Miras al suelo: tu sombra no está a tus pies.','Something is different on the sea road, where your journey began. You look down: your shadow is not at your feet.'),
+    N('Está unos pasos más allá, parada al borde del camino. Te mira con tus propios ojos... y se mete en una grieta gris que se abre en el aire.','It stands a few steps away, at the edge of the road. It looks at you with your own eyes... and steps into a grey crack that opens in the air.'),
+    Object.assign(N('Venciste a todos los wekufü escondidos, bajaste al fondo del lago, pasaste la prueba del Epunamun y le devolviste la voz a Santiago. Pero hay un lugar donde todavía no has estado: el lugar adonde se va todo lo que se te olvidó.','You defeated every hidden wekufü, went down to the bottom of the lake, passed the Epunamun\'s trial and gave Santiago its voice back. But there is one place you have not been yet: the place where everything you forgot goes.'),
+      {fx:()=>{if(CUR==='rupu'&&!ents.some(e=>e.id==='llawcrack')){const e=Object.assign({},def,{fx:def.x,fy:def.y,ox:def.x,oy:def.y,cd:60,wait:0,pi:0,bt:0,dir:'down'});ents.push(e)}sfx('swirl')}})])}
+const _ngLoadMap=loadMap;
+loadMap=function(id){const r=_ngLoadMap.apply(this,arguments);
+  if(id==='rupu'&&allSecrets()&&!S.flags.llaw_seen)setTimeout(()=>{if(!active&&mode==='map'&&CUR==='rupu')llawIntro()},700);
+  if(MAPS[id]&&MAPS[id].ngoyun&&!S.flags['ng_in:'+id]){S.flags['ng_in:'+id]=1;persist();
+    const T={y_rupu:[N('Todo es gris. El mar no se mueve, el fuego no da calor. Es el camino del mar, el primero... pero alguien le borró los colores y las letras.','Everything is grey. The sea does not move, the fire gives no warmth. It is the sea road, the very first one... but someone has erased its colours and its letters.'),
+        N('Por el aire flotan letras sueltas, como ceniza. Estás en Ngoyün mapu: aquí viene a parar todo lo que se olvida.','Loose letters drift through the air like ash. You are in Ngoyün mapu: everything that is forgotten ends up here.')],
+      y_lof:[N('El lof de siempre, en gris. La gente está en sus lugares, pero quieta, con la boca abierta a medio decir algo. A cada uno le falta una palabra.','The same old lof, in grey. The people are in their places, but still, their mouths open halfway through saying something. Each of them is missing a word.')],
+      y_ruka:[]}[id];
+    if(T&&T.length)setTimeout(()=>{if(!active&&mode==='map')say(T)},650)}
+  return r};
+const _ngMapSong=mapSong;
+mapSong=function(){if(M&&M.ngoyun)return ngFull(CUR)?(M.song==='coast'?'coast':'lof'):'ngoy';return _ngMapSong()};
+const _ngStart=startBattle;
+startBattle=function(){const r=_ngStart.apply(this,arguments);if(B&&M&&M.ngoyun&&!ngFull(CUR))B.grey=1;return r};
+
+/* ---------- the shadow ---------- */
+function llawTalk(){const en=S.gloss==='en',lw=llawName();
+  say([N('Junto al fuego apagado, donde tu kuku te contó la primera historia, está sentada tu sombra. Se levanta cuando entras. Tiene tu altura, tu manera de pararte, tu pelo.','By the dead fire, where your kuku told you the first story, your shadow is sitting. It stands up as you come in. It has your height, your way of standing, your hair.'),
+    L(lw,'Mari mari, '+S.name+'.','Lo dice con tu voz.','It says it in your voice.'),
+    L(lw,'Iñche tami llawfeñ.','Soy tu sombra.','I am your shadow.'),
+    N('«Aquí guardé todo lo que se te olvidó en el camino: cada palabra que se te escapó, cada respuesta que fallaste. Las fui juntando una por una mientras tú seguías caminando.»','"Here I kept everything you forgot along the way: every word that slipped away, every answer you missed. I gathered them one by one while you kept walking."'),
+    N('«No soy un wekufü. Soy lo que todavía te falta aprender. Si quieres que vuelva contigo, demuéstrame que ya no me necesitas para acordarte.»','"I am not a wekufü. I am what you still have to learn. If you want me back with you, show me you no longer need me to remember."')],()=>
+    choose(L(lw,'Weychayayu?','¿Peleamos tú y yo?','Shall we fight, you and I?'),
+      [{m:'May, weychayayu!',g:en?'Yes, let us fight!':'¡Sí, peleemos!',v:1},{m:'Pepikawkülelan petu',g:en?'I am not prepared yet':'Todavía no estoy preparado',v:0}],v=>{
+      if(!v)return say([N('Tu sombra se vuelve a sentar junto al fuego apagado. «Aquí voy a estar», dice. «Siempre estoy.»','Your shadow sits back down by the dead fire. "I will be here," it says. "I always am."')]);
+      ET.llawfen.name=lw;
+      say([N('Tu sombra levanta los brazos igual que tú. A su alrededor se encienden tres sellos de luz: tus propias palabras.','Your shadow raises its arms just as you do. Three seals of light kindle around it: your own words.')],()=>{
+        startBattle(['llawfen'],{boss:1,sflag:'llaw_won',song:'ngoyFinal'});llawSetup()})},true,true))}
+function llawSetup(){const e=B&&B.en[0];if(!e||e.t!=='llawfen')return;
+  // it mirrors you: as tough as about eight of your blows, hitting about as hard as you can take
+  const hp=Math.max(300,Math.round((atk()+4)*8));e.hp=e.max=hp;
+  ET.llawfen.atk=Math.max(22,def()+Math.round(maxHP()/13));   // about thirteen of its plain blows to bring you down
+  const R=ngShuf(S.roots.filter(r=>VG[r]));const pick=R.slice(0,3);while(pick.length<3)pick.push(['umawtu','nepe','tripa'][pick.length]);
+  pick[2]+='kil';e.seals=pick;
+  e.label=GR(llawName())}
+function llawTurn(e,hitP,fx,fxe,hitsFx){
+  const t=B.turn;
+  if(t>0&&t%4===2&&!B.llawPending){B.llawPending=e;
+    fx.push(e.label+' abre la boca, y de adentro salen, una por una, las palabras que se te olvidaron...');fxe.push(e.label+' opens its mouth, and out come, one by one, the words you forgot...');
+    hitsFx.push(()=>{sfx('cast');B.flash=12;B.shake=8});return}
+  if(e.seals&&!e.seals.length&&t>0&&t%5===0){const pool=S.roots.filter(r=>VG[r]);let code=pool[rnd(pool.length)];if(Math.random()<.4)code+='kil';e.seals=[code];
+    fx.push('¡Tu sombra alza una barrera con tus propias palabras! '+sealGloss(code,'es'));fxe.push('Your shadow raises a barrier made of your own words! '+sealGloss(code,'en'));hitsFx.push(()=>{sfx('cast');B.flash=10});return}
+  if(B.last&&ROOTS[B.last.r]&&Math.random()<.4){const f=B.last.r+(B.last.k?'kil':'')+'nge';
+    hitP(e,1.5,{es:' te devuelve tu última orden, con tu misma voz: «'+f+'!»',en:' throws your last command back at you, in your own voice: "'+f+'!"'});hitsFx.push(()=>B.shake=8);return}
+  if(t>0&&t%4===0){hitP(e,1.9,{es:' se lanza contra ti con todos tus movimientos a la vez',en:' hurls itself at you with all your moves at once'});hitsFx.push(()=>B.shake=10);return}
+  hitP(e,1.1,{es:' te golpea igual que tú golpeas',en:' strikes you the way you strike'})}
+function llawPool(n){const qs=[];
+  for(const m of missList()){if(qs.length>=n)break;if(m.q.m&&m.q.m[0]!=='⧉'&&m.t!=='palin'&&!/trafkintu/.test(m.t)&&m.o&&m.o.length>1)qs.push({q:m.q,o:ngShuf(m.o),a:m.a,mine:1})}
+  const pool=lanPool();while(qs.length<n&&pool.length){const p=pool.splice(rnd(pool.length),1)[0];if(!qs.some(x=>x.q.m===p.q.m&&x.q.es===p.q.es))qs.push(p)}
+  return qs}
+function llawKewun(e){
+  const qs=llawPool(3),mine=qs.filter(q=>q.mine).length;
+  say([Object.assign(L(e.label,'Ngoyün!','¡Olvido!','Forgetting!'),{fx:()=>{sfx('bad');B.flash=14;B.shake=10}}),
+    N(mine?'Tu sombra te devuelve '+(mine===qs.length?'las preguntas':mine+' de las preguntas')+' que fallaste en tu viaje. Cada respuesta correcta la hiere; cada error la alimenta y te cuesta 2 piwke.':'Tu sombra casi no tiene olvidos tuyos que devolverte: te pregunta lo que aprendiste. Cada respuesta correcta la hiere; cada error la alimenta y te cuesta 2 piwke.',
+      mine?'Your shadow hands back '+(mine===qs.length?'the questions':mine+' of the questions')+' you missed on your journey. Every right answer wounds it; every mistake feeds it and costs you 2 hearts.':'Your shadow has almost none of your forgettings to hand back: it asks you what you learned. Every right answer wounds it; every mistake feeds it and costs you 2 hearts.')],()=>ask(0));
+  function ask(i){
+    if(i>=qs.length)return battleMenu();
+    const q=qs[i];
+    choose(Object.assign({},q.q,{es:'('+(i+1)+'/'+qs.length+') '+(q.q.es||''),en:'('+(i+1)+'/'+qs.length+') '+(q.q.en||'')}),q.o.map(o=>({m:o,v:o})),v=>{
+      const ok=v===q.a;track('llawfeñ',ok,q.q,q.o,q.a);
+      if(ok){const d=Math.round(e.max*.07);e.hp=Math.max(1,e.hp-d);
+        return say([Object.assign(N('La palabra te sale clara: tu sombra se encoge (−'+d+').','The word comes out clear: your shadow shrinks (−'+d+').'),{fx:()=>{sfx('ok');e.hit=12;const p=epos(e);pop(p.x,p.y-10,'-'+d,'#ffffff');spark(p.x,p.y,'#e8e0ff',12)}})],()=>ask(i+1))}
+      const d=2*HPQ,hl=Math.round(e.max*.04);S.hp=Math.max(1,S.hp-d);e.hp=Math.min(e.max,e.hp+hl);
+      say([Object.assign(N('Se te escapa otra vez. La respuesta era: '+q.a+'. Tu sombra la guarda y crece (+'+hl+'); tú pierdes 2 piwke (−'+d+').','It slips away again. The answer was: '+q.a+'. Your shadow keeps it and grows (+'+hl+'); you lose 2 hearts (−'+d+').'),
+        {fx:()=>{sfx('bad');B.red=10;pop(60,30,'-'+d,'#ff6050');const p=epos(e);pop(p.x,p.y-10,'+'+hl,'#80ff90')}})],()=>ask(i+1))},false,true)}}
+function llawLast(qb){const en=S.gloss==='en';
+  const q=llawPool(1)[0]||{q:{m:'«Amun.»',es:'¿Quién fue?',en:'Who went?'},o:['iñche','eymi','fey'],a:'iñche'};
+  say([N(qb.label+' cae de rodillas. Levanta la cara, que es tu cara, y te hace una última pregunta: '+(q.mine?'la que más veces se te olvidó.':'una de las primeras que aprendiste.'),
+      qb.label+' drops to its knees. It lifts its face, which is your face, and asks you one last question: '+(q.mine?'the one you forgot most often.':'one of the first ones you learned.'))],()=>
+    choose(q.q,ngShuf(q.o).map(o=>({m:o,v:o})),v=>{const ok=v===q.a;track('llawfeñ',ok,q.q,q.o,q.a);
+      if(ok){sfx('lvl');B.flash=16;B.shake=10;qb.hp=0;B.qok=1;
+        return say([N('Esta vez no se te olvida. Tu sombra cierra los ojos y sonríe.','This time you do not forget. Your shadow closes its eyes and smiles.')],victory)}
+      sfx('bad');qb.stag=0;const rg=Math.round(qb.max*.2);qb.hp=Math.min(qb.max,qb.hp+rg);
+      say([N('Otra vez se te escapa. La respuesta era: '+q.a+'. Tu sombra se levanta, más fuerte (+'+rg+').','It slips away again. The answer was: '+q.a+'. Your shadow gets up, stronger (+'+rg+').')],battleMenu)},false,true))}
+function llawWon(){const lw=llawName();
+  S.flags.llaw_won=1;S.flags.kimche=1;for(const id of ['y_rupu','y_lof','y_ruka'])S.flags['yfull:'+id]=1;
+  YWF={t:frame+30,x:5,y:4,id:CUR};persist();sfx('lvl');KIMCHE=undefined;ents=ents.filter(e=>e.id!=='yllaw');
+  say([N('Tu sombra no se deshace. Se queda quieta frente a ti, respirando a tu mismo ritmo, y por primera vez sonríe.','Your shadow does not break apart. It stands still before you, breathing at your own pace, and for the first time it smiles.'),
+    L(lw,'Ka iñche eymi.','Yo también soy tú.','I am you, too.'),
+    L(S.name,'Amuayu, tañi llawfeñ.','Vámonos los dos, sombra mía.','Let us go, the two of us, my shadow.'),
+    Object.assign(N('Le das la mano. Tu sombra la toma... y se tiende a tus pies, donde siempre estuvo. Las palabras que guardaba vuelven contigo: ya no son olvidos, son cosas que aprendiste dos veces.','You hold out your hand. Your shadow takes it... and lies down at your feet, where it always was. The words it kept come back with you: they are no longer things you forgot, they are things you learned twice.'),{fx:()=>sfx('cast')}),
+    N('El color vuelve a la ruka, al lof y al camino del mar. Afuera, la gente del lof se saluda: «Mari mari!»','Colour comes back to the ruka, the lof and the sea road. Outside, the people of the lof greet one another: «Mari mari!»'),
+    Object.assign(L('','Kimche!','Desde hoy te llaman kimche: la persona que sabe. No porque nunca olvide, sino porque vuelve a aprender lo que olvida.','From today they call you kimche: the one who knows. Not because they never forget, but because they learn again what they forget.'),{fx:()=>sfx('lvl')}),
+    N('Tu sombra te sigue a todas partes. Ahora también en la pantalla de inicio.','Your shadow follows you everywhere. Now on the title screen, too.')],()=>gainPiwke([N('Donde estaba tu sombra, algo rojo brilla en el suelo...','Where your shadow stood, something red glints on the ground...')]))}
+
+/* ---------- drawing: the grey, the colour coming back, the crack and the shadow ---------- */
+let NGOC=null;
+function ngOverlay(c,cx,cy){
+  if(!M||!M.ngoyun)return;
+  const full=ngFull(CUR),anim=YWF&&YWF.id===CUR?frame-YWF.t:null;
+  if(full&&(anim===null||anim>150))return;
+  if(!NGOC||NGOC[0].width!==LW||NGOC[0].height!==LH)NGOC=mk(LW,LH);
+  const [ov,o]=NGOC;o.globalCompositeOperation='source-over';o.clearRect(0,0,LW,LH);o.fillStyle='#808080';o.fillRect(0,VY,LW,VH);
+  o.globalCompositeOperation='destination-out';
+  const hole=(X,Y,r)=>{if(r<=1)return;const g=o.createRadialGradient(X,Y,r*.55,X,Y,r);g.addColorStop(0,'rgba(0,0,0,1)');g.addColorStop(1,'rgba(0,0,0,0)');o.fillStyle=g;o.beginPath();o.arc(X,Y,r,0,6.283);o.fill()};
+  const RR=T*5.2;
+  for(const k in (M.ngspots||{})){if(!ngDone(CUR,k))continue;const [x,y]=M.ngspots[k],t0=YWT[CUR+':'+k];
+    const a=t0==null?1:Math.min(1,(frame-t0)/55),e2=1-Math.pow(1-a,3);hole(x*T+8-cx,y*T+8-cy+VY,RR*e2)}
+  if(anim!==null&&anim>0)hole(YWF.x*T+8-cx,YWF.y*T+8-cy+VY,anim*7);
+  hole(Math.round(P.fx*T+8-cx),Math.round(P.fy*T+4-cy+VY),15);   // you are the one thing here that keeps its colour
+  c.save();c.globalCompositeOperation='saturation';c.drawImage(ov,0,0);c.globalCompositeOperation='source-over';c.globalAlpha=.16;c.drawImage(ov,0,0);c.restore();
+  if(!full){// loose letters drifting up like ash
+    const LET=['a','e','i','o','u','ü','ng','tr','ch','ll','ñ','w','f','k','l','m','p','y'];
+    for(let k=0;k<12;k++){const ph=((frame*.5+k*61)%240)/240,X=((k*97+Math.floor(k*k*13))%LW),Y=VY+VH-ph*VH*1.1;
+      const mx=Math.floor((X+cx)/T),my=Math.floor((Y-VY+cy)/T);let lit=false;
+      for(const q in (M.ngspots||{}))if(ngDone(CUR,q)){const [sx2,sy2]=M.ngspots[q];if(Math.hypot(sx2-mx,sy2-my)<4.5)lit=true}
+      if(lit)continue;const al=(Math.sin(ph*Math.PI)*.55).toFixed(2),ch=LET[k%LET.length],xx=X+Math.sin(frame/40+k)*6;
+      OV.push(()=>ash(ch,xx,Y,al,10))}}}
+function ash(ch,x,y,al,size){// a soft letter, no outline: it should read as ash, not as a label
+  ctx.font=size*2+'px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='rgba(40,40,44,'+(al*.5).toFixed(2)+')';ctx.fillText(ch,x*2+1,y*2+1);
+  ctx.fillStyle='rgba(236,236,240,'+al+')';ctx.fillText(ch,x*2,y*2);ctx.textAlign='left'}
+function silhouette(src,key,col,rim){const k2='SIL'+key;if(ECACHE[k2])return ECACHE[k2];
+  const [cv,c]=mk(src.width+2,src.height+2);
+  if(rim){const [rc,rx]=mk(src.width,src.height);rx.drawImage(src,0,0);rx.globalCompositeOperation='source-atop';rx.fillStyle=rim;rx.fillRect(0,0,src.width,src.height);
+    for(const [dx,dy] of [[0,1],[2,1],[1,0],[1,2]])c.drawImage(rc,dx,dy)}
+  c.drawImage(src,1,1);c.globalCompositeOperation='source-atop';c.fillStyle=col;c.fillRect(1,1,src.width,src.height);
+  return ECACHE[k2]=cv}
+function llawEyes(c,src,ox,oy,sc){// the shadow keeps the whites of your eyes: find the near-white pixels in the head and light them
+  const w=src.width,h=src.height,d=src.getContext('2d').getImageData(0,0,w,Math.round(h*.45)).data;
+  c.fillStyle='#e8e2ff';
+  for(let y=0;y<Math.round(h*.45);y++)for(let x=0;x<w;x++){const i=(y*w+x)*4;if(d[i+3]>200&&d[i]>215&&d[i+1]>215&&d[i+2]>215)c.fillRect(ox+x*sc,oy+y*sc,sc,sc)}}
+function llawCanvas(size,fr){const key='LLAWB'+heroLook()+size+fr;if(ECACHE[key])return ECACHE[key];
+  // the same sprite as the hero (facing left); enemies are drawn mirrored, so it faces you like a reflection
+  const src=ctCharSpriteBig(heroLook(),'left',fr?1:0),sc=1.5,w=Math.round(src.width*sc),h=Math.round(src.height*sc);
+  const sil=silhouette(src,'B'+heroLook()+fr,'rgba(18,10,30,.86)','#8a74c4');
+  const [cv,c]=mk(w+16,h+12);
+  for(const [r,al] of [[1,.09],[.75,.11],[.5,.13]]){c.fillStyle='rgba(110,90,170,'+al+')';c.beginPath();c.ellipse(cv.width/2,cv.height*.5,cv.width/2*r,cv.height/2*r,0,0,6.283);c.fill()}
+  c.imageSmoothingEnabled=false;c.drawImage(sil,0,0,sil.width,sil.height,8,6,Math.round(sil.width*sc),Math.round(sil.height*sc));
+  llawEyes(c,src,8+sc,6+sc,sc);
+  return ECACHE[key]=cv}
+function drawLlawMap(c,e,sx,sy){
+  if(e.look==='llawcrack'){const X=sx+8,Y=sy+16,fl=Math.sin(frame/9)*.5+.5;
+    ell(c,X,Y-1,6,2,'rgba(0,0,0,.25)');
+    for(const [w,col] of [[5,'rgba(120,120,128,.35)'],[3,'rgba(200,200,206,.75)'],[1,'rgba(250,250,255,'+(.7+fl*.3).toFixed(2)+')']]){
+      c.fillStyle=col;c.beginPath();c.moveTo(X,Y-26);for(let k=0;k<=6;k++){const yy=Y-26+k*4.2;c.lineTo(X+((k%2)?w:-w*.6)+Math.round(Math.sin(frame/13+k)*.6),yy)}
+      for(let k=6;k>=0;k--){const yy=Y-26+k*4.2;c.lineTo(X+((k%2)?w*.4:-w)-1,yy)}c.closePath();c.fill()}
+    for(let k=0;k<4;k++){const ph=((frame*.6+k*30)%120)/120;OV.push(()=>ash(['ng','ü','tr','ll'][k],X+Math.sin(ph*5+k)*8,Y-14-ph*22,(.75*(1-ph)).toFixed(2),9))}
+    return}
+  const src=ctCharSprite(heroLook(),e.dir||'down',0),sil=silhouette(src,'M'+heroLook()+(e.dir||'down'),'rgba(16,10,26,.9)','#6a5a9a');
+  ell(c,sx+9,sy+15,7,2.4,'rgba(0,0,0,.35)');
+  for(let k=0;k<3;k++){const ph=((frame+k*40)%120)/120;ell(c,sx+8+Math.sin(ph*6+k)*5,sy+6-ph*18,1.5+ph*2,(1.5+ph*2)*.7,'rgba(110,96,150,'+(.3*(1-ph)).toFixed(2)+')')}
+  c.drawImage(sil,sx-2,sy+15-src.height)}
+// battle backdrop in the grey: drained of colour (the fighters keep theirs)
+function ngBattleGrey(c){if(!B||!B.grey)return;c.save();c.globalCompositeOperation='saturation';c.fillStyle='#808080';c.fillRect(0,0,LW,LH);c.globalCompositeOperation='source-over';c.fillStyle='rgba(60,60,70,.18)';c.fillRect(0,0,LW,LH);c.restore()}
+
+/* ---------- the title screen: once any save has its shadow back, a walker crosses the beach at sunset with a long shadow ---------- */
+let KIMCHE;
+function titleKimche(c,t){
+  if(KIMCHE===undefined){KIMCHE=null;for(const n of [1,2,3]){const v=loadSave(n);if(v&&v.flags&&v.flags.llaw_won){KIMCHE=v.hero==='millaray'?'millaray':'llanka';break}}}
+  if(!KIMCHE)return;
+  const x=Math.round(((t*.18)%(LW+60))-30),fr=Math.floor(t/9)%4,sp=ctCharSprite(KIMCHE,'right',[0,1,0,2][fr]?fr:0),y=176;
+  const sil=silhouette(sp,'T'+KIMCHE+fr,'rgba(30,20,40,1)');
+  c.save();c.globalAlpha=.4;c.translate(x+1,y);c.transform(1,0,-2.2,-.32,0,0);c.drawImage(sil,-sil.width/2,-sil.height);c.restore();
+  c.drawImage(sp,x-Math.round(sp.width/2),y-sp.height)}
 
 /* ============================================================
    RENDER (everything drawn at 256x224 into LO, then blitted at 2x; text drawn crisp on top)
@@ -6862,6 +7163,7 @@ function renderMap(){
         for(let k=0;k<3;k++){const ph=((frame+k*40)%120)/120;ell(c,sx+8+Math.sin(ph*6+k)*6,sy+8-ph*22,2+ph*3,(2+ph*3)*.7,'rgba(120,110,140,'+(.25*(1-ph)).toFixed(2)+')')}
         c.drawImage(yc,sx+8-(yc.width>>1),sy+17-yc.height)}
       else if(e.look==='rewe'){ell(c,sx+8,sy+14,6,2,'rgba(0,0,0,.3)');const rc=reweCanvas();c.drawImage(rc,sx-1,sy+16-rc.height)}
+      else if(e.look==='llawfen'||e.look==='llawcrack')drawLlawMap(c,e,sx,sy);
       else if(e.obj)drawObj(c,e.obj,sx,sy,e);
       else if(e.look==='dog'){ell(c,sx+8,sy+14,6,2,'rgba(0,0,0,.3)');c.drawImage(dogSprite(e.mv?Math.floor(frame/6)%2:0,e.dir),sx,sy+4)}
       else{let fr=e.mv?Math.floor(frame/7)%4:0;if(e.act==='weave'||e.act==='teach')fr=Math.floor(frame/24)%2?1:0;
@@ -6976,6 +7278,7 @@ function renderMap(){
   if(M.bg==='lagoon'){c.fillStyle=S.flags.ngen?'rgba(120,200,255,.08)':'rgba(60,30,90,.22)';c.fillRect(0,VY,LW,VH)}
   atmos(c);
   if(CT)ctLight(c,glows);
+  if(typeof ngOverlay==='function')ngOverlay(c,cx,cy);   // Ngoyün mapu: the grey goes over the light too
   drawHUD(c);
 }
 // palin wiño: a long wooden stick held at the hip, its curved head sweeping the ground
@@ -7361,6 +7664,7 @@ function renderBattle(){
   if(!BG[B.area]||BG[B.area].width!==LW){const bg=buildBG(B.area);if(!painted||paintedBG(pa))BG[B.area]=bg;else{c.drawImage(bg,0,0)}}
   if(BG[B.area])c.drawImage(BG[B.area],0,0);if(painted&&paintedBG(pa)){animPainted(c,pa.split('@')[0]);if(B.area!==pa)for(let k=0;k<6;k++){const fx=((k*83+frame*.4)%(LW+120))-60;for(let d=0;d<5;d++)R(c,Math.round(fx+d*7),70+k*16+(d%2),46-d*8,2,'rgba(200,206,216,.14)')}}else animBG(B.area);
   if(B.wx)wxBattle(c,B.wx);
+  if(B.grey)ngBattleGrey(c);
   {// battle grade: soft-light contrast on the backdrop, a little haze where sky meets land, so the fighters pop off it
    const ar=B.area,dark=/cave|deep|crater|fog:|waria/.test(ar);if(!painted){c.save();c.globalCompositeOperation='soft-light';
    const g=dLin(0,0,0,LH);g.addColorStop(0,dark?'rgba(80,90,130,.5)':'rgba(150,140,120,.4)');g.addColorStop(.55,'rgba(128,128,128,0)');g.addColorStop(1,'rgba(50,40,80,.5)');g.fill(c,0,0,LW,LH);
@@ -7639,7 +7943,7 @@ function loopBody(ts){
   else if(mode==='battle'&&B){renderBattle();if(B.lanScene){OV=[];drawLanScene(lx,B.lanScene)}}
   else if(mode==='palin'&&PG)renderPalin(lx);
   else if(mode==='cut')renderCut();
-  else if(mode==='title')paintLand(lx,frame,false);
+  else if(mode==='title'){paintLand(lx,frame,false);if(typeof titleKimche==='function')titleKimche(lx,frame)}
   if(mode==='map'&&M){dayTint(lx);if(M.urban&&typeof urbanNight==='function')urbanNight(lx,CAM.x,CAM.y)}
   if(fade>0&&mode==='map'){lx.fillStyle='rgba(0,0,0,'+(fade/16)+')';lx.fillRect(0,0,LW,LH);fade=Math.max(0,fade-steps)}
   present();
@@ -8077,7 +8381,7 @@ $('title').addEventListener('pointerdown',()=>{auInit();if(!AU.name)playSong('in
 playSong('intro');
 function slotLabel(n){const v=loadSave(n);if(!v)return LANG==='es'?'vacío':'empty';
   const mp=(typeof MAPS!=='undefined'&&MAPS[v.map]&&MAPS[v.map].name)||'';
-  return (v.name||'')+(v.hm?' · weichafe'+(v.hm>1?' ×'+v.hm:''):'')+' · kimün '+(v.lvl||1)+(mp?' · '+mp:'')}
+  return (v.name||'')+(v.flags&&v.flags.kimche?' · kimche':'')+(v.hm?' · weichafe'+(v.hm>1?' ×'+v.hm:''):'')+' · kimün '+(v.lvl||1)+(mp?' · '+mp:'')}
 function slotPick(forNew,cb){
   choose({es:forNew?'Nueva partida, ¿en qué espacio?':'¿Qué partida sigues?',en:forNew?'New game: which slot?':'Continue which save?'},
     [1,2,3].map(n=>({m:(loadSave(n)?'■':'□')+' '+n,g:slotLabel(n),v:n,dis:!forNew&&!loadSave(n)}))
