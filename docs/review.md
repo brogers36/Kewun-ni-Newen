@@ -510,3 +510,12 @@ Brandon terminó las pestañas 0 Apertura, 1 Lafkenche y 2 Nagche de docs/Kewun_
 
 ### Revisión en la planilla (Nov 24): pestaña 4 Williche
 41 OK y 15 Corregir; las 15 correcciones aplicadas (la del Kaleuche ya estaba). El konew de la lengua ahora tiene por respuesta **kewün** (glosa «la lengua»); en el konew de la sal, *challwa* se glosa «pez, pescado» (tu nota). "Kimniefimi tami pu che?" se cambió también en la piedra de la familia (kin), que repetía la frase. El lonko williche dice "Inaltu lafken amunge, [nombre]." (se mantuvo el nombre, como con Amupunge).
+
+## Revisión del cuaderno: pestaña 5 Puelmapu (24 nov)
+Aplicado tal como lo marcaste (16 correcciones; la fila 5, «Müley Walichu!», ya decía «Wefi Walichu!» por tu regla anterior):
+- Luan ayükefiñ! Müna kümekengey. · Choyke matu lefkey! (glosa: «corre rápido») · Luan kuydaken.
+- Kom mapu ayüwküley. · Walichu miawmiawpai. (glosa: «anda dando vueltas por aquí»)
+- Kintulaen, chaltu! Llingüdkülechi achu mew müley. (también «Kintulaen» en la pichi chumpall, misma frase) ⚠ ¿«achu» o «kachu»?
+- Charki müley! Ilayaymi am? · Chem am ta "ilo"? · Chem am ta "iyael"? · Kümey! Charkitukeymi am?
+- ngen mülerkefuy · fey kom ñamürpay · Wüle ka yepayan ko. · Lifngey ti chadi! · Amutuy Walichu! Lelfün karüngewetuay.
+⚠ «Chem am "challwa"?» quedó sin «ta» (lo marcaste OK), a diferencia de las otras dos preguntas de la misma cocinera.

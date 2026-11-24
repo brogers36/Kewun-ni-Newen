@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='4455b71-202611241229';
+window.KEWUN_BUILD='3bfce81-202611241232';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -2236,10 +2236,10 @@ e_lof:{region:'puelmapu',name:'Puelche lof',g:{es:'La comunidad del este',en:'Th
    {id:'rewe_puel',kind:'npc',look:'rewe',x:20,y:6,fixed:1,talk:()=>reweTalk()},
    {id:'enutram',kind:'npc',look:'elder2',x:16,y:8,dir:'up',fixed:1,act:'teach',talk:()=>eNutramTalk(),bub:['Kuyfi...','Walichu...']},
    {id:'ek1',kind:'npc',look:'child',x:15,y:6,dir:'down',seated:1,fixed:1,talk:()=>choykeKidTalk(),bub:['Choyke!']},
-   {id:'ek2',kind:'npc',look:'childf',fem:1,x:17,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([[L('Pichi domo','Luan ayüfiñ! Müna kümeke ngey.','¡Me gustan los luan! Son muy buenos.','I love the guanacos! They are so gentle.')],[L('Pichi domo','Choyke müna lefkey!','¡El choyke corre rapidísimo!','The choyke runs so fast!')]][rot('ek2',2)]),bub:['Luan!']},
+   {id:'ek2',kind:'npc',look:'childf',fem:1,x:17,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([[L('Pichi domo','Luan ayükefiñ! Müna kümekengey.','¡Me gustan los luan! Son muy buenos.','I love the guanacos! They are so gentle.')],[L('Pichi domo','Choyke matu lefkey!','¡El choyke corre rápido!','The choyke runs fast!')]][rot('ek2',2)]),bub:['Luan!']},
    {id:'emalen',kind:'npc',look:'weaver',fem:1,x:7,y:4,dir:'up',act:'weave',fixed:1,talk:()=>malenTalk(),bub:['Meli witran mapu...']},
    {id:'charkife',kind:'npc',look:'cook',fem:1,x:24,y:8,dir:'up',act:'weave',fixed:1,talk:()=>charkiTalk(),bub:['Charki!','Ilo!']},
-   {id:'eherd',kind:'npc',look:'gatherer',fem:1,x:22,y:6,dir:'up',fixed:1,talk:()=>say([[L('Domo','Luan kintuken. Pichike kullin reke ngeyngün.','Cuido los luan. Son como animales de la casa.','I look after the guanacos. They are like animals of the household.')],[L('Domo','Pichi luan choyüy!','¡Nació un guanaquito!','A baby guanaco was born!'),N('Señala un luan chico de patas largas que apenas se tiene en pie.','She points at a long-legged baby guanaco that can barely stand.')]][rot('eherd',2)]),bub:['Luan!']},
+   {id:'eherd',kind:'npc',look:'gatherer',fem:1,x:22,y:6,dir:'up',fixed:1,talk:()=>say([[L('Domo','Luan kuydaken. Pichike kullin reke ngeyngün.','Cuido los luan. Son como animales de la casa.','I look after the guanacos. They are like animals of the household.')],[L('Domo','Pichi luan choyüy!','¡Nació un guanaquito!','A baby guanaco was born!'),N('Señala un luan chico de patas largas que apenas se tiene en pie.','She points at a long-legged baby guanaco that can barely stand.')]][rot('eherd',2)]),bub:['Luan!']},
    {id:'ewood',kind:'npc',look:'walker',x:2,y:10,act:'wood',path:[[2,10],[9,10]],pause:80,talk:()=>walkerTalk(),bub:['Mamüll yelen.']},
    {id:'erun',kind:'npc',look:'child',x:11,y:10,path:[[11,10],[13,10],[13,10],[11,10]],pause:20,spd:10,talk:()=>runnerTalk(),bub:['Ayüwün!']},
    {id:'edog',kind:'npc',look:'dog',x:25,y:10,path:[[25,10],[30,10]],pause:40,talk:()=>dogTalk()},
@@ -4250,7 +4250,7 @@ function kona4Talk(){
 
 /* ================= PUELMAPU ================= */
 function werkenTalk(){
-  if(S.flags.ngen5)return say([L('Werken','Ngen-lelfün nepey! Kom mapu ayüwüy.','¡Ngen-lelfün despertó! Toda la tierra está contenta.','Ngen-lelfün has woken up! The whole land is glad.')]);
+  if(S.flags.ngen5)return say([L('Werken','Ngen-lelfün nepey! Kom mapu ayüwküley.','¡Ngen-lelfün despertó! Toda la tierra está contenta.','Ngen-lelfün has woken up! The whole land is glad.')]);
   say([L('Werken','Mari mari, '+addr(false)+'! Iñche werken ngen.','¡Hola! Soy werken (mensajero).','Hello! I am a werken (messenger).'),
     N('Llevo mensajes entre las comunidades, a caballo. Esta bajada lleva a Puelmapu, la tierra del este, al otro lado de la cordillera: la pampa abierta.','I carry messages between the communities, on horseback. This slope leads down to Puelmapu, the land of the east, on the far side of the mountains: the open plain.'),
     L('Werken','Puel mapu mew müley tami weku.','En la tierra del este está tu weku.','In the eastern land is your weku.'),
@@ -4298,7 +4298,7 @@ function eLonkoTalk(){
   function done(){
     S.flags.puel_lonko=1;learnRoot('trana');S.items.kulon++;persist();sfx('lvl');
     say([L('Lonko','Kümey! Meli ngen nepeyngün, pikeyngün.','¡Bien! Dicen que cuatro ngen despertaron.','Good! They say four ngen have woken up.'),
-      L('Lonko','Welu Ngen-lelfün umawtuley. Walichu miawi.','Pero Ngen-lelfün duerme. El Walichu anda suelto.','But Ngen-lelfün sleeps. The Walichu is on the loose.'),
+      L('Lonko','Welu Ngen-lelfün umawtuley. Walichu miawmiawpai.','Pero Ngen-lelfün duerme. El Walichu anda dando vueltas por aquí.','But Ngen-lelfün sleeps. The Walichu is roaming around here.'),
       N('El Walichu es un wekufü de la pampa: seca el pasto, espanta a los luan y hace tropezar a los kawellu. Y lo peor: a la gente le va robando las palabras, una por una, para su patrón: Ti Fütra Ngoymatulfe.','The Walichu is a wekufü of the plains: it dries the grass, scares off the guanacos and makes the horses stumble. And worst of all: it steals people\'s words, one by one, for its master: Ti Fütra Ngoymatulfe.'),
       L('Lonko','Trana- kimeltueyu.','Te enseño trana- ("caerse").','I teach you trana- ("fall down").'),
       N('Con tranange, tranamu o tranamün, el wekufü cae al suelo: pierde su turno y el próximo golpe le duele más. Recibiste trana- y un külon.','With tranange, tranamu or tranamün, a wekufü falls to the ground: it loses its turn and the next blow hurts it more. You received trana- and a külon.'),
@@ -4323,7 +4323,7 @@ function choykeKidTalk(){
   S.flags.puel_kidq=1;persist();
   say([L('Pichiche','Mari mari! Choyke pichuñ nien... niefun.','¡Hola! Tengo una pluma de choyke... tenía.','Hello! I have a choyke plume... I had one.'),
     N('El niño bailaba el choyke purun, el baile del ñandú, con una pluma larga y gris. Pero el viento se la llevó a la pampa del este.','The boy was dancing the choyke purun, the rhea dance, with a long grey feather. But the wind carried it off to the eastern grassland.'),
-    L('Pichiche','Kintulelen, chaltu! Pasto pisado mew müley.','¡Búscamela, porfa! Está donde el pasto está pisado.','Please find it for me! It is where the grass is trampled.')]);
+    L('Pichiche','Kintulaen, chaltu! Llingüdkülechi achu mew müley.','¡Búscamela, porfa! Está en el pasto aplastado.','Please find it for me! It is in the flattened grass.')]);
 }
 function malenTalk(){
   const en=S.gloss==='en';
@@ -4342,23 +4342,23 @@ function malenTalk(){
 }
 function charkiTalk(){
   const en=S.gloss==='en';
-  if(S.flags.puel_food)return say([L('Domo','Charki müley! Iaymi?','¡Hay charki! ¿Vas a comer?','There is charki! Will you eat?')]);
-  const qs=[{q:L('Domo','Chem am "ilo"?','¿Qué es "ilo"?','What is "ilo"?'),o:[en?'meat':'carne',en?'bread':'pan',en?'water':'agua'],a:en?'meat':'carne'},
+  if(S.flags.puel_food)return say([L('Domo','Charki müley! Ilayaymi am?','¡Hay charki! ¿Vas a comer?','There is charki! Will you eat?')]);
+  const qs=[{q:L('Domo','Chem am ta "ilo"?','¿Qué es "ilo"?','What is "ilo"?'),o:[en?'meat':'carne',en?'bread':'pan',en?'water':'agua'],a:en?'meat':'carne'},
     {q:L('Domo','Chem am "challwa"?','¿Qué es "challwa"?','What is "challwa"?'),o:[en?'potato':'papa',en?'fish':'pescado',en?'salt':'sal'],a:en?'fish':'pescado'},
-    {q:L('Domo','Chem am "iyael"?','¿Qué es "iyael"?','What is "iyael"?'),o:[en?'food':'comida',en?'fire':'fuego',en?'house':'casa'],a:en?'food':'comida'}];
+    {q:L('Domo','Chem am ta "iyael"?','¿Qué es "iyael"?','What is "iyael"?'),o:[en?'food':'comida',en?'fire':'fuego',en?'house':'casa'],a:en?'food':'comida'}];
   say([L('Domo','Mari mari! Charki dewmalen: angkümka ilo.','¡Hola! Estoy haciendo charki: carne secada al sol.','Hello! I am making charki: sun-dried meat.'),
     N('En la pampa, la carne se seca al sol y al viento para que dure todo el año. Mientras corta, te pregunta palabras de comida.','On the plains, meat is dried in the sun and wind so it lasts all year. While she cuts, she asks you food words.')],()=>ask(0));
   function ask(i){
     if(i>=qs.length){S.flags.puel_food=1;S.items.kofke+=2;persist();sfx('lvl');
-      return say([praise(),L('Domo','Kümey! Iaymi charki?','¡Bien! ¿Comes charki?','Good! Will you have some charki?'),N('Te da dos kofke para el camino.','She gives you two kofke for the road.')])}
+      return say([praise(),L('Domo','Kümey! Charkitukeymi am?','¡Bien! ¿Sueles comer charki?','Good! Do you eat charki?'),N('Te da dos kofke para el camino.','She gives you two kofke for the road.')])}
     const q=qs[i];const o=q.o.map(m=>({m,v:m}));for(let a=o.length-1;a>0;a--){const b=rnd(a+1);[o[a],o[b]]=[o[b],o[a]]}
     choose(q.q,o,v=>{if(trk('comida',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Domo','Fey no...','Eso no...','Not that...')],()=>ask(0))}},true,false)}
 }
 function kusheTalk(){
   const ls=[L('Kushe Millaray','Konpange, konpange!','¡Pasa, pasa!','Come in, come in!'),
-    L('Kushe Millaray','Kuyfi, tüfachi mapu mew, ngen mülerkey.','Dicen que hace tiempo, en esta tierra, había un ngen.','They say that long ago, in this land, there was a ngen.'),
+    L('Kushe Millaray','Kuyfi, tüfachi mapu mew, ngen mülerkefuy.','Dicen que hace tiempo, en esta tierra, había un ngen.','They say that long ago, in this land, there was a ngen.'),
     L('Kushe Millaray','Fütra pasto mülerkefuy. Luan mülerkefuy.','Dicen que había pasto alto. Que había guanacos.','They say there was tall grass. That there were guanacos.'),
-    L('Kushe Millaray','Walichu akuy... fey kom ñamrkey.','Llegó el Walichu... y dicen que todo se fue perdiendo.','The Walichu came... and they say it all began to be lost.'),
+    L('Kushe Millaray','Walichu akuy... fey kom ñamürpay.','Llegó el Walichu... y todo se vino perdiendo.','The Walichu came... and everything came to be lost.'),
     N('La kushe habla con -rke-: todo lo que cuenta lo supo de los más viejos. Así viajan los epew: de boca en boca, con -rke- adentro.','The old woman speaks with -rke-: everything she tells she learned from her elders. That is how epew travel: from mouth to mouth, with -rke- inside.')];
   if(!S.flags.puel_kushe){S.flags.puel_kushe=1;S.items.kofke++;persist();sfx('pick');
     ls.push(L('Kushe Millaray','Kofke eluayu. Inge, pichi weche!','Te doy un kofke. ¡Come!','I will give you a kofke. Eat!'));}
@@ -4366,7 +4366,7 @@ function kusheTalk(){
 }
 function mallinTalk(){
   const en=S.gloss==='en';
-  if(S.flags.puel_mallin)return say([L('Challwafe','Wüle ka yepan ko. Pewkayal!','Mañana vengo a buscar agua otra vez. ¡Hasta luego!','Tomorrow I will come for water again. See you later!')]);
+  if(S.flags.puel_mallin)return say([L('Challwafe','Wüle ka yepayan ko. Pewkayal!','Mañana vengo a buscar agua otra vez. ¡Hasta luego!','Tomorrow I will come for water again. See you later!')]);
   const qs=[{q:L('Challwafe','Wiya challwatu___','Ayer fui a pescar (allá, y volví).','Yesterday I went fishing (over there, and came back).'),o:['challwatun','challwatumen','challwatupan'],a:'challwatumen'},
     {q:L('Challwafe','Ko ye___','Vine a buscar agua (hacia acá).','I came here to fetch water.'),o:['yemen','yepan','yen'],a:'yepan'},
     {q:L('Challwafe','Wüle kintu___','Mañana iré a buscar (allá).','Tomorrow I will go looking (over there).'),o:['kintupayan','kintumean','kintuan'],a:'kintumean'}];
@@ -4382,13 +4382,13 @@ function mallinTalk(){
 function chadifeTalk(){
   const ls=[L('Chadife','Mari mari, '+addr(true)+'. Chadi ngillakan.','Hola. Junto sal.','Hello. I gather salt.'),
     N('Del salitral sale la chadi (sal) para todo Puelmapu: para el charki, para el kofke, para cambiar por ngülliw. El agua se va y la sal se queda.','From the salt flat comes the chadi (salt) for all Puelmapu: for the charki, for the bread, to trade for ngülliw. The water leaves and the salt stays.')];
-  if(S.flags.sb5)ls.push(L('Chadife','Lif ngey ti chadi! Chaltu may.','¡La sal quedó limpia! Gracias.','The salt is clean again! Thank you.'),
+  if(S.flags.sb5)ls.push(L('Chadife','Lifngey ti chadi! Chaltu may.','¡La sal quedó limpia! Gracias.','The salt is clean again! Thank you.'),
     N('«Al que dormía bajo la sal lo llamaban Elëngasëm. No es palabra de nuestra lengua: viene del günün a yajüch, la lengua de los günün a künä, la gente antigua de estas llanuras. Ellos tenían su propia lengua y sus propios relatos, y de tanto andar juntos por el puel, sus seres entraron también en los nuestros, como el walichu.»','"The one that slept under the salt was called Elëngasëm. That is not a word of our language: it comes from Günün a yajüch, the language of the Günün a künä, the old people of these plains. They had their own language and their own tellings, and from so much walking the puel together, their beings entered ours as well, like the walichu."'));
   else if(S.flags.ngen5)ls.push(N('«Pero algo pasa junto a las pozas blancas: de noche, la tierra blanda tiembla, y nadie se atreve a pisarla... Los antiguos de las llanuras, los günün a künä, que tenían su propia lengua, hablaban de un gigante acorazado que duerme bajo la tierra: el Elëngasëm.»','"But something is wrong beside the white pools: at night the soft ground trembles, and no one dares to walk on it... The old people of the plains, the Günün a künä, who had their own language, spoke of an armored giant that sleeps under the earth: the Elëngasëm."'));
   say(ls);
 }
 function kona5Talk(){
-  if(S.flags.ngen5)return say([L('Kona','Walichu ngewelay! Lelfün karüwetuay.','¡Ya no está el Walichu! La pampa volverá a verdear.','The Walichu is gone! The plain will turn green again.')]);
+  if(S.flags.ngen5)return say([L('Kona','Amutuy Walichu! Lelfün karüngewetuay.','¡Se fue el Walichu! La pampa volverá a ser verde.','The Walichu has gone! The plain will be green again.')]);
   say([L('Kona','Walichu müley chenke mew! Umawtulen miawkey.','¡El Walichu está en el chenque! Anda caminando dormido.','The Walichu is in the chenque! It walks about asleep.'),
     N('El chenque baja entre las piedras, aquí al lado. Dicen que adentro hay piedras con números enormes, una puerta con llave, y otra piedra que pregunta de quién son las cosas. Y al fondo, el Walichu, envuelto en su sueño gris: a ese, dicen, primero hay que despertarlo.','The chenque goes down among the rocks, right here. They say inside there are stones with huge numbers, a locked door, and another stone that asks whose things are whose. And at the bottom, the Walichu, wrapped in its grey dream: that one, they say, must first be woken.')]);
 }
@@ -4529,7 +4529,7 @@ function chChildTalk(){
   S.flags.ch2q=1;persist();
   say([L('Pichi chumpall','Ngümaley... Ñi lüq kura ñami.','(Está llorando.) Se me perdió mi lüq kura, mi piedra blanca.','(He is crying.) I lost my lüq kura, my white stone.'),
     N('Es una perla que canta. Cuando el Kaykayfilu pasó, la onda se la llevó a la fosa profunda, al este. Quedó enterrada en la arena blanda.','It is a pearl that sings. When the Kaykayfilu passed, the wave carried it to the deep trench, to the east. It lies buried in the soft sand.'),
-    L('Pichi chumpall','Kintulelen, chaltu!','¡Búscamela, porfa!','Please find it for me!'),
+    L('Pichi chumpall','Kintulaen, chaltu!','¡Búscamela, porfa!','Please find it for me!'),
     N('Entre sollozos agrega: «El Kaykayfilu no es malo... Antes dormía abajo, quietito, con el canto de los grandes. Cuando vuelva a oír su ül, se va a dormir de nuevo.»','Between sobs he adds: "The Kaykayfilu is not bad... It used to sleep down there, so still, with the grown-ups\' song. When it hears its ül again, it will go back to sleep."')]);
 }
 function chSingerTalk(){
