@@ -1509,7 +1509,7 @@ function stKidsTalk(){
   const qs=[{q:L('Pichiche','"Epu"... ¿cuánto es?','"Epu", ¿cuánto es?','"Epu", how many is that?'),o:['2','3','5'],a:'2'},
     {q:L('Pichiche','¿Qué viene después de "küla"?','¿Qué viene después de "küla" (3)?','What comes after "küla" (3)?'),o:['meli','kechu','mari'],a:'meli'},
     {q:L('Pichiche','"Mari"... ¿cuánto es?','"Mari", ¿cuánto es?','"Mari", how many is that?'),o:['5','10','100'],a:'10'}];
-  say([L('Pichiche','Tío, tía! ¿Sabís contar en mapudungun?','¡Tío, tía! ¿Sabís contar en mapudungun?','Hey! Do you know how to count in Mapudungun?'),
+  say([L('Pichiche','Tío, tía! ¿Sabí contar en mapudungun?','¡Tío, tía! ¿Sabí contar en mapudungun?','Hey! Do you know how to count in Mapudungun?'),
     N('Los niños de la plaza quieren saltar la cuerda contando en mapudungun, pero se les enredan los números. Enséñales.','The plaza kids want to jump rope counting in Mapudungun, but the numbers get tangled. Teach them.')],()=>ask(0));
   function ask(i){
     if(i>=qs.length)return stReward('st1',()=>{S.gold+=20},[praise(),L('Pichikeche','Kiñe, epu, küla...!','¡Uno, dos, tres...!','One, two, three...!'),N('Los niños saltan la cuerda contando en mapudungun, cada vez más fuerte. Te dan epu mari (20) ngülliw de sus alcancías, muy serios.','The kids jump rope counting in Mapudungun, louder and louder. They give you epu mari (20) ngülliw from their piggy banks, very serious.')]);
@@ -1530,7 +1530,7 @@ function stMuralTalk(){
     choose(q.q,o,v=>{if(trk('Santiago',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Muralista','Mmm, no me suena...','Mmm, no me suena...','Hmm, that does not sound right...')],()=>ask(0))}},true,false)}
 }
 function stAbuelaTalk(){
-  if(S.flags.st2)return say([L('Papay','Tañi pu füchakeche ñi dungun, tañi pu pichikeche ñi dungun.','La lengua de mis abuelos, la lengua de mis nietos.','The language of my grandparents, the language of my grandchildren.'),N('La papay sonríe, tejiendo. Sus nietos practican el pentukuwün en un rincón de la ruka.','The papay smiles, weaving. Her grandchildren practice the pentukuwün in a corner of the ruka.')]);
+  if(S.flags.st2)return say([L('Papay','Tañi pu füchakeche ñi kewün, tañi pu püñeñ ñi kewün. Tañi pu püñeñ ñi pichike choyün ñi kewün.','La lengua de mis mayores, la lengua de mis hijos. La lengua de los pequeños brotes de mis hijos.','The language of my elders, the language of my children. The language of my children\'s little sprouts.'),N('La papay sonríe, tejiendo. Sus nietos practican el pentukuwün en un rincón de la ruka.','The papay smiles, weaving. Her grandchildren practice the pentukuwün in a corner of the ruka.')]);
   const steps=[
     {q:L('Papay','A ver: te pregunto "Chumleymi?". ¿Qué respondes?','A ver: te pregunto "¿cómo estás?". ¿Qué respondes?','Let me ask you: "How are you?". What do you answer?'),
      o:[{m:'Kümelen, chaltu. Eymi kay?',ok:1},{m:'Kümeleymi.'},{m:'Chew tuwimi?'}]},

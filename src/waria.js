@@ -158,18 +158,18 @@ for(const e of MAPS.s_poblacion.ents)if(e.id==='yewen')e.req='sw_all';
 
 /* ---------- district 1: the feria and the radio (ngoyngoyün) ---------- */
 function noiseTalk(i){const en=S.gloss==='en';
-  if(S.flags.sw1)return say([[L('Feriante','Mari mari! Kiñe kilo poñü, kechu pataka peso.','¡Hola! Un kilo de papas, quinientos pesos.','Hello! A kilo of potatoes, five hundred pesos.')],[L('Feriante','Kümey!','¡Bien!','Good!')],
-    [L('Chachay','Mari mari! Fewla allkütuniey.','¡Hola! Ahora sí se escucha.','Hello! Now it can be heard.'),N('La abuela se ríe: alguien, por fin, le devolvió el saludo.','The grandmother laughs: someone, at last, returned her greeting.')],[L('Pichiche','Mari mari!','¡Hola!','Hello!')]][i]);
+  if(S.flags.sw1)return say([[L('Feriante','Mari mari! Kiñe kilo poñü fali kechu pataka peso.','¡Hola! Un kilo de papas, quinientos pesos.','Hello! A kilo of potatoes, five hundred pesos.')],[L('Feriante','Kümey!','¡Bien!','Good!')],
+    [L('Chachay','Mari mari! Fewla allkütungey.','¡Hola! Ahora sí se escucha.','Hello! Now it can be heard.'),N('La abuela se ríe: alguien, por fin, le devolvió el saludo.','The grandmother laughs: someone, at last, returned her greeting.')],[L('Pichiche','Mari mari!','¡Hola!','Hello!')]][i]);
   say([[L('Feriante','¡A luca, a luca, a luca la palta!','¡A luca, a luca, a luca la palta!','A luca, a luca, avocados for a luca!'),N('No te escucha: grita por encima de todos los demás.','He does not hear you: he shouts over everyone else.')],
     [L('Feriante','¡Pasen, pasen! ¡Lleve tres, pague dos!','¡Pasen, pasen! ¡Lleve tres, pague dos!','Come in, come in! Take three, pay for two!'),N('Su voz se mezcla con la radio, la bocina de una micro y un parlante con cumbia.','His voice mixes with the radio, a bus horn and a speaker playing cumbia.')],
     [L('Kuku','Mari mari... mari mari...','Hola... hola...','Hello... hello...'),N('Saluda en mapudungun a cada persona que pasa. Nadie la oye. «Antes, en esta feria, se escuchaba el mapudungun en cada puesto», te dice, «ahora el ruido se lo come todo».','She greets each passer-by in Mapudungun. Nobody hears her. "Before, in this market, you heard Mapudungun at every stall," she tells you, "now the noise swallows everything."')],
     [L('Pichiche','¿Qué? ¡No te escucho!','¿Qué? ¡No te escucho!','What? I cannot hear you!')]][i])}
 const FERIA_Q=[
-  {q:L('Casera','Kiñe kilo poñü: kechu pataka peso.','¿Cuánto cuesta el kilo de papas?','How much is a kilo of potatoes?'),o:['500','5000','105'],a:'500'},
-  {q:L('Casera','Kiñe kilo tomate: kiñe waranka peso.','¿Cuánto cuesta el kilo de tomates?','How much is a kilo of tomatoes?'),o:['1000','100','10'],a:'1000'},
-  {q:L('Casera','Epu sandia: epu waranka kechu pataka peso.','¿Cuánto cuestan las dos sandías?','How much are the two watermelons?'),o:['2500','2050','5200'],a:'2500'},
-  {q:L('Casera','Kiñe atado kulantro: küla pataka peso.','¿Cuánto cuesta el atado de cilantro?','How much is the bunch of coriander?'),o:['300','30','3000'],a:'300'},
-  {q:L('Casera','Kiñe kofke: pataka mari peso.','¿Cuánto cuesta un pan?','How much is one bread roll?'),o:['110','1010','200'],a:'110'}];
+  {q:L('Casera','Kiñe kilo poñü: kechu pataka peso fali.','¿Cuánto cuesta el kilo de papas?','How much is a kilo of potatoes?'),o:['500','5000','105'],a:'500'},
+  {q:L('Casera','Kiñe kilo tomate: kiñe waranka peso fali.','¿Cuánto cuesta el kilo de tomates?','How much is a kilo of tomatoes?'),o:['1000','100','10'],a:'1000'},
+  {q:L('Casera','Epu sandia: epu waranka kechu pataka peso fali.','¿Cuánto cuestan las dos sandías?','How much are the two watermelons?'),o:['2500','2050','5200'],a:'2500'},
+  {q:L('Casera','Kiñe atado kulantro: küla pataka peso fali.','¿Cuánto cuesta el atado de cilantro?','How much is the bunch of coriander?'),o:['300','30','3000'],a:'300'},
+  {q:L('Casera','Kiñe kofke: pataka mari peso fali.','¿Cuánto cuesta un pan?','How much is one bread roll?'),o:['110','1010','200'],a:'110'}];
 function feriaTalk(){const en=S.gloss==='en';
   if(S.flags.feria_ok)return say([L('Casera','Chaltu may, '+nm()+'.','Gracias, '+nm()+'.','Thank you, '+nm()+'.'),
     N(S.flags.sw1?'«Desde que se calmó el ruido, la mitad de la feria cobra en mapudungun. ¡Y la otra mitad está aprendiendo!»':S.flags.radio_ok?'«¿Sientes cómo se amontona el ruido en medio de la calle? Algo se está juntando ahí.»':'«Si quieres que se escuche el mapudungun, ve a la radio de la ruka, ahí arriba. Hace días que no se le entiende nada.»',
@@ -216,7 +216,7 @@ function radioTune(){
 
 /* ---------- district 2: the Metro (pu mapuche ñi ngamleftripael) ---------- */
 function metroWorkerTalk(){
-  if(S.flags.sw2)return say([L('Trabajador','Mari mari! Kiñe kiñe akuyngün.','¡Hola! Van llegando de a uno.','Hello! They keep arriving one by one.'),N('«Los jueves, en la ruka urbana, se juntan los que encontraste. Y cada semana llega uno más.»','"On Thursdays, at the urban ruka, the people you found get together. And every week one more arrives."')]);
+  if(S.flags.sw2)return say([L('Trabajador','Mari mari! Kiñekiñe akuyngün.','¡Hola! Van llegando de a uno.','Hello! They keep arriving one by one.'),N('«Los jueves, en la ruka urbana, se juntan los que encontraste. Y cada semana llega uno más.»','"On Thursdays, at the urban ruka, the people you found get together. And every week one more arrives."')]);
   say([L('Trabajador','Mari mari, '+addr(false)+'.','Hola.','Hello.'),
     N('«Trabajo en el metro hace treinta años. Por aquí pasa media ciudad, y en media ciudad hay gente que habla mapudungun. Pero cada uno cree que es el único.»','"I have worked in the metro for thirty years. Half the city passes through here, and in half the city there are people who speak Mapudungun. But each one believes they are the only one."'),
     N('«Allá abajo, en los andenes y en la línea vieja, hay hablantes perdidos entre la gente. Encuéntralos. Y si puedes, ponle nombre a las estaciones: aquí se nos olvidó cómo se llamaban.»','"Down there, on the platforms and the old line, there are speakers lost among the crowd. Find them. And if you can, name the stations: here we forgot what they were called."')])}
@@ -231,7 +231,7 @@ function tornoTalk(n){
     say([L('',B.target,'Bip. La luz se pone verde y el torniquete gira.','Beep. The light turns green and the turnstile turns.')])}))}
 const SPEAKERS={
  1:{who:'Domo',items:[
-   {q:L('Domo','...Mari mari? Mapudungukeymi?','...¿Hola? ¿Hablas mapudungun?','...Hello? Do you speak Mapudungun?'),o:['May, pichin mapudungun.','Mapudungun pingen.','Amulan.'],a:'May, pichin mapudungun.'},
+   {q:L('Domo','...Mari mari? Kim mapudungukeymi am?','...¿Hola? ¿Sabes hablar mapudungun?','...Hello? Can you speak Mapudungun?'),o:['May, pichin mapudungun.','Mapudungun pingen.','Amulan.'],a:'May, pichin mapudungun.'},
    {q:L('Domo','Iñche Temuko tuwün. Eymi kay, chew tuwimi?','Yo soy de Temuco. ¿Y tú, de dónde eres?','I am from Temuco. And you, where are you from?'),o:['Santiago tuwün.','Santiago pingen.','Santiago amuan.'],a:'Santiago tuwün.'}],
   end:[N('Se le llenan los ojos de agua y se ríe al mismo tiempo. «Veinte años en Santiago, y pensé que era la única que lo hablaba en esta línea.»','Her eyes fill with tears and she laughs at the same time. "Twenty years in Santiago, and I thought I was the only one who spoke it on this line."')]},
  2:{who:'Chachay',items:[
@@ -239,7 +239,7 @@ const SPEAKERS={
    {q:L('Chachay','Kimimi mapudungun?','¿Sabes mapudungun?','Do you know Mapudungun?'),o:['May, pichin kimün.','May, pichin kimi.','Kimün pingen.'],a:'May, pichin kimün.'}],
   end:[N('El chachay deja la bolsa en el suelo. «Cuarenta años de micro y de metro, y nadie con quien hablarlo. Mis nietos me entienden, pero no me contestan.»','The old man sets his bag on the ground. "Forty years of buses and metro, and nobody to speak it with. My grandchildren understand me, but they do not answer."')]},
  3:{who:'Weche',items:[
-   {q:L('Weche','Fey ta tañi ül. Ayüymi?','Esta es mi canción. ¿Te gusta?','This is my song. Do you like it?'),o:['May, ayüfiñ!','May, ayüy.','Ül pingen.'],a:'May, ayüfiñ!'},
+   {q:L('Weche','Fey ta tañi ül. Ayüfimi am?','Esta es mi canción. ¿Te gusta?','This is my song. Do you like it?'),o:['May, ayüfiñ!','May, ayüy.','Ül pingen.'],a:'May, ayüfiñ!'},
    {q:L('Weche','Trawün mew ülkantuan. Küpayaymi?','Voy a cantar en el trawün. ¿Vas a venir?','I will sing at the gathering. Will you come?'),o:['May, küpayan.','May, küpay.','Küpa pingen.'],a:'May, küpayan.'}],
   end:[N('Se saca los audífonos. «Escribo canciones en mapudungun y las canto acá abajo, donde nadie me escucha. Pensé que a nadie le importaba.»','He takes off his headphones. "I write songs in Mapudungun and sing them down here, where nobody hears me. I thought nobody cared."')]}};
 function speakerTalk(n){const D=SPEAKERS[n];
@@ -255,7 +255,7 @@ function blocksTalk(i){
   say([[L('Mamá','¡Apúrate, que llegamos tarde! Después, después...','¡Apúrate, que llegamos tarde! Después, después...','Hurry up, we are late! Later, later...'),N('Pasa corriendo con dos bolsas y un niño de la mano.','She runs past with two bags and a child by the hand.')],
     [L('Weche domo','Mi abuela me habla en mapudungun y yo le entiendo todo... pero le contesto en castellano. No sé por qué.','Mi abuela me habla en mapudungun y yo le entiendo todo... pero le contesto en castellano. No sé por qué.','My grandmother speaks to me in Mapudungun and I understand everything... but I answer in Spanish. I do not know why.')],
     [L('Pichiche','¡Pásamela, pásamela!','¡Pásamela, pásamela!','Pass it, pass it!')],
-    [L('Chachay','Mapudungun... fillantü kiñe pichin.','Mapudungun... todos los días un poquito.','Mapudungun... every day a little.'),N('«Así me lo enseñó mi madre. Pero aquí todos están apurados, y la lengua siempre queda para mañana. Pasa por el departamento de la familia de arriba, y por el de la chuchu: ellos quieren hablarlo en la casa.»','"That is how my mother taught it to me. But here everyone is in a hurry, and the language is always left for tomorrow. Stop by the family upstairs, and the chuchu\'s flat: they want to speak it at home."')]][i])}
+    [L('Chachay','Mapudungun... fillantü ka pichin kimnierpuken.','Mapudungun... cada día voy sabiendo un poquito más.','Mapudungun... every day I come to know a little more.'),N('«Así me lo enseñó mi madre. Pero aquí todos están apurados, y la lengua siempre queda para mañana. Pasa por el departamento de la familia de arriba, y por el de la chuchu: ellos quieren hablarlo en la casa.»','"That is how my mother taught it to me. But here everyone is in a hurry, and the language is always left for tomorrow. Stop by the family upstairs, and the chuchu\'s flat: they want to speak it at home."')]][i])}
 function dinnerTalk(){
   if(S.flags.cena_ok)return say([L('Ñuke','Chaltu may, '+nm()+'. Fillantü mapudungukeaiñ.','Gracias. Vamos a hablar mapudungun todos los días.','Thank you. We will speak Mapudungun every day.')]);
   say([L('Ñuke','Mari mari! Konpange.','¡Hola! Pasa.','Hello! Come in.'),

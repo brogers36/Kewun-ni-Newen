@@ -544,3 +544,7 @@ Aplicado tal como lo marcaste (17; «Wefi Ti Fütra Ngoymatulfe!» y «Chem am t
 ## Pestañas 0–6 completas (24 nov)
 - Carmen: «Küla külon elumuen.» → «Küla külon eluaen.» (las dos líneas; glosa «Me vas a dar tres külon»). La opción incorrecta de su pregunta y la explicación pasan a «eluaen», para que coincidan con lo que ella dice.
 - «Elumuen kofke» (Santiago, pedir el pan) sigue igual: no estaba en tus correcciones.
+
+## Revisión del cuaderno: pestaña 7 Santiago (24 nov)
+Aplicado tal como lo marcaste (13): «fali» en el precio de la feriante y en las cinco preguntas de la casera · Fewla allkütungey · Kiñekiñe akuyngün · Kim mapudungukeymi am? · Ayüfimi am? · fillantü ka pichin kimnierpuken (tenía OK pero traía corrección) · «¿Sabí contar…?» · la papay: «Tañi pu füchakeche ñi kewün, tañi pu püñeñ ñi kewün. Tañi pu püñeñ ñi pichike choyün ñi kewün.»
+- Nacho (fila 156): la corrección es igual a la línea actual; no cambia nada. «Wüla müten» (fila 8) quedó sin marcar.
