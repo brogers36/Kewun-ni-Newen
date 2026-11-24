@@ -152,6 +152,7 @@ addMap('s_chuchu',Object.assign({},DEPTO,{name:'Santiago · departamento de la c
 MAPS.s_plaza.edges.left={to:'s_feria',x:38,y:3};
 MAPS.s_poblacion.edges.right={to:'s_blocks',x:1,y:3};
 MAPS.s_calle.doors=Object.assign(MAPS.s_calle.doors||{},{'30,1':{to:'s_metro',x:10,y:8}});
+MAPS.s_calle.bld['29,0']={metro:1,door:1};   // the metro entrance looks like one, not like a shop door
 MAPS.s_calle.rows=MAPS.s_calle.rows.map((r,y)=>y===2?r.slice(0,32)+'I'+r.slice(33):r);
 MAPS.s_calle.signs=Object.assign(MAPS.s_calle.signs||{},{'32,2':[L('','Metro','La entrada del metro. Abajo, alguien escribió con plumón: «¿y si le ponemos nombre en mapudungun?».','The metro entrance. Below it, someone wrote in marker: "what if we name it in Mapudungun?".')]});
 for(const e of MAPS.s_poblacion.ents)if(e.id==='yewen')e.req='sw_all';

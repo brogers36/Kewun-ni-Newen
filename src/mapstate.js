@@ -181,7 +181,7 @@ function buildLayers(){
       let bw=0,bh=0;while(x+bw<M.w&&grid[y][x+bw]==='h')bw++;while(y+bh<M.h&&grid[y+bh][x]==='h')bh++;
       let door;if(M.doors)for(let k=0;k<bw;k++)if(M.doors[(x+k)+','+(y+bh-1)])door=k;
       const bd=M.bld&&M.bld[x+','+y]||{};if(bd.door!==undefined)door=bd.door;
-      const bc=buildingCanvas(bw,bh,x*17+y*5+(M.seed||0),{door,shop:bd.shop,mural:bd.mural});
+      const bc=buildingCanvas(bw,bh,x*17+y*5+(M.seed||0),{door,shop:bd.shop,mural:bd.mural,metro:bd.metro});
       PROPS.push({y:y+bh-.1,cvs:bc,dx:x*T-1,dy:y*T+bh*16-bc.height+2,sh:[x*T+bw*8,y*T+bh*16-1,bw*8,2]})}
     else if(ch==='Z')PROPS.push({y:y+.9,loom:1,dx:x*T,dy:y*T-6,sh:[x*T+8,y*T+15,8,2]});
     else if(ch==='U')PROPS.push({y:y+.9,pot:1,dx:x*T,dy:y*T,sh:[x*T+8,y*T+14,7,2]});

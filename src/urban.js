@@ -13,7 +13,7 @@ const UPAL={wall:['#d9b48c','#c99ba2','#93b2c9','#e4d7b6','#9fc3a3','#b9b5b1','#
 const UCACHE={};
 function shade(hex,k){const [r,g,b]=hexRGB(hex);const f=v=>Math.max(0,Math.min(255,Math.round(v*k)));return'rgb('+f(r)+','+f(g)+','+f(b)+')'}
 function buildingCanvas(bw,bh,seed,opt){
-  opt=opt||{};const key='bld'+bw+'x'+bh+':'+seed+':'+(opt.door||'')+(opt.shop?'s':'')+(opt.mural?'m':'');if(UCACHE[key])return UCACHE[key];
+  opt=opt||{};const key='bld'+bw+'x'+bh+':'+seed+':'+(opt.door||'')+(opt.shop?'s':'')+(opt.mural?'m':'')+(opt.metro?'M':'');if(UCACHE[key])return UCACHE[key];
   const W0=bw*16,H0=bh*16,top=12,[cvs,c]=mk(W0+2,H0+top+2),ox=1,oy=top+1;
   const r=k=>h2(seed,k,91),tall=bh>=3,wall=UPAL.wall[Math.floor(r(1)*UPAL.wall.length)],dark=shade(wall,.72),lite=shade(wall,1.12);
   const house=!tall;
@@ -41,7 +41,14 @@ function buildingCanvas(bw,bh,seed,opt){
       if(house||ry===bh-1){for(let k=0;k<3;k++)R(c,wx+k*2,wy,1,7,'#3a3836')}  // rejas on the ground floor
       if(tall&&ry<bh-1&&(cx+ry+seed)%2===0){R(c,wx-2,wy+9,10,1,'#3a3836');for(let k=0;k<5;k++)R(c,wx-2+k*2,wy+9,1,3,'#3a3836');R(c,wx-2,wy+12,10,1,shade(wall,.6))}}}
   // door (+ awning for shops)
-  if(opt.door!==undefined){const dx=ox+opt.door*16+5,dy=oy+H0-13;
+  if(opt.door!==undefined&&opt.metro){const dx=ox+opt.door*16+1,dy=oy+H0-14;   // a metro entrance: a stairway going down, rails, a lit sign
+    R(c,dx-2,dy-1,18,15,'#2a2a30');R(c,dx,dy,14,14,'#08080c');
+    for(let k=0;k<5;k++){const sy=dy+3+k*2;R(c,dx+1,sy,12,1,shade('#8a8a90',1-k*.15));R(c,dx+1,sy+1,12,1,'#1a1a20')}
+    R(c,dx-2,dy-1,1,15,'#c8c8d0');R(c,dx+15,dy-1,1,15,'#c8c8d0');for(let k=0;k<4;k++){R(c,dx-2,dy+k*4,2,1,'#e8e8f0');R(c,dx+14,dy+k*4,2,1,'#e8e8f0')}
+    const px=dx+3,py=dy-12;R(c,px-1,py-1,10,10,'#1a1a20');R(c,px,py,8,8,'#c8323a');R(c,px,py,8,1,'#e85a5a');
+    R(c,px+1,py+2,1,4,'#ffffff');R(c,px+6,py+2,1,4,'#ffffff');R(c,px+2,py+3,1,1,'#ffffff');R(c,px+5,py+3,1,1,'#ffffff');R(c,px+3,py+4,2,1,'#ffffff');
+    R(c,px+3,py+8,2,3,'#4a4a52')}
+  else if(opt.door!==undefined){const dx=ox+opt.door*16+5,dy=oy+H0-13;
     R(c,dx-1,dy-1,8,14,UPAL.frame);R(c,dx,dy,6,13,UPAL.doorc);R(c,dx,dy,2,13,UPAL.doorHi);R(c,dx+4,dy+6,1,1,'#e8d070');
     if(opt.shop){const aw=UPAL.aw[Math.floor(r(6)*UPAL.aw.length)],ax=dx-9,aww=24;
       for(let x=0;x<aww;x++)R(c,ax+x,dy-6,1,4,((x>>2)&1)?aw[0]:aw[1]);
