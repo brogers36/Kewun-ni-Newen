@@ -937,569 +937,139 @@ def ngoyman2(f):
     speculars(c, ['heart', 'root', 'plinth'], thr=.86, col=(220, 255, 210))
     return finish(c, [('root', 'heart'), ('heart', 'plinth2'), ('plinth2', 'plinth'), ('root', 'plinth2')], rim=(130, 230, 120), rimparts=('heart', 'root', 'plinth'))
 
-def ngoyman3(f):
-    """Fütra Ngoymatulfe: a hunched giant of piled stone, knuckles on the ground, eyes like lamps under the brow"""
-    setsize(96, 124); c = Canvas()
-    S_, Y_ = R['sand'], R['yglow']
-    bob = f
-    # legs: short pillars
-    for (x, lift) in [(32, .12), (62, -.04)]:
-        blob(c, S_, lambda d, x=x: d.polygon([(x - 10, 92), (x + 10, 92), (x + 12, 122), (x - 12, 122)], fill=1), bulge=1.1, lift=lift, name='leg')
-        plate_lines(c, 'leg', [((x - 11, 108), (x + 11, 106))], .5)
-    # the body: three great boulders stacked and leaning
-    for (box, lift, nm) in [((14, 64, 82, 100), .08, 'hip'), ((8, 30 + bob, 88, 76 + bob), .16, 'chest'), ((22, 10 + bob, 74, 44 + bob), .22, 'shoulders')]:
-        blob(c, S_, lambda d, box=box: d.polygon(smooth_poly([(box[0], (box[1] + box[3]) / 2), (box[0] + 8, box[1]), (box[2] - 6, box[1] + 2), (box[2], (box[1] + box[3]) / 2 + 2), (box[2] - 8, box[3]), (box[0] + 6, box[3])], 4), fill=1),
-             bulge=1.25, lift=lift, name=nm)
-    cracks(c, 'chest', [[(30, 36 + bob), (36, 50), (30, 66)], [(66, 36 + bob), (60, 54), (66, 70)], [(36, 50), (48, 54), (60, 54)]], S_)
-    cracks(c, 'hip', [[(30, 70), (40, 86)], [(64, 72), (58, 88)]], S_)
-    for pts in ([(36, 50 + bob), (48, 54 + bob), (60, 54 + bob)],):
-        for (X, Y) in line(c, pts, R['fgreen'][4], 'chest'): pass
-    # arms: pillars of stone hanging to the ground, the knuckles resting on it
-    for side in (-1, 1):
-        lf = .14 if side < 0 else -.04
-        taper(c, cr([(48 + side * 36, 36 + bob), (48 + side * 42, 70), (48 + side * 38, 104)], 6), 16, 14, S_, lift=lf, name='arm', bulge=1.25)
-        blob(c, S_, lambda d, side=side: d.polygon(smooth_poly([(48 + side * 28, 100), (48 + side * 46, 98), (48 + side * 48, 118), (48 + side * 30, 120)], 4), fill=1), bulge=1.25, lift=lf + .05, name='fist')
-        for k in range(3): c.px(48 + side * (32 + k * 5), 116, S_[1]); c.px(48 + side * (32 + k * 5), 105, S_[7])
-        plate_lines(c, 'arm', [((48 + side * 34, 62), (48 + side * 50, 64)), ((48 + side * 32, 82), (48 + side * 48, 86))], .5)
-    # head: sunk forward between the shoulders, a ledge of brow, deep-set lamp eyes, a jagged slab of a mouth
-    hd = smooth_poly([(34, 16 + bob), (62, 16 + bob), (66, 32 + bob), (58, 46 + bob), (38, 46 + bob), (30, 32 + bob)], 4)
-    blob(c, S_, lambda d: d.polygon(hd, fill=1), bulge=1.3, lift=.24, name='head')
-    facet(c, [(31, 24 + bob), (65, 24 + bob), (62, 29 + bob), (34, 29 + bob)], S_[7], 'brow'); facet(c, [(34, 29 + bob), (62, 29 + bob), (61, 30 + bob), (35, 30 + bob)], S_[1], 'brow')
-    for ex in (40, 56):
-        c.rect(ex - 4, 30 + bob, 9, 5, (6, 6, 4)); glow(c, ex, 32 + bob, 2.6, Y_); c.px(ex - 1, 31 + bob, (255, 255, 255))
-    c.rect(38, 38 + bob, 20, 5, (8, 6, 6))
-    for k, x in enumerate(range(38, 58, 3)):
-        tooth3(c, x, 38 + bob, 40 + bob + (k % 2), S_[3:])
-        c.px(x + 1, 42 + bob, S_[6]); c.px(x + 1, 41 + bob, S_[5])
-    rubble(c, 10, (2, 4, 94, 60), S_, 33, f)
-    texture(c, ['leg', 'hip', 'chest', 'shoulders', 'arm', 'fist', 'head'], amt=.16, seed=43)
-    occlude(c, ['head'], ['shoulders', 'chest'], r=5, k=.5)
-    occlude(c, ['shoulders'], ['chest'], r=4, k=.55)
-    occlude(c, ['chest'], ['hip'], r=4, k=.55)
-    occlude(c, ['hip'], ['leg'], r=4, k=.5)
-    speculars(c, ['head', 'shoulders', 'chest', 'arm', 'fist'], thr=.85)
-    return finish(c, [('head', 'shoulders'), ('shoulders', 'chest'), ('chest', 'hip'), ('hip', 'leg'), ('arm', 'chest'), ('arm', 'shoulders'), ('fist', 'arm'), ('brow', 'head')],
-                  rim=(230, 190, 110), rimparts=('head', 'shoulders', 'chest', 'arm', 'leg', 'hip'))
-
-def ngoyman4(f):
-    """Füta Dumiñ: the great darkness, a shape of ink with a crown of red eyes and arms of thorns"""
-    setsize(112, 144); c = Canvas()
-    D_ = R['shade']; Rg = R['redg']
-    sw = 2 if f else 0
-    # thorned arms: long whips of shadow, barbs along them
-    for side in (-1, 1):
-        lf = .2 if side < 0 else .05
-        pts = [(56 + side * 14, 44), (56 + side * 34, 38 - sw), (56 + side * 48, 52), (56 + side * 52, 74 + sw), (56 + side * 46, 94)]
-        P = cr(pts, 8)
-        taper(c, P, 9, 3, D_, lift=lf, name='armS', bulge=1.2)
-        for i in range(4, len(P) - 2, 4):
-            (x0, y0), (x1, y1) = P[i - 1], P[i + 1]
-            L = max(.1, math.hypot(x1 - x0, y1 - y0)); nx, ny = -(y1 - y0) / L, (x1 - x0) / L
-            q = 1 if (i // 4) % 2 else -1
-            x, y = P[i]
-            taper(c, [(x, y), (x + nx * q * 7 + (x1 - x0) / L * 3, y + ny * q * 7 + (y1 - y0) / L * 3)], 3, 1, D_, lift=lf + .1, name='barb', bulge=1.0)
-    # the body: a column of darkness bulging at the shoulders, thinning into wisps that never reach the ground
-    body = smooth_poly([(56, 22), (76, 30), (82, 52), (78, 80), (74, 104), (66, 126), (56, 138), (46, 126), (38, 104), (34, 80), (30, 52), (36, 30)], 6)
-    m = blob(c, D_, lambda d: d.polygon(body, fill=1), bulge=1.0, lift=.2, name='body')
-    for k in range(7):                                                      # wisps trailing below
-        x0 = 40 + k * 5; L = 10 + (k * 7) % 9
-        taper(c, cr([(x0, 116), (x0 + math.sin(k + f) * 3, 116 + L * .5), (x0 + math.sin(k * 2 + f) * 5, 116 + L)], 5), 4, 1, D_, lift=.1, name='wisp', bulge=1.0)
-    ys, xs = np.nonzero(m)                                                  # slow swirls inside the dark
-    sw_ = np.sin((xs - 56) * .22 + (ys - 70) * .12 + f) * np.cos((ys - 70) * .09) * .5
-    c.rgb[ys, xs] = np.clip(c.rgb[ys, xs] * (1 + sw_ * .35)[:, None], 0, 255).astype(np.uint8)
-    # red pinpoints drifting inside it: the words it has swallowed
-    rs = np.random.RandomState(7 + f)
-    for _ in range(18):
-        i = rs.randint(len(ys)); y, x = ys[i], xs[i]
-        if y > 40: c.px(x, y, Rg[2]); c.px(x + 1, y, Rg[1]) if c.part[y, min(yp.W - 1, x + 1)] == 'body' else None
-    # the head: a smooth dark dome with two antlers and a cluster of red eyes
-    for side in (-1, 1):
-        taper(c, cr([(56 + side * 8, 12), (56 + side * 18, 4), (56 + side * 22, -4), (56 + side * 30, -2)], 6), 4, 1.5, D_, lift=.25, name='antler', bulge=1.2)
-        taper(c, [(56 + side * 17, 4), (56 + side * 14, -4)], 3, 1, D_, lift=.25, name='antler', bulge=1.1)
-    blob(c, D_, lambda d: d.ellipse([40, 6, 72, 36], fill=1), bulge=1.3, lift=.3, name='head')
-    for (ex, ey, r) in [(50, 18, 2.6), (62, 18, 2.6), (56, 14, 2.0), (45, 24, 1.6), (67, 24, 1.6), (56, 22, 1.6)]:
-        c.rect(int(ex - r - 1), int(ey - r), int(2 * r + 3), int(2 * r + 1), (2, 0, 2)); glow(c, ex, ey, r, Rg); c.px(int(ex) - 1, int(ey) - 1, (255, 255, 255))
-    for x in range(48, 65): c.px(x, 30, (2, 0, 2))                         # a mouth that is only a line
-    texture(c, ['body', 'head', 'armS'], amt=.1, seed=44)
-    occlude(c, ['head'], ['body'], r=5, k=.5)
-    speculars(c, ['head', 'body', 'armS'], thr=.8, col=(150, 120, 190))
-    return finish(c, [('head', 'body'), ('armS', 'body'), ('barb', 'armS'), ('antler', 'head'), ('wisp', 'body')], rim=(180, 60, 70), rimparts=('body', 'head', 'armS', 'antler'))
-
-def ngoyman5(f):
-    """Rüf Fütra Ngoymatulfe: the true form, a colossus of the forgetting whose stone body is splitting open,
-    the words it swallowed breaking out of it in gold"""
-    setsize(144, 208); c = Canvas()
-    S_, Y_, E = R['stn'], R['yglow'], R['ember']
-    bob = f
-    # base: a mound of stone pierced with mouths, the colossus rooted in it
-    mound = smooth_poly([(8, 206), (20, 176), (48, 164), (96, 164), (124, 176), (136, 206)], 5)
-    blob(c, S_, lambda d: d.polygon(mound, fill=1), bulge=.9, lift=.12, name='mound')
-    holes(c, 'mound', [(28, 194), (42, 182), (56, 196), (72, 178), (88, 194), (102, 182), (116, 196), (64, 190), (80, 200), (36, 202), (108, 202)], 3)
-    # the torso: a long twisting trunk, split by cracks of gold
-    trunk = smooth_poly([(44, 70 + bob), (100, 70 + bob), (96, 100), (86, 128), (92, 156), (100, 172), (44, 172), (52, 156), (58, 128), (48, 100)], 6)
-    blob(c, S_, lambda d: d.polygon(trunk, fill=1), bulge=1.25, lift=.14, name='trunk')
-    for k, y in enumerate(range(84, 168, 14)):                             # twisting bands of the trunk
-        line(c, [(40, y + bob * (y < 100)), (72, y + 6 - (k % 2) * 3), (104, y)], S_[1], 'trunk')
-        line(c, [(40, y - 1 + bob * (y < 100)), (72, y + 5 - (k % 2) * 3), (104, y - 1)], S_[6], 'trunk')
-    goldc = [[(60, 76 + bob), (66, 92), (60, 110), (70, 128), (64, 150), (72, 168)], [(88, 78 + bob), (80, 96), (86, 114), (78, 134)], [(66, 92), (78, 96)], [(60, 110), (50, 116)], [(70, 128), (84, 132)]]
-    for v in goldc:
-        for (X, Y) in line(c, v, Y_[5], 'trunk'):
-            for dx in (-1, 1):
-                if c.part[Y, X + dx] == 'trunk': c.px(X + dx, Y, Y_[3])
-    for (x, y) in [(66, 92), (64, 118), (78, 134), (84, 100)]: glow(c, x, y + (bob if y < 100 else 0), 3.2, Y_)
-    # golden letters breaking free from the cracks and rising: the words remembered
-    glyphs = ['ñ', 'ü', 'tr', 'ng', 'll', 'ch']
-    rs = np.random.RandomState(11 + f)
-    for k in range(10):
-        x = rs.randint(24, 120); y = rs.randint(60, 160) - f * 3
-        if c.a[y, x]: continue
-        w = rs.randint(2, 4)
-        for i in range(w): c.px(x + i, y, Y_[4]); c.part[y, x + i] = 'glyph'
-        c.px(x + w // 2, y - 2, Y_[5]); c.px(x, y + 1, Y_[3]); c.px(x + w - 1, y - 1, Y_[3])
-    # shoulders and arms raised high, fists clenched over its head
-    for side in (-1, 1):
-        lf = .16 if side < 0 else -.02
-        blob(c, S_, lambda d, side=side: d.ellipse([72 + side * 30 - 16, 60 + bob, 72 + side * 30 + 16, 88 + bob], fill=1), bulge=1.3, lift=lf + .04, name='shoulder')
-        taper(c, cr([(72 + side * 34, 72 + bob), (72 + side * 56, 50), (72 + side * 58, 24), (72 + side * 50, 10)], 8), 18, 13, S_, lift=lf, name='arm', bulge=1.25)
-        blob(c, S_, lambda d, side=side: d.polygon(smooth_poly([(72 + side * 40, 2 - bob), (72 + side * 58, 0 - bob), (72 + side * 62, 14 - bob), (72 + side * 44, 18 - bob)], 4), fill=1), bulge=1.3, lift=lf + .06, name='fist')
-        for k in range(3): c.px(72 + side * (44 + k * 5), 13 - bob, S_[1]); c.px(72 + side * (44 + k * 5), 3 - bob, S_[7])
-        cracks(c, 'arm', [[(72 + side * 52, 56), (72 + side * 58, 40), (72 + side * 54, 28)]], S_)
-        for (X, Y) in line(c, [(72 + side * 52, 56), (72 + side * 58, 40)], Y_[4], 'arm'): pass
-        # rubble and dust falling from the raised fists
-        for k in range(4): c.px(72 + side * (46 + k * 4), 22 + k * 7 + f * 2, S_[6]); c.part[22 + k * 7 + f * 2, 72 + side * (46 + k * 4)] = 'rubble'
-    # the head: a round helmed dome, a single visor-slit of white-hot light, four horns
-    for (a, L) in [(-120, 26), (-60, 26), (-155, 18), (-25, 18)]:
-        r = math.radians(a)
-        taper(c, cr([(72, 46 + bob), (72 + math.cos(r) * L * .6, 46 + bob + math.sin(r) * L * .6 - 3), (72 + math.cos(r) * L, 46 + bob + math.sin(r) * L)], 6), 6, 2, S_, lift=.2, name='horn', bulge=1.2)
-    blob(c, S_, lambda d: d.ellipse([52, 32 + bob, 92, 72 + bob], fill=1), bulge=1.35, lift=.22, name='head')
-    blob(c, R['void'], lambda d: d.polygon([(56, 48 + bob), (88, 48 + bob), (86, 60 + bob), (58, 60 + bob)], fill=1), bulge=.5, lift=0, name='visor')
-    for x in range(60, 85): c.px(x, 53 + bob, Y_[5] if x % 3 else Y_[6]); c.px(x, 54 + bob, Y_[3])
-    glow(c, 72, 54 + bob, 3.5, Y_)
-    for k, x in enumerate(range(60, 86, 4)): tooth3(c, x, 60 + bob, 64 + bob + (k % 2), S_[3:])
-    plate_lines(c, 'head', [((54, 44 + bob), (90, 44 + bob)), ((72, 34 + bob), (72, 47 + bob))], .55)
-    rivets(c, [(58, 42 + bob), (66, 38 + bob), (78, 38 + bob), (86, 42 + bob)], S_)
-    rubble(c, 16, (4, 80, 140, 168), S_, 35, f)
-    texture(c, ['mound', 'trunk', 'arm', 'fist', 'shoulder', 'head', 'horn'], amt=.15, seed=45)
-    occlude(c, ['head', 'shoulder'], ['trunk'], r=5, k=.5)
-    occlude(c, ['trunk'], ['mound'], r=5, k=.5)
-    speculars(c, ['head', 'trunk', 'arm', 'fist', 'shoulder', 'mound'], thr=.86)
-    return finish(c, [('head', 'trunk'), ('head', 'shoulder'), ('visor', 'head'), ('shoulder', 'trunk'), ('arm', 'shoulder'), ('fist', 'arm'), ('trunk', 'mound'), ('horn', 'head')],
-                  rim=(150, 200, 120), rimparts=('head', 'trunk', 'arm', 'shoulder', 'mound', 'fist'))
-
-# =========================================================== the Kaykayfilu: the great serpent of the water, five forms
-R.update({k: [hx(c) for c in v] for k, v in {
-    'kay':   ['#031012', '#071e22', '#0c2e34', '#124048', '#1a565e', '#246e76', '#328a90', '#48a8aa', '#6cc6c2'],
-    'kayb':  ['#1e2c22', '#34483a', '#4e6854', '#6e8a70', '#94ae90', '#c2d6b6'],
-    'kglow': ['#04363a', '#0a6a70', '#18a8aa', '#40e0d8', '#a0fff4', '#ffffff'],
-    'kbone': ['#2a2a24', '#4a4a40', '#6e6c5e', '#94927e', '#bab8a2', '#dcdac6', '#f6f4e6']}.items()})
-def kayhead(c, x, y, dr, s=1.0, jaw=0, lift=.2, glowm=True):
-    """the Kaykayfilu's head in profile, facing dr (+1 right, -1 left): horned skull, barbels, a jaw that opens on cyan light"""
-    K, G = R['kay'], R['kglow']
-    T = lambda pts: [(x + dr * px_ * s, y + py * s) for px_, py in pts]
-    for (bx, by, tx, ty) in [(-2, -6, -14, -14), (2, -7, -8, -17)]:        # horns swept back
-        taper(c, cr(T([(bx, by), ((bx + tx) / 2, (by + ty) / 2 - 2), (tx, ty)]), 5), 4 * s, 1.2, R['kbone'], lift=lift, name='khorn', bulge=1.2)
-    jw = T([(-4, 2), (8, 3 + jaw * .4), (20, 4 + jaw), (19, 8 + jaw), (6, 9 + jaw * .4), (-4, 8)])
-    if jaw > 0:
-        blob(c, R['throat'], lambda d: d.polygon(T([(0, 1), (22, 0), (22, 4 + jaw), (0, 7)]), fill=1), bulge=.6, lift=0, name='kmouth')
-        if glowm: glow(c, x + dr * 10 * s, y + (3 + jaw * .5) * s, 2.5 * s, G)
-    blob(c, K, lambda d: d.polygon(jw, fill=1), bulge=1.2, lift=lift - .1, name='kjaw')
-    up = T([(-6, -4), (0, -8), (10, -7), (20, -4), (25, -1), (24, 2), (10, 2), (-6, 4)])
-    blob(c, K, lambda d: d.polygon(up, fill=1), bulge=1.3, lift=lift, name='khead')
-    for (a, b) in [((2, -6), (20, -3)), ((4, -4), (14, -3))]:
-        line(c, T([a, b]), K[7], 'khead')
-    ex, ey = T([(6, -3)])[0]
-    c.rect(int(ex - 2), int(ey - 1), 5, 3, (2, 10, 10)); glow(c, ex, ey, 1.6 * s, G); c.px(int(ex), int(ey) - 1, (255, 255, 255))
-    for (X, Y) in [T([(23, 0)])[0]]: c.px(int(X), int(Y), (2, 8, 10))     # nostril
-    for k in range(int(4 + 2 * s), 22, 4):                                 # teeth
-        X, Y = T([(k, 2)])[0]; tooth3(c, int(X), int(Y), int(Y + 2 + s), R['kbone'], 'ktooth')
-    for q in (0, 1):                                                       # barbels trailing from the snout
-        line(c, T([(22, 2 + q * 2), (26, 8 + q * 3), (22 + q * 2, 16 + q * 2), (16, 20 + q)]), K[6] if q else K[7])
-def kaybody(c, path, w0, w1, name='kbody', lift=.12, fins=False, n=10):
-    P = serpent(c, path, w0, w1, R['kay'], R['kayb'], name, lift=lift - .1, step=5, n=n, kd=.72)
-    # dorsal crest: a ridge of fin-spines along the top
-    for i in range(3, len(P) - 3, 4):
-        (x0, y0), (x1, y1) = P[i - 1], P[i + 1]
-        L = max(.01, math.hypot(x1 - x0, y1 - y0)); nx, ny = -(y1 - y0) / L, (x1 - x0) / L
-        if ny > 0: nx, ny = -nx, -ny
-        w = (w0 + (w1 - w0) * i / len(P)) / 2
-        x, y = P[i]
-        ln = 2 + w * .35
-        taper(c, [(x + nx * w * .7, y + ny * w * .7), (x + nx * (w + ln) - (x1 - x0) / L * 3, y + ny * (w + ln) - (y1 - y0) / L * 3)], 4, 1, R['kay'][2:], lift=.05, name=name + 'fin', bulge=1.0)
-        c.px(int(round(x + nx * (w + ln * .6))), int(round(y + ny * (w + ln * .6))), R['kglow'][2])
-        if i % 8 == 0:                                                   # glowing spots along the flank
-            c.px(int(x + nx * w * .2), int(y + ny * w * .2), R['kglow'][3]); c.px(int(x + nx * w * .2) + 1, int(y + ny * w * .2), R['kglow'][2])
-    return P
-def kaywater(c, f, y0=None):
-    y0 = y0 if y0 is not None else yp.H - 18
-    sea(c, y0, yp.H, 0, yp.W, f)
-    ripples(c, yp.W // 2, y0 + 8, yp.W // 3, 3, f, R['water'][6], R['water'][1], 2)
-def kayfinish(c, extra=()):
-    texture(c, ['kbody', 'kbody2', 'kbody3', 'khead', 'kjaw'], amt=.1, seed=50)
-    occlude(c, ['khead', 'kjaw', 'kbody'], ['kbody2', 'kbody2b', 'kbody3', 'kbody3b', 'water'], r=4, k=.55)
-    speculars(c, ['kbody', 'kbody2', 'kbody3', 'khead'], thr=.86, col=(210, 255, 250))
-    return finish(c, [('khead', 'kbody'), ('kjaw', 'khead'), ('kmouth', 'khead'), ('khorn', 'khead'), ('kbody', 'kbody2'), ('kbodyb', 'kbody2'), ('kbody', 'water'), ('kbody2', 'water'), ('kbody', 'kbody3')] + list(extra),
-                  rim=(80, 200, 190), rimparts=('kbody', 'kbody2', 'kbody3', 'khead'))
-
-def llufu1(f):
-    """asleep and waking: coiled in the shallows, the head resting on its own coils, one eye open"""
-    setsize(104, 80); c = Canvas()
-    kaywater(c, f, 62)
-    kaybody(c, [(90, 70), (98, 56), (86, 44), (60, 42), (40, 50)], 16, 14, 'kbody2', lift=-.02)
-    kaybody(c, [(12, 70), (30, 74), (62, 74), (88, 68), (94, 58)], 18, 12, 'kbody3', lift=.06)
-    kaybody(c, [(64, 70), (44, 64), (30, 54), (28, 44), (36, 38)], 16, 12, 'kbody', lift=.14)
-    kayhead(c, 34, 36 + f, -1, 1.0, jaw=1 + f)
-    return kayfinish(c)
-
-def llufu2(f):
-    """Kaykayfilu ñi foro: its bones: the neck rises, the scales torn away to show the spine and ribs beneath"""
-    setsize(104, 96); c = Canvas()
-    kaywater(c, f, 78)
-    kaybody(c, [(8, 88), (30, 92), (60, 92), (84, 88), (96, 80)], 18, 14, 'kbody2', lift=.0)
-    P = kaybody(c, [(70, 90), (82, 74), (84, 54), (76, 36), (62, 26 - f)], 16, 12, 'kbody', lift=.14)
-    # the bared section: dark flesh, the spine's knuckles and a cage of ribs
-    for i in range(int(len(P) * .3), int(len(P) * .75)):
-        (x0, y0), (x1, y1) = P[i - 1], P[i + 1]
-        L = max(.01, math.hypot(x1 - x0, y1 - y0)); nx, ny = -(y1 - y0) / L, (x1 - x0) / L
-        x, y = P[i]
-        for k in np.linspace(-5, 5, 12):
-            X, Y = int(round(x + nx * k)), int(round(y + ny * k))
-            if 0 <= X < yp.W and 0 <= Y < yp.H and c.part[Y, X] in ('kbody', 'kbodyb'): c.px(X, Y, R['throat'][1 + int(abs(k) < 3)]); c.part[Y, X] = 'flesh'
-        if i % 3 == 0:
-            for k in np.linspace(-6, 6, 13):
-                X, Y = int(round(x + nx * k)), int(round(y + ny * k))
-                if 0 <= X < yp.W and 0 <= Y < yp.H and c.part[Y, X] == 'flesh': c.px(X, Y, R['kbone'][5 if k < 0 else 3]); c.part[Y, X] = 'rib'
-        c.px(int(x), int(y), R['kbone'][6]); c.px(int(x) + 1, int(y), R['kbone'][3])
-    kayhead(c, 60, 24 - f, -1, 1.15, jaw=3 + 2 * f)
-    return kayfinish(c, [('rib', 'kbody'), ('flesh', 'kbody')])
-
-def llufu3(f):
-    """Kaykayfilu ñi müpü: its wings: it swims in great loops through the water, fins spread like wings"""
-    setsize(120, 84); c = Canvas()
-    kaywater(c, f, 66)
-    ph = f * .6
-    path = [(4, 72), (16, 60 - 4 * math.sin(ph)), (28, 50), (40, 64), (52, 74), (64, 60), (76, 48 + 3 * math.sin(ph)), (86, 62), (94, 66), (96, 50), (88, 38)]
-    P = kaybody(c, path, 9, 14, 'kbody', lift=.12, n=8)
-    # two pairs of wing-fins, membranes between long rays
-    for (i0, side) in [(int(len(P) * .22), 1), (int(len(P) * .62), 1)]:
-        x, y = P[i0]
-        for k in range(5):
-            a = math.radians(-150 + k * 22 + f * 8); L = 22 - abs(k - 2) * 3
-            taper(c, [(x, y), (x + math.cos(a) * L, y + math.sin(a) * L)], 2.5, 1, R['kglow'][1:5], lift=.15, name='wingray', bulge=1.0)
-        mem = [(x, y)] + [(x + math.cos(math.radians(-150 + k * 22 + f * 8)) * (22 - abs(k - 2) * 3), y + math.sin(math.radians(-150 + k * 22 + f * 8)) * (22 - abs(k - 2) * 3)) for k in range(5)]
-        m = c.mask(lambda d, mem=mem: d.polygon(mem, fill=1)) & ~c.a
-        ys, xs = np.nonzero(m)
-        keep = yp.BAYER[ys % 4, xs % 4] < .7
-        c.rgb[ys[keep], xs[keep]] = np.array(R['kglow'][1]); c.a[ys[keep], xs[keep]] = True; c.part[ys[keep], xs[keep]] = 'wingm'
-    kayhead(c, 86, 34 + f, 1, 1.0, jaw=2 + f)
-    return kayfinish(c, [('wingray', 'kbody')])
-
-def llufu4(f):
-    """Kaykayfilu ñi piwke: its heart: the body knotted in a figure of eight around a heart of cyan light"""
-    setsize(100, 108); c = Canvas()
-    kaywater(c, f, 92)
-    # the lower loop (behind), then the heart, then the upper loop crossing in front
-    loop = lambda cy, ry: [(50 + math.cos(a) * 28, cy + math.sin(a) * ry) for a in np.linspace(0, 2 * math.pi, 14)]
-    kaybody(c, loop(76, 16), 11, 11, 'kbody2', lift=.0, n=6)
-    blob(c, R['kglow'], lambda d: d.polygon(smooth_poly([(50, 50 - f), (58, 42 - f), (66, 50), (62, 62), (50, 72), (38, 62), (34, 50), (42, 42 - f)], 4), fill=1), bulge=1.3, lift=.25 + f * .1, name='gem')
-    for (a, b) in [((44, 48), (50, 66)), ((56, 48), (50, 66)), ((38, 54), (62, 54))]: line(c, [a, b], R['kglow'][2], 'gem')
-    glow(c, 47, 50, 3, R['kglow']); c.px(44, 46, (255, 255, 255)); c.px(45, 46, (255, 255, 255))
-    kaybody(c, loop(32, 18)[:12], 12, 11, 'kbody', lift=.14, n=6)
-    kayhead(c, 64, 16 - f, 1, 1.0, jaw=2 + 2 * f)
-    for k in range(6):                                                    # light leaking from the heart
-        a = k * 1.05 + f * .5
-        x, y = 50 + math.cos(a) * 22, 56 + math.sin(a) * 14
-        if not c.a[int(y), int(x)]: c.px(int(x), int(y), R['kglow'][3]); c.part[int(y), int(x)] = 'spark'
-    return kayfinish(c, [('gem', 'kbody2'), ('kbody', 'gem')])
-
-def llufu5(f):
-    """Rüf Kaykayfilu: the serpent as it truly is, risen from its coils, crowned, singing again"""
-    setsize(112, 128); c = Canvas()
-    kaywater(c, f, 108)
-    kaybody(c, [(96, 116), (104, 98), (90, 86), (60, 84), (36, 92)], 18, 16, 'kbody2', lift=-.02)
-    kaybody(c, [(8, 116), (30, 122), (64, 122), (92, 116), (100, 104)], 20, 14, 'kbody3', lift=.06)
-    kaybody(c, [(70, 118), (44, 110), (30, 92), (32, 66), (46, 46), (54, 34 - f)], 20, 14, 'kbody', lift=.16, n=12)
-    kayhead(c, 56, 30 - f, 1, 1.3, jaw=3 + 2 * f)
-    # a crown of light-horns over the head and music in rings
-    for k in range(5):
-        a = math.radians(-150 + k * 25); L = 12 + (k % 2) * 4
-        taper(c, [(56, 18 - f), (56 + math.cos(a) * L, 18 - f + math.sin(a) * L)], 3, 1, R['kglow'][1:], lift=.2, name='crown', bulge=1.0)
-    arcs(c, 86, 40 - f, [6 + 3 * f, 12 + 3 * f, 18 + 3 * f], -math.pi * .35, math.pi * .35, (160, 255, 240), step=.07)
-    for k in range(16):
-        x, y = (k * 23 + f * 5) % 108 + 2, (k * 37 + f * 3) % 96 + 4
-        if not c.a[y, x]: c.px(x, y, R['kglow'][3] if k % 2 else R['kglow'][4]); c.part[y, x] = 'spark'
-    return kayfinish(c, [('crown', 'khead')])
-
-# =========================================================== polishing straight from the pixel art (Ngoymatulfe forms 1 and 5):
-# the original sprite is the drawing; every pixel keeps its place and its role, only the light, the form and the finish change
-def _s2x(rows):
-    h = len(rows); w = len(rows[0]); out = [['.'] * (w * 2) for _ in range(h * 2)]
-    g = lambda x, y: rows[y][x] if 0 <= x < w and 0 <= y < h else '.'
-    for y in range(h):
-        for x in range(w):
-            P = g(x, y); A = g(x, y - 1); B = g(x + 1, y); C = g(x - 1, y); Dd = g(x, y + 1)
-            out[2 * y][2 * x] = A if (C == A and C != Dd and A != B) else P
-            out[2 * y][2 * x + 1] = B if (A == B and A != C and B != Dd) else P
-            out[2 * y + 1][2 * x] = C if (Dd == C and Dd != B and C != A) else P
-            out[2 * y + 1][2 * x + 1] = Dd if (B == Dd and B != A and Dd != C) else P
-    return out
-PX = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ngoy_px.json')))
-def pixpolish(name, f, stone, tones, special, rim, seed=60):
-    """stone: colour ramp for the body; tones: char -> original tone 0..1 (its place in the old shading);
-    special: char -> (ramp, mode) for voids, glows and accents, drawn by their own rules"""
-    from scipy.ndimage import label, distance_transform_edt as edt, gaussian_filter as gf
-    G = np.array(_s2x(PX[name]['f'][f])); H_, W_ = G.shape; setsize(W_, H_); c = Canvas()
-    # the old 2-px outline: the outer layer goes (finish draws a fine one), the inner ones stay as seams between the masses
-    inside = G != '.'
-    outer = (G == 'o') & ~(np.roll(inside, 1, 0) & np.roll(inside, -1, 0) & np.roll(inside, 1, 1) & np.roll(inside, -1, 1))
-    body = np.isin(G, list(tones))
-    lab, n = label(body)
-    K = len(stone)
-    yy, xx = np.mgrid[0:H_, 0:W_]
-    bay = yp.BAYER[yy % 4, xx % 4]
-    tone = np.zeros((H_, W_))
-    for ch, t in tones.items(): tone[G == ch] = t
-    tone = gf(tone, .6)
-    for i in range(1, n + 1):
-        m = lab == i
-        d = edt(m); Rr = max(2.0, d.max())
-        h = gf((np.clip(d / Rr, 0, 1) ** .6) * Rr * 1.1, 1.0)
-        gy, gx = np.gradient(h)
-        nn = np.dstack([-gx, -gy, np.ones_like(h) * .8]); nn /= np.linalg.norm(nn, axis=2, keepdims=True)
-        lum = (nn @ yp.LIGHT - .15) / .85
-        lum = (lum - .45) * 1.3 + .45 - yy / H_ * .06
-        t = .5 * lum + .5 * tone
-        rimlit = (d <= 1.5) & ((gx > .05) | (gy > .05))           # reflected light along the shadow-side edge
-        t = np.where(rimlit & (t < .35), t + .14, t)
-        idx = np.clip(np.floor(t * (K - 1) + .35 + (bay - .5) * .3).astype(int), 0, K - 1)
-        c.rgb[m] = np.array(stone)[idx[m]]; c.a[m] = True; c.part[m] = 'st%d' % (i % 7)
-    # seams: the inner outline pixels, dark but not black, so the masses read as carved
-    seam = (G == 'o') & ~outer
-    c.rgb[seam] = np.array(stone[0]); c.a[seam] = True; c.part[seam] = 'seam'
-    for ch, (rmp, mode) in special.items():
-        m = G == ch
-        if not m.any(): continue
-        d = edt(m)
-        if mode == 'void':                                         # a hollow: darkest at the heart, a faint lip of light
-            k = np.clip(1 - d / 4, 0, 1)
-            idx = np.clip((k * (len(rmp) - 1) * .8 + (bay - .5) * .4).astype(int), 0, len(rmp) - 1)
-        elif mode == 'glow':                                       # light: hottest at the core
-            k = np.clip(d / 2.5, 0, 1)
-            idx = np.clip((1 + k * (len(rmp) - 2)).astype(int), 0, len(rmp) - 1)
-        else:                                                      # flat accent, shaded top to bottom
-            k = np.clip(1 - (yy - yy[m].min()) / max(1, np.ptp(yy[m]) + 1), 0, 1)
-            idx = np.clip((1 + k * (len(rmp) - 2) + (bay - .5) * .5).astype(int), 0, len(rmp) - 1)
-        c.rgb[m] = np.array(rmp)[idx[m]]; c.a[m] = True; c.part[m] = 'sp_' + mode
-    for ch, (rmp, mode) in special.items():                        # light spills out of the glows onto the stone round them
-        if mode != 'glow': continue
-        m = G == ch
-        near = (edt(~m) <= 3) & ~m & c.a & np.isin(c.part, ['st%d' % i for i in range(7)])
-        c.rgb[near] = np.clip(c.rgb[near] * .6 + np.array(rmp[3]) * .4, 0, 255).astype(np.uint8)
-    texture(c, ['st%d' % i for i in range(7)], amt=.12, seed=seed)
-    speculars(c, ['st%d' % i for i in range(7)], thr=.9)
-    return finish(c, [('st%d' % i, 'sp_void') for i in range(7)], rim=rim, rimparts=tuple('st%d' % i for i in range(7)))
-
-R.update({k: [hx(c) for c in v] for k, v in {
-    # five forms, five stones
-    'slate':  ['#06080e', '#0e1220', '#182034', '#24304a', '#344462', '#4a5c7c', '#647896', '#8496b0', '#a8b8cc'],     # 1: cold blue slate
-    'oxblood':['#0e0406', '#1e080c', '#320e14', '#48161c', '#602028', '#7a2e34', '#963e42', '#b05652', '#c87466'],     # 2: the heart, dark red stone
-    'sand':   ['#100c06', '#20180c', '#342814', '#4a3a1e', '#62502a', '#7c6838', '#968048', '#b09a5e', '#cab47a'],     # 3: weathered sandstone
-    'verd':   ['#040a08', '#0a1612', '#12241e', '#1c342c', '#284840', '#365e54', '#48766a', '#609082', '#80ac9c'],     # 5: dark verdigris bronze
-    'vvoid':  ['#000000', '#020404', '#060a0a', '#0c1414', '#162222'],
-    'svoid':  ['#000000', '#030408', '#080a12', '#10141e', '#1c2230'],
-    'gold':   ['#3a2a04', '#6a4c08', '#a07418', '#d0a030', '#f0cc60', '#fff0b0'],
-    'moss2':  ['#0c1a0a', '#1a3014', '#2a4a20', '#3c6430', '#527e44']}.items()})
-
-# =========================================================== the Fütra Ngoymatulfe: five forms of the great forgetting
-R.update({k: [hx(c) for c in v] for k, v in {
-    'stn':   ['#0a0c0e', '#14181c', '#20262c', '#2e363e', '#3e4852', '#505c68', '#66727e', '#7e8a96', '#9aa6b0'],
-    'void':  ['#020204', '#06060a', '#0c0c12', '#14141c'],
-    'fgreen':['#0a1a0a', '#163a16', '#246024', '#3a8a34', '#62b450', '#a0e080', '#e0ffd0'],
-    'shade': ['#020104', '#06040a', '#0c0812', '#140e1c', '#1e1628', '#2a2036', '#382c46']}.items()})
-def cracks(c, part, paths, rmp, w=1):
-    for pts in paths:
-        for (X, Y) in line(c, pts, rmp[3], part):
-            if c.part[Y, min(yp.W - 1, X + 1)] == part: c.px(X + 1, Y, rmp[1])
-            if Y > 0 and c.part[Y - 1, X] == part: c.rgb[Y - 1, X] = np.minimum(255, c.rgb[Y - 1, X].astype(int) + 26).astype(np.uint8)
-def holes(c, part, pts, r=2):
-    """stopped mouths in the stone: a dark pit, a lit lower lip, a shadowed upper lip"""
-    for (x, y) in pts:
-        for yy in range(y - r, y + r + 1):
-            for xx in range(x - r - 1, x + r + 2):
-                if ((xx - x) / (r + 1)) ** 2 + ((yy - y) / r) ** 2 <= 1 and c.part[yy, xx] == part: c.px(xx, yy, (6, 6, 8))
-        for xx in range(x - r, x + r + 1):
-            if c.part[y + r + 1, xx] == part: c.rgb[y + r + 1, xx] = np.minimum(255, c.rgb[y + r + 1, xx].astype(int) + 40).astype(np.uint8)
-def rubble(c, n, box, rmp, seed, f):
+def rock(c, cx, cy, rx, ry, seed, rmp, lift=.1, name='rock', n=9, jag=.22):
+    """a rough-hewn boulder: a jagged outline, a rounded mass, then chiselled planes cut into it from a ridge"""
     rs = np.random.RandomState(seed)
-    for _ in range(n):
-        x = rs.randint(box[0], box[2]); y = rs.randint(box[1], box[3]) + (f if rs.rand() < .5 else -f); r = rs.randint(1, 3)
-        blob(c, rmp, lambda d, x=x, y=y, r=r: d.polygon([(x - r, y), (x, y - r), (x + r, y + 1), (x, y + r)], fill=1), bulge=1.0, lift=.15, name='rubble')
-
-def ngoyman1(f):
-    """Ti Fütra Ngoymatulfe: a stone idol rising from a mound of stopped mouths, arms flung up, a void for a face"""
-    setsize(128, 96); c = Canvas()
-    S_, E = R['stn'], R['ember']
-    bob = f
-    mound = smooth_poly([(14, 94), (30, 72), (50, 64), (78, 64), (98, 72), (114, 94)], 5)
-    blob(c, S_, lambda d: d.polygon(mound, fill=1), bulge=.9, lift=.12, name='mound')
-    holes(c, 'mound', [(30, 86), (44, 78), (58, 88), (72, 76), (86, 86), (100, 88), (52, 70), (80, 70)], 2)
-    # arms flung up and out in an X, three-fingered claws
-    for side in (-1, 1):
-        lf = .16 if side < 0 else -.02
-        sh = (64 + side * 16, 34 + bob); el = (64 + side * 36, 22); hd = (64 + side * 54, 6 - bob)
-        taper(c, cr([sh, el, hd], 8), 12, 8, S_, lift=lf, name='arm', bulge=1.25)
-        plate_lines(c, 'arm', [((el[0] - 4, el[1] - 4), (el[0] + 4, el[1] + 4))], .55)
-        for k in range(3):
-            a = math.radians(-90 + side * (20 + k * 25))
-            taper(c, [hd, (hd[0] + math.cos(a) * 9, hd[1] + math.sin(a) * 9)], 4, 1, S_, lift=lf + .1, name='claw', bulge=1.1)
-        # the lower arms: pointing down and out, braced
-        taper(c, cr([(64 + side * 14, 46 + bob), (64 + side * 32, 56), (64 + side * 46, 70)], 6), 8, 5, S_, lift=lf - .05, name='arm2', bulge=1.2)
-    # body: a tapering trunk with a hollow chest where words smoulder
-    trunk = smooth_poly([(46, 30 + bob), (82, 30 + bob), (78, 50), (70, 70), (58, 70), (50, 50)], 5)
-    blob(c, S_, lambda d: d.polygon(trunk, fill=1), bulge=1.2, lift=.16, name='trunk')
-    blob(c, R['void'], lambda d: d.ellipse([54, 38 + bob, 74, 56 + bob], fill=1), bulge=.6, lift=0, name='hollow')
-    rs = np.random.RandomState(5 + f)
-    for _ in range(22):
-        x, y = rs.randint(56, 73), rs.randint(41, 55) + bob
-        if c.part[y, x] == 'hollow': c.px(x, y, E[rs.randint(2, 6)])
-    cracks(c, 'trunk', [[(52, 34 + bob), (56, 46), (54, 60)], [(76, 34 + bob), (72, 50), (74, 62)]], S_)
-    # head: a smooth egg of stone, the face a void with two embers for eyes and a round dark mouth, four horns
-    for (a, L) in [(-115, 18), (-65, 18), (-150, 14), (-30, 14)]:
-        r = math.radians(a)
-        taper(c, cr([(64, 14 + bob), (64 + math.cos(r) * L * .6, 14 + bob + math.sin(r) * L * .6 - 2), (64 + math.cos(r) * L, 14 + bob + math.sin(r) * L)], 5), 5, 1.5, S_, lift=.18, name='horn', bulge=1.2)
-    blob(c, S_, lambda d: d.ellipse([50, 4 + bob, 78, 32 + bob], fill=1), bulge=1.3, lift=.2, name='head')
-    blob(c, R['void'], lambda d: d.ellipse([54, 10 + bob, 74, 30 + bob], fill=1), bulge=.6, lift=0, name='face')
-    for ex in (59, 69):
-        glow(c, ex, 17 + bob, 2.4, E[1:]); c.px(ex - 1, 16 + bob, (255, 255, 255))
-    for a in np.linspace(0, 2 * math.pi, 30):
-        c.px(int(round(64 + math.cos(a) * 3)), int(round(25 + bob + math.sin(a) * 2)), E[2])
-    rubble(c, 14, (4, 30, 124, 70), S_, 31, f)
-    texture(c, ['mound', 'arm', 'arm2', 'trunk', 'head', 'horn'], amt=.14, seed=40)
-    occlude(c, ['trunk', 'head'], ['mound', 'arm2'], r=4, k=.55)
-    occlude(c, ['arm'], ['trunk'], r=3, k=.6)
-    speculars(c, ['head', 'trunk', 'arm', 'mound'], thr=.86)
-    return finish(c, [('head', 'trunk'), ('face', 'head'), ('hollow', 'trunk'), ('arm', 'trunk'), ('arm2', 'trunk'), ('trunk', 'mound'), ('horn', 'head'), ('claw', 'arm'), ('arm2', 'mound')],
-                  rim=(140, 200, 120), rimparts=('head', 'trunk', 'arm', 'mound', 'horn'))
-
-def ngoyman2(f):
-    """Ngoymatulfe ñi piwke: its heart, a stone heart bound in roots, green veins of the forgotten words pulsing"""
-    setsize(80, 100); c = Canvas()
-    S_, G = R['oxblood'], R['fgreen']
-    p = 1 if f else 0
-    # the plinth and the roots that hold it
-    blob(c, S_, lambda d: d.polygon([(24, 86), (56, 86), (62, 98), (18, 98)], fill=1), bulge=1.0, lift=.12, name='plinth')
-    blob(c, S_, lambda d: d.polygon([(30, 78), (50, 78), (54, 88), (26, 88)], fill=1), bulge=1.0, lift=.2, name='plinth2')
-    # the heart: two lobes and a point, armoured in plates
-    heart = smooth_poly([(40, 22 - p), (50, 8 - p), (66, 6 - p), (76, 20), (72, 40), (58, 60), (40, 80), (22, 60), (8, 40), (4, 20), (14, 6 - p), (30, 8 - p)], 5)
-    blob(c, S_, lambda d: d.polygon(heart, fill=1), bulge=1.25, lift=.18, name='heart')
-    plate_lines(c, 'heart', [((40, 22), (40, 78)), ((10, 30), (70, 30)), ((18, 52), (62, 52))], .5)
-    rivets(c, [(20, 28), (30, 28), (50, 28), (60, 28), (26, 50), (54, 50), (34, 62), (46, 62)], S_)
-    # veins of green light branching across it, brighter on the beat
-    veins = [[(40, 22), (34, 34), (24, 44), (16, 46)], [(40, 22), (48, 36), (58, 40), (68, 34)], [(34, 34), (36, 50), (40, 66), (40, 76)], [(48, 36), (50, 50), (46, 60)],
-             [(24, 44), (26, 56)], [(58, 40), (60, 50)], [(30, 12), (34, 24)], [(52, 12), (48, 24)]]
-    for v in veins:
-        for (X, Y) in line(c, v, G[4 + p], 'heart'):
-            if c.part[Y, X + 1] == 'heart': c.px(X + 1, Y, G[2 + p])
-            if c.part[Y, X - 1] == 'heart' and p: c.px(X - 1, Y, G[3])
-    glow(c, 40, 34, 4 + p, G)
-    # roots wrapping it, from the plinth up over the lobes
-    for pts in ([(28, 82), (14, 64), (8, 40), (14, 18), (28, 10)], [(52, 82), (66, 64), (72, 40), (66, 18), (52, 10)], [(36, 80), (30, 60), (34, 44)], [(44, 80), (50, 60), (46, 46)]):
-        taper(c, cr(pts, 7), 5, 2, R['bark'], lift=.15, name='root', bulge=1.2)
-    # drops of light falling from the point
-    for k in range(3): c.px(40, 84 + k * 4 + p * 2, G[4]); c.px(40, 85 + k * 4 + p * 2, G[2])
-    texture(c, ['heart', 'plinth', 'plinth2'], amt=.14, seed=41)
-    texture(c, ['root'], amt=.12, seed=42)
-    occlude(c, ['root'], ['heart'], r=2, k=.6)
-    occlude(c, ['heart'], ['plinth2'], r=4, k=.55)
-    speculars(c, ['heart', 'root', 'plinth'], thr=.86, col=(220, 255, 210))
-    return finish(c, [('root', 'heart'), ('heart', 'plinth2'), ('plinth2', 'plinth'), ('root', 'plinth2')], rim=(130, 230, 120), rimparts=('heart', 'root', 'plinth'))
-
+    pts = []
+    for k in range(n):
+        a = 2 * math.pi * k / n + rs.uniform(-.2, .2); r = 1 + rs.uniform(-jag, jag)
+        pts.append((cx + math.cos(a) * rx * r, cy + math.sin(a) * ry * r))
+    m = blob(c, rmp, lambda d: d.polygon(pts, fill=1), bulge=1.15, lift=lift, name=name)
+    ridge = (cx - rx * .25, cy - ry * .3)                         # the planes all meet at a ridge up toward the light
+    for (x, y) in pts[::2]:
+        for (X, Y) in line(c, [ridge, ((ridge[0] + x) / 2, (ridge[1] + y) / 2)], rmp[1], name):
+            if c.part[Y, min(yp.W - 1, X + 1)] == name: c.rgb[Y, X + 1] = np.minimum(255, c.rgb[Y, X + 1].astype(int) + 22).astype(np.uint8)
+    ys, xs = np.nonzero(m)
+    up = (ys - cy) < -ry * .35                                    # a flat-ish lit top face
+    c.rgb[ys[up], xs[up]] = np.minimum(255, c.rgb[ys[up], xs[up]].astype(int) + 14).astype(np.uint8)
+    return m, pts
+def moss_on(c, part, rmp, seed, amount=.3):
+    """moss only where a surface faces up: pixels of the part with empty space or another part above them"""
+    from scipy.ndimage import gaussian_filter as gf
+    rs = np.random.RandomState(seed); n = gf(rs.rand(yp.H, yp.W), 1.2)
+    m = np.isin(c.part, part) & c.a
+    top = m & ~np.roll(m, 3, 0)
+    grow = np.zeros_like(m)
+    for k in range(3): grow |= np.roll(top, k, 0)
+    grow &= m & (n > np.percentile(n, 100 - amount * 100))
+    ys, xs = np.nonzero(grow)
+    c.rgb[ys, xs] = np.array(rmp)[np.clip((c.rgb[ys, xs].mean(1) / 255 * len(rmp) * 1.6).astype(int), 0, len(rmp) - 1)]
 def ngoyman3(f):
-    """Fütra Ngoymatulfe: a hunched giant of piled stone, knuckles on the ground, eyes like lamps under the brow"""
+    """Fütra Ngoymatulfe: a golem of rough-hewn sandstone, the blocks held together by the forgetting's own light"""
     setsize(96, 124); c = Canvas()
     S_, Y_ = R['sand'], R['yglow']
     bob = f
-    # legs: short pillars
-    for (x, lift) in [(32, .12), (62, -.04)]:
-        blob(c, S_, lambda d, x=x: d.polygon([(x - 10, 92), (x + 10, 92), (x + 12, 122), (x - 12, 122)], fill=1), bulge=1.1, lift=lift, name='leg')
-        plate_lines(c, 'leg', [((x - 11, 108), (x + 11, 106))], .5)
-    # the body: three great boulders stacked and leaning
-    for (box, lift, nm) in [((14, 64, 82, 100), .08, 'hip'), ((8, 30 + bob, 88, 76 + bob), .16, 'chest'), ((22, 10 + bob, 74, 44 + bob), .22, 'shoulders')]:
-        blob(c, S_, lambda d, box=box: d.polygon(smooth_poly([(box[0], (box[1] + box[3]) / 2), (box[0] + 8, box[1]), (box[2] - 6, box[1] + 2), (box[2], (box[1] + box[3]) / 2 + 2), (box[2] - 8, box[3]), (box[0] + 6, box[3])], 4), fill=1),
-             bulge=1.25, lift=lift, name=nm)
-    cracks(c, 'chest', [[(30, 36 + bob), (36, 50), (30, 66)], [(66, 36 + bob), (60, 54), (66, 70)], [(36, 50), (48, 54), (60, 54)]], S_)
-    cracks(c, 'hip', [[(30, 70), (40, 86)], [(64, 72), (58, 88)]], S_)
-    for pts in ([(36, 50 + bob), (48, 54 + bob), (60, 54 + bob)],):
-        for (X, Y) in line(c, pts, R['fgreen'][4], 'chest'): pass
-    # arms: pillars of stone hanging to the ground, the knuckles resting on it
+    J = []                                                         # joints: where the light shows between the blocks
+    # legs: thigh block, shin block, a flat foot slab; the far leg first
+    for (x, lift, sd) in [(62, -.06, 1), (34, .12, 2)]:
+        rock(c, x + 2 * (1 if x > 48 else -1), 117, 13, 6, 30 + sd, S_, lift, 'foot', n=8, jag=.12)
+        rock(c, x, 104, 10, 10, 32 + sd, S_, lift, 'shin')
+        rock(c, x, 87, 11, 10, 34 + sd, S_, lift + .04, 'thigh')
+        J += [(x, 96), (x, 112)]
+    rock(c, 48, 76, 22, 10, 40, S_, .06, 'hip', n=10)
+    # the trunk: a great chest block, a belly stone under it, slabs on the shoulders
+    rock(c, 48, 64 + bob, 20, 10, 41, S_, .08, 'belly')
+    rock(c, 48, 46 + bob, 30, 17, 42, S_, .16, 'chest', n=11, jag=.16)
+    J += [(36, 70), (60, 70), (30, 56 + bob), (66, 56 + bob)]
+    # arms: long, heavy, hanging to the knees, the fists big as boulders
     for side in (-1, 1):
-        lf = .14 if side < 0 else -.04
-        taper(c, cr([(48 + side * 36, 36 + bob), (48 + side * 42, 70), (48 + side * 38, 104)], 6), 16, 14, S_, lift=lf, name='arm', bulge=1.25)
-        blob(c, S_, lambda d, side=side: d.polygon(smooth_poly([(48 + side * 28, 100), (48 + side * 46, 98), (48 + side * 48, 118), (48 + side * 30, 120)], 4), fill=1), bulge=1.25, lift=lf + .05, name='fist')
-        for k in range(3): c.px(48 + side * (32 + k * 5), 116, S_[1]); c.px(48 + side * (32 + k * 5), 105, S_[7])
-        plate_lines(c, 'arm', [((48 + side * 34, 62), (48 + side * 50, 64)), ((48 + side * 32, 82), (48 + side * 48, 86))], .5)
-    # head: sunk forward between the shoulders, a ledge of brow, deep-set lamp eyes, a jagged slab of a mouth
-    hd = smooth_poly([(34, 16 + bob), (62, 16 + bob), (66, 32 + bob), (58, 46 + bob), (38, 46 + bob), (30, 32 + bob)], 4)
-    blob(c, S_, lambda d: d.polygon(hd, fill=1), bulge=1.3, lift=.24, name='head')
-    facet(c, [(31, 24 + bob), (65, 24 + bob), (62, 29 + bob), (34, 29 + bob)], S_[7], 'brow'); facet(c, [(34, 29 + bob), (62, 29 + bob), (61, 30 + bob), (35, 30 + bob)], S_[1], 'brow')
-    for ex in (40, 56):
-        c.rect(ex - 4, 30 + bob, 9, 5, (6, 6, 4)); glow(c, ex, 32 + bob, 2.6, Y_); c.px(ex - 1, 31 + bob, (255, 255, 255))
-    c.rect(38, 38 + bob, 20, 5, (8, 6, 6))
-    for k, x in enumerate(range(38, 58, 3)):
-        tooth3(c, x, 38 + bob, 40 + bob + (k % 2), S_[3:])
-        c.px(x + 1, 42 + bob, S_[6]); c.px(x + 1, 41 + bob, S_[5])
-    rubble(c, 10, (2, 4, 94, 60), S_, 33, f)
-    texture(c, ['leg', 'hip', 'chest', 'shoulders', 'arm', 'fist', 'head'], amt=.16, seed=43)
-    occlude(c, ['head'], ['shoulders', 'chest'], r=5, k=.5)
-    occlude(c, ['shoulders'], ['chest'], r=4, k=.55)
-    occlude(c, ['chest'], ['hip'], r=4, k=.55)
-    occlude(c, ['hip'], ['leg'], r=4, k=.5)
-    speculars(c, ['head', 'shoulders', 'chest', 'arm', 'fist'], thr=.85)
-    return finish(c, [('head', 'shoulders'), ('shoulders', 'chest'), ('chest', 'hip'), ('hip', 'leg'), ('arm', 'chest'), ('arm', 'shoulders'), ('fist', 'arm'), ('brow', 'head')],
-                  rim=(230, 190, 110), rimparts=('head', 'shoulders', 'chest', 'arm', 'leg', 'hip'))
+        lf = .14 if side < 0 else -.04; sx = 48 + side * 34
+        rock(c, sx + side * 4, 54 + bob, 9, 13, 50 + side, S_, lf, 'arm', n=8)
+        rock(c, sx + side * 6, 78, 8, 12, 52 + side, S_, lf, 'arm', n=8)
+        rock(c, sx + side * 5, 99, 11, 10, 54 + side, S_, lf + .05, 'fist', n=9)
+        J += [(sx + side * 5, 66), (sx + side * 6, 89)]
+    for side in (-1, 1):
+        rock(c, 48 + side * 26, 33 + bob, 15, 10, 60 + side, S_, .2 if side < 0 else .04, 'shoulder', n=9)
+    # the head: a small heavy stone sunk forward between the shoulders, no mouth, eyes as a slit of light in a crevice
+    rock(c, 48, 26 + bob, 12, 10, 70, S_, .24, 'head', n=8, jag=.14)
+    for x in range(38, 59):                                         # the brow ledge and the crevice under it
+        y = 25 + bob + (1 if x in (47, 48, 49) else 0)
+        if c.part[y, x] == 'head': c.px(x, y - 1, S_[7]); c.px(x, y, (8, 6, 2)); c.px(x, y + 1, (14, 10, 4)); c.px(x, y + 2, S_[1])
+    for ex in (42, 54):
+        c.px(ex - 1, 25 + bob, Y_[3]); c.px(ex, 25 + bob, Y_[5]); c.px(ex + 1, 25 + bob, Y_[3])
+        glow(c, ex, 25 + bob, 1.6, Y_)
+    # the light of the forgetting holding the blocks together: glowing gaps at every joint, and runes cut into the chest
+    for (x, y) in J:
+        glow(c, x, y, 2.2, Y_[:5])
+    for pts in ([(40, 40 + bob), (44, 46 + bob), (40, 52 + bob)], [(56, 40 + bob), (52, 46 + bob), (56, 52 + bob)], [(44, 46 + bob), (52, 46 + bob)]):
+        for (X, Y) in line(c, pts, Y_[4], 'chest'):
+            if c.part[Y, X + 1] == 'chest': c.px(X + 1, Y, Y_[2])
+    moss_on(c, ['shoulder', 'head', 'chest', 'fist', 'hip'], [hx(x) for x in ['#0e140a', '#1a2412', '#28361a', '#384a24', '#4a5e30']], 7, .28)
+    rubble(c, 9, (2, 4, 94, 70), S_, 33, f)
+    texture(c, ['foot', 'shin', 'thigh', 'hip', 'belly', 'chest', 'arm', 'fist', 'shoulder', 'head'], amt=.2, seed=43)
+    occlude(c, ['head'], ['chest'], r=4, k=.5)
+    occlude(c, ['shoulder'], ['chest', 'arm'], r=4, k=.55)
+    occlude(c, ['chest'], ['belly', 'hip'], r=4, k=.55)
+    occlude(c, ['hip'], ['thigh'], r=4, k=.5)
+    occlude(c, ['thigh'], ['shin'], r=3, k=.55)
+    speculars(c, ['head', 'shoulder', 'chest', 'fist'], thr=.88)
+    parts = ['foot', 'shin', 'thigh', 'hip', 'belly', 'chest', 'arm', 'fist', 'shoulder', 'head']
+    return finish(c, [(p_, q) for p_ in parts for q in parts if p_ != q], rim=(230, 190, 110), rimparts=tuple(parts))
 
 def ngoyman4(f):
-    """Füta Dumiñ: the great darkness, a shape of ink with a crown of red eyes and arms of thorns"""
-    setsize(112, 144); c = Canvas()
-    D_ = R['shade']; Rg = R['redg']
-    sw = 2 if f else 0
-    # thorned arms: long whips of shadow, barbs along them
+    """Füta Dumiñ: the great darkness, not a body but a fog: a column of smoke that thins at every edge, arms that are
+    only drifts of it, and in the thickest dark a crown of red eyes"""
+    setsize(112, 144)
+    from scipy.ndimage import gaussian_filter as gf
+    H_, W_ = 144, 112
+    yy, xx = np.mgrid[0:H_, 0:W_].astype(float)
+    dens = np.zeros((H_, W_))
+    def puff(x, y, r, k=1.0):
+        dens[:] = np.maximum(dens, k * np.exp(-((xx - x) ** 2 + (yy - y - 6) ** 2) / (2 * r * r)))
+    ph = f * .7
+    # the column: thick at the head and shoulders, thinning and fraying toward the ground
+    for t in np.linspace(0, 1, 40):
+        y = 22 + t * 110; x = 56 + math.sin(t * 5 + ph) * 4 * t
+        puff(x, y, 16 - t * 7, 1.2 - t * .5)
+    puff(56, 20, 12, 1.4); puff(56, 40, 17, 1.25)
+    # arms of drifting smoke reaching out and curling down
     for side in (-1, 1):
-        lf = .2 if side < 0 else .05
-        pts = [(56 + side * 14, 44), (56 + side * 34, 38 - sw), (56 + side * 48, 52), (56 + side * 52, 74 + sw), (56 + side * 46, 94)]
-        P = cr(pts, 8)
-        taper(c, P, 9, 3, D_, lift=lf, name='armS', bulge=1.2)
-        for i in range(4, len(P) - 2, 4):
-            (x0, y0), (x1, y1) = P[i - 1], P[i + 1]
-            L = max(.1, math.hypot(x1 - x0, y1 - y0)); nx, ny = -(y1 - y0) / L, (x1 - x0) / L
-            q = 1 if (i // 4) % 2 else -1
-            x, y = P[i]
-            taper(c, [(x, y), (x + nx * q * 7 + (x1 - x0) / L * 3, y + ny * q * 7 + (y1 - y0) / L * 3)], 3, 1, D_, lift=lf + .1, name='barb', bulge=1.0)
-    # the body: a column of darkness bulging at the shoulders, thinning into wisps that never reach the ground
-    body = smooth_poly([(56, 22), (76, 30), (82, 52), (78, 80), (74, 104), (66, 126), (56, 138), (46, 126), (38, 104), (34, 80), (30, 52), (36, 30)], 6)
-    m = blob(c, D_, lambda d: d.polygon(body, fill=1), bulge=1.0, lift=.2, name='body')
-    for k in range(7):                                                      # wisps trailing below
-        x0 = 40 + k * 5; L = 10 + (k * 7) % 9
-        taper(c, cr([(x0, 116), (x0 + math.sin(k + f) * 3, 116 + L * .5), (x0 + math.sin(k * 2 + f) * 5, 116 + L)], 5), 4, 1, D_, lift=.1, name='wisp', bulge=1.0)
-    ys, xs = np.nonzero(m)                                                  # slow swirls inside the dark
-    sw_ = np.sin((xs - 56) * .22 + (ys - 70) * .12 + f) * np.cos((ys - 70) * .09) * .5
-    c.rgb[ys, xs] = np.clip(c.rgb[ys, xs] * (1 + sw_ * .35)[:, None], 0, 255).astype(np.uint8)
-    # red pinpoints drifting inside it: the words it has swallowed
-    rs = np.random.RandomState(7 + f)
-    for _ in range(18):
-        i = rs.randint(len(ys)); y, x = ys[i], xs[i]
-        if y > 40: c.px(x, y, Rg[2]); c.px(x + 1, y, Rg[1]) if c.part[y, min(yp.W - 1, x + 1)] == 'body' else None
-    # the head: a smooth dark dome with two antlers and a cluster of red eyes
-    for side in (-1, 1):
-        taper(c, cr([(56 + side * 8, 12), (56 + side * 18, 4), (56 + side * 22, -4), (56 + side * 30, -2)], 6), 4, 1.5, D_, lift=.25, name='antler', bulge=1.2)
-        taper(c, [(56 + side * 17, 4), (56 + side * 14, -4)], 3, 1, D_, lift=.25, name='antler', bulge=1.1)
-    blob(c, D_, lambda d: d.ellipse([40, 6, 72, 36], fill=1), bulge=1.3, lift=.3, name='head')
-    for (ex, ey, r) in [(50, 18, 2.6), (62, 18, 2.6), (56, 14, 2.0), (45, 24, 1.6), (67, 24, 1.6), (56, 22, 1.6)]:
-        c.rect(int(ex - r - 1), int(ey - r), int(2 * r + 3), int(2 * r + 1), (2, 0, 2)); glow(c, ex, ey, r, Rg); c.px(int(ex) - 1, int(ey) - 1, (255, 255, 255))
-    for x in range(48, 65): c.px(x, 30, (2, 0, 2))                         # a mouth that is only a line
-    texture(c, ['body', 'head', 'armS'], amt=.1, seed=44)
-    occlude(c, ['head'], ['body'], r=5, k=.5)
-    speculars(c, ['head', 'body', 'armS'], thr=.8, col=(150, 120, 190))
-    return finish(c, [('head', 'body'), ('armS', 'body'), ('barb', 'armS'), ('antler', 'head'), ('wisp', 'body')], rim=(180, 60, 70), rimparts=('body', 'head', 'armS', 'antler'))
+        for t in np.linspace(0, 1, 34):
+            x = 56 + side * (12 + t * 42); y = 38 - math.sin(t * 2.6) * 14 + t * t * 44 + math.sin(t * 7 + ph + side) * 3
+            puff(x, y, 7.5 - t * 4.5, 1.05 - t * .4)
+    # loose wisps rising off it
+    for k in range(9):
+        x0 = 20 + k * 9; y0 = 30 + (k * 37) % 70
+        for t in np.linspace(0, 1, 12):
+            puff(x0 + math.sin(t * 4 + k + ph) * 5, y0 - t * 18, 3 - t * 2, .5 - t * .3)
+    # the fog itself: churned by noise that drifts between the frames
+    rs = np.random.RandomState(4)
+    n1 = gf(rs.rand(H_ + 8, W_ + 8), 3.0); n2 = gf(rs.rand(H_ + 8, W_ + 8), 1.2)
+    o = 2 + f * 3
+    n = (n1[o:o + H_, 2:2 + W_] - n1.mean()) / n1.std() * .5 + (n2[2:2 + H_, o:o + W_] - n2.mean()) / n2.std() * .22
+    D = dens * (1 + n * .45) - .04 * n
+    bay = yp.BAYER[yy.astype(int) % 4, xx.astype(int) % 4]
+    a = D > (.2 + (bay - .5) * .3)                                # edges dither away into nothing
+    ramp = [hx(c_) for c_ in ['#010003', '#04020a', '#090512', '#100a1c', '#1a1228', '#251a36', '#332646', '#443658']]
+    # thick dark at the core, thin fog lighter (lit faintly from above-left) at the edges
+    gy, gx = np.gradient(gf(D, 1.5))
+    lit = np.clip(-(gx + gy) * 4, -.5, .5)
+    t = np.clip(1 - (D - .2) / .7, 0, 1) ** 1.3 * .85 + lit * .35 + n * .08
+    idx = np.clip(np.floor(t * (len(ramp) - 1) + (bay - .5) * .5).astype(int), 0, len(ramp) - 1)
+    img = np.zeros((H_, W_, 4), np.uint8)
+    img[..., :3] = np.array(ramp)[idx]; img[..., 3] = a * 255
+    c = Canvas(); c.rgb = img[..., :3].copy(); c.a = a.copy(); c.part[a] = 'fog'
+    Rg = R['redg']
+    # the eyes: a crown of red embers in the thickest dark of the head
+    for (ex, ey, r) in [(50, 18, 2.6), (62, 18, 2.6), (56, 13, 2.0), (45, 23, 1.6), (67, 23, 1.6), (56, 23, 1.4)]:
+        glow(c, ex, ey + 6 + (1 if f else 0), r, Rg); c.px(int(ex) - 1, int(ey) + 6, (255, 236, 230))
+    # swallowed words: faint red sparks drifting in the fog
+    ys, xs = np.nonzero(a & (D > .5))
+    rs2 = np.random.RandomState(7 + f)
+    for i in rs2.choice(len(ys), 16, replace=False):
+        if ys[i] > 34: c.px(xs[i], ys[i], Rg[2] if i % 2 else Rg[1])
+    out = np.zeros((H_, W_, 4), np.uint8); out[..., :3] = c.rgb; out[..., 3] = c.a * 255
+    return out
 
 def ngoyman5(f):
     """Rüf Fütra Ngoymatulfe: the true form, a colossus of the forgetting whose stone body is splitting open,
@@ -1784,15 +1354,6 @@ R.update({k: [hx(c) for c in v] for k, v in {
     'svoid':  ['#000000', '#030408', '#080a12', '#10141e', '#1c2230'],
     'gold':   ['#3a2a04', '#6a4c08', '#a07418', '#d0a030', '#f0cc60', '#fff0b0'],
     'moss2':  ['#0c1a0a', '#1a3014', '#2a4a20', '#3c6430', '#527e44']}.items()})
-
-def ngoyman1(f):
-    return pixpolish('ngoyman1', f, R['slate'], {'w': .95, 's': .62, 'd': .3},
-                     {'k': (R['svoid'], 'void'), 'E': (R['ember'], 'glow'), 'r': (R['ember'][1:5], 'flat')}, rim=(255, 140, 70), seed=61)
-
-def ngoyman5(f):
-    return pixpolish('ngoyman5', f, R['verd'], {'w': .95, 's': .62, 'd': .3, 'B': .12, 'c': .55, 'v': .4, 'g': .35},
-                     {'k': (R['vvoid'], 'void'), 'E': (R['yglow'], 'glow'), 'y': (R['gold'], 'flat'), 'f': (R['gold'][1:], 'flat'), 'r': (R['ember'][1:5], 'flat')},
-                     rim=(240, 200, 90), seed=65)
 
 def oldpolish(name, f, stone, rim, seed=60, gamma=1.0, accb=1.0):
     """start from the form as it was painted before (its old battle sprite) and only polish it: the stone is recoloured
