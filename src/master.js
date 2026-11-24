@@ -85,7 +85,7 @@ const MSET={
   chdone:s=>{Object.assign(s.flags,{chboss:1});s.gear.lafkenkura=1;if(!s.roots.includes('llako'))s.roots.push('llako')},
   epuwon:s=>{Object.assign(s.flags,{epu_won:1});s.gear.waiki=1},
   kalkudone:s=>{Object.assign(s.flags,{sb6:1})},
-  stgocall:s=>{Object.assign(s.flags,{stgo_call:1})},
+  stgocall:s=>{Object.assign(s.flags,{stgo_call:1});if(!s.roots.includes('llako'))s.roots.push('llako')},   // Santiago teaches llako- at the radio for anyone who skipped the lake
   stgoseen:s=>{Object.assign(s.flags,{stgo_seen:1})},
   sw1pre:s=>{Object.assign(s.flags,{feria_ok:1,radio_ok:1,feria_ready:1})},
   sw2pre:s=>{Object.assign(s.flags,{torno1:1,torno2:1,spk1:1,spk2:1,spk3:1,spk_all:1})},
@@ -110,7 +110,7 @@ function mCheckpoints(back){
    region already taught. Backfill them from the story flags whenever a map loads or a battle starts. */
 const MROOTFLAGS=[['intro','küpa'],['pentukun','umawtu'],['pentukun','nagtu'],['nag_lonko','llüka'],['root_winotu','wüñotreka'],
   ['pew_lonko','trafo'],['root_wutre','wütre'],['ngen3','ñam'],['root_nam','ñam'],['wil_lonko','lef'],['root_tripa','tripa'],
-  ['puel_lonko','trana'],['root_nepe','nepe'],['chboss','llako']];
+  ['puel_lonko','trana'],['root_nepe','nepe'],['chboss','llako'],['stgocall','llako']];
 function mFixRoots(){if(!S||!S.roots)return;let add=0;for(const [f,r] of MROOTFLAGS)if(S.flags[f]&&!S.roots.includes(r)){S.roots.push(r);add=1}if(add)persist()}
 const _mLoadMap=loadMap;loadMap=function(){mFixRoots();return _mLoadMap.apply(this,arguments)};
 const _mStartBattle=startBattle;startBattle=function(){mFixRoots();return _mStartBattle.apply(this,arguments)};

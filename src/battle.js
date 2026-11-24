@@ -6,7 +6,7 @@ const SUMMONP=Object.keys(ET).filter(k=>!ET[k].boss);
 function engage(e){
   if(grace>0||active)return;
   const go=()=>startBattle(e.party,{ent:e,boss:e.boss,mini:e.mini,final:e.final,chain:e.chain,song:e.song});
-  if(e.pre)say(e.pre,go);else go();
+  {const pre=(e.pre||[]).concat(e.prex?e.prex():[]);if(pre.length)say(pre,go);else go()}
 }
 function relabel(){const cnt={},seen={};B.en.forEach(e=>cnt[e.t]=(cnt[e.t]||0)+1);
   B.en.forEach(e=>{seen[e.t]=(seen[e.t]||0)+1;if(e.label)return;e.label=GR(ET[e.t].name)+(cnt[e.t]>1||ET[e.t].name==='laftrache'&&B.en.length>1?' '+'ABCDE'[seen[e.t]-1]:'')})}

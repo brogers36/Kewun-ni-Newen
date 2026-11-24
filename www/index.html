@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='e79d13a-202611241331';
+window.KEWUN_BUILD='91a68ab-202611241334';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -5741,7 +5741,7 @@ addMap('s_feria',Object.assign({},WARIA,{bg:'feria',name:'Santiago · feria',g:{
    {id:'fkid',kind:'npc',look:'child',x:12,y:12,path:[[12,12],[24,12],[24,10],[12,10]],pause:40,talk:()=>noiseTalk(3),bub:['¡Mamá!']},
    {id:'fdog',kind:'npc',look:'dog',x:30,y:12,path:[[30,12],[36,12]],pause:60,talk:()=>dogTalk()},
    {kind:'enemy',x:5,y:10,party:['wirarun'],flag:'sw1'},{kind:'enemy',x:36,y:8,party:['drone','wirarun'],flag:'sw1'},{kind:'enemy',x:26,y:12,party:['drone','drone'],flag:'sw1'},
-   {id:'ngoyngoyun',song:'stgoBoss1',kind:'enemy',x:20,y:10,party:['ngoyngoyun'],fixed:1,boss:1,req:'feria_ready',flag:'sw1',
+   {id:'ngoyngoyun',song:'stgoBoss1',kind:'enemy',x:20,y:10,party:['ngoyngoyun'],fixed:1,boss:1,req:'feria_ready',flag:'sw1',prex:()=>llakoPapay(),
     pre:[N('La radio, la feria, los parlantes, los gritos, las bocinas: todo el ruido se amontona en medio de la calle y se levanta como una torre que habla con mil bocas.','The radio, the market, the loudspeakers, the shouting, the horns: all the noise piles up in the middle of the street and rises like a tower talking with a thousand mouths.'),
       L('','Ngoyngoyün!','El ruido confuso, como de mucha gente junta. Ahí, entre tanto ruido, nadie escucha el mapudungun. Cálmalo (llako-), hazlo dormir (umawtu-) y que se vaya (amutu-).','Confused noise, like a crowd all talking at once. In so much noise, nobody hears Mapudungun. Calm it (llako-), put it to sleep (umawtu-) and make it go (amutu-).')],
     post:()=>postWarden(1)}]}));
@@ -5835,7 +5835,18 @@ function feriaTalk(){const en=S.gloss==='en';
         sfx('bad');return say([N(ok+'/4. La casera se ríe: «Casi. Vuelve cuando quieras y lo intentamos de nuevo».',ok+'/4. The stallholder laughs: "Almost. Come back any time and we will try again."')])}
       const q=qs[i];choose(q.q,shuf(q.o).map(x=>({m:x,v:x})),v=>{const g=v===q.a;track('números grandes',g,q.q,q.o,q.a);if(g){ok++;sfx('ok');ask(i+1)}else{sfx('bad');say([N('Era '+q.a+'.','It was '+q.a+'.')],()=>ask(i+1))}},false,true)};
     ask(0)})}
+/* llako- is first taught by the ñidol chumpall, in a lake that is optional: anyone who reaches Santiago without it
+   learns it here, from the radio (or, as a last resort, from a papay of the feria just before Ngoyngoyün) */
+function llakoRadio(){if(S.roots.includes('llako'))return[];S.roots.push('llako');persist();
+  return [L('Radio','Llakonge! Llakomün!','¡Cálmate! ¡Cálmense!','Calm down! Calm down, all of you!'),
+    N('«Esa es la palabra que el ruido no quiere oír: llako-, calmarse. Llakonge, a uno; llakomu, a dos; llakomün, a muchos. Llévatela: allá abajo la vas a necesitar.»','"That is the word the noise does not want to hear: llako-, to calm down. Llakonge, to one; llakomu, to two; llakomün, to many. Take it with you: down there you will need it."'),
+    N('Aprendes llako- («calmarse, aplacarse»).','You learn llako- ("to calm down, to settle").')]}
+function llakoPapay(){if(S.roots.includes('llako'))return[];S.roots.push('llako');persist();
+  return [N('Una papay de la feria se planta a tu lado y le grita al ruido con toda su voz:','A papay from the market plants herself beside you and shouts at the noise with all her voice:'),
+    L('Papay','Llakonge!','¡Cálmate!','Calm down!'),
+    N('Aprendes llako- («calmarse, aplacarse»): llakonge, llakomu, llakomün.','You learn llako- ("to calm down, to settle"): llakonge, llakomu, llakomün.')]}
 function radioTalk(){
+  if(S.flags.radio_ok&&!S.roots.includes('llako'))return say([L('Radio','Mari mari kom pu che!','¡Hola a todos!','Hello, everyone!')].concat(llakoRadio()));
   if(S.flags.radio_ok)return say([L('Radio','Mari mari kom pu che!','¡Hola a todos!','Hello, everyone!'),N(S.flags.sw1?'«La señal llega a toda la ciudad. Cada mañana, un rato en mapudungun.»':'«Ya tenemos señal... pero allá abajo el ruido se está juntando. Si alguien lo calma, nos van a escuchar.»',S.flags.sw1?'"The signal reaches the whole city. Every morning, a while in Mapudungun."':'"We have signal now... but down there the noise is gathering. If someone calms it, they will hear us."')]);
   say([L('Radio','Mari mari, '+addr(true)+'. Allkütuymi?','Hola. ¿Me escuchas?','Hello. Can you hear me?'),
     N('«Esta es la radio de la ruka urbana. Transmitimos en mapudungun... o transmitíamos. Con tanto ruido la señal se pierde, y en el dial solo se oyen frases a medias.»','"This is the urban ruka\'s radio. We broadcast in Mapudungun... or we used to. With so much noise the signal gets lost, and on the dial you only hear half-formed sentences."'),
@@ -5849,7 +5860,7 @@ function radioTune(){
   if(S.flags.radio_ok)return say([L('','Wallmapu Waria · 97.7','La aguja está fija en la estación de la ruka. Se escucha un ül, una canción, muy clara.','The needle is fixed on the ruka\'s station. A song, an ül, comes through very clearly.')]);
   const ask=i=>{if(i>=RADIO_R.length){S.flags.radio_ok=1;swCheck();persist();sfx('lvl');
       return say([L('Radio','Mari mari kom pu che! Fewla mapudungun mew nütramkayaiñ.','¡Hola a todos! Ahora vamos a conversar en mapudungun.','Hello, everyone! Now we will talk in Mapudungun.'),
-        N('La señal entra limpia. Pero en la calle, en vez de bajar, el ruido sube: los gritos, las bocinas y los parlantes se amontonan en medio de la feria, como si algo no quisiera que se oyera la radio.','The signal comes in clean. But in the street, instead of dropping, the noise rises: the shouts, the horns and the speakers pile up in the middle of the market, as if something did not want the radio to be heard.')],()=>swCheck())}
+        N('La señal entra limpia. Pero en la calle, en vez de bajar, el ruido sube: los gritos, las bocinas y los parlantes se amontonan en medio de la feria, como si algo no quisiera que se oyera la radio.','The signal comes in clean. But in the street, instead of dropping, the noise rises: the shouts, the horns and the speakers pile up in the middle of the market, as if something did not want the radio to be heard.').concat(llakoRadio())],()=>swCheck())}
     const r=RADIO_R[i];sfx('swirl');
     choose({m:'≈≈≈ '+(i+1)+'/'+RADIO_R.length+' ≈≈≈',es:r.es,en:r.en},shuf(r.o).map(x=>({m:x,v:x})),v=>{const g=v===r.a;track('radio (frases)',g,{m:'',es:r.es,en:r.en},r.o,r.a);
       if(g){sfx('ok');ask(i+1)}else{sfx('bad');say([N('Kshhhh... Solo estática. Esa frase no dice lo que buscas.','Kshhhh... Only static. That sentence does not say what you are looking for.')],()=>ask(i))}},false,true)};
@@ -5960,7 +5971,7 @@ const SUMMONP=Object.keys(ET).filter(k=>!ET[k].boss);
 function engage(e){
   if(grace>0||active)return;
   const go=()=>startBattle(e.party,{ent:e,boss:e.boss,mini:e.mini,final:e.final,chain:e.chain,song:e.song});
-  if(e.pre)say(e.pre,go);else go();
+  {const pre=(e.pre||[]).concat(e.prex?e.prex():[]);if(pre.length)say(pre,go);else go()}
 }
 function relabel(){const cnt={},seen={};B.en.forEach(e=>cnt[e.t]=(cnt[e.t]||0)+1);
   B.en.forEach(e=>{seen[e.t]=(seen[e.t]||0)+1;if(e.label)return;e.label=GR(ET[e.t].name)+(cnt[e.t]>1||ET[e.t].name==='laftrache'&&B.en.length>1?' '+'ABCDE'[seen[e.t]-1]:'')})}

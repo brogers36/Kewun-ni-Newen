@@ -525,3 +525,9 @@ Aplicado tal como lo marcaste (16 correcciones; la fila 5, «Müley Walichu!», 
 - Wentru, pregunta 1: «Pu pewenche ___» con ngülliwtuyngün / ✓ngülliwtukeyngün / ngülliwtukey; pregunta 3: «Eymi ___» con kawelltuymi / ✓kawelltukeymi / kawelltuken.
 - En todo el juego, las preguntas de completar ya no parten la palabra («amu___» → «___»): 34 preguntas, todas con opciones de palabra entera.
 - Las pistas de esas preguntas llevan la raíz entre paréntesis en modo normal («Él / ella va. (amu-)»); en modo Weichafe la raíz no aparece.
+
+## llako- en Santiago (24 nov)
+Ngoyngoyün tiene un sello de llako-, que solo enseñaba la ñidol chumpall (lago opcional). Ahora:
+- La locutora de la radio lo enseña al terminar de sintonizar (o en cualquier visita después, si falta): ⚠ «Llakonge! Llakomün!» (¡Cálmate! ¡Cálmense!).
+- Red de seguridad: si alguien llega al jefe sin llako-, una papay de la feria le grita al ruido ⚠ «Llakonge!» y lo enseña.
+- En el maestro, los puntos de Santiago ya traen llako-.
