@@ -262,7 +262,7 @@ const STONES={
     qs:[{q:L('Kura','___ ruka','Mi casa.','My house.'),o:['tami','ñi','tañi'],a:'tañi'},
         {q:L('Kura','___ kawellu','Tu caballo.','Your horse.'),o:['tañi','tami','ñi'],a:'tami'},
         {q:L('Kura','___ trewa','Su perro (de él o de ella).','His / her dog.'),o:['ñi','tañi','tami'],a:'ñi'}],hq:{q:L('Kura','___ ruka','Nuestra casa (de muchos).','Our house (of many).'),o:['tañi','tayiñ','tami'],a:'tayiñ'}},
-  kin:{intro:[L('Kura','Mari mari! Kimimi tami pu che?','¡Hola! ¿Conoces a tu familia?','Hello! Do you know your family?'),N('Di quién es cada uno y te abro el paso.','Say who each one is and I will open the way.')],
+  kin:{intro:[L('Kura','Mari mari! Kimniefimi tami pu che?','¡Hola! ¿Conoces a tu familia?','Hello! Do you know your family?'),N('Di quién es cada uno y te abro el paso.','Say who each one is and I will open the way.')],
     qs:[{q:L('Kura','Tañi chaw ñi ñuke: ___','La mamá de mi papá.','My father\'s mother.'),o:['chuchu','kuku','laku'],a:'kuku'},
         {q:L('Kura','Tañi ñuke ñi ñuke: ___','La mamá de mi mamá.','My mother\'s mother.'),o:['kuku','cheche','chuchu'],a:'chuchu'},
         {q:L('Kura','Tañi chaw ñi chaw: ___','El papá de mi papá.','My father\'s father.'),o:['laku','cheche','kuku'],a:'laku'},
@@ -623,7 +623,7 @@ function pewKidsTalk(){
 function mushayTalk(){
   const en=S.gloss==='en';
   if(S.flags.w_mushd)return say([L('Papay','Kümey mushay! Ka antü ka dewmayan.','¡Qué rico el mushay! Otro día haré más.','The mushay was so good! Another day I will make more.')]);
-  if(S.items.kulon>=2)return choose(L('Papay','Epu külon nieymi! Dewmayan mushay. Eluen?','¡Tienes dos külon! Haré mushay. ¿Me los das?','You have two külon! I will make mushay. Will you give them to me?'),
+  if(S.items.kulon>=2)return choose(L('Papay','Epu külon nieymi! Dewmayan mushay. Eluafen?','¡Tienes dos külon! Haré mushay. ¿Me los das?','You have two külon! I will make mushay. Will you give them to me?'),
     [{m:'May, eluayu!',g:en?'Yes, here you are':'Sí, aquí tiene',v:1},{m:'Petu no',g:en?'Not yet':'Todavía no',v:0}],v=>{
       if(!v)return;
       S.items.kulon-=2;S.flags.w_mushd=1;S.gold+=30;S.hp=maxHP();persist();sfx('lvl');
@@ -692,7 +692,7 @@ function trutfeTalk(){
 }
 function kurantuTalk(){
   const en=S.gloss==='en';
-  if(S.flags.w_kur)return say([L('Kurantufe','Ka antü ka dewmayan kurantu. Küpatuaymi!','Otro día haré otro kurantu. ¡Vuelve!','Another day I will make another kurantu. Come back!')]);
+  if(S.flags.w_kur)return say([L('Kurantufe','Ka antü ka dewmayan kurantu. Wiñotuaymi!','Otro día haré otro kurantu. ¡Vuelve!','Another day I will make another kurantu. Come back!')]);
   if(S.items.diwen>=2&&S.items.kofke>=1){
     return choose(L('Kurantufe','Epu diweñ ka kiñe kofke nieymi! Dewmayu kurantu?','¡Tienes dos diweñes y un kofke! ¿Hacemos el kurantu?','You have two diweñ and a kofke! Shall we make the kurantu?'),
       [{m:'May!',g:en?'Yes! (hand over the food)':'¡Sí! (entregar la comida)',v:1},{m:'Petu no',g:en?'Not yet':'Todavía no',v:0}],v=>{
@@ -1030,12 +1030,12 @@ function checheTalk(){
   if(!S.flags.cheche){S.flags.cheche=1;S.gold+=30;persist();sfx('pick');
     return say([L('Cheche','Mari mari, '+nm()+'! Iñche tami cheche.','¡Hola, '+nm()+'! Soy tu cheche.','Hello, '+nm()+'! I am your cheche.'),
       N('Tu cheche es el papá de tu mamá. Vive aquí en el sur, junto al lago, donde nació.','Your cheche is your mother\'s father. He lives here in the south, by the lake, where he was born.'),
-      L('Cheche','Kimimi tami pu che?','¿Conoces a tu familia?','Do you know your family?'),
+      L('Cheche','Kimniefimi tami pu che?','¿Conoces a tu familia?','Do you know your family?'),
       N('Por el lado de tu papá están tu kuku y tu laku; por el lado de tu mamá, tu chuchu y tu cheche. Ya conociste a los cuatro. Tu chillka lo tiene en «Pu che».','On your father\'s side are your kuku and your laku; on your mother\'s side, your chuchu and your cheche. Now you have met all four. Your chillka has it under «Pu che».'),
       N('Tu cheche te regala küla mari (30) ngülliw.','Your cheche gives you küla mari (30) ngülliw.'),
       L('Cheche','Lonko mew amunge. Kütral mew inaltuley.','Ve donde el lonko. Está junto al kütral.','Go to the lonko. He is by the fire.')]);}
   const ls=[L('Cheche','Mari mari, '+nm()+'!','¡Hola, '+nm()+'!','Hello, '+nm()+'!')];
-  if(S.flags.ngen4)ls.push(L('Cheche','Ngen-kürüf nepey! Ayüwün.','¡Ngen-kürüf despertó! Estoy feliz.','Ngen-kürüf has woken up! I am happy.'));
+  if(S.flags.ngen4)ls.push(L('Cheche','Ngen-kürüf nepey! Ayüwkülen.','¡Ngen-kürüf despertó! Estoy feliz.','Ngen-kürüf has woken up! I am happy.'));
   else ls.push(N('Los acantilados donde se esconde el Kaleuche quedan al este, pasando el bosque de alerces y la costa.','The cliffs where the Kaleuche hides lie to the east, past the alerce forest and the coast.'));
   say(ls);
 }
@@ -1050,7 +1050,7 @@ function wLonkoTalk(){
     if(S.flags.ngen4)ls.push(L('Lonko','Ngen-kürüf nepey. Chaltu may!','Ngen-kürüf despertó. ¡Gracias!','Ngen-kürüf has woken up. Thank you!'),
       N('Ya llevas cuatro trariwe trokiñ. El último está en Puelmapu, al otro lado de la cordillera.','You now carry four trariwe trokiñ. The last one is in Puelmapu, on the other side of the mountains.'),
       N('El camino: vuelve al lof pewenche y sigue al este por Pewen mapu y Pire mapu; en los campos de nieve sube al norte hasta Wente degiñ, el paso, y baja al este por el Puel rüpü hasta el lof puelche.','The way: return to the Pewenche lof and keep east through Pewen mapu and Pire mapu; from the snowfields climb north to Wente degiñ, the pass, and descend east along the Puel rüpü to the Puelche lof.'));
-    else ls.push(L('Lonko','Lafken inaltu mew amunge.','Ve a los acantilados de la costa.','Go to the cliffs by the sea.'),N('Pasando el bosque de alerces y la costa están los acantilados. La cueva del Kaleuche está bajando por las rocas.','Past the alerce forest and the coast are the cliffs. The Kaleuche\'s cave is down among the rocks.'));
+    else ls.push(L('Lonko','Inaltu lafken amunge.','Ve a los acantilados de la costa.','Go to the cliffs by the sea.'),N('Pasando el bosque de alerces y la costa están los acantilados. La cueva del Kaleuche está bajando por las rocas.','Past the alerce forest and the coast are the cliffs. The Kaleuche\'s cave is down among the rocks.'));
     return say(ls);
   }
   const steps=[
@@ -1074,7 +1074,7 @@ function wLonkoTalk(){
       N('Sin viento, la niebla no se va. Dentro de ella navega el Kaleuche, un barco de kalku que se lleva a la gente. Desde entonces la niebla cubre el sur y la gente habla cada vez menos.','Without wind, the fog does not leave. Inside it sails the Kaleuche, a kalku ship that carries people away. Since then the fog covers the south and people speak less and less.'),
       L('Lonko','Lef- kimeltueyu.','Te enseño lef- ("correr").','I teach you lef- ("run").'),
       N('Con lefnge, lefmu o lefmün, los wekufü que ya están débiles (la mitad de su fuerza o menos) salen corriendo y no vuelven. Recibiste lef- y un külon.','With lefnge, lefmu or lefmün, wekufü that are already weak (half their strength or less) run off and do not come back. You received lef- and a külon.'),
-      L('Lonko','Lafken inaltu mew amunge, '+nm()+'.','Ve a los acantilados, '+nm()+'.','Go to the cliffs, '+nm()+'.')]);
+      L('Lonko','Inaltu lafken amunge, '+nm()+'.','Ve a los acantilados, '+nm()+'.','Go to the cliffs, '+nm()+'.')]);
   }
 }
 function wNutramTalk(){
@@ -1104,7 +1104,7 @@ function timeTalk(){
       if(trk('pasado y futuro',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Challwafe','Fey no...','Eso no...','Not that...'),N('Piensa: ¿ya pasó, o todavía no?','Think: has it already happened, or not yet?')],()=>ask(0))}},false,false)}
 }
 function kona4Talk(){
-  if(S.flags.ngen4)return say([L('Kona','Kaleuche ngelay! Ayüwün!','¡Ya no está el Kaleuche! ¡Qué feliz estoy!','The Kaleuche is gone! I am so happy!')]);
+  if(S.flags.ngen4)return say([L('Kona','Amutuy Kaleuche! Ayüwkülen!','¡Se fue el Kaleuche! ¡Qué feliz estoy!','The Kaleuche has gone! I am so happy!')]);
   say([L('Kona','Kaleuche müley lafken mew! Pun mew pengekey.','¡El Kaleuche está en el mar! De noche se ve.','The Kaleuche is at sea! At night it can be seen.'),
     N('La cueva baja por las rocas, aquí al lado. Dicen que adentro hay braseros de colores y una piedra que habla de lo que no pasará.','The cave goes down through the rocks, right here. They say inside there are colored braziers and a stone that talks about what will not happen.')]);
 }

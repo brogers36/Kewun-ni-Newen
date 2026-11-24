@@ -507,3 +507,6 @@ Brandon terminó las pestañas 0 Apertura, 1 Lafkenche y 2 Nagche de docs/Kewun_
 ### Revisión en la planilla (Nov 24): pestaña 3 Pewenche
 45 OK y 18 Corregir. Se aplicaron las 18 correcciones y las de las filas #21 y #52 (marcadas OK, pero con corrección). El arriero ahora dice **"Kawellutulen"** (también en su burbuja), y sus preguntas de -ke- quedaron así: "Pu pewenche ngülliw___" → **tuyngün** (distractores iyngün, ikey) y "Eymi kawellu___" → **tukeymi** (distractores amuymi, amuken). Como su saludo ya no trae *amuken*, la explicación dice ahora solo que -ke- marca lo que alguien hace por costumbre.
 - (Nov 24) Brandon: la respuesta de la primera pregunta es **tukeyngün** (no *tuyngün*).
+
+### Revisión en la planilla (Nov 24): pestaña 4 Williche
+41 OK y 15 Corregir; las 15 correcciones aplicadas (la del Kaleuche ya estaba). El konew de la lengua ahora tiene por respuesta **kewün** (glosa «la lengua»); en el konew de la sal, *challwa* se glosa «pez, pescado» (tu nota). "Kimniefimi tami pu che?" se cambió también en la piedra de la familia (kin), que repetía la frase. El lonko williche dice "Inaltu lafken amunge, [nombre]." (se mantuvo el nombre, como con Amupunge).

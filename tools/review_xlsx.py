@@ -8,7 +8,7 @@ What is collected:
   - the answer options of the quizzes (o:[...]), with the correct one marked ✓
   - the battle imperatives the game builds (root + -kil- + -nge/-mu/-mün), and the vocabulary tables
 Code inside a line is shown as a placeholder: [nombre] for the player, peñi/lamngen for addr(), {code} otherwise."""
-import re, os, json, subprocess
+import sys, re, os, json, subprocess
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.worksheet.datavalidation import DataValidation
@@ -146,7 +146,7 @@ STAGES = [('0 Apertura', 'La escena inicial, la kuku, el camino al lof'),
           ('3 Pewenche', 'Tierra pewenche: pewen, nieve, Cherufe'),
           ('4 Williche', 'Tierra williche: el mar del sur, Kaleuche'),
           ('5 Puelmapu', 'Al otro lado de la cordillera: Walichu'),
-          ('6 Ngoyman y Chumpall', 'El gran olvido, el reino de Chumpall, el final'),
+          ('6 Ngoyman y Chumpall', 'El gran olvido, el reino de Chumpall, el final, Upewtuwün mapu (el nivel secreto)'),
           ('7 Santiago', 'La waria: plaza, feria, radio, Metro, blocks, los tres guardianes'),
           ('8 Trawün y nütram', 'Lecciones de gramática (trawün) y conversaciones (nütram)'),
           ('9 Piedras y tablillas', 'Las piedras que preguntan, las tablillas de lectura, las preguntas de la machi'),
@@ -190,6 +190,12 @@ for n, body in sblocks:
     if len(regs) == 1: BUCKET[REG_NAMES[list(regs)[0]]] += scan(body, n)
     else: BUCKET['11 Menús y aprendizaje'] += scan(body, n)
 BUCKET['0 Apertura'] = scan(FILES['cutlogic.js'], 'cutlogic') + BUCKET['0 Apertura']
+# the side quests of kompa.js (Nico, Seba, Carmen, Nacho) go to the land where each one lives; the secret level goes with the finale
+if 'kompa.js' in FILES:
+    for n, body in blocks(FILES['kompa.js'], r"^(?:function |const |MAPS\.)([A-Za-z_0-9]+)"):
+        tab = '1 Lafkenche' if n.startswith('nico') else '2 Nagche' if n.startswith('seba') else '4 Williche' if n.startswith('carmen') or n == 'CARMEN' else '7 Santiago' if n.startswith('nacho') else None
+        if tab: BUCKET[tab] += scan(body, n)
+if 'ngoyun.js' in FILES: BUCKET['6 Ngoyman y Chumpall'] += scan(FILES['ngoyun.js'], 'upewtuwün (nivel secreto)')
 BUCKET['10 Batalla'] += scan(FILES['battle.js'], 'battle')
 for f in ('learn.js', 'pause.js', 'ui.js', 'maplogic.js', 'mapstate.js', 'boot.js', 'weather.js', 'cutart.js'):
     if f in FILES: BUCKET['11 Menús y aprendizaje'] += scan(FILES[f], f.replace('.js', ''))
@@ -241,6 +247,46 @@ for name, desc in STAGES:
         seen.add(k); out.append((who, mm, es, ctx))
     FINAL.append((name, desc, out))
 
+# ---------------------------------------------------------------- carry over a previous review: python3 tools/review_xlsx.py PREVIOUS.xlsx
+# A row keeps its OK when its Mapudungun is unchanged; a line rewritten from a correction is marked OK with a note
+# saying what it was; a line that was not in the previous book is marked as new. Unmarked rows stay unmarked.
+import difflib
+MARKS = {}
+def _k(t): return re.sub(r'[^a-zñüäëïöáéíóú\[\]]+', ' ', str(t or '').lower()).strip()
+if len(sys.argv) > 1:
+    from openpyxl import load_workbook
+    old = load_workbook(sys.argv[1]); prev = {}; corr = []; done_tabs = set()
+    for ws in old.worksheets[1:]:
+        rows = [r for r in ws.iter_rows(min_row=5, values_only=True) if r[0] is not None]
+        reviewed = any((r[5] or '').strip() for r in rows) or ws.title.startswith('0 ')   # tab 0 came back with nothing to correct
+        if reviewed: done_tabs.add(ws.title)
+        for r in rows:
+            st, fix, note = (r[5] or '').strip(), (r[6] or ''), (r[7] or '')
+            for key in ((_k(r[2]), _k(r[3])), _k(r[2])):        # by line and gloss, and by line alone; a reviewed tab wins over an unreviewed one
+                if key not in prev or (reviewed and not prev[key][4]): prev[key] = (st, fix, note, ws.title, reviewed)
+            if fix: corr.append((_k(fix), r[2], ws.title))
+    for name, desc, rows in FINAL:
+        for who, mm, es, ctx in rows:
+            k = _k(mm); kk = (k, _k(es))
+            if kk in prev: k = kk
+            if str(mm).startswith('Feypienew fentreke che'): MARKS[(name, mm)] = ('OK', '', 'Tu línea; va sin traducción a propósito.'); continue
+            if k in prev:
+                st, fix, note, tab, reviewed = prev[k]
+                if reviewed and not fix: MARKS[(name, mm)] = ('OK', '', note); continue
+                if reviewed and fix: MARKS[(name, mm)] = ('', '', 'Tu corrección todavía no está aplicada aquí: ' + str(fix)); continue
+                MARKS[(name, mm)] = ('', '', note); continue
+            k = _k(mm); kn = k.replace('[nombre]', '').strip(' ')
+            hit = next((c for c in corr if len(c[0]) >= 6 and c[0] in k), None)
+            if hit and kn != k and hit[0] not in kn.replace(' ', ''):
+                pass
+            if hit and '[nombre]' in k and _k(hit[0]) != k:
+                MARKS[(name, mm)] = ('', '', 'Tu corrección «' + str(hit[0]) + '», pero se mantuvo el nombre del personaje: revisa. Antes: ' + str(hit[1])); continue
+            if hit:
+                MARKS[(name, mm)] = ('OK', '', 'Corregido (24 nov), con tu forma «' + str(hit[0]) + '». Antes: ' + str(hit[1])); continue
+            best = max(corr, key=lambda c: difflib.SequenceMatcher(None, k, c[0]).ratio(), default=None)
+            if best and difflib.SequenceMatcher(None, k, best[0]).ratio() >= .86:
+                MARKS[(name, mm)] = ('OK', '', 'Corregido (24 nov). Antes: ' + str(best[1])); continue
+            MARKS[(name, mm)] = ('', '', 'Nuevo desde la versión anterior.')
 # ---------------------------------------------------------------- the workbook (same layout as Petu Mongeleiñ)
 HDR = ['#', 'Hablante', 'Mapudungun', 'Glosa (castellano)', 'Contexto', 'Estado', 'Corrección', 'Nota']
 thin = Side(style='thin', color='BBBBBB'); BD = Border(left=thin, right=thin, top=thin, bottom=thin)
@@ -254,7 +300,8 @@ def sheet(wb, name, desc, rows):
         c.alignment = Alignment(vertical='center', wrap_text=True); c.border = BD
     for i, (who, mm, es, ctx) in enumerate(rows, 1):
         r = 4 + i
-        for j, v in enumerate([i, who, mm, es, ctx, '', '', ''], 1):
+        st, fx, nt = MARKS.get((name, mm), ('', '', ''))
+        for j, v in enumerate([i, who, mm, es, ctx, st, fx, nt], 1):
             c = ws.cell(row=r, column=j, value=v); c.font = Font(name='Arial', size=10); c.alignment = Alignment(wrap_text=True, vertical='top'); c.border = BD
         for j in (6, 7, 8): ws.cell(row=r, column=j).fill = PatternFill('solid', fgColor='FFFFE0')
     n = len(rows)

@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='31038c7-202611240943';
+window.KEWUN_BUILD='890a0e1-202611240951';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -2143,7 +2143,7 @@ w_lof:{region:'williche',name:'Williche lof',g:{es:'La comunidad del lago',en:'T
    {id:'rewe_wil',kind:'npc',look:'rewe',x:21,y:5,fixed:1,talk:()=>reweTalk()},
    {id:'wnutram',kind:'npc',look:'elder2',fem:1,x:16,y:8,dir:'up',fixed:1,act:'teach',talk:()=>wNutramTalk(),bub:['Kuyfi...','Kaleuche...']},
    {id:'wk1',kind:'npc',look:'child',x:15,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichiche','Kaleuche pewmafiñ!','¡Soñé con el Kaleuche!','I dreamed about the Kaleuche!')]),bub:['Kaleuche!']},
-   {id:'wk2',kind:'npc',look:'childf',fem:1,x:17,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([[L('Pichi domo','Mawün ayüfiñ!','¡Me gusta la lluvia!','I love the rain!')],[L('Pichi domo','Trayen mew amuan!','¡Voy a ir a la cascada!','I am going to the waterfall!')]][rot('wk2',2)]),bub:['Mawün!']},
+   {id:'wk2',kind:'npc',look:'childf',fem:1,x:17,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([[L('Pichi domo','Mawün ayükefiñ!','¡Me gusta la lluvia!','I love the rain!')],[L('Pichi domo','Trayenko mew amumean!','¡Voy a ir a la cascada!','I am going to the waterfall!')]][rot('wk2',2)]),bub:['Mawün!']},
    {id:'wweav',kind:'npc',look:'weaver',fem:1,x:7,y:4,dir:'up',act:'weave',fixed:1,talk:()=>say([L('Domo','Makuñ ngürekalen. Mawünley ka wütreley!','Estoy tejiendo un makuñ. ¡Está lloviendo y hace frío!','I am weaving a makuñ. It is raining and it is cold!')]),bub:['Ngürekalen.']},
    {id:'wcook',kind:'npc',look:'cook',fem:1,x:24,y:8,dir:'up',act:'weave',fixed:1,talk:()=>say([L('Domo','Challwa ka poñü dewmalen.','Estoy preparando pescado y papas.','I am cooking fish and potatoes.')]),bub:['Challwa!','Poñü!']},
    {id:'wfish',kind:'npc',look:'fisher',x:15,y:11,dir:'down',fixed:1,talk:()=>wFisherTalk(),bub:['Challwatulen.']},
@@ -2181,7 +2181,7 @@ wd1:{region:'williche',name:'Kaleuche ñi lolo · 1',g:{es:'La cueva del Kaleuch
  edges:{right:{to:'w_inaltu',x:24,y:6}},stairs:{to:'wd2',x:22,y:2},
  chests:{'3,8':'piwke','20,8':'lawen1'},konew:{'14,8':K9},
  pz:{kind:'J',tiles:{'2,2':{lab:'karü',col:'#30c040',i:0},'4,2':{lab:'chod',col:'#f0d020',i:1},'2,4':{lab:'kurü',col:'#303030',i:2}}},
- signs:{'5,4':[L('Kura','Karü, chod, kurü.','Una piedra tallada: «verde, amarillo, negro». Tres braseros esperan su fuego.','A carved stone: «green, yellow, black». Three braziers wait for their fire.')]},
+ signs:{'5,4':[L('Kura','Kiñe wirintungechi kura pi: «Karü, chod, kurü». Müley tami lüpümafiel küla frasero.','Una piedra tallada: «verde, amarillo, negro». Tres braseros esperan su fuego.','A carved stone: «green, yellow, black». Three braziers wait for their fire.')]},
  ents:[{kind:'enemy',x:19,y:2,party:['kowek','kowek']},{kind:'enemy',x:9,y:8,party:['kowek','mawek']},{kind:'enemy',x:12,y:2,party:['mawek']},
    {id:'wmini1',kind:'enemy',x:16,y:9,party:['kamawetu','kowek'],fixed:1,mini:1,flag:'wmini1',
      pre:[N('Un ternero de pelaje dorado, con un solo cuerno brillante en la frente, sale del agua: el kamawetu.','A golden-haired calf with a single shining horn on its forehead comes out of the water: the kamawetu.')]}]},
@@ -2207,12 +2207,12 @@ ngen4:{region:'williche',ngenmap:1,name:'Ngen-kürüf',g:{es:'El muelle en la ni
 /* ---------- PUELMAPU ---------- */
 const K15={q:L('Konew','Müpükelay, welu lefkey; fütrake namun niey. Chem am ta tatey?','No vuela, pero corre; tiene patas grandes. ¿Qué será?','It does not fly, but it runs; it has big legs. What could it be?'),
   opts:[{m:'choyke',es:'ñandú',en:'rhea',ok:1},{m:'luan',es:'guanaco',en:'guanaco'},{m:'mañke',es:'cóndor',en:'condor'},{m:'trewa',es:'perro',en:'dog'}]};
-const K16={reward:'piwke',q:L('Konew','Antü amuy, fey akuy; kom takukefi, welu küdawkelay. Chem am ta tatey?','Se va el sol, y él llega; todo lo cubre, pero no trabaja. ¿Qué será?','The sun leaves, and it arrives; it covers everything, but it does no work. What could it be?'),
+const K16={reward:'piwke',q:L('Konew','Antü amukey, wüla fey akukey; kom takukefi, welu küdawkelay. Chem am ta tatey?','Se va el sol, y después él llega; todo lo cubre, pero no trabaja. ¿Qué será?','The sun leaves, and it arrives; it covers everything, but it does no work. What could it be?'),
   opts:[{m:'pun',es:'noche',en:'night',ok:1},{m:'antü',es:'sol',en:'sun'},{m:'küyen',es:'luna',en:'moon'},{m:'tromü',es:'nube',en:'cloud'}]};
-const K18={reward:'piwke',q:L('Konew','Pekelafiyiñ, nükelafiyiñ, welu kom nentukey newen. Ngoyman ñi kayñe. Chem am ta tatey?','No se ve, no se agarra, pero de ella sale todo el newen. Es la enemiga del olvido. ¿Qué será?','It cannot be seen, it cannot be held, yet all newen comes from it. It is the enemy of forgetting. What could it be?'),
-  opts:[{m:'dungun',es:'la palabra, el habla',en:'the word, speech',ok:1},{m:'kütral',es:'fuego',en:'fire'},{m:'ko',es:'agua',en:'water'},{m:'kura',es:'piedra',en:'stone'}]};
-const K17={reward:'piwke',q:L('Konew','Lafken mew mülekey; ko amutuy, fey mülewey. Lig ngey. Chem am ta tatey?','Vive en el mar; el agua se va, y él se queda. Es blanco. ¿Qué será?','It lives in the sea; the water leaves, and it stays. It is white. What could it be?'),
-  opts:[{m:'chadi',es:'sal',en:'salt',ok:1},{m:'pire',es:'nieve',en:'snow'},{m:'kuyum',es:'arena',en:'sand'},{m:'challwa',es:'pescado',en:'fish'}]};
+const K18={reward:'piwke',q:L('Konew','Pengekelafiyiñ, nükengelafiyiñ, welu kom nentukey newen. Ngoyman ñi kayñe. Chem am ta tatey?','No se ve, no se agarra, pero de ella sale todo el newen. Es la enemiga del olvido. ¿Qué será?','It cannot be seen, it cannot be held, yet all newen comes from it. It is the enemy of forgetting. What could it be?'),
+  opts:[{m:'kewün',es:'la lengua',en:'language, the tongue',ok:1},{m:'kütral',es:'fuego',en:'fire'},{m:'ko',es:'agua',en:'water'},{m:'kura',es:'piedra',en:'stone'}]};
+const K17={reward:'piwke',q:L('Konew','Lafken mew mülekey; ko amutukey, fey mülekakey. Lig ngey. Chem am ta tatey?','Vive en el mar; el agua se va, y él se queda. Es blanco. ¿Qué será?','It lives in the sea; the water leaves, and it stays. It is white. What could it be?'),
+  opts:[{m:'chadi',es:'sal',en:'salt',ok:1},{m:'pire',es:'nieve',en:'snow'},{m:'kuyum',es:'arena',en:'sand'},{m:'challwa',es:'pez, pescado',en:'fish'}]};
 Object.assign(MAPS,{
 e_rupu:{region:'puelmapu',name:'Puel rüpü',g:{es:'La bajada al este de la cordillera',en:'The way down the east side of the mountains'},floor:',',bg:'pampa',song:'puel',pal:'puelmapu',trees:'chacay',
  edges:{left:{to:'p_degin',x:30,y:9},right:{to:'e_lof',x:1,y:9}},chests:{'29,2':'puelgift'},digs:{'12,9':{}},
@@ -3392,7 +3392,7 @@ const STONES={
     qs:[{q:L('Kura','___ ruka','Mi casa.','My house.'),o:['tami','ñi','tañi'],a:'tañi'},
         {q:L('Kura','___ kawellu','Tu caballo.','Your horse.'),o:['tañi','tami','ñi'],a:'tami'},
         {q:L('Kura','___ trewa','Su perro (de él o de ella).','His / her dog.'),o:['ñi','tañi','tami'],a:'ñi'}],hq:{q:L('Kura','___ ruka','Nuestra casa (de muchos).','Our house (of many).'),o:['tañi','tayiñ','tami'],a:'tayiñ'}},
-  kin:{intro:[L('Kura','Mari mari! Kimimi tami pu che?','¡Hola! ¿Conoces a tu familia?','Hello! Do you know your family?'),N('Di quién es cada uno y te abro el paso.','Say who each one is and I will open the way.')],
+  kin:{intro:[L('Kura','Mari mari! Kimniefimi tami pu che?','¡Hola! ¿Conoces a tu familia?','Hello! Do you know your family?'),N('Di quién es cada uno y te abro el paso.','Say who each one is and I will open the way.')],
     qs:[{q:L('Kura','Tañi chaw ñi ñuke: ___','La mamá de mi papá.','My father\'s mother.'),o:['chuchu','kuku','laku'],a:'kuku'},
         {q:L('Kura','Tañi ñuke ñi ñuke: ___','La mamá de mi mamá.','My mother\'s mother.'),o:['kuku','cheche','chuchu'],a:'chuchu'},
         {q:L('Kura','Tañi chaw ñi chaw: ___','El papá de mi papá.','My father\'s father.'),o:['laku','cheche','kuku'],a:'laku'},
@@ -3753,7 +3753,7 @@ function pewKidsTalk(){
 function mushayTalk(){
   const en=S.gloss==='en';
   if(S.flags.w_mushd)return say([L('Papay','Kümey mushay! Ka antü ka dewmayan.','¡Qué rico el mushay! Otro día haré más.','The mushay was so good! Another day I will make more.')]);
-  if(S.items.kulon>=2)return choose(L('Papay','Epu külon nieymi! Dewmayan mushay. Eluen?','¡Tienes dos külon! Haré mushay. ¿Me los das?','You have two külon! I will make mushay. Will you give them to me?'),
+  if(S.items.kulon>=2)return choose(L('Papay','Epu külon nieymi! Dewmayan mushay. Eluafen?','¡Tienes dos külon! Haré mushay. ¿Me los das?','You have two külon! I will make mushay. Will you give them to me?'),
     [{m:'May, eluayu!',g:en?'Yes, here you are':'Sí, aquí tiene',v:1},{m:'Petu no',g:en?'Not yet':'Todavía no',v:0}],v=>{
       if(!v)return;
       S.items.kulon-=2;S.flags.w_mushd=1;S.gold+=30;S.hp=maxHP();persist();sfx('lvl');
@@ -3822,7 +3822,7 @@ function trutfeTalk(){
 }
 function kurantuTalk(){
   const en=S.gloss==='en';
-  if(S.flags.w_kur)return say([L('Kurantufe','Ka antü ka dewmayan kurantu. Küpatuaymi!','Otro día haré otro kurantu. ¡Vuelve!','Another day I will make another kurantu. Come back!')]);
+  if(S.flags.w_kur)return say([L('Kurantufe','Ka antü ka dewmayan kurantu. Wiñotuaymi!','Otro día haré otro kurantu. ¡Vuelve!','Another day I will make another kurantu. Come back!')]);
   if(S.items.diwen>=2&&S.items.kofke>=1){
     return choose(L('Kurantufe','Epu diweñ ka kiñe kofke nieymi! Dewmayu kurantu?','¡Tienes dos diweñes y un kofke! ¿Hacemos el kurantu?','You have two diweñ and a kofke! Shall we make the kurantu?'),
       [{m:'May!',g:en?'Yes! (hand over the food)':'¡Sí! (entregar la comida)',v:1},{m:'Petu no',g:en?'Not yet':'Todavía no',v:0}],v=>{
@@ -4160,12 +4160,12 @@ function checheTalk(){
   if(!S.flags.cheche){S.flags.cheche=1;S.gold+=30;persist();sfx('pick');
     return say([L('Cheche','Mari mari, '+nm()+'! Iñche tami cheche.','¡Hola, '+nm()+'! Soy tu cheche.','Hello, '+nm()+'! I am your cheche.'),
       N('Tu cheche es el papá de tu mamá. Vive aquí en el sur, junto al lago, donde nació.','Your cheche is your mother\'s father. He lives here in the south, by the lake, where he was born.'),
-      L('Cheche','Kimimi tami pu che?','¿Conoces a tu familia?','Do you know your family?'),
+      L('Cheche','Kimniefimi tami pu che?','¿Conoces a tu familia?','Do you know your family?'),
       N('Por el lado de tu papá están tu kuku y tu laku; por el lado de tu mamá, tu chuchu y tu cheche. Ya conociste a los cuatro. Tu chillka lo tiene en «Pu che».','On your father\'s side are your kuku and your laku; on your mother\'s side, your chuchu and your cheche. Now you have met all four. Your chillka has it under «Pu che».'),
       N('Tu cheche te regala küla mari (30) ngülliw.','Your cheche gives you küla mari (30) ngülliw.'),
       L('Cheche','Lonko mew amunge. Kütral mew inaltuley.','Ve donde el lonko. Está junto al kütral.','Go to the lonko. He is by the fire.')]);}
   const ls=[L('Cheche','Mari mari, '+nm()+'!','¡Hola, '+nm()+'!','Hello, '+nm()+'!')];
-  if(S.flags.ngen4)ls.push(L('Cheche','Ngen-kürüf nepey! Ayüwün.','¡Ngen-kürüf despertó! Estoy feliz.','Ngen-kürüf has woken up! I am happy.'));
+  if(S.flags.ngen4)ls.push(L('Cheche','Ngen-kürüf nepey! Ayüwkülen.','¡Ngen-kürüf despertó! Estoy feliz.','Ngen-kürüf has woken up! I am happy.'));
   else ls.push(N('Los acantilados donde se esconde el Kaleuche quedan al este, pasando el bosque de alerces y la costa.','The cliffs where the Kaleuche hides lie to the east, past the alerce forest and the coast.'));
   say(ls);
 }
@@ -4180,7 +4180,7 @@ function wLonkoTalk(){
     if(S.flags.ngen4)ls.push(L('Lonko','Ngen-kürüf nepey. Chaltu may!','Ngen-kürüf despertó. ¡Gracias!','Ngen-kürüf has woken up. Thank you!'),
       N('Ya llevas cuatro trariwe trokiñ. El último está en Puelmapu, al otro lado de la cordillera.','You now carry four trariwe trokiñ. The last one is in Puelmapu, on the other side of the mountains.'),
       N('El camino: vuelve al lof pewenche y sigue al este por Pewen mapu y Pire mapu; en los campos de nieve sube al norte hasta Wente degiñ, el paso, y baja al este por el Puel rüpü hasta el lof puelche.','The way: return to the Pewenche lof and keep east through Pewen mapu and Pire mapu; from the snowfields climb north to Wente degiñ, the pass, and descend east along the Puel rüpü to the Puelche lof.'));
-    else ls.push(L('Lonko','Lafken inaltu mew amunge.','Ve a los acantilados de la costa.','Go to the cliffs by the sea.'),N('Pasando el bosque de alerces y la costa están los acantilados. La cueva del Kaleuche está bajando por las rocas.','Past the alerce forest and the coast are the cliffs. The Kaleuche\'s cave is down among the rocks.'));
+    else ls.push(L('Lonko','Inaltu lafken amunge.','Ve a los acantilados de la costa.','Go to the cliffs by the sea.'),N('Pasando el bosque de alerces y la costa están los acantilados. La cueva del Kaleuche está bajando por las rocas.','Past the alerce forest and the coast are the cliffs. The Kaleuche\'s cave is down among the rocks.'));
     return say(ls);
   }
   const steps=[
@@ -4204,7 +4204,7 @@ function wLonkoTalk(){
       N('Sin viento, la niebla no se va. Dentro de ella navega el Kaleuche, un barco de kalku que se lleva a la gente. Desde entonces la niebla cubre el sur y la gente habla cada vez menos.','Without wind, the fog does not leave. Inside it sails the Kaleuche, a kalku ship that carries people away. Since then the fog covers the south and people speak less and less.'),
       L('Lonko','Lef- kimeltueyu.','Te enseño lef- ("correr").','I teach you lef- ("run").'),
       N('Con lefnge, lefmu o lefmün, los wekufü que ya están débiles (la mitad de su fuerza o menos) salen corriendo y no vuelven. Recibiste lef- y un külon.','With lefnge, lefmu or lefmün, wekufü that are already weak (half their strength or less) run off and do not come back. You received lef- and a külon.'),
-      L('Lonko','Lafken inaltu mew amunge, '+nm()+'.','Ve a los acantilados, '+nm()+'.','Go to the cliffs, '+nm()+'.')]);
+      L('Lonko','Inaltu lafken amunge, '+nm()+'.','Ve a los acantilados, '+nm()+'.','Go to the cliffs, '+nm()+'.')]);
   }
 }
 function wNutramTalk(){
@@ -4234,7 +4234,7 @@ function timeTalk(){
       if(trk('pasado y futuro',v,q)){sfx('ok');ask(i+1)}else{sfx('bad');say([L('Challwafe','Fey no...','Eso no...','Not that...'),N('Piensa: ¿ya pasó, o todavía no?','Think: has it already happened, or not yet?')],()=>ask(0))}},false,false)}
 }
 function kona4Talk(){
-  if(S.flags.ngen4)return say([L('Kona','Kaleuche ngelay! Ayüwün!','¡Ya no está el Kaleuche! ¡Qué feliz estoy!','The Kaleuche is gone! I am so happy!')]);
+  if(S.flags.ngen4)return say([L('Kona','Amutuy Kaleuche! Ayüwkülen!','¡Se fue el Kaleuche! ¡Qué feliz estoy!','The Kaleuche has gone! I am so happy!')]);
   say([L('Kona','Kaleuche müley lafken mew! Pun mew pengekey.','¡El Kaleuche está en el mar! De noche se ve.','The Kaleuche is at sea! At night it can be seen.'),
     N('La cueva baja por las rocas, aquí al lado. Dicen que adentro hay braseros de colores y una piedra que habla de lo que no pasará.','The cave goes down through the rocks, right here. They say inside there are colored braziers and a stone that talks about what will not happen.')]);
 }
@@ -7033,7 +7033,6 @@ MAPS.n_lof.ents.push({id:'seba',kind:'npc',look:'seba',x:16,y:10,dir:'down',fixe
 MAPS.n_lof.ents.push({id:'sebadog2',kind:'npc',look:'dog',x:17,y:10,dir:'left',req:'seba_dog',talk:()=>say([L('','Kiltro','El perro de Seba mueve la cola. No se le despega.','Seba\'s dog wags its tail. It will not leave his side.')])});
 MAPS.n_kullin.ents.push({id:'sebadog',kind:'npc',look:'dog',x:26,y:5,dir:'left',req:'seba_q',flag:'seba_dog',talk:()=>sebaDog()});
 MAPS.s_plaza.ents.push({id:'nacho',kind:'npc',look:'nacho',x:26,y:13,dir:'up',fixed:1,talk:()=>nachoTalk(),bub:['¿Cómo se dice...?','Mari mari...']});
-const KQ=(o,a,es,en,hint)=>({q:N(es,en),o,a,hint});
 
 /* ---------- Nico: introducing himself to the lonko ---------- */
 function nicoTalk(){const en=S.gloss==='en';
@@ -7042,12 +7041,9 @@ function nicoTalk(){const en=S.gloss==='en';
     choose(L('Nico','','¿Ensayan juntos?','Practise together?'),[{m:'May',g:en?'Yes, let us practise':'Sí, ensayemos',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{
       if(!v)return say([L('Nico','','«Ya, aquí te espero. Mari mari... mari mari...»','"OK, I\'ll wait here. Mari mari... mari mari..."')]);
       S.flags.nico_q=1;persist();
-      convo([KQ(['Mari mari, lonko.','Pewkayal, lonko.','Chaltu may, lonko.'],'Mari mari, lonko.','Primero, el saludo al llegar donde el lonko.','First, the greeting when he reaches the lonko.',
-          ['Pewkayal es para despedirse y chaltu may para dar las gracias. Al llegar se dice mari mari.','Pewkayal is for leaving and chaltu may is for thanking. On arriving you say mari mari.']),
-        KQ(['Iñche Nico pingen.','Eymi Nico pingeymi.','Fey Nico pingey.'],'Iñche Nico pingen.','Ahora su nombre: «Me llamo Nico».','Now his name: "My name is Nico".',
-          ['Habla de sí mismo: iñche ... pingen.','He is talking about himself: iñche ... pingen.']),
-        KQ(['Santiago tuwün.','Santiago pingen.','Santiago amuan.'],'Santiago tuwün.','Y de dónde viene: «Soy de Santiago».','And where he comes from: "I am from Santiago".',
-          ['tuwün dice de dónde vienes; pingen, cómo te llamas; amuan, adónde vas a ir.','tuwün says where you come from; pingen, what you are called; amuan, where you will go.'])],()=>{
+      convo([{q:N('Primero, el saludo al llegar donde el lonko.','First, the greeting when he reaches the lonko.'),o:['Mari mari, lonko.','Pewkayal, lonko.','Chaltu may, lonko.'],a:'Mari mari, lonko.',hint:['Pewkayal es para despedirse y chaltu may para dar las gracias. Al llegar se dice mari mari.','Pewkayal is for leaving and chaltu may is for thanking. On arriving you say mari mari.']},
+        {q:N('Ahora su nombre: «Me llamo Nico».','Now his name: "My name is Nico".'),o:['Iñche Nico pingen.','Eymi Nico pingeymi.','Fey Nico pingey.'],a:'Iñche Nico pingen.',hint:['Habla de sí mismo: iñche ... pingen.','He is talking about himself: iñche ... pingen.']},
+        {q:N('Y de dónde viene: «Soy de Santiago».','And where he comes from: "I am from Santiago".'),o:['Santiago tuwün.','Santiago pingen.','Santiago amuan.'],a:'Santiago tuwün.',hint:['tuwün dice de dónde vienes; pingen, cómo te llamas; amuan, adónde vas a ir.','tuwün says where you come from; pingen, what you are called; amuan, where you will go.']}],()=>{
         S.flags.nico_t=1;persist();sfx('lvl');ents=ents.filter(e=>e.id!=='nico');
         say([L('Nico','Mari mari, lonko. Iñche Nico pingen. Santiago tuwün.','Lo repite tres veces, cada vez más seguro.','He says it three times, more sure of himself each time.'),
           N('«¡Ya está! Me voy al lof antes de que se me olvide. Pasa a verme por allá.»','"That\'s it! I\'m off to the lof before I forget. Come and see me there."')])},'Nico (presentarse)')},true,true))}
@@ -7073,7 +7069,7 @@ function sebaTalk(){const en=S.gloss==='en';
       S.flags.seba_q=1;persist();say([L('Seba','','«¡Gracias! Está en los campos, al sur. Llámalo en mapudungun, que en castellano se hace el sordo.»','"Thanks! He\'s in the fields, to the south. Call him in Mapudungun; in Spanish he plays deaf."')])},true,true))}
 function sebaDog(){
   const q={m:'',es:'El perro de Seba te mira moviendo la cola, pero no se acerca. Llámalo.',en:'Seba\'s dog looks at you, wagging its tail, but does not come closer. Call him.'};
-  const o=['Küpange!','Küpamu!','Küpamün!','Amutunge!'],a='Küpange!';
+  const {o,a}={o:['Küpange!','Küpamu!','Küpamün!','Amutunge!'],a:'Küpange!'};
   const ask=()=>choose(q,o.slice().sort(()=>Math.random()-.5).map(x=>({m:x,v:x})),v=>{track('Seba (llamar al perro)',v===a,q,o,a);
     if(v===a){sfx('lvl');S.flags.seba_dog=1;persist();ents=ents.filter(e=>e.id!=='sebadog');
       return say([L(S.name,'Küpange!','¡Ven!','Come!'),N('El Kiltro para las orejas, ladra una vez y sale corriendo hacia el lof. Ya sabe volver solo.','Kiltro pricks up his ears, barks once and races off toward the lof. He knows his way back now.')])}
@@ -7089,10 +7085,10 @@ function nachoTalk(){const en=S.gloss==='en';
     N('«Tengo el celular listo. ¿Me dices qué decir?»','"I\'ve got my phone ready. Will you tell me what to say?"')],()=>
     choose(L('Nacho','','¿Lo ayudas con el audio?','Help him with the message?'),[{m:'May',g:en?'Yes, let us record it':'Sí, grabemos',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{
       if(!v)return say([L('Nacho','','«Ya, aquí sigo. ¿Cómo era... mari mari?»','"OK, I\'m still here. How did it go... mari mari?"')]);
-      convo([KQ(['Mari mari, chuchu!','Pewkayal, chuchu!','Chaltu may, chuchu!'],'Mari mari, chuchu!','Primero, saludarla.','First, greet her.',['Para saludar: mari mari.','To greet: mari mari.']),
-        KQ(['Chumleymi?','Kümelen.','Chew müleymi?'],'Chumleymi?','Después, preguntarle cómo está.','Then, ask her how she is.',['¿Cómo estás?: chumleymi. Kümelen es la respuesta.','How are you?: chumleymi. Kümelen is the answer.']),
-        KQ(['Chaltu may!','Mari mari!','Pewkayal!'],'Chaltu may!','Ahora, darle las gracias por las sopaipillas.','Now, thank her for the sopaipillas.',['Para agradecer: chaltu may.','To thank: chaltu may.']),
-        KQ(['Pewkayal!','Chaltu may!','Kümelen.'],'Pewkayal!','Y despedirse.','And say goodbye.',['Para despedirse: pewkayal.','To say goodbye: pewkayal.'])],()=>{
+      convo([{q:N('Primero, saludarla.','First, greet her.'),o:['Mari mari, chuchu!','Pewkayal, chuchu!','Chaltu may, chuchu!'],a:'Mari mari, chuchu!',hint:['Para saludar: mari mari.','To greet: mari mari.']},
+        {q:N('Después, preguntarle cómo está.','Then, ask her how she is.'),o:['Chumleymi?','Kümelen.','Chew müleymi?'],a:'Chumleymi?',hint:['¿Cómo estás?: chumleymi. Kümelen es la respuesta.','How are you?: chumleymi. Kümelen is the answer.']},
+        {q:N('Ahora, darle las gracias por las sopaipillas.','Now, thank her for the sopaipillas.'),o:['Chaltu may!','Mari mari!','Pewkayal!'],a:'Chaltu may!',hint:['Para agradecer: chaltu may.','To thank: chaltu may.']},
+        {q:N('Y despedirse.','And say goodbye.'),o:['Pewkayal!','Chaltu may!','Kümelen.'],a:'Pewkayal!',hint:['Para despedirse: pewkayal.','To say goodbye: pewkayal.']}],()=>{
         S.flags.nacho_d=1;S.gold+=60;persist();sfx('lvl');
         say([L('Nacho','Mari mari, chuchu! Chumleymi? Chaltu may! Pewkayal!','Graba, escucha, borra, vuelve a grabar. A la tercera queda conforme y lo manda.','He records, listens, deletes, records again. On the third try he is happy and sends it.'),
           N('El celular vibra casi al tiro: la chuchu le contesta con un audio de cinco minutos. Nacho se ríe y se pone colorado.','The phone buzzes almost at once: his chuchu answers with a five-minute voice message. Nacho laughs and turns red.'),
@@ -7102,29 +7098,29 @@ function nachoTalk(){const en=S.gloss==='en';
 /* ---------- Carmen Lienkura (Williche lof): the külon for the mushay. Her first words are Brandon's own, shown without a translation on purpose. ---------- */
 LOOKS.carmen={t:'F',c:'#2a4a8a',C:'#1a305e',r:'#d83030'};
 MAPS.w_lof.ents.push({id:'carmen',kind:'npc',look:'carmen',fem:1,x:12,y:8,dir:'down',fixed:1,talk:()=>carmenTalk(),bub:['Mari mari!','Külon...']});
-const CARMEN='Carmen Lienkura';
+
 function carmenTalk(){const en=S.gloss==='en',have=S.items.kulon||0;
-  if(S.flags.carmen_d)return say([L(CARMEN,'Mari mari, '+addr(true)+'!','«El mushay quedó rico. Esta noche, en el trawün, brindamos por ti.»','"The mushay turned out lovely. Tonight, at the trawün, we will drink to you."')]);
+  if(S.flags.carmen_d)return say([L('Carmen Lienkura','Mari mari, '+addr(true)+'!','«El mushay quedó rico. Esta noche, en el trawün, brindamos por ti.»','"The mushay turned out lovely. Tonight, at the trawün, we will drink to you."')]);
   if(S.flags.carmen_q){
-    if(have<3)return say([L(CARMEN,'Küla külon elumuen.','«Dame tres külon.» Tienes '+numP(have)+'. Hay külon en los arbustos del monte, y también se venden en las tiendas.','"Give me three külon." You have '+numP(have)+'. There are külon on the bushes in the forest, and the shops sell them too.')]);
-    const q={m:'',es:'Le pasas los tres külon a Carmen. ¿Qué le dices?',en:'You hand Carmen the three külon. What do you say?'},o=['Küla külon elueyu.','Küla külon elumuen.','Küla külon nien.'],a='Küla külon elueyu.';
+    if(have<3)return say([L('Carmen Lienkura','Küla külon elumuen.','«Dame tres külon.» Tienes '+numP(have)+'. Hay külon en los arbustos del monte, y también se venden en las tiendas.','"Give me three külon." You have '+numP(have)+'. There are külon on the bushes in the forest, and the shops sell them too.')]);
+    const q={m:'',es:'Le pasas los tres külon a Carmen. ¿Qué le dices?',en:'You hand Carmen the three külon. What do you say?'},{o,a}={o:['Küla külon elueyu.','Küla külon elumuen.','Küla külon nien.'],a:'Küla külon elueyu.'};
     const ask=()=>choose(q,o.slice().sort(()=>Math.random()-.5).map(x=>({m:x,v:x})),v=>{track('Carmen (dar)',v===a,q,o,a);
       if(v!==a){sfx('bad');return say([N(v==='Küla külon elumuen.'?'Carmen se ríe: «¿Me los estás pidiendo a mí?». Elumuen es «dame»: lo dice quien pide. Quien da dice elueyu, «te doy».':'«Küla külon nien» es «tengo tres külon»: es verdad, pero se los estás dando. Quien da dice elueyu, «te doy».',
         v==='Küla külon elumuen.'?'Carmen laughs: "Are you asking me for them?" Elumuen is "give me": the one who asks says it. The one who gives says elueyu, "I give you".':'"Küla külon nien" is "I have three külon": true, but you are giving them to her. The one who gives says elueyu, "I give you".')],ask)}
       S.items.kulon-=3;S.flags.carmen_d=1;S.gold+=50;S.items.mate=(S.items.mate||0)+2;persist();sfx('lvl');
       say([L(S.name,'Küla külon elueyu.','Te doy tres külon.','I give you three külon.'),
-        L(CARMEN,'Chaltu may, '+addr(true)+'!','«¡Justo los que faltaban!» Muele los frutitos morados en una fuente de madera y el agua se pone color vino.','"Just the ones I was missing!" She grinds the little purple berries in a wooden bowl and the water turns the colour of wine.'),
+        L('Carmen Lienkura','Chaltu may, '+addr(true)+'!','«¡Justo los que faltaban!» Muele los frutitos morados en una fuente de madera y el agua se pone color vino.','"Just the ones I was missing!" She grinds the little purple berries in a wooden bowl and the water turns the colour of wine.'),
         N('«Toma, para el camino: un poco de mate, y unos ngülliw que me sobraron del mercado.»','"Here, for the road: some mate, and a few ngülliw I had left over from the market."'),
         L('','+'+numW(50)+' ngülliw · epu mate','Ganas '+numP(50)+' ngülliw y dos mate.','You get '+numP(50)+' ngülliw and two mate.')])},false,true);
     return ask()}
-  say([L(CARMEN,"Feypienew fentreke che 'Rume küme adngerkey feychi dewmalfilu tüfachi awkantun' pingerken. Pewmangele pepi kimnieafiñ kiñe antü.",'',''),
+  say([L('Carmen Lienkura',"Feypienew fentreke che 'Rume küme adngerkey feychi dewmalfilu tüfachi awkantun' pingerken. Pewmangele pepi kimnieafiñ kiñe antü.",'',''),
     N('Carmen se ríe sola y sigue revolviendo una olla vacía.','Carmen laughs to herself and keeps stirring an empty pot.'),
     N('«Perdona, mari mari. Soy Carmen. Estoy preparando mushay, la bebida de külon (maqui), para el trawün de esta noche... pero me faltan los külon.»','"Sorry, mari mari. I\'m Carmen. I\'m making mushay, the külon (maqui) drink, for tonight\'s trawün... but I\'m out of külon."'),
-    L(CARMEN,'Küla külon elumuen.','Dame tres külon (maqui).','Give me three külon (maqui berries).')],()=>
-    choose(L(CARMEN,'','¿Le traes tres külon?','Will you bring her three külon?'),[{m:'May',g:en?'Yes, I will bring them':'Sí, se los traigo',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{
-      if(!v)return say([L(CARMEN,'','«Aquí estaré, con mi olla vacía.»','"I will be here, with my empty pot."')]);
+    L('Carmen Lienkura','Küla külon elumuen.','Dame tres külon (maqui).','Give me three külon (maqui berries).')],()=>
+    choose(L('Carmen Lienkura','','¿Le traes tres külon?','Will you bring her three külon?'),[{m:'May',g:en?'Yes, I will bring them':'Sí, se los traigo',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{
+      if(!v)return say([L('Carmen Lienkura','','«Aquí estaré, con mi olla vacía.»','"I will be here, with my empty pot."')]);
       S.flags.carmen_q=1;persist();
-      say([L(CARMEN,'Chaltu may!','«Gracias. Hay külon en los arbustos del monte, y en las tiendas los venden.»','"Thank you. There are külon on the bushes in the forest, and the shops sell them."')])},true,true))}
+      say([L('Carmen Lienkura','Chaltu may!','«Gracias. Hay külon en los arbustos del monte, y en las tiendas los venden.»','"Thank you. There are külon on the bushes in the forest, and the shops sell them."')])},true,true))}
 
 /* ============================================================
    RENDER (everything drawn at 256x224 into LO, then blitted at 2x; text drawn crisp on top)

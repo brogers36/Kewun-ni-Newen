@@ -325,7 +325,7 @@ w_lof:{region:'williche',name:'Williche lof',g:{es:'La comunidad del lago',en:'T
    {id:'rewe_wil',kind:'npc',look:'rewe',x:21,y:5,fixed:1,talk:()=>reweTalk()},
    {id:'wnutram',kind:'npc',look:'elder2',fem:1,x:16,y:8,dir:'up',fixed:1,act:'teach',talk:()=>wNutramTalk(),bub:['Kuyfi...','Kaleuche...']},
    {id:'wk1',kind:'npc',look:'child',x:15,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([L('Pichiche','Kaleuche pewmafiñ!','¡Soñé con el Kaleuche!','I dreamed about the Kaleuche!')]),bub:['Kaleuche!']},
-   {id:'wk2',kind:'npc',look:'childf',fem:1,x:17,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([[L('Pichi domo','Mawün ayüfiñ!','¡Me gusta la lluvia!','I love the rain!')],[L('Pichi domo','Trayen mew amuan!','¡Voy a ir a la cascada!','I am going to the waterfall!')]][rot('wk2',2)]),bub:['Mawün!']},
+   {id:'wk2',kind:'npc',look:'childf',fem:1,x:17,y:6,dir:'down',seated:1,fixed:1,talk:()=>say([[L('Pichi domo','Mawün ayükefiñ!','¡Me gusta la lluvia!','I love the rain!')],[L('Pichi domo','Trayenko mew amumean!','¡Voy a ir a la cascada!','I am going to the waterfall!')]][rot('wk2',2)]),bub:['Mawün!']},
    {id:'wweav',kind:'npc',look:'weaver',fem:1,x:7,y:4,dir:'up',act:'weave',fixed:1,talk:()=>say([L('Domo','Makuñ ngürekalen. Mawünley ka wütreley!','Estoy tejiendo un makuñ. ¡Está lloviendo y hace frío!','I am weaving a makuñ. It is raining and it is cold!')]),bub:['Ngürekalen.']},
    {id:'wcook',kind:'npc',look:'cook',fem:1,x:24,y:8,dir:'up',act:'weave',fixed:1,talk:()=>say([L('Domo','Challwa ka poñü dewmalen.','Estoy preparando pescado y papas.','I am cooking fish and potatoes.')]),bub:['Challwa!','Poñü!']},
    {id:'wfish',kind:'npc',look:'fisher',x:15,y:11,dir:'down',fixed:1,talk:()=>wFisherTalk(),bub:['Challwatulen.']},
@@ -363,7 +363,7 @@ wd1:{region:'williche',name:'Kaleuche ñi lolo · 1',g:{es:'La cueva del Kaleuch
  edges:{right:{to:'w_inaltu',x:24,y:6}},stairs:{to:'wd2',x:22,y:2},
  chests:{'3,8':'piwke','20,8':'lawen1'},konew:{'14,8':K9},
  pz:{kind:'J',tiles:{'2,2':{lab:'karü',col:'#30c040',i:0},'4,2':{lab:'chod',col:'#f0d020',i:1},'2,4':{lab:'kurü',col:'#303030',i:2}}},
- signs:{'5,4':[L('Kura','Karü, chod, kurü.','Una piedra tallada: «verde, amarillo, negro». Tres braseros esperan su fuego.','A carved stone: «green, yellow, black». Three braziers wait for their fire.')]},
+ signs:{'5,4':[L('Kura','Kiñe wirintungechi kura pi: «Karü, chod, kurü». Müley tami lüpümafiel küla frasero.','Una piedra tallada: «verde, amarillo, negro». Tres braseros esperan su fuego.','A carved stone: «green, yellow, black». Three braziers wait for their fire.')]},
  ents:[{kind:'enemy',x:19,y:2,party:['kowek','kowek']},{kind:'enemy',x:9,y:8,party:['kowek','mawek']},{kind:'enemy',x:12,y:2,party:['mawek']},
    {id:'wmini1',kind:'enemy',x:16,y:9,party:['kamawetu','kowek'],fixed:1,mini:1,flag:'wmini1',
      pre:[N('Un ternero de pelaje dorado, con un solo cuerno brillante en la frente, sale del agua: el kamawetu.','A golden-haired calf with a single shining horn on its forehead comes out of the water: the kamawetu.')]}]},
@@ -389,12 +389,12 @@ ngen4:{region:'williche',ngenmap:1,name:'Ngen-kürüf',g:{es:'El muelle en la ni
 /* ---------- PUELMAPU ---------- */
 const K15={q:L('Konew','Müpükelay, welu lefkey; fütrake namun niey. Chem am ta tatey?','No vuela, pero corre; tiene patas grandes. ¿Qué será?','It does not fly, but it runs; it has big legs. What could it be?'),
   opts:[{m:'choyke',es:'ñandú',en:'rhea',ok:1},{m:'luan',es:'guanaco',en:'guanaco'},{m:'mañke',es:'cóndor',en:'condor'},{m:'trewa',es:'perro',en:'dog'}]};
-const K16={reward:'piwke',q:L('Konew','Antü amuy, fey akuy; kom takukefi, welu küdawkelay. Chem am ta tatey?','Se va el sol, y él llega; todo lo cubre, pero no trabaja. ¿Qué será?','The sun leaves, and it arrives; it covers everything, but it does no work. What could it be?'),
+const K16={reward:'piwke',q:L('Konew','Antü amukey, wüla fey akukey; kom takukefi, welu küdawkelay. Chem am ta tatey?','Se va el sol, y después él llega; todo lo cubre, pero no trabaja. ¿Qué será?','The sun leaves, and it arrives; it covers everything, but it does no work. What could it be?'),
   opts:[{m:'pun',es:'noche',en:'night',ok:1},{m:'antü',es:'sol',en:'sun'},{m:'küyen',es:'luna',en:'moon'},{m:'tromü',es:'nube',en:'cloud'}]};
-const K18={reward:'piwke',q:L('Konew','Pekelafiyiñ, nükelafiyiñ, welu kom nentukey newen. Ngoyman ñi kayñe. Chem am ta tatey?','No se ve, no se agarra, pero de ella sale todo el newen. Es la enemiga del olvido. ¿Qué será?','It cannot be seen, it cannot be held, yet all newen comes from it. It is the enemy of forgetting. What could it be?'),
-  opts:[{m:'dungun',es:'la palabra, el habla',en:'the word, speech',ok:1},{m:'kütral',es:'fuego',en:'fire'},{m:'ko',es:'agua',en:'water'},{m:'kura',es:'piedra',en:'stone'}]};
-const K17={reward:'piwke',q:L('Konew','Lafken mew mülekey; ko amutuy, fey mülewey. Lig ngey. Chem am ta tatey?','Vive en el mar; el agua se va, y él se queda. Es blanco. ¿Qué será?','It lives in the sea; the water leaves, and it stays. It is white. What could it be?'),
-  opts:[{m:'chadi',es:'sal',en:'salt',ok:1},{m:'pire',es:'nieve',en:'snow'},{m:'kuyum',es:'arena',en:'sand'},{m:'challwa',es:'pescado',en:'fish'}]};
+const K18={reward:'piwke',q:L('Konew','Pengekelafiyiñ, nükengelafiyiñ, welu kom nentukey newen. Ngoyman ñi kayñe. Chem am ta tatey?','No se ve, no se agarra, pero de ella sale todo el newen. Es la enemiga del olvido. ¿Qué será?','It cannot be seen, it cannot be held, yet all newen comes from it. It is the enemy of forgetting. What could it be?'),
+  opts:[{m:'kewün',es:'la lengua',en:'language, the tongue',ok:1},{m:'kütral',es:'fuego',en:'fire'},{m:'ko',es:'agua',en:'water'},{m:'kura',es:'piedra',en:'stone'}]};
+const K17={reward:'piwke',q:L('Konew','Lafken mew mülekey; ko amutukey, fey mülekakey. Lig ngey. Chem am ta tatey?','Vive en el mar; el agua se va, y él se queda. Es blanco. ¿Qué será?','It lives in the sea; the water leaves, and it stays. It is white. What could it be?'),
+  opts:[{m:'chadi',es:'sal',en:'salt',ok:1},{m:'pire',es:'nieve',en:'snow'},{m:'kuyum',es:'arena',en:'sand'},{m:'challwa',es:'pez, pescado',en:'fish'}]};
 Object.assign(MAPS,{
 e_rupu:{region:'puelmapu',name:'Puel rüpü',g:{es:'La bajada al este de la cordillera',en:'The way down the east side of the mountains'},floor:',',bg:'pampa',song:'puel',pal:'puelmapu',trees:'chacay',
  edges:{left:{to:'p_degin',x:30,y:9},right:{to:'e_lof',x:1,y:9}},chests:{'29,2':'puelgift'},digs:{'12,9':{}},

@@ -15,7 +15,6 @@ MAPS.n_lof.ents.push({id:'seba',kind:'npc',look:'seba',x:16,y:10,dir:'down',fixe
 MAPS.n_lof.ents.push({id:'sebadog2',kind:'npc',look:'dog',x:17,y:10,dir:'left',req:'seba_dog',talk:()=>say([L('','Kiltro','El perro de Seba mueve la cola. No se le despega.','Seba\'s dog wags its tail. It will not leave his side.')])});
 MAPS.n_kullin.ents.push({id:'sebadog',kind:'npc',look:'dog',x:26,y:5,dir:'left',req:'seba_q',flag:'seba_dog',talk:()=>sebaDog()});
 MAPS.s_plaza.ents.push({id:'nacho',kind:'npc',look:'nacho',x:26,y:13,dir:'up',fixed:1,talk:()=>nachoTalk(),bub:['¿Cómo se dice...?','Mari mari...']});
-const KQ=(o,a,es,en,hint)=>({q:N(es,en),o,a,hint});
 
 /* ---------- Nico: introducing himself to the lonko ---------- */
 function nicoTalk(){const en=S.gloss==='en';
@@ -24,12 +23,9 @@ function nicoTalk(){const en=S.gloss==='en';
     choose(L('Nico','','¿Ensayan juntos?','Practise together?'),[{m:'May',g:en?'Yes, let us practise':'Sí, ensayemos',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{
       if(!v)return say([L('Nico','','«Ya, aquí te espero. Mari mari... mari mari...»','"OK, I\'ll wait here. Mari mari... mari mari..."')]);
       S.flags.nico_q=1;persist();
-      convo([KQ(['Mari mari, lonko.','Pewkayal, lonko.','Chaltu may, lonko.'],'Mari mari, lonko.','Primero, el saludo al llegar donde el lonko.','First, the greeting when he reaches the lonko.',
-          ['Pewkayal es para despedirse y chaltu may para dar las gracias. Al llegar se dice mari mari.','Pewkayal is for leaving and chaltu may is for thanking. On arriving you say mari mari.']),
-        KQ(['Iñche Nico pingen.','Eymi Nico pingeymi.','Fey Nico pingey.'],'Iñche Nico pingen.','Ahora su nombre: «Me llamo Nico».','Now his name: "My name is Nico".',
-          ['Habla de sí mismo: iñche ... pingen.','He is talking about himself: iñche ... pingen.']),
-        KQ(['Santiago tuwün.','Santiago pingen.','Santiago amuan.'],'Santiago tuwün.','Y de dónde viene: «Soy de Santiago».','And where he comes from: "I am from Santiago".',
-          ['tuwün dice de dónde vienes; pingen, cómo te llamas; amuan, adónde vas a ir.','tuwün says where you come from; pingen, what you are called; amuan, where you will go.'])],()=>{
+      convo([{q:N('Primero, el saludo al llegar donde el lonko.','First, the greeting when he reaches the lonko.'),o:['Mari mari, lonko.','Pewkayal, lonko.','Chaltu may, lonko.'],a:'Mari mari, lonko.',hint:['Pewkayal es para despedirse y chaltu may para dar las gracias. Al llegar se dice mari mari.','Pewkayal is for leaving and chaltu may is for thanking. On arriving you say mari mari.']},
+        {q:N('Ahora su nombre: «Me llamo Nico».','Now his name: "My name is Nico".'),o:['Iñche Nico pingen.','Eymi Nico pingeymi.','Fey Nico pingey.'],a:'Iñche Nico pingen.',hint:['Habla de sí mismo: iñche ... pingen.','He is talking about himself: iñche ... pingen.']},
+        {q:N('Y de dónde viene: «Soy de Santiago».','And where he comes from: "I am from Santiago".'),o:['Santiago tuwün.','Santiago pingen.','Santiago amuan.'],a:'Santiago tuwün.',hint:['tuwün dice de dónde vienes; pingen, cómo te llamas; amuan, adónde vas a ir.','tuwün says where you come from; pingen, what you are called; amuan, where you will go.']}],()=>{
         S.flags.nico_t=1;persist();sfx('lvl');ents=ents.filter(e=>e.id!=='nico');
         say([L('Nico','Mari mari, lonko. Iñche Nico pingen. Santiago tuwün.','Lo repite tres veces, cada vez más seguro.','He says it three times, more sure of himself each time.'),
           N('«¡Ya está! Me voy al lof antes de que se me olvide. Pasa a verme por allá.»','"That\'s it! I\'m off to the lof before I forget. Come and see me there."')])},'Nico (presentarse)')},true,true))}
@@ -55,7 +51,7 @@ function sebaTalk(){const en=S.gloss==='en';
       S.flags.seba_q=1;persist();say([L('Seba','','«¡Gracias! Está en los campos, al sur. Llámalo en mapudungun, que en castellano se hace el sordo.»','"Thanks! He\'s in the fields, to the south. Call him in Mapudungun; in Spanish he plays deaf."')])},true,true))}
 function sebaDog(){
   const q={m:'',es:'El perro de Seba te mira moviendo la cola, pero no se acerca. Llámalo.',en:'Seba\'s dog looks at you, wagging its tail, but does not come closer. Call him.'};
-  const o=['Küpange!','Küpamu!','Küpamün!','Amutunge!'],a='Küpange!';
+  const {o,a}={o:['Küpange!','Küpamu!','Küpamün!','Amutunge!'],a:'Küpange!'};
   const ask=()=>choose(q,o.slice().sort(()=>Math.random()-.5).map(x=>({m:x,v:x})),v=>{track('Seba (llamar al perro)',v===a,q,o,a);
     if(v===a){sfx('lvl');S.flags.seba_dog=1;persist();ents=ents.filter(e=>e.id!=='sebadog');
       return say([L(S.name,'Küpange!','¡Ven!','Come!'),N('El Kiltro para las orejas, ladra una vez y sale corriendo hacia el lof. Ya sabe volver solo.','Kiltro pricks up his ears, barks once and races off toward the lof. He knows his way back now.')])}
@@ -71,10 +67,10 @@ function nachoTalk(){const en=S.gloss==='en';
     N('«Tengo el celular listo. ¿Me dices qué decir?»','"I\'ve got my phone ready. Will you tell me what to say?"')],()=>
     choose(L('Nacho','','¿Lo ayudas con el audio?','Help him with the message?'),[{m:'May',g:en?'Yes, let us record it':'Sí, grabemos',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{
       if(!v)return say([L('Nacho','','«Ya, aquí sigo. ¿Cómo era... mari mari?»','"OK, I\'m still here. How did it go... mari mari?"')]);
-      convo([KQ(['Mari mari, chuchu!','Pewkayal, chuchu!','Chaltu may, chuchu!'],'Mari mari, chuchu!','Primero, saludarla.','First, greet her.',['Para saludar: mari mari.','To greet: mari mari.']),
-        KQ(['Chumleymi?','Kümelen.','Chew müleymi?'],'Chumleymi?','Después, preguntarle cómo está.','Then, ask her how she is.',['¿Cómo estás?: chumleymi. Kümelen es la respuesta.','How are you?: chumleymi. Kümelen is the answer.']),
-        KQ(['Chaltu may!','Mari mari!','Pewkayal!'],'Chaltu may!','Ahora, darle las gracias por las sopaipillas.','Now, thank her for the sopaipillas.',['Para agradecer: chaltu may.','To thank: chaltu may.']),
-        KQ(['Pewkayal!','Chaltu may!','Kümelen.'],'Pewkayal!','Y despedirse.','And say goodbye.',['Para despedirse: pewkayal.','To say goodbye: pewkayal.'])],()=>{
+      convo([{q:N('Primero, saludarla.','First, greet her.'),o:['Mari mari, chuchu!','Pewkayal, chuchu!','Chaltu may, chuchu!'],a:'Mari mari, chuchu!',hint:['Para saludar: mari mari.','To greet: mari mari.']},
+        {q:N('Después, preguntarle cómo está.','Then, ask her how she is.'),o:['Chumleymi?','Kümelen.','Chew müleymi?'],a:'Chumleymi?',hint:['¿Cómo estás?: chumleymi. Kümelen es la respuesta.','How are you?: chumleymi. Kümelen is the answer.']},
+        {q:N('Ahora, darle las gracias por las sopaipillas.','Now, thank her for the sopaipillas.'),o:['Chaltu may!','Mari mari!','Pewkayal!'],a:'Chaltu may!',hint:['Para agradecer: chaltu may.','To thank: chaltu may.']},
+        {q:N('Y despedirse.','And say goodbye.'),o:['Pewkayal!','Chaltu may!','Kümelen.'],a:'Pewkayal!',hint:['Para despedirse: pewkayal.','To say goodbye: pewkayal.']}],()=>{
         S.flags.nacho_d=1;S.gold+=60;persist();sfx('lvl');
         say([L('Nacho','Mari mari, chuchu! Chumleymi? Chaltu may! Pewkayal!','Graba, escucha, borra, vuelve a grabar. A la tercera queda conforme y lo manda.','He records, listens, deletes, records again. On the third try he is happy and sends it.'),
           N('El celular vibra casi al tiro: la chuchu le contesta con un audio de cinco minutos. Nacho se ríe y se pone colorado.','The phone buzzes almost at once: his chuchu answers with a five-minute voice message. Nacho laughs and turns red.'),
@@ -84,26 +80,26 @@ function nachoTalk(){const en=S.gloss==='en';
 /* ---------- Carmen Lienkura (Williche lof): the külon for the mushay. Her first words are Brandon's own, shown without a translation on purpose. ---------- */
 LOOKS.carmen={t:'F',c:'#2a4a8a',C:'#1a305e',r:'#d83030'};
 MAPS.w_lof.ents.push({id:'carmen',kind:'npc',look:'carmen',fem:1,x:12,y:8,dir:'down',fixed:1,talk:()=>carmenTalk(),bub:['Mari mari!','Külon...']});
-const CARMEN='Carmen Lienkura';
+
 function carmenTalk(){const en=S.gloss==='en',have=S.items.kulon||0;
-  if(S.flags.carmen_d)return say([L(CARMEN,'Mari mari, '+addr(true)+'!','«El mushay quedó rico. Esta noche, en el trawün, brindamos por ti.»','"The mushay turned out lovely. Tonight, at the trawün, we will drink to you."')]);
+  if(S.flags.carmen_d)return say([L('Carmen Lienkura','Mari mari, '+addr(true)+'!','«El mushay quedó rico. Esta noche, en el trawün, brindamos por ti.»','"The mushay turned out lovely. Tonight, at the trawün, we will drink to you."')]);
   if(S.flags.carmen_q){
-    if(have<3)return say([L(CARMEN,'Küla külon elumuen.','«Dame tres külon.» Tienes '+numP(have)+'. Hay külon en los arbustos del monte, y también se venden en las tiendas.','"Give me three külon." You have '+numP(have)+'. There are külon on the bushes in the forest, and the shops sell them too.')]);
-    const q={m:'',es:'Le pasas los tres külon a Carmen. ¿Qué le dices?',en:'You hand Carmen the three külon. What do you say?'},o=['Küla külon elueyu.','Küla külon elumuen.','Küla külon nien.'],a='Küla külon elueyu.';
+    if(have<3)return say([L('Carmen Lienkura','Küla külon elumuen.','«Dame tres külon.» Tienes '+numP(have)+'. Hay külon en los arbustos del monte, y también se venden en las tiendas.','"Give me three külon." You have '+numP(have)+'. There are külon on the bushes in the forest, and the shops sell them too.')]);
+    const q={m:'',es:'Le pasas los tres külon a Carmen. ¿Qué le dices?',en:'You hand Carmen the three külon. What do you say?'},{o,a}={o:['Küla külon elueyu.','Küla külon elumuen.','Küla külon nien.'],a:'Küla külon elueyu.'};
     const ask=()=>choose(q,o.slice().sort(()=>Math.random()-.5).map(x=>({m:x,v:x})),v=>{track('Carmen (dar)',v===a,q,o,a);
       if(v!==a){sfx('bad');return say([N(v==='Küla külon elumuen.'?'Carmen se ríe: «¿Me los estás pidiendo a mí?». Elumuen es «dame»: lo dice quien pide. Quien da dice elueyu, «te doy».':'«Küla külon nien» es «tengo tres külon»: es verdad, pero se los estás dando. Quien da dice elueyu, «te doy».',
         v==='Küla külon elumuen.'?'Carmen laughs: "Are you asking me for them?" Elumuen is "give me": the one who asks says it. The one who gives says elueyu, "I give you".':'"Küla külon nien" is "I have three külon": true, but you are giving them to her. The one who gives says elueyu, "I give you".')],ask)}
       S.items.kulon-=3;S.flags.carmen_d=1;S.gold+=50;S.items.mate=(S.items.mate||0)+2;persist();sfx('lvl');
       say([L(S.name,'Küla külon elueyu.','Te doy tres külon.','I give you three külon.'),
-        L(CARMEN,'Chaltu may, '+addr(true)+'!','«¡Justo los que faltaban!» Muele los frutitos morados en una fuente de madera y el agua se pone color vino.','"Just the ones I was missing!" She grinds the little purple berries in a wooden bowl and the water turns the colour of wine.'),
+        L('Carmen Lienkura','Chaltu may, '+addr(true)+'!','«¡Justo los que faltaban!» Muele los frutitos morados en una fuente de madera y el agua se pone color vino.','"Just the ones I was missing!" She grinds the little purple berries in a wooden bowl and the water turns the colour of wine.'),
         N('«Toma, para el camino: un poco de mate, y unos ngülliw que me sobraron del mercado.»','"Here, for the road: some mate, and a few ngülliw I had left over from the market."'),
         L('','+'+numW(50)+' ngülliw · epu mate','Ganas '+numP(50)+' ngülliw y dos mate.','You get '+numP(50)+' ngülliw and two mate.')])},false,true);
     return ask()}
-  say([L(CARMEN,"Feypienew fentreke che 'Rume küme adngerkey feychi dewmalfilu tüfachi awkantun' pingerken. Pewmangele pepi kimnieafiñ kiñe antü.",'',''),
+  say([L('Carmen Lienkura',"Feypienew fentreke che 'Rume küme adngerkey feychi dewmalfilu tüfachi awkantun' pingerken. Pewmangele pepi kimnieafiñ kiñe antü.",'',''),
     N('Carmen se ríe sola y sigue revolviendo una olla vacía.','Carmen laughs to herself and keeps stirring an empty pot.'),
     N('«Perdona, mari mari. Soy Carmen. Estoy preparando mushay, la bebida de külon (maqui), para el trawün de esta noche... pero me faltan los külon.»','"Sorry, mari mari. I\'m Carmen. I\'m making mushay, the külon (maqui) drink, for tonight\'s trawün... but I\'m out of külon."'),
-    L(CARMEN,'Küla külon elumuen.','Dame tres külon (maqui).','Give me three külon (maqui berries).')],()=>
-    choose(L(CARMEN,'','¿Le traes tres külon?','Will you bring her three külon?'),[{m:'May',g:en?'Yes, I will bring them':'Sí, se los traigo',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{
-      if(!v)return say([L(CARMEN,'','«Aquí estaré, con mi olla vacía.»','"I will be here, with my empty pot."')]);
+    L('Carmen Lienkura','Küla külon elumuen.','Dame tres külon (maqui).','Give me three külon (maqui berries).')],()=>
+    choose(L('Carmen Lienkura','','¿Le traes tres külon?','Will you bring her three külon?'),[{m:'May',g:en?'Yes, I will bring them':'Sí, se los traigo',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{
+      if(!v)return say([L('Carmen Lienkura','','«Aquí estaré, con mi olla vacía.»','"I will be here, with my empty pot."')]);
       S.flags.carmen_q=1;persist();
-      say([L(CARMEN,'Chaltu may!','«Gracias. Hay külon en los arbustos del monte, y en las tiendas los venden.»','"Thank you. There are külon on the bushes in the forest, and the shops sell them."')])},true,true))}
+      say([L('Carmen Lienkura','Chaltu may!','«Gracias. Hay külon en los arbustos del monte, y en las tiendas los venden.»','"Thank you. There are külon on the bushes in the forest, and the shops sell them."')])},true,true))}
