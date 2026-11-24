@@ -506,4 +506,4 @@ Brandon terminó las pestañas 0 Apertura, 1 Lafkenche y 2 Nagche de docs/Kewun_
 
 ### Revisión en la planilla (Nov 24): pestaña 3 Pewenche
 45 OK y 18 Corregir. Se aplicaron las 18 correcciones y las de las filas #21 y #52 (marcadas OK, pero con corrección). El arriero ahora dice **"Kawellutulen"** (también en su burbuja), y sus preguntas de -ke- quedaron así: "Pu pewenche ngülliw___" → **tuyngün** (distractores iyngün, ikey) y "Eymi kawellu___" → **tukeymi** (distractores amuymi, amuken). Como su saludo ya no trae *amuken*, la explicación dice ahora solo que -ke- marca lo que alguien hace por costumbre.
-- ⚠ Pendiente: la primera pregunta se presenta como -ke- (glosa «siempre, de costumbre»), pero la respuesta correcta *tuyngün* no lleva -ke-. ¿Debe ser **tukeyngün**?
+- (Nov 24) Brandon: la respuesta de la primera pregunta es **tukeyngün** (no *tuyngün*).

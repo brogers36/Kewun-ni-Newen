@@ -1001,7 +1001,7 @@ function arrieroTalk(){
       L('Wentru','Allkütunge: pewen mapu mew, epu fütra pewen müley, willi püle rüpü mew.','Escucha: en el bosque hay dos pewenes gemelos, al sur del camino.','Listen: in the forest there are two twin pewen trees, south of the road.'),
       N('«Mis caballos siempre escarban justo entre esos dos árboles. Algo brilla ahí abajo. Busca justo en medio.»','"My horses always paw at the ground right between those two trees. Something shines down there. Search right in the middle."')]);}
   if(S.flags.pew_ke)return say([L('Wentru','Kawellutulen. Pewkayal!','Yo ando a caballo. ¡Hasta luego!','I ride on horseback. See you later!')]);
-  const qs=[{q:L('Wentru','Pu pewenche ngülliw___','Los pewenche comen piñones (siempre, de costumbre).','The Pewenche eat pewen nuts (always, as a habit).'),o:['iyngün','tuyngün','ikey'],a:'tuyngün'},
+  const qs=[{q:L('Wentru','Pu pewenche ngülliw___','Los pewenche comen piñones (siempre, de costumbre).','The Pewenche eat pewen nuts (always, as a habit).'),o:['iyngün','tukeyngün','ikey'],a:'tukeyngün'},
     {q:L('Wentru','Iñche mapudungu___','Yo hablo mapudungun (siempre, de costumbre).','I speak Mapudungun (always, as a habit).'),o:['mapudungun','mapudunguken','mapudungukey'],a:'mapudunguken'},
     {q:L('Wentru','Eymi kawellu___','Tú andas a caballo (siempre, de costumbre).','You ride on horseback (always, as a habit).'),o:['amuymi','tukeymi','amuken'],a:'tukeymi'}];
   say([L('Wentru','Mari mari, '+addr(false)+'. Kawellutulen.','Hola. Yo ando a caballo.','Hello. I ride on horseback.'),
