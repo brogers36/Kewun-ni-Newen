@@ -14,7 +14,7 @@ The player is a young wariache: Millaray, Ayelen, Llanka or Kallfürüngi, chose
 | Williche (south) | Playable: 5 overworld maps, a 3-floor sea cave, the Kaleuche, Ngen-kürüf |
 | Puelmapu (east, the pampa) | Playable: 7 overworld maps, a 3-floor chenque, the Walichu, Ngen-lelfün |
 | Ngoyman (finale) | Playable: five stolen-biome areas with captive-freeing quests and puzzles, extended metal soundtrack with guitar solos, visible light barriers, the Fütra Kalku, the three-stage Ti Fütra Ngoyman (summons, barriers, Rüf form) and an ending cutscene |
-| Münche lafken (secret) | Playable: the chumpall realm under the Williche lake; three aid quests and the five-form Kaykayfilu, calmed with the chumpall singing beside you |
+| Münche lafken (secret) | Playable: the chumpall realm under the Williche lake; three aid quests and the five-form Millalobo (king of the sea in Williche tradition), calmed with the chumpall singing beside you |
 | Santiago (secret) | Playable after all secrets: the portal back to the waria; five language-and-culture recovery quests with the wariache |
 | Upewtuwün mapu (secret) | Playable once every secret is done, Yewen included: your shadow walks into a grey crack on the sea road; grey copies of the first places get their colour back word by word, then you fight your shadow, which asks the questions you missed most. Reward: the title *kimche* |
 

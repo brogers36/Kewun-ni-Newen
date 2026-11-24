@@ -1180,148 +1180,185 @@ def ngoyman5(f):
     return finish(c, [('head', 'trunk'), ('head', 'shoulder'), ('visor', 'head'), ('shoulder', 'trunk'), ('arm', 'shoulder'), ('fist', 'arm'), ('trunk', 'mound'), ('horn', 'head')],
                   rim=(150, 200, 120), rimparts=('head', 'trunk', 'arm', 'shoulder', 'mound', 'fist'))
 
-# =========================================================== the Kaykayfilu: the great serpent of the water, five forms
+# =========================================================== the Millalobo: king of the sea in the Williche tradition of Chiloé,
+# half man and half sea lion, gold (milla) in his hair, his crown and his heart; five forms
 R.update({k: [hx(c) for c in v] for k, v in {
-    'kay':   ['#031012', '#071e22', '#0c2e34', '#124048', '#1a565e', '#246e76', '#328a90', '#48a8aa', '#6cc6c2'],
-    'kayb':  ['#1e2c22', '#34483a', '#4e6854', '#6e8a70', '#94ae90', '#c2d6b6'],
-    'kglow': ['#04363a', '#0a6a70', '#18a8aa', '#40e0d8', '#a0fff4', '#ffffff'],
+    'mfur':  ['#0c0804', '#1c140a', '#2e2212', '#44321a', '#5c4422', '#78582c', '#967038', '#b48a48', '#d0a65e'],
+    'mbel':  ['#2a2010', '#4a3a1e', '#6e5830', '#927848', '#b49a66', '#d4bc8a'],
+    'mskin': ['#160a06', '#2c160c', '#462414', '#62341e', '#80462a', '#9e5a38', '#ba724a', '#d08c62'],
+    'mhair': ['#040404', '#0c0a08', '#16120e', '#221c16', '#30281e', '#403528'],
+    'mgold': ['#2a1a02', '#523608', '#7e5610', '#ac7c1a', '#d4a42c', '#f0c848', '#fce47e', '#fff8d0'],
+    'gglow2':['#3a2602', '#7a5206', '#c08a10', '#f0c030', '#ffe890', '#ffffff'],
     'kbone': ['#2a2a24', '#4a4a40', '#6e6c5e', '#94927e', '#bab8a2', '#dcdac6', '#f6f4e6']}.items()})
-def kayhead(c, x, y, dr, s=1.0, jaw=0, lift=.2, glowm=True):
-    """the Kaykayfilu's head in profile, facing dr (+1 right, -1 left): horned skull, barbels, a jaw that opens on cyan light"""
-    K, G = R['kay'], R['kglow']
-    T = lambda pts: [(x + dr * px_ * s, y + py * s) for px_, py in pts]
-    for (bx, by, tx, ty) in [(-2, -6, -14, -14), (2, -7, -8, -17)]:        # horns swept back
-        taper(c, cr(T([(bx, by), ((bx + tx) / 2, (by + ty) / 2 - 2), (tx, ty)]), 5), 4 * s, 1.2, R['kbone'], lift=lift, name='khorn', bulge=1.2)
-    jw = T([(-4, 2), (8, 3 + jaw * .4), (20, 4 + jaw), (19, 8 + jaw), (6, 9 + jaw * .4), (-4, 8)])
-    if jaw > 0:
-        blob(c, R['throat'], lambda d: d.polygon(T([(0, 1), (22, 0), (22, 4 + jaw), (0, 7)]), fill=1), bulge=.6, lift=0, name='kmouth')
-        if glowm: glow(c, x + dr * 10 * s, y + (3 + jaw * .5) * s, 2.5 * s, G)
-    blob(c, K, lambda d: d.polygon(jw, fill=1), bulge=1.2, lift=lift - .1, name='kjaw')
-    up = T([(-6, -4), (0, -8), (10, -7), (20, -4), (25, -1), (24, 2), (10, 2), (-6, 4)])
-    blob(c, K, lambda d: d.polygon(up, fill=1), bulge=1.3, lift=lift, name='khead')
-    for (a, b) in [((2, -6), (20, -3)), ((4, -4), (14, -3))]:
-        line(c, T([a, b]), K[7], 'khead')
-    ex, ey = T([(6, -3)])[0]
-    c.rect(int(ex - 2), int(ey - 1), 5, 3, (2, 10, 10)); glow(c, ex, ey, 1.6 * s, G); c.px(int(ex), int(ey) - 1, (255, 255, 255))
-    for (X, Y) in [T([(23, 0)])[0]]: c.px(int(X), int(Y), (2, 8, 10))     # nostril
-    for k in range(int(4 + 2 * s), 22, 4):                                 # teeth
-        X, Y = T([(k, 2)])[0]; tooth3(c, int(X), int(Y), int(Y + 2 + s), R['kbone'], 'ktooth')
-    for q in (0, 1):                                                       # barbels trailing from the snout
-        line(c, T([(22, 2 + q * 2), (26, 8 + q * 3), (22 + q * 2, 16 + q * 2), (16, 20 + q)]), K[6] if q else K[7])
-def kaybody(c, path, w0, w1, name='kbody', lift=.12, fins=False, n=10):
-    P = serpent(c, path, w0, w1, R['kay'], R['kayb'], name, lift=lift - .1, step=5, n=n, kd=.72)
-    # dorsal crest: a ridge of fin-spines along the top
-    for i in range(3, len(P) - 3, 4):
-        (x0, y0), (x1, y1) = P[i - 1], P[i + 1]
-        L = max(.01, math.hypot(x1 - x0, y1 - y0)); nx, ny = -(y1 - y0) / L, (x1 - x0) / L
-        if ny > 0: nx, ny = -nx, -ny
-        w = (w0 + (w1 - w0) * i / len(P)) / 2
-        x, y = P[i]
-        ln = 2 + w * .35
-        taper(c, [(x + nx * w * .7, y + ny * w * .7), (x + nx * (w + ln) - (x1 - x0) / L * 3, y + ny * (w + ln) - (y1 - y0) / L * 3)], 4, 1, R['kay'][2:], lift=.05, name=name + 'fin', bulge=1.0)
-        c.px(int(round(x + nx * (w + ln * .6))), int(round(y + ny * (w + ln * .6))), R['kglow'][2])
-        if i % 8 == 0:                                                   # glowing spots along the flank
-            c.px(int(x + nx * w * .2), int(y + ny * w * .2), R['kglow'][3]); c.px(int(x + nx * w * .2) + 1, int(y + ny * w * .2), R['kglow'][2])
-    return P
+
 def kaywater(c, f, y0=None):
     y0 = y0 if y0 is not None else yp.H - 18
     sea(c, y0, yp.H, 0, yp.W, f)
     ripples(c, yp.W // 2, y0 + 8, yp.W // 3, 3, f, R['water'][6], R['water'][1], 2)
-def kayfinish(c, extra=()):
-    texture(c, ['kbody', 'kbody2', 'kbody3', 'khead', 'kjaw'], amt=.1, seed=50)
-    occlude(c, ['khead', 'kjaw', 'kbody'], ['kbody2', 'kbody2b', 'kbody3', 'kbody3b', 'water'], r=4, k=.55)
-    speculars(c, ['kbody', 'kbody2', 'kbody3', 'khead'], thr=.86, col=(210, 255, 250))
-    return finish(c, [('khead', 'kbody'), ('kjaw', 'khead'), ('kmouth', 'khead'), ('khorn', 'khead'), ('kbody', 'kbody2'), ('kbodyb', 'kbody2'), ('kbody', 'water'), ('kbody2', 'water'), ('kbody', 'kbody3')] + list(extra),
-                  rim=(80, 200, 190), rimparts=('kbody', 'kbody2', 'kbody3', 'khead'))
+def mhair_back(c, x, y, s=1.0, hairflow=1):
+    """the long wet hair, falling behind the shoulders (drawn before the torso)"""
+    Hh = R['mhair']; S = lambda v: v * s
+    for k in range(6):
+        dx = (k - 2.5) * S(4)
+        taper(c, [(x + dx * .5, y - S(4)), (x + dx * 1.4 + hairflow * S(2), y + S(8)), (x + dx * 1.9 + hairflow * S(4), y + S(17) + (k % 2) * S(3))], S(6), S(2), Hh, lift=-.15, name='mhairb', bulge=1.0)
+def mhead(c, x, y, s=1.0, f=0, angry=True, crown=True, hairflow=1):
+    """the Millalobo's head, seen from the front: dark hair streaming with sea water, a beard, gold eyes, a gold crown"""
+    Hh, Sk, G = R['mhair'], R['mskin'], R['mgold']
+    S = lambda v: v * s
+    blob(c, Hh, lambda d: d.polygon(smooth_poly([(x - S(8), y - S(2)), (x - S(6), y - S(8)), (x + S(6), y - S(8)), (x + S(8), y - S(2)), (x + S(9), y + S(4)), (x - S(9), y + S(4))], 4), fill=1), bulge=1.1, lift=.1, name='mhair')
+    blob(c, Sk, lambda d: d.polygon(smooth_poly([(x - S(7), y - S(6)), (x + S(7), y - S(6)), (x + S(8), y + S(2)), (x + S(5), y + S(9)), (x - S(5), y + S(9)), (x - S(8), y + S(2))], 4), fill=1), bulge=1.25, lift=.2, name='mface')
+    blob(c, Hh, lambda d: d.polygon(smooth_poly([(x - S(7), y + S(4)), (x + S(7), y + S(4)), (x + S(5), y + S(10)), (x, y + S(12)), (x - S(5), y + S(10))], 3), fill=1), bulge=1.0, lift=.1, name='mbeard')
+    for k in range(-2, 3):                                                 # beard strands
+        line(c, [(x + S(k * 2.5), y + S(6)), (x + S(k * 2.2), y + S(11))], Hh[5], 'mbeard')
+    for side in (-1, 1):                                                   # gold eyes under a heavy brow
+        ex, ey = x + side * S(3.2), y - S(1)
+        c.rect(int(ex - S(1.5)), int(ey - 1), max(2, int(S(3))), 2, (14, 6, 2))
+        if angry: line(c, [(ex - side * S(2.5), ey - S(2.5)), (ex + side * S(2), ey - S(1.5))], Hh[1])
+        else: line(c, [(ex - S(2), ey - S(2)), (ex + S(2), ey - S(2))], Hh[2])
+        glow(c, ex, ey, max(1.0, S(1.1)), R['gglow2']); c.px(int(ex), int(ey) - 1, (255, 255, 255))
+    line(c, [(x, y), (x, y + S(2.5))], Sk[3], 'mface'); c.px(int(x) + 1, int(y + S(2.5)), Sk[6])
+    for xx in range(int(x - S(2.5)), int(x + S(2.5)) + 1): c.px(xx, int(y + S(4.5)), (30, 10, 6) if angry else Sk[2])   # mouth
+    if crown:                                                              # crown of gold points with a glow at the front
+        blob(c, G, lambda d: d.polygon([(x - S(8), y - S(6)), (x + S(8), y - S(6)), (x + S(8), y - S(9)), (x - S(8), y - S(9))], fill=1), bulge=1.1, lift=.3, name='mcrown')
+        for k in range(5):
+            px_ = x - S(8) + k * S(4)
+            hh = S(6) if k == 2 else S(4)
+            blob(c, G, lambda d, px_=px_, hh=hh: d.polygon([(px_ - S(1.6), y - S(8.5)), (px_ + S(1.6), y - S(8.5)), (px_, y - S(8.5) - hh)], fill=1), bulge=1.1, lift=.3, name='mcrown')
+        glow(c, x, y - S(7.5), max(1.0, S(1.3)), R['gglow2'])
+
+def mtorso(c, x, y, s=1.0, arms='wide', f=0, bone=False):
+    """a man's chest and arms rising from the sea lion's shoulders; y is the top of the chest"""
+    Sk = R['mskin']; S = lambda v: v * s
+    blob(c, Sk, lambda d: d.polygon(smooth_poly([(x - S(11), y), (x + S(11), y), (x + S(12), y + S(10)), (x + S(8), y + S(22)), (x - S(8), y + S(22)), (x - S(12), y + S(10))], 5), fill=1), bulge=1.2, lift=.16, name='mtorso')
+    line(c, [(x, y + S(3)), (x, y + S(18))], Sk[3], 'mtorso')
+    for side in (-1, 1): line(c, [(x + side * S(2), y + S(9)), (x + side * S(9), y + S(8))], Sk[3], 'mtorso')
+    if bone:                                                               # a breastplate of whale bones lashed with kelp
+        for k in range(5):
+            yy = y + S(3) + k * S(3.6)
+            taper(c, [(x - S(10) + k * S(.4), yy + S(1)), (x, yy - S(1)), (x + S(10) - k * S(.4), yy + S(1))], S(3), S(2.4), R['kbone'], lift=.25, name='mbone', bulge=1.2)
+        line(c, [(x, y + S(1)), (x, y + S(20))], R['mbel'][1], 'mbone')
+    for side in (-1, 1):
+        lf = .16 if side < 0 else -.02
+        if arms == 'wide':   pts = [(x + side * S(10), y + S(3)), (x + side * S(20), y + S(8)), (x + side * S(27), y + S(2 - f * 2))]
+        elif arms == 'up':   pts = [(x + side * S(10), y + S(3)), (x + side * S(17), y - S(6)), (x + side * S(19), y - S(17 + f * 2))]
+        else:                pts = [(x + side * S(10), y + S(3)), (x + side * S(15), y + S(13)), (x + side * S(13), y + S(23))]
+        taper(c, cr(pts, 5), S(7), S(5.5), Sk, lift=lf, name='marm', bulge=1.2)
+        hx_, hy = pts[-1]
+        blob(c, Sk, lambda d, hx_=hx_, hy=hy: d.ellipse([hx_ - S(3.5), hy - S(3.5), hx_ + S(3.5), hy + S(3.5)], fill=1), bulge=1.25, lift=lf, name='mfist')
+        line(c, [(x + side * S(13), y + S(6)), (x + side * S(16), y + S(9))], R['mgold'][5], 'marm')    # gold armbands
+        line(c, [(x + side * S(13), y + S(7)), (x + side * S(16), y + S(10))], R['mgold'][3], 'marm')
+
+def mlower(c, path, w0, w1, name='mbody', lift=.1, n=10):
+    """the sea lion's body, golden-brown fur, a paler belly, rear flippers fanned at the end"""
+    P = cr(path, n) if len(path) > 2 else path
+    taper(c, P, w0, w1, R['mfur'], lift=lift, name=name, bulge=1.25)
+    m = c.part == name
+    ys, xs = np.nonzero(m)
+    if len(ys):
+        from scipy.ndimage import distance_transform_edt as edt
+        top = np.zeros_like(m)
+        for X in np.unique(xs):
+            col = ys[xs == X]; lo, hi = col.min(), col.max(); h = hi - lo + 1
+            sel = (xs == X) & (ys > lo + h * .62)
+            top[ys[sel], xs[sel]] = True
+        c.rgb[top] = np.clip(c.rgb[top].astype(float) * .55 + np.array(R['mbel'][3]) * .45, 0, 255).astype(np.uint8)
+        c.part[top] = name + 'b'
+    (xa, ya), (xb, yb) = P[-2], P[-1]
+    L = max(.01, math.hypot(xb - xa, yb - ya)); ux, uy = (xb - xa) / L, (yb - ya) / L
+    for a in (-.55, .55):                                                  # two rear flippers
+        ca, sa = math.cos(a), math.sin(a); vx, vy = ux * ca - uy * sa, ux * sa + uy * ca
+        taper(c, [(xb, yb), (xb + vx * 9, yb + vy * 9), (xb + vx * 15, yb + vy * 15)], 5, 7, R['mfur'][:6], lift=lift - .05, name=name + 'fl', bulge=1.0)
+    return P
+
+def mflipper(c, x, y, ang, L, name='mfore', lift=.1):
+    a = math.radians(ang)
+    taper(c, [(x, y), (x + math.cos(a) * L * .5, y + math.sin(a) * L * .5), (x + math.cos(a) * L, y + math.sin(a) * L)], 7, 4, R['mfur'], lift=lift, name=name, bulge=1.1)
+
+def mfinish(c, extra=()):
+    texture(c, ['mbody', 'mbody2', 'mtorso', 'marm', 'mface', 'mhair'], amt=.12, seed=52)
+    occlude(c, ['mtorso', 'marm', 'mface', 'mbeard'], ['mhairb'], r=3, k=.6)
+    occlude(c, ['mtorso', 'marm', 'mface', 'mbeard'], ['mbody', 'mbody2', 'water'], r=4, k=.5)
+    speculars(c, ['mcrown', 'mtorso', 'mbody', 'marm', 'mbone', 'mgem'], thr=.85, col=(255, 248, 210))
+    return finish(c, [('mface', 'mhair'), ('mbeard', 'mface'), ('mcrown', 'mface'), ('mcrown', 'mhair'), ('mtorso', 'mbody'), ('marm', 'mtorso'), ('mfist', 'marm'),
+                      ('mbody', 'water'), ('mbody2', 'water'), ('mbody', 'mbody2'), ('mbone', 'mtorso'), ('mfore', 'mbody')] + list(extra),
+                  rim=(240, 200, 110), rimparts=('mbody', 'mbody2', 'mtorso', 'marm', 'mhair'))
 
 def llufu1(f):
-    """asleep and waking: coiled in the shallows, the head resting on its own coils, one eye open"""
+    """rising from the dark water: only his shoulders, his crowned head and the hump of his back show"""
     setsize(104, 80); c = Canvas()
-    kaywater(c, f, 62)
-    kaybody(c, [(90, 70), (98, 56), (86, 44), (60, 42), (40, 50)], 16, 14, 'kbody2', lift=-.02)
-    kaybody(c, [(12, 70), (30, 74), (62, 74), (88, 68), (94, 58)], 18, 12, 'kbody3', lift=.06)
-    kaybody(c, [(64, 70), (44, 64), (30, 54), (28, 44), (36, 38)], 16, 12, 'kbody', lift=.14)
-    kayhead(c, 34, 36 + f, -1, 1.0, jaw=1 + f)
-    return kayfinish(c)
+    kaywater(c, f, 56)
+    mlower(c, [(40, 66), (60, 60), (80, 58), (96, 64)], 22, 12, 'mbody2', lift=.0)
+    mhair_back(c, 38, 30 + f, 1.0, hairflow=1)
+    mtorso(c, 38, 42 + f, 1.0, arms='down', f=f)
+    mhead(c, 38, 30 + f, 1.0, f, angry=True, hairflow=1)
+    sea(c, 62, yp.H, 0, yp.W, f)
+    ripples(c, 40, 64, 30, 3, f, R['water'][6], R['water'][1], 2)
+    return mfinish(c)
 
 def llufu2(f):
-    """Kaykayfilu ñi foro: its bones: the neck rises, the scales torn away to show the spine and ribs beneath"""
+    """Millalobo ñi foro: his bones: risen to the waist in a breastplate of whale bones"""
     setsize(104, 96); c = Canvas()
     kaywater(c, f, 78)
-    kaybody(c, [(8, 88), (30, 92), (60, 92), (84, 88), (96, 80)], 18, 14, 'kbody2', lift=.0)
-    P = kaybody(c, [(70, 90), (82, 74), (84, 54), (76, 36), (62, 26 - f)], 16, 12, 'kbody', lift=.14)
-    # the bared section: dark flesh, the spine's knuckles and a cage of ribs
-    for i in range(int(len(P) * .3), int(len(P) * .75)):
-        (x0, y0), (x1, y1) = P[i - 1], P[i + 1]
-        L = max(.01, math.hypot(x1 - x0, y1 - y0)); nx, ny = -(y1 - y0) / L, (x1 - x0) / L
-        x, y = P[i]
-        for k in np.linspace(-5, 5, 12):
-            X, Y = int(round(x + nx * k)), int(round(y + ny * k))
-            if 0 <= X < yp.W and 0 <= Y < yp.H and c.part[Y, X] in ('kbody', 'kbodyb'): c.px(X, Y, R['throat'][1 + int(abs(k) < 3)]); c.part[Y, X] = 'flesh'
-        if i % 3 == 0:
-            for k in np.linspace(-6, 6, 13):
-                X, Y = int(round(x + nx * k)), int(round(y + ny * k))
-                if 0 <= X < yp.W and 0 <= Y < yp.H and c.part[Y, X] == 'flesh': c.px(X, Y, R['kbone'][5 if k < 0 else 3]); c.part[Y, X] = 'rib'
-        c.px(int(x), int(y), R['kbone'][6]); c.px(int(x) + 1, int(y), R['kbone'][3])
-    kayhead(c, 60, 24 - f, -1, 1.15, jaw=3 + 2 * f)
-    return kayfinish(c, [('rib', 'kbody'), ('flesh', 'kbody')])
+    mlower(c, [(48, 82), (70, 84), (88, 80), (98, 70)], 26, 14, 'mbody', lift=.1)
+    mflipper(c, 36, 76, 160, 18); mflipper(c, 62, 78, 20, 16, lift=.0)
+    mhair_back(c, 50, 32 - f, 1.15, hairflow=-1)
+    mtorso(c, 50, 46 - f, 1.15, arms='wide', f=f, bone=True)
+    mhead(c, 50, 32 - f, 1.15, f, angry=True, hairflow=-1)
+    return mfinish(c)
 
 def llufu3(f):
-    """Kaykayfilu ñi müpü: its wings: it swims in great loops through the water, fins spread like wings"""
+    """Millalobo ñi müpü: his flippers: he swims in a great arc, fore-flippers spread like wings"""
     setsize(120, 84); c = Canvas()
     kaywater(c, f, 66)
     ph = f * .6
-    path = [(4, 72), (16, 60 - 4 * math.sin(ph)), (28, 50), (40, 64), (52, 74), (64, 60), (76, 48 + 3 * math.sin(ph)), (86, 62), (94, 66), (96, 50), (88, 38)]
-    P = kaybody(c, path, 9, 14, 'kbody', lift=.12, n=8)
-    # two pairs of wing-fins, membranes between long rays
-    for (i0, side) in [(int(len(P) * .22), 1), (int(len(P) * .62), 1)]:
-        x, y = P[i0]
-        for k in range(5):
-            a = math.radians(-150 + k * 22 + f * 8); L = 22 - abs(k - 2) * 3
-            taper(c, [(x, y), (x + math.cos(a) * L, y + math.sin(a) * L)], 2.5, 1, R['kglow'][1:5], lift=.15, name='wingray', bulge=1.0)
-        mem = [(x, y)] + [(x + math.cos(math.radians(-150 + k * 22 + f * 8)) * (22 - abs(k - 2) * 3), y + math.sin(math.radians(-150 + k * 22 + f * 8)) * (22 - abs(k - 2) * 3)) for k in range(5)]
-        m = c.mask(lambda d, mem=mem: d.polygon(mem, fill=1)) & ~c.a
-        ys, xs = np.nonzero(m)
-        keep = yp.BAYER[ys % 4, xs % 4] < .7
-        c.rgb[ys[keep], xs[keep]] = np.array(R['kglow'][1]); c.a[ys[keep], xs[keep]] = True; c.part[ys[keep], xs[keep]] = 'wingm'
-    kayhead(c, 86, 34 + f, 1, 1.0, jaw=2 + f)
-    return kayfinish(c, [('wingray', 'kbody')])
+    mlower(c, [(36, 46), (56, 50 + 2 * math.sin(ph)), (76, 60), (96, 66), (112, 62)], 24, 10, 'mbody', lift=.12)
+    for (ang, L) in [(-150 + f * 10, 30), (-110 - f * 10, 26)]:
+        mflipper(c, 40, 50, ang, L, name='mfore', lift=.15)
+    mhair_back(c, 34, 18 + f, 1.0, hairflow=2)
+    mtorso(c, 34, 30 + f, 1.0, arms='up', f=f)
+    mhead(c, 34, 18 + f, 1.0, f, angry=True, hairflow=2)
+    for k in range(10):                                                    # spray thrown off the flippers
+        x, y = (k * 19 + f * 7) % 70 + 4, (k * 13 + f * 5) % 30 + 8
+        if not c.a[y, x]: c.px(x, y, R['water'][7]); c.part[y, x] = 'spark'
+    return mfinish(c)
 
 def llufu4(f):
-    """Kaykayfilu ñi piwke: its heart: the body knotted in a figure of eight around a heart of cyan light"""
+    """Millalobo ñi piwke: his heart: the chest opens on a heart of gold light that throws up barriers"""
     setsize(100, 108); c = Canvas()
     kaywater(c, f, 92)
-    # the lower loop (behind), then the heart, then the upper loop crossing in front
-    loop = lambda cy, ry: [(50 + math.cos(a) * 28, cy + math.sin(a) * ry) for a in np.linspace(0, 2 * math.pi, 14)]
-    kaybody(c, loop(76, 16), 11, 11, 'kbody2', lift=.0, n=6)
-    blob(c, R['kglow'], lambda d: d.polygon(smooth_poly([(50, 50 - f), (58, 42 - f), (66, 50), (62, 62), (50, 72), (38, 62), (34, 50), (42, 42 - f)], 4), fill=1), bulge=1.3, lift=.25 + f * .1, name='gem')
-    for (a, b) in [((44, 48), (50, 66)), ((56, 48), (50, 66)), ((38, 54), (62, 54))]: line(c, [a, b], R['kglow'][2], 'gem')
-    glow(c, 47, 50, 3, R['kglow']); c.px(44, 46, (255, 255, 255)); c.px(45, 46, (255, 255, 255))
-    kaybody(c, loop(32, 18)[:12], 12, 11, 'kbody', lift=.14, n=6)
-    kayhead(c, 64, 16 - f, 1, 1.0, jaw=2 + 2 * f)
-    for k in range(6):                                                    # light leaking from the heart
-        a = k * 1.05 + f * .5
-        x, y = 50 + math.cos(a) * 22, 56 + math.sin(a) * 14
-        if not c.a[int(y), int(x)]: c.px(int(x), int(y), R['kglow'][3]); c.part[int(y), int(x)] = 'spark'
-    return kayfinish(c, [('gem', 'kbody2'), ('kbody', 'gem')])
+    mlower(c, [(50, 96), (72, 98), (90, 92), (96, 80)], 28, 14, 'mbody', lift=.1)
+    mflipper(c, 36, 92, 170, 16); mflipper(c, 64, 94, 10, 14, lift=.0)
+    mhair_back(c, 50, 39, 1.2, hairflow=0)
+    mtorso(c, 50, 54, 1.2, arms='up', f=f)
+    blob(c, R['gglow2'], lambda d: d.polygon(smooth_poly([(50, 62 - f), (56, 58 - f), (61, 63), (58, 70), (50, 77), (42, 70), (39, 63), (44, 58 - f)], 4), fill=1), bulge=1.3, lift=.3 + f * .1, name='mgem')
+    for (a, b) in [((46, 63), (50, 73)), ((54, 63), (50, 73))]: line(c, [a, b], R['gglow2'][2], 'mgem')
+    glow(c, 48, 63, 2.5, R['gglow2']); c.px(46, 61, (255, 255, 255))
+    mhead(c, 50, 39, 1.2, f, angry=True, hairflow=0)
+    for k in range(8):                                                     # light leaking from the heart
+        a = k * .8 + f * .5
+        x, y = 50 + math.cos(a) * 30, 66 + math.sin(a) * 20
+        if 0 <= int(y) < yp.H and 0 <= int(x) < yp.W and not c.a[int(y), int(x)]: c.px(int(x), int(y), R['gglow2'][3]); c.part[int(y), int(x)] = 'spark'
+    return mfinish(c, [('mgem', 'mtorso')])
 
 def llufu5(f):
-    """Rüf Kaykayfilu: the serpent as it truly is, risen from its coils, crowned, singing again"""
+    """Rüf Millalobo: the king of the sea as he truly is, risen whole on a swell, crown blazing, hearing the song again"""
     setsize(112, 128); c = Canvas()
     kaywater(c, f, 108)
-    kaybody(c, [(96, 116), (104, 98), (90, 86), (60, 84), (36, 92)], 18, 16, 'kbody2', lift=-.02)
-    kaybody(c, [(8, 116), (30, 122), (64, 122), (92, 116), (100, 104)], 20, 14, 'kbody3', lift=.06)
-    kaybody(c, [(70, 118), (44, 110), (30, 92), (32, 66), (46, 46), (54, 34 - f)], 20, 14, 'kbody', lift=.16, n=12)
-    kayhead(c, 56, 30 - f, 1, 1.3, jaw=3 + 2 * f)
-    # a crown of light-horns over the head and music in rings
-    for k in range(5):
-        a = math.radians(-150 + k * 25); L = 12 + (k % 2) * 4
-        taper(c, [(56, 18 - f), (56 + math.cos(a) * L, 18 - f + math.sin(a) * L)], 3, 1, R['kglow'][1:], lift=.2, name='crown', bulge=1.0)
-    arcs(c, 86, 40 - f, [6 + 3 * f, 12 + 3 * f, 18 + 3 * f], -math.pi * .35, math.pi * .35, (160, 255, 240), step=.07)
+    mlower(c, [(44, 100), (64, 110), (86, 112), (102, 104), (108, 90)], 34, 14, 'mbody', lift=.1, n=12)
+    mflipper(c, 30, 104, 165, 22); mflipper(c, 58, 108, 25, 18, lift=.0)
+    mhair_back(c, 44, 42 - f, 1.4, hairflow=1)
+    mtorso(c, 44, 60 - f, 1.4, arms='wide', f=f)
+    mhead(c, 44, 42 - f, 1.4, f, angry=False, hairflow=1)
+    # a halo of gold rays behind the crown and the song in rings
+    for k in range(7):
+        a = math.radians(-160 + k * 23); L = 14 + (k % 2) * 5
+        x0, y0 = 44 + math.cos(a) * 12, 30 - f + math.sin(a) * 8
+        taper(c, [(x0, y0), (x0 + math.cos(a) * L, y0 + math.sin(a) * L)], 2.5, 1, R['gglow2'][1:], lift=.2, name='mray', bulge=1.0)
+    arcs(c, 80, 44 - f, [6 + 3 * f, 12 + 3 * f, 18 + 3 * f], -math.pi * .35, math.pi * .35, (255, 236, 170), step=.07)
     for k in range(16):
         x, y = (k * 23 + f * 5) % 108 + 2, (k * 37 + f * 3) % 96 + 4
-        if not c.a[y, x]: c.px(x, y, R['kglow'][3] if k % 2 else R['kglow'][4]); c.part[y, x] = 'spark'
-    return kayfinish(c, [('crown', 'khead')])
+        if not c.a[y, x]: c.px(x, y, R['gglow2'][3] if k % 2 else R['gglow2'][4]); c.part[y, x] = 'spark'
+    return mfinish(c, [('mray', 'mhair')])
 
 # =========================================================== polishing straight from the pixel art (Ngoymatulfe forms 1 and 5):
 # the original sprite is the drawing; every pixel keeps its place and its role, only the light, the form and the finish change

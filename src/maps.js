@@ -533,7 +533,7 @@ u_deep:{region:'chumpall',name:'Llufü mapu',g:{es:'La fosa profunda (zona difí
    {kind:'enemy',x:11,y:3,party:['kamawetu','basilisko']},{kind:'enemy',x:24,y:5,party:['basilisko','basilisko','kowek']},{kind:'enemy',x:10,y:10,party:['kamawetu','kamawetu','mawek']}]},
 u_throne:{region:'chumpall',name:'Chumpall ñi ruka',g:{es:'El salón de los chumpall',en:'The hall of the chumpall'},floor:'_',bg:'deep',song:'deep',dungeon:1,pal:'munchedeep',under:1,
  edges:{left:{to:'u_deep',x:30,y:7}},
- ents:[{id:'chqueen',kind:'npc',look:'chumpall',fem:1,x:11,y:4,dir:'down',fixed:1,talk:()=>chQueenTalk(),bub:['Kaykayfilu...','Kellumuyiñ!']}]},
+ ents:[{id:'chqueen',kind:'npc',look:'chumpall',fem:1,x:11,y:4,dir:'down',fixed:1,talk:()=>chQueenTalk(),bub:['Millalobo...','Kellumuyiñ!']}]},
 s_plaza:{region:'santiago',name:'Santiago · Plaza Wallmapu',g:{es:'Una plaza de la waria',en:'A plaza in the city'},floor:',',bg:'waria',song:'waria',pal:'stgo',urban:1,trees:'koyam',seed:3,
  edges:{right:{to:'s_calle',x:1,y:3}},bld:{'18,0':{mural:1},'6,0':{shop:1,door:3},'26,0':{shop:1,door:2},'0,14':{shop:1,door:2},'12,14':{shop:1,door:2},'24,14':{shop:1,door:3}},
  signs:{'24,10':[L('','Plaza Wallmapu','Un letrero nuevo, pintado a mano: «Plaza Wallmapu». Debajo, más chico: «mari mari, compita».','A new, hand-painted sign: «Plaza Wallmapu». Below, smaller: «mari mari, compita».')]},

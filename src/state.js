@@ -126,11 +126,11 @@ const ET={
   ngoyman3:{name:'Ngoymatulfe ñi piwke',hp:205,atk:16,xp:0,gold:[0,0],boss:true,bs:112,armor:1,spres:1},
   ngoyman4:{name:'Füta Dumiñ',hp:235,atk:18,xp:0,gold:[0,0],boss:true,bs:134,armor:1,spres:1},
   ngoyman5:{name:'Rüf Fütra Ngoymatulfe',hp:265,atk:20,xp:400,gold:[500,500],boss:true,bs:146,spres:1,thick:1},
-  llufu1:{name:'Kaykayfilu',hp:140,atk:14,xp:0,gold:[0,0],boss:true,bs:104},
-  llufu2:{name:'Kaykayfilu ñi foro',hp:150,atk:14,xp:0,gold:[0,0],boss:true,bs:106,armor:1},
-  llufu3:{name:'Kaykayfilu ñi müpü',hp:160,atk:15,xp:0,gold:[0,0],boss:true,bs:108,twice:1},
-  llufu4:{name:'Kaykayfilu ñi piwke',hp:175,atk:15,xp:0,gold:[0,0],boss:true,bs:104,spres:1},
-  llufu5:{name:'Rüf Kaykayfilu',hp:185,atk:16,xp:380,gold:[500,500],boss:true,bs:112,thick:1}};
+  llufu1:{name:'Millalobo',hp:140,atk:14,xp:0,gold:[0,0],boss:true,bs:104},
+  llufu2:{name:'Millalobo ñi foro',hp:150,atk:14,xp:0,gold:[0,0],boss:true,bs:106,armor:1},
+  llufu3:{name:'Millalobo ñi müpü',hp:160,atk:15,xp:0,gold:[0,0],boss:true,bs:108,twice:1},
+  llufu4:{name:'Millalobo ñi piwke',hp:175,atk:15,xp:0,gold:[0,0],boss:true,bs:104,spres:1},
+  llufu5:{name:'Rüf Millalobo',hp:185,atk:16,xp:380,gold:[500,500],boss:true,bs:112,thick:1}};
 
 /* ---------- items ---------- */
 const ITEMS={

@@ -238,11 +238,11 @@ function resolve(r,kil,tg,ei){
       const ulk=B.o.chain==='llufu'&&T.boss;
       if(ulk){
         let d=atk()+rnd(4)+3;
-        if(e.armor){d=Math.max(1,Math.round(d*.25));fx.push(e.label+': las placas apagan el canto.');fxe.push(e.label+': the plates muffle the song.')}
+        if(e.armor){d=Math.max(1,Math.round(d*.25));fx.push(e.label+': la coraza de huesos apaga el canto.');fxe.push(e.label+': the bone breastplate muffles the song.')}
         if(e.seals&&e.seals.length){d=Math.min(2,d);fx.push(e.label+': la barrera de luz apaga casi todo el canto.');fxe.push(e.label+': the barrier of light smothers most of the song.')}
         if(e.down){d+=4;e.down=0}
         e.pend=d;e.hp-=d;
-        fx.push('El ül envuelve a '+e.label+': sus anillos se aflojan, más cerca del sueño (−'+d+').');fxe.push('The ül wraps around '+e.label+': its coils loosen, closer to sleep (−'+d+').');
+        fx.push('El ül envuelve a '+e.label+': su furia se enfría, más cerca de la calma (−'+d+').');fxe.push('The ül wraps around '+e.label+': his fury cools, closer to calm (−'+d+').');
       }else if(T.boss){fx.push(e.label+' no se aquieta con palabras.');fxe.push(e.label+' is not stilled by words.')}
       else{const d=e.seals&&e.seals.length?Math.min(2,2):2;e.pend=d;e.hp-=d;if(!ET[e.t].fly&&Math.random()<.35)e.sl=1;
         fx.push(e.label+' se aquieta un poco (−'+d+').');fxe.push(e.label+' settles a little (−'+d+').');}}}
@@ -287,23 +287,23 @@ function enemyPhase(){
     if(e.stun>0){e.stun--;fx.push(e.label+' todavía retrocede.');fxe.push(e.label+' is still backing away.');continue}
     if(e.t==='ngoyam'&&Math.random()<.3&&(S.sp||0)>0){S.sp--;fx.push(e.label+' te susurra el olvido: pierdes un punto de newen (✦).');fxe.push(e.label+' whispers forgetting to you: you lose one newen point (✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')});continue}
     if(e.t==='ngoyman1'||e.t==='llufu1'){const wat=e.t==='llufu1';
-      if(!e.hidden&&e.hideT>0){e.hideT--;if(e.hideT<=0){e.hidden=1;fx.push(wat?'El agua oscura vuelve a tragarse al Kaykayfilu.':'La niebla vuelve a tragarse a Ti Fütra Ngoymatulfe.');fxe.push(wat?'The dark water swallows the Kaykayfilu again.':'The fog swallows Ti Fütra Ngoymatulfe again.');continue}}
-      if(!e.hidden&&!e.hideT&&B.turn===0){e.hidden=1;fx.push(wat?'El Kaykayfilu se hunde en el agua oscura: no ves dónde golpear.':'El velo de niebla se cierra sobre el gran olvido: no ves dónde golpear.');fxe.push(wat?'The Kaykayfilu sinks into the dark water: you cannot see where to strike.':'The veil of fog closes over the great forgetting: you cannot see where to strike.');continue}
+      if(!e.hidden&&e.hideT>0){e.hideT--;if(e.hideT<=0){e.hidden=1;fx.push(wat?'El agua oscura vuelve a tragarse al Millalobo.':'La niebla vuelve a tragarse a Ti Fütra Ngoymatulfe.');fxe.push(wat?'The dark water swallows the Millalobo again.':'The fog swallows Ti Fütra Ngoymatulfe again.');continue}}
+      if(!e.hidden&&!e.hideT&&B.turn===0){e.hidden=1;fx.push(wat?'El Millalobo se hunde en el agua oscura: no ves dónde golpear.':'El velo de niebla se cierra sobre el gran olvido: no ves dónde golpear.');fxe.push(wat?'The Millalobo sinks into the dark water: you cannot see where to strike.':'The veil of fog closes over the great forgetting: you cannot see where to strike.');continue}
       if(!wat&&B.turn>0&&B.turn%3===2){hitP(e,2.0,{es:': dos garras de niebla salen del velo y te cruzan el pecho',en:': two claws of fog lash out of the veil and rake your chest'});hitsFx.push(()=>B.shake=10);continue}
-      hitP(e,e.hidden?1:1.3,wat?{es:' te golpea con la cola desde lo oscuro',en:' strikes you with its tail from the dark'}:{es:' te azota con un jirón de niebla',en:' lashes you with a shred of fog'});continue}
+      hitP(e,e.hidden?1:1.3,wat?{es:' te golpea con una aleta desde lo oscuro',en:' strikes you with a flipper from the dark'}:{es:' te azota con un jirón de niebla',en:' lashes you with a shred of fog'});continue}
     if(e.t==='llufu2'){
-      if(!e.armor){e.armorT=(e.armorT||0)-1;if(e.armorT<=0){e.armor=1;fx.push('Las placas de la mandíbula del Kaykayfilu vuelven a cerrarse.');fxe.push('The plates of the Kaykayfilu\'s jaw lock shut again.');continue}}
-      hitP(e,B.turn%3===2?1.5:1,{es:' muerde con sus mandíbulas de piedra',en:' bites with its stone jaws'});continue}
+      if(!e.armor){e.armorT=(e.armorT||0)-1;if(e.armorT<=0){e.armor=1;fx.push('La coraza de huesos de ballena del Millalobo vuelve a cerrarse.');fxe.push('The Millalobo\'s whalebone breastplate closes again.');continue}}
+      hitP(e,B.turn%3===2?1.5:1,{es:' golpea con sus puños',en:' strikes with his fists'});continue}
     if(e.t==='llufu4'){
       if(!e.seals)e.seals=[];
       if(!e.seals.length&&B.turn>0&&B.turn%3===0){const pool=S.roots.slice();let code=pool[rnd(pool.length)];if(Math.random()<.4)code+='kil';e.seals=[code];
-        fx.push('¡El piwke del Kaykayfilu alza una barrera de luz! '+sealGloss(code,'es'));fxe.push('The Kaykayfilu\'s heart raises a barrier of light! '+sealGloss(code,'en'));hitsFx.push(()=>{sfx('cast');B.flash=10});continue}
+        fx.push('¡El piwke del Millalobo alza una barrera de luz! '+sealGloss(code,'es'));fxe.push('The Millalobo\'s heart raises a barrier of light! '+sealGloss(code,'en'));hitsFx.push(()=>{sfx('cast');B.flash=10});continue}
       hitP(e,1.1,{es:' late con fuerza y el agua te golpea',en:' beats hard and the water slams you'});continue}
     if(e.t==='llufu5'){
       if(B.en.length<4&&Math.random()<.3){const t2=Math.random()<.5?'kowek':'mawek',ne=mkEnemy(t2);B.en.push(ne);relabel();
-        fx.push('El Kaykayfilu llama a las aguas: ¡'+ne.label+' aparece!');fxe.push('The Kaykayfilu calls the waters: '+ne.label+' appears!');continue}
-      if(B.turn%3===2){hitP(e,1.9,{es:' se deja caer entero sobre ti',en:' crashes its whole body down on you'});continue}
-      hitP(e,.9);hitP(e,.9,{es:' barre con la cola',en:' sweeps with its tail'});continue}
+        fx.push('El Millalobo llama a las aguas: ¡'+ne.label+' aparece!');fxe.push('The Millalobo calls the waters: '+ne.label+' appears!');continue}
+      if(B.turn%3===2){hitP(e,1.9,{es:' se deja caer entero sobre ti',en:' crashes his whole body down on you'});continue}
+      hitP(e,.9);hitP(e,.9,{es:' barre con las aletas',en:' sweeps with his flippers'});continue}
     if(e.t==='ngoyman3'){
       if(B.turn>0&&B.turn%4===3){if((S.sp||0)>0)S.sp--;hitP(e,1.9,{es:': un latido de losa te aplasta contra el suelo (−✦)',en:': a stone-slab beat crushes you to the ground (−✦)'});hitsFx.push(()=>{B.shake=12;pop(60,30,'−✦','#c0b8ff');sfx('bad')});continue}
       if(!e.armor){e.armorT=(e.armorT||0)-1;if(e.armorT<=0){e.armor=1;fx.push('La coraza gris del piwke vuelve a cerrarse.');fxe.push('The grey crust of the heart closes again.');continue}}
@@ -474,16 +474,16 @@ function llufuStage(nx){
   const e=mkEnemy(nx);B.en=[e];relabel();B.tele=false;B.blocked=null;B.rush=null;sfx('lvl');B.flash=16;B.shake=10;
   S.hp=maxHP();S.sp=SPMAX;e.hp-=12;
   const k={llufu2:0,llufu3:1,llufu4:2,llufu5:3}[nx],[snm,sd,sde]=LLSING[k];
-  const forms={llufu2:[N('¡Las aguas se abren! El Kaykayfilu alza la cabeza: una mandíbula enorme de placas de piedra, llena de dientes.','The waters part! The Kaykayfilu raises its head: a huge jaw of stone plates, full of teeth.')],
-    llufu3:[N('El Kaykayfilu despliega una tormenta de aletas: el agua entera se vuelve un remolino de filos.','The Kaykayfilu unfurls a storm of fins: the whole water becomes a whirl of blades.')],
-    llufu4:[N('Entre sus anillos aparece su piwke: un corazón que late luz robada, protegido por barreras.','Within its coils appears its piwke: a heart beating with stolen light, guarded by barriers.')],
-    llufu5:[N('El Kaykayfilu entero se alza desde el fondo, más grande que la ruka más grande: Rüf Kaykayfilu, la gran serpiente de las aguas.','The whole Kaykayfilu rears up from the depths, bigger than the biggest ruka: Rüf Kaykayfilu, the great serpent of the waters.')]}[nx];
-  forms.push(N('El chumpall '+snm+', '+sd+', canta a tu lado: tu piwke y tu newen se llenan de nuevo, y su ül golpea a la serpiente (−12).','The chumpall '+snm+', '+sde+', sings at your side: your hearts and your newen fill again, and their ül strikes the serpent (−12).'));
+  const forms={llufu2:[N('¡Las aguas se abren! El Millalobo se alza hasta la cintura: lleva una coraza de huesos de ballena atada con cochayuyo.','The waters part! The Millalobo rises to the waist, wearing a breastplate of whale bones lashed with kelp.')],
+    llufu3:[N('El Millalobo nada en grandes arcos, con las aletas abiertas como alas: el agua entera se vuelve un remolino.','The Millalobo swims in great arcs, flippers spread like wings: the whole water becomes a whirlpool.')],
+    llufu4:[N('Su pecho se abre y aparece su piwke: un corazón de oro que late luz robada, protegido por barreras.','His chest opens and his piwke appears: a heart of gold beating with stolen light, guarded by barriers.')],
+    llufu5:[N('El Millalobo entero se alza sobre una ola, más grande que la ruka más grande: Rüf Millalobo, el rey del mar.','The whole Millalobo rises on a swell, bigger than the biggest ruka: Rüf Millalobo, the king of the sea.')]}[nx];
+  forms.push(N('El chumpall '+snm+', '+sd+', canta a tu lado: tu piwke y tu newen se llenan de nuevo, y su ül alcanza al Millalobo (−12).','The chumpall '+snm+', '+sde+', sings at your side: your hearts and your newen fill again, and their ül reaches the Millalobo (−12).'));
   say(forms,battleMenu);
 }
 function postLlufu(){
   S.flags.chboss=1;S.gear.lafkenkura=1;persist();sfx('lvl');
-  say([N('El Rüf Kaykayfilu deja de luchar: el ül de los chumpall lo envuelve y lo aquieta. En paz, se hunde despacio hacia una fosa tan honda que ni los chumpall la conocen. El agua queda limpia y quieta.','The Rüf Kaykayfilu stops fighting: the chumpall\'s ül wraps around it and stills it. At peace, it sinks slowly into a trench so deep not even the chumpall know it. The water is left clean and still.'),
+  say([N('El Rüf Millalobo deja de luchar: el ül de los chumpall lo envuelve y le enfría la furia. En paz, inclina la corona ante ti y se hunde despacio hacia su palacio, tan hondo que ni los chumpall lo conocen. El agua queda limpia y quieta.','The Rüf Millalobo stops fighting: the chumpall\'s ül wraps around him and cools his fury. At peace, he bows his crown to you and sinks slowly toward his palace, so deep not even the chumpall know it. The water is left clean and still.'),
     L('Ñidol chumpall','Chaltu may, '+nm()+'. Taiñ lafken montulürkey.','Gracias, '+nm()+'. Nuestro mar se salvó.','Thank you, '+nm()+'. Our sea has been saved.'),
     N('Los cinco cantores chumpall te rodean y cantan juntos una sola vez. El agua entera brilla.','The five chumpall singers surround you and sing together, just once. The whole water glows.'),
     Object.assign(L('','Lafkenkura!','La ñidol chumpall te regala una lafkenkura, una piedra del mar: desde ahora recuperas 2 de newen en cada turno de pelea.','The chumpall leader gives you a lafkenkura, a sea stone: from now on you recover 2 newen every battle turn.'),{fx:()=>sfx('lvl')})],
@@ -578,7 +578,7 @@ function victory(){
   S.xp+=xp;S.gold+=gold;
   const wn=(B.o.boss||B.o.final||B.o.chain)?'win':'winS';const after=SONGS[wn];after.after=()=>mapSong();playSong(wn);
   const NGN={lafken:'Ngen-lafken',mawida:'Ngen-mawida',pewen:'Ngen-pewen',kuruf:'Ngen-kürüf',lelfun:'Ngen-lelfün'};
-  const ls=[(B.ngenA&&B.ngenA.kind==='final')?N('¡Los cinco ngen del mapu responden a la vez! Mar, monte, pewen, viento y pampa descargan su newen, uno tras otro... y Ti Fütra Ngoymatulfe se quiebra en mil pedazos que la luz deshace.','The five ngen of the land answer as one! Sea, forest, pewen, wind and plain unleash their newen, one after another... and Ti Fütra Ngoymatulfe shatters into a thousand pieces that the light unmakes.'):B.o.chain==='llufu'?N('El ül se cierra como una marea mansa: Kaykayfilu se aquieta y vuelve a su sueño en el fondo del mar.','The ül closes like a gentle tide: Kaykayfilu grows calm and returns to his sleep at the bottom of the sea.'):(B.ngenA&&B.ngenA.v)?N('¡'+NGN[B.ngenA.v]+' despierta y descarga su newen sobre el wekufü: el maligno estalla en mil pedazos que la luz deshace! La tierra respira de nuevo.',NGN[B.ngenA.v]+' awakens and unleashes its newen upon the wekufü: the evil one shatters into a thousand pieces that the light unmakes! The land breathes again.'):(B.en.some(e=>e.t==='epunamun'))?N('El Epunamun baja sus dos lanzas y asiente con las dos caras: la prueba terminó, y la pasaste.','The Epunamun lowers his two spears and nods with both faces: the trial is over, and you have passed it.'):(B.en.some(e=>e.t==='llawfen'))?N('Tu sombra deja de pelear. No huye ni se deshace: se queda quieta, mirándote con tus propios ojos.','Your shadow stops fighting. It does not flee or break apart: it stands still, looking at you with your own eyes.'):N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
+  const ls=[(B.ngenA&&B.ngenA.kind==='final')?N('¡Los cinco ngen del mapu responden a la vez! Mar, monte, pewen, viento y pampa descargan su newen, uno tras otro... y Ti Fütra Ngoymatulfe se quiebra en mil pedazos que la luz deshace.','The five ngen of the land answer as one! Sea, forest, pewen, wind and plain unleash their newen, one after another... and Ti Fütra Ngoymatulfe shatters into a thousand pieces that the light unmakes.'):B.o.chain==='llufu'?N('El ül se cierra como una marea mansa: el Millalobo se aquieta y su furia se apaga en el fondo del mar.','The ül closes like a gentle tide: the Millalobo grows calm and his fury dies away at the bottom of the sea.'):(B.ngenA&&B.ngenA.v)?N('¡'+NGN[B.ngenA.v]+' despierta y descarga su newen sobre el wekufü: el maligno estalla en mil pedazos que la luz deshace! La tierra respira de nuevo.',NGN[B.ngenA.v]+' awakens and unleashes its newen upon the wekufü: the evil one shatters into a thousand pieces that the light unmakes! The land breathes again.'):(B.en.some(e=>e.t==='epunamun'))?N('El Epunamun baja sus dos lanzas y asiente con las dos caras: la prueba terminó, y la pasaste.','The Epunamun lowers his two spears and nods with both faces: the trial is over, and you have passed it.'):(B.en.some(e=>e.t==='llawfen'))?N('Tu sombra deja de pelear. No huye ni se deshace: se queda quieta, mirándote con tus propios ojos.','Your shadow stops fighting. It does not flee or break apart: it stands still, looking at you with your own eyes.'):N('¡Los wekufü se van!','The wekufü are gone!'),L('','+'+numW(gold)+' ngülliw','Ganas '+numP(gold)+' ngülliw y '+numP(xp)+' de kimün.','You gain '+numP(gold)+' ngülliw and '+numP(xp)+' kimün.')];
   if(B.ngenA&&B.ngenA.kind==='final'&&S.flags.epu_won)ls.push(N('Y al final, entre los ngen, el Epunamun: sus dos caras arden en rojo y sus lanzas disparan el último fuego contra el olvido.','And last, among the ngen, the Epunamun: both his faces burn red and his spears fire the last blaze against the forgetting.'));
   while(S.xp>=xpNeed()){S.xp-=xpNeed();S.lvl++;S.baseMax+=HPQ;S.hp+=HPQ;S.baseAtk+=1;if(S.lvl%2===0)S.baseDef+=1;
     const l=L('','Doy kimün! Akuymi kimün nivel '+S.lvl+'. Llowfimi ka piwke ka doy newentuymi.','¡Más conocimiento! Llegas a kimün '+S.lvl+': ganas un corazón y más fuerza.','More knowledge! You reach kimün '+S.lvl+': you gain a heart and more strength.');l.fx=()=>sfx('lvl');ls.push(l)}

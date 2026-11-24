@@ -218,7 +218,7 @@ add(28.8, 30.4333, cutshot('c_i2', 0, 1.06, 1.0))
 add(30.4333, 32.0, cutshot('c_i3', 0))
 for (t0, t1, b, lab) in [(32, 33.6, 'trelke', 'Trelke-wekufü'), (33.6, 35.2, 'witranalwe', 'Witranalwe'), (35.2, 36.8333, 'cherrufe', 'Cherufe'), (36.8333, 38.4333, 'kaleuche', 'Kaleuche'),
                          (38.4333, 40, 'walichu', 'Walichu'), (40, 41.6, 'chadikura', 'Elëngasëm'), (41.6, 43.2, 'chinifilu', 'Chiñifilu'), (43.2, 44.8333, 'piwuchen', 'Piwüchen'),
-                         (64, 65.6, 'wallipen', 'Wallepeñ'), (65.6, 67.2, 'trawko', 'Trawko'), (67.2, 68.8, 'epunamun', 'Epunamun'), (68.8, 70.4, 'kalku', 'Fütra Kalku'), (70.4, 72, 'llufu5', 'Kaykayfilu')]:
+                         (64, 65.6, 'wallipen', 'Wallepeñ'), (65.6, 67.2, 'trawko', 'Trawko'), (67.2, 68.8, 'epunamun', 'Epunamun'), (68.8, 70.4, 'kalku', 'Fütra Kalku'), (70.4, 72, 'llufu5', 'Millalobo')]:
     add(t0, t1, bossshot(b, lab))
 add(57.6, 60.8333, cutshot('c_e1', 0))
 add(60.8333, 64, cutshot('c_e2', 0))

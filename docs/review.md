@@ -548,3 +548,16 @@ Aplicado tal como lo marcaste (17; «Wefi Ti Fütra Ngoymatulfe!» y «Chem am t
 ## Revisión del cuaderno: pestaña 7 Santiago (24 nov)
 Aplicado tal como lo marcaste (13): «fali» en el precio de la feriante y en las cinco preguntas de la casera · Fewla allkütungey · Kiñekiñe akuyngün · Kim mapudungukeymi am? · Ayüfimi am? · fillantü ka pichin kimnierpuken (tenía OK pero traía corrección) · «¿Sabí contar…?» · la papay: «Tañi pu füchakeche ñi kewün, tañi pu püñeñ ñi kewün. Tañi pu püñeñ ñi pichike choyün ñi kewün.»
 - Nacho (fila 156): la corrección es igual a la línea actual; no cambia nada. «Wüla müten» (fila 8) quedó sin marcar.
+
+## Kaykayfilu → Millalobo (24 nov)
+Trengtreng y Kaykay son sagrados y salen del juego. El jefe secreto del salón de los chumpall pasa a ser el **Millalobo**, rey del mar en la tradición williche de Chiloé (mitad hombre, mitad lobo marino, oro en el pelo y la corona).
+- Se mantiene la mecánica de las cinco formas, el ül de los chumpall y llako-, ahora reencuadrado: llako- le enfría la furia (ya no "lo acerca al sueño"); al final inclina la corona y vuelve a su palacio.
+- Las formas conservan sus nombres con el nuevo nombre: Millalobo, Millalobo ñi foro (coraza de huesos de ballena), Millalobo ñi müpü (aletas abiertas como alas), Millalobo ñi piwke (corazón de oro), Rüf Millalobo.
+- Sprites nuevos pintados a mano (tools/boss_paint.py), y el plano del jefe en los créditos (ending.mp4, 70.4–72 s) vuelto a componer con el nombre nuevo.
+- Se quitó el epew de Trengtrengfilu y Kaykayfilu del nütramkafe; en su lugar cuenta quién es el Millalobo.
+- Líneas en mapudungun nuevas o cambiadas, para revisar (no están en el cuaderno .xlsx, que no se regeneró para no perder tus marcas):
+  - Challwafe: «Millalobo müley lafken mew.» ('El Millalobo está en el mar.') ⚠ reemplaza «Kaykayfilu umawtuley.»
+  - Nütramkafe: «Kuyfi, lafken mew mülefuy Millalobo.» ('Hace mucho tiempo, en el mar vivía el Millalobo.') ⚠
+  - Nütramkafe: «Lafken ñi lonko ngefuy.» ('Era el lonko del mar.') ⚠
+  - Ñidol chumpall: «Millalobo nepey. …» (solo cambia el nombre).
+- ⚠ Ortografía: se dejó «Millalobo», la forma tradicional (milla 'oro' + lobo marino), aunque mezcla una raíz castellana.

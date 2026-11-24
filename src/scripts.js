@@ -105,7 +105,7 @@ function fisherTalk(){const fv=rot('fisher',3);
   if(fv===1)return say([L('Challwafe','Fachantü alün challwa müley!','¡Hoy hay mucho pescado!','Today there is so much fish!'),
     N('Te muestra el canasto: plateado y lleno hasta el borde.','He shows you the basket: silver and full to the brim.')]);
   if(fv===2)return say([L('Challwafe','Lafken llükakelafiñ.','No le temo al mar.','I do not fear the sea.'),
-    L('Challwafe','Kaykayfilu umawtuley.','Kaykayfilu duerme.','Kaykayfilu is asleep.')]);
+    L('Challwafe','Millalobo müley lafken mew.','El Millalobo está en el mar.','The Millalobo is in the sea.')]);
   say([L('Challwafe','Mari mari, '+addr(false)+'!','¡Hola, '+addr(false)+'! (challwafe: pescador)','Hello, '+addr(false)+'! (challwafe: fisherman)'),
   L('Challwafe','Challwatuken lafken mew.','Pesco en el mar.','I fish in the sea.'),
   N('Los ngülliw se cuentan en mapudungun. Escucha:','Ngülliw are counted in Mapudungun. Listen:'),
@@ -482,10 +482,10 @@ function nutramTalk(){
     L('Nütramkafe','Anchimalleñ pingey.','Se llama anchimalleñ.','It is called an anchimalleñ.'),
     N('Una lucecita que salta por los campos de noche. Unos dicen que acompaña; otros, que extravía. Si la sigues, cuenta tus pasos para poder volver.','A little light that skips across the fields at night. Some say it keeps you company; others, that it leads you astray. If you follow it, count your steps so you can return.'),
     N('Otra vez -fu-: mülefuy, «había». Así se cuenta lo de antes.','Again -fu-: mülefuy, «there was». That is how the past is told.')]);
-  if(nv===2)return say([L('Nütramkafe','Kuyfi, fütra ko küpafuy.','Hace mucho tiempo, venía una gran agua.','Long ago, a great water was coming.'),
-    L('Nütramkafe','Kaykayfilu ñi ko. Trengtrengfilu ñi winkul.','El agua de Kaykayfilu. El cerro de Trengtrengfilu.','Kaykayfilu\'s water. Trengtrengfilu\'s hill.'),
-    N('El mar subía y subía, y la serpiente de la tierra levantó los cerros para que la gente se salvara. Por eso, cuando el mar se enoja, los antiguos suben al winkul.','The sea rose and rose, and the serpent of the land lifted the hills so the people could be saved. That is why, when the sea grows angry, the old people climb the winkul.'),
-    N('Dos nombres que pelean desde el principio del mundo: Kaykayfilu, del agua, y Trengtrengfilu, de la tierra.','Two names that have fought since the beginning of the world: Kaykayfilu of the water and Trengtrengfilu of the land.')]);
+  if(nv===2)return say([L('Nütramkafe','Kuyfi, lafken mew mülefuy Millalobo.','Hace mucho tiempo, en el mar vivía el Millalobo.','Long ago, the Millalobo lived in the sea.'),
+    L('Nütramkafe','Lafken ñi lonko ngefuy.','Era el lonko del mar.','He was the lonko of the sea.'),
+    N('Mitad hombre, mitad lobo marino, con oro en el pelo y en la corona. Los williche de Chiloé cuentan que manda sobre los peces y las olas, y que se enoja con quien no respeta el mar.','Half man, half sea lion, with gold in his hair and his crown. The Williche of Chiloé tell that he rules the fish and the waves, and that he grows angry with anyone who does not respect the sea.'),
+    N('Otra vez -fu-: mülefuy «vivía», ngefuy «era». Así se cuenta lo de antes.','Again -fu-: mülefuy «he lived», ngefuy «he was». That is how the past is told.')]);
   say([L('Nütramkafe','Mari mari, '+addr(false)+'. Nütramkayaiñ?','Hola. ¿Conversamos?','Hello. Shall we talk?'),
     N('Nütramkan es conversar y contar lo que pasó. El nütramkafe es quien cuenta.','Nütramkan means to converse and tell what happened. The nütramkafe is the one who tells.'),
     L('Nütramkafe','Kuyfi, mawida mew mülefuy kiñe Witranalwe.','Hace mucho tiempo, en el monte había un Witranalwe.','Long ago, in the forest, there was a Witranalwe.'),
@@ -1372,8 +1372,8 @@ function chGardenTalk(){
     {q:L('Chumpall','Chem am ta "challwa"?','¿Qué es "challwa"?','What is "challwa"?'),o:[en?'bird':'pájaro',en?'fish':'pescado',en?'wave':'ola'],a:en?'fish':'pescado'},
     {q:L('Chumpall','Chem am ta "lafken"?','¿Qué es "lafken"?','What is "lafken"?'),o:[en?'the sea, the lake':'el mar, el lago',en?'the rain':'la lluvia',en?'the river':'el río'],a:en?'the sea, the lake':'el mar, el lago'}];
   say([L('Chumpall','Mari mari, wenüy. Iñche chumpall ngen.','Hola, amiga o amigo. Yo soy chumpall.','Hello, friend. I am a chumpall.'),
-    N('La chumpall jardinera cuida huertas de algas y corales. Desde que despertó el Kaykayfilu, sus plantas olvidan sus nombres... y sin nombre, se marchitan. Devuélveselos.','The chumpall gardener tends beds of kelp and coral. Since the Kaykayfilu woke, her plants forget their names... and without a name, they wither. Give the names back.'),
-    N('«No es un wekufü», te dice. «Es la gran serpiente de las aguas, la de los relatos antiguos. Dormía en paz con el ül que le cantábamos. El olvido se llevó ese canto, y sin él no puede dormir.»','"It is not a wekufü," she tells you. "It is the great serpent of the waters, the one of the old tellings. It slept in peace with the ül we sang to it. The forgetting took that song, and without it, it cannot sleep."')],()=>ask(0));
+    N('La chumpall jardinera cuida huertas de algas y corales. Desde que se enfureció el Millalobo, sus plantas olvidan sus nombres... y sin nombre, se marchitan. Devuélveselos.','The chumpall gardener tends beds of kelp and coral. Since the Millalobo flew into his rage, her plants forget their names... and without a name, they wither. Give the names back.'),
+    N('«No es un wekufü», te dice. «Es el Millalobo, el rey del mar: mitad hombre, mitad lobo marino. Así lo cuentan los williche de Chiloé. Vivía en paz en su palacio bajo el agua, oyendo el ül que le cantábamos. El olvido se llevó ese canto, y sin él su furia no se acaba.»','"He is not a wekufü," she tells you. "He is the Millalobo, the king of the sea: half man, half sea lion. That is how the Williche of Chiloé tell it. He lived in peace in his palace under the water, listening to the ül we sang him. The forgetting took that song, and without it his fury has no end."')],()=>ask(0));
   function ask(i){
     if(i>=qs.length){S.flags.ch1=1;S.items.lawen++;S.gold+=40;persist();sfx('lvl');
       return say([praise(),L('Chumpall','Kom mongetuy!','¡Todo revive!','Everything comes back to life!'),N('Las algas se enderezan y los corales vuelven a brillar. Te da un lawen y meli mari (40) ngülliw.','The kelp straightens and the coral glows again. She gives you a lawen and meli mari (40) ngülliw.')])}
@@ -1389,9 +1389,9 @@ function chChildTalk(){
     N('«Donde la arena está blanda, entre los dos abismos. Escarba y la encontrarás.»','"Where the sand is soft, between the two chasms. Dig and you will find it."')]);
   S.flags.ch2q=1;persist();
   say([L('Pichi chumpall','Ngümaley... Ñi lüq kura ñami.','(Está llorando.) Se me perdió mi lüq kura, mi piedra blanca.','(He is crying.) I lost my lüq kura, my white stone.'),
-    N('Es una perla que canta. Cuando el Kaykayfilu pasó, la onda se la llevó a la fosa profunda, al este. Quedó enterrada en la arena blanda.','It is a pearl that sings. When the Kaykayfilu passed, the wave carried it to the deep trench, to the east. It lies buried in the soft sand.'),
+    N('Es una perla que canta. Cuando el Millalobo pasó, la onda se la llevó a la fosa profunda, al este. Quedó enterrada en la arena blanda.','It is a pearl that sings. When the Millalobo passed, the wave carried it to the deep trench, to the east. It lies buried in the soft sand.'),
     L('Pichi chumpall','Kintulaen, chaltu!','¡Búscamela, porfa!','Please find it for me!'),
-    N('Entre sollozos agrega: «El Kaykayfilu no es malo... Antes dormía abajo, quietito, con el canto de los grandes. Cuando vuelva a oír su ül, se va a dormir de nuevo.»','Between sobs he adds: "The Kaykayfilu is not bad... It used to sleep down there, so still, with the grown-ups\' song. When it hears its ül again, it will go back to sleep."')]);
+    N('Entre sollozos agrega: «El Millalobo no es malo... Antes se quedaba abajo, en su palacio, tranquilo, con el canto de los grandes. Cuando vuelva a oír su ül, se va a calmar y volverá a su casa.»','Between sobs he adds: "The Millalobo is not bad... He used to stay down there in his palace, so calm, with the grown-ups\' song. When he hears his ül again, he will calm down and go back home."')]);
 }
 function chSingerTalk(){
   const en=S.gloss==='en';
@@ -1400,8 +1400,8 @@ function chSingerTalk(){
     {q:N('La ola tiene que IRSE de las huertas. Díselo:','The wave must GO AWAY from the gardens. Tell it:'),o:['küpange','amutunge','nepenge'],a:'amutunge'},
     {q:N('El agua brava tiene que DORMIRSE. Díselo:','The rough water must SLEEP. Tell it:'),o:['tripange','lefnge','umawtunge'],a:'umawtunge'}];
   say([L('Chumpall ülkantufe','Mari mari. Taiñ lafken ül ñamürkey.','Hola. El canto de nuestro mar se perdió.','Hello. The song of our sea has been lost.'),
-    N('Los chumpall gobiernan el agua cantándole órdenes. Pero al despertar, el Kaykayfilu desordenó el ül, el canto. Ayúdala a ordenar las palabras del agua.','The chumpall govern the water by singing commands to it. But in waking, the Kaykayfilu scrambled the ül, the song. Help her put the water\'s words back in order.'),
-    N('«Este mismo ül era el que lo hacía dormir», dice. «Ordenarlo de nuevo es el primer paso para devolverle la calma.»','"This very ül was what made it sleep," she says. "Putting it back in order is the first step toward giving its calm back."')],()=>ask(0));
+    N('Los chumpall gobiernan el agua cantándole órdenes. Pero en su furia, el Millalobo desordenó el ül, el canto. Ayúdala a ordenar las palabras del agua.','The chumpall govern the water by singing commands to it. But in his fury, the Millalobo scrambled the ül, the song. Help her put the water\'s words back in order.'),
+    N('«Este mismo ül era el que lo mantenía en calma», dice. «Ordenarlo de nuevo es el primer paso para devolvérsela.»','"This very ül was what kept him calm," she says. "Putting it back in order is the first step toward giving that calm back."')],()=>ask(0));
   function ask(i){
     if(i>=qs.length){S.flags.ch3=1;S.items.kofke++;S.gold+=40;S.xp+=4;persist();sfx('lvl');
       return say([praise(),L('Chumpall ülkantufe','Taiñ ül wüñomongeturkey. Chaltu may.','Nuestro canto revivió. Gracias.','Our song has come back to life. Thank you.'),N('El agua de la fosa se aquieta un momento, escuchando. Te da un kofke y meli mari (40) ngülliw. +4 kimün.','The water of the trench goes still for a moment, listening. She gives you a kofke and meli mari (40) ngülliw. +4 kimün.')],()=>{if(S.xp>=xpNeed())levelUpCheck()})}
@@ -1415,18 +1415,18 @@ function chQueenTalk(){
   const ready=S.flags.ch1&&S.flags.ch2&&S.flags.ch3;
   const ls=[L('Ñidol chumpall','Mari mari, wenüy. Iñche ñidol chumpall ngen.','Hola. Yo guío a los chumpall.','Hello. I lead the chumpall.'),
     N('La ñidol de los chumpall tiene el pelo largo como corriente de agua. Habla despacio, con pena.','The chumpall leader has hair long as a water current. She speaks slowly, with sorrow.'),
-    L('Ñidol chumpall','Kaykayfilu nepey. Taiñ challwa, taiñ tukukawe, taiñ ül: kom apümnieyew.','Despertó el Kaykayfilu, agitado por el olvido. Nuestros peces, nuestras huertas, nuestro canto: lo está destruyendo todo.','The Kaykayfilu has woken, stirred by the forgetting. Our fish, our gardens, our song: it is destroying everything.')];
+    L('Ñidol chumpall','Millalobo nepey. Taiñ challwa, taiñ tukukawe, taiñ ül: kom apümnieyew.','Despertó el Millalobo, enfurecido por el olvido. Nuestros peces, nuestras huertas, nuestro canto: lo está destruyendo todo.','The Millalobo has woken, enraged by the forgetting. Our fish, our gardens, our song: he is destroying everything.')];
   if(!ready){ls.push(N('«Antes de enfrentarlo, ayuda a mi gente: la jardinera de las huertas, el pequeño de la perla y la cantora de la fosa. Cuando los tres estén bien, cantaremos contigo.»','"Before facing it, help my people: the gardener of the beds, the little one of the pearl, and the singer of the trench. When all three are well, we will sing with you."'));
     return say(ls);}
-  ls.push(N('«Ayudaste a los tres. Ahora los chumpall cantaremos contigo. El olvido le quitó al Kaykayfilu el ül que lo aquietaba, y se agita bajo este salón: tiene cinco formas, y con cada una que se aquiete, uno de nuestros cantores te levantará. No se le puede matar; hay que devolverle la calma, verso a verso, hasta que vuelva a dormirse.»','"You helped all three. Now we chumpall will sing with you. The forgetting took from the Kaykayfilu the ül that kept it calm, and it stirs beneath this hall: it has five forms, and as each one is stilled, one of our singers will lift you up. It cannot be killed; its calm must be given back, verse by verse, until it sleeps again."'));
+  ls.push(N('«Ayudaste a los tres. Ahora los chumpall cantaremos contigo. El olvido le quitó al Millalobo el ül que lo aquietaba, y se agita bajo este salón: tiene cinco formas, y con cada una que se aquiete, uno de nuestros cantores te levantará. No se le puede matar: es el rey del mar. Hay que devolverle la calma, verso a verso, hasta que vuelva a su palacio.»','"You helped all three. Now we chumpall will sing with you. The forgetting took from the Millalobo the ül that kept him calm, and he stirs beneath this hall: he has five forms, and as each one is stilled, one of our singers will lift you up. He cannot be killed: he is the king of the sea. His calm must be given back, verse by verse, until he returns to his palace."'));
   if(!S.roots.includes('llako')){S.roots.push('llako');persist();
     ls.push(N('La ñidol toma tus manos y te canta una palabra nueva, despacio, para que la aprendas: llako- («calmarse, aplacarse»). «Esta es la palabra del ül: llakonge, llakomu, llakomün. Dicha bien, aquieta.»','The ñidol takes your hands and sings you a new word, slowly, so you learn it: llako- ("to calm, to settle"). "This is the word of the ül: llakonge, llakomu, llakomün. Said well, it stills."'),
-      N('«Allá abajo no pelearás para vencer: cada orden tuya será un verso del ül. Las otras palabras lo llaman y lo sujetan; llako- lo acerca al sueño.»','"Down there you will not fight to win: every order of yours will be a verse of the ül. The other words call it and hold it; llako- carries it toward sleep."'));}
+      N('«Allá abajo no pelearás para vencer: cada orden tuya será un verso del ül. Las otras palabras lo llaman y lo sujetan; llako- le enfría la furia.»','"Down there you will not fight to win: every order of yours will be a verse of the ül. The other words call him and hold him; llako- cools his fury."'));}
   say(ls,()=>choose(L('Ñidol chumpall','Eymi iñchiñ weychayafiyiñ?','¿Tú y nosotros lo enfrentamos?','Shall you and we face it?'),
     [{m:'May, weychayafiyiñ!',g:en?'Yes, let us face it!':'¡Sí, enfrentémoslo!',v:1},{m:'Pepikawkülelan petu',g:en?'Not yet':'Todavía no',v:0}],v=>{
     if(!v)return say([L('Ñidol chumpall','Küme rakiduamnge. Faw müleaiñ.','Piénsalo. Aquí estaremos.','Think it over. We will be here.')]);
-    say([N('Los chumpall forman un círculo y golpean el agua con las palmas, todos a la vez. El suelo del salón tiembla... y de la fosa sube algo enorme, anillo tras anillo.','The chumpall form a circle and strike the water with their palms, all at once. The floor of the hall trembles... and out of the trench rises something enormous, coil after coil.'),
-      N('El Kaykayfilu se esconde en el agua oscura. Lo que se esconde... sale cuando se le dice.','The Kaykayfilu hides in the dark water. What hides... comes out when it is told to.')],
+    say([N('Los chumpall forman un círculo y golpean el agua con las palmas, todos a la vez. El suelo del salón tiembla... y de la fosa sube algo enorme: primero una corona de oro, después unos ojos furiosos.','The chumpall form a circle and strike the water with their palms, all at once. The floor of the hall trembles... and out of the trench rises something enormous: first a crown of gold, then two furious eyes.'),
+      N('El Millalobo se esconde en el agua oscura. Lo que se esconde... sale cuando se le dice.','The Millalobo hides in the dark water. What hides... comes out when it is told to.')],
       ()=>startBattle(['llufu1'],{boss:1,chain:'llufu'}));
   },true,true));
 }

@@ -115,7 +115,7 @@ const BEST={
   ngoyam:['Un alma perdida en la niebla, que ya no recuerda su nombre.','A soul lost in the fog, who no longer remembers its name.'],
   kalku:['El Fütra Kalku, el gran brujo que trabaja para el olvido.','The Fütra Kalku, the great sorcerer who works for the forgetting.'],
   ngoyman1:['Ti Fütra Ngoymatulfe, el gran olvido, el que hace olvidar las palabras.','Ti Fütra Ngoymatulfe, the great forgetting, the one who makes words be forgotten.'],
-  llufu1:['El Kaykayfilu, la gran culebra del agua. No es malo: despertó de su sueño y necesita volver a oír su canto.','The Kaykayfilu, the great serpent of the water. It is not evil: it woke from its sleep and needs to hear its song again.']};
+  llufu1:['El Millalobo, rey del mar en los relatos williche de Chiloé: mitad hombre, mitad lobo marino, con oro (milla) en el pelo y en la corona. No es un wekufü: el olvido le quitó el canto que lo calmaba, y necesita volver a oírlo.','The Millalobo, king of the sea in the Williche tellings of Chiloé: half man, half sea lion, with gold (milla) in his hair and his crown. He is not a wekufü: the forgetting took the song that calmed him, and he needs to hear it again.']};
 ['ngoyman2','ngoyman3','ngoyman4','ngoyman5','ngoysum'].forEach(k=>BEST[k]=BEST.ngoyman1);['llufu2','llufu3','llufu4','llufu5'].forEach(k=>BEST[k]=BEST.llufu1);
 function bestWhere(t){if(S.beatW&&S.beatW[t])return S.beatW[t];for(const id in MAPS){const m=MAPS[id];for(const e of m.ents||[])if(e.kind==='enemy'&&e.party&&e.party.includes(t))return m.name}return null}
 function bestTips(t){const e=ET[t],es=[],en=[];
