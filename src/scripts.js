@@ -715,7 +715,7 @@ function kallfurayTalk(){
     N('«Cuando era niña, mi hermano enterró algo rojo en las dunas: donde el pasto crece entre la arena, cerca de la entrada del oeste. Nunca lo fue a buscar.»','"When I was a girl, my brother buried something red in the dunes: where the grass grows out of the sand, near the western entrance. He never went back for it."')]);
 }
 function sayenTalk(){
-  if(S.flags.n_sayen)return say([L('Ñaña Sayen','Dewmamültrünküley. Inge!','Estoy haciendo mültrün (catutos). ¡Come!','I am making mültrün. Eat!'),
+  if(S.flags.n_sayen)return say([L('Ñaña Sayen','Dewmamültrünkülen. Inge!','Estoy haciendo mültrün (catutos). ¡Come!','I am making mültrün. Eat!'),
     N('«¿Ya escarbaste en los campos de los animales? Justo al medio del pasto, lejos de los corrales, los niños esconden cántaros.»','"Did you dig in the animal fields yet? Right in the middle of the grass, away from the pens, the children hide little jars."')]);
   S.flags.n_sayen=1;S.items.kofke+=2;persist();sfx('pick');
   say([L('Ñaña Sayen','Mari mari, '+addr(true)+'! Konpange, inge!','¡Hola! ¡Pasa, come!','Hello! Come in, eat!'),

@@ -299,7 +299,7 @@ pd3:{pz:{kind:'N',tiles:{'3,2':{lab:'pire',i:0},'14,2':{lab:'ko',i:1},'10,6':{la
 ngen3:{region:'pewenche',ngenmap:1,name:'Ngen-pewen',g:{es:'El cráter',en:'The crater'},floor:'_',bg:'crater',song:'cave',pal:'pewcave',lava:1,
  stairs:{to:'pd3',x:20,y:7},
  ents:[{id:'boss',kind:'enemy',x:8,y:4,party:['cherrufe'],fixed:1,boss:1,flag:'boss3',
-     pre:[N('Desde la lava se levanta un gigante de roca negra, con grietas que brillan como brasas y una cabellera de fuego: el Cherufe.','A giant of black rock rises from the lava, with cracks that glow like embers and a mane of fire: the Cherufe.'),L('','Müley Cherufe!','¡Ahí está el Cherufe!','There is the Cherufe!')]},
+     pre:[N('Desde la lava se levanta un gigante de roca negra, con grietas que brillan como brasas y una cabellera de fuego: el Cherufe.','A giant of black rock rises from the lava, with cracks that glow like embers and a mane of fire: the Cherufe.'),L('','Wefi Cherufe!','¡Apareció el Cherufe!','The Cherufe appeared!')]},
    {id:'ngen',kind:'npc',look:'ngen3',x:8,y:5,req:'ngen3',fixed:1,talk:()=>{const ls=[L('Ngen-pewen','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")];
    if(!S.flags.sb3)ls.push(N('«Algo más duerme en los campos de nieve: bajo el ojo de agua congelado del sur. Camina por su orilla, y lleva palabras de frío y de quiebre: sus sellos no ceden con menos.»','"Something else sleeps in the snowfields: beneath the frozen pool in the south. Walk along its edge, and bring words of cold and breaking: its seals yield to nothing less."'));
    say(ls)}}]}
@@ -381,7 +381,7 @@ wd3:{pz:{kind:'N',tiles:{'6,2':{lab:'witrunko',i:0},'12,4':{lab:'lewfü',i:1},'1
 ngen4:{region:'williche',ngenmap:1,name:'Ngen-kürüf',g:{es:'El muelle en la niebla',en:'The pier in the fog'},floor:'b',bg:'fjord',song:'cave',pal:'williche',
  stairs:{to:'wd3',x:3,y:7},
  ents:[{id:'boss',kind:'enemy',x:8,y:4,party:['kaleuche'],fixed:1,boss:1,flag:'boss4',
-     pre:[N('De la niebla sale un barco iluminado, con velas rotas que brillan pálidas y música que nadie toca: el Kaleuche.','An illuminated ship comes out of the fog, with torn sails that glow pale and music no one is playing: the Kaleuche.'),L('','Müley Kaleuche!','¡Ahí está el Kaleuche!','There is the Kaleuche!')]},
+     pre:[N('De la niebla sale un barco iluminado, con velas rotas que brillan pálidas y música que nadie toca: el Kaleuche.','An illuminated ship comes out of the fog, with torn sails that glow pale and music no one is playing: the Kaleuche.'),L('','Wefi Kaleuche!','¡Apareció el Kaleuche!','The Kaleuche appeared!')]},
    {id:'ngen',kind:'npc',look:'ngen4',x:8,y:6,req:'ngen4',fixed:1,talk:()=>{const ls=[L('Ngen-kürüf','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")];
    if(!S.flags.sb4)ls.push(N('«Una última cosa: en la garganta de la cascada vive un hombrecito que odia las visitas. Cruza la tierra junto al puente del río. Y cuida tus palabras: dile que salga, y no dejes que se vaya.»','"One last thing: in the waterfall gorge lives a little man who hates visitors. Cross the ground beside the river bridge. And mind your words: tell him to come out, and do not let him leave."'));
    say(ls)}}]}
@@ -471,7 +471,7 @@ ngen5:{region:'puelmapu',ngenmap:1,name:'Ngen-lelfün',g:{es:'El círculo de pie
  stairs:{to:'ed3',x:18,y:7},
  ents:[{id:'boss',kind:'enemy',x:8,y:4,party:['walichu'],fixed:1,boss:1,flag:'boss5',
      pre:[N('El pasto se seca a tu alrededor y el aire se llena de polvo. En medio del círculo de piedras se levanta una figura flaca y gris, con cabeza de calavera de luan, envuelta en un sueño que no es suyo: el Walichu.','The grass withers around you and the air fills with dust. In the middle of the stone circle rises a gaunt grey figure with a guanaco-skull head, wrapped in a dream that is not its own: the Walichu.'),
-       L('','Müley Walichu!','¡Ahí está el Walichu!','There is the Walichu!'),
+       L('','Wefi Walichu!','¡Apareció el Walichu!','The Walichu appeared!'),
        N('Duerme caminando, y lo que duerme no siente tus golpes...','It sleeps as it walks, and what sleeps does not feel your blows...')]},
    {id:'ngen',kind:'npc',look:'ngen5',x:8,y:5,req:'ngen5',fixed:1,talk:()=>{const ls=[L('Ngen-lelfün','Mapudungukeaiñ!','¡Hablemos mapudungun!',"Let's speak Mapudungun!")];
    if(!S.flags.sb5)ls.push(N('«Una cosa más: bajo el salitral del sur duerme algo que nació cuando el agua se fue: un wekufü de pura sal, duro como la piedra. Camina por la tierra blanda junto a las pozas blancas. Y lleva todas tus palabras: despiértalo, quiébralo, y no lo dejes volver a armarse.»','"One more thing: under the southern salt flat sleeps something born when the water left: a wekufü of pure salt, hard as stone. Walk the soft ground beside the white pools. And bring all your words: wake it, break it, and do not let it put itself back together."'));
@@ -516,7 +516,7 @@ g_ngoyman:{region:'ngoyman',name:'Ti Fütra Ngoymatulfe',g:{es:'El corazón de l
  stairs:{to:'g_wulngin',x:8,y:3},
  ents:[{id:'boss',kind:'enemy',x:8,y:4,party:['ngoyman1'],fixed:1,boss:1,final:1,flag:'bossF',
    pre:[N('Aquí la niebla no flota: se acumula, como siglos. En el centro de la sala respira algo enorme que no tiene forma... o que las tiene todas.','Here the fog does not drift: it piles up, like centuries. In the middle of the hall something enormous breathes, something with no shape... or with all of them.'),
-     L('','Müley Ti Fütra Ngoymatulfe!','¡El gran olvido está aquí!','The great forgetting is here!'),
+     L('','Wefi Ti Fütra Ngoymatulfe!','¡Apareció el gran olvido!','The great forgetting appeared!'),
      N('Un velo de niebla lo envuelve por completo. Lo que se esconde... sale cuando se le dice.','A veil of fog wraps it completely. What hides... comes out when it is told to.')]}]},
 u_grotto:{region:'chumpall',name:'Münche lafken wülngiñ',g:{es:'La gruta bajo el lago',en:'The grotto beneath the lake'},floor:'_',bg:'deep',song:'deep',dungeon:1,pal:'munchedeep',under:1,
  edges:{right:{to:'u_garden',x:1,y:7}},stairs:{to:'w_wapi',x:16,y:9},

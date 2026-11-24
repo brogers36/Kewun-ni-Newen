@@ -502,3 +502,4 @@ Brandon terminó las pestañas 0 Apertura, 1 Lafkenche y 2 Nagche de docs/Kewun_
 - 1 Lafkenche #22 "Kiñe makuñ ngürekalen." y #115 "Iñche diweñfe: diweñ kintuken. Eymi kay? Challwafe? Ngürekafe?": marcadas Corregir pero sin corrección escrita.
 - 2 Nagche #39 "Paro! Kom kurü / Kom lüq" (awar): marcada Duda.
 - 0 Apertura: ninguna fila marcada; se dejó todo igual.
+- (Nov 24) Brandon: #22 y #115 de Lafkenche están bien como están; el awar nagche está bien; Ñaña Sayen dice **"Dewmamültrünkülen. Inge!"**; las entradas de jefe usan **"Wefi X!"** (Cherufe, Kaleuche, Walichu y Ti Fütra Ngoymatulfe, como Trelke-wekufü y Witranalwe).
