@@ -283,7 +283,7 @@ if len(sys.argv) > 1:
             if str(mm).startswith('Feypienew fentreke che'): MARKS[(name, mm)] = ('OK', '', 'Tu línea; va sin traducción a propósito.'); continue
             if k in prev:
                 st, fix, note, tab, reviewed, _ = prev[k]
-                if reviewed and not fix: MARKS[(name, mm)] = ('OK', '', note); continue
+                if reviewed and not fix: MARKS[(name, mm)] = ('OK' if (st == 'OK' or tab.startswith('0 ')) else st, '', note); continue
                 if reviewed and fix: MARKS[(name, mm)] = ('', '', 'Tu corrección todavía no está aplicada aquí: ' + str(fix)); continue
                 MARKS[(name, mm)] = ('', '', note); continue
             k = _k(mm); kn = k.replace('[nombre]', '').strip(' ')
