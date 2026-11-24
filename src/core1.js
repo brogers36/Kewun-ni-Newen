@@ -1,5 +1,5 @@
 /* ============================================================
-   Kewün ñi Newen (working title) · Lafkenche region
+   Kewün Newen (working title) · Lafkenche region
    ============================================================ */
 let W=512,H=448,LW=256;const LH=224,T=16,VY=0,VH=LH;
 const cv=document.getElementById('cv'),ctx=cv.getContext('2d');ctx.imageSmoothingEnabled=false;

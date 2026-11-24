@@ -1,4 +1,4 @@
-"""Extract every Mapudungun line in Kewün ñi Newen from src/*.js, grouped by stage of the game, into
+"""Extract every Mapudungun line in Kewün Newen from src/*.js, grouped by stage of the game, into
 docs/Kewun_revision_mapudungun.xlsx (Resumen + one tab per stage). Same layout as the Petu Mongeleiñ review book.
 Run: python3 tools/review_xlsx.py
 Each row: #, speaker, Mapudungun, Spanish gloss, context, Estado (OK / Corregir / Duda), Corrección, Nota.
@@ -264,7 +264,7 @@ def sheet(wb, name, desc, rows):
     return n
 def build(path, stages):
     wb = Workbook(); ws = wb.active; ws.title = 'Resumen'
-    ws['A1'] = 'Kewün ñi Newen · revisión del mapudungun'; ws['A1'].font = Font(name='Arial', bold=True, size=14, color='1E5A32')
+    ws['A1'] = 'Kewün Newen · revisión del mapudungun'; ws['A1'].font = Font(name='Arial', bold=True, size=14, color='1E5A32')
     ws['A2'] = 'Generado desde src/*.js por tools/review_xlsx.py. Cada línea aparece una vez, en la primera etapa que la usa. Las formas que arma la batalla están en 10 Batalla; las listas de palabras, en 12 Vocabulario.'
     ws['A2'].font = Font(name='Arial', italic=True, size=9)
     for j, h in enumerate(['Etapa', 'Líneas', 'OK', 'Corregir', 'Duda', 'Sin revisar'], 1):

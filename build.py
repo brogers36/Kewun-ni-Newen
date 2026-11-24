@@ -14,7 +14,7 @@ js='\n'.join(src(f+'.js') for f in ORDER).replace('</script>\n</body>\n</html>\n
 head=src('head.html').replace('KEWUN_BUILD_ID',BUILD)
 if MASTER:
     js='window.KEWUN_MASTER=1;\n'+js+'\n'+src('master.js')
-    head=head.replace('<title>Kewün ñi Newen','<title>MAESTRO · Kewün ñi Newen',1)
+    head=head.replace('<title>Kewün Newen','<title>MAESTRO · Kewün Newen',1)
     i0=head.find('<!--PWA-->');i1=head.find('<!--/PWA-->')
     if i0>=0 and i1>=0:head=head[:i0]+head[i1+len('<!--/PWA-->'):]
 out=os.path.join(ROOT,'master' if MASTER else 'www')

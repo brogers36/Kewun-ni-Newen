@@ -30,7 +30,23 @@ function endCutLines(){const n=nm();return[
 ];}
 function startEndCut(){$('ui').classList.add('cutm');mode='cut';ECUT={i:0,t:0,L:endCutLines()};$('skip').style.display='block';AU.name=null;playSong('ending');nextEndCut()}
 function nextEndCut(){if(!ECUT)return;if(ECUT.i>=ECUT.L.length)return endEndCut();ECUT.t=0;const ls=ECUT.L[ECUT.i];say(ls,()=>{if(!ECUT)return;ECUT.i++;nextEndCut()})}
-function endEndCut(){$('ui').classList.remove('cutm');ECUT=null;$('skip').style.display='none';mode='map';AU.name=null;loadMap('ngoyman',8,8,true);showBanner(M.name,G(M.g));
+/* the end credits: a film ("Kelluaeyu") that plays once the ending is over, with its own skip button */
+function playCredits(done){
+  let fin=false;const end=()=>{if(fin)return;fin=true;try{v.pause()}catch(e){}ov.remove();done()};
+  const ov=document.createElement('div');ov.id='credits';ov.style.cssText='position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center';
+  const v=document.createElement('video');v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
+  for(const u of ['ending.mp4','../www/ending.mp4']){const so=document.createElement('source');so.src=u;so.type='video/mp4';v.appendChild(so)}
+  v.lastElementChild.addEventListener('error',end);v.addEventListener('ended',end);
+  const sk=document.createElement('button');sk.textContent=((S&&S.gloss==='en')||LANG==='en')?'Skip ▶':'Saltar ▶';
+  sk.style.cssText='position:absolute;right:14px;bottom:14px;padding:8px 14px;font:600 14px sans-serif;color:#f3ead2;background:rgba(0,0,0,.55);border:1px solid rgba(243,234,210,.5);border-radius:6px;opacity:.75';
+  sk.onclick=e=>{e.stopPropagation();end()};
+  ov.appendChild(v);ov.appendChild(sk);document.body.appendChild(ov);
+  if(typeof playSong==='function')playSong(null);if(typeof stopAmb==='function')stopAmb();mode='credits';
+  const pr=v.play();if(pr&&pr.catch)pr.catch(()=>{v.muted=true;v.play().catch(end)});   // if sound is refused, it still plays, silent
+}
+function endEndCut(){$('ui').classList.remove('cutm');ECUT=null;$('skip').style.display='none';
+  playCredits(endEndCut2)}
+function endEndCut2(){mode='map';AU.name=null;loadMap('ngoyman',8,8,true);showBanner(M.name,G(M.g));
   setTimeout(()=>{if(!active)say([N('Puedes seguir jugando: las tierras, los wekufü escondidos y el Epunamun siguen ahí... y dicen que el mundo todavía guarda secretos bajo el agua.','You can keep playing: the lands, the hidden wekufü and the Epunamun are still there... and they say the world still keeps secrets under the water.'),
-    N('Chaltu may por jugar Kewün ñi Newen.','Chaltu may for playing Kewün ñi Newen.')])},400)}
+    N('Chaltu may por jugar Kewün Newen.','Chaltu may for playing Kewün Newen.')])},400)}
 $('skip').addEventListener('click',()=>{if(ECUT){dlg.style.display='none';active=null;endEndCut();return}skipCut()});

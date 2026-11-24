@@ -153,7 +153,7 @@ function renderEndCut(){
     ell(c,hx2+hs.width,182,hs.width*.7,4,'rgba(0,0,0,.3)');c.drawImage(hs,hx2,182-hs.height*2,hs.width*2,hs.height*2);
     ell(c,kx2+ks.width,182,ks.width*.7,4,'rgba(0,0,0,.3)');c.drawImage(ks,kx2,182-ks.height*2,ks.width*2,ks.height*2);
     for(let k=0;k<9;k++){const a2=((frame+k*18)%130)/130;ell(c,LW*.47+Math.sin(a2*7+k)*10,168-a2*110,1.5,1.5,'rgba(255,230,150,'+(1-a2)*.8+')')}
-    if(t>60){const al=Math.min(1,(t-60)/120);OV.push(()=>{txt('Kewün ñi Newen',LW/2,34,'rgba(255,233,176,'+al+')',22,'center');txt('AFPUY',LW/2,52,'rgba(232,236,248,'+(al*.8)+')',13,'center')})}}
+    if(t>60){const al=Math.min(1,(t-60)/120);OV.push(()=>{txt('Kewün Newen',LW/2,34,'rgba(255,233,176,'+al+')',22,'center');txt('AFPUY',LW/2,52,'rgba(232,236,248,'+(al*.8)+')',13,'center')})}}
   cutFx(c,false);caXfadeDraw(c);caLetterbox(c,t);
 }
 

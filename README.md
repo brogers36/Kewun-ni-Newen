@@ -1,6 +1,6 @@
-# Kewün ñi Newen
+# Kewün Newen
 
-*Kewün ñi Newen* ("the strength of the language") is a retro action RPG for learning Mapudungun. It is drawn in the style of *A Link to the Past*, *EarthBound* and *Final Fantasy*.
+*Kewün Newen* ("the strength of the language") is a retro action RPG for learning Mapudungun. It is drawn in the style of *A Link to the Past*, *EarthBound* and *Final Fantasy*.
 
 The player is a young wariache, Llanka or Millaray. They travel the Mapuche lands to wake the ngen, who have been silenced by forgetting. Mapudungun grammar is the battle system: you build commands from verb roots and person endings, and they act on wekufü taken from Mapuche folklore. Each region's boss drops a trokiñ (piece) of an ancient trariwe. The five pieces together let you pass through the fog of **Ti Fütra Ngoyman**, the great forgetting, to the final boss.
 
@@ -98,9 +98,9 @@ The build master strips the PWA tags (`build.py --master`), so only the player c
 
 ## Derechos · Rights
 
-*Kewün ñi Newen* es © 2026 Brandon M. A. Rogers, todos los derechos reservados: no se permite copiarlo, modificarlo, redistribuirlo ni reutilizarlo, total o parcialmente, sin permiso escrito. Prohibido usar este sitio o su contenido para entrenar inteligencia artificial.
+*Kewün Newen* es © 2026 Brandon M. A. Rogers, todos los derechos reservados: no se permite copiarlo, modificarlo, redistribuirlo ni reutilizarlo, total o parcialmente, sin permiso escrito. Prohibido usar este sitio o su contenido para entrenar inteligencia artificial.
 
-*Kewün ñi Newen* is © 2026 Brandon M. A. Rogers, all rights reserved: no copying, modification, redistribution or reuse, in whole or in part, without written permission. No use of this site or its content to train artificial intelligence.
+*Kewün Newen* is © 2026 Brandon M. A. Rogers, all rights reserved: no copying, modification, redistribution or reuse, in whole or in part, without written permission. No use of this site or its content to train artificial intelligence.
 
 ## Language notes
 

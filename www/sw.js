@@ -1,4 +1,4 @@
-/* Kewün ñi Newen · service worker: offline play + fresh updates when online. */
+/* Kewün Newen · service worker: offline play + fresh updates when online. */
 const CACHE = 'kewun-v2';
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png'];
 
@@ -12,6 +12,7 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
   if (req.url.indexOf('version.txt') >= 0) return; // always straight to the network
+  if (/\.mp4(\?|$)/.test(req.url)) return; // the credits film streams from the network (range requests), never cached
   const nav = req.mode === 'navigate' || req.url.indexOf('/index.html') >= 0;
   if (nav) {
     // network first with forced revalidation, so a new build is picked up on the next online launch

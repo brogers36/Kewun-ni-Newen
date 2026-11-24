@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='b2a24be-202611231642';
+window.KEWUN_BUILD='5b9b4b7-202611231754';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -32,7 +32,7 @@ window.KEWUN_BUILD='b2a24be-202611231642';
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(chk,400)});
 })();
 addEventListener('load',()=>{const iOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);const inst=navigator.standalone||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches;const h=document.getElementById('ioshint');if(h&&iOS&&!inst)h.style.display='block'})</script><!--/PWA-->
-<title>Kewün ñi Newen · Prototipo</title>
+<title>Kewün Newen · Prototipo</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-monospace,Menlo,Consolas,"DejaVu Sans Mono",monospace;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
@@ -111,7 +111,7 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
       <button id="mbtn">☰</button>
       <button id="fsbtn" title="Pantalla completa / Fullscreen (F)">⛶</button>
       <div id="title">
-        <h1>Kewün ñi Newen</h1>
+        <h1>Kewün Newen</h1>
         <div class="sub">Prototipo · Lafkenche, Nagche, Pewenche y Williche</div>
         <div class="row">
           <button class="hero on" id="hM"><canvas width="32" height="48"></canvas><span>Millaray</span></button>
@@ -145,11 +145,11 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
   </div>
 </div>
 <script>
-/* Kewün ñi Newen · © 2026 Brandon M. A. Rogers. Todos los derechos reservados. All rights reserved.
+/* Kewün Newen · © 2026 Brandon M. A. Rogers. Todos los derechos reservados. All rights reserved.
    Prohibido usar este sitio o su contenido para entrenar inteligencia artificial. No use of this site or its content to train artificial intelligence. */
 'use strict';
 /* ============================================================
-   Kewün ñi Newen (working title) · Lafkenche region
+   Kewün Newen (working title) · Lafkenche region
    ============================================================ */
 let W=512,H=448,LW=256;const LH=224,T=16,VY=0,VH=LH;
 const cv=document.getElementById('cv'),ctx=cv.getContext('2d');ctx.imageSmoothingEnabled=false;
@@ -3090,9 +3090,25 @@ function endCutLines(){const n=nm();return[
 ];}
 function startEndCut(){$('ui').classList.add('cutm');mode='cut';ECUT={i:0,t:0,L:endCutLines()};$('skip').style.display='block';AU.name=null;playSong('ending');nextEndCut()}
 function nextEndCut(){if(!ECUT)return;if(ECUT.i>=ECUT.L.length)return endEndCut();ECUT.t=0;const ls=ECUT.L[ECUT.i];say(ls,()=>{if(!ECUT)return;ECUT.i++;nextEndCut()})}
-function endEndCut(){$('ui').classList.remove('cutm');ECUT=null;$('skip').style.display='none';mode='map';AU.name=null;loadMap('ngoyman',8,8,true);showBanner(M.name,G(M.g));
+/* the end credits: a film ("Kelluaeyu") that plays once the ending is over, with its own skip button */
+function playCredits(done){
+  let fin=false;const end=()=>{if(fin)return;fin=true;try{v.pause()}catch(e){}ov.remove();done()};
+  const ov=document.createElement('div');ov.id='credits';ov.style.cssText='position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center';
+  const v=document.createElement('video');v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
+  for(const u of ['ending.mp4','../www/ending.mp4']){const so=document.createElement('source');so.src=u;so.type='video/mp4';v.appendChild(so)}
+  v.lastElementChild.addEventListener('error',end);v.addEventListener('ended',end);
+  const sk=document.createElement('button');sk.textContent=((S&&S.gloss==='en')||LANG==='en')?'Skip ▶':'Saltar ▶';
+  sk.style.cssText='position:absolute;right:14px;bottom:14px;padding:8px 14px;font:600 14px sans-serif;color:#f3ead2;background:rgba(0,0,0,.55);border:1px solid rgba(243,234,210,.5);border-radius:6px;opacity:.75';
+  sk.onclick=e=>{e.stopPropagation();end()};
+  ov.appendChild(v);ov.appendChild(sk);document.body.appendChild(ov);
+  if(typeof playSong==='function')playSong(null);if(typeof stopAmb==='function')stopAmb();mode='credits';
+  const pr=v.play();if(pr&&pr.catch)pr.catch(()=>{v.muted=true;v.play().catch(end)});   // if sound is refused, it still plays, silent
+}
+function endEndCut(){$('ui').classList.remove('cutm');ECUT=null;$('skip').style.display='none';
+  playCredits(endEndCut2)}
+function endEndCut2(){mode='map';AU.name=null;loadMap('ngoyman',8,8,true);showBanner(M.name,G(M.g));
   setTimeout(()=>{if(!active)say([N('Puedes seguir jugando: las tierras, los wekufü escondidos y el Epunamun siguen ahí... y dicen que el mundo todavía guarda secretos bajo el agua.','You can keep playing: the lands, the hidden wekufü and the Epunamun are still there... and they say the world still keeps secrets under the water.'),
-    N('Chaltu may por jugar Kewün ñi Newen.','Chaltu may for playing Kewün ñi Newen.')])},400)}
+    N('Chaltu may por jugar Kewün Newen.','Chaltu may for playing Kewün Newen.')])},400)}
 $('skip').addEventListener('click',()=>{if(ECUT){dlg.style.display='none';active=null;endEndCut();return}skipCut()});
 
 /* ============================================================
@@ -5400,8 +5416,8 @@ function reportText(){
   const trw=TRW_IDS.filter(k=>F['trw_'+k]).length+'/'+TRW_IDS.length+' + '+TRW_IDS.filter(k=>F['trw2_'+k]).length+'/'+TRW_IDS.length;
   const tabs=typeof TAB_IDS!=='undefined'?TAB_IDS.filter(t=>F['tab_'+t]).length:0;
   const ntk=Object.keys(NUTK).filter(k=>F['ntk_'+k]).length+Object.keys(NUTK2).filter(k=>F['ntk2_'+k]).length;
-  const L1=en?['KIMÜN REPORT · Kewün ñi Newen','Player','Level','Play time','min','Ngen awakened','Verb roots','Trawün lessons','Kuyfi chillka','Nütramkan','Wekufü beaten','Accuracy by topic (correct / attempts)','Still to practise (most missed first)','Nothing pending: well done!']
-    :['INFORME DE KIMÜN · Kewün ñi Newen','Jugador/a','Nivel','Tiempo de juego','min','Ngen despertados','Raíces verbales','Lecciones del trawün','Kuyfi chillka','Nütramkan','Wekufü vencidos','Precisión por tema (aciertos / intentos)','Por practicar (lo más fallado primero)','Nada pendiente: ¡bien hecho!'];
+  const L1=en?['KIMÜN REPORT · Kewün Newen','Player','Level','Play time','min','Ngen awakened','Verb roots','Trawün lessons','Kuyfi chillka','Nütramkan','Wekufü beaten','Accuracy by topic (correct / attempts)','Still to practise (most missed first)','Nothing pending: well done!']
+    :['INFORME DE KIMÜN · Kewün Newen','Jugador/a','Nivel','Tiempo de juego','min','Ngen despertados','Raíces verbales','Lecciones del trawün','Kuyfi chillka','Nütramkan','Wekufü vencidos','Precisión por tema (aciertos / intentos)','Por practicar (lo más fallado primero)','Nada pendiente: ¡bien hecho!'];
   return [L1[0],'',L1[1]+': '+S.name+(S.hm?' (weichafe)':''),L1[2]+': kimün '+S.lvl,L1[3]+': '+mins+' '+L1[4],
     L1[5]+': '+['ngen','ngen2','ngen3','ngen4','ngen5'].filter(k=>F[k]).length+'/5'+(F.won?'  · Ti Fütra Ngoymatulfe ✓':''),
     L1[6]+' ('+S.roots.length+'): '+S.roots.map(r=>r+'-').join(', '),L1[7]+': '+trw,L1[8]+': '+tabs+'/6',L1[9]+': '+ntk+'/'+(Object.keys(NUTK).length+Object.keys(NUTK2).length),
@@ -7923,7 +7939,7 @@ function renderEndCut(){
     ell(c,hx2+hs.width,182,hs.width*.7,4,'rgba(0,0,0,.3)');c.drawImage(hs,hx2,182-hs.height*2,hs.width*2,hs.height*2);
     ell(c,kx2+ks.width,182,ks.width*.7,4,'rgba(0,0,0,.3)');c.drawImage(ks,kx2,182-ks.height*2,ks.width*2,ks.height*2);
     for(let k=0;k<9;k++){const a2=((frame+k*18)%130)/130;ell(c,LW*.47+Math.sin(a2*7+k)*10,168-a2*110,1.5,1.5,'rgba(255,230,150,'+(1-a2)*.8+')')}
-    if(t>60){const al=Math.min(1,(t-60)/120);OV.push(()=>{txt('Kewün ñi Newen',LW/2,34,'rgba(255,233,176,'+al+')',22,'center');txt('AFPUY',LW/2,52,'rgba(232,236,248,'+(al*.8)+')',13,'center')})}}
+    if(t>60){const al=Math.min(1,(t-60)/120);OV.push(()=>{txt('Kewün Newen',LW/2,34,'rgba(255,233,176,'+al+')',22,'center');txt('AFPUY',LW/2,52,'rgba(232,236,248,'+(al*.8)+')',13,'center')})}}
   cutFx(c,false);caXfadeDraw(c);caLetterbox(c,t);
 }
 
