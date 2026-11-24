@@ -502,8 +502,8 @@ def fillantu(f):
     setsize(164, 152); c = Canvas()
     # the stopped clock, hung from the zipper pull on a chain, swinging under the chin
     sw = 2 if f else -2
-    for k in range(7):
-        X, Y = int(round(86 + sw * k / 7)), int(124 + k * 2 + fl)
+    for k in range(9):                                           # from the ring of the zipper pull down to the clock
+        t = k / 8; X, Y = int(round(91 + (86 + sw - 91) * t)), int(round(122 + t * 15 + fl))
         c.px(X, Y, R['brass'][5] if k % 2 else R['brass'][2]); c.px(X + 1, Y, R['brass'][1]); c.part[Y, X] = c.part[Y, X + 1] = 'chain'; c.a[Y, X] = c.a[Y, X + 1] = True
     cx_, cy_ = 86 + sw, 143 + fl
     blob(c, R['brass'], lambda d: d.ellipse([cx_ - 6, cy_ - 6, cx_ + 6, cy_ + 6], fill=1), bulge=1.1, lift=0, name='clock')
@@ -587,16 +587,34 @@ def fillantu(f):
     line([(64, 88), (65, 91), (67, 92)], M[3], 8); line([(78, 88), (78, 91), (76, 92)], M[2], 8)
     # folds from nose to mouth
     line([(73, 92), (68, 97), (63, 101)], M[2], 16); line([(81, 92), (90, 96), (97, 103)], M[1], 20, 2); line([(80, 91), (89, 95), (96, 101.5)], M[6], 20)
-    # the zipper sewn through the mouth, lips puckered around it, stitches across every tooth
-    for k, x in enumerate(range(61, 99)):
-        y = 103 + (1.2 if 67 < x < 92 else 0)
-        P(x, y - 2, M[7] if x < 84 else M[5]); P(x, y - 1, M[3])
-        P(x, y, R['zip'][-1] if k % 2 else R['zip'][1]); P(x, y + 1, R['zip'][2] if k % 2 else R['zip'][-2])
-        P(x, y + 2, R['zip'][1] if k % 2 else R['zip'][2])
-        P(x, y + 3, M[1]); P(x, y + 4, M[2] if k % 3 else M[1])
-        if k % 3 == 0:
-            P(x, y - 3, (180, 164, 152)); P(x + 1, y - 4, (140, 124, 116)); P(x, y + 5, (140, 124, 116)); P(x - 1, y + 6, (100, 88, 84))
-    for (x, y) in [(60, 103), (60, 104), (99, 104), (99, 105), (98, 106)]: P(x, y, M[0])
+    # the zipper sewn through the mouth: two cloth tapes, interlocking metal teeth, an end stop at each corner,
+    # the lips pulled tight around it and stitched to the tapes
+    TAPE = [(22, 16, 28), (40, 30, 46), (58, 46, 64)]
+    MET = [(40, 30, 18), (96, 78, 40), (156, 130, 66), (210, 184, 108), (246, 228, 170), (255, 250, 226)]
+    def my(x): return 103 + (1.2 if 67 < x < 92 else .6 if 64 < x < 95 else 0)
+    for x in range(60, 100):
+        y = int(round(my(x)))
+        P(x, y - 5, M[7] if x < 84 else M[5]); P(x, y - 4, M[2])            # the upper lip, lit, rolled over the tape
+        P(x, y - 3, TAPE[1]); P(x, y + 3, TAPE[0])                           # the cloth tapes
+        P(x, y + 4, M[1]); P(x, y + 5, M[3] if x % 3 else M[2])              # the lower lip pressed under
+        j = (x - 60) // 2; up = j % 2 == 0; left = (x - 60) % 2 == 0
+        rows = range(y - 2, y + 2) if up else range(y - 1, y + 3)             # upper teeth hang down, lower teeth reach up: they lock in the middle
+        for yy in range(y - 2, y + 3):
+            if yy in rows:
+                i = yy - rows[0]                                             # 0 at the root of the tooth
+                col = MET[4] if (left and i == 0) else MET[3] if left else MET[2] if i < 3 else MET[1]
+                if not up: col = MET[3] if (left and i == 3) else MET[2] if left else MET[1] if i > 0 else MET[2]
+                P(x, yy, col)
+            else: P(x, yy, TAPE[0])
+        if up and left: P(x, y - 2, MET[5])                                  # a glint on the top of every upper tooth
+    for x0 in (59, 99):                                                      # the metal stops at both corners
+        y = int(round(my(x0)))
+        for yy in range(y - 3, y + 4): P(x0, yy, MET[2] if yy < y else MET[1])
+        P(x0, y - 3, MET[4]); P(x0, y + 3, MET[0])
+    for x in range(62, 99, 4):                                               # coarse stitches tying the lips to the tapes
+        y = int(round(my(x)))
+        P(x, y - 6, (196, 182, 170)); P(x, y - 5, (150, 136, 128)); P(x + 1, y + 6, (150, 136, 128)); P(x + 1, y + 5, (196, 182, 170))
+    for (x, y) in [(58, 102), (58, 103), (58, 104), (100, 104), (100, 105), (99, 107)]: P(x, y, M[0])   # the corners, pinched
     # chin and jaw
     for x in range(70, 84, 2): P(x, 112, M[8])
     line([(86, 117), (98, 108), (111, 89)], M[1], 30, 2)
@@ -629,7 +647,28 @@ def fillantu(f):
     for k in range(9):                                                # stubble of hair at the temples, running back to the crown
         for (hx_, sg) in ((57, -1), (112, 1)):
             y = 44 + k * 2.2; P(hx_ - sg * (k % 2), y, R['robe'][3]); P(hx_ - sg * (1 + k % 2), y + 1, R['robe'][2])
-    blob(c, R['zip'], lambda d: d.rounded_rectangle([84, 103 + fl, 89, 116 + fl], 1, fill=1), bulge=.9, lift=.3, name='pull')
+    # the slider sitting on the zipper near the right corner, and the pull tab hanging from it with a ring for the chain
+    def Q(x, y, col, nm='pull'):
+        X, Y = int(x), int(y + fl)
+        if 0 <= Y < yp.H and 0 <= X < yp.W: c.px(X, Y, col); c.a[Y, X] = True; c.part[Y, X] = nm
+    MET = [(40, 30, 18), (96, 78, 40), (156, 130, 66), (210, 184, 108), (246, 228, 170), (255, 250, 226)]
+    sy0 = 103
+    for yy in range(sy0 - 5, sy0 + 5):                                       # the slider: a little body wider at the top
+        half = 4 if yy < sy0 - 1 else 3 if yy < sy0 + 2 else 2
+        for xx in range(91 - half, 92 + half):
+            edge = xx in (91 - half, 91 + half) or yy in (sy0 - 5, sy0 + 4)
+            col = MET[0] if edge else MET[4] if (yy == sy0 - 4 or xx == 92 - half) else MET[3] if xx < 92 else MET[2]
+            Q(xx, yy, col)
+    Q(90, sy0 - 2, MET[1]); Q(91, sy0 - 2, MET[1]); Q(92, sy0 - 2, MET[1])   # the slot the teeth run through
+    Q(89, sy0 - 4, MET[5])
+    sw2 = 1 if f else 0                                                      # the tab swings a little with the flight
+    for k, yy in enumerate(range(sy0 + 5, sy0 + 19)):                        # the tab, a long rounded plate
+        cx2 = 91 + sw2 * k / 13; w2 = 2 if k < 11 else 1
+        for xx in range(int(round(cx2 - w2)), int(round(cx2 + w2)) + 1):
+            edge = xx in (int(round(cx2 - w2)), int(round(cx2 + w2))) or k == 13
+            Q(xx, yy, MET[0] if edge else MET[4] if xx <= cx2 - 1 else MET[3] if xx <= cx2 else MET[2])
+        if k in (9, 10): Q(int(round(cx2)), yy, (20, 12, 16)); Q(int(round(cx2)) + 1, yy, (20, 12, 16))   # the hole
+    Q(91 + sw2, sy0 + 6, MET[5])
     # lay the three layers together: hair behind, then the wings, then the head with its chain and clock
     setsize(164 + OX * 2, 152); C = Canvas()
     for layer, ox in ((ch, OX), (cw, 0), (c, OX)):
