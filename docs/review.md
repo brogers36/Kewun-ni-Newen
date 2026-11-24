@@ -496,3 +496,9 @@ Tres jóvenes de la ciudad con un favor que pedir (los nombres son de Brandon). 
 - **Seba** (lof nagche; el perro en Kulliñ mapu): su perro, el **Kiltro**, solo hace caso en mapudungun. Se llama con "Küpange!" (distractores Küpamu!, Küpamün!, Amutunge!). ¿Te parece bien el nombre Kiltro para el perro (del mapudungun *kiltro*, perro mestizo, ya chilenismo)?
 - **Nacho** (plaza de Santiago): graba un audio para su chuchu de Temuko. ⚠ "Mari mari, chuchu!", "Chumleymi?", "Chaltu may!", "Pewkayal!" (distractores entre ellas y "Kümelen.", "Chew müleymi?").
 - **Carmen Lienkura** (lof williche): sus primeras palabras son tuyas y se muestran sin traducción, a propósito. Luego pide külon para el mushay: ⚠ "Küla külon elumuen." Al dárselos se elige ⚠ "Küla külon elueyu." (distractores "Küla külon elumuen.", "Küla külon nien.").
+
+### Revisión en la planilla (Nov 24): pestañas 0, 1 y 2
+Brandon terminó las pestañas 0 Apertura, 1 Lafkenche y 2 Nagche de docs/Kewun_revision_mapudungun.xlsx. Se aplicaron todas las correcciones de la columna Corrección (también las de filas marcadas OK que traían corrección). Cuando la misma frase aparece en otros lugares, la corrección se aplicó en todos (p. ej. "Kütral mew inaltuley" para los seis abuelos, "Amupunge" para los cinco lonko, "Mülekayan faw" en los cuatro menús, "challwatumean" también en el challwafe williche). Pendientes:
+- 1 Lafkenche #22 "Kiñe makuñ ngürekalen." y #115 "Iñche diweñfe: diweñ kintuken. Eymi kay? Challwafe? Ngürekafe?": marcadas Corregir pero sin corrección escrita.
+- 2 Nagche #39 "Paro! Kom kurü / Kom lüq" (awar): marcada Duda.
+- 0 Apertura: ninguna fila marcada; se dejó todo igual.
