@@ -484,7 +484,7 @@ function llufuStage(nx){
 function postLlufu(){
   S.flags.chboss=1;S.gear.lafkenkura=1;persist();sfx('lvl');
   say([N('El Rüf Kaykayfilu deja de luchar: el ül de los chumpall lo envuelve y lo aquieta. En paz, se hunde despacio hacia una fosa tan honda que ni los chumpall la conocen. El agua queda limpia y quieta.','The Rüf Kaykayfilu stops fighting: the chumpall\'s ül wraps around it and stills it. At peace, it sinks slowly into a trench so deep not even the chumpall know it. The water is left clean and still.'),
-    L('Ñidol chumpall','Chaltu may, '+nm()+'. Taiñ lafken montuy.','Gracias, '+nm()+'. Nuestro mar está a salvo.','Thank you, '+nm()+'. Our sea is safe.'),
+    L('Ñidol chumpall','Chaltu may, '+nm()+'. Taiñ lafken montulürkey.','Gracias, '+nm()+'. Nuestro mar se salvó.','Thank you, '+nm()+'. Our sea has been saved.'),
     N('Los cinco cantores chumpall te rodean y cantan juntos una sola vez. El agua entera brilla.','The five chumpall singers surround you and sing together, just once. The whole water glows.'),
     Object.assign(L('','Lafkenkura!','La ñidol chumpall te regala una lafkenkura, una piedra del mar: desde ahora recuperas 2 de newen en cada turno de pelea.','The chumpall leader gives you a lafkenkura, a sea stone: from now on you recover 2 newen every battle turn.'),{fx:()=>sfx('lvl')})],
     ()=>gainPiwke([N('Y entre las algas, algo rojo brilla...','And among the kelp, something red glints...')]));

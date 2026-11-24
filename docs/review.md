@@ -531,3 +531,12 @@ Ngoyngoyün tiene un sello de llako-, que solo enseñaba la ñidol chumpall (lag
 - La locutora de la radio lo enseña al terminar de sintonizar (o en cualquier visita después, si falta): ⚠ «Llakonge! Llakomün!» (¡Cálmate! ¡Cálmense!).
 - Red de seguridad: si alguien llega al jefe sin llako-, una papay de la feria le grita al ruido ⚠ «Llakonge!» y lo enseña.
 - En el maestro, los puntos de Santiago ya traen llako-.
+
+## Revisión del cuaderno: pestaña 6 Ngoyman y Chumpall (24 nov)
+Aplicado tal como lo marcaste (17; «Wefi Ti Fütra Ngoymatulfe!» y «Chem am ta "ko"?» ya estaban):
+- Las cuatro piedras ahora son narración en mapudungun: «Kiñe wirintungechi kura pi: «…»» / «Kiñe iyüdkülechi kura pi: «…»»; la de los braseros añade «Müley tami lüpümafiel küla frasero».
+- Akuymi. Akuymi may pichi weche chew rüpü aflu. · tranakilpe · Kechu che tami kellufiel wiñoturkey ñi pu mapu mew.
+- Ponwitu Ngoyman mew mülen. · Rakin ngoyman. · Ñi werken dungu ñamyawi. · Lelifinge!
+- Taiñ ül wüñomongeturkey. Chaltu may. (las dos líneas de la ülkantufe) · Taiñ lafken ül ñamürkey.
+- Taiñ lafken montulürkey (también en la línea de la ñidol después de la batalla, misma frase). · Eymi iñchiñ rumel wenüyyeayiñ.
+- Eymi iñchiñ weychayafiyiñ? · May, weychayafiyiñ! · Faw müleaiñ.
