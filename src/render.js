@@ -718,7 +718,7 @@ function renderBattle(){
       else{const m=Math.max(1,grd.length-1),sp=Math.min(28,Math.round(44/m));cx=40+gi*12;bse=(grd.length===1?138:112)+gi*sp}}
     else if(bossI<0&&fls.length){cx=36+fi*Math.max(34,sz+10);bse=122+(fi%2)*22} // all airborne: a V across the sky
     else if(bossI<0){const m=Math.max(1,n-1),sp=Math.min(30,Math.round(52/m));cx=(n===1?60:40)+i*14;bse=(n===1?138:104)+i*sp}
-    else if(ET[e.t].boss){cx=Math.max(72,Math.round(cvs.width/2)-12);bse=138}   // very wide bosses step in so their far edge stays on screen
+    else if(ET[e.t].boss){cx=Math.max(72,Math.round(cvs.width/2)-(/^llufu/.test(e.t)&&cvs.width>150?4:12));bse=138}   // very wide bosses step in so their far edge stays on screen
     else if(tall){cx=Math.round(104+(oi+1)*(LW-184)/(others.length+1));bse=138}
     else if(fi>=0){cx=150+fi*Math.max(30,sz+8);bse=98}
     else{const gm=grd.length,m=Math.max(1,gm-1),sp=Math.min(26,Math.round(46/m));cx=152+gi*12;bse=(gm===1?136:108)+gi*sp}
@@ -761,7 +761,7 @@ function renderBattle(){
       e._sn=e.seals.length;
       if(e.seals.length)drawWard(c,cx,cyS,sz,e.seals.length,frame,e.t);}
     if(e.sl>0)OV.push(()=>txt('z'+(frame%40<20?'Z':''),cx+sz/2-3,y+6,'#e0f0ff',16));
-    const bw=Math.max(32,Math.min(76,sz*.8)),bx=Math.round(cx-bw/2),by=bse+4;
+    const bw=Math.max(32,Math.min(76,sz*.8)),bx=Math.round(cx-bw/2),by=/^llufu/.test(e.t)?Math.max(bse+4,Math.max(4,bse-cvs.height+4)+cvs.height-1):bse+4;   // a boss taller than the stage keeps its bar below its feet
     const col=!tall&&!ET[e.t].boss&&(bossI<0?n>1:others.length>1)&&!(fi>=0&&bossI<0&&!grd.length);
     const bw2=col?28:bw,bx2=col?Math.round(cx+sz/2+6):bx,by2=col?bse-10:by;
     R(c,bx2-1,by2-1,bw2+2,5,'#181018');R(c,bx2,by2,bw2,3,'#4a1a1f');R(c,bx2,by2,Math.max(0,Math.round(bw2*e.hp/e.max)),3,'#f07028');R(c,bx2,by2,Math.max(0,Math.round(bw2*e.hp/e.max)),1,'#ffb070');
