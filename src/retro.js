@@ -33,6 +33,8 @@ const BASEP={o:'#181018',s:'#e8a878',S:'#c07850',h:'#201820',H:'#584860',b:'#d83
 const LOOKS={
   llanka:{t:'M',fixedSkin:1},
   millaray:{t:'F',r:'#2a64c8',c:'#8a2458',fixedSkin:1},
+  ayelen:{t:'F',fixedSkin:1,c:'#2a2634',C:'#18151f',r:'#c83030',s:'#b47446',S:'#80492a',q:'#c4865a'},          // black küpam, red trariwe, darker skin than Millaray
+  kallfurungi:{t:'M',fixedSkin:1,p:'#3e3c46',P:'#26252c',b:'#5a3ab8',B:'#c8b8ff',r:'#5a3ab8',w:'#e8e2f0',s:'#94603a',S:'#643820',q:'#a6704a'},   // charcoal makuñ, kallfü (violet-blue) trarilonko, darker skin than Llanka
   kuku:{t:'F',fixedSkin:1,h:'#c8c8d0',H:'#f4f4fa',s:'#d09868',S:'#a87048',c:'#4a2a5a',C:'#2e1a3a',r:'#c03030'},
   lonko:{t:'M',p:'#6a2818',P:'#481408',w:'#f0dca0',r:'#202020',b:'#c82828'},
   seller:{t:'M',p:'#9a6a30',P:'#6e4a1c',b:'#2f8d4a',r:'#2f8d4a',s:'#d8986a'},

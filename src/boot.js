@@ -36,9 +36,10 @@ function updLang(){$('copy').textContent=LANG==='es'?'© 2026 Brandon M. A. Roge
 $('bLang').onclick=()=>{LANG=LANG==='es'?'en':'es';updLang()};
 $('bMus').onclick=()=>toggleMute();
 $('bMus').textContent=AU.muted?'♪ Música: no':'♪ Música: sí';$('pN').textContent=AU.muted?'♪×':'♪';
-for(const [id,lk] of [['hL','llanka'],['hM','millaray']]){const cvs=$(id).querySelector('canvas'),c=cvs.getContext('2d');c.imageSmoothingEnabled=false;
+const HEROBTN=[['hM','millaray'],['hA','ayelen'],['hL','llanka'],['hK','kallfurungi']];
+for(const [id,lk] of HEROBTN){const cvs=$(id).querySelector('canvas'),c=cvs.getContext('2d');c.imageSmoothingEnabled=false;
   let t=0;setInterval(()=>{t++;c.clearRect(0,0,32,48);c.drawImage(charSprite(lk,'down',HERO===lk?Math.floor(t)%4:0),0,0,32,48)},180);
-  $(id).onclick=()=>{HERO=lk;$('hL').classList.toggle('on',lk==='llanka');$('hM').classList.toggle('on',lk==='millaray');sfx('ok')}}
+  $(id).onclick=()=>{HERO=lk;for(const [i2,l2] of HEROBTN)$(i2).classList.toggle('on',l2===lk);sfx('ok')}}
 $('title').addEventListener('pointerdown',()=>{auInit();if(!AU.name)playSong('intro')});
 playSong('intro');
 function slotLabel(n){const v=loadSave(n);if(!v)return LANG==='es'?'vacío':'empty';

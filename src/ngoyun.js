@@ -309,7 +309,7 @@ function ngBattleGrey(c){if(!B||!B.grey)return;c.save();c.globalCompositeOperati
 /* ---------- the title screen: once any save has its shadow back, a walker crosses the beach at sunset with a long shadow ---------- */
 let KIMCHE;
 function titleKimche(c,t){
-  if(KIMCHE===undefined){KIMCHE=null;for(const n of [1,2,3]){const v=loadSave(n);if(v&&v.flags&&v.flags.llaw_won){KIMCHE=v.hero==='millaray'?'millaray':'llanka';break}}}
+  if(KIMCHE===undefined){KIMCHE=null;for(const n of [1,2,3]){const v=loadSave(n);if(v&&v.flags&&v.flags.llaw_won){KIMCHE=HEROES[v.hero]?v.hero:'llanka';break}}}
   if(!KIMCHE)return;
   const x=Math.round(((t*.18)%(LW+60))-30),fr=Math.floor(t/9)%4,sp=ctCharSprite(KIMCHE,'right',[0,1,0,2][fr]?fr:0),y=176;
   const sil=silhouette(sp,'T'+KIMCHE+fr,'rgba(30,20,40,1)');

@@ -2,7 +2,7 @@
 
 *Kewün Newen* ("the strength of the language") is a retro action RPG for learning Mapudungun. It is drawn in the style of *A Link to the Past*, *EarthBound* and *Final Fantasy*.
 
-The player is a young wariache, Llanka or Millaray. They travel the Mapuche lands to wake the ngen, who have been silenced by forgetting. Mapudungun grammar is the battle system: you build commands from verb roots and person endings, and they act on wekufü taken from Mapuche folklore. Each region's boss drops a trokiñ (piece) of an ancient trariwe. The five pieces together let you pass through the fog of **Ti Fütra Ngoyman**, the great forgetting, to the final boss.
+The player is a young wariache: Millaray, Ayelen, Llanka or Kallfürüngi, chosen on the title screen. They travel the Mapuche lands to wake the ngen, who have been silenced by forgetting. Mapudungun grammar is the battle system: you build commands from verb roots and person endings, and they act on wekufü taken from Mapuche folklore. Each region's boss drops a trokiñ (piece) of an ancient trariwe. The five pieces together let you pass through the fog of **Ti Fütra Ngoyman**, the great forgetting, to the final boss.
 
 ## Status
 

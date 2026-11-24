@@ -128,6 +128,26 @@ def millaray(fr):
     c.inner_lines({('kupam', 'hairB'), ('face', 'hair'), ('neck', 'kupam'), ('arm', 'kupam'), ('fore', 'arm'), ('hand', 'fore'), ('silver', 'kupam')})
     c.outline(); return finish(c)
 
+# ---- the two new heroes: the same bodies as Millaray and Llanka, with their own skin and clothes ----
+ALT = {
+    'ayelen': {'skin': ['#2a160c', '#46261a', '#64381f', '#80492a', '#9c5c36', '#b47446', '#cc8e5c'],     # darker than Millaray
+               'kupam': ['#040408', '#0c0b12', '#15131c', '#201d29', '#2c2838', '#3e394e', '#58526c'],    # a black küpam
+               'belt': ['#3a0606', '#6a0e0c', '#9a1a14', '#c8281e', '#e84a34', '#ff7a5a']},              # a red trariwe
+    'kallfurungi': {'skin': ['#1e1008', '#341c10', '#4c2a18', '#643820', '#7c4a2c', '#94603a', '#ac784c'],   # darker than Llanka
+                    'poncho': ['#08080a', '#121216', '#1e1e24', '#2c2c34', '#3c3c46', '#54545e', '#74747e'],   # a charcoal makuñ
+                    'red': ['#10062a', '#200c4c', '#321676', '#4626a0', '#6242c8', '#8a6ae6']},               # kallfü: the band and trarilonko in violet-blue
+}
+ALT = {n: {k: [hx(c) for c in v] for k, v in d.items()} for n, d in ALT.items()}
+def dressed(name, base):
+    def fn(fr):
+        saved = {k: R[k] for k in ALT[name]}
+        R.update(ALT[name])
+        try: return base(fr)
+        finally: R.update(saved)
+    return fn
+ayelen = dressed('ayelen', lambda fr: millaray(fr))
+kallfurungi = dressed('kallfurungi', lambda fr: llanka(fr))
+
 def kuku(fr, cheer=None):
     # the grandmother: a little shorter and stooped, silver-white braid, deep purple küpam under a dark
     # ükülla shawl pinned with a silver tupu, red trariwe, hands folded in front. Same light and outline as the heroes.
@@ -196,7 +216,7 @@ def finish(c):
 if __name__ == '__main__':
     from PIL import Image
     here = os.path.dirname(os.path.abspath(__file__)); out = {}
-    for name, fn in [('llanka', llanka), ('millaray', millaray), ('kuku', kuku)]:
+    for name, fn in [('llanka', llanka), ('millaray', millaray), ('ayelen', ayelen), ('kallfurungi', kallfurungi), ('kuku', kuku)]:
         frames = [fn(f) for f in range(4)]
         p, f = yp.encode(frames); out[name] = {'pal': p, 'f': f}
         strip = np.concatenate(frames, axis=1); Image.fromarray(strip).resize((strip.shape[1] * 4, strip.shape[0] * 4), Image.NEAREST).save('/home/claude/hero_%s.png' % name)

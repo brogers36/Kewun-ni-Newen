@@ -1683,6 +1683,7 @@ function nutkTalk(lofId){
   const first=!!S.flags['ntk_'+lofId],two=first&&NUTK2[lofId];
   let D=NUTK[lofId],fl='ntk_'+lofId,done=first;const nm=S.name;
   if(two&&(!S.flags['ntk2_'+lofId]||Math.random()<.5)){D={who:D.who,set:NUTK2[lofId]};fl='ntk2_'+lofId;done=!!S.flags[fl]}
+  if(D.who===S.name)D={who:'\u200b'+D.who,set:D.set};   // a namesake (the player is Ayelen too): a hidden mark so her lines keep her own portrait
   const sub=s=>s.replace('@',nm);
   say([L(D.who,'Mari mari! Nütramkayaiñ?','¡Hola! ¿Conversamos? Estoy aprendiendo y quiero practicar.','Hello! Shall we talk? I am learning and I want to practise.')],()=>{
     choose(L('','Nütramkayaiñ?','¿Conversas con '+D.who+'?','Talk with '+D.who+'?'),[{m:'May',g:S.gloss==='en'?'Yes, let us talk':'Sí, conversemos',v:1},{m:'Ka mew',g:S.gloss==='en'?'Later':'Después',v:0}],v=>{if(v)step(0)},true,true)});

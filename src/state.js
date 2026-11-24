@@ -6,7 +6,9 @@ function maxHP(){return S.baseMax+(S.gear.trariwe?4:0)+Math.floor(S.piwke/4)*4+(
 function atk(){return Math.max(1,S.baseAtk+(S.gear.futrawino?3:0)+(S.gear.waiki?2:0)-(S.curse?2:0)-(S.kutran?3:0)-(S.chill>0?2:0))}
 function def(){return Math.max(0,S.baseDef+(S.gear.makun?2:0)+(S.gear.trarilongko?3:0)-(S.kutran?2:0))}
 function xpNeed(){return 10+S.lvl*10}
-function newState(hero){const fem=hero==='millaray';return{hero,fem,name:fem?'Millaray':'Llanka',gloss:LANG,map:'rupu',x:1,y:6,hp:24,baseMax:24,baseAtk:5,baseDef:1,lvl:1,xp:0,gold:0,
+/* the four heroes you can play: two women and two men, each with their own skin, clothes and battle sprite */
+const HEROES={millaray:{name:'Millaray',fem:1},ayelen:{name:'Ayelen',fem:1},llanka:{name:'Llanka',fem:0},kallfurungi:{name:'Kallfürüngi',fem:0}};
+function newState(hero){if(!HEROES[hero])hero='llanka';const fem=!!HEROES[hero].fem;return{hero,fem,name:HEROES[hero].name,gloss:LANG,map:'rupu',x:1,y:6,hp:24,baseMax:24,baseAtk:5,baseDef:1,lvl:1,xp:0,gold:0,
   items:{kulon:2,diwen:0,kofke:0,lawen:0,mate:0},gear:{},roots:['amutu'],runes:[],flags:{},piwke:0,keys:0,sp:0,curse:0,hints:true,
   pw:{speed:0,pewen:0,gold:0},save:{map:'rupu',x:1,y:6}}}
 function persist(){try{if(M){S.map=CUR;S.x=P.x;S.y=P.y}localStorage.setItem(slotKey(SLOT),JSON.stringify(S))}catch(e){}}
@@ -20,7 +22,7 @@ function heroState(src){const s=newState(src.hero||'llanka');
   s.items=Object.assign(s.items,src.items||{});s.gear=Object.assign({},src.gear||{});s.hm=(src.hm||0)+1;
   s.hp=s.baseMax+(s.gear.trariwe?4:0);return s}
 function heroHurt(){const d=Math.max(1,Math.round(maxHP()*.1));S.hp=Math.max(1,S.hp-d);sfx('bad');return d}
-const heroLook=()=>S.hero==='millaray'?'millaray':'llanka';
+const heroLook=()=>HEROES[S.hero]?S.hero:'llanka';
 
 /* ---------- verbs ---------- */
 const ROOTS={
