@@ -312,3 +312,6 @@ Object.assign(BEST,{
   ngamlef:['Pu mapuche ñi ngamleftripael: la dispersión de la gente mapuche por la ciudad, cada uno creyéndose solo.','Pu mapuche ñi ngamleftripael: the scattering of the Mapuche people across the city, each one believing they are alone.'],
   fillantu:['Pu che ñi mapudungukenoael fillantü: que la gente no hable mapudungun todos los días. Siempre lo deja para después. Aquí vuela como un chonchón gigante, con la boca cerrada con un cierre y los días tachados en el cráneo.','Pu che ñi mapudungukenoael fillantü: people not speaking Mapudungun every day. It always leaves it for later. Here it flies as a giant chonchón, its mouth zipped shut and the days crossed out on its skull.']});
 BEST.ngoyngoyun=BEST.ngoyngoyün;
+// more kutral in Santiago: before, the only one was inside the urban ruka, so a long city stretch had nowhere to rest and save
+for(const [k,x,y] of [['s_plaza',14,9],['s_calle',37,13],['s_feria',38,10],['s_metro',2,6],['s_m2',2,8],['s_m3',9,9],['s_blocks',33,9]])
+  MAPS[k].rows=MAPS[k].rows.map((r,yy)=>yy===y?r.slice(0,x)+'F'+r.slice(x+1):r);
