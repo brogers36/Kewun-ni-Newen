@@ -71,7 +71,10 @@ function _dg(kind,geo){const st=[];return{addColorStop(p,col){st.push([p,_rgba(c
     g.putImageData(id,0,0);DGC.set(key,cv)}
   c.drawImage(cv,x,y)}}}
 const dLin=(x0,y0,x1,y1)=>_dg('l',[x0,y0,x1,y1]),dRad=(cx,cy,r0,cx1,cy1,r1)=>_dg('r',[cx,cy,r0,cx1,cy1,r1]);
-function G(o){if(!o)return'';const l=S?S.gloss:LANG;return o[l]!==undefined?o[l]:(o.es||'')}
+function G(o){if(!o)return'';const l=S?S.gloss:LANG;const t=o[l]!==undefined?o[l]:(o.es||'');return typeof t==='string'&&t.indexOf('\u2063')>=0?rootHint(t):t}
+/* a fill-in question's root rides in its hint between invisible marks: shown in normal mode, removed in Weichafe mode */
+function rh(r){return ' \u2063('+r+'-)\u2063'}
+function rootHint(t){return (S&&S.hm)?t.replace(/ ?\u2063[^\u2063]*\u2063/g,''):t.replace(/\u2063/g,'')}
 const h2=(x,y,s)=>{let n=(Math.imul(x|0,374761393)+Math.imul(y|0,668265263)+Math.imul((s|0)+7,982451653))|0;n=Math.imul(n^(n>>>13),1274126177);n^=n>>>16;return (n>>>0)/4294967296};
 const hexRGB=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
 const GA=(m,f)=>S&&S.fem?f:m;

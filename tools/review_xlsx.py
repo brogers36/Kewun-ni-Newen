@@ -38,7 +38,7 @@ def split_args(s, i):
         elif ch == ',' and depth == 0: args.append(cur); cur = ''; j += 1; continue
         cur += ch; j += 1
     return args, j
-SUBS = [(r"nm\(\)", '[nombre]'), (r"S\.name", '[nombre]'), (r"addr\([^)]*\)", 'peñi/lamngen'), (r"GR\(([^)]*)\)", r'\1')]
+SUBS = [(r"rh\('([^']*)'\)", r' (\1-)'), (r"nm\(\)", '[nombre]'), (r"S\.name", '[nombre]'), (r"addr\([^)]*\)", 'peñi/lamngen'), (r"GR\(([^)]*)\)", r'\1')]
 def text(expr):
     """turn a JS string expression into readable text: literals kept, code shown as {code}"""
     expr = expr.strip(); out = ''; j = 0
@@ -252,6 +252,7 @@ for name, desc in STAGES:
 # saying what it was; a line that was not in the previous book is marked as new. Unmarked rows stay unmarked.
 import difflib
 MARKS = {}
+def _nr(t): return re.sub(r' \([^()]*-\)$', '', str(t or ''))          # a fill-in's hint without its root
 def _k(t): return re.sub(r'[^a-zñüäëïöáéíóú\[\]]+', ' ', str(t or '').lower()).strip()
 if len(sys.argv) > 1:
     from openpyxl import load_workbook
@@ -262,16 +263,26 @@ if len(sys.argv) > 1:
         if reviewed: done_tabs.add(ws.title)
         for r in rows:
             st, fix, note = (r[5] or '').strip(), (r[6] or ''), (r[7] or '')
-            for key in ((_k(r[2]), _k(r[3])), _k(r[2])):        # by line and gloss, and by line alone; a reviewed tab wins over an unreviewed one
-                if key not in prev or (reviewed and not prev[key][4]): prev[key] = (st, fix, note, ws.title, reviewed)
+            keys = ((_k(r[2]), _k(r[3])), _k(r[2])) if '___' not in str(r[2]) else ((_k(r[2]), _k(_nr(r[3]))), ('gap', _k(_nr(r[3]))))
+            for key in keys:        # by line and gloss, and by line alone (fill-ins: by their hint); a reviewed tab wins over an unreviewed one
+                if key not in prev or (reviewed and not prev[key][4]): prev[key] = (st, fix, note, ws.title, reviewed, r[2])
             if fix: corr.append((_k(fix), r[2], ws.title))
     for name, desc, rows in FINAL:
         for who, mm, es, ctx in rows:
+            if any(w in str(mm) + str(es) for w in ('ngülliwtukeyngün', 'kawelltukeymi', 'Kawelltuken', '(ngülliwtu-)', '(kawelltu-)')) or str(mm).startswith('Chem am ta "'):
+                MARKS[(name, mm)] = ('OK', '', 'Tu forma (24 nov).'); continue
             k = _k(mm); kk = (k, _k(es))
-            if kk in prev: k = kk
+            if '___' in str(mm):
+                kk = (k, _k(_nr(es)))
+                if kk in prev: k = kk
+                elif ('gap', _k(_nr(es))) in prev:
+                    st, fix, note, tab, reviewed, oldl = prev[('gap', _k(_nr(es)))]
+                    MARKS[(name, mm)] = (st if not fix else '', '', 'La palabra va entera; la raíz está en la pista (solo en modo normal). Antes: ' + str(oldl)); continue
+                else: k = ('nogap', k)
+            elif kk in prev: k = kk
             if str(mm).startswith('Feypienew fentreke che'): MARKS[(name, mm)] = ('OK', '', 'Tu línea; va sin traducción a propósito.'); continue
             if k in prev:
-                st, fix, note, tab, reviewed = prev[k]
+                st, fix, note, tab, reviewed, _ = prev[k]
                 if reviewed and not fix: MARKS[(name, mm)] = ('OK', '', note); continue
                 if reviewed and fix: MARKS[(name, mm)] = ('', '', 'Tu corrección todavía no está aplicada aquí: ' + str(fix)); continue
                 MARKS[(name, mm)] = ('', '', note); continue

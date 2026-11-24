@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='c512dbe-202611241327';
+window.KEWUN_BUILD='4da85d3-202611241330';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -224,7 +224,10 @@ function _dg(kind,geo){const st=[];return{addColorStop(p,col){st.push([p,_rgba(c
     g.putImageData(id,0,0);DGC.set(key,cv)}
   c.drawImage(cv,x,y)}}}
 const dLin=(x0,y0,x1,y1)=>_dg('l',[x0,y0,x1,y1]),dRad=(cx,cy,r0,cx1,cy1,r1)=>_dg('r',[cx,cy,r0,cx1,cy1,r1]);
-function G(o){if(!o)return'';const l=S?S.gloss:LANG;return o[l]!==undefined?o[l]:(o.es||'')}
+function G(o){if(!o)return'';const l=S?S.gloss:LANG;const t=o[l]!==undefined?o[l]:(o.es||'');return typeof t==='string'&&t.indexOf('\u2063')>=0?rootHint(t):t}
+/* a fill-in question's root rides in its hint between invisible marks: shown in normal mode, removed in Weichafe mode */
+function rh(r){return ' \u2063('+r+'-)\u2063'}
+function rootHint(t){return (S&&S.hm)?t.replace(/ ?\u2063[^\u2063]*\u2063/g,''):t.replace(/\u2063/g,'')}
 const h2=(x,y,s)=>{let n=(Math.imul(x|0,374761393)+Math.imul(y|0,668265263)+Math.imul((s|0)+7,982451653))|0;n=Math.imul(n^(n>>>13),1274126177);n^=n>>>16;return (n>>>0)/4294967296};
 const hexRGB=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
 const GA=(m,f)=>S&&S.fem?f:m;
@@ -3390,9 +3393,9 @@ function pzTouch(tx,ty){
 }
 const STONES={
   conj:{intro:[L('Kura','Mari mari! Kura ngen, welu dunguken.','¡Hola! Soy una piedra, pero hablo.','Hello! I am a stone, but I speak.'),N('Responde bien y te dejo pasar. Cambia el final del verbo según quién lo hace.','Answer well and I will let you through. Change the end of the verb depending on who does it.')],
-    qs:[{q:L('Kura','Fey ___','Él / ella va. (fey = él, ella)','He / she goes. (fey = he, she)'),o:['amun','amuymi','amuy'],a:'amuy'},
-        {q:L('Kura','Eymi ___','Tú vienes. (eymi = tú)','You come. (eymi = you)'),o:['küpan','küpaymi','küpay'],a:'küpaymi'},
-        {q:L('Kura','Iñche ___','Yo sé. (iñche = yo)','I know. (iñche = I)'),o:['kimün','kimimi','kimi'],a:'kimün'}],hq:{q:L('Kura','Eymün ___','Ustedes (muchos) van.','You (many) go.'),o:['amuymu','amuymün','amuyngün'],a:'amuymün'}},
+    qs:[{q:L('Kura','Fey ___','Él / ella va. (fey = él, ella)'+rh('amu'),'He / she goes. (fey = he, she)'+rh('amu')),o:['amun','amuymi','amuy'],a:'amuy'},
+        {q:L('Kura','Eymi ___','Tú vienes. (eymi = tú)'+rh('küpa'),'You come. (eymi = you)'+rh('küpa')),o:['küpan','küpaymi','küpay'],a:'küpaymi'},
+        {q:L('Kura','Iñche ___','Yo sé. (iñche = yo)'+rh('kim'),'I know. (iñche = I)'+rh('kim')),o:['kimün','kimimi','kimi'],a:'kimün'}],hq:{q:L('Kura','Eymün ___','Ustedes (muchos) van.'+rh('amu'),'You (many) go.'+rh('amu')),o:['amuymu','amuymün','amuyngün'],a:'amuymün'}},
   neg:{intro:[L('Kura','Mari mari! Kimimi -la-?','¡Hola! ¿Conoces -la-?','Hello! Do you know -la-?'),N('-la- niega el verbo: amun "voy" → amulan "no voy". Responde bien y la puerta se abrirá.','-la- negates the verb: amun "I go" → amulan "I do not go". Answer well and the door will open.')],
     qs:[{q:N('¿Cómo se dice "no voy"?','How do you say "I do not go"?'),o:['amun','amulan','amulay'],a:'amulan'},
         {q:N('¿Cómo se dice "ella no viene"?','How do you say "she does not come"?'),o:['küpalay','küpay','küpalan'],a:'küpalay'},
@@ -3427,9 +3430,9 @@ const STONES={
         {q:L('Kura','___ ngülliw nieymi?','¿Cuántos piñones tienes?','How many pewen nuts do you have?'),o:['Chumten','Chumül','Iney'],a:'Chumten'}],hq:{q:L('Kura','___ amuaymi?','¿Cuándo te vas a ir?','When will you leave?'),o:['Chew','Chumül','Chem'],a:'Chumül'}},
   du:{intro:[L('Kura','Mari mari! Kimimi iñchiw, eymu, fey engu?','¡Hola! ¿Conoces iñchiw, eymu, fey engu?','Hello! Do you know iñchiw, eymu, fey engu?'),
     N('El mapudungun tiene formas especiales para DOS personas: iñchiw (nosotros dos), eymu (ustedes dos), fey engu (ellos dos). Tu chillka las muestra en «Iñche, eymi, fey...».','Mapudungun has special forms for TWO people: iñchiw (we two), eymu (you two), fey engu (they two). Your chillka shows them under «Iñche, eymi, fey...».')],
-    qs:[{q:L('Kura','Iñchiw ___','Nosotros dos vamos.','We two go.'),o:['amuyu','amuiñ','amuymu'],a:'amuyu'},
-        {q:L('Kura','Eymu ___','Ustedes dos vienen.','You two come.'),o:['küpaymün','küpaymu','küpayu'],a:'küpaymu'},
-        {q:L('Kura','Fey engu ___','Ellos dos saben.','They two know.'),o:['kimingün','kimi','kimingu'],a:'kimingu'}],hq:{q:L('Kura','Iñchiw ___','Nosotros dos trabajamos.','We two work.'),o:['küdawiñ','küdawiyu','küdawimu'],a:'küdawiyu'}},
+    qs:[{q:L('Kura','Iñchiw ___','Nosotros dos vamos.'+rh('amu'),'We two go.'+rh('amu')),o:['amuyu','amuiñ','amuymu'],a:'amuyu'},
+        {q:L('Kura','Eymu ___','Ustedes dos vienen.'+rh('küpa'),'You two come.'+rh('küpa')),o:['küpaymün','küpaymu','küpayu'],a:'küpaymu'},
+        {q:L('Kura','Fey engu ___','Ellos dos saben.'+rh('kim'),'They two know.'+rh('kim')),o:['kimingün','kimi','kimingu'],a:'kimingu'}],hq:{q:L('Kura','Iñchiw ___','Nosotros dos trabajamos.'+rh('küdaw'),'We two work.'+rh('küdaw')),o:['küdawiñ','küdawiyu','küdawimu'],a:'küdawiyu'}},
   fe:{intro:[L('Kura','Mari mari! Kimimi -fe?','¡Hola! ¿Conoces -fe?','Hello! Do you know -fe?'),
     N('-fe hace nombres de oficio: challwan «pescar» → challwafe «pescador». Responde bien y te abro el paso.','-fe makes names of trades: challwan «to fish» → challwafe «fisher». Answer well and I will open the way.')],
     qs:[{q:L('Kura','Challwa + -fe: ___','La persona que pesca.','The person who fishes.'),o:['challwawe','challwafe','challwan'],a:'challwafe'},
@@ -3437,9 +3440,9 @@ const STONES={
         {q:L('Kura','Trutruka + -tu- + -fe: ___','La persona que toca la trutruka.','The person who plays the trutruka.'),o:['trutrukawe','trutrukan','trutrukatufe'],a:'trutrukatufe'}],hq:{q:L('Kura','Küdaw + -fe: ___','La persona que trabaja.','The person who works.'),o:['küdawün','küdawfe','küdawwe'],a:'küdawfe'}},
   fu:{intro:[L('Kura','Mari mari! Kimimi -fu-?','¡Hola! ¿Conoces -fu-?','Hello! Do you know -fu-?'),
     N('-fu- habla de lo que era antes y ya no es: kümelen «estoy bien» → kümelefun «estaba bien». Tu chillka lo explica en «Kuyfi · -fu-».','-fu- talks about what used to be: kümelen «I am well» → kümelefun «I was well». Your chillka explains it under «Kuyfi · -fu-».')],
-    qs:[{q:L('Kura','Kuyfi iñche pichiche ___','Antes yo era niño.','Long ago I was a child.'),o:['ngen','ngefun','ngefuy'],a:'ngefun'},
-        {q:L('Kura','Fey ___','Ella sabía.','She used to know.'),o:['kimfuy','kimi','kimfun'],a:'kimfuy'},
-        {q:L('Kura','Iñchiñ lof mew ___','Nosotros vivíamos en el lof.','We used to live in the lof.'),o:['müleiñ','mülefuy','mülefuiñ'],a:'mülefuiñ'}],hq:{q:L('Kura','Eymi ___','Tú sabías.','You used to know.'),o:['kimfun','kimimi','kimfuymi'],a:'kimfuymi'}},
+    qs:[{q:L('Kura','Kuyfi iñche pichiche ___','Antes yo era niño.'+rh('nge'),'Long ago I was a child.'+rh('nge')),o:['ngen','ngefun','ngefuy'],a:'ngefun'},
+        {q:L('Kura','Fey ___','Ella sabía.'+rh('kim'),'She used to know.'+rh('kim')),o:['kimfuy','kimi','kimfun'],a:'kimfuy'},
+        {q:L('Kura','Iñchiñ lof mew ___','Nosotros vivíamos en el lof.'+rh('müle'),'We used to live in the lof.'+rh('müle')),o:['müleiñ','mülefuy','mülefuiñ'],a:'mülefuiñ'}],hq:{q:L('Kura','Eymi ___','Tú sabías.'+rh('kim'),'You used to know.'+rh('kim')),o:['kimfun','kimimi','kimfuymi'],a:'kimfuymi'}},
   kead:{intro:[L('Kura','Mari mari! Epu pichi ruka? Pichike ruka!','¡Hola! ¿Dos casas chicas? ¡Pichike ruka!','Hello! Two little houses? Pichike ruka!'),
     N('Cuando hay varios, el adjetivo lleva -ke: pichi ruka «casa chica» → pichike ruka «casas chicas».','When there are several, the adjective takes -ke: pichi ruka «small house» → pichike ruka «small houses».')],
     qs:[{q:L('Kura','Epu ___ trewa','Dos perros chicos.','Two small dogs.'),o:['pichike','pichi','pichiñma'],a:'pichike'},
@@ -3451,9 +3454,9 @@ const STONES={
         {q:N('¿Cómo se dice «mil»?','How do you say «one thousand»?'),o:['pataka mari','warangka','mari pataka'],a:'warangka'},
         {q:L('Kura','Epu pataka kechu mari = ?','¿Qué número es?','Which number is it?'),o:['250','205','2050'],a:'250'}],hq:{q:L('Kura','Küla warangka epu pataka = ?','¿Qué número es?','Which number is it?'),o:['2300','3020','3200'],a:'3200'}},
   plur:{intro:[L('Kura','Mari mari! Kimimi pu?','¡Hola! ¿Conoces pu?','Hello! Do you know pu?'),N('Cuando son dos o muchos, el verbo también cambia. Completa los verbos.','When there are two or many, the verb changes too. Complete the verbs.')],
-    qs:[{q:L('Kura','Pu wentru ___','Los hombres van.','The men go.'),o:['amuy','amuyngu','amuyngün'],a:'amuyngün'},
-        {q:L('Kura','Epu domo ___','Dos mujeres vienen.','Two women come.'),o:['küpayngu','küpay','küpayngün'],a:'küpayngu'},
-        {q:L('Kura','Pu pichikeche ___','Los niños saben.','The children know.'),o:['kimi','kimingün','kimingu'],a:'kimingün'}],hq:{q:L('Kura','Pu domo ___','Las mujeres trabajan.','The women work.'),o:['küdawi','küdawingu','küdawingün'],a:'küdawingün'}}};
+    qs:[{q:L('Kura','Pu wentru ___','Los hombres van.'+rh('amu'),'The men go.'+rh('amu')),o:['amuy','amuyngu','amuyngün'],a:'amuyngün'},
+        {q:L('Kura','Epu domo ___','Dos mujeres vienen.'+rh('küpa'),'Two women come.'+rh('küpa')),o:['küpayngu','küpay','küpayngün'],a:'küpayngu'},
+        {q:L('Kura','Pu pichikeche ___','Los niños saben.'+rh('kim'),'The children know.'+rh('kim')),o:['kimi','kimingün','kimingu'],a:'kimingün'}],hq:{q:L('Kura','Pu domo ___','Las mujeres trabajan.'+rh('küdaw'),'The women work.'+rh('küdaw')),o:['küdawi','küdawingu','küdawingün'],a:'küdawingün'}}};
 function stoneTalk(id){
   const st=STONES[id],sf=M.pz?'pz:'+CUR+':st':'pz:'+CUR;
   if(S.flags[sf])return say([L('Kura','Kümey! Amunge.','¡Bien! Pasa.','Good! Go on through.')]);
@@ -4050,9 +4053,9 @@ function shepTalk(){
 function nFisherTalk(){
   const en=S.gloss==='en';
   if(S.flags.nfish)return say([L('Challwafe','Wüle ka challwatumean.','Mañana voy a pescar otra vez.','Tomorrow I will fish again.')]);
-  const qs=[{q:L('Challwafe','Wüle iñche ___','Mañana yo iré.','Tomorrow I will go.'),o:['amun','amuan','amuay'],a:'amuan'},
-    {q:L('Challwafe','Eymi ___','Tú sabrás.','You will know.'),o:['kimimi','kiman','kimaymi'],a:'kimaymi'},
-    {q:L('Challwafe','Fey ___','Él va a pescar.','He will fish.'),o:['challwatuay','challwatuy','challwatuan'],a:'challwatuay'}];
+  const qs=[{q:L('Challwafe','Wüle iñche ___','Mañana yo iré.'+rh('amu'),'Tomorrow I will go.'+rh('amu')),o:['amun','amuan','amuay'],a:'amuan'},
+    {q:L('Challwafe','Eymi ___','Tú sabrás.'+rh('kim'),'You will know.'+rh('kim')),o:['kimimi','kiman','kimaymi'],a:'kimaymi'},
+    {q:L('Challwafe','Fey ___','Él va a pescar.'+rh('challwatu'),'He will fish.'+rh('challwatu')),o:['challwatuay','challwatuy','challwatuan'],a:'challwatuay'}];
   say([L('Challwafe','Mari mari, '+addr(false)+'. Challwatulen.','Hola. Estoy pescando.','Hello. I am fishing.'),
     N('El pescador quiere hablar de lo que vendrá, pero las palabras se le escapan como peces. Ayúdalo a terminar los verbos: todo lo que todavía no pasa.','The fisherman wants to talk about what is to come, but the words slip away from him like fish. Help him finish the verbs: everything that has not happened yet.')],()=>ask(0));
   function ask(i){
@@ -4140,9 +4143,9 @@ function arrieroTalk(){
       L('Wentru','Allkütunge: pewen mapu mew, epu fütra pewen müley, willi püle rüpü mew.','Escucha: en el bosque hay dos pewenes gemelos, al sur del camino.','Listen: in the forest there are two twin pewen trees, south of the road.'),
       N('«Mis caballos siempre escarban justo entre esos dos árboles. Algo brilla ahí abajo. Busca justo en medio.»','"My horses always paw at the ground right between those two trees. Something shines down there. Search right in the middle."')]);}
   if(S.flags.pew_ke)return say([L('Wentru','Kawelltuken. Pewkayal!','Yo ando a caballo (siempre, de costumbre). ¡Hasta luego!','I ride on horseback (always, as a habit). See you later!')]);
-  const qs=[{q:L('Wentru','Pu pewenche ___','Los pewenche comen piñones (siempre, de costumbre).','The Pewenche eat pewen nuts (always, as a habit).'),o:['ngülliwtuyngün','ngülliwtukeyngün','ngülliwtukey'],a:'ngülliwtukeyngün'},
-    {q:L('Wentru','Iñche ___','Yo hablo mapudungun (siempre, de costumbre).','I speak Mapudungun (always, as a habit).'),o:['mapudungun','mapudunguken','mapudungukey'],a:'mapudunguken'},
-    {q:L('Wentru','Eymi ___','Tú andas a caballo (siempre, de costumbre).','You ride on horseback (always, as a habit).'),o:['kawelltuymi','kawelltukeymi','kawelltuken'],a:'kawelltukeymi'}];
+  const qs=[{q:L('Wentru','Pu pewenche ___','Los pewenche comen piñones (siempre, de costumbre).'+rh('ngülliwtu'),'The Pewenche eat pewen nuts (always, as a habit).'+rh('ngülliwtu')),o:['ngülliwtuyngün','ngülliwtukeyngün','ngülliwtukey'],a:'ngülliwtukeyngün'},
+    {q:L('Wentru','Iñche ___','Yo hablo mapudungun (siempre, de costumbre).'+rh('mapudungu'),'I speak Mapudungun (always, as a habit).'+rh('mapudungu')),o:['mapudungun','mapudunguken','mapudungukey'],a:'mapudunguken'},
+    {q:L('Wentru','Eymi ___','Tú andas a caballo (siempre, de costumbre).'+rh('kawelltu'),'You ride on horseback (always, as a habit).'+rh('kawelltu')),o:['kawelltuymi','kawelltukeymi','kawelltuken'],a:'kawelltukeymi'}];
   say([L('Wentru','Mari mari, '+addr(false)+'. Kawelltuken.','Hola. Yo ando a caballo (siempre, de costumbre).','Hello. I ride on horseback (always, as a habit).'),
     N('-ke- dice lo que alguien hace siempre, por costumbre. El arriero quiere ver si lo entiendes. Tu chillka lo explica en «-ke-».','-ke- says what someone always does, as a habit. The muleteer wants to see if you understand. Your chillka explains it under «-ke-».')],()=>ask(0));
   function ask(i){
@@ -4230,9 +4233,9 @@ function wFisherTalk(){
 function timeTalk(){
   const en=S.gloss==='en';
   if(S.flags.wil_time)return say([L('Challwafe','Wüle ka challwatumean. Pewkayal!','Mañana vuelvo a pescar. ¡Hasta luego!','Tomorrow I will fish again. See you later!')]);
-  const qs=[{q:L('Challwafe','Wiya iñche ___','Ayer pesqué.','Yesterday I fished.'),o:['challwatuan','challwatun','challwatuy'],a:'challwatun'},
-    {q:L('Challwafe','Wüle iñche ___','Mañana pescaré.','Tomorrow I will fish.'),o:['challwatun','challwatuy','challwatuan'],a:'challwatuan'},
-    {q:L('Challwafe','Fachantü eymi ___','Hoy viniste.','Today you came.'),o:['küpaymi','küpayaymi','küpan'],a:'küpaymi'}];
+  const qs=[{q:L('Challwafe','Wiya iñche ___','Ayer pesqué.'+rh('challwatu'),'Yesterday I fished.'+rh('challwatu')),o:['challwatuan','challwatun','challwatuy'],a:'challwatun'},
+    {q:L('Challwafe','Wüle iñche ___','Mañana pescaré.'+rh('challwatu'),'Tomorrow I will fish.'+rh('challwatu')),o:['challwatun','challwatuy','challwatuan'],a:'challwatuan'},
+    {q:L('Challwafe','Fachantü eymi ___','Hoy viniste.'+rh('küpa'),'Today you came.'+rh('küpa')),o:['küpaymi','küpayaymi','küpan'],a:'küpaymi'}];
   say([L('Challwafe','Mari mari, '+addr(true)+'. Wiya, fachantü, wüle...','Hola. Ayer, hoy, mañana...','Hello. Yesterday, today, tomorrow...'),
     N('La pescadora mezcla los días desde que llegó la niebla. Ayúdala: wiya es ayer, fachantü es hoy y wüle es mañana. Lo que ya pasó no lleva -a-; lo que todavía no pasa, sí.','The fisherwoman mixes up the days since the fog came. Help her: wiya is yesterday, fachantü is today and wüle is tomorrow. What already happened has no -a-; what has not happened yet does.')],()=>ask(0));
   function ask(i){
@@ -4367,9 +4370,9 @@ function kusheTalk(){
 function mallinTalk(){
   const en=S.gloss==='en';
   if(S.flags.puel_mallin)return say([L('Challwafe','Wüle ka yepayan ko. Pewkayal!','Mañana vengo a buscar agua otra vez. ¡Hasta luego!','Tomorrow I will come for water again. See you later!')]);
-  const qs=[{q:L('Challwafe','Wiya ___','Ayer fui a pescar (allá, y volví).','Yesterday I went fishing (over there, and came back).'),o:['challwatun','challwatumen','challwatupan'],a:'challwatumen'},
-    {q:L('Challwafe','Ko ___','Vine a buscar agua (hacia acá).','I came here to fetch water.'),o:['yemen','yepan','yen'],a:'yepan'},
-    {q:L('Challwafe','Wüle ___','Mañana iré a buscar (allá).','Tomorrow I will go looking (over there).'),o:['kintupayan','kintumean','kintuan'],a:'kintumean'}];
+  const qs=[{q:L('Challwafe','Wiya ___','Ayer fui a pescar (allá, y volví).'+rh('challwatu'),'Yesterday I went fishing (over there, and came back).'+rh('challwatu')),o:['challwatun','challwatumen','challwatupan'],a:'challwatumen'},
+    {q:L('Challwafe','Ko ___','Vine a buscar agua (hacia acá).'+rh('ye'),'I came here to fetch water.'+rh('ye')),o:['yemen','yepan','yen'],a:'yepan'},
+    {q:L('Challwafe','Wüle ___','Mañana iré a buscar (allá).'+rh('kintu'),'Tomorrow I will go looking (over there).'+rh('kintu')),o:['kintupayan','kintumean','kintuan'],a:'kintumean'}];
   say([L('Challwafe','Mari mari, '+addr(false)+'. Malliñ mew küdawkülen.','Hola. Estoy trabajando en el mallín.','Hello. I am working in the wet meadow.'),
     N('El pescador va y viene entre el lof y el mallín, y sus verbos van y vienen con él: -me- es ir a hacer algo allá; -pa- es hacia acá. Ayúdalo a terminar los verbos.','The fisherman comes and goes between the lof and the meadow, and his verbs come and go with him: -me- is going to do something over there; -pa- is toward here. Help him finish the verbs.')],()=>ask(0));
   function ask(i){
@@ -4464,9 +4467,9 @@ function gNagTalk(){
   capQuiz('cap2','gm2','Challwafe',
     [L('Challwafe','Kelluen... Ngoyman mew mülen.','Ayúdame... Estoy dentro del olvido.','Help me... I am inside the forgetting.'),
      N('Un pescador nagche está atrapado en la niebla. Olvidó lo que viene: el futuro. Devuélvele el -a- y la niebla lo soltará.','A Nagche fisherman is trapped in the fog. He has forgotten what is to come: the future. Give him back the -a- and the fog will let him go.')],
-    [{q:L('Challwafe','Wüle iñche ___','Mañana yo pescaré.','Tomorrow I will fish.'),o:['challwatun','challwatuan','challwatuy'],a:'challwatuan'},
-     {q:L('Challwafe','Eymi ___','Tú irás.','You will go.'),o:['amuymi','amuaymi','amuan'],a:'amuaymi'},
-     {q:L('Challwafe','Fey ___','Ella dormirá.','She will sleep.'),o:['umawtuy','umawtuay','umawtuan'],a:'umawtuay'}],
+    [{q:L('Challwafe','Wüle iñche ___','Mañana yo pescaré.'+rh('challwatu'),'Tomorrow I will fish.'+rh('challwatu')),o:['challwatun','challwatuan','challwatuy'],a:'challwatuan'},
+     {q:L('Challwafe','Eymi ___','Tú irás.'+rh('amu'),'You will go.'+rh('amu')),o:['amuymi','amuaymi','amuan'],a:'amuaymi'},
+     {q:L('Challwafe','Fey ___','Ella dormirá.'+rh('umawtu'),'She will sleep.'+rh('umawtu')),o:['umawtuy','umawtuay','umawtuan'],a:'umawtuay'}],
     'el pescador','the fisherman','Antes de irse te deja un lawen y meli mari (40) ngülliw.','Before leaving he gives you a lawen and meli mari (40) ngülliw.',
     ()=>{S.items.lawen++;S.gold+=40});
 }
@@ -4487,7 +4490,7 @@ function gWilTalk(){
      N('Una pescadora williche perdió los días en la niebla: ayer, hoy y mañana se le mezclan. Ordénaselos y la niebla la soltará.','A Williche fisherwoman has lost the days in the fog: yesterday, today and tomorrow blur together. Set them in order and the fog will let her go.')],
     [{q:L('Challwafe domo','"Wiya"... chem am?','"Wiya", ¿qué es?','"Wiya", what is it?'),o:[en?'yesterday':'ayer',en?'tomorrow':'mañana',en?'today':'hoy'],a:en?'yesterday':'ayer'},
      {q:L('Challwafe domo','"Wüle"... chem am?','"Wüle", ¿qué es?','"Wüle", what is it?'),o:[en?'today':'hoy',en?'tomorrow':'mañana',en?'yesterday':'ayer'],a:en?'tomorrow':'mañana'},
-     {q:L('Challwafe domo','Wiya iñche ___','Ayer yo pesqué.','Yesterday I fished.'),o:['challwatun','challwatuan','challwatuay'],a:'challwatun'}],
+     {q:L('Challwafe domo','Wiya iñche ___','Ayer yo pesqué.'+rh('challwatu'),'Yesterday I fished.'+rh('challwatu')),o:['challwatun','challwatuan','challwatuay'],a:'challwatun'}],
     'la pescadora','the fisherwoman','Antes de irse te deja un kofke, un lawen y meli mari (40) ngülliw.','Before leaving she gives you a kofke, a lawen and meli mari (40) ngülliw.',
     ()=>{S.items.kofke++;S.items.lawen++;S.gold+=40});
 }
@@ -4495,9 +4498,9 @@ function gPuelTalk(){
   capQuiz('cap5','gm5','Werken',
     [L('Werken','Kelluen... Ñi dungu ñamyawi.','Ayúdame... Mis mensajes andan perdidos.','Help me... My messages have gone astray.'),
      N('Un werken puelche lleva mensajes que la niebla le borró. Son los más difíciles: ir y venir, y lo que dicen otros. Devuélveselos y la niebla lo soltará.','A Puelche messenger carries messages the fog erased. They are the hardest ones: going and coming, and what others say. Give them back and the fog will let him go.')],
-    [{q:L('Werken','___ ("fui a buscar allá")','"Fui a buscar (allá y volví)".','"I went looking (over there and back)".'),o:['kintun','kintumen','kintupan'],a:'kintumen'},
-     {q:L('Werken','___ ("vino a ayudar acá")','"Vino a ayudar (hacia acá)".','"He came here to help".'),o:['kellumey','kellupay','kelluy'],a:'kellupay'},
-     {q:L('Werken','___ ("dicen que se fue")','"Dicen que se fue".','"They say he went away".'),o:['amutuy','amuturkey','amutuan'],a:'amuturkey'}],
+    [{q:L('Werken','___ ("fui a buscar allá")','"Fui a buscar (allá y volví)".'+rh('kintu'),'"I went looking (over there and back)".'+rh('kintu')),o:['kintun','kintumen','kintupan'],a:'kintumen'},
+     {q:L('Werken','___ ("vino a ayudar acá")','"Vino a ayudar (hacia acá)".'+rh('kellu'),'"He came here to help".'+rh('kellu')),o:['kellumey','kellupay','kelluy'],a:'kellupay'},
+     {q:L('Werken','___ ("dicen que se fue")','"Dicen que se fue".'+rh('amutu'),'"They say he went away".'+rh('amutu')),o:['amutuy','amuturkey','amutuan'],a:'amuturkey'}],
     'el werken','the werken','Antes de irse te deja un lawen y kayu mari (60) ngülliw.','Before leaving he gives you a lawen and kayu mari (60) ngülliw.',
     ()=>{S.items.lawen++;S.gold+=60});
 }
@@ -4873,7 +4876,7 @@ const TRAWUN={
   L('@','Eymu amuymu. Eymün amuymün.','Ustedes dos van. Ustedes (tres o más) van.','You two go. You (three or more) go.'),
   N('¿Te suenan -mu y -mün? Son las mismas que usas en las peleas: -nge a uno, -mu a dos, -mün a tres o más.','Do -mu and -mün sound familiar? They are the same ones you use in battle: -nge to one, -mu to two, -mün to three or more.'),
   L('@','Feyengu amuyngu. Feyengün amuyngün.','Ellos dos van. Ellos (tres o más) van.','The two of them go. They (three or more) go.'),
-  {q:L('@','Iñchiw ___','Nosotros dos trabajamos.','We two work.'),o:['küdawiñ','küdawiyu','küdawimu'],a:'küdawiyu',why:N('Dos y yo dentro: -iyu después de consonante.','Two, including me: -iyu after a consonant.')},
+  {q:L('@','Iñchiw ___','Nosotros dos trabajamos.'+rh('küdaw'),'We two work.'+rh('küdaw')),o:['küdawiñ','küdawiyu','küdawimu'],a:'küdawiyu',why:N('Dos y yo dentro: -iyu después de consonante.','Two, including me: -iyu after a consonant.')},
   {q:N('¿Cómo se dice «ustedes (muchos) comen»?','How do you say "you (many) eat"?'),o:['iyaymu','iyaymün','iyayngün'],a:'iyaymün',why:N('Ustedes, tres o más: -ymün.','You, three or more: -ymün.')},
   {q:N('¿Cómo se dice «ellos dos van»?','How do you say "the two of them go"?'),o:['amuyngu','amuyngün','amuyu'],a:'amuyngu',why:N('Ellos dos: -yngu.','The two of them: -yngu.')},
   N('Contar bien a la gente es respeto: en mapudungun nunca da lo mismo si son dos o son muchos.','Counting people right is respect: in Mapudungun it never matters little whether there are two or many.'),

@@ -524,3 +524,4 @@ Aplicado tal como lo marcaste (16 correcciones; la fila 5, «Müley Walichu!», 
 - «Kawellutulen» → «Kawelltuken» (dos veces), porque enseña -ke-; la pregunta 3 pasa a «Eymi kawell___» (respuesta tukeymi → kawelltukeymi) para usar la misma raíz.
 - Wentru, pregunta 1: «Pu pewenche ___» con ngülliwtuyngün / ✓ngülliwtukeyngün / ngülliwtukey; pregunta 3: «Eymi ___» con kawelltuymi / ✓kawelltukeymi / kawelltuken.
 - En todo el juego, las preguntas de completar ya no parten la palabra («amu___» → «___»): 34 preguntas, todas con opciones de palabra entera.
+- Las pistas de esas preguntas llevan la raíz entre paréntesis en modo normal («Él / ella va. (amu-)»); en modo Weichafe la raíz no aparece.
