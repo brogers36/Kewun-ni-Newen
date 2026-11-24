@@ -2372,8 +2372,9 @@ _BOSSES=['trelke','cherrufe','kaleuche','witranalwe','chinifilu','piwuchen','wal
          'ngoyman1','ngoyman2','ngoyman3','ngoyman4','ngoyman5','llufu1','llufu2','llufu3','llufu4','llufu5']
 _SKIP={'kawellu','waka','ofisa','luan','choyke','yewen','wenangkun','illkun','llukalfe','ayentufe','profe','ngen_lafken','ngen_mawida','ngen_pewen','ngen_kuruf','ngen_lelfun'}
 _ALL=_BOSSES+[n for n in list(D) if '@' not in n and n not in _BOSSES and n not in _SKIP and n in PAL]
+_HANDB=set(json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'boss.json')))) if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)),'boss.json')) else set()
 for _n in _ALL:
-    if _n not in D or _n not in PAL:continue
+    if _n not in D or _n not in PAL or _n in _HANDB:continue
     if _n not in _BOSSES:
         _g=HI.get(_n,{}).get('glow','')
         _src=(lambda f:scale2x(f)) if D[_n].get('big',1)==2 else (lambda f:f)
@@ -2383,6 +2384,13 @@ for _n in _ALL:
     _fr=[_rp.repaint(scale2x(f),PAL[_n],_g,D[_n].get('aura') or None) for f in D[_n]['f']]
     _p,_f=_yp.encode(_fr)
     D[_n+'@b']={'pal':_p,'f':_f,'big':1,'aura':D[_n].get('aura',0),'hand':1}
+# the bosses, hand-painted one by one with the Yewen's method (tools/boss_paint.py): they replace the automatic repaint above
+_bp=os.path.join(os.path.dirname(os.path.abspath(__file__)),'boss.json')
+if os.path.exists(_bp):
+    for _n,_k in json.load(open(_bp)).items():
+        _a=D[_n].get('aura',0) if _n in D else 0
+        D[_n]={'pal':_k['small']['pal'],'f':_k['small']['f'],'big':1,'aura':_a,'hand':1}
+        D[_n+'@b']={'pal':_k['big']['pal'],'f':_k['big']['f'],'big':1,'aura':_a,'hand':1}
 open(OUT,'w').write('const SPR2='+json.dumps(D,ensure_ascii=False)+';\n')
 if __name__=='__main__':
     for n in D:
