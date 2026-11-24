@@ -153,8 +153,9 @@ MAPS.s_plaza.edges.left={to:'s_feria',x:38,y:3};
 MAPS.s_poblacion.edges.right={to:'s_blocks',x:1,y:3};
 MAPS.s_calle.doors=Object.assign(MAPS.s_calle.doors||{},{'30,1':{to:'s_metro',x:10,y:8}});
 MAPS.s_calle.bld['29,0']={metro:1,door:1};   // the metro entrance looks like one, not like a shop door
-MAPS.s_calle.rows=MAPS.s_calle.rows.map((r,y)=>y===2?r.slice(0,32)+'I'+r.slice(33):r);
-MAPS.s_calle.signs=Object.assign(MAPS.s_calle.signs||{},{'32,2':[L('','Metro','La entrada del metro. Abajo, alguien escribió con plumón: «¿y si le ponemos nombre en mapudungun?».','The metro entrance. Below it, someone wrote in marker: "what if we name it in Mapudungun?".')]});
+MAPS.s_calle.rows=MAPS.s_calle.rows.map((r,y)=>y===2?r.slice(0,32)+'I'+r.slice(33):y===6?r.slice(0,33)+'I'+r.slice(34):r);
+MAPS.s_calle.metroGate={x:31,y:6,w:2,to:'s_metro',tx:10,ty:8};   // a sidewalk stairwell in the open, not hidden under the HUD in the top row
+MAPS.s_calle.signs=Object.assign(MAPS.s_calle.signs||{},{'33,6':[L('','Metro','Una entrada del metro. Bajas por la escalera, al lado del tótem rojo.','A metro entrance. Go down the stairs, next to the red totem.')],'32,2':[L('','Metro','La entrada del metro. Abajo, alguien escribió con plumón: «¿y si le ponemos nombre en mapudungun?».','The metro entrance. Below it, someone wrote in marker: "what if we name it in Mapudungun?".')]});
 for(const e of MAPS.s_poblacion.ents)if(e.id==='yewen')e.req='sw_all';
 
 /* ---------- district 1: the feria and the radio (ngoyngoyün) ---------- */

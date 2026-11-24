@@ -172,6 +172,7 @@ function buildLayers(){
     else if(ch==='#')PROPS.push({y:y+.8,cvs:rockCanvas(Math.floor(h2(x,y,2)*2)),dx:x*T,dy:y*T+2,sh:[x*T+8,y*T+14,7,2]});
     else if(ch==='V')PROPS.push({y:y+.9,cvs:boardCanvas(),dx:x*T-4,dy:y*T-6,sh:[x*T+8,y*T+15,10,2],board:1});
     else if(ch==='l')PROPS.push({y:y+.9,cvs:lampCanvas(),dx:x*T+3,dy:y*T-18,sh:[x*T+8,y*T+15,4,2],lamp:1});
+    if(M.metroGate&&x===M.metroGate.x&&y===M.metroGate.y){const g=M.metroGate;PROPS.push({y:y-.45,cvs:metroHoleCanvas(g.w),dx:x*T,dy:y*T-1,sh:[x*T+g.w*8,y*T+15,1,1]});PROPS.push({y:y+.9,cvs:metroTotemCanvas(),dx:(x+g.w)*T+1,dy:y*T-28,sh:[(x+g.w)*T+8,y*T+15,5,2],mtotem:1})}
     else if(ch==='z')PROPS.push({y:y+.9,cvs:benchCanvas(),dx:x*T,dy:y*T+4,sh:[x*T+8,y*T+15,8,2]});
     else if(ch==='w')PROPS.push({y:y+.9,cvs:railCanvas(),dx:x*T,dy:y*T+3,sh:[x*T+8,y*T+15,8,1]});
     else if(ch==='e')PROPS.push({y:y+.9,cvs:stallCanvas(Math.floor(h2(x,y,9)*6)),dx:x*T-2,dy:y*T-10,sh:[x*T+8,y*T+15,9,2]});
@@ -233,7 +234,7 @@ function mapSong(){const m=MAPS[CUR];
   if(m.region==='santiago'&&!(S&&S.flags&&S.flags.yewen_won)&&(m.song==='waria'||m.song==='cave'))return 'wariaG';   // Santiago stays tense until every silence and Yewen have fallen
   if(m.ngenmap)return rsong(awake(m.region)?'ngen':'cave');const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'||s==='pew'||s==='wil'||s==='puel'))return rsong(s+'G');return rsong(s)}
 function loadMap(id,x,y,quiet){TALKER=null;
-  CUR=id;M=MAPS[id];
+  CUR=id;M=MAPS[id];if(id==='s_metro'&&S&&S.flags)S.flags.metro_seen=1;
   if(S&&S.flags&&M&&M.region&&!S.flags['gc_'+M.region]){S.flags['gc_'+M.region]=1;gcEvent('region-'+M.region,'Región: '+M.region)}
   grid=M.rows.map(r=>r.split(''));
   for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++){const c=grid[yy][xx];

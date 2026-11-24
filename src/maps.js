@@ -550,7 +550,7 @@ s_calle:{region:'santiago',name:'Santiago · calle',g:{es:'La calle de la feria'
    {id:'schofer',kind:'npc',look:'kona',x:18,y:5,dir:'up',fixed:1,talk:()=>stChoferTalk(),bub:['¡Sube, sube!']},
    {id:'sestud',kind:'npc',look:'childf',fem:1,x:10,y:6,dir:'down',fixed:1,talk:()=>stEstudTalk(),bub:['Prueba mañana...']},
    {id:'spalin',kind:'npc',look:'child',x:9,y:9,path:[[9,9],[14,9],[14,11],[5,11],[5,9]],pause:40,talk:()=>say([L('Pichiche','Palin! ...¿se dice así? Acá jugamos a la pelota, pero mi abuelo dice palin.','¡Palin! ...¿se dice así? Acá jugamos a la pelota, pero mi abuelo dice palin.','Palin! ...is that how you say it? Here we play football, but my grandpa says palin.')]),bub:['Gol!','Palin!']},
-   {id:'sdog2',kind:'npc',look:'dog',x:30,y:6,path:[[30,6],[36,6],[36,2],[30,2]],pause:60,talk:()=>dogTalk()}]},
+   {id:'sdog2',kind:'npc',look:'dog',x:35,y:7,path:[[35,7],[38,7],[38,2],[35,2]],pause:60,talk:()=>dogTalk()}]},
 s_poblacion:{region:'santiago',name:'Santiago · población',g:{es:'La población y la ruka urbana',en:'The neighborhood and the urban ruka'},floor:',',bg:'waria',song:'waria',pal:'stgo',urban:1,trees:'koyam',seed:11,
  doors:{'14,10':{to:'s_centro',x:7,y:7}},bld:{'0,7':{door:1},'5,7':{door:2},'0,10':{door:2},'5,10':{door:1},'6,0':{shop:1,door:2},'24,0':{shop:1,door:2}},
  edges:{left:{to:'s_calle',x:38,y:3}},

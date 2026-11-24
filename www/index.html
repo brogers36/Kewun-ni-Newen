@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='abe808e-202611241634';
+window.KEWUN_BUILD='b632d64-202611241638';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -1769,6 +1769,20 @@ function facadeShade(cvs,ox,oy,W0,H0,top,house){
   // a lit cornice line along the top of the wall
   c.fillStyle='rgba(255,250,235,.35)';c.fillRect(ox,oy,W0-2,1);
 }
+// a Santiago metro entrance on the sidewalk: a stairwell going down, steel rails on three sides, and a lit totem beside it
+function metroHoleCanvas(w){const k='mhole'+w;if(UCACHE[k])return UCACHE[k];const W=w*16,[cvs,c]=mk(W,18);
+  R(c,0,2,W,16,'#5a5e66');R(c,2,4,W-4,14,'#14161c');
+  for(let i=0;i<5;i++){const y=5+i*3;R(c,3,y,W-6,2,['#8a8e96','#6e727a','#565a62','#40444c','#2c3038'][i]);R(c,3,y,W-6,1,['#b4b8c0','#9a9ea6','#7e828a','#62666e','#484c54'][i])}
+  R(c,0,0,W,2,'#9aa0aa');R(c,0,0,W,1,'#d8dce2');R(c,0,0,2,18,'#9aa0aa');R(c,W-2,0,2,18,'#9aa0aa');R(c,0,0,1,18,'#d8dce2');
+  for(let x=4;x<W-3;x+=5)R(c,x,0,1,2,'#e8ecf0');
+  R(c,1,1,W-2,1,'#c8102e');
+  outline(cvs,'#101014');return UCACHE[k]=repaintSmall(cvs,{amp:.6})}
+function metroTotemCanvas(){const k='mtotem';if(UCACHE[k])return UCACHE[k];const [cvs,c]=mk(14,44);
+  R(c,5,16,4,26,'#3a3c44');R(c,5,16,1,26,'#6a6c76');R(c,3,40,8,4,'#2a2c34');R(c,4,40,6,1,'#5a5c66');
+  R(c,0,0,14,16,'#f0f2f4');R(c,1,1,12,14,'#c8102e');R(c,1,1,12,1,'#e8344e');
+  // white M
+  R(c,3,4,2,9,'#ffffff');R(c,9,4,2,9,'#ffffff');R(c,5,5,1,2,'#ffffff');R(c,6,6,2,3,'#ffffff');R(c,8,5,1,2,'#ffffff');
+  outline(cvs,'#101014');return UCACHE[k]=repaintSmall(cvs,{amp:.5})}
 function lampCanvas(){const k='lamp';if(UCACHE[k])return UCACHE[k];const [cvs,c]=mk(10,34);
   R(c,4,6,2,26,'#3a3c44');R(c,4,6,1,26,'#5a5c66');R(c,2,30,6,3,'#2a2c34');R(c,3,30,4,1,'#4a4c56');
   R(c,2,1,6,5,'#4a4c56');R(c,3,2,4,3,'#ffe9a0');R(c,3,2,2,1,'#fff8d8');R(c,1,0,8,1,'#2a2c34');outline(cvs,'#101014');return UCACHE[k]=repaintSmall(cvs,{amp:.8})}
@@ -2386,7 +2400,7 @@ s_calle:{region:'santiago',name:'Santiago · calle',g:{es:'La calle de la feria'
    {id:'schofer',kind:'npc',look:'kona',x:18,y:5,dir:'up',fixed:1,talk:()=>stChoferTalk(),bub:['¡Sube, sube!']},
    {id:'sestud',kind:'npc',look:'childf',fem:1,x:10,y:6,dir:'down',fixed:1,talk:()=>stEstudTalk(),bub:['Prueba mañana...']},
    {id:'spalin',kind:'npc',look:'child',x:9,y:9,path:[[9,9],[14,9],[14,11],[5,11],[5,9]],pause:40,talk:()=>say([L('Pichiche','Palin! ...¿se dice así? Acá jugamos a la pelota, pero mi abuelo dice palin.','¡Palin! ...¿se dice así? Acá jugamos a la pelota, pero mi abuelo dice palin.','Palin! ...is that how you say it? Here we play football, but my grandpa says palin.')]),bub:['Gol!','Palin!']},
-   {id:'sdog2',kind:'npc',look:'dog',x:30,y:6,path:[[30,6],[36,6],[36,2],[30,2]],pause:60,talk:()=>dogTalk()}]},
+   {id:'sdog2',kind:'npc',look:'dog',x:35,y:7,path:[[35,7],[38,7],[38,2],[35,2]],pause:60,talk:()=>dogTalk()}]},
 s_poblacion:{region:'santiago',name:'Santiago · población',g:{es:'La población y la ruka urbana',en:'The neighborhood and the urban ruka'},floor:',',bg:'waria',song:'waria',pal:'stgo',urban:1,trees:'koyam',seed:11,
  doors:{'14,10':{to:'s_centro',x:7,y:7}},bld:{'0,7':{door:1},'5,7':{door:2},'0,10':{door:2},'5,10':{door:1},'6,0':{shop:1,door:2},'24,0':{shop:1,door:2}},
  edges:{left:{to:'s_calle',x:38,y:3}},
@@ -2595,6 +2609,7 @@ function buildLayers(){
     else if(ch==='#')PROPS.push({y:y+.8,cvs:rockCanvas(Math.floor(h2(x,y,2)*2)),dx:x*T,dy:y*T+2,sh:[x*T+8,y*T+14,7,2]});
     else if(ch==='V')PROPS.push({y:y+.9,cvs:boardCanvas(),dx:x*T-4,dy:y*T-6,sh:[x*T+8,y*T+15,10,2],board:1});
     else if(ch==='l')PROPS.push({y:y+.9,cvs:lampCanvas(),dx:x*T+3,dy:y*T-18,sh:[x*T+8,y*T+15,4,2],lamp:1});
+    if(M.metroGate&&x===M.metroGate.x&&y===M.metroGate.y){const g=M.metroGate;PROPS.push({y:y-.45,cvs:metroHoleCanvas(g.w),dx:x*T,dy:y*T-1,sh:[x*T+g.w*8,y*T+15,1,1]});PROPS.push({y:y+.9,cvs:metroTotemCanvas(),dx:(x+g.w)*T+1,dy:y*T-28,sh:[(x+g.w)*T+8,y*T+15,5,2],mtotem:1})}
     else if(ch==='z')PROPS.push({y:y+.9,cvs:benchCanvas(),dx:x*T,dy:y*T+4,sh:[x*T+8,y*T+15,8,2]});
     else if(ch==='w')PROPS.push({y:y+.9,cvs:railCanvas(),dx:x*T,dy:y*T+3,sh:[x*T+8,y*T+15,8,1]});
     else if(ch==='e')PROPS.push({y:y+.9,cvs:stallCanvas(Math.floor(h2(x,y,9)*6)),dx:x*T-2,dy:y*T-10,sh:[x*T+8,y*T+15,9,2]});
@@ -2656,7 +2671,7 @@ function mapSong(){const m=MAPS[CUR];
   if(m.region==='santiago'&&!(S&&S.flags&&S.flags.yewen_won)&&(m.song==='waria'||m.song==='cave'))return 'wariaG';   // Santiago stays tense until every silence and Yewen have fallen
   if(m.ngenmap)return rsong(awake(m.region)?'ngen':'cave');const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'||s==='pew'||s==='wil'||s==='puel'))return rsong(s+'G');return rsong(s)}
 function loadMap(id,x,y,quiet){TALKER=null;
-  CUR=id;M=MAPS[id];
+  CUR=id;M=MAPS[id];if(id==='s_metro'&&S&&S.flags)S.flags.metro_seen=1;
   if(S&&S.flags&&M&&M.region&&!S.flags['gc_'+M.region]){S.flags['gc_'+M.region]=1;gcEvent('region-'+M.region,'Región: '+M.region)}
   grid=M.rows.map(r=>r.split(''));
   for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++){const c=grid[yy][xx];
@@ -2804,6 +2819,7 @@ function tryMove(d){
   const e=entAt(nx,ny);
   if(e){if(e.kind==='enemy')engage(e);return}
   const c=grid[ny][nx];
+  if(M.metroGate){const g=M.metroGate;if(ny===g.y&&nx>=g.x&&nx<g.x+g.w){sfx('door');loadMap(g.to,g.tx,g.ty);return}}
   if(M.doors&&M.doors[nx+','+ny]&&d==='up'){const D=M.doors[nx+','+ny];if(D.req&&!S.flags[D.req]){if(!P.bump){P.bump=1;say(D.reqMsg)}return}sfx('door');loadMap(D.to,D.x,D.y);return}
   if(c==='B')return pushBlock(nx,ny,dx,dy);
   if(c==='L')return unlock(nx,ny);
@@ -5812,8 +5828,9 @@ MAPS.s_plaza.edges.left={to:'s_feria',x:38,y:3};
 MAPS.s_poblacion.edges.right={to:'s_blocks',x:1,y:3};
 MAPS.s_calle.doors=Object.assign(MAPS.s_calle.doors||{},{'30,1':{to:'s_metro',x:10,y:8}});
 MAPS.s_calle.bld['29,0']={metro:1,door:1};   // the metro entrance looks like one, not like a shop door
-MAPS.s_calle.rows=MAPS.s_calle.rows.map((r,y)=>y===2?r.slice(0,32)+'I'+r.slice(33):r);
-MAPS.s_calle.signs=Object.assign(MAPS.s_calle.signs||{},{'32,2':[L('','Metro','La entrada del metro. Abajo, alguien escribió con plumón: «¿y si le ponemos nombre en mapudungun?».','The metro entrance. Below it, someone wrote in marker: "what if we name it in Mapudungun?".')]});
+MAPS.s_calle.rows=MAPS.s_calle.rows.map((r,y)=>y===2?r.slice(0,32)+'I'+r.slice(33):y===6?r.slice(0,33)+'I'+r.slice(34):r);
+MAPS.s_calle.metroGate={x:31,y:6,w:2,to:'s_metro',tx:10,ty:8};   // a sidewalk stairwell in the open, not hidden under the HUD in the top row
+MAPS.s_calle.signs=Object.assign(MAPS.s_calle.signs||{},{'33,6':[L('','Metro','Una entrada del metro. Bajas por la escalera, al lado del tótem rojo.','A metro entrance. Go down the stairs, next to the red totem.')],'32,2':[L('','Metro','La entrada del metro. Abajo, alguien escribió con plumón: «¿y si le ponemos nombre en mapudungun?».','The metro entrance. Below it, someone wrote in marker: "what if we name it in Mapudungun?".')]});
 for(const e of MAPS.s_poblacion.ents)if(e.id==='yewen')e.req='sw_all';
 
 /* ---------- district 1: the feria and the radio (ngoyngoyün) ---------- */
@@ -7303,6 +7320,7 @@ function renderMap(){
       c.drawImage(dynCanvas(ch,ch==='N'?(lit?1:0):t.col+'|'+(lit?1:0)),X,Y);if(lit)glows.push([X+8,Y+6]);
       if(Math.abs(x-P.x)+Math.abs(y-P.y)<7)OV.push(()=>txt(t.lab,X+8,Y-2,ch==='J'?t.col:'#e0f4ff',12,'center'));continue}}
     if(ch==='A'){drawWarpRing(c,X+8,Y+9);continue}
+    if(ch==='I'&&M.metroGate&&x===M.metroGate.x+M.metroGate.w&&y===M.metroGate.y)continue;
     if(ch==='Ł'){const id=M.tablets&&M.tablets[x+','+y],lit=id&&S.flags['tab_'+id];drawTablet(c,X,Y,lit);if(lit)glows.push([X+8,Y-2]);continue}
     if(ch==='@'){drawPortal(c,X+8,Y+9);continue}
     if(BOB.has(ch)){const b=Math.round(Math.sin(frame/10+x)*1.5);ell(c,X+8,Y+14,4,1.5,'rgba(0,0,0,.25)');c.drawImage(dynCanvas(ch,0),X,Y-3+b);if(frame%40<6)R(c,X+13,Y+1+b,1,1,'#ffffff')}
@@ -7406,6 +7424,12 @@ function renderMap(){
     R(c,X-13,Y-1,26,9,'#2a1a10');R(c,X-12,Y,24,7,'#c8402a');for(let j=0;j<12;j++)R(c,X-12+j*2,Y+(j%2?1:5),1,1,'#f4e8c8');R(c,X-12,Y+3,24,1,'#2a1a10');
     R(c,X-12+Math.round(sw),Y+7,1,3,'#c8402a');R(c,X+11+Math.round(sw),Y+7,1,3,'#c8402a');
     OV.push(()=>txt('trawün',X,Y-3,'#ffe8a0',11,'center'))}
+  // the metro entrance: a soft red glow on the totem, and a bobbing arrow with a label until the player has gone down once
+  if(M.metroGate){const g=M.metroGate,X=(g.x+g.w)*T-cx+8,Y=g.y*T-cy+VY-28;if(X>-40&&X<LW+40&&Y>-60&&Y<LH+40){
+    const a=(.18+.12*Math.sin(frame/12)).toFixed(2);c.fillStyle='rgba(255,60,80,'+a+')';c.beginPath();c.ellipse(X,Y+8,12,11,0,0,6.283);c.fill();
+    if(!S.flags.metro_seen){const hx=g.x*T-cx+g.w*8,b=Math.round(Math.sin(frame/8)*2),ay=g.y*T-cy+VY-14+b;
+      R(c,hx-3,ay,6,4,'#ffffff');R(c,hx-5,ay+4,10,1,'#ffffff');R(c,hx-4,ay+5,8,1,'#ffffff');R(c,hx-3,ay+6,6,1,'#ffffff');R(c,hx-2,ay+7,4,1,'#ffffff');R(c,hx-1,ay+8,2,1,'#ffffff');
+      OV.push(()=>txt('Metro',hx,ay-3,'#ffd0d8',11,'center'))}}}
   // quest dig spots (the ones an NPC has told you about): a faint shimmer in the ground until you dig there
   if(M.digs)for(const k in M.digs){const dv=M.digs[k];if(!dv.req||!S.flags[dv.req]||S.flags['dig:'+CUR+':'+k])continue;
     const [qx,qy]=k.split(',').map(Number),X=qx*T-cx+8,Y=qy*T-cy+VY+10;if(X<-20||X>LW+20||Y<-20||Y>LH+20)continue;

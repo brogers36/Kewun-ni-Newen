@@ -147,6 +147,7 @@ function renderMap(){
       c.drawImage(dynCanvas(ch,ch==='N'?(lit?1:0):t.col+'|'+(lit?1:0)),X,Y);if(lit)glows.push([X+8,Y+6]);
       if(Math.abs(x-P.x)+Math.abs(y-P.y)<7)OV.push(()=>txt(t.lab,X+8,Y-2,ch==='J'?t.col:'#e0f4ff',12,'center'));continue}}
     if(ch==='A'){drawWarpRing(c,X+8,Y+9);continue}
+    if(ch==='I'&&M.metroGate&&x===M.metroGate.x+M.metroGate.w&&y===M.metroGate.y)continue;
     if(ch==='Ł'){const id=M.tablets&&M.tablets[x+','+y],lit=id&&S.flags['tab_'+id];drawTablet(c,X,Y,lit);if(lit)glows.push([X+8,Y-2]);continue}
     if(ch==='@'){drawPortal(c,X+8,Y+9);continue}
     if(BOB.has(ch)){const b=Math.round(Math.sin(frame/10+x)*1.5);ell(c,X+8,Y+14,4,1.5,'rgba(0,0,0,.25)');c.drawImage(dynCanvas(ch,0),X,Y-3+b);if(frame%40<6)R(c,X+13,Y+1+b,1,1,'#ffffff')}
@@ -250,6 +251,12 @@ function renderMap(){
     R(c,X-13,Y-1,26,9,'#2a1a10');R(c,X-12,Y,24,7,'#c8402a');for(let j=0;j<12;j++)R(c,X-12+j*2,Y+(j%2?1:5),1,1,'#f4e8c8');R(c,X-12,Y+3,24,1,'#2a1a10');
     R(c,X-12+Math.round(sw),Y+7,1,3,'#c8402a');R(c,X+11+Math.round(sw),Y+7,1,3,'#c8402a');
     OV.push(()=>txt('trawün',X,Y-3,'#ffe8a0',11,'center'))}
+  // the metro entrance: a soft red glow on the totem, and a bobbing arrow with a label until the player has gone down once
+  if(M.metroGate){const g=M.metroGate,X=(g.x+g.w)*T-cx+8,Y=g.y*T-cy+VY-28;if(X>-40&&X<LW+40&&Y>-60&&Y<LH+40){
+    const a=(.18+.12*Math.sin(frame/12)).toFixed(2);c.fillStyle='rgba(255,60,80,'+a+')';c.beginPath();c.ellipse(X,Y+8,12,11,0,0,6.283);c.fill();
+    if(!S.flags.metro_seen){const hx=g.x*T-cx+g.w*8,b=Math.round(Math.sin(frame/8)*2),ay=g.y*T-cy+VY-14+b;
+      R(c,hx-3,ay,6,4,'#ffffff');R(c,hx-5,ay+4,10,1,'#ffffff');R(c,hx-4,ay+5,8,1,'#ffffff');R(c,hx-3,ay+6,6,1,'#ffffff');R(c,hx-2,ay+7,4,1,'#ffffff');R(c,hx-1,ay+8,2,1,'#ffffff');
+      OV.push(()=>txt('Metro',hx,ay-3,'#ffd0d8',11,'center'))}}}
   // quest dig spots (the ones an NPC has told you about): a faint shimmer in the ground until you dig there
   if(M.digs)for(const k in M.digs){const dv=M.digs[k];if(!dv.req||!S.flags[dv.req]||S.flags['dig:'+CUR+':'+k])continue;
     const [qx,qy]=k.split(',').map(Number),X=qx*T-cx+8,Y=qy*T-cy+VY+10;if(X<-20||X>LW+20||Y<-20||Y>LH+20)continue;

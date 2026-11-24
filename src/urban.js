@@ -95,6 +95,20 @@ function facadeShade(cvs,ox,oy,W0,H0,top,house){
   // a lit cornice line along the top of the wall
   c.fillStyle='rgba(255,250,235,.35)';c.fillRect(ox,oy,W0-2,1);
 }
+// a Santiago metro entrance on the sidewalk: a stairwell going down, steel rails on three sides, and a lit totem beside it
+function metroHoleCanvas(w){const k='mhole'+w;if(UCACHE[k])return UCACHE[k];const W=w*16,[cvs,c]=mk(W,18);
+  R(c,0,2,W,16,'#5a5e66');R(c,2,4,W-4,14,'#14161c');
+  for(let i=0;i<5;i++){const y=5+i*3;R(c,3,y,W-6,2,['#8a8e96','#6e727a','#565a62','#40444c','#2c3038'][i]);R(c,3,y,W-6,1,['#b4b8c0','#9a9ea6','#7e828a','#62666e','#484c54'][i])}
+  R(c,0,0,W,2,'#9aa0aa');R(c,0,0,W,1,'#d8dce2');R(c,0,0,2,18,'#9aa0aa');R(c,W-2,0,2,18,'#9aa0aa');R(c,0,0,1,18,'#d8dce2');
+  for(let x=4;x<W-3;x+=5)R(c,x,0,1,2,'#e8ecf0');
+  R(c,1,1,W-2,1,'#c8102e');
+  outline(cvs,'#101014');return UCACHE[k]=repaintSmall(cvs,{amp:.6})}
+function metroTotemCanvas(){const k='mtotem';if(UCACHE[k])return UCACHE[k];const [cvs,c]=mk(14,44);
+  R(c,5,16,4,26,'#3a3c44');R(c,5,16,1,26,'#6a6c76');R(c,3,40,8,4,'#2a2c34');R(c,4,40,6,1,'#5a5c66');
+  R(c,0,0,14,16,'#f0f2f4');R(c,1,1,12,14,'#c8102e');R(c,1,1,12,1,'#e8344e');
+  // white M
+  R(c,3,4,2,9,'#ffffff');R(c,9,4,2,9,'#ffffff');R(c,5,5,1,2,'#ffffff');R(c,6,6,2,3,'#ffffff');R(c,8,5,1,2,'#ffffff');
+  outline(cvs,'#101014');return UCACHE[k]=repaintSmall(cvs,{amp:.5})}
 function lampCanvas(){const k='lamp';if(UCACHE[k])return UCACHE[k];const [cvs,c]=mk(10,34);
   R(c,4,6,2,26,'#3a3c44');R(c,4,6,1,26,'#5a5c66');R(c,2,30,6,3,'#2a2c34');R(c,3,30,4,1,'#4a4c56');
   R(c,2,1,6,5,'#4a4c56');R(c,3,2,4,3,'#ffe9a0');R(c,3,2,2,1,'#fff8d8');R(c,1,0,8,1,'#2a2c34');outline(cvs,'#101014');return UCACHE[k]=repaintSmall(cvs,{amp:.8})}
