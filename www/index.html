@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='0e5105b-202611231756';
+window.KEWUN_BUILD='8c721be-202611231828';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -259,7 +259,13 @@ function mkDist2(c){
   const lp2=c.createBiquadFilter();lp2.type='lowpass';lp2.frequency.value=6500;
   const out=c.createGain();out.gain.value=.2;
   pre.connect(ws);ws.connect(hp);hp.connect(mid);mid.connect(lp);lp.connect(lp2);lp2.connect(out);out.connect(AU.mus);
-  AU.dist2=pre}
+  AU.dist2=pre;
+  // the battle songs' amps, driven a little less: the same cabinet EQ, a gentler clip
+  const pS=c.createGain();pS.gain.value=2.3;
+  const wS=c.createWaveShaper();{const n=2048,cv=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;cv[i]=Math.tanh(x*15+.14)*.85-Math.tanh(.14)*.85}wS.curve=cv;wS.oversample='2x'}
+  pS.connect(wS);wS.connect(hp);AU.dist2s=pS;
+  const d1=c.createWaveShaper();{const n=1024,cv=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;cv[i]=Math.tanh(x*4.2)*.8}d1.curve=cv}
+  const d1g=c.createGain();d1g.gain.value=.6;d1.connect(d1g);d1g.connect(AU.mus);AU.dists=d1}
 function toggleMute(){AU.muted=!AU.muted;try{localStorage.setItem(MUTE_KEY,AU.muted?'1':'0')}catch(e){}auInit();if(AU.m)AU.m.gain.value=AU.muted?0:1;$('bMus').textContent=AU.muted?'♪ Música: no':'♪ Música: sí';$('pN').textContent=AU.muted?'♪×':'♪'}
 const NOTE={C:0,'C#':1,Db:1,D:2,'D#':3,Eb:3,E:4,F:5,'F#':6,Gb:6,G:7,'G#':8,Ab:8,A:9,'A#':10,Bb:10,B:11};
 function nf(s){const m=/^([A-G][#b]?)(\d)$/.exec(s);if(!m)return 0;return 440*Math.pow(2,(NOTE[m[1]]+(+m[2]+1)*12-69)/12)}
@@ -675,7 +681,8 @@ function playAmb(kind){
 /* ---------- the battle songs in a Mapuche cadence: each pair of steps swings long-short (a ternary pulse),
    the kultrun beats that gallop under everything, kaskawilla on the beat, and the trutruka calls at the top of each loop.
    The tune itself is the same; the drum kit steps back. ---------- */
-const KULTRUN_SONGS=['battle','boss','nagBattle','nagBoss','pewBattle','pewBoss','wilBattle','wilBoss','puelBattle','puelBoss','deepBattle','deepBoss','ngoyBattle','ngoyBoss','ngoyFinal','yewenBoss','stgoBoss1','stgoBoss2','stgoBoss3'];
+// only the boss songs: the ordinary battle songs went back to their original versions (Brandon, Nov 2026)
+const KULTRUN_SONGS=['boss','nagBoss','pewBoss','wilBoss','puelBoss','deepBoss','ngoyBoss','ngoyFinal','yewenBoss','stgoBoss1','stgoBoss2','stgoBoss3'];
 (function kultrunize(){
   // every beat of the old 4/4 tunes (two steps) becomes one kultrun beat of six fast subdivisions: the tune lands long-short (4+2),
   // the kultrun strikes long-short under it, and new layers fill the six: a galloping distorted guitar, a running arpeggio, a shaker, kaskawilla
@@ -724,6 +731,7 @@ const KULTRUN_SONGS=['battle','boss','nagBattle','nagBoss','pewBattle','pewBoss'
     mk({d:1,v:.5},i=>Math.floor(i/24)%4===3&&(i%24===20||i%24===22)?{n:'p',len:1}:null);   // pifilka
     const isBoss=n==='boss'||/Boss|Final/.test(n);so.bpm=n==='wilBattle'?376:isBoss?399:409;   // the approved speeds: battles 409 (a kultrun beat every 0.44 s), bosses 399, the Williche battle 376          // a kultrun beat of about 0.9 s (battles) / 0.8 s (bosses), six notes in each
     so.len=L}})();
+for(const n of KULTRUN_SONGS)if(SONGS[n])for(const c of SONGS[n].ch)if(c.dist)c.soft=1;   // every boss song plays through the gentler amps
 function playSong(name){
   if(AU.name===name)return;AU.name=name;AU.song=SONGS[name]||null;AU.step=0;
   if(AU.c)AU.next=AU.c.currentTime+.06;
@@ -769,7 +777,8 @@ function playNote(ch,e,t,sd){
   g.gain.setValueAtTime(ch.v*.65,t+dur*.85);g.gain.linearRampToValueAtTime(0,t+dur*.98);
   if(e.len>=3&&ch.w==='square'){const l=c.createOscillator(),lg=c.createGain();l.frequency.value=5.5;lg.gain.value=nf(e.n)*.008;l.connect(lg);lg.connect(o.frequency);l.start(t+.15);l.stop(t+dur)}
   if(ch.dist===2&&AU.dist2&&ch.det){const o2=c.createOscillator();o2.type=ch.w;o2.frequency.value=nf(e.n)*Math.pow(2,ch.det/1200);o2.connect(g);o2.start(t);o2.stop(t+dur)}
-  o.connect(g);g.connect(ch.dist===2&&AU.dist2?AU.dist2:ch.dist&&AU.dist?AU.dist:AU.mus);o.start(t);o.stop(t+dur);
+  const D2=ch.soft&&AU.dist2s||AU.dist2,D1=ch.soft&&AU.dists||AU.dist;
+  o.connect(g);g.connect(ch.dist===2&&D2?D2:ch.dist&&D1?D1:AU.mus);o.start(t);o.stop(t+dur);
 }
 function tone(type,f0,f1,dur,vol,delay){
   if(!AU.c||AU.muted)return;const c=AU.c,t=c.currentTime+(delay||0),o=c.createOscillator(),g=c.createGain();o.type=type;
