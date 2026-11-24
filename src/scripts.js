@@ -1000,11 +1000,11 @@ function arrieroTalk(){
       L('Wentru','Chaltu may! Kümey ngülliw!','¡Gracias! ¡Qué ricos piñones!','Thank you! What good pewen nuts!'),
       L('Wentru','Allkütunge: pewen mapu mew, epu fütra pewen müley, willi püle rüpü mew.','Escucha: en el bosque hay dos pewenes gemelos, al sur del camino.','Listen: in the forest there are two twin pewen trees, south of the road.'),
       N('«Mis caballos siempre escarban justo entre esos dos árboles. Algo brilla ahí abajo. Busca justo en medio.»','"My horses always paw at the ground right between those two trees. Something shines down there. Search right in the middle."')]);}
-  if(S.flags.pew_ke)return say([L('Wentru','Kawellutulen. Pewkayal!','Yo ando a caballo. ¡Hasta luego!','I ride on horseback. See you later!')]);
+  if(S.flags.pew_ke)return say([L('Wentru','Kawelltuken. Pewkayal!','Yo ando a caballo (siempre, de costumbre). ¡Hasta luego!','I ride on horseback (always, as a habit). See you later!')]);
   const qs=[{q:L('Wentru','Pu pewenche ngülliw___','Los pewenche comen piñones (siempre, de costumbre).','The Pewenche eat pewen nuts (always, as a habit).'),o:['iyngün','tukeyngün','ikey'],a:'tukeyngün'},
     {q:L('Wentru','Iñche mapudungu___','Yo hablo mapudungun (siempre, de costumbre).','I speak Mapudungun (always, as a habit).'),o:['mapudungun','mapudunguken','mapudungukey'],a:'mapudunguken'},
-    {q:L('Wentru','Eymi kawellu___','Tú andas a caballo (siempre, de costumbre).','You ride on horseback (always, as a habit).'),o:['amuymi','tukeymi','amuken'],a:'tukeymi'}];
-  say([L('Wentru','Mari mari, '+addr(false)+'. Kawellutulen.','Hola. Yo ando a caballo.','Hello. I ride on horseback.'),
+    {q:L('Wentru','Eymi kawell___','Tú andas a caballo (siempre, de costumbre).','You ride on horseback (always, as a habit).'),o:['amuymi','tukeymi','amuken'],a:'tukeymi'}];
+  say([L('Wentru','Mari mari, '+addr(false)+'. Kawelltuken.','Hola. Yo ando a caballo (siempre, de costumbre).','Hello. I ride on horseback (always, as a habit).'),
     N('-ke- dice lo que alguien hace siempre, por costumbre. El arriero quiere ver si lo entiendes. Tu chillka lo explica en «-ke-».','-ke- says what someone always does, as a habit. The muleteer wants to see if you understand. Your chillka explains it under «-ke-».')],()=>ask(0));
   function ask(i){
     if(i>=qs.length){S.flags.pew_ke=1;S.items.kofke+=2;S.gold+=30;S.xp+=4;persist();sfx('lvl');

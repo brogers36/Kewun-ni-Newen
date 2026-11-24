@@ -519,3 +519,6 @@ Aplicado tal como lo marcaste (16 correcciones; la fila 5, «Müley Walichu!», 
 - Charki müley! Ilayaymi am? · Chem am ta "ilo"? · Chem am ta "iyael"? · Kümey! Charkitukeymi am?
 - ngen mülerkefuy · fey kom ñamürpay · Wüle ka yepayan ko. · Lifngey ti chadi! · Amutuy Walichu! Lelfün karüngewetuay.
 «Chem am ta "X"?» ahora es uniforme en todo el juego (14 preguntas: la cocinera, los chumpall y las preguntas del ngen en batalla).
+
+## Wentru del rüpü pewenche (24 nov)
+- «Kawellutulen» → «Kawelltuken» (dos veces), porque enseña -ke-; la pregunta 3 pasa a «Eymi kawell___» (respuesta tukeymi → kawelltukeymi) para usar la misma raíz.

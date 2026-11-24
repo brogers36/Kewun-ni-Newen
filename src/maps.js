@@ -220,7 +220,7 @@ const K12={q:L('Konew','Pengelay, welu nengümkefi kom pu aliwen. Chem am ta tat
 Object.assign(MAPS,{
 p_rupu:{region:'pewenche',name:'Pewenche rüpü',g:{es:'El camino a la cordillera',en:'The road to the mountains'},floor:',',bg:'mount',song:'pew',pal:'pewenche',trees:'pewen',
  edges:{left:{to:'n_mawida',x:30,y:7},right:{to:'p_lof',x:1,y:9}},
- ents:[{id:'arriero',kind:'npc',look:'walker',x:25,y:8,dir:'left',fixed:1,talk:()=>arrieroTalk(),bub:['Kawellutulen.']},
+ ents:[{id:'arriero',kind:'npc',look:'walker',x:25,y:8,dir:'left',fixed:1,talk:()=>arrieroTalk(),bub:['Kawelltuken.']},
    {kind:'enemy',x:8,y:3,party:['pire']},{kind:'enemy',x:12,y:10,party:['kura','pire']},{kind:'enemy',x:22,y:3,party:['kutral','kutral']},{kind:'enemy',x:26,y:10,party:['pire','pire','kura']}]},
 p_lof:{region:'pewenche',name:'Pewenche lof',g:{es:'La comunidad de los pewenes',en:'The community of the pewen trees'},floor:',',bg:'mount',song:'lof',pal:'pewenche',trees:'pewen',
  doors:{'19,3':{to:'p_ruka1',x:6,y:7},'3,7':{to:'p_ruka2',x:6,y:7},'10,6':{to:'p_trawun',x:6,y:7}},digs:{'30,5':{what:'piwke',req:'pew_kidd'}},
