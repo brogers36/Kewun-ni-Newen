@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='c488c6e-202611242105';
+window.KEWUN_BUILD='b367121-202611242115';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -7459,7 +7459,10 @@ function renderMap(){
   // city doors you can go into: a warm lit doorway, and a bobbing arrow while someone inside still needs you
   if(M.urban&&M.doors)for(const k in M.doors){const D=M.doors[k],[qx,qy]=k.split(',').map(Number),X=qx*T-cx+8,Y=qy*T-cy+VY;
     if(X<-30||X>LW+30||Y<-40||Y>LH+20)continue;
-    const a=(.42+.15*Math.sin(frame/14)).toFixed(2),g=c.createRadialGradient(X,Y-2,1,X,Y-2,16);g.addColorStop(0,'rgba(255,210,120,'+a+')');g.addColorStop(1,'rgba(255,210,120,0)');c.fillStyle=g;c.fillRect(X-17,Y-19,34,34);
+    {const a=.75+.2*Math.sin(frame/14);c.save();c.globalCompositeOperation='lighter';   // light pouring out of the open door onto the pavement
+     let g=c.createRadialGradient(X,Y-2,1,X,Y-2,24);g.addColorStop(0,'rgba(255,200,90,'+a.toFixed(2)+')');g.addColorStop(.45,'rgba(255,170,60,'+(a*.45).toFixed(2)+')');g.addColorStop(1,'rgba(255,150,40,0)');c.fillStyle=g;c.fillRect(X-25,Y-27,50,50);
+     g=c.createLinearGradient(0,Y+4,0,Y+T+12);g.addColorStop(0,'rgba(255,190,80,'+(a*.55).toFixed(2)+')');g.addColorStop(1,'rgba(255,190,80,0)');c.fillStyle=g;
+     c.beginPath();c.moveTo(X-6,Y+4);c.lineTo(X+6,Y+4);c.lineTo(X+13,Y+T+12);c.lineTo(X-13,Y+T+12);c.closePath();c.fill();c.restore()}
     const need={s_depto:'cena_ok',s_chuchu:'tel_ok',s_radio:'radio_ok'}[D.to];
     if(need&&!S.flags[need]){const b=Math.round(Math.sin(frame/8)*2),ay=Y+T+4+b;   // an up-arrow on the pavement in front of the door, pointing in
       R(c,X-1,ay,2,1,'#ffffff');R(c,X-2,ay+1,4,1,'#ffffff');R(c,X-3,ay+2,6,1,'#ffffff');R(c,X-4,ay+3,8,1,'#ffffff');R(c,X-5,ay+4,10,1,'#ffffff');R(c,X-3,ay+5,6,4,'#ffffff');
