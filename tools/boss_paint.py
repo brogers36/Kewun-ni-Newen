@@ -1589,46 +1589,83 @@ def llufu2(f):
     foam(c, int(k(84)), 0, yp.W, f)
     return mfinish(c, [('mkelp', 'mtorso')])
 
-def _paste_rot(c, L, ang, px_, py_, dx=0, dy=0):
-    """rotate a layer about (px_, py_) by ang degrees (positive leans the top toward the left) and lay it over c"""
+def _paste_rot2(c, L, ang, px_, py_):
+    """lay a layer painted at double resolution over c, rotated about (px_, py_) by ang degrees (positive leans the top
+    toward the left): sampling the fine layer keeps the stair-steps of the rotation one pixel fine instead of doubled"""
     a = math.radians(ang); ca, sa = math.cos(a), math.sin(a)
     yy, xx = np.mgrid[0:yp.H, 0:yp.W]
-    X = xx - px_ - dx; Y = yy - py_ - dy
-    sx = np.round(ca * X - sa * Y + px_).astype(int); sy = np.round(sa * X + ca * Y + py_).astype(int)
-    ok = (sx >= 0) & (sx < yp.W) & (sy >= 0) & (sy < yp.H)
+    X = xx + .5 - px_; Y = yy + .5 - py_
+    sx = np.floor((ca * X - sa * Y + px_) * 2).astype(int); sy = np.floor((sa * X + ca * Y + py_) * 2).astype(int)
+    H2, W2 = L.a.shape
+    ok = (sx >= 0) & (sx < W2) & (sy >= 0) & (sy < H2)
     src = np.zeros_like(ok); src[ok] = L.a[sy[ok], sx[ok]]
     c.rgb[src] = L.rgb[sy[src], sx[src]]; c.a[src] = True; c.part[src] = L.part[sy[src], sx[src]]
 
+R['mwing'] = ramp('#06090c', '#0e1a20', '#172a34', '#223e4a', '#2f5462', '#42707e', '#5e909a', '#86b4b8')
+def mwing(c, rx, ry, s, spread, lift=0.0, f=0, name='mwing'):
+    """a great feathered wing raised from the shoulders and swept back: a strong leading edge, rows of coverts,
+    long primaries fanned out with gold tips (the milla of the king)"""
+    S = lambda v: v * s
+    a0 = math.radians(-78 + spread - f * 6)
+    lead = [(rx, ry), (rx + math.cos(a0) * S(14) + S(3), ry + math.sin(a0) * S(14)),
+            (rx + math.cos(a0) * S(26) + S(12), ry + math.sin(a0) * S(26)), (rx + math.cos(a0) * S(28) + S(30), ry + math.sin(a0) * S(28) - S(2))]
+    L = cr(lead, 8)
+    n = 15
+    for i in range(n - 1, -1, -1):                                         # primaries and secondaries, long at the tip
+        t = i / (n - 1); j = min(len(L) - 1, int(t * (len(L) - 1))); bx, by = L[j]
+        ang = math.radians(66 - 74 * t + spread * .3 - f * 4)
+        ln = S(12 + 18 * t ** 1.2)
+        tip = (bx + math.cos(ang) * ln, by + math.sin(ang) * ln)
+        mid = (bx + math.cos(ang) * ln * .55 + S(.8), by + math.sin(ang) * ln * .55)
+        taper(c, [(bx, by), mid, tip], S(4.2), S(1.2), R['mwing'], lift=lift + .04 * (i % 2) - .05, name=name, bulge=1.0)
+        line(c, [(bx + math.cos(ang) * S(2), by + math.sin(ang) * S(2)), mid, (tip[0] - math.cos(ang) * S(1.5), tip[1] - math.sin(ang) * S(1.5))], R['mwing'][6] if i % 2 else R['mwing'][5], name)
+        for k in range(3):                                                 # gold tip
+            X, Y = int(tip[0] - math.cos(ang) * k), int(tip[1] - math.sin(ang) * k)
+            c.px(X, Y, R['mgold'][6 - k * 2] if k < 3 else R['mgold'][2])
+    for i in range(10):                                                    # coverts: shorter, rounder rows near the edge
+        t = i / 9; j = min(len(L) - 1, int(t * (len(L) - 1) * .9)); bx, by = L[j]
+        ang = math.radians(60 - 60 * t + spread * .3)
+        ln = S(6 + 5 * t)
+        taper(c, [(bx, by), (bx + math.cos(ang) * ln, by + math.sin(ang) * ln)], S(4.6), S(2), R['mwing'], lift=lift + .14, name=name + 'c', bulge=1.1)
+        c.px(int(bx + math.cos(ang) * ln), int(by + math.sin(ang) * ln), R['mwing'][7])
+    taper(c, L, S(5), S(2.4), R['mwing'], lift=lift + .22, name=name + 'e', bulge=1.2)      # the leading edge (the bones of the wing)
+    for (X, Y) in L[2::4]: c.px(int(X), int(Y) - 1, R['mwing'][7])
+
 def llufu3(f):
-    """Millalobo ñi müpü: his flippers: he bursts out of the sea in a great diving arc, leaning into the charge,
-    one hand reaching for you, the fore-flippers swept back like wings and the tail flung high behind"""
-    K = 1.32; k, sc = _K(K); kx = lambda v: k(v + 16); ky = lambda v: k(v + 10); sc = lambda pts: [(k(a + 16), k(b + 10)) for a, b in pts]
-    setsize(int(136 * K), int(98 * K)); ox, oy = 8, 10; c = Canvas()
+    """Müpükülechi Millalobo: the winged Millalobo bursts out of the sea in a great arc, leaning into the charge,
+    one hand reaching for you, great wings raised from his shoulders, a fore-flipper paddling forward and the tail flung high"""
+    K = 1.22; k, sc = _K(K); kx = lambda v: k(v + 16); ky = lambda v: k(v + 22); sc = lambda pts: [(k(a + 16), k(b + 22)) for a, b in pts]
+    setsize(int(148 * K), int(110 * K)); c = Canvas()
     kaywater(c, f, int(ky(70)))
-    # the far fore-flipper swept back behind him
-    mflipper(c, kx(46), ky(58), -30 - f * 6, k(34), name='mfore_fl', lift=-.04, s=K)
+    # the far wing, higher and darker, then the near wing: both behind the body
+    mwing(c, kx(46), ky(36), K * 1.0, -22, lift=-.12, f=f, name='mwingf')
+    mwing(c, kx(48), ky(40), K * 1.2, 6, lift=.05, f=f, name='mwing')
+    # the far fore-flipper hanging down behind, over the water
+    mflipper(c, kx(50), ky(62), 58 + f * 6, k(26), name='mfore_fl', lift=-.02, s=K)
     # the body: from the waist it dives under the surface and the tail bursts out again at the far end
     mlower(c, sc([(36, 50), (48, 62), (62, 74), (80, 80), (98, 72), (110, 54), (116, 40)]), k(30), k(10), 'mbody', lift=.12, n=10, s=K)
-    # the near fore-flipper swept back across the body like a wing
-    mflipper(c, kx(48), ky(64), 12 + f * 5, k(30), name='mfore_fl', lift=.14, s=K)
-    # the man, drawn upright on his own layer and leaned forward into the charge
-    Lr = Canvas()
-    mhair_back(Lr, kx(36), ky(18 + f), K, hairflow=3)
-    mtorso(Lr, kx(36), ky(30 + f), K, arms='reach', f=f)
-    mhead(Lr, kx(36), ky(18 + f), K, f, angry=True, hairflow=3)
-    _paste_rot(c, Lr, 18, kx(36), ky(54))
+    # the man, painted upright on a double-resolution layer and leaned forward into the charge
+    W0, H0 = yp.W, yp.H; setsize(W0 * 2, H0 * 2); Lr = Canvas(); k2 = lambda v: kx(v) * 2; j2 = lambda v: ky(v) * 2
+    mhair_back(Lr, k2(36), j2(18 + f), K * 2, hairflow=3)
+    mtorso(Lr, k2(36), j2(30 + f), K * 2, arms='reach', f=f)
+    mhead(Lr, k2(36), j2(18 + f), K * 2, f, angry=True, hairflow=3)
+    setsize(W0, H0)
+    _paste_rot2(c, Lr, 16, kx(36), ky(54))
+    # the near fore-flipper paddling forward under the reaching arm, in front of everything
+    mflipper(c, kx(40), ky(60), 146 - f * 10, k(32), name='mfore_fl', lift=.5, s=K * 1.15)
     sea(c, int(ky(72)), yp.H, 0, yp.W, f)
     ripples(c, kx(70), ky(78), k(40), 3, f, R['water'][6], R['water'][1], 2)
     foam(c, int(ky(68)), 0, yp.W, f)
-    # a curtain of spray where he breaks the surface, and droplets flung off the tail
+    # a curtain of spray where he breaks the surface, and droplets flung off the tail and the wings
     for kk in range(40):
         t = kk / 40; x = int(kx(60) + t * k(50) + ((kk * 7) % 5)); y = int(ky(72) - math.sin(t * math.pi) * k(10) * ((kk * 13) % 7) / 6 - f * 2)
         if 0 <= y < yp.H and 0 <= x < yp.W and not (c.a[y, x] and c.part[y, x] not in ('water',)):
             c.px(x, y, (236, 248, 248) if kk % 3 else R['water'][7]); c.part[y, x] = 'spark'
-    for kk in range(16):
-        x, y = int(kx(104) + (kk * 11 % 20) - k(6)), int(ky(30) + (kk * 7 % 16) - f * 3)
+    for kk in range(24):
+        x, y = int(kx(96) + (kk * 11 % 34) - k(6)), int(ky(10) + (kk * 7 % 30) - f * 3)
         if 0 <= y < yp.H and 0 <= x < yp.W and not c.a[y, x]: c.px(x, y, R['water'][7] if kk % 2 else (240, 250, 250)); c.part[y, x] = 'spark'
-    return mfinish(c, [('mfore_fl', 'mbody')])
+    texture(c, ['mwing', 'mwingf', 'mwingc', 'mwingfc'], amt=.18, seed=54)
+    return mfinish(c, [('mfore_fl', 'mbody'), ('mwingc', 'mwing'), ('mwinge', 'mwingc'), ('mwingfc', 'mwingf'), ('mwingfe', 'mwingfc'), ('mwing', 'mwingf'), ('mwingc', 'mwingf')])
 
 def llufu4(f):
     """Millalobo ñi piwke: his heart: the chest opens on a heart of gold light that throws up barriers"""

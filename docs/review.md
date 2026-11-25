@@ -561,3 +561,8 @@ Trengtreng y Kaykay son sagrados y salen del juego. El jefe secreto del salón d
   - Nütramkafe: «Lafken ñi lonko ngefuy.» ('Era el lonko del mar.') ⚠
   - Ñidol chumpall: «Millalobo nepey. …» (solo cambia el nombre).
 - ⚠ Ortografía: se dejó «Millalobo», la forma tradicional (milla 'oro' + lobo marino), aunque mezcla una raíz castellana.
+
+## Millalobo, tercera forma (24 nov.)
+
+- ⚠ La tercera forma pasa de «Millalobo ñi müpü» a **Müpükülechi Millalobo** («el Millalobo alado»), forma dictada por Brandon («mupukülechi millalobo»), escrita con ü según el grafemario del juego. Confirmar la grafía y la segmentación (müpü + -kü-le-chi).
+- La forma ahora tiene alas; el mensaje de la forma dice: «¡Al Millalobo le brotan alas! Salta del agua en un gran arco, con las alas abiertas y las aletas tendidas».

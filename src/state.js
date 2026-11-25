@@ -128,7 +128,7 @@ const ET={
   ngoyman5:{name:'Rüf Fütra Ngoymatulfe',hp:265,atk:20,xp:400,gold:[500,500],boss:true,bs:146,spres:1,thick:1},
   llufu1:{name:'Millalobo',hp:140,atk:14,xp:0,gold:[0,0],boss:true,bs:104},
   llufu2:{name:'Millalobo ñi foro',hp:150,atk:14,xp:0,gold:[0,0],boss:true,bs:106,armor:1},
-  llufu3:{name:'Millalobo ñi müpü',hp:160,atk:15,xp:0,gold:[0,0],boss:true,bs:108,twice:1},
+  llufu3:{name:'Müpükülechi Millalobo',hp:160,atk:15,xp:0,gold:[0,0],boss:true,bs:108,twice:1},
   llufu4:{name:'Millalobo ñi piwke',hp:175,atk:15,xp:0,gold:[0,0],boss:true,bs:104,spres:1},
   llufu5:{name:'Rüf Millalobo',hp:185,atk:16,xp:380,gold:[500,500],boss:true,bs:112,thick:1}};
 

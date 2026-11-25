@@ -71,12 +71,12 @@ def cutshot(name, off=0, z0=1.0, z1=1.035, fin=0, fout=0, text=None):
         if text: img = text(img, i, n)
         return img
     return f
-def bossshot(name, label):
+def bossshot(name, label, dy=0):
     def f(i, n):
         fcap = capframe('b_' + name, i); h_, w_ = fcap.shape[:2]
         s = w_ / 1000 * 1.45; cw, ch = W / s, H / s
         t = i / max(1, n - 1)
-        x0 = (30 + 26 * t + 6 * math.sin(i * .9) * max(0, 1 - i / 6)) * w_ / 1000; y0 = (36 + 8 * t) * w_ / 1000
+        x0 = (30 + 26 * t + 6 * math.sin(i * .9) * max(0, 1 - i / 6)) * w_ / 1000; y0 = (36 + dy + 8 * t) * w_ / 1000
         img = crop_scale(fcap, x0, y0, cw, ch, cv2.INTER_NEAREST)
         img = flash(img, .8 * max(0, 1 - i / 5))
         a_in = ease((i - 2) / 7); a_out = ease((n - 1 - i) / 7); al = min(a_in, a_out)
@@ -219,7 +219,7 @@ add(30.4333, 32.0, cutshot('c_i3', 0))
 for (t0, t1, b, lab) in [(32, 33.6, 'trelke', 'Trelke-wekufü'), (33.6, 35.2, 'witranalwe', 'Witranalwe'), (35.2, 36.8333, 'cherrufe', 'Cherufe'), (36.8333, 38.4333, 'kaleuche', 'Kaleuche'),
                          (38.4333, 40, 'walichu', 'Walichu'), (40, 41.6, 'chadikura', 'Elëngasëm'), (41.6, 43.2, 'chinifilu', 'Chiñifilu'), (43.2, 44.8333, 'piwuchen', 'Piwüchen'),
                          (64, 65.6, 'wallipen', 'Wallepeñ'), (65.6, 67.2, 'trawko', 'Trawko'), (67.2, 68.8, 'epunamun', 'Epunamun'), (68.8, 70.4, 'kalku', 'Fütra Kalku'), (70.4, 72, 'llufu5', 'Millalobo')]:
-    add(t0, t1, bossshot(b, lab))
+    add(t0, t1, bossshot(b, lab, -34 if b == 'llufu5' else 0))   # the Rüf Millalobo's crown rises above the usual frame
 add(57.6, 60.8333, cutshot('c_e1', 0))
 add(60.8333, 64, cutshot('c_e2', 0))
 # the breakdown: the original cut points, five forms instead of three

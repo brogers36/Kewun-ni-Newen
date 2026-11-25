@@ -475,7 +475,7 @@ function llufuStage(nx){
   S.hp=maxHP();S.sp=SPMAX;e.hp-=12;
   const k={llufu2:0,llufu3:1,llufu4:2,llufu5:3}[nx],[snm,sd,sde]=LLSING[k];
   const forms={llufu2:[N('¡Las aguas se abren! El Millalobo se alza hasta la cintura: lleva una coraza de huesos de ballena atada con cochayuyo.','The waters part! The Millalobo rises to the waist, wearing a breastplate of whale bones lashed with kelp.')],
-    llufu3:[N('El Millalobo nada en grandes arcos, con las aletas abiertas como alas: el agua entera se vuelve un remolino.','The Millalobo swims in great arcs, flippers spread like wings: the whole water becomes a whirlpool.')],
+    llufu3:[N('¡Al Millalobo le brotan alas! Salta del agua en un gran arco, con las alas abiertas y las aletas tendidas: el agua entera se vuelve un remolino.','The Millalobo sprouts wings! He leaps from the water in a great arc, wings spread and flippers out: the whole water becomes a whirlpool.')],
     llufu4:[N('Su pecho se abre y aparece su piwke: un corazón de oro que late luz robada, protegido por barreras.','His chest opens and his piwke appears: a heart of gold beating with stolen light, guarded by barriers.')],
     llufu5:[N('El Millalobo entero se alza sobre una ola, más grande que la ruka más grande: Rüf Millalobo, el rey del mar.','The whole Millalobo rises on a swell, bigger than the biggest ruka: Rüf Millalobo, the king of the sea.')]}[nx];
   forms.push(N('El chumpall '+snm+', '+sd+', canta a tu lado: tu piwke y tu newen se llenan de nuevo, y su ül alcanza al Millalobo (−12).','The chumpall '+snm+', '+sde+', sings at your side: your hearts and your newen fill again, and their ül reaches the Millalobo (−12).'));
