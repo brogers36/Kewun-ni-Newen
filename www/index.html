@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='a5cbe9d-202611241950';
+window.KEWUN_BUILD='4f6e6c1-202611242048';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -2838,6 +2838,7 @@ function tryMove(d){
   if(!inB(nx,ny))return edge(d);
   const e=entAt(nx,ny);
   if(e){if(e.kind==='enemy')engage(e);return}
+  {const bb=ents.find(b=>b.kind==='enemy'&&b.boss&&Math.abs(nx-b.x)<=(ET[b.party[0]]&&ET[b.party[0]].bs>=120?2:1)&&ny<=b.y&&ny>=b.y-2);if(bb){engage(bb);return}}   // big bosses: their whole body, not just one tile
   const c=grid[ny][nx];
   if(M.metroGate){const g=M.metroGate;if(ny===g.y&&nx>=g.x&&nx<g.x+g.w){sfx('door');loadMap(g.to,g.tx,g.ty);return}}
   if(M.doors&&M.doors[nx+','+ny]&&d==='up'){const D=M.doors[nx+','+ny];if(D.req&&!S.flags[D.req]){if(!P.bump){P.bump=1;say(D.reqMsg)}return}sfx('door');loadMap(D.to,D.x,D.y);return}
