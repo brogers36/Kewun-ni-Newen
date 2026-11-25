@@ -5,7 +5,8 @@ const AU={c:null,m:null,mus:null,sfx:null,noise:null,muted:false,song:null,name:
 try{AU.muted=localStorage.getItem(MUTE_KEY)==='1'}catch(e){}
 function auInit(){
   try{
-    if(!AU.c){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;AU.c=new AC();
+    if(!AU.c){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;try{AU.c=new AC({latencyHint:'balanced'})}catch(e){AU.c=new AC()}   /* bigger audio buffer: the dense kultrun boss songs stop stuttering on phones */
+      
       AU.m=AU.c.createGain();AU.m.connect(AU.c.destination);
       AU.mus=AU.c.createGain();AU.mus.gain.value=.2;AU.mus.connect(AU.m);
       AU.dist=AU.c.createWaveShaper();{const n=1024,cv=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;cv[i]=Math.tanh(x*6)*.8}AU.dist.curve=cv}
