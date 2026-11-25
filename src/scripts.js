@@ -74,7 +74,7 @@ function teacherTalk(){
       else{sfx('bad');say([L('Kimeltuchefe','Fey no...','No, eso no...','No, not that...'),N('Escucha otra vez y vuelve a intentarlo.','Listen again and try once more.')])}
     },false,true)});
 }
-function levelUpCheck(){const ls=[];while(S.xp>=xpNeed()){S.xp-=xpNeed();S.lvl++;S.baseMax+=HPQ;S.hp+=HPQ;S.baseAtk+=1;if(S.lvl%2===0)S.baseDef+=1;
+function levelUpCheck(){const ls=[];while(S.xp>=xpNeed()){S.xp-=xpNeed();S.lvl++;S.baseMax+=HPQ;S.hp+=HPQ;S.baseAtk+=1;if(S.lvl%2===0||S.hm)S.baseDef+=1;
   ls.push(L('','Doy kimün! Akuymi kimün nivel '+S.lvl+'. Llowfimi ka piwke ka doy newentuymi.','¡Más conocimiento! Llegas a kimün '+S.lvl+': ganas un corazón y más fuerza.','More knowledge! You reach kimün '+S.lvl+': you gain a heart and more strength.'))}
   if(ls.length){sfx('lvl');persist();say(ls)}}
 function kidTalk(i){

@@ -20,7 +20,7 @@ function heroExp(){const k=progK(),L=[2,7,12,17,21,25,29][Math.min(6,k)];
 function heroState(src,hero){const s=newState(hero||src.hero||'llanka');   // weichafe mode plays as the hero chosen on the title, not the one from the finished game
   for(const k of ['lvl','xp','baseMax','baseAtk','baseDef','gold','hints'])if(src[k]!=null)s[k]=src[k];
   s.items=Object.assign(s.items,src.items||{});s.gear=Object.assign({},src.gear||{});s.hm=(src.hm||0)+1;
-  s.hp=s.baseMax+(s.gear.trariwe?4:0);return s}
+  s.hp=s.baseMax+(s.gear.trariwe?4:0);s.hmDef0=null;return s}
 function heroHurt(){const d=Math.max(1,Math.round(maxHP()*.1));S.hp=Math.max(1,S.hp-d);sfx('bad');return d}
 const heroLook=()=>HEROES[S.hero]?S.hero:'llanka';
 
