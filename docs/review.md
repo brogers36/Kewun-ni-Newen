@@ -587,4 +587,4 @@ Brandon: «estoy triste» es **weñankülen** (con n, no ng). Corregido en la le
 
 ## «Después» = wüla feman (24 nov.)
 
-Brandon: en el texto de Nico, la opción «Ka mew» (después) es **Wüla feman**. Cambiado solo en Nico (src/kompa.js). «Ka mew» sigue en Seba, Nacho, Carmen, las lecciones de las piedras y el nütramkan, a la espera de confirmar si se cambia en todos.
+Brandon: en el texto de Nico, la opción «Ka mew» (después) es **Wüla feman**. Cambiado en todas las opciones «después»: Nico, Seba, Nacho, Carmen (src/kompa.js), las lecciones de las piedras y la invitación al nütramkan (src/scripts.js).

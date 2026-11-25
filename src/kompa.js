@@ -46,7 +46,7 @@ function sebaTalk(){const en=S.gloss==='en';
   if(S.flags.seba_q)return say([L('Seba','','«Se fue hacia los campos de los animales, al sur del lof. Llámalo en mapudungun: en castellano no me hace caso.»','"He ran off toward the animal fields, south of the lof. Call him in Mapudungun: in Spanish he ignores me."')]);
   say([L('Seba','Mari mari!','«Soy Seba, de Temuko. Vine a ayudar a mi laku en el campo y me traje a mi perro, el Kiltro.»','"I\'m Seba, from Temuko. I came to help my laku on the farm and brought my dog, Kiltro."'),
     N('«Se me arrancó hacia los campos de los animales, y no viene cuando lo llamo. Mi laku dice que el Kiltro entiende mapudungun mejor que yo... y que por eso no me hace caso.»','"He ran off toward the animal fields, and he won\'t come when I call him. My laku says Kiltro understands Mapudungun better than I do... and that\'s why he ignores me."')],()=>
-    choose(L('Seba','','¿Lo buscas?','Will you look for him?'),[{m:'May',g:en?'Yes, I will find him':'Sí, lo busco',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{
+    choose(L('Seba','','¿Lo buscas?','Will you look for him?'),[{m:'May',g:en?'Yes, I will find him':'Sí, lo busco',v:1},{m:'Wüla feman',g:en?'Later':'Después',v:0}],v=>{
       if(!v)return say([L('Seba','','«Ya. ¡Kiltro! ¡Kiltroooo!»','"OK. Kiltro! Kiltrooooo!"')]);
       S.flags.seba_q=1;persist();say([L('Seba','','«¡Gracias! Está en los campos, al sur. Llámalo en mapudungun, que en castellano se hace el sordo.»','"Thanks! He\'s in the fields, to the south. Call him in Mapudungun; in Spanish he plays deaf."')])},true,true))}
 function sebaDog(){
@@ -65,7 +65,7 @@ function nachoTalk(){const en=S.gloss==='en';
   if(S.flags.nacho_d)return say([L('Nacho','Mari mari, '+addr(false)+'!','«Mi chuchu ahora me manda audios en mapudungun todos los días. Me demoro, pero los entiendo.»','"My chuchu sends me voice messages in Mapudungun every day now. They take me a while, but I understand them."')]);
   say([L('Nacho','Mari mari!','«Soy Nacho. Mi chuchu vive en Temuko y me mandó sopaipillas por encomienda. Le quiero dar las gracias con un audio en mapudungun... para que no me reclame que se lo hablo en castellano.»','"I\'m Nacho. My chuchu lives in Temuko and sent me sopaipillas by bus courier. I want to thank her with a voice message in Mapudungun... so she stops complaining that I talk to her in Spanish."'),
     N('«Tengo el celular listo. ¿Me dices qué decir?»','"I\'ve got my phone ready. Will you tell me what to say?"')],()=>
-    choose(L('Nacho','','¿Lo ayudas con el audio?','Help him with the message?'),[{m:'May',g:en?'Yes, let us record it':'Sí, grabemos',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{
+    choose(L('Nacho','','¿Lo ayudas con el audio?','Help him with the message?'),[{m:'May',g:en?'Yes, let us record it':'Sí, grabemos',v:1},{m:'Wüla feman',g:en?'Later':'Después',v:0}],v=>{
       if(!v)return say([L('Nacho','','«Ya, aquí sigo. ¿Cómo era... mari mari?»','"OK, I\'m still here. How did it go... mari mari?"')]);
       convo([{q:N('Primero, saludarla.','First, greet her.'),o:['Mari mari, chuchu!','Pewkayal, chuchu!','Chaltu may, chuchu!'],a:'Mari mari, chuchu!',hint:['Para saludar: mari mari.','To greet: mari mari.']},
         {q:N('Después, preguntarle cómo está.','Then, ask her how she is.'),o:['Chumleymi?','Kümelen.','Chew müleymi?'],a:'Chumleymi?',hint:['¿Cómo estás?: chumleymi. Kümelen es la respuesta.','How are you?: chumleymi. Kümelen is the answer.']},
@@ -100,7 +100,7 @@ function carmenTalk(){const en=S.gloss==='en',have=S.items.kulon||0;
     N('Carmen se ríe sola y sigue revolviendo una olla vacía.','Carmen laughs to herself and keeps stirring an empty pot.'),
     N('«Perdona, mari mari. Soy Carmen. Estoy preparando mushay, la bebida de külon (maqui), para el trawün de esta noche... pero me faltan los külon.»','"Sorry, mari mari. I\'m Carmen. I\'m making mushay, the külon (maqui) drink, for tonight\'s trawün... but I\'m out of külon."'),
     L('Carmen Lienkura','Küla külon eluaen.','Me vas a dar tres külon (maqui).','You will give me three külon (maqui berries).')],()=>
-    choose(L('Carmen Lienkura','','¿Le traes tres külon?','Will you bring her three külon?'),[{m:'May',g:en?'Yes, I will bring them':'Sí, se los traigo',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{
+    choose(L('Carmen Lienkura','','¿Le traes tres külon?','Will you bring her three külon?'),[{m:'May',g:en?'Yes, I will bring them':'Sí, se los traigo',v:1},{m:'Wüla feman',g:en?'Later':'Después',v:0}],v=>{
       if(!v)return say([L('Carmen Lienkura','','«Aquí estaré, con mi olla vacía.»','"I will be here, with my empty pot."')]);
       S.flags.carmen_q=1;persist();
       say([L('Carmen Lienkura','Chaltu may!','«Gracias. Hay külon en los arbustos del monte, y en las tiendas los venden.»','"Thank you. There are külon on the bushes in the forest, and the shops sell them."')])},true,true))}

@@ -1619,7 +1619,7 @@ const tabCount=()=>TAB_IDS.filter(t=>S.flags['tab_'+t]).length;
 function tabletTalk(id){
   const T=TABLETS[id],en=S.gloss==='en';
   if(S.flags['tab_'+id])return choose(L('','Kuyfi chillka','La piedra brilla tranquila. ¿Vuelves a leerla?','The stone glows quietly. Read it again?'),
-    [{m:'May',g:en?'Read the lesson':'Leer la lección',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{if(v)say([T.t].concat(T.lines))},true,true);
+    [{m:'May',g:en?'Read the lesson':'Leer la lección',v:1},{m:'Wüla feman',g:en?'Later':'Después',v:0}],v=>{if(v)say([T.t].concat(T.lines))},true,true);
   const first=!S.flags.tab_seen;S.flags.tab_seen=1;
   say((first?[N('Una piedra antigua, verde de musgo, tallada de arriba abajo con signos. Bajo el musgo se leen palabras en mapudungun: la dejaron los kuyfikeche, la gente de antes, para que nadie olvidara.','An ancient stone, green with moss, carved from top to bottom. Under the moss you can read words in Mapudungun: the kuyfikeche, the people of long ago, left it so that no one would forget.'),
       N('Dicen que quien despierta las seis kuyfi chillka recibe un trarilongko que protege como ningún otro.','They say whoever wakes all six kuyfi chillka receives a trarilongko that protects like no other.')]
@@ -1690,7 +1690,7 @@ function nutkTalk(lofId){
   if(D.who===S.name)D={who:'\u200b'+D.who,set:D.set};   // a namesake (a partner with the player's own name): a hidden mark so their lines keep their own portrait
   const sub=s=>s.replace('@',nm);
   say([L(D.who,'Mari mari! Nütramkayaiñ?','¡Hola! ¿Conversamos? Estoy aprendiendo y quiero practicar.','Hello! Shall we talk? I am learning and I want to practise.')],()=>{
-    choose(L('','Nütramkayaiñ?','¿Conversas con '+D.who+'?','Talk with '+D.who+'?'),[{m:'May',g:S.gloss==='en'?'Yes, let us talk':'Sí, conversemos',v:1},{m:'Ka mew',g:S.gloss==='en'?'Later':'Después',v:0}],v=>{if(v)step(0)},true,true)});
+    choose(L('','Nütramkayaiñ?','¿Conversas con '+D.who+'?','Talk with '+D.who+'?'),[{m:'May',g:S.gloss==='en'?'Yes, let us talk':'Sí, conversemos',v:1},{m:'Wüla feman',g:S.gloss==='en'?'Later':'Después',v:0}],v=>{if(v)step(0)},true,true)});
   function step(i){
     if(i>=D.set.length){const ls=[L(D.who,'Kümey! Pewkayal!','¡Muy bien! ¡Hasta luego!','Very good! See you later!')];
       if(!done){S.flags[fl]=1;S.gold+=15;S.xp+=6;sfx('lvl');ls.push(N('+15 ngülliw · +6 kimün.','+15 ngülliw · +6 kimün.'));
