@@ -82,7 +82,8 @@ LOOKS.carmen={t:'F',c:'#2a4a8a',C:'#1a305e',r:'#d83030'};
 MAPS.w_lof.ents.push({id:'carmen',kind:'npc',look:'carmen',fem:1,x:12,y:8,dir:'down',fixed:1,talk:()=>carmenTalk(),bub:['Mari mari!','Külon...']});
 
 function carmenTalk(){const en=S.gloss==='en',have=S.items.kulon||0;
-  if(S.flags.carmen_d)return say([L('Carmen Lienkura','Mari mari, '+addr(true)+'!','«El mushay quedó rico. Esta noche, en el trawün, brindamos por ti.»','"The mushay turned out lovely. Tonight, at the trawün, we will drink to you."')]);
+  if(S.flags.carmen_d){S.flags.carmen_r=((S.flags.carmen_r||0)+1)%2;   // after the quest she alternates: her thanks, then her own untranslated words
+    return say([S.flags.carmen_r?L('Carmen Lienkura',"Feypienew fentreke che 'Rume küme adngerkey feychi dewmalfilu tüfachi awkantun' pingerken. Pewmangele pepi kimnieafiñ kiñe antü.",'',''):L('Carmen Lienkura','Mari mari, '+addr(true)+'!','«El mushay quedó rico. Esta noche, en el trawün, brindamos por ti.»','"The mushay turned out lovely. Tonight, at the trawün, we will drink to you."')])}
   if(S.flags.carmen_q){
     if(have<3)return say([L('Carmen Lienkura','Küla külon eluaen.','«Me vas a dar tres külon.» Tienes '+numP(have)+'. Hay külon en los arbustos del monte, y también se venden en las tiendas.','"You will give me three külon." You have '+numP(have)+'. There are külon on the bushes in the forest, and the shops sell them too.')]);
     const q={m:'',es:'Le pasas los tres külon a Carmen. ¿Qué le dices?',en:'You hand Carmen the three külon. What do you say?'},{o,a}={o:['Küla külon elueyu.','Küla külon eluaen.','Küla külon nien.'],a:'Küla külon elueyu.'};
