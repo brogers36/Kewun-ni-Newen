@@ -1642,7 +1642,7 @@ const NUTK={
     {q:L('Kallfü','Chew amuaymi?','¿Adónde vas?','Where are you going?'),o:['Mawida mew amuan.','Mawida mew tuwün.','Mawida pingen.'],a:'Mawida mew amuan.'},
     {q:L('Kallfü','Kimimi mapudungun?','¿Sabes mapudungun?','Do you know Mapudungun?'),o:['Kimnierpuken.','Amuyngün.','Kiñe pataka.'],a:'Kimnierpuken.'}]},
   p_lof:{who:'Rayen',set:[
-    {q:L('Rayen','Iyaymi kofke?','¿Vas a comer pan?','Will you eat bread?'),o:['May, iyan.','May, iyay.','Iyael pingen.'],a:'May, iyan.'},
+    {q:L('Rayen','Kofketuaymi?','¿Vas a comer pan?','Will you eat bread?'),o:['May, kofketuan.','May, kofketuay.','Iyael pingen.'],a:'May, kofketuan.'},
     {q:L('Rayen','Chem ayüymi?','¿Qué te gusta?','What do you like?'),o:['Ngülliw ayüfiñ.','Ngülliw pingen.','Ngülliw mew tuwün.'],a:'Ngülliw ayüfiñ.'},
     {q:L('Rayen','Wütreymi?','¿Tienes frío?','Are you cold?'),o:['May, wütren.','May, wütrey.','Wütre ruka.'],a:'May, wütren.'}]},
   w_lof:{who:'Millanao',set:[

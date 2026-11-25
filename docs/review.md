@@ -573,3 +573,10 @@ La gente de Santiago llega y le grita al Yewen; cada grito le arranca un pedazo 
 - ⚠ **¡Amutunge!** («¡Vete!»)
 - ⚠ **¡Yewentuwelayaiñ!** («Ya no tendremos vergüenza»)
 - ⚠ **Mañumwiyiñ.** («Gracias», la persona que queda). Confirmar la grafía en los tres grafemarios.
+
+## «Comer pan» = kofketun (24 nov.)
+
+Brandon: comer pan es **kofketun** (kofke + -tu-). Cambios:
+- Nütram de Rayen (Pewenche): «Iyaymi kofke?» → **«Kofketuaymi?»**; respuesta correcta «May, iyan.» → **«May, kofketuan.»**; distractor «May, iyay.» → «May, kofketuay.».
+- Santiago, pedir el pan: el distractor «Kofke iyan.» → «Kofketuan.».
+- Las lecciones generales de iya- («comer», sin objeto) no cambian.
