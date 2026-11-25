@@ -149,7 +149,7 @@ function shop(where){
   function list(){
     const opts=[];
     for(const k in ITEMS)opts.push({m:ITEMS[k].m+'  ·  '+ITEMS[k].p,g:numW(ITEMS[k].p)+' ngülliw · '+G(ITEMS[k]),v:'i:'+k});
-    for(const k in GEAR){if(GEAR[k].hide)continue;opts.push({m:GEAR[k].m+'  ·  '+GEAR[k].p,g:S.gear[k]?(S.gloss==='en'?'(already yours)':'(ya lo tienes)'):numW(GEAR[k].p)+' ngülliw · '+G(GEAR[k]),v:'g:'+k,dis:!!S.gear[k]})}
+    for(const k in GEAR){if(GEAR[k].hide)continue;opts.push({m:GEAR[k].m+'  ·  '+GEAR[k].p,g:S.gear[k]&&!window.KEWUN_MASTER?(S.gloss==='en'?'(already yours)':'(ya lo tienes)'):numW(GEAR[k].p)+' ngülliw · '+G(GEAR[k])+(S.gear[k]?(S.gloss==='en'?' · you have ':' · tienes ')+numP(+S.gear[k]):''),v:'g:'+k,dis:!!S.gear[k]&&!window.KEWUN_MASTER})}   // master: these stack, for testing
     opts.push({m:'Pewkayal',g:S.gloss==='en'?'See you later (leave)':'Hasta luego (salir)',v:'x'});
     choose({es:'Tienes '+numP(S.gold)+' ngülliw.',en:'You have '+numP(S.gold)+' ngülliw.'},opts,v=>{
       if(v===null||v==='x')return say([L('Ngillakafe','Pewkayal!','¡Hasta luego!','See you later!')]);
@@ -167,7 +167,7 @@ function shop(where){
       }
       choose(L('',it.m+' · '+numW(it.p)+' ngülliw','¿Lo compras?','Buy it?'),[{m:'Ngillayafiñ',g:en?'I will buy it':'Lo voy a comprar',v:1},{m:'Ngillalayafiñ',g:en?'I will not buy it':'No lo voy a comprar',v:0}],y=>{
         if(!y)return list();
-        S.gold-=it.p;S.gear[k]=1;if(k==='trariwe')S.hp+=HPQ;
+        S.gold-=it.p;S.gear[k]=(+S.gear[k]||0)+1;if(k==='trariwe')S.hp+=HPQ;
         persist();sfx('pick');say([L('Ngillakafe','Chaltu may!','¡Gracias!','Thank you!')],list)},true,false)
     },true,true);
   }

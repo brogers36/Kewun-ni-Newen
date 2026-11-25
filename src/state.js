@@ -2,9 +2,9 @@
    STATE
    ============================================================ */
 const HPQ=4,SPMAX=3;
-function maxHP(){return S.baseMax+(S.gear.trariwe?4:0)+Math.floor(S.piwke/4)*4+(S.flags.ngen?4:0)+(S.flags.ngen2?4:0)+(S.flags.ngen3?4:0)+(S.flags.ngen4?4:0)+(S.flags.ngen5?4:0)}
-function atk(){return Math.max(1,S.baseAtk+(S.gear.futrawino?3:0)+(S.gear.waiki?2:0)-(S.curse?2:0)-(S.kutran?3:0)-(S.chill>0?2:0))}
-function def(){return Math.max(0,S.baseDef+(S.gear.makun?2:0)+(S.gear.trarilongko?3:0)-(S.kutran?2:0))}
+function maxHP(){return S.baseMax+4*(+S.gear.trariwe||0)+Math.floor(S.piwke/4)*4+(S.flags.ngen?4:0)+(S.flags.ngen2?4:0)+(S.flags.ngen3?4:0)+(S.flags.ngen4?4:0)+(S.flags.ngen5?4:0)}
+function atk(){return Math.max(1,S.baseAtk+3*(+S.gear.futrawino||0)+(S.gear.waiki?2:0)-(S.curse?2:0)-(S.kutran?3:0)-(S.chill>0?2:0))}
+function def(){return Math.max(0,S.baseDef+2*(+S.gear.makun||0)+(S.gear.trarilongko?3:0)-(S.kutran?2:0))}
 function xpNeed(){return 10+S.lvl*10}
 /* the four heroes you can play: two women and two men, each with their own skin, clothes and battle sprite */
 const HEROES={millaray:{name:'Millaray',fem:1},ayelen:{name:'Ayelen',fem:1},llanka:{name:'Llanka',fem:0},kallfurungi:{name:'Kallfürüngi',fem:0}};
