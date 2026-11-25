@@ -71,8 +71,8 @@ function renderEndCut(){
   else{paintLand(c,frame,false);
     const gr2=c.createLinearGradient(0,0,0,LH);gr2.addColorStop(0,'rgba(255,170,90,.18)');gr2.addColorStop(1,'rgba(90,40,70,.2)');c.fillStyle=gr2;c.fillRect(0,0,LW,LH);
     const rk=rukaCanvas(3,2),rox=(LW-256)>>1;ell(c,195+rox,175,40,5,'rgba(0,0,0,.3)');c.drawImage(rk.cvs,150+rox,120,rk.cvs.width*1.7,rk.cvs.height*1.7);
-    {const hs=ctCharSprite(heroLook(),'down',0);c.drawImage(hs,84,96,54,96)}
-    {const ks=ctCharSprite('kuku','down',0);c.drawImage(ks,130,100,50,90)}
+    cutPerson(c,heroLook(),'down',84,96,54,96);
+    cutPerson(c,'kuku','down',130,100,50,90);
     for(let k=0;k<9;k++){const a2=((frame+k*18)%130)/130;ell(c,40+(k*31)%180,190-a2*90,1.5,1.5,'rgba(255,230,150,'+(1-a2)*.8+')')}
     const gl=.5+.3*Math.sin(frame/18);for(const [rr,al] of [[26,.10],[18,.16],[10,.22]])ell(c,110,170,rr,rr*.4,'rgba(255,226,130,'+(al*gl)+')')}
   cutFx(c,false);
@@ -93,7 +93,7 @@ function renderCut(){
     for(let k=0;k<16;k++){const bw=13+(k*13)%15,bx=k*17-5,bh=50+((k*53)%70),by=180-bh;R(c,bx,by,bw,bh+50,k%2?'#1c1a32':'#242240');R(c,bx+bw-2,by,2,bh+50,'#16142a');if(k%3===0)R(c,bx+bw/2,by-7,1,7,'#242240');
       for(let wy=by+4;wy<175;wy+=6)for(let wx=bx+2;wx<bx+bw-3;wx+=4)if(h2(wx,wy,3)<.42)R(c,wx,wy,2,3,h2(wx,wy,4)<.5?'#f8d870':'#c8a850')}
     R(c,0,180,LW,44,'#22203a');R(c,60,160,136,3,'#4a4668');for(let k=0;k<17;k++)R(c,62+k*8,163,1,17,'#3a3656');R(c,60,180,136,2,'#4a4668');
-    {const hs=ctCharSprite(heroLook(),'up',0);c.drawImage(hs,101,66,54,96)}
+    cutPerson(c,heroLook(),'up',101,66,54,96);
     for(let k=0;k<44;k++){const rx=(k*53+frame*2.6)%(LW+30)-15,ry=(k*91+frame*5.2)%LH;R(c,rx,ry,1,7,'rgba(170,190,230,.33)');R(c,rx,ry+5,1,2,'rgba(210,225,250,.45)')}
     if(frame%300<4)c.fillStyle='rgba(205,215,255,.22)',c.fillRect(0,0,LW,LH);
     for(let k=0;k<5;k++){const a=((frame/60+k*.2)%1);OV.push(()=>txt(['ü','ñ','ng','tr','ll'][k],113+k*8+Math.sin(a*6+k)*4,86-a*45,'rgba(255,240,200,'+(1-a)*.85+')',16,'center'))}}
@@ -108,7 +108,7 @@ function renderCut(){
     for(let k=0;k<7;k++){const fx2=30+(k*37)%200+Math.sin(frame/30+k*2)*8,fy2=120+(k*23)%80+Math.sin(frame/19+k)*5;if((frame+k*25)%80<55){R(c,fx2,fy2,1,1,'#ffe9a0');ell(c,fx2,fy2,2.5,2.5,'rgba(255,230,140,.18)')}}
     const rk=rukaCanvas(3,2),rox=(LW-256)>>1;ell(c,195+rox,175,40,5,'rgba(0,0,0,.3)');c.drawImage(rk.cvs,150+rox,120,rk.cvs.width*1.7,rk.cvs.height*1.7);
     for(let k=0;k<6;k++){const a=((frame+k*22)%140)/140;ell(c,150+(rk.smoke[0]+rk.ox)*1.7+Math.sin(a*6+k)*3,120+(rk.smoke[1]+rk.oy)*1.7-a*45,2+a*6,2+a*5,'rgba(210,210,220,'+(.5-a*.45)+')')}
-    ell(c,96,186,12,3,'rgba(0,0,0,.3)');{const ks=ctCharSprite('kuku','down',0);c.drawImage(ks,69,90,54,96)}}
+    ell(c,96,186,12,3,'rgba(0,0,0,.3)');cutPerson(c,'kuku','down',69,90,54,96);}
   cutFx(c,i===2||i===3);
 }
 /* ---------- map ---------- */

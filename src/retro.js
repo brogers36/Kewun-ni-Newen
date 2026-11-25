@@ -188,6 +188,8 @@ function drawPortal(c,x,y){
   for(let k=0;k<8;k++){const a=t/14+k*.785;R(c,Math.round(x+Math.cos(a)*13),Math.round(y-6+Math.sin(a)*15),2,2,k%2?'#e8d0ff':'#9ad0ff')}
   if(t%50<4)ell(c,x,y-6,15,18,'rgba(255,255,255,.18)');
 }
+/* a person drawn large in a cutscene, filling the box x,y,w,h */
+function cutPerson(c,look,dir,x,y,w,h){c.drawImage(ctCharSprite(look,dir,0),x,y,w,h)}
 /* where a ngen's eyes and mouth sit, measured up from its feet at size 1 (the eye beams at the end of a battle start there) */
 function ngenFace(v){return {cx:0,ex:3,ey:80,my:71}}
 function drawNgen(c,x,y,s,t,v){
