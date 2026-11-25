@@ -16,8 +16,8 @@ addEventListener('keydown',e=>{
 });
 addEventListener('keyup',e=>{const d=DK[e.key];if(d)held[d]=0});
 addEventListener('pointerdown',()=>auInit(),{capture:true});
-function pressA(){if(active)active.a();else if(mode==='map')interact();else if(mode==='palin'&&PG)palinSwing()}
-function pressB(){if(mode==='cut'){skipCut();return}if(active){active.b&&active.b()}else if(mode==='map')openPause();else if(mode==='palin'&&PG)palinQuit()}
+function pressA(){if(mode==='battle'&&B&&B.defA&&!B.defA.done)return defSkip();if(active)active.a();else if(mode==='map')interact();else if(mode==='palin'&&PG)palinSwing()}
+function pressB(){if(mode==='battle'&&B&&B.defA&&!B.defA.done)return defSkip();if(mode==='cut'){skipCut();return}if(active){active.b&&active.b()}else if(mode==='map')openPause();else if(mode==='palin'&&PG)palinQuit()}
 document.querySelectorAll('#dpad button').forEach(b=>{const d=b.dataset.d;
   b.addEventListener('pointerdown',e=>{e.preventDefault();held[d]=1;if(active&&active.mv)active.mv(d==='up'||d==='left'?-1:1)});
   for(const ev of ['pointerup','pointerleave','pointercancel'])b.addEventListener(ev,()=>held[d]=0)});

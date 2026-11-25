@@ -737,7 +737,8 @@ function renderBattle(){
     if(e.dead){e.fadeT--;c.globalAlpha=Math.max(0,e.fadeT/20)}
     if(e.hit>0&&e.hit--%4<2)c.globalAlpha=.25;
     let ly=0,ls=1;if(e.lunge>0){e.lunge--;ly=Math.round(Math.sin(e.lunge/16*Math.PI)*10);}
-    c.save();c.scale(-1,1);c.drawImage(cvs,-(cx+Math.ceil(cvs.width/2)),y+ly);c.restore();c.globalAlpha=1;
+    e._cx=cx;e._y=y;e._bse=bse;const inDef=B.defA&&B.defA.e===e;
+    if(!inDef){c.save();c.scale(-1,1);c.drawImage(cvs,-(cx+Math.ceil(cvs.width/2)),y+ly);c.restore()}c.globalAlpha=1;
     if(e.sl>0){c.fillStyle='rgba(40,40,120,.25)';c.fillRect(cx-sz/2,y,sz,cvs.height)}
     if(!B.ngenA&&e.hit===13)B.heroA=16;
     if(!B.ngenA&&e.hit>6&&e.hit<=14){const sp=(14-e.hit)/8,cyS=y+cvs.height/2;
@@ -748,6 +749,7 @@ function renderBattle(){
       c.beginPath();c.moveTo(cx-sz*.5,cyS+sz*.3-sp*sz*.1);c.lineTo(cx+sz*.5-sp*sz*.2,cyS-sz*.35);c.stroke();
       for(let k2=0;k2<4;k2++)R(c,Math.round(cx+Math.cos(k2*1.7+sp*5)*sz*.4),Math.round(cyS+Math.sin(k2*2.3+sp*4)*sz*.3),2,2,'#fff8d0');
       c.restore()}
+    if(inDef)return;
     if(!e.dead&&(e.stag||(e.hp<=0&&typeof quizPend==='function'&&quizPend(e)))){
       // staggered, waiting for the ngen's question: pulse red/orange
       const ph=Math.floor(frame/7)%2,[tcv,tg]=mk(cvs.width,cvs.height);
@@ -764,8 +766,8 @@ function renderBattle(){
     const bw=Math.max(32,Math.min(76,sz*.8)),bx=Math.round(cx-bw/2),by=/^llufu/.test(e.t)?Math.max(bse+4,Math.max(4,bse-cvs.height+4)+cvs.height-1):bse+4;   // a boss taller than the stage keeps its bar below its feet
     const col=!tall&&!ET[e.t].boss&&(bossI<0?n>1:others.length>1)&&!(fi>=0&&bossI<0&&!grd.length);
     const bw2=col?28:bw,bx2=col?Math.round(cx+sz/2+6):bx,by2=col?bse-10:by;
-    if(!window.FILM){R(c,bx2-1,by2-1,bw2+2,5,'#181018');R(c,bx2,by2,bw2,3,'#4a1a1f');R(c,bx2,by2,Math.max(0,Math.round(bw2*e.hp/e.max)),3,'#f07028');R(c,bx2,by2,Math.max(0,Math.round(bw2*e.hp/e.max)),1,'#ffb070');}
-    if(!window.FILM){if(col)OV.push(()=>txt(e.label,bx2,by2-3,'#ffffff',e.label.length>11?9:12,'left'));else OV.push(()=>txt(e.label,cx,by2+13,'#ffffff',13,'center'))}
+    if(!window.FILM&&!inDef){R(c,bx2-1,by2-1,bw2+2,5,'#181018');R(c,bx2,by2,bw2,3,'#4a1a1f');R(c,bx2,by2,Math.max(0,Math.round(bw2*e.hp/e.max)),3,'#f07028');R(c,bx2,by2,Math.max(0,Math.round(bw2*e.hp/e.max)),1,'#ffb070');}
+    if(!window.FILM&&!inDef){if(col)OV.push(()=>txt(e.label,bx2,by2-3,'#ffffff',e.label.length>11?9:12,'left'));else OV.push(()=>txt(e.label,cx,by2+13,'#ffffff',13,'center'))}
     const tg=B.cursor==='all'||B.cursor===B.en.indexOf(e);
     if(tg&&frame%20<15){const ay=y-8+Math.round(Math.sin(frame/5)*2);for(let k=0;k<5;k++){R(c,cx-5+k,ay+k,11-k*2,1,'#ffe040');R(c,cx-6+k,ay+k,1,1,'#181018');R(c,cx+5-k,ay+k,1,1,'#181018')}R(c,cx-6,ay-1,13,1,'#181018')}
   });
@@ -818,6 +820,7 @@ function renderBattle(){
   B.pops=B.pops.filter(p=>p.t>0);for(const p of B.pops){p.t--;const pp=p;OV.push(()=>txt(pp.txt,pp.x,pp.y-(50-pp.t)*.45,pp.col,20,'center'))}
   if(B.flash>0){c.fillStyle='rgba(255,255,255,'+(B.flash/16)+')';c.fillRect(0,0,LW,LH);B.flash--}
   if(B.red>0){c.fillStyle='rgba(255,0,0,'+(B.red/30)+')';c.fillRect(0,0,LW,LH);B.red--}
+  if(B.defA&&!B.defA.done)drawDefeat(c);
   if(B.ngenA&&!B.ngenA.done&&B.ngenA.kind==='final'){const A=B.ngenA;A.t++;
     const NG=[[undefined,'120,220,255'],['mawida','120,255,150'],['pewen','255,200,110'],['kuruf','225,240,255'],['lelfun','255,230,120']];
     if(S.flags.epu_won)NG.push(['epunamun','255,48,40']);   // the Epunamun joins the five ngen, with red fire

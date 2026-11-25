@@ -43,6 +43,7 @@ function bossBlock(e){const T=ET[e.t];if(!T.boss)return false;if(e.down||e.sl||e
 const quizPend=e=>!!B&&ET[e.t].boss&&!B.qok&&!/^ngoyman[1-4]$/.test(e.t)&&!(B.o.chain==='llufu'&&e.t!=='llufu5');
 function battleMenu(){
   if(B&&B.ngenA&&!B.ngenA.done)return;
+  if(B&&B.defA&&!B.defA.done)return;
   if(B&&B.o.tut&&tutStep())return;
   if(B&&B.lanPending){const le=B.lanPending;B.lanPending=null;if(!le.dead)return lanKewun(le)}
   if(B&&B.llawPending){const le=B.llawPending;B.llawPending=null;if(!le.dead&&le.hp>0)return llawKewun(le)}
@@ -566,6 +567,7 @@ function victory(){
   {const qb=B.en.find(e=>ET[e.t].boss);
    if(qb&&!B.qok){qb.dead=false;qb.fadeT=0;qb.hit=0;qb.hp=1;qb.stag=1;return qb.t==='llawfen'?llawLast(qb):ngenQuiz(qb)}}
   {const vb=B.en.find(e=>ET[e.t].boss);
+   if(vb&&!B.defA&&typeof DEFEAT!=='undefined'&&DEFEAT[vb.t]){defStart(vb);return}   // the Santiago wardens and the Yewen come apart on screen
    if(vb&&!B.ngenA&&B.o.chain!=='llufu'&&vb.t!=='epunamun'){
      if(vb.t==='ngoyman5'){vb.stag=1;B.ngenA={t:0,e:vb,kind:'final'};document.getElementById('dlg').style.display='none';active=null;sfx('cast');return}
      if(!/^ngoyman/.test(vb.t)){
@@ -573,6 +575,7 @@ function victory(){
        if(v){vb.stag=1;B.ngenA={t:0,e:vb,v};document.getElementById('dlg').style.display='none';active=null;sfx('cast');return}}}
    if(vb&&vb.hp<=0&&!vb.dead){vb.dead=true;vb.fadeT=20}}
   if(B.ngenA&&!B.ngenA.done)return;
+  if(B.defA&&!B.defA.done)return;
   const xp=B.en.reduce((a,e)=>a+ET[e.t].xp,0);let gold=B.en.reduce((a,e)=>{const g=ET[e.t].gold;return a+g[0]+rnd(g[1]-g[0]+1)},0);
   if(S.pw.gold){gold*=2;S.pw.gold=0}
   S.xp+=xp;S.gold+=gold;
