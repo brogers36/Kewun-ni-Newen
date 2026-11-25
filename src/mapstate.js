@@ -258,6 +258,7 @@ function loadMap(id,x,y,quiet){TALKER=null;
   if(S.flags.lelfun)for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++)if(grid[yy][xx]==='D')grid[yy][xx]=M.floor;
   if(id==='l_ruka2'&&typeof stgoOpen==='function'&&stgoOpen())grid[3][7]='@';
   buildLayers();
+  if(M.region==='santiago'&&typeof swCheck==='function')swCheck();   // older saves: rebuild the Santiago progress flags before placing the wardens
   ents=[];FLYHELD=[];P.x=x;P.y=y;
   const [px0,py0]=placeNear(x,y);P.x=px0;P.y=py0;P.fx=P.x;P.fy=P.y;P.moving=false;
   for(const e0 of M.ents||[]){
