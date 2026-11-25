@@ -20,7 +20,7 @@ MAPS.s_plaza.ents.push({id:'nacho',kind:'npc',look:'nacho',x:26,y:13,dir:'up',fi
 function nicoTalk(){const en=S.gloss==='en';
   say([L('Nico','Mari mari!','«Hola. Soy Nico, de Santiago. Mi chuchu es de este lof, y vine a conocer a la familia.»','"Hi. I\'m Nico, from Santiago. My chuchu is from this lof, and I came to meet the family."'),
     N('«Quiero presentarme con el lonko como se debe, en mapudungun. Pero me pongo nervioso y se me olvida todo. ¿Me ayudas a ensayar?»','"I want to introduce myself to the lonko properly, in Mapudungun. But I get nervous and forget everything. Will you help me practise?"')],()=>
-    choose(L('Nico','','¿Ensayan juntos?','Practise together?'),[{m:'May',g:en?'Yes, let us practise':'Sí, ensayemos',v:1},{m:'Ka mew',g:en?'Later':'Después',v:0}],v=>{
+    choose(L('Nico','','¿Ensayan juntos?','Practise together?'),[{m:'May',g:en?'Yes, let us practise':'Sí, ensayemos',v:1},{m:'Wüla feman',g:en?'Later':'Después',v:0}],v=>{
       if(!v)return say([L('Nico','','«Ya, aquí te espero. Mari mari... mari mari...»','"OK, I\'ll wait here. Mari mari... mari mari..."')]);
       S.flags.nico_q=1;persist();
       convo([{q:N('Primero, el saludo al llegar donde el lonko.','First, the greeting when he reaches the lonko.'),o:['Mari mari, lonko.','Pewkayal, lonko.','Chaltu may, lonko.'],a:'Mari mari, lonko.',hint:['Pewkayal es para despedirse y chaltu may para dar las gracias. Al llegar se dice mari mari.','Pewkayal is for leaving and chaltu may is for thanking. On arriving you say mari mari.']},
