@@ -1606,10 +1606,10 @@ const TABLETS={
        {q:N('¿Cómo se dice «puma»?','How do you say «puma»?'),o:['pangi','luan','trewa'],a:'pangi'}]},
   rakizuam:{t:N('Cómo te sientes: -le-, -külen','How you feel: -le-, -külen'),lines:[
     N('-le- y -külen dicen cómo estás ahora mismo.','-le- and -külen say how you are right now.'),
-    L('','Kümelen. · Ayiwkülen. · Weñangkülen.','Estoy bien. · Estoy feliz. · Estoy triste.','I am well. · I am happy. · I am sad.'),
+    L('','Kümelen. · Ayiwkülen. · Weñankülen.','Estoy bien. · Estoy feliz. · Estoy triste.','I am well. · I am happy. · I am sad.'),
     N('El olvido se alimenta de la tristeza callada: decir cómo te sientes también es newen.','The forgetting feeds on silent sorrow: saying how you feel is newen too.')],
    qs:[{q:L('','Ayiwkülen.','¿Qué significa?','What does it mean?'),o:['Estoy triste.','Estoy feliz.','Estoy cansado.'],a:'Estoy feliz.'},
-       {q:N('¿Cómo se dice «estoy triste»?','How do you say «I am sad»?'),o:['Weñangkülen.','Kümelen.','Ayiwkülen.'],a:'Weñangkülen.'}]}};
+       {q:N('¿Cómo se dice «estoy triste»?','How do you say «I am sad»?'),o:['Weñankülen.','Kümelen.','Ayiwkülen.'],a:'Weñankülen.'}]}};
 const TAB_IDS=Object.keys(TABLETS);
 const tabCount=()=>TAB_IDS.filter(t=>S.flags['tab_'+t]).length;
 function tabletTalk(id){

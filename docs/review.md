@@ -580,3 +580,7 @@ Brandon: comer pan es **kofketun** (kofke + -tu-). Cambios:
 - Nütram de Rayen (Pewenche): «Iyaymi kofke?» → **«Kofketuaymi?»**; respuesta correcta «May, iyan.» → **«May, kofketuan.»**; distractor «May, iyay.» → «May, kofketuay.».
 - Santiago, pedir el pan: el distractor «Kofke iyan.» → «Kofketuan.».
 - Las lecciones generales de iya- («comer», sin objeto) no cambian.
+
+## «Estoy triste» = weñankülen (24 nov.)
+
+Brandon: «estoy triste» es **weñankülen** (con n, no ng). Corregido en la lección de sentimientos (trawün): la línea de ejemplo y la respuesta de «¿Cómo se dice "estoy triste"?».
