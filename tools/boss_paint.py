@@ -1226,6 +1226,45 @@ def mhair_back(c, x, y, s=1.0, hairflow=1, f=0):
         line(c, [(x + dx * 1.3 + hairflow * S(1.5), y + S(7)), (x + dx * 1.7 + hairflow * S(3), y + S(16))], R['mgold'][5], 'mhairb')
         c.px(int(x + dx * 1.7 + hairflow * S(3)), int(y + S(16)), R['mgold'][7])
 
+def mface_relief(c, x, y, s, angry=True):
+    """the face shaded from a relief map, the way the fillantü's head is: an egg for the skull, then brow ridge, sockets,
+    nose, cheekbones, hollows, folds, lips and chin added as soft bumps and dents, lit from the upper left with a fine ramp"""
+    Sk = R['mskin']; u = s
+    Y_, X_ = np.mgrid[0:yp.H, 0:yp.W].astype(float)
+    DX = (X_ - x) / u; DY = (Y_ - y) / u
+    def g(cx0, cy0, sx, sy, amp): return amp * u * np.exp(-(((DX - cx0) / sx) ** 2 + ((DY - cy0) / sy) ** 2))
+    def gl(x0, y0, x1, y1, w, amp):
+        L = max(.01, math.hypot(x1 - x0, y1 - y0)); ux, uy = (x1 - x0) / L, (y1 - y0) / L
+        t = np.clip(((DX - x0) * ux + (DY - y0) * uy) / L, 0, 1)
+        return amp * u * np.exp(-((DX - (x0 + ux * L * t)) ** 2 + (DY - (y0 + uy * L * t)) ** 2) / w ** 2)
+    jaw = np.clip((DY - 4.5) / 6, 0, 1)
+    rx = 8.3 - jaw ** 1.4 * 4.2                                            # the jaw narrows evenly to a broad chin
+    e = 1 - (DX / rx) ** 2 - ((DY - 1.2) / 10.2) ** 2
+    m = e > 0
+    h = np.sqrt(np.clip(e, 0, 1)) * 5.6 * u
+    h += gl(-6.8, -2.7, 6.8, -2.7, .8, 1.0)                                # brow ridge
+    if angry: h += g(0, -3.2, 1.2, .9, .5)                                 # knotted between the brows
+    h += gl(0, -2.2, 0, 2.2, .75, .8) + g(0, 2.5, .95, .8, .6)             # bridge and tip of the nose
+    h += g(-1.45, 3.0, .7, .55, .35) + g(1.45, 3.0, .7, .55, .35)          # the wings of the nostrils
+    h -= g(-3.6, -.5, 2.1, 1.5, 1.7) + g(3.6, -.5, 2.1, 1.5, 1.7)          # eye sockets
+    h += g(-3.6, -.4, 1.4, .8, .5) + g(3.6, -.4, 1.4, .8, .5)              # the eyeballs inside them
+    h += g(-5.4, 2.2, 1.9, 1.0, .9) + g(5.4, 2.2, 1.9, 1.0, .9)            # cheekbones
+    h -= g(-5.0, 5.4, 1.6, 1.6, .8) + g(5.0, 5.4, 1.6, 1.6, .8)            # the hollows under them
+    h -= g(-7.5, -3.4, 1.2, 2.0, .45) + g(7.5, -3.4, 1.2, 2.0, .45)        # temples
+    h -= gl(-1.9, 3.3, -3.7, 6.3, .45, .55) + gl(1.9, 3.3, 3.7, 6.3, .45, .55)   # folds from nose to mouth
+    h += gl(-2.4, 5.9, 2.4, 5.9, .55, .35) - gl(-2.6, 5.3, 2.6, 5.3, .3, .3)     # the lower lip, the line of the mouth
+    h += g(0, 4.4, 1.6, .5, .2)                                            # the upper lip
+    h += g(0, 9.0, 2.4, 1.3, .55)                                          # chin
+    if angry: h -= gl(-2.6, -5.1, 2.6, -5.1, .3, .25) + gl(-2.4, -6.1, 2.4, -6.1, .3, .2)   # forehead furrows
+    gx = np.roll(h, -1, 1) - np.roll(h, 1, 1); gy = np.roll(h, -1, 0) - np.roll(h, 1, 0)
+    nz = 2.0; nl = np.sqrt(gx ** 2 + gy ** 2 + nz ** 2)
+    sh = (-gx * -.55 - gy * -.62 + nz * .56) / nl
+    ys, xs = np.nonzero(m)
+    v = sh[ys, xs] * 1.25 + .06 - DX[ys, xs] / 16 * .14 - np.clip(DY[ys, xs] - 6, 0, 9) * .015
+    idx = np.clip(np.floor(v * (len(Sk) - 1) + (yp.BAYER[ys % 4, xs % 4] - .5) * .7).astype(int), 0, len(Sk) - 1)
+    c.rgb[ys, xs] = np.array(Sk)[idx]; c.a[ys, xs] = True; c.part[ys, xs] = 'mface'
+    return m
+
 def mhead(c, x, y, s=1.0, f=0, angry=True, crown=True, hairflow=1):
     """the head seen from the front, painted large: wet hair, heavy brow and brows, lidded gold eyes, broad nose, lips,
     sea-lion whiskers and fangs, ears with gold hoops, droplets running down, a beard to the collarbones, the gold crown"""
@@ -1242,7 +1281,7 @@ def mhead(c, x, y, s=1.0, f=0, angry=True, crown=True, hairflow=1):
                 if (xx - X) ** 2 + (yy - Y) ** 2 <= rr * rr:
                     c.px(xx, yy, col)
                     if part and 0 <= yy < yp.H and 0 <= xx < yp.W: c.part[yy, xx] = part
-    blob(c, Hh, lambda d: d.polygon(smooth_poly([(x - S(9), y - S(1)), (x - S(7), y - S(9)), (x + S(7), y - S(9)), (x + S(9), y - S(1)), (x + S(9.6), y + S(5)), (x - S(9.6), y + S(5))], 4), fill=1), bulge=1.1, lift=.05, name='mhair')
+    blob(c, Hh, lambda d: d.polygon(smooth_poly([(x - S(9), y - S(1)), (x - S(7.4), y - S(10.6)), (x + S(7.4), y - S(10.6)), (x + S(9), y - S(1)), (x + S(9.6), y + S(5)), (x - S(9.6), y + S(5))], 4), fill=1), bulge=1.1, lift=.05, name='mhair')
     # ears, half hidden in the hair, with gold hoops
     for side in (-1, 1):
         blob(c, Sk, lambda d, side=side: d.ellipse([*P(side * 8.6 - 1.6, -1.2), *P(side * 8.6 + 1.6, 3.4)], fill=1), bulge=1.0, lift=.15 if side < 0 else -.05, name='mear')
@@ -1250,7 +1289,7 @@ def mhead(c, x, y, s=1.0, f=0, angry=True, crown=True, hairflow=1):
         X, Y = P(side * 8.8, 4.2)
         for a in range(0, 360, 30):
             c.px(int(X + math.cos(math.radians(a)) * S(1.1)), int(Y + math.sin(math.radians(a)) * S(1.1)), G[6] if a < 180 else G[3])
-    blob(c, Sk, lambda d: d.polygon(smooth_poly([(x - S(7), y - S(7)), (x + S(7), y - S(7)), (x + S(8.2), y + S(1)), (x + S(6.2), y + S(7.6)), (x + S(2.6), y + S(10)), (x - S(2.6), y + S(10)), (x - S(6.2), y + S(7.6)), (x - S(8.2), y + S(1))], 5), fill=1), bulge=1.3, lift=.2, name='mface')
+    mface_relief(c, x, y, s, angry)
     fm = c.part == 'mface'
     # warm flush over the cheeks and the nose, a cool shadow down the far side
     for (cx_, cy_, r, k, col) in [(-4.6, 3.4, 2.6, .25, (200, 96, 70)), (4.6, 3.4, 2.4, .2, (170, 80, 60)), (0, 2.6, 1.6, .18, (210, 110, 80)), (6.4, 2, 3, .22, (40, 30, 50))]:
@@ -1259,19 +1298,17 @@ def mhead(c, x, y, s=1.0, f=0, angry=True, crown=True, hairflow=1):
         c.rgb[m] = np.clip(c.rgb[m] * (1 - k) + np.array(col) * k, 0, 255).astype(np.uint8)
     # hair parted over the brow: wet locks across the forehead, a strand falling over the face
     for side in (-1, 1):
-        taper(c, [(x + side * S(.8), y - S(8.6)), (x + side * S(5), y - S(7.2)), (x + side * S(8), y - S(2.4))], S(3.2), S(1.4), Hh, lift=.08 if side < 0 else -.05, name='mhair', bulge=1.0)
-    taper(c, [(x - S(1.6), y - S(7.6)), (x - S(2.8), y - S(4)), (x - S(2.2), y - S(1.6))], S(1.3), S(.6), Hh, lift=.1, name='mhair', bulge=1.0)
-    for side in (-1, 1): line(c, [P(side * 2, -8.4), P(side * 5, -7.4), P(side * 7.4, -3.4)], Hh[6], 'mhair')
+        taper(c, [(x + side * S(4.4), y - S(9.4)), (x + side * S(7), y - S(7.4)), (x + side * S(8.4), y - S(2.4))], S(2.6), S(1.2), Hh, lift=.08 if side < 0 else -.05, name='mhair', bulge=1.0)
+    for side in (-1, 1): line(c, [P(side * 4.8, -9.2), P(side * 7, -7.4), P(side * 8, -3.4)], Hh[6], 'mhair')
     # forehead: the brow ridge, furrows, the heavy brows
     if angry:
         for dy in (-4.6, -5.6): line(c, [P(-2.8, dy), P(-.6, dy + .5), P(1.4, dy)], Sk[3], 'mface')
         line(c, [P(-.4, -4.2), P(-.2, -2.8)], Sk[2], 'mface'); line(c, [P(.6, -4.2), P(.5, -2.8)], Sk[3], 'mface')
     for side in (-1, 1):
         tilt = (.9 if angry else -.3)
-        for j in range(5):                                                 # each brow: hairs combed outward
-            a0 = P(side * (1.2 + j * 1.2), -3.2 + tilt * (1 - j / 4) * .9)
-            a1 = P(side * (2.2 + j * 1.25), -3.9 + tilt * (1 - j / 4) * .9 - .2 * (j == 4))
-            line(c, [a0, a1], Hh[1] if j % 2 else Hh[3])
+        bpts = [(x + side * S(1.1), y + S(-3.0 + tilt * .9)), (x + side * S(3.8), y + S(-3.7 + tilt * .35)), (x + side * S(6.8), y + S(-3.2))]
+        taper(c, bpts, S(1.5), S(.7), R['mhair'], lift=.15 if side < 0 else 0, name='mbrow', bulge=1.0)   # each brow, thick at the nose
+        line(c, [(px_, py_ - S(.45)) for px_, py_ in bpts], R['mhair'][6] if side < 0 else R['mhair'][4], 'mbrow')
         line(c, [P(side * 1.4, -2.3 + tilt * .7), P(side * 6.6, -2.6)], Sk[1], 'mface')   # the shadow under the ridge
     # the eyes: socket, upper lid, iris ring, slit pupil, two catchlights, lower lid, the lines at the corners
     for side in (-1, 1):
@@ -1303,7 +1340,6 @@ def mhead(c, x, y, s=1.0, f=0, angry=True, crown=True, hairflow=1):
         yy = y - S(1.6) + k
         c.px(int(x - S(.7)), int(yy), Sk[8] if k < S(2.4) else Sk[7]); c.px(int(x + S(.9)), int(yy), Sk[3]); c.px(int(x + S(1.3)), int(yy), Sk[4])
     for side in (-1, 1):
-        blob(c, Sk, lambda d, side=side: d.ellipse([*P(side * 1.9 - 1, 1.6), *P(side * 1.9 + 1, 3.4)], fill=1), bulge=1.0, lift=.2 if side < 0 else -.05, name='mface')
         px(side * 1.3, 3.1, Sk[0]); px(side * 1.6, 3.1, Sk[1])
     dot(-.2, 2.2, .45, Sk[8]); px(0, 3.4, Sk[2])
     for side in (-1, 1):                                                   # the folds from nose to mouth
@@ -1324,38 +1360,34 @@ def mhead(c, x, y, s=1.0, f=0, angry=True, crown=True, hairflow=1):
         c.px((mx0 + mx1) // 2, my + 1, Sk[8])
     # moustache sweeping down into the beard
     for side in (-1, 1):
-        taper(c, [(x + side * S(.4), y + S(3.9)), (x + side * S(2.8), y + S(4.5)), (x + side * S(4.4), y + S(7.4))], S(2.4), S(1.1), Hh, lift=.12 if side < 0 else -.04, name='mbeard', bulge=1.0)
-        line(c, [P(side * 1, 4.1), P(side * 3, 4.8), P(side * 4.2, 6.8)], Hh[6] if side < 0 else Hh[4], 'mbeard')
+        taper(c, [(x + side * S(.5), y + S(4.0)), (x + side * S(2.4), y + S(4.4)), (x + side * S(3.4), y + S(6.6))], S(1.6), S(.8), Hh, lift=.12 if side < 0 else -.04, name='mbeard', bulge=1.0)
+        line(c, [P(side * 1, 4.1), P(side * 2.4, 4.6), P(side * 3.2, 6.2)], Hh[6] if side < 0 else Hh[4], 'mbeard')
     # the beard: below the lip, combed into strands with gold beads, a braided tip in a gold ring
-    blob(c, Hh, lambda d: d.polygon(smooth_poly([(x - S(7.4), y + S(4)), (x - S(3.4), y + S(7.4)), (x + S(3.4), y + S(7.4)), (x + S(7.4), y + S(4)), (x + S(6), y + S(9.6)), (x + S(3), y + S(12.6)), (x, y + S(14.6)), (x - S(3), y + S(12.6)), (x - S(6), y + S(9.6))], 4), fill=1), bulge=1.05, lift=.1, name='mbeard')
+    blob(c, Hh, lambda d: d.polygon(smooth_poly([P(-8.3, .6), P(-7.6, 5), P(-4.8, 7.4), P(-2.2, 7.0), P(0, 7.3), P(2.2, 7.0), P(4.8, 7.4), P(7.6, 5), P(8.3, .6), P(7.8, 9.4), P(3.4, 12.8), P(0, 14.8), P(-3.4, 12.8), P(-7.8, 9.4)], 4), fill=1), bulge=1.05, lift=.1, name='mbeard')
     for k in range(-5, 6):
-        line(c, [P(k * 1.25, 7.4), P(k * 1.0, 10), P(k * .55, 12.8)], Hh[6] if k % 2 else Hh[1], 'mbeard')
+        line(c, [P(k * 1.3, 7.8), P(k * 1.05, 10.4), P(k * .55, 13)], Hh[6] if k % 2 else Hh[1], 'mbeard')
     for (dx, dy) in [(-3.4, 9.6), (3, 10.4), (0, 8.6)]: dot(dx, dy, .45, G[6], 'mbead'); px(dx + .3, dy + .3, G[2])
     X, Y = P(0, 13.6); c.rect(X - int(S(.9)), Y, max(2, int(S(1.8))), max(2, int(S(1))), G[5]); c.px(X - int(S(.9)), Y, G[7])
-    # sea-lion whiskers fanning out from under the nose
-    for side in (-1, 1):
-        for j in range(2):
-            line(c, [P(side * 2.6, 3.8 + j * .6), P(side * (6.4 + j * .5), 3.4 + j * 1.4), P(side * (8.6 + j * .3), 3.2 + j * 2)], (196, 184, 160) if side < 0 else (128, 118, 104))
     # droplets running down from the wet hair, glints on the brow and the nose
     for (dx, dy, n) in [(-5, -5.6, 3), (3.4, -5.4, 2), (-6.8, -1, 3)]:
         for j in range(n): px(dx, dy + j * .7, Sk[8] if j == n - 1 else Sk[6])
     for (dx, dy) in [(-3.2, -6), (-2.6, -5.6), (2.8, -5.2)]: px(dx, dy, Sk[8])
     if crown:                                                              # crown: a filigree band, five points, set with rubies and teal stones
-        blob(c, G, lambda d: d.polygon([(x - S(8.4), y - S(6)), (x + S(8.4), y - S(6)), (x + S(8.8), y - S(9.6)), (x - S(8.8), y - S(9.6))], fill=1), bulge=1.1, lift=.3, name='mcrown')
-        line(c, [P(-8, -9.2), P(8, -9.2)], G[7], 'mcrown'); line(c, [P(-8, -6.4), P(8, -6.4)], G[1], 'mcrown')
+        blob(c, G, lambda d: d.polygon([(x - S(8.4), y - S(2.4) - S(6)), (x + S(8.4), y - S(2.4) - S(6)), (x + S(8.8), y - S(2.4) - S(9.6)), (x - S(8.8), y - S(2.4) - S(9.6))], fill=1), bulge=1.1, lift=.3, name='mcrown')
+        line(c, [P(-8, -11.6), P(8, -11.6)], G[7], 'mcrown'); line(c, [P(-8, -8.8), P(8, -8.8)], G[1], 'mcrown')
         for k in range(5):
             px_ = x - S(8) + k * S(4)
             hh = S(7) if k == 2 else S(4.6) if k in (1, 3) else S(3.6)
-            blob(c, G, lambda d, px_=px_, hh=hh: d.polygon([(px_ - S(1.8), y - S(9)), (px_ + S(1.8), y - S(9)), (px_ + S(.3), y - S(9) - hh), (px_, y - S(9.4) - hh), (px_ - S(.3), y - S(9) - hh)], fill=1), bulge=1.15, lift=.3, name='mcrown')
-            X, Y = int(px_), int(y - S(9.4) - hh); c.px(X, Y, G[7]); c.px(X, Y + 1, G[6])
+            blob(c, G, lambda d, px_=px_, hh=hh: d.polygon([(px_ - S(1.8), y - S(2.4) - S(9)), (px_ + S(1.8), y - S(2.4) - S(9)), (px_ + S(.3), y - S(2.4) - S(9) - hh), (px_, y - S(2.4) - S(9.4) - hh), (px_ - S(.3), y - S(2.4) - S(9) - hh)], fill=1), bulge=1.15, lift=.3, name='mcrown')
+            X, Y = int(px_), int(y - S(2.4) - S(9.4) - hh); c.px(X, Y, G[7]); c.px(X, Y + 1, G[6])
         for k, gx in enumerate([-6, -3, 0, 3, 6]):                          # the stones in the band
             gr = R['ruby'] if k % 2 == 0 else R['teal']
-            X, Y = P(gx, -7.8); r = max(1, int(S(.9)))
+            X, Y = P(gx, -10.2); r = max(1, int(S(.9)))
             for yy in range(Y - r, Y + r + 1):
                 for xx in range(X - r, X + r + 1):
                     if (xx - X) ** 2 + (yy - Y) ** 2 <= r * r + .5: c.px(xx, yy, gr[2 + (yy < Y) + (xx < X)]); c.part[min(yp.H - 1, max(0, yy)), min(yp.W - 1, max(0, xx))] = 'mgem'
             c.px(X - r + 1, Y - r + 1, gr[5])
-        glow(c, x, y - S(14.5), max(1.0, S(1.2)), R['gglow2'])
+        glow(c, x, y - S(2.4) - S(14.5), max(1.0, S(1.2)), R['gglow2'])
 
 def _mus(c, base, box, lift, name, ramp=None):
     m = c.mask(lambda d: d.ellipse(box, fill=1)) & base
@@ -1381,6 +1413,45 @@ def mhand_open(c, x, y, s, lift):
         taper(c, [p0, p1, p2], S(1.8), S(1.2), Sk, lift=lift + .05, name='mfist', bulge=1.1)
         c.px(int(p2[0]), int(p2[1]), R['kbone'][2]); c.px(int(p1[0]), int(p1[1]) - 1, Sk[7])
     taper(c, [(x - S(1), y + S(2)), (x - S(3.4), y + S(4)), (x - S(5), y + S(4.4))], S(2), S(1.3), Sk, lift=lift, name='mfist', bulge=1.1)
+def relief_light(c, m, h, ramp, name, DX, lift=0.0, tilt=16):
+    gx = np.roll(h, -1, 1) - np.roll(h, 1, 1); gy = np.roll(h, -1, 0) - np.roll(h, 1, 0)
+    nz = 2.0; nl = np.sqrt(gx ** 2 + gy ** 2 + nz ** 2)
+    sh = (-gx * -.55 - gy * -.62 + nz * .56) / nl
+    ys, xs = np.nonzero(m)
+    v = sh[ys, xs] * 1.25 + lift - DX[ys, xs] / tilt * .14
+    idx = np.clip(np.floor(v * (len(ramp) - 1) + (yp.BAYER[ys % 4, xs % 4] - .5) * .7).astype(int), 0, len(ramp) - 1)
+    c.rgb[ys, xs] = np.array(ramp)[idx]; c.a[ys, xs] = True; c.part[ys, xs] = name
+
+def mtorso_relief(c, x, y, s, arms='wide'):
+    """the chest modelled like the fillantü's head: a relief of pecs, deltoids, the sternum, the abdominal blocks,
+    obliques, serratus and collarbones over a broad dome, lit from the upper left with a fine ramp"""
+    u = s
+    Y_, X_ = np.mgrid[0:yp.H, 0:yp.W].astype(float)
+    DX = (X_ - x) / u; DY = (Y_ - y) / u
+    def g(cx0, cy0, sx, sy, amp): return amp * u * np.exp(-(((DX - cx0) / sx) ** 2 + ((DY - cy0) / sy) ** 2))
+    def gl(x0, y0, x1, y1, w, amp):
+        L = max(.01, math.hypot(x1 - x0, y1 - y0)); ux, uy = (x1 - x0) / L, (y1 - y0) / L
+        t = np.clip(((DX - x0) * ux + (DY - y0) * uy) / L, 0, 1)
+        return amp * u * np.exp(-((DX - (x0 + ux * L * t)) ** 2 + (DY - (y0 + uy * L * t)) ** 2) / w ** 2)
+    P = lambda dx, dy: (x + dx * s, y + dy * s)
+    m = c.mask(lambda d: [d.polygon(smooth_poly([P(-12, 0), P(12, 0), P(13, 8), P(10, 16), P(8.5, 24), P(-8.5, 24), P(-10, 16), P(-13, 8)], 5), fill=1),
+                          d.ellipse([*P(-15.2, -1.4), *P(-7.4, 8.2)], fill=1), d.ellipse([*P(7.4, -1.4), *P(15.2, 8.2)], fill=1)])
+    e = 1 - (DX / 15) ** 2 - ((DY - 10) / 18) ** 2
+    h = np.sqrt(np.clip(e, 0, 1)) * 4.2 * u
+    for sd in (-1, 1):
+        h += g(sd * 5.2, 5.4, 4.6, 3.3, 1.7)                               # pecs
+        h -= gl(sd * 1.2, 10.4, sd * 9.8, 8.6, .55, .7)                    # the crease under them
+        h += g(sd * 11.4, 3.2, 2.9, 3.4, 2.0)                              # deltoids
+        h -= gl(sd * 8.6, 1.2, sd * 9.4, 8.6, .5, .5)                      # between deltoid and pec
+        h += gl(sd * 1.6, 1.4, sd * 10.2, .6, .45, .5)                     # collarbones
+        for k in range(3): h += g(sd * (9.8 - k * .3), 9.4 + k * 2.2, .9, .6, .4)   # serratus
+        h += g(sd * 8.4, 17, 1.7, 4.2, .9)                                 # obliques
+        for yy in (12.8, 16.4, 20.0): h += g(sd * 2.4, yy, 1.9, 1.45, .95) # the abdominal blocks
+    h -= gl(0, 1.6, 0, 11, .5, .55) + gl(0, 11, 0, 23.5, .4, .45)          # sternum and the line down the belly
+    h -= g(0, .6, .9, .7, .6) + g(0, 22.6, .5, .45, .7)                    # the pit of the throat, the navel
+    relief_light(c, m, h, R['mskin'], 'mtorso', DX, lift=.08, tilt=26)
+    return m
+
 def mtorso(c, x, y, s=1.0, arms='wide', f=0, bone=False, heart=False):
     """a man's chest and arms rising from the sea lion's shoulders; y is the top of the chest"""
     Sk, G = R['mskin'], R['mgold']; S = lambda v: v * s
@@ -1423,23 +1494,14 @@ def mtorso(c, x, y, s=1.0, arms='wide', f=0, bone=False, heart=False):
     blob(c, Sk, lambda d: d.polygon([P(-4, -6), P(4, -6), P(5.5, 1), P(-5.5, 1)], fill=1), bulge=1.1, lift=.06, name='mneck')
     blob(c, Sk, lambda d: d.polygon(smooth_poly([P(-5, -2), P(5, -2), P(12, 2), P(10, 4), P(-10, 4), P(-12, 2)], 3), fill=1), bulge=1.0, lift=.08, name='mtrap')
     # the torso: broad shoulders, a deep chest, tapering into the waist where the fur begins
-    m_t = blob(c, Sk, lambda d: d.polygon(smooth_poly([P(-12, 0), P(12, 0), P(13, 8), P(10, 16), P(8.5, 24), P(-8.5, 24), P(-10, 16), P(-13, 8)], 5), fill=1), bulge=1.15, lift=.24, name='mtorso')
-    _mus(c, m_t | (c.part == 'marm'), [*P(-15, -1), *P(-7, 8)], .44, 'mdelt'); _mus(c, m_t | (c.part == 'marm'), [*P(7, -1), *P(15, 8)], .14, 'mdelt')
-    _mus(c, m_t, [*P(-11, 1), *P(.2, 11)], .46, 'mpec'); _mus(c, m_t, [*P(-.2, 1), *P(11, 11)], .18, 'mpec')
-    for i, yy in enumerate((11.5, 15.2, 18.9)):
-        _mus(c, m_t, [*P(-5, yy), *P(-.2, yy + 3.6)], .40 - i * .05, 'mabs'); _mus(c, m_t, [*P(.2, yy), *P(5, yy + 3.6)], .18 - i * .05, 'mabs')
+    m_t = mtorso_relief(c, x, y, s, arms)
     for side in (-1, 1):                                                   # obliques and the serratus at the flanks
-        _mus(c, m_t, [*P(side * 9.5 - 2.4, 12), *P(side * 9.5 + 2.4, 22)], .32 if side < 0 else .06, 'mobl')
         for k in range(3):
             X, Y = P(side * (9.6 - k * .4), 9 + k * 2.2)
             for j in range(max(2, int(S(2)))): c.px(int(X - side * j), int(Y + j // 2), Sk[2 if side < 0 else 1])
-    line(c, [P(-10, .8), P(-5, 1.8), P(-1, 1)], Sk[7], ('mtorso', 'mpec', 'mtrap')); line(c, [P(1, 1), P(5, 1.8), P(10, .8)], Sk[5], ('mtorso', 'mpec', 'mtrap'))   # collarbones
-    line(c, [P(-10, 1.9), P(-5, 2.9), P(-1, 2.2)], Sk[3], ('mtorso', 'mpec')); line(c, [P(1, 2.2), P(5, 2.9), P(10, 1.9)], Sk[2], ('mtorso', 'mpec'))
     for (dx, dy) in [(-7, 3.4), (-6.3, 3), (-8, 4.2), (-13, 1.6), (-12.4, 1.2), (-3.4, 12.2), (-3, 15.8)]:    # wet glints
         X, Y = P(dx, dy); c.px(int(X), int(Y), Sk[8])
     X, Y = P(0, 22.6); c.px(int(X), int(Y), Sk[1]); c.px(int(X), int(Y) + 1, Sk[3])                   # navel
-    line(c, [P(-.2, 2.6), P(-.1, 7), P(0, 10.6)], Sk[2], ('mtorso', 'mpec'))                          # the groove of the sternum
-    for side in (-1, 1): line(c, [P(side * 1, 10.6), P(side * 5, 11.2), P(side * 9.6, 9.4)], Sk[1 if side > 0 else 2], ('mpec', 'mtorso', 'mabs'))   # under the pecs
     for (a, b) in [((8.4, 3.2), (11.4, 7.4)), ((-4.8, 14.6), (-1.6, 16.6))]:                      # old scars from sea battles
         line(c, [P(*a), P(*b)], Sk[6], ('mpec', 'mabs', 'mtorso', 'mdelt')); line(c, [P(a[0] + .4, a[1] + .5), P(b[0] + .4, b[1] + .5)], Sk[2], ('mpec', 'mabs', 'mtorso', 'mdelt'))
     if not bone:                                                           # a string of shells across the collarbones
@@ -1551,8 +1613,8 @@ def mfinish(c, extra=()):
     occlude(c, ['mbody', 'mbody2', 'mfist', 'mfore'], ['water'], r=4, k=.55)
     occlude(c, ['mcrown'], ['mface', 'mhair'], r=2, k=.6)
     speculars(c, ['mcrown', 'mtorque', 'mband', 'mbone', 'mgem', 'mbody', 'mbody2'], thr=.86, col=(255, 248, 210))
-    speculars(c, ['mpec', 'mdelt', 'mabs', 'marm', 'mfore'], thr=.92, col=(250, 214, 178))
-    return finish(c, [('mface', 'mhair'), ('mbeard', 'mface'), ('mcrown', 'mface'), ('mcrown', 'mhair'), ('mtorso', 'mbody'), ('marm', 'mtorso'), ('mfist', 'marm'), ('mfist', 'mfore'), ('mfore', 'marm'),
+    speculars(c, ['mtorso', 'marm', 'mfore'], thr=.93, col=(250, 214, 178))
+    return finish(c, [('mface', 'mhair'), ('mbrow', 'mface'), ('mbeard', 'mface'), ('mcrown', 'mface'), ('mcrown', 'mhair'), ('mtorso', 'mbody'), ('marm', 'mtorso'), ('mfist', 'marm'), ('mfist', 'mfore'), ('mfore', 'marm'),
                       ('mpec', 'mabs'), ('mabs', 'mabs'), ('mpec', 'mpec'), ('mabs', 'mtorso'), ('mpec', 'mtorso'), ('mdelt', 'mpec'), ('mdelt', 'marm'), ('mobl', 'mabs'), ('mobl', 'mtorso'),
                       ('mneck', 'mtrap'), ('mbeard', 'mneck'), ('mbeard', 'mtorso'), ('mbeard', 'mpec'), ('mtorque', 'mtorso'), ('mtorque', 'mpec'), ('mband', 'mfore'),
                       ('mbody', 'water'), ('mbody2', 'water'), ('mbody', 'mbody2'), ('mbone', 'mtorso'), ('mbone', 'mpec'), ('mbone', 'mabs'), ('mkelp', 'mbone'), ('mfore', 'mbody'), ('mbodyfl', 'mbody'), ('mbody2fl', 'mbody2'), ('mtuft', 'mbody')] + list(extra),
