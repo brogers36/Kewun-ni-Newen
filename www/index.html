@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='40205b2-202611242059';
+window.KEWUN_BUILD='bbf6d4f-202611242105';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -7456,6 +7456,14 @@ function renderMap(){
     R(c,X-13,Y-1,26,9,'#2a1a10');R(c,X-12,Y,24,7,'#c8402a');for(let j=0;j<12;j++)R(c,X-12+j*2,Y+(j%2?1:5),1,1,'#f4e8c8');R(c,X-12,Y+3,24,1,'#2a1a10');
     R(c,X-12+Math.round(sw),Y+7,1,3,'#c8402a');R(c,X+11+Math.round(sw),Y+7,1,3,'#c8402a');
     OV.push(()=>txt('trawün',X,Y-3,'#ffe8a0',11,'center'))}
+  // city doors you can go into: a warm lit doorway, and a bobbing arrow while someone inside still needs you
+  if(M.urban&&M.doors)for(const k in M.doors){const D=M.doors[k],[qx,qy]=k.split(',').map(Number),X=qx*T-cx+8,Y=qy*T-cy+VY;
+    if(X<-30||X>LW+30||Y<-40||Y>LH+20)continue;
+    const a=(.42+.15*Math.sin(frame/14)).toFixed(2),g=c.createRadialGradient(X,Y-2,1,X,Y-2,16);g.addColorStop(0,'rgba(255,210,120,'+a+')');g.addColorStop(1,'rgba(255,210,120,0)');c.fillStyle=g;c.fillRect(X-17,Y-19,34,34);
+    const need={s_depto:'cena_ok',s_chuchu:'tel_ok',s_radio:'radio_ok'}[D.to];
+    if(need&&!S.flags[need]){const b=Math.round(Math.sin(frame/8)*2),ay=Y+T+4+b;   // an up-arrow on the pavement in front of the door, pointing in
+      R(c,X-1,ay,2,1,'#ffffff');R(c,X-2,ay+1,4,1,'#ffffff');R(c,X-3,ay+2,6,1,'#ffffff');R(c,X-4,ay+3,8,1,'#ffffff');R(c,X-5,ay+4,10,1,'#ffffff');R(c,X-3,ay+5,6,4,'#ffffff');
+      OV.push(()=>txt('Konpange',X,ay+19,'#ffe8a0',11,'center'))}}
   // the metro entrance: a soft red glow on the totem, and a bobbing arrow with a label until the player has gone down once
   if(M.metroGate){const g=M.metroGate,X=(g.x+g.w)*T-cx+8,Y=g.y*T-cy+VY-28;if(X>-40&&X<LW+40&&Y>-60&&Y<LH+40){
     const a=(.18+.12*Math.sin(frame/12)).toFixed(2);c.fillStyle='rgba(255,60,80,'+a+')';c.beginPath();c.ellipse(X,Y+8,12,11,0,0,6.283);c.fill();
