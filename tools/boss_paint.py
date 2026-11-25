@@ -1452,7 +1452,7 @@ def mtorso_relief(c, x, y, s, arms='wide'):
     relief_light(c, m, h, R['mskin'], 'mtorso', DX, lift=.08, tilt=26)
     return m
 
-def mtorso(c, x, y, s=1.0, arms='wide', f=0, bone=False, heart=False):
+def mtorso(c, x, y, s=1.0, arms='wide', f=0, bone=False, heart=False, glowfist=False):
     """a man's chest and arms rising from the sea lion's shoulders; y is the top of the chest"""
     Sk, G = R['mskin'], R['mgold']; S = lambda v: v * s
     P = lambda dx, dy: (x + dx * s, y + dy * s)
@@ -1484,8 +1484,10 @@ def mtorso(c, x, y, s=1.0, arms='wide', f=0, bone=False, heart=False):
             line(c, [(a0[0] + nx_, a0[1] + ny_), mid, (a1[0] + nx_, a1[1] + ny_)], Sk[3], 'mfore')
             line(c, [(a0[0] + nx_ - 1, a0[1] + ny_ - 1), (mid[0] - 1, mid[1] - 1)], Sk[7] if side < 0 else Sk[5], 'mfore')
         line(c, [(up[0][0] + side * S(1), up[0][1] + S(2)), (bx - side * S(1), by + S(1.6)), (up[2][0], up[2][1] + S(1.4))], Sk[3], 'marm')
+        if glowfist: mfistglow(c, bx2, by2, s, f, behind=True)
         if arms == 'reach' and side < 0: mhand_open(c, bx2, by2, s, lf + .04)
         else: mfist(c, bx2, by2, s, side, lf + .04)
+        if glowfist: mfistglow(c, bx2, by2, s, f, behind=False)
         for k in range(3):                                                 # sea water dripping off the arm
             X, Y = int(ax + (bx2 - ax) * (.3 + k * .25)), int(max(ay, by2) + S(3.4) + k * S(1.4) + f * S(1.2))
             if 0 <= Y < yp.H and 0 <= X < yp.W and not c.a[Y, X]: c.px(X, Y, R['water'][7]); c.part[Y, X] = 'spark'
@@ -1604,6 +1606,48 @@ def mflipper(c, x, y, ang, L, name='mfore', lift=.1, s=1.0):
         line(c, [a0, a1], R['mflip'][6] if k < 1 else R['mflip'][3], name)
         c.px(int(a1[0]), int(a1[1]), R['kbone'][5])
 
+def mfistglow(c, x, y, s, f, behind):
+    """the fists of the king of the sea burning with gold light: a halo behind, the hand lit from within, sparks flying off"""
+    S = lambda v: v * s; Gl = R['gglow2']
+    if behind:
+        r = S(7.5 + f)
+        for yy in range(int(y - r), int(y + r) + 1):
+            for xx in range(int(x - r), int(x + r) + 1):
+                if not (0 <= yy < yp.H and 0 <= xx < yp.W): continue
+                d = math.hypot(xx - x, yy - y) / r
+                if d < 1 and not c.a[yy, xx]:
+                    if d < .78 or (xx + yy) % 2 == 0:
+                        c.px(xx, yy, Gl[min(5, int((1 - d) ** 1.3 * 6))]); c.part[yy, xx] = 'mglow'
+        for k in range(8):                                                 # short rays
+            a = k * math.pi / 4 + f * .4; r0, r1 = S(8.5), S(11.5 + (k % 2) * 2)
+            for t in np.linspace(0, 1, 8):
+                X, Y = int(x + math.cos(a) * (r0 + (r1 - r0) * t)), int(y + math.sin(a) * (r0 + (r1 - r0) * t))
+                if 0 <= Y < yp.H and 0 <= X < yp.W and not c.a[Y, X]: c.px(X, Y, Gl[4] if t < .5 else Gl[3]); c.part[Y, X] = 'mglow'
+    else:
+        m = (c.part == 'mfist')
+        yy, xx = np.mgrid[0:yp.H, 0:yp.W]; m &= ((xx - x) ** 2 + (yy - y) ** 2) < S(6) ** 2
+        c.rgb[m] = np.clip(c.rgb[m] * .55 + np.array(Gl[4]) * .45, 0, 255).astype(np.uint8)
+        glow(c, x - S(.8), y - S(1), max(1.0, S(1.4)), Gl)
+
+def mspikes(c, P, w0, w1, n, s):
+    """a row of bone spikes down the back of the tail, raked back, tipped with gold"""
+    S = lambda v: v * s; N = len(P)
+    for i in range(n):
+        t = .18 + .74 * i / max(1, n - 1); j = min(N - 2, int(t * (N - 1)))
+        (xa, ya), (xb, yb) = P[j], P[j + 1]
+        L = max(.01, math.hypot(xb - xa, yb - ya)); tx, ty = (xb - xa) / L, (yb - ya) / L
+        nx_, ny_ = ty, -tx
+        if ny_ > 0: nx_, ny_ = -nx_, -ny_
+        hw = (w0 + (w1 - w0) * t) / 2
+        bx, by = xa + nx_ * hw * .8, ya + ny_ * hw * .8
+        ln = S(11 - 5 * t); bw = ln * .36
+        tip = (bx + nx_ * ln + tx * ln * .45, by + ny_ * ln + ty * ln * .45)
+        blob(c, R['mbel'], lambda d, bx=bx, by=by, tip=tip, bw=bw, tx=tx, ty=ty: d.polygon([(bx - tx * bw, by - ty * bw), tip, (bx + tx * bw, by + ty * bw)], fill=1), bulge=1.1, lift=.05, name='mspike')
+        line(c, [(bx - tx * bw * .4, by - ty * bw * .4), tip], R['mbel'][5], 'mspike')
+        for k in range(3):
+            X, Y = int(round(tip[0] - (tip[0] - bx) * k / ln)), int(round(tip[1] - (tip[1] - by) * k / ln))
+            c.px(X, Y, R['mgold'][7 - k * 2])
+
 def mfinish(c, extra=()):
     texture(c, ['mbody', 'mbody2', 'mtorso', 'marm', 'mfore', 'mface', 'mhair', 'mpec', 'mabs', 'mdelt', 'mobl'], amt=.12, seed=52)
     texture(c, ['mbodyfl', 'mbody2fl', 'mfore_fl', 'mfore', 'mbone'], amt=.2, seed=53)
@@ -1612,12 +1656,12 @@ def mfinish(c, extra=()):
     occlude(c, ['mtuft', 'mtorso', 'mabs', 'mobl'], ['mbody', 'mbody2', 'mbodyb', 'mbody2b'], r=4, k=.55)
     occlude(c, ['mbody', 'mbody2', 'mfist', 'mfore'], ['water'], r=4, k=.55)
     occlude(c, ['mcrown'], ['mface', 'mhair'], r=2, k=.6)
-    speculars(c, ['mcrown', 'mtorque', 'mband', 'mbone', 'mgem', 'mbody', 'mbody2'], thr=.86, col=(255, 248, 210))
+    speculars(c, ['mcrown', 'mtorque', 'mband', 'mbone', 'mgem', 'mbody', 'mbody2', 'mspike'], thr=.86, col=(255, 248, 210))
     speculars(c, ['mtorso', 'marm', 'mfore'], thr=.93, col=(250, 214, 178))
     return finish(c, [('mface', 'mhair'), ('mbrow', 'mface'), ('mbeard', 'mface'), ('mcrown', 'mface'), ('mcrown', 'mhair'), ('mtorso', 'mbody'), ('marm', 'mtorso'), ('mfist', 'marm'), ('mfist', 'mfore'), ('mfore', 'marm'),
                       ('mpec', 'mabs'), ('mabs', 'mabs'), ('mpec', 'mpec'), ('mabs', 'mtorso'), ('mpec', 'mtorso'), ('mdelt', 'mpec'), ('mdelt', 'marm'), ('mobl', 'mabs'), ('mobl', 'mtorso'),
                       ('mneck', 'mtrap'), ('mbeard', 'mneck'), ('mbeard', 'mtorso'), ('mbeard', 'mpec'), ('mtorque', 'mtorso'), ('mtorque', 'mpec'), ('mband', 'mfore'),
-                      ('mbody', 'water'), ('mbody2', 'water'), ('mbody', 'mbody2'), ('mbone', 'mtorso'), ('mbone', 'mpec'), ('mbone', 'mabs'), ('mkelp', 'mbone'), ('mfore', 'mbody'), ('mbodyfl', 'mbody'), ('mbody2fl', 'mbody2'), ('mtuft', 'mbody')] + list(extra),
+                      ('mbody', 'water'), ('mbody2', 'water'), ('mbody', 'mbody2'), ('mbone', 'mtorso'), ('mbone', 'mpec'), ('mbone', 'mabs'), ('mkelp', 'mbone'), ('mfore', 'mbody'), ('mbodyfl', 'mbody'), ('mbody2fl', 'mbody2'), ('mtuft', 'mbody'), ('mspike', 'mbody')] + list(extra),
                   rim=(240, 200, 110), rimparts=('mbody', 'mbody2', 'mtorso', 'marm', 'mfore', 'mhair', 'mhairb', 'mpec', 'mdelt', 'mobl'))
 
 def _K(K):
@@ -1628,27 +1672,21 @@ def llufu1(f):
     """rising from the dark water: only his shoulders, his crowned head and the hump of his back show"""
     K = 1.4; k, sc = _K(K)
     setsize(int(104 * K), int(80 * K)); c = Canvas()
-    kaywater(c, f, int(k(56)))
     mlower(c, sc([(40, 66), (60, 60), (80, 58), (96, 64)]), k(22), k(12), 'mbody2', lift=.0, s=K)
     mhair_back(c, k(38), k(30 + f), K, hairflow=1)
     mtorso(c, k(38), k(42 + f), K, arms='down', f=f)
     mhead(c, k(38), k(30 + f), K, f, angry=True, hairflow=1)
-    sea(c, int(k(62)), yp.H, 0, yp.W, f)
-    ripples(c, k(40), k(64), k(30), 3, f, R['water'][6], R['water'][1], 2)
-    foam(c, int(k(62)), 0, yp.W, f)
     return mfinish(c)
 
 def llufu2(f):
     """Millalobo ñi foro: his bones: risen to the waist in a breastplate of whale bones"""
     K = 1.35; k, sc = _K(K)
     setsize(int(104 * K), int(96 * K)); c = Canvas()
-    kaywater(c, f, int(k(78)))
     mlower(c, sc([(48, 82), (70, 84), (88, 80), (98, 70)]), k(26), k(14), 'mbody', lift=.1, s=K)
-    mflipper(c, k(36), k(76), 160, k(18), s=K); mflipper(c, k(62), k(78), 20, k(16), lift=.0, s=K)
+    mflipper(c, k(38), k(76), 128, k(17), s=K); mflipper(c, k(62), k(80), 58, k(15), lift=.0, s=K)
     mhair_back(c, k(50), k(32 - f), 1.15 * K, hairflow=-1)
     mtorso(c, k(50), k(46 - f), 1.15 * K, arms='wide', f=f, bone=True)
     mhead(c, k(50), k(32 - f), 1.15 * K, f, angry=True, hairflow=-1)
-    foam(c, int(k(84)), 0, yp.W, f)
     return mfinish(c, [('mkelp', 'mtorso')])
 
 def _paste_rot2(c, L, ang, px_, py_):
@@ -1698,7 +1736,6 @@ def llufu3(f):
     one hand reaching for you, great wings raised from his shoulders, a fore-flipper paddling forward and the tail flung high"""
     K = 1.22; k, sc = _K(K); kx = lambda v: k(v + 16); ky = lambda v: k(v + 22); sc = lambda pts: [(k(a + 16), k(b + 22)) for a, b in pts]
     setsize(int(148 * K), int(110 * K)); c = Canvas()
-    kaywater(c, f, int(ky(70)))
     # the far wing, higher and darker, then the near wing: both behind the body
     mwing(c, kx(46), ky(36), K * 1.0, -22, lift=-.12, f=f, name='mwingf')
     mwing(c, kx(48), ky(40), K * 1.2, 6, lift=.05, f=f, name='mwing')
@@ -1715,14 +1752,7 @@ def llufu3(f):
     _paste_rot2(c, Lr, 16, kx(36), ky(54))
     # the near fore-flipper paddling forward under the reaching arm, in front of everything
     mflipper(c, kx(40), ky(60), 146 - f * 10, k(32), name='mfore_fl', lift=.5, s=K * 1.15)
-    sea(c, int(ky(72)), yp.H, 0, yp.W, f)
-    ripples(c, kx(70), ky(78), k(40), 3, f, R['water'][6], R['water'][1], 2)
-    foam(c, int(ky(68)), 0, yp.W, f)
-    # a curtain of spray where he breaks the surface, and droplets flung off the tail and the wings
-    for kk in range(40):
-        t = kk / 40; x = int(kx(60) + t * k(50) + ((kk * 7) % 5)); y = int(ky(72) - math.sin(t * math.pi) * k(10) * ((kk * 13) % 7) / 6 - f * 2)
-        if 0 <= y < yp.H and 0 <= x < yp.W and not (c.a[y, x] and c.part[y, x] not in ('water',)):
-            c.px(x, y, (236, 248, 248) if kk % 3 else R['water'][7]); c.part[y, x] = 'spark'
+    # droplets flung off the tail and the wings
     for kk in range(24):
         x, y = int(kx(96) + (kk * 11 % 34) - k(6)), int(ky(10) + (kk * 7 % 30) - f * 3)
         if 0 <= y < yp.H and 0 <= x < yp.W and not c.a[y, x]: c.px(x, y, R['water'][7] if kk % 2 else (240, 250, 250)); c.part[y, x] = 'spark'
@@ -1733,9 +1763,8 @@ def llufu4(f):
     """Millalobo ñi piwke: his heart: the chest opens on a heart of gold light that throws up barriers"""
     K = 1.3; k, sc = _K(K)
     setsize(int(100 * K), int(108 * K)); c = Canvas()
-    kaywater(c, f, int(k(92)))
     mlower(c, sc([(50, 96), (72, 98), (90, 92), (96, 80)]), k(28), k(14), 'mbody', lift=.1, s=K)
-    mflipper(c, k(36), k(92), 170, k(16), s=K); mflipper(c, k(64), k(94), 10, k(14), lift=.0, s=K)
+    mflipper(c, k(38), k(92), 128, k(15), s=K); mflipper(c, k(64), k(96), 58, k(13), lift=.0, s=K)
     mhair_back(c, k(50), k(39), 1.2 * K, hairflow=0)
     mtorso(c, k(50), k(54), 1.2 * K, arms='up', f=f, heart=True)
     # the chest split open on a heart of gold light, cracks running out through the muscle
@@ -1749,7 +1778,6 @@ def llufu4(f):
         line(c, [a, b], R['gglow2'][2], 'mgem')
     glow(c, hx_ - k(2), hy - k(3), k(2.6), R['gglow2']); c.px(int(hx_ - k(4)), int(hy - k(5)), (255, 255, 255))
     mhead(c, k(50), k(39), 1.2 * K, f, angry=True, hairflow=0)
-    foam(c, int(k(96)), 0, yp.W, f)
     for kk in range(14):                                                   # light leaking from the heart
         a = kk * .45 + f * .5
         for r_ in (k(30), k(34)):
@@ -1759,23 +1787,22 @@ def llufu4(f):
 
 def llufu5(f):
     """Rüf Millalobo: the king of the sea as he truly is, risen whole on a swell, crown blazing, hearing the song again"""
-    K = 1.2; k, sc = _K(K)
-    setsize(int(112 * K), int(128 * K)); c = Canvas()
-    kaywater(c, f, int(k(108)))
+    K = 1.2; k, sc = _K(K); kx = lambda v: k(v + 9); sc = lambda pts: [(k(a + 9), k(b)) for a, b in pts]
+    setsize(int(130 * K), int(128 * K)); c = Canvas()
     # a halo of gold rays behind the crown
     for kk in range(9):
         a = math.radians(-170 + kk * 20); L = 16 + (kk % 2) * 6
-        x0, y0 = k(44) + math.cos(a) * k(13), k(28 - f) + math.sin(a) * k(9)
+        x0, y0 = kx(44) + math.cos(a) * k(13), k(28 - f) + math.sin(a) * k(9)
         taper(c, [(x0, y0), (x0 + math.cos(a) * k(L), y0 + math.sin(a) * k(L))], k(2.6), k(.8), R['gglow2'][1:], lift=.2, name='mray', bulge=1.0)
-    mlower(c, sc([(44, 100), (64, 110), (86, 112), (102, 104), (108, 90)]), k(34), k(14), 'mbody', lift=.1, n=12, s=K)
-    mflipper(c, k(30), k(104), 165, k(22), s=K); mflipper(c, k(58), k(108), 25, k(18), lift=.0, s=K)
-    mhair_back(c, k(44), k(42 - f), 1.4 * K, hairflow=1)
-    mtorso(c, k(44), k(60 - f), 1.4 * K, arms='wide', f=f)
-    mhead(c, k(44), k(42 - f), 1.4 * K, f, angry=False, hairflow=1)
-    arcs(c, k(84), k(44 - f), [k(6 + 3 * f), k(12 + 3 * f), k(18 + 3 * f)], -math.pi * .35, math.pi * .35, (255, 236, 170), step=.07)
-    foam(c, int(k(112)), 0, yp.W, f)
+    Pb = mlower(c, sc([(44, 100), (64, 110), (86, 112), (102, 104), (108, 90)]), k(34), k(14), 'mbody', lift=.1, n=12, s=K)
+    mspikes(c, Pb, k(34), k(14), 9, K)
+    mflipper(c, kx(32), k(102), 128, k(20), s=K); mflipper(c, kx(58), k(106), 58, k(17), lift=.0, s=K)
+    mhair_back(c, kx(44), k(42 - f), 1.4 * K, hairflow=1)
+    mtorso(c, kx(44), k(60 - f), 1.4 * K, arms='wide', f=f, glowfist=True)
+    mhead(c, kx(44), k(42 - f), 1.4 * K, f, angry=False, hairflow=1)
+    arcs(c, kx(84), k(44 - f), [k(6 + 3 * f), k(12 + 3 * f), k(18 + 3 * f)], -math.pi * .35, math.pi * .35, (255, 236, 170), step=.07)
     for kk in range(22):
-        x, y = int((kk * 23 + f * 5) % k(108) + 2), int((kk * 37 + f * 3) % k(96) + 4)
+        x, y = int((kk * 23 + f * 5) % k(124) + 2), int((kk * 37 + f * 3) % k(96) + 4)
         if 0 <= y < yp.H and 0 <= x < yp.W and not c.a[y, x]: c.px(x, y, R['gglow2'][3] if kk % 2 else R['gglow2'][4]); c.part[y, x] = 'spark'
     return mfinish(c, [('mray', 'mhair')])
 
@@ -1929,7 +1956,11 @@ if __name__ == '__main__':
     names = sys.argv[1].split(',') if len(sys.argv) > 1 else list(SPRITES)
     strip = []
     for name in names:
-        big = [SPRITES[name](0), SPRITES[name](1)]; small = [yp.half(b) for b in big]
+        big = [SPRITES[name](0), SPRITES[name](1)]
+        if name.startswith('llufu'):                                       # no water under him: trim the empty rows below his body
+            bot = max(int(np.nonzero(b[..., 3].any(1))[0].max()) for b in big) + 1
+            big = [b[:bot] for b in big]
+        small = [yp.half(b) for b in big]
         pb, fb = wp.encode2(big); ps, fs = wp.encode2(small)
         out[name] = {'big': {'pal': pb, 'f': fb}, 'small': {'pal': ps, 'f': fs}}
         for b in big:
