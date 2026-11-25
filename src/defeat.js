@@ -18,7 +18,7 @@ const DEFEAT={
   // Yewen: the people of Santiago come in and call it away, piece by piece, until an ordinary person stands there
   yewen:{T:690,base:()=>tplCanvas('yewen@b',0,1)}
 };
-function defStart(e){B.defA={t:0,e,k:e.t,T:DEFEAT[e.t].T};const d=document.getElementById('dlg');if(d)d.style.display='none';active=null}
+function defStart(e){const D=(typeof defAlt==='function'&&defAlt(e.t))||DEFEAT[e.t];B.defA={t:0,e,k:e.t,T:D.T,D};const d=document.getElementById('dlg');if(d)d.style.display='none';active=null}
 function defSkip(){const A=B.defA;if(A&&!A.done&&A.t<A.T-20)A.t=A.T-20}
 const SSd=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
 
@@ -121,7 +121,7 @@ const defNote=(c,x,y,col)=>{R(c,x,y,2,2,col);R(c,x+1,y-5,1,5,col);R(c,x+2,y-5,2,
 
 /* ---------- the driver ---------- */
 function drawDefeat(c){
-  const A=B.defA;if(!A||A.done)return;const D=DEFEAT[A.k],e=A.e;
+  const A=B.defA;if(!A||A.done)return;const D=A.D||DEFEAT[A.k],e=A.e;
   const S2={fillantu:[setFill,stepFill,drawFill],ngoyngoyun:[setNgoy,stepNgoy,drawNgoy],ngamlef:[setNgam,stepNgam,drawNgam],yewen:[setYew,stepYew,drawYew]}[A.k];
   if(!A.Q){A.Q=defBase(D);dWorld(A);A.x0=(e._cx||72)-Math.round(A.Q.W/2);A.y0=e._y!=null?e._y:12;A.gy=(e._bse||138)+4;A.ox=0;A.oy=0;A.f=frame;S2[0](A,D)}
   // advance on the game's 60 Hz clock, not on screen refreshes, so a slow phone sees the same timing
@@ -161,7 +161,7 @@ function drawFill(c,A,D){const Q=A.Q,t=A.t,al=dFade(A),U=Q.MX;
   const X=A.x0+A.ox,Y=A.y0+A.oy;
   if(A.landed&&t<240)drawCracks(c,A.cr,SSd((t-A.landed)/35),X,Y,0,A);
   // the clock comes back to life, racing round
-  if(t<236){const cx=X+U(D.clock[0]),cy=Y+D.clock[1],turns=t<70?Math.pow(t/70,2.4)*10:10+(t-70)*.02,a=turns*6.283-Math.PI/2;
+  if(t<236&&!D.noClock){const cx=X+U(D.clock[0]),cy=Y+D.clock[1],turns=t<70?Math.pow(t/70,2.4)*10:10+(t-70)*.02,a=turns*6.283-Math.PI/2;
     c.fillStyle='rgba(255,236,170,'+(t<70?.22+.22*Math.sin(t/3):.18).toFixed(2)+')';c.beginPath();c.arc(cx,cy,6,0,6.283);c.fill();
     c.strokeStyle='#1a1010';c.lineWidth=1;c.beginPath();c.moveTo(cx,cy);c.lineTo(cx+Math.cos(a)*4,cy+Math.sin(a)*4);c.stroke()}
   // the zipper opens, light leaks out, and one quiet word
@@ -214,12 +214,12 @@ function drawNgoy(c,A,D){const Q=A.Q,t=A.t,al=dFade(A);
 /* ---------- Ngamleftripael ---------- */
 function setNgam(A,D){const Q=A.Q,U=Q.MX,[hx,hy,hr,hr2]=D.head,[bx,by,brx,bry]=D.abd;
   const inBody=(x,y)=>{const ux=U(x);return ((ux-hx)/hr)**2+((y-hy)/hr2)**2<1||((ux-bx)/brx)**2+((y-by)/bry)**2<1};
-  A.cx=U(88);A.cy=74;
+  A.cx=U((D.c||[88,74])[0]);A.cy=(D.c||[88,74])[1];
   // eight legs, each broken into segments, snapped in an order that walks round the body
   A.legs=[];for(let k=0;k<8;k++){const a0=-Math.PI+k*Math.PI/4,a1=a0+Math.PI/4;A.legs.push(dFrac(Q,(x,y)=>{if(inBody(x,y))return false;const a=Math.atan2(y-A.cy,x-A.cx);return a>=a0&&a<a1},6))}
-  A.body=dFrac(Q,()=>true,90,(x,y)=>.35+.65*Math.max(0,1-Math.abs(y-80)/50));
+  A.body=dFrac(Q,()=>true,90,(x,y)=>.35+.65*Math.max(0,1-Math.abs(y-(D.c?D.c[1]+6:80))/50));
   A.frags=[].concat(...A.legs,A.body);A.order=[0,4,2,6,1,5,3,7];
-  A.cr=dCracks(U(75),92,10,60,5)}
+  A.cr=dCracks(U(D.head[0]),D.head[1]+12,10,60,5)}
 function stepNgam(A,D){const t=A.t;
   const LC=['#d6342e','#ecbe28','#36a04c','#3a70d2','#964ec4','#d6342e','#ecbe28','#36a04c'];
   for(let j=0;j<8;j++){const t0=30+j*14;if(t===t0){const L=A.legs[A.order[j]];dCrack(1);B.shake=5;
@@ -228,7 +228,7 @@ function stepNgam(A,D){const t=A.t;
       if(near)dSparks(A,A.x0+near.f.cx,A.y0+A.oy+near.f.cy,14,LC[A.order[j]],2.4);
       for(const F of L)dRel(A,F,(F.f.cx-A.cx)*.025+(Math.random()-.5)*.8,-.6-Math.random()*1.2,(Math.random()-.5)*.35)}}
   // 148: with no legs under it the body drops and crashes down
-  if(t>=148&&!A.landed){A.vy=(A.vy||0)+.34;A.oy+=A.vy;const bottom=A.y0+A.oy+108;if(bottom>=A.gy){A.oy-=bottom-A.gy;A.landed=t;B.shake=18;B.flash=6;dThud(1);dRumble(.8,.22);dDust(A,A.x0+A.cx,A.gy,30,3);dCrack(1)}}
+  if(t>=148&&!A.landed){A.vy=(A.vy||0)+.34;A.oy+=A.vy;const bottom=A.y0+A.oy+(D.bot||108);if(bottom>=A.gy){A.oy-=bottom-A.gy;A.landed=t;B.shake=18;B.flash=6;dThud(1);dRumble(.8,.22);dDust(A,A.x0+A.cx,A.gy,30,3);dCrack(1)}}
   // 190-270: the carapace and the skull crumble, from the top down, into the pile
   if(t>=190&&t<270){const tops=A.body.filter(F=>!F.rel).sort((a,b)=>a.f.cy-b.f.cy);
     for(let k=0;k<2&&k<tops.length;k++){const F=tops[k];dRel(A,F,(F.f.cx-A.cx)*.02+(Math.random()-.5),-Math.random()*.9,(Math.random()-.5)*.25)}
@@ -259,12 +259,13 @@ function yPerson(n,fr,faceRight){const key=n+fr+(faceRight?'r':'l');if(_yMir[key
   if(!faceRight)return _yMir[key]=cv;const [k,g]=mk(cv.width,cv.height);g.translate(cv.width,0);g.scale(-1,1);g.drawImage(cv,0,0);return _yMir[key]=k}
 function setYew(A,D){const Q=A.Q,U=Q.MX;
   const isFire=(r,g,b)=>r>40&&b>=r*.6&&r>=b*.8&&g<r*.75&&g<b*.8;
-  const core=ux=>ux>=28&&ux<=66;
+  const P=D.y||{mid:48,core:[28,66],staff:[60,80,20,66,74],bot:80,top:12,side:[33,58],chest:36};
+  const core=ux=>ux>=P.core[0]&&ux<=P.core[1];
   const isCloak=(r,g,b,ux)=>(r>g*1.6&&r>b*1.15&&!(g>r*.6))||(r+g+b<150&&!core(ux));
-  const rules=[(x,y,r,g,b)=>isFire(r,g,b)&&U(x)>48, (x,y,r,g,b)=>isFire(r,g,b),
-    (x,y,r,g,b)=>U(x)>48&&isCloak(r,g,b,U(x)), (x,y,r,g,b)=>isCloak(r,g,b,U(x)),
-    (x,y)=>{const ux=U(x);return (ux>=60&&ux<=80&&y<20)||(ux>=66&&ux<=74)},
-    (x,y)=>y>=80, (x,y)=>y<12, (x,y)=>{const ux=U(x);return ux<33||ux>58}, (x,y)=>y>=36, ()=>true];
+  const st=P.staff,rules=[(x,y,r,g,b)=>isFire(r,g,b)&&U(x)>P.mid, (x,y,r,g,b)=>isFire(r,g,b),
+    (x,y,r,g,b)=>U(x)>P.mid&&isCloak(r,g,b,U(x)), (x,y,r,g,b)=>isCloak(r,g,b,U(x)),
+    (x,y)=>{const ux=U(x);return (ux>=st[0]&&ux<=st[1]&&y<st[2])||(ux>=st[3]&&ux<=st[4])},
+    (x,y)=>y>=P.bot, (x,y)=>y<P.top, (x,y)=>{const ux=U(x);return ux<P.side[0]||ux>P.side[1]}, (x,y)=>y>=P.chest, ()=>true];
   A.pcs=rules.map(r=>yCut(Q,r)).filter(Boolean);
   const cxY=A.x0+Q.W/2;   // the Yewen's centre on screen; the crowd stands round it
   A.crowd=YEW_CROWD.map(([n,dx,y,side],i)=>({n,tx:A.x0+dx,y,side,x:LW+24+i*30,start:6+i*14,face:'l'}));
