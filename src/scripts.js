@@ -2,7 +2,11 @@
    NPC SCRIPTS
    ============================================================ */
 const nm=()=>S.name;
-function learnRoot(r){if(!S.roots.includes(r))S.roots.push(r)}
+function learnRoot(r){if(S.roots.includes(r))return;S.roots.push(r);
+  if(r==='nagtu'&&typeof ents!=='undefined'){   // flyers held back before nagtu- come back now
+    for(const e of ents)if(e.kind==='enemy'&&e.p0){e.party=e.p0.slice();delete e.p0}
+    for(const e0 of FLYHELD){const [ex,ey]=placeNear(e0.x,e0.y,true);ents.push(Object.assign({},e0,{x:ex,y:ey,fx:ex,fy:ey,ox:ex,oy:ey,cd:30+rnd(60),dir:'down',pi:0,wait:0,bt:rnd(400)}))}
+    FLYHELD=[]}}
 function introScript(){
   say([
     L('Kuku','Mari mari, '+nm()+'!','¡Hola, '+nm()+'!','Hello, '+nm()+'!'),

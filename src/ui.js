@@ -43,11 +43,25 @@ function say(lines,cb){
     const full=G(l),hid=!!(S&&S.nogloss&&l.m&&full);g.textContent=hid?'':full;g.style.display=full&&!hid?'':'none';
     let rv=dlg.querySelector('.rv');if(!rv){rv=document.createElement('button');rv.className='rv';rv.textContent='?';dlg.appendChild(rv)}
     rv.style.display=hid?'':'none';rv.onclick=e=>{e.stopPropagation();g.textContent=full;g.style.display='';rv.style.display='none';S.peek=(S.peek||0)+1};
+    let ds=dlg.querySelector('.ds');if(!ds){ds=document.createElement('button');ds.className='ds';ds.textContent='÷';dlg.appendChild(ds)}
+    const dw=desgWords(l.m);ds.style.display=dw.length?'':'none';ds.title=LANG==='es'?'Desglose de palabras':'Word breakdown';ds.onclick=e=>{e.stopPropagation();desgOpen(dw)};
     dlg.style.display='block';SAYT=performance.now();if(l.fx)l.fx();};
   active={kind:'say',a(){i++;if(i>=lines.length){dlg.style.display='none';active=null;cb&&cb()}else{sfx('move');show()}},b(){this.a()}};
   show();
 }
 let SAYT=0;
+/* word breakdown: approved rows of docs/Kewun_desglose.xlsx (src/desglose.js); the master build also shows unreviewed ones with ⚠ */
+function desgWords(m){if(!m||typeof DESG==='undefined')return[];const out=[],seen=new Set();
+  for(const t of String(m).split(/\s+/)){const k=t.toLowerCase().replace(/^[^\p{L}']+|[^\p{L}']+$/gu,'');const d=DESG[k];
+    if(!d||seen.has(k)||d.p.length<2||!(d.ok||window.KEWUN_MASTER))continue;seen.add(k);out.push([t.replace(/[¡!¿?.,;:«»"“”()…]/g,''),d])}return out}
+function desgOpen(list){let pn=$('desgp');if(!pn){pn=document.createElement('div');pn.id='desgp';pn.className='box';dlg.parentNode.appendChild(pn)}
+  const en=LANG!=='es',h=[];
+  for(const [w,d] of list){const gl=[d.r[en?1:0]].concat(d.m.map(x=>x[en?1:0]));
+    h.push('<div class="dw"><b>'+esc(GR(w))+(d.ok?'':' <span class="dwarn">⚠</span>')+'</b><div class="dilg">'+d.p.map((p,i)=>'<span><em>'+(i?'-':'')+esc(GR(p))+'</em><i>'+esc(gl[i]||'')+'</i></span>').join('')+'</div></div>')}
+  if(list.some(x=>!x[1].ok))h.push('<div class="dnote">⚠ '+(en?'not yet reviewed':'sin revisar todavía')+'</div>');
+  pn.innerHTML=h.join('');pn.style.display='block';sfx('move');
+  const prev=active,close=()=>{pn.style.display='none';active=prev};
+  active={kind:'desg',a:close,b:close};pn.onclick=e=>{e.stopPropagation();close()}}
 dlg.addEventListener('click',()=>{if(active&&active.kind==='say'&&performance.now()-SAYT>180)active.a()});
 function choose(prompt,opts,cb,cancel,one,onSel){
   const pe=menu.querySelector('.p'),le=menu.querySelector('.list');
