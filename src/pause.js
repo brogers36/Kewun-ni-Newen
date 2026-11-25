@@ -43,8 +43,10 @@ function openCfg(){const en=S.gloss==='en';
     {m:'Re mapudungun: '+(S.nogloss?(en?'yes':'sí'):'no'),g:en?'Hide the translation of Mapudungun lines':'Ocultar la traducción de las líneas en mapudungun',v:'nogloss'},
     {m:'Grafemario: '+GRAF_NAME[GRAF],g:en?'Unificado → Azümchefe → Ragileo':'Unificado → Azümchefe → Ragileo',v:'graf'},
     {m:AU.muted?(en?'Music: off':'Música: no'):(en?'Music: on':'Música: sí'),g:en?'Turn the music on or off':'Encender o apagar la música',v:'mus'},
+    {m:(en?'Graphics: ':'Gráficos: ')+(GEM_ON?(en?'new (beta)':'nuevos (beta)'):(en?'classic':'clásicos')),g:en?'Try the new character and wekufü art; switch back any time':'Probar el nuevo dibujo de personajes y wekufü; puedes volver cuando quieras',v:'gfx'},
     {m:en?'Back':'Volver',v:'x'}],v=>{
-    if(v==='hints'){S.hints=!S.hints;persist();openCfg()}
+    if(v==='gfx'){gemSet(!GEM_ON);openCfg()}
+    else if(v==='hints'){S.hints=!S.hints;persist();openCfg()}
     else if(v==='lang'){S.gloss=S.gloss==='en'?'es':'en';LANG=S.gloss;persist();openCfg()}
     else if(v==='nogloss'){S.nogloss=S.nogloss?0:1;persist();openCfg()}
     else if(v==='graf'){setGraf({u:'a',a:'r',r:'u'}[GRAF]);openCfg()}
