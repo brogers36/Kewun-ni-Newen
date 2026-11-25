@@ -566,3 +566,10 @@ Trengtreng y Kaykay son sagrados y salen del juego. El jefe secreto del salón d
 
 - ⚠ La tercera forma pasa de «Millalobo ñi müpü» a **Müpükülechi Millalobo** («el Millalobo alado»), forma dictada por Brandon («mupukülechi millalobo»), escrita con ü según el grafemario del juego. Confirmar la grafía y la segmentación (müpü + -kü-le-chi).
 - La forma ahora tiene alas; el mensaje de la forma dice: «¡Al Millalobo le brotan alas! Salta del agua en un gran arco, con las alas abiertas y las aletas tendidas».
+
+## Derrota del Yewen (24 nov.)
+
+La gente de Santiago llega y le grita al Yewen; cada grito le arranca un pedazo hasta que queda una persona común. Frases dictadas por Brandon:
+- ⚠ **¡Amutunge!** («¡Vete!»)
+- ⚠ **¡Yewentuwelayaiñ!** («Ya no tendremos vergüenza»)
+- ⚠ **Mañumwiyiñ.** («Gracias», la persona que queda). Confirmar la grafía en los tres grafemarios.

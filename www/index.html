@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='569f09c-202611241833';
+window.KEWUN_BUILD='6460336-202611241841';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -8325,9 +8325,8 @@ const DEFEAT={
   // Ngamleftripael: the legs break off at the joints one by one, the body crashes down,
   // and the carapace and the skull crack open and crumble
   ngamlef:{T:360,base:()=>tplCanvas('ngamlef@b',0,1),head:[75,80,23,23],abd:[121,62,31,39],eyes:[[64,74],[86,74]]},
-  // Yewen: the stitches snap, the padlock bursts and the key falls, the staff topples, the ghostfire gutters
-  // into smoke, the cloak tears away in shreds, and the shame itself cracks and crumbles to dust
-  yewen:{T:380,base:()=>tplCanvas('yewen@b',0,1),stitches:[39,41,43,45,47,49,51],stY:24,lock:[62,0,78,19],staffX:[67,73],staffFoot:[70,108]}
+  // Yewen: the people of Santiago come in and call it away, piece by piece, until an ordinary person stands there
+  yewen:{T:700,base:()=>tplCanvas('yewen@b',0,1)}
 };
 function defStart(e){B.defA={t:0,e,k:e.t,T:DEFEAT[e.t].T};const d=document.getElementById('dlg');if(d)d.style.display='none';active=null}
 function defSkip(){const A=B.defA;if(A&&!A.done&&A.t<A.T-20)A.t=A.T-20}
@@ -8555,53 +8554,83 @@ function drawNgam(c,A,D){const Q=A.Q,t=A.t,al=dFade(A),U=Q.MX;
   drawFX(c,A,al)}
 
 /* ---------- Yewen ---------- */
+// The people of Santiago, no longer ashamed, come in and stand with you. Each one calls out, «¡Amutunge!» or
+// «¡Yewentuwelayaiñ!», and each call breaks a piece off the Yewen, which comes loose, drifts away and dissolves into
+// light, until nothing of it is left and an ordinary person stands where it stood and says «Mañumwiyiñ».
+const YEW_CROWD=[['cook',100,134],['kona',118,141],['childf',136,135],['teacher',154,142],['child',172,134],['fisherw',190,141]];
+const YEW_SAY=['¡Amutunge!','¡Yewentuwelayaiñ!'];
+function yCut(Q,rule){const {W,H,px}=Q,[k,g]=mk(W,H),pts=[];if(!px)return null;const im=g.createImageData(W,H),o=im.data;let sx=0,sy=0;
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=(y*W+x)*4,j=y*W+x;if(px[i+3]<10||Q.used[j])continue;if(!rule(x,y,px[i],px[i+1],px[i+2]))continue;
+    o[i]=px[i];o[i+1]=px[i+1];o[i+2]=px[i+2];o[i+3]=px[i+3];Q.used[j]=1;sx+=x;sy+=y;pts.push([x,y,px[i],px[i+1],px[i+2]])}
+  if(!pts.length)return null;g.putImageData(im,0,0);return {cv:k,cx:sx/pts.length,cy:sy/pts.length,pts,t0:-1}}
 function setYew(A,D){const Q=A.Q,U=Q.MX;
-  const sx0=U(D.staffX[1]),sx1=U(D.staffX[0]),[l0,ly0,l1,ly1]=D.lock,lx0=U(l1),lx1=U(l0);
   const isFire=(r,g,b)=>r>40&&b>=r*.6&&r>=b*.8&&g<r*.75&&g<b*.8;
-  const core=x=>{const ux=U(x);return ux>=28&&ux<=66};
-  const isCloak=(r,g,b,x)=>(r>g*1.6&&r>b*1.15&&!(g>r*.6))||(r+g+b<150&&!core(x));
-  A.fire=dCut(Q,(x,y,r,g,b)=>isFire(r,g,b));
-  A.lockP=dFrac(Q,(x,y)=>x>=lx0&&x<=lx1&&y>=ly0&&y<=ly1,5);
-  A.staff=dCut(Q,(x,y)=>x>=sx0&&x<=sx1&&y>ly1);
-  A.cloak=dFrac(Q,(x,y,r,g,b)=>isCloak(r,g,b,x),42);
-  A.body=dFrac(Q,()=>true,80,(x,y)=>.35+.65*Math.max(0,1-Math.abs(y-D.stY)/70));
-  A.frags=A.cloak.concat(A.body,A.lockP);
-  A.skin=(()=>{const x=U(45),y=D.stY-3,i=(y*Q.W+x)*4;return Q.px?'rgb('+Q.px[i]+','+Q.px[i+1]+','+Q.px[i+2]+')':'#8e7aae'})();
-  A.snapped=[];A.staffA=0;A.staffV=0;A.cr=dCracks(U(46),D.stY,12,70,9);A.fireA=1}
-function stepYew(A,D){const Q=A.Q,t=A.t,U=Q.MX;
-  D.stitches.forEach((sx,j)=>{const t0=14+j*9;if(t===t0){A.snapped.push(sx);dCrack(.7);B.shake=3;dSparks(A,A.x0+U(sx),A.y0+D.stY,8,j%2?'#ff9ad8':'#ffd0ee',2)}});
-  // 85: the padlock bursts; the shackle and the body of the lock fly off, the key falls
-  if(t===85){B.flash=6;B.shake=8;tone('square',900,900,.03,.14);tone('square',600,600,.05,.12,.04);const [l0,ly0,l1,ly1]=D.lock,cx=U((l0+l1)/2),cy=(ly0+ly1)/2;
-    for(const F of A.lockP)dBurst(A,F,cx,cy+4,2.4,1.6);A.key={x:A.x0+cx,y:A.y0+ly1,vx:-.5,vy:-1.5};dSparks(A,A.x0+cx,A.y0+cy,16,'#ffe9a0',2.6)}
-  if(A.key){const k=A.key;k.vy+=.28;k.x+=k.vx;k.y+=k.vy;const g=dGround(A,k.x)-1;if(k.y>g){k.y=g;if(k.vy>1.2){k.vy=-k.vy*.35;tone('triangle',3200,3200,.05,.08);tone('triangle',2600,2600,.08,.06,.05)}else{k.vy=0;k.vx*=.8}}}
-  // 95: the staff topples and hits the ground
-  if(t>=95){A.staffV+=.0026;A.staffA=Math.min(1.5,A.staffA+A.staffV);if(A.staffA>=1.5&&!A.staffDown){A.staffDown=1;B.shake=6;dThud(.7);dDust(A,A.x0+U(D.staffFoot[0])-50,A.gy,8,1.4)}}
-  // 110-180: the ghostfire gutters out into smoke
-  if(t>=110&&t<190){A.fireA=Math.max(0,1-(t-110)/70);if(t%3===0)for(let k=0;k<2;k++)dSmoke(A,A.x0+(Math.random()<.5?U(8):U(88))+(Math.random()-.5)*10,A.y0+60+Math.random()*44,true)}
-  if(t===112)noiseBurst(.9,.12,600);
-  // 150-215: the cloak tears loose in shreds, from the hem up, and settles
-  if(t>=150&&t<215){const bot=A.cloak.filter(F=>!F.rel).sort((a,b)=>b.f.cy-a.f.cy);
-    for(let i=0;i<2&&i<bot.length;i++){const F=bot[i];dRel(A,F,(F.f.cx-Q.W/2)*.02+(Math.random()-.5)*.6,-.2-Math.random()*.5,(Math.random()-.5)*.12,{drag:.45,flut:.08})}
-    if(t%9===0)noiseBurst(.1,.07,2600)}
-  // 215-305: the shame itself cracks from the mouth and crumbles, from the top down, to rubble and dust
-  if(t===215){dCrack(1);B.shake=8}
-  if(t>=240&&t<305){const tops=A.body.filter(F=>!F.rel).sort((a,b)=>a.f.cy-b.f.cy);
-    for(let k=0;k<2&&k<tops.length;k++){const F=tops[k];dRel(A,F,(F.f.cx-Q.W/2)*.015+(Math.random()-.5)*.9,-Math.random()*.7,(Math.random()-.5)*.25);if(Math.random()<.35)dDust(A,A.x0+F.f.cx,A.y0+F.f.cy,1,.3)}
-    if(t%10===0)dRumble(.25,.1)}
+  const core=ux=>ux>=28&&ux<=66;
+  const isCloak=(r,g,b,ux)=>(r>g*1.6&&r>b*1.15&&!(g>r*.6))||(r+g+b<150&&!core(ux));
+  const rules=[(x,y,r,g,b)=>isFire(r,g,b)&&U(x)>48, (x,y,r,g,b)=>isFire(r,g,b),
+    (x,y,r,g,b)=>U(x)>48&&isCloak(r,g,b,U(x)), (x,y,r,g,b)=>isCloak(r,g,b,U(x)),
+    (x,y)=>{const ux=U(x);return (ux>=60&&ux<=80&&y<20)||(ux>=66&&ux<=74)},
+    (x,y)=>y>=80, (x,y)=>y<12, (x,y)=>{const ux=U(x);return ux<33||ux>58}, (x,y)=>y>=36, ()=>true];
+  A.pcs=rules.map(r=>yCut(Q,r)).filter(Boolean);
+  A.crowd=YEW_CROWD.map(([look,x,y],i)=>({look,tx:x,y,x:LW+30+i*26,start:8+i*16}));
+  A.motes=[];A.waves=[];A.says=[];
+  // one call per piece, the speakers taking turns
+  A.calls=A.pcs.map((p,i)=>({t:150+i*38,who:i%A.crowd.length,w:YEW_SAY[i%2],p}));
+  A.endT=A.calls[A.calls.length-1].t+30}
+function stepYew(A,D){const t=A.t;
+  for(const m of A.crowd){if(t>=m.start&&m.x>m.tx){m.x=Math.max(m.tx,m.x-1.25);m.walk=1}else m.walk=0}
+  for(const cl of A.calls){
+    if(t===cl.t){const m=A.crowd[cl.who];A.says.push({x:m.x+18,y:m.y-58,w:cl.w,t0:t,l:52});tone('triangle',260+cl.who*30,330+cl.who*30,.16,.07);tone('triangle',390+cl.who*30,440+cl.who*30,.14,.05,.03);
+      A.waves.push({x0:m.x+16,y0:m.y-44,p:cl.p,t0:t})}
+    if(t===cl.t+12){const p=cl.p;p.t0=t;const m=A.crowd[cl.who],px=A.x0+p.cx,py=A.y0+p.cy;
+      const dx=px-(m.x+16),dy=py-(m.y-40),d=Math.hypot(dx,dy)||1;p.dx=dx/d;p.dy=dy/d-.35;p.rot=(Math.random()<.5?-1:1)*(.18+Math.random()*.2);
+      dCrack(.8);noiseBurst(.25,.08,1800);tone('sine',880,660,.25,.05);A.hitT=t;A.hitX=px;A.hitY=py;B.shake=Math.max(B.shake||0,4)}}
+  // the loosened pieces drift off and give up their pixels as rising motes of light
+  for(const p of A.pcs){if(p.t0<0)continue;const k=t-p.t0;if(k>46)continue;const e=SSd(k/50);
+    const ox=p.dx*e*34,oy=p.dy*e*34-k*.12;for(let q=0;q<(k<30?7:3);q++){const s2=p.pts[Math.floor(Math.random()*p.pts.length)];
+      const r=Math.round(s2[2]*.4+255*.6),g=Math.round(s2[3]*.4+226*.6),b=Math.round(s2[4]*.4+160*.6);
+      A.motes.push({x:A.x0+s2[0]+ox,y:A.y0+s2[1]+oy,vx:(Math.random()-.5)*.3+p.dx*.25,vy:-.25-Math.random()*.55,l:40+Math.random()*30,col:'rgb('+r+','+g+','+b+')',ph:Math.random()*6})}}
+  for(const m of A.motes){m.l--;m.x+=m.vx+Math.sin(t/12+m.ph)*.12;m.y+=m.vy;m.vy*=.99}A.motes=A.motes.filter(m=>m.l>0);
+  if(t===A.endT){B.flash=8;sfx('heal')}
+  if(t===A.endT+40)tone('triangle',523,523,.5,.06);
+  if(t===A.endT+44){A.says.push({x:A.x0+A.Q.W/2+2,y:A.gy-70,w:'Mañumwiyiñ.',t0:t,l:90,person:1})}
 }
-function drawYew(c,A,D){const Q=A.Q,t=A.t,al=dFade(A),U=Q.MX;
-  A.ox=t<14?(t%4<2?1:-1):0;const X=A.x0+A.ox,Y=A.y0+A.oy;
-  // a little daylight where it stood, once it has crumbled
-  if(t>=250){const p=SSd((t-250)/50)*al,cx=A.x0+Q.W/2,cy=A.gy-20;const g=c.createRadialGradient(cx,cy,2,cx,cy,52);g.addColorStop(0,'rgba(255,232,170,'+(.45*p).toFixed(2)+')');g.addColorStop(1,'rgba(255,220,150,0)');c.fillStyle=g;c.fillRect(cx-54,cy-54,108,108)}
-  if(A.fireA>0){c.globalAlpha=A.fireA*al;c.drawImage(A.fire,Math.round(X),Math.round(Y+(1-A.fireA)*6));c.globalAlpha=1}
-  // the staff, toppling about its foot
-  {const fx=U(D.staffFoot[0]),fy=D.staffFoot[1];c.save();c.globalAlpha=al;c.translate(X+fx,Y+fy);c.rotate(-A.staffA);c.drawImage(A.staff,-fx,-fy);c.restore();c.globalAlpha=1}
-  drawFrags(c,A,al);
-  // the stitches mended as they snap (while the face is still whole)
-  if(t<240)for(const sx of A.snapped){c.fillStyle=A.skin;const x=X+U(sx),y=Y+D.stY;c.fillRect(Math.round(x)-1,Math.round(y)-2,2,1);c.fillRect(Math.round(x)-1,Math.round(y)+1,2,1)}
-  if(t>=215&&t<250)drawCracks(c,A.cr,SSd((t-215)/25),X,Y,0,A);
-  if(A.key){const k=A.key;c.globalAlpha=al;R(c,Math.round(k.x)-1,Math.round(k.y)-2,3,3,'#f0c848');R(c,Math.round(k.x)+2,Math.round(k.y)-1,4,1,'#d4a42c');R(c,Math.round(k.x)+4,Math.round(k.y),1,1,'#d4a42c');c.globalAlpha=1}
-  drawFX(c,A,al)}
+function drawYew(c,A,D){const Q=A.Q,t=A.t,al=t<A.T-40?1:Math.max(0,(A.T-t)/40);
+  const sh=A.hitT&&t-A.hitT<8?(t%2?1:-1):0;const X=A.x0+sh,Y=A.y0;
+  const gone=A.pcs.filter(p=>p.t0>=0).length,tot=A.pcs.length;
+  // the person who was under the shame all along, there as soon as enough of it has fallen away
+  const pa=SSd((gone-tot*.45)/(tot*.45))*al;
+  const pcv=ctCharSpriteBig('walker','right',0),pw=pcv.width,ph=pcv.height,ppx=Math.round(A.x0+Q.W/2-pw/2),ppy=138-ph;
+  if(pa>0){ell(c,ppx+pw/2,138,pw*.4,3,'rgba(0,0,14,'+(.35*pa).toFixed(2)+')');c.globalAlpha=pa;c.drawImage(pcv,ppx,ppy);c.globalAlpha=1}
+  if(t>=A.endT){const p=SSd((t-A.endT)/40)*al,cx=ppx+pw/2,cy=ppy+ph*.45;const g=c.createRadialGradient(cx,cy,2,cx,cy,50);g.addColorStop(0,'rgba(255,236,180,'+(.4*p*(1-SSd((t-A.endT-60)/80))).toFixed(2)+')');g.addColorStop(1,'rgba(255,220,150,0)');c.fillStyle=g;c.fillRect(cx-52,cy-52,104,104)}
+  // what is left of the Yewen; pieces that have come loose drift away, turn and fade
+  c.save();
+  for(const p of A.pcs){if(p.t0<0){c.globalAlpha=al;c.drawImage(p.cv,Math.round(X),Math.round(Y));continue}
+    const k=t-p.t0;if(k>50)continue;const e=SSd(k/50),ox=p.dx*e*34,oy=p.dy*e*34-k*.12,a=1-SSd((k-4)/40);
+    if(a<=0)continue;c.globalAlpha=a*al;c.save();c.imageSmoothingEnabled=true;c.translate(X+p.cx+ox,Y+p.cy+oy);c.rotate(p.rot*e);c.scale(1-e*.15,1-e*.15);
+    c.drawImage(p.cv,-p.cx,-p.cy);
+    if(k<10){c.globalCompositeOperation='lighter';c.globalAlpha=(1-k/10)*.6*al;c.drawImage(p.cv,-p.cx,-p.cy)}
+    c.restore()}
+  c.restore();c.globalAlpha=1;
+  // each call travels as a ripple of light from the speaker to the Yewen
+  for(const w of A.waves){const k=t-w.t0;if(k<0||k>16)continue;const q=SSd(k/12),tx=A.x0+w.p.cx,ty=A.y0+w.p.cy,x=w.x0+(tx-w.x0)*q,y=w.y0+(ty-w.y0)*q-Math.sin(q*Math.PI)*10;
+    const a2=k<12?.9:Math.max(0,(16-k)/4)*.9;const g=c.createRadialGradient(x,y,0,x,y,9);g.addColorStop(0,'rgba(255,248,220,'+(a2*al).toFixed(2)+')');g.addColorStop(1,'rgba(255,220,140,0)');c.fillStyle=g;c.fillRect(x-9,y-9,18,18);
+    if(k>=12){const r=(k-12)*4;c.strokeStyle='rgba(255,240,200,'+((16-k)/4*.8*al).toFixed(2)+')';c.lineWidth=1;c.beginPath();c.arc(tx,ty,r+3,0,6.283);c.stroke()}}
+  // light motes rising from the pieces as they go
+  c.save();c.globalCompositeOperation='lighter';for(const m of A.motes){c.globalAlpha=Math.min(1,m.l/25)*.8*al;c.fillStyle=m.col;c.fillRect(m.x,m.y,1.2,1.2)}c.restore();c.globalAlpha=1;
+  // the people of Santiago, walking in and standing with you; they lean in when they call out
+  const cs=A.crowd.slice().sort((a,b)=>a.y-b.y);
+  for(const m of cs){const fr=m.walk?Math.floor(t/7)%4:0,cv=ctCharSpriteBig(m.look,'left',fr),bob=m.walk?(Math.floor(t/7)%2):0;
+    const call=A.calls.find(cl=>cl.who===A.crowd.indexOf(m)&&t-cl.t>=0&&t-cl.t<14),lean=call?Math.round(Math.sin((t-call.t)/14*Math.PI)*3):0;
+    const hop=t>A.endT+50&&t<A.endT+90?Math.round(Math.abs(Math.sin((t-A.endT)/7+m.tx))*3):0;
+    ell(c,m.x+cv.width/2,m.y,cv.width*.4,3,'rgba(0,0,14,'+(.32*al).toFixed(2)+')');c.globalAlpha=al;c.drawImage(cv,Math.round(m.x-lean),Math.round(m.y-cv.height-bob-hop));c.globalAlpha=1}
+  // what they call out, in bubbles over their heads
+  for(const sb of A.says){const k=t-sb.t0;if(k<0||k>sb.l)continue;const a=Math.min(1,k/5)*Math.min(1,(sb.l-k)/8)*al,sc=k<6?.7+.3*SSd(k/6):1;
+    OV.push(()=>{ctx.save();ctx.globalAlpha=a;ctx.font='bold '+Math.round(13*sc)+'px ui-monospace,Menlo,Consolas,monospace';const text=GRm(sb.w);
+      const w=ctx.measureText(text).width+12,bx=Math.round(sb.x*2-w/2),by=Math.round(sb.y*2-26-(sb.person?0:k*.2));
+      ctx.fillStyle='#181018';ctx.fillRect(bx-2,by-2,w+4,24);ctx.fillStyle=sb.person?'#fff6d8':'#fffaf0';ctx.fillRect(bx,by,w,20);
+      ctx.fillStyle='#181018';ctx.fillRect(sb.x*2-3,by+20,6,4);ctx.fillStyle='#2a1a3a';ctx.textAlign='center';ctx.fillText(text,sb.x*2,by+15);ctx.textAlign='left';ctx.restore()})}
+}
 
 /* ============================================================
    CUTSCENES, upgraded: full-width scenes painted in layers (cached), parallax drift,
