@@ -60,7 +60,7 @@ function contSlot(n){
   setSlot(n);const sv=loadSave(n);if(!sv)return;gcEvent('continuar','Continuar partida');
   S=Object.assign(newState(sv.hero||'llanka'),sv);S.items.diwen=S.items.diwen||0;S.gear=S.gear||{};S.gloss=LANG;S.pw={speed:0,pewen:0,gold:0};S.roots=S.roots.map(r=>r==='amu'?'amutu':r==='wiñotu'?'wüñotreka':r==='nag'?'nagtu':r).filter(r=>ROOTS[r]);if(S.last)S.last=null;$('title').style.display='none';mode='map';AU.name=null;loadMap(MAPS[S.map]?S.map:'rupu',S.x,S.y);
 }
-function newGo(src){slotPick(true,n=>{setSlot(n);S=src?heroState(src):newState(HERO);persist();gcEvent('nuevo-'+(S.hero||HERO),'Juego nuevo: '+((HEROES[S.hero]||{}).name||S.hero));$('title').style.display='none';startCut()})}
+function newGo(src){slotPick(true,n=>{setSlot(n);S=src?heroState(src,HERO):newState(HERO);persist();gcEvent('nuevo-'+(S.hero||HERO),'Juego nuevo: '+((HEROES[S.hero]||{}).name||S.hero));$('title').style.display='none';startCut()})}
 $('bNew').onclick=()=>{auInit();const won=[1,2,3].filter(n=>{const v=loadSave(n);return v&&v.flags&&v.flags.won});
   if(!won.length)return newGo(null);
   const en=LANG==='en';

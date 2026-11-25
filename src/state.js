@@ -17,7 +17,7 @@ function loadSave(n){try{const t=localStorage.getItem(slotKey(n||SLOT));return t
 const heroMul=()=>Math.min(2.75,1.6+.25*((S.hm||1)-1));
 function heroExp(){const k=progK(),L=[2,7,12,17,21,25,29][Math.min(6,k)];
   return{atk:L+4+(k>=2?3:0),def:1+Math.floor(L/2)+(k>=1?2:0),hp:24+HPQ*(L-1)+4*k+(k>=1?4:0)+4*Math.floor(k*.8)}}
-function heroState(src){const s=newState(src.hero||'llanka');
+function heroState(src,hero){const s=newState(hero||src.hero||'llanka');   // weichafe mode plays as the hero chosen on the title, not the one from the finished game
   for(const k of ['lvl','xp','baseMax','baseAtk','baseDef','gold','hints'])if(src[k]!=null)s[k]=src[k];
   s.items=Object.assign(s.items,src.items||{});s.gear=Object.assign({},src.gear||{});s.hm=(src.hm||0)+1;
   s.hp=s.baseMax+(s.gear.trariwe?4:0);return s}
