@@ -16,7 +16,7 @@ const DEFEAT={
   // and the carapace and the skull crack open and crumble
   ngamlef:{T:360,base:()=>tplCanvas('ngamlef@b',0,1),head:[75,80,23,23],abd:[121,62,31,39],eyes:[[64,74],[86,74]]},
   // Yewen: the people of Santiago come in and call it away, piece by piece, until an ordinary person stands there
-  yewen:{T:700,base:()=>tplCanvas('yewen@b',0,1)}
+  yewen:{T:690,base:()=>tplCanvas('yewen@b',0,1)}
 };
 function defStart(e){B.defA={t:0,e,k:e.t,T:DEFEAT[e.t].T};const d=document.getElementById('dlg');if(d)d.style.display='none';active=null}
 function defSkip(){const A=B.defA;if(A&&!A.done&&A.t<A.T-20)A.t=A.T-20}
@@ -244,15 +244,19 @@ function drawNgam(c,A,D){const Q=A.Q,t=A.t,al=dFade(A),U=Q.MX;
   drawFX(c,A,al)}
 
 /* ---------- Yewen ---------- */
-// The people of Santiago, no longer ashamed, come in and stand with you. Each one calls out, «¡Amutunge!» or
-// «¡Yewentuwelayaiñ!», and each call breaks a piece off the Yewen, which comes loose, drifts away and dissolves into
-// light, until nothing of it is left and an ordinary person stands where it stood and says «Mañumwiyiñ».
-const YEW_CROWD=[['cook',100,134],['kona',118,141],['childf',136,135],['teacher',154,142],['child',172,134],['fisherw',190,141]];
+// The people of Santiago, no longer ashamed, walk in and surround the Yewen. Then, one after another, they raise a fist
+// and call out «¡Amutunge!» or «¡Yewentuwelayaiñ!»; each call hits like a blow and blasts a piece off it, until at the
+// last call all of them shout together, the last of it is gone, and an ordinary person stands there and says «Mañumwiyiñ».
+// [painted sprite, feet x, feet y, side]: side 'L' stands left of the Yewen and faces right; y<136 stands behind it
+const YEW_CROWD=[['joven',16,126,'L'],['estud',120,124,'R'],['mujer',6,148,'L'],['obrero',130,148,'R'],['abuelo',44,120,'L'],['lamngen',96,119,'R']];
 const YEW_SAY=['¡Amutunge!','¡Yewentuwelayaiñ!'];
 function yCut(Q,rule){const {W,H,px}=Q,[k,g]=mk(W,H),pts=[];if(!px)return null;const im=g.createImageData(W,H),o=im.data;let sx=0,sy=0;
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=(y*W+x)*4,j=y*W+x;if(px[i+3]<10||Q.used[j])continue;if(!rule(x,y,px[i],px[i+1],px[i+2]))continue;
     o[i]=px[i];o[i+1]=px[i+1];o[i+2]=px[i+2];o[i+3]=px[i+3];Q.used[j]=1;sx+=x;sy+=y;pts.push([x,y,px[i],px[i+1],px[i+2]])}
   if(!pts.length)return null;g.putImageData(im,0,0);return {cv:k,cx:sx/pts.length,cy:sy/pts.length,pts,t0:-1}}
+let _yMir={};
+function yPerson(n,fr,faceRight){const key=n+fr+(faceRight?'r':'l');if(_yMir[key])return _yMir[key];const cv=tplCanvas('hero_stg_'+n,fr,1);
+  if(!faceRight)return _yMir[key]=cv;const [k,g]=mk(cv.width,cv.height);g.translate(cv.width,0);g.scale(-1,1);g.drawImage(cv,0,0);return _yMir[key]=k}
 function setYew(A,D){const Q=A.Q,U=Q.MX;
   const isFire=(r,g,b)=>r>40&&b>=r*.6&&r>=b*.8&&g<r*.75&&g<b*.8;
   const core=ux=>ux>=28&&ux<=66;
@@ -262,62 +266,71 @@ function setYew(A,D){const Q=A.Q,U=Q.MX;
     (x,y)=>{const ux=U(x);return (ux>=60&&ux<=80&&y<20)||(ux>=66&&ux<=74)},
     (x,y)=>y>=80, (x,y)=>y<12, (x,y)=>{const ux=U(x);return ux<33||ux>58}, (x,y)=>y>=36, ()=>true];
   A.pcs=rules.map(r=>yCut(Q,r)).filter(Boolean);
-  A.crowd=YEW_CROWD.map(([look,x,y],i)=>({look,tx:x,y,x:LW+30+i*26,start:8+i*16}));
-  A.motes=[];A.waves=[];A.says=[];
-  // one call per piece, the speakers taking turns
-  A.calls=A.pcs.map((p,i)=>({t:150+i*38,who:i%A.crowd.length,w:YEW_SAY[i%2],p}));
-  A.endT=A.calls[A.calls.length-1].t+30}
-function stepYew(A,D){const t=A.t;
-  for(const m of A.crowd){if(t>=m.start&&m.x>m.tx){m.x=Math.max(m.tx,m.x-1.25);m.walk=1}else m.walk=0}
+  const cxY=A.x0+Q.W/2;   // the Yewen's centre on screen; the crowd stands round it
+  A.crowd=YEW_CROWD.map(([n,dx,y,side],i)=>({n,tx:A.x0+dx,y,side,x:LW+24+i*30,start:6+i*14,face:'l'}));
+  A.motes=[];A.rings=[];A.says=[];A.kick=[0,0];
+  // one call per piece, the speakers taking turns; the last call is everyone together
+  A.calls=A.pcs.map((p,i)=>({t:230+i*34,who:i===A.pcs.length-1?-1:i%A.crowd.length,w:i===A.pcs.length-1?YEW_SAY[0]:YEW_SAY[i%2],p}));
+  A.endT=A.calls[A.calls.length-1].t+40}
+function stepYew(A,D){const Q=A.Q,t=A.t;
+  // walk in round the Yewen
+  for(const m of A.crowd){if(t<m.start)continue;const d=m.tx-m.x;if(Math.abs(d)>.6){m.x+=Math.sign(d)*Math.min(1.7,Math.abs(d));m.walk=1;m.face=d<0?'l':'r'}else{m.x=m.tx;m.walk=0;m.face=m.side==='L'?'r':'l'}}
   for(const cl of A.calls){
-    if(t===cl.t){const m=A.crowd[cl.who];A.says.push({x:m.x+18,y:m.y-58,w:cl.w,t0:t,l:52});tone('triangle',260+cl.who*30,330+cl.who*30,.16,.07);tone('triangle',390+cl.who*30,440+cl.who*30,.14,.05,.03);
-      A.waves.push({x0:m.x+16,y0:m.y-44,p:cl.p,t0:t})}
-    if(t===cl.t+12){const p=cl.p;p.t0=t;const m=A.crowd[cl.who],px=A.x0+p.cx,py=A.y0+p.cy;
-      const dx=px-(m.x+16),dy=py-(m.y-40),d=Math.hypot(dx,dy)||1;p.dx=dx/d;p.dy=dy/d-.35;p.rot=(Math.random()<.5?-1:1)*(.18+Math.random()*.2);
-      dCrack(.8);noiseBurst(.25,.08,1800);tone('sine',880,660,.25,.05);A.hitT=t;A.hitX=px;A.hitY=py;B.shake=Math.max(B.shake||0,4)}}
-  // the loosened pieces drift off and give up their pixels as rising motes of light
-  for(const p of A.pcs){if(p.t0<0)continue;const k=t-p.t0;if(k>46)continue;const e=SSd(k/50);
-    const ox=p.dx*e*34,oy=p.dy*e*34-k*.12;for(let q=0;q<(k<30?7:3);q++){const s2=p.pts[Math.floor(Math.random()*p.pts.length)];
-      const r=Math.round(s2[2]*.4+255*.6),g=Math.round(s2[3]*.4+226*.6),b=Math.round(s2[4]*.4+160*.6);
-      A.motes.push({x:A.x0+s2[0]+ox,y:A.y0+s2[1]+oy,vx:(Math.random()-.5)*.3+p.dx*.25,vy:-.25-Math.random()*.55,l:40+Math.random()*30,col:'rgb('+r+','+g+','+b+')',ph:Math.random()*6})}}
-  for(const m of A.motes){m.l--;m.x+=m.vx+Math.sin(t/12+m.ph)*.12;m.y+=m.vy;m.vy*=.99}A.motes=A.motes.filter(m=>m.l>0);
-  if(t===A.endT){B.flash=8;sfx('heal')}
-  if(t===A.endT+40)tone('triangle',523,523,.5,.06);
-  if(t===A.endT+44){A.says.push({x:A.x0+A.Q.W/2+2,y:A.gy-70,w:'Mañumwiyiñ.',t0:t,l:90,person:1})}
+    const who=cl.who<0?A.crowd:[A.crowd[cl.who]];
+    if(t===cl.t){for(const m of who)m.shout=t;
+      if(cl.who<0)A.says.push({x:A.x0+Q.W/2,y:A.y0+14,w:cl.w,t0:t,l:70,big:1});else A.says.push({m:who[0],w:cl.w,t0:t,l:46})
+      tone('sawtooth',220,300,.12,cl.who<0?.12:.07);tone('triangle',330,440,.14,cl.who<0?.1:.06,.02)}
+    // the words land: a heavy blow, a flash, a shockwave, the piece blasted off
+    if(t===cl.t+6){const p=cl.p;p.t0=t;const px=A.x0+p.cx,py=A.y0+p.cy;let sx=0,sy=0;for(const m of who){sx+=m.x;sy+=m.y-46}sx/=who.length;sy/=who.length;
+      const dx=px-sx,dy=py-sy,d=Math.hypot(dx,dy)||1;p.dx=dx/d;p.dy=dy/d;p.rot=(Math.random()<.5?-1:1)*(.5+Math.random()*.5);p.sp=cl.who<0?5.5:4.2;
+      const big=cl.who<0;B.shake=big?22:12;B.flash=big?14:7;A.kick=[p.dx*(big?7:4),p.dy*(big?4:2)];A.hitT=t;
+      tone('sine',120,40,.3,big?.4:.28);noiseBurst(.35,big?.3:.2,160);dCrack(1);noiseBurst(.12,.16,3000);
+      A.rings.push({x:px,y:py,t0:t,big});dSparks(A,px,py,big?40:18,'#fff2c8',big?4:3);
+      for(let q=0;q<(big?6:3);q++)A.fx.push({k:'d',x:px+(Math.random()-.5)*10,y:py+(Math.random()-.5)*10,vx:p.dx*(1+Math.random()),vy:p.dy*(1+Math.random())-.3,dr:.94,r:4+Math.random()*4,gr:.3,a:.45,col:'#e8dcd0',l:30,fl:25})}}
+  A.kick[0]*=.82;A.kick[1]*=.82;
+  // blasted pieces fly off fast, slowing as they burn away into motes of light
+  for(const p of A.pcs){if(p.t0<0)continue;const k=t-p.t0;if(k>40)continue;
+    p.ox=(p.ox||0)+p.dx*p.sp*Math.pow(.9,k);p.oy=(p.oy||0)+p.dy*p.sp*Math.pow(.9,k)-.08*k*.2;
+    for(let q=0;q<(k<14?14:k<30?5:2);q++){const s2=p.pts[Math.floor(Math.random()*p.pts.length)];
+      const r=Math.round(s2[2]*.35+255*.65),g=Math.round(s2[3]*.35+228*.65),b=Math.round(s2[4]*.35+170*.65),v=k<10?2.2:1;
+      A.motes.push({x:A.x0+s2[0]+p.ox,y:A.y0+s2[1]+p.oy,vx:p.dx*v*(.5+Math.random())+(Math.random()-.5)*.8,vy:p.dy*v*(.5+Math.random())-.3-Math.random()*.5,l:30+Math.random()*30,col:'rgb('+r+','+g+','+b+')',ph:Math.random()*6})}}
+  for(const m of A.motes){m.l--;m.x+=m.vx;m.y+=m.vy;m.vx*=.95;m.vy=m.vy*.95-.02}A.motes=A.motes.filter(m=>m.l>0);
+  if(t===A.endT){B.flash=12;sfx('heal')}
+  if(t===A.endT+40){tone('triangle',523,523,.5,.06);A.says.push({person:1,x:A.x0+Q.W/2+2,y:A.gy-76,w:'Mañumwiyiñ.',t0:t,l:100})}
 }
 function drawYew(c,A,D){const Q=A.Q,t=A.t,al=t<A.T-40?1:Math.max(0,(A.T-t)/40);
-  const sh=A.hitT&&t-A.hitT<8?(t%2?1:-1):0;const X=A.x0+sh,Y=A.y0;
+  const X=A.x0+A.kick[0]+(A.hitT&&t-A.hitT<10?(t%2?1:-1):0),Y=A.y0+A.kick[1];
   const gone=A.pcs.filter(p=>p.t0>=0).length,tot=A.pcs.length;
-  // the person who was under the shame all along, there as soon as enough of it has fallen away
-  const pa=SSd((gone-tot*.45)/(tot*.45))*al;
-  const pcv=ctCharSpriteBig('walker','right',0),pw=pcv.width,ph=pcv.height,ppx=Math.round(A.x0+Q.W/2-pw/2),ppy=138-ph;
-  if(pa>0){ell(c,ppx+pw/2,138,pw*.4,3,'rgba(0,0,14,'+(.35*pa).toFixed(2)+')');c.globalAlpha=pa;c.drawImage(pcv,ppx,ppy);c.globalAlpha=1}
-  if(t>=A.endT){const p=SSd((t-A.endT)/40)*al,cx=ppx+pw/2,cy=ppy+ph*.45;const g=c.createRadialGradient(cx,cy,2,cx,cy,50);g.addColorStop(0,'rgba(255,236,180,'+(.4*p*(1-SSd((t-A.endT-60)/80))).toFixed(2)+')');g.addColorStop(1,'rgba(255,220,150,0)');c.fillStyle=g;c.fillRect(cx-52,cy-52,104,104)}
-  // what is left of the Yewen; pieces that have come loose drift away, turn and fade
-  c.save();
+  // the crowd: back row first (behind the Yewen), then the Yewen, then the front row
+  const drawM=m=>{const sh=m.shout!=null&&t-m.shout<26?(t-m.shout<6?3:4):null;
+    const fr=sh!=null?sh:m.walk?(Math.floor(t/8)%2?1:2):0,cv=yPerson(m.n,fr,m.face==='r'),bob=m.walk?(Math.floor(t/8)%2):0;
+    const hop=t>A.endT+50&&t<A.endT+100?Math.round(Math.abs(Math.sin((t-A.endT)/7+m.tx))*3):0,lean=sh!=null&&t-m.shout<10?(m.face==='r'?2:-2):0;
+    ell(c,m.x,m.y,cv.width*.32,3,'rgba(0,0,14,'+(.32*al).toFixed(2)+')');c.globalAlpha=al;c.drawImage(cv,Math.round(m.x-cv.width/2+lean),Math.round(m.y-cv.height+2-bob-hop));c.globalAlpha=1};
+  const back=A.crowd.filter(m=>m.y<136).sort((a,b)=>a.y-b.y),front=A.crowd.filter(m=>m.y>=136).sort((a,b)=>a.y-b.y);
+  back.forEach(drawM);
+  // the person who was under the shame all along, showing through as it is blasted away
+  const pa=SSd((gone-tot*.4)/(tot*.5))*al;const pcv=yPerson('persona',0,true),pw=pcv.width,ph=pcv.height,ppx=Math.round(A.x0+Q.W/2-pw/2),ppy=A.gy-2-ph;
+  if(pa>0){ell(c,ppx+pw/2,A.gy-3,pw*.32,3,'rgba(0,0,14,'+(.35*pa).toFixed(2)+')');c.globalAlpha=pa;c.drawImage(pcv,ppx,ppy);c.globalAlpha=1}
+  if(t>=A.endT){const p=SSd((t-A.endT)/30)*al*(1-SSd((t-A.endT-60)/90)),cx=ppx+pw/2,cy=ppy+ph*.45;const g=c.createRadialGradient(cx,cy,2,cx,cy,56);g.addColorStop(0,'rgba(255,240,190,'+(.55*p).toFixed(2)+')');g.addColorStop(1,'rgba(255,220,150,0)');c.fillStyle=g;c.fillRect(cx-58,cy-58,116,116)}
+  // what is left of the Yewen, and the pieces blasted off it, burning away
   for(const p of A.pcs){if(p.t0<0){c.globalAlpha=al;c.drawImage(p.cv,Math.round(X),Math.round(Y));continue}
-    const k=t-p.t0;if(k>50)continue;const e=SSd(k/50),ox=p.dx*e*34,oy=p.dy*e*34-k*.12,a=1-SSd((k-4)/40);
-    if(a<=0)continue;c.globalAlpha=a*al;c.save();c.imageSmoothingEnabled=true;c.translate(X+p.cx+ox,Y+p.cy+oy);c.rotate(p.rot*e);c.scale(1-e*.15,1-e*.15);
-    c.drawImage(p.cv,-p.cx,-p.cy);
-    if(k<10){c.globalCompositeOperation='lighter';c.globalAlpha=(1-k/10)*.6*al;c.drawImage(p.cv,-p.cx,-p.cy)}
+    const k=t-p.t0;if(k>34)continue;const a=1-SSd(k/30);if(a<=0)continue;
+    c.save();c.globalAlpha=a*al;c.imageSmoothingEnabled=true;c.translate(X+p.cx+p.ox,Y+p.cy+p.oy);c.rotate(p.rot*SSd(k/30));c.drawImage(p.cv,-p.cx,-p.cy);
+    if(k<12){c.globalCompositeOperation='lighter';c.globalAlpha=(1-k/12)*al;c.drawImage(p.cv,-p.cx,-p.cy);c.drawImage(p.cv,-p.cx,-p.cy)}c.restore()}
+  c.globalAlpha=1;
+  front.forEach(drawM);
+  // shockwaves where the words land
+  for(const r of A.rings){const k=t-r.t0;if(k>22)continue;const q=k/22,R2=(r.big?10:6)+q*(r.big?70:44);
+    c.save();c.globalCompositeOperation='lighter';c.strokeStyle='rgba(255,236,190,'+((1-q)*.9*al).toFixed(2)+')';c.lineWidth=(1-q)*4+1;c.beginPath();c.arc(r.x,r.y,R2,0,6.283);c.stroke();
+    if(k<6){const g=c.createRadialGradient(r.x,r.y,0,r.x,r.y,R2*.8);g.addColorStop(0,'rgba(255,255,240,'+((1-k/6)*al).toFixed(2)+')');g.addColorStop(1,'rgba(255,220,150,0)');c.fillStyle=g;c.fillRect(r.x-R2,r.y-R2,R2*2,R2*2)}
     c.restore()}
-  c.restore();c.globalAlpha=1;
-  // each call travels as a ripple of light from the speaker to the Yewen
-  for(const w of A.waves){const k=t-w.t0;if(k<0||k>16)continue;const q=SSd(k/12),tx=A.x0+w.p.cx,ty=A.y0+w.p.cy,x=w.x0+(tx-w.x0)*q,y=w.y0+(ty-w.y0)*q-Math.sin(q*Math.PI)*10;
-    const a2=k<12?.9:Math.max(0,(16-k)/4)*.9;const g=c.createRadialGradient(x,y,0,x,y,9);g.addColorStop(0,'rgba(255,248,220,'+(a2*al).toFixed(2)+')');g.addColorStop(1,'rgba(255,220,140,0)');c.fillStyle=g;c.fillRect(x-9,y-9,18,18);
-    if(k>=12){const r=(k-12)*4;c.strokeStyle='rgba(255,240,200,'+((16-k)/4*.8*al).toFixed(2)+')';c.lineWidth=1;c.beginPath();c.arc(tx,ty,r+3,0,6.283);c.stroke()}}
-  // light motes rising from the pieces as they go
-  c.save();c.globalCompositeOperation='lighter';for(const m of A.motes){c.globalAlpha=Math.min(1,m.l/25)*.8*al;c.fillStyle=m.col;c.fillRect(m.x,m.y,1.2,1.2)}c.restore();c.globalAlpha=1;
-  // the people of Santiago, walking in and standing with you; they lean in when they call out
-  const cs=A.crowd.slice().sort((a,b)=>a.y-b.y);
-  for(const m of cs){const fr=m.walk?Math.floor(t/7)%4:0,cv=ctCharSpriteBig(m.look,'left',fr),bob=m.walk?(Math.floor(t/7)%2):0;
-    const call=A.calls.find(cl=>cl.who===A.crowd.indexOf(m)&&t-cl.t>=0&&t-cl.t<14),lean=call?Math.round(Math.sin((t-call.t)/14*Math.PI)*3):0;
-    const hop=t>A.endT+50&&t<A.endT+90?Math.round(Math.abs(Math.sin((t-A.endT)/7+m.tx))*3):0;
-    ell(c,m.x+cv.width/2,m.y,cv.width*.4,3,'rgba(0,0,14,'+(.32*al).toFixed(2)+')');c.globalAlpha=al;c.drawImage(cv,Math.round(m.x-lean),Math.round(m.y-cv.height-bob-hop));c.globalAlpha=1}
+  c.save();c.globalCompositeOperation='lighter';for(const m of A.motes){c.globalAlpha=Math.min(1,m.l/20)*.9*al;c.fillStyle=m.col;c.fillRect(m.x,m.y,1.4,1.4)}c.restore();c.globalAlpha=1;
+  drawFX(c,A,al);
   // what they call out, in bubbles over their heads
-  for(const sb of A.says){const k=t-sb.t0;if(k<0||k>sb.l)continue;const a=Math.min(1,k/5)*Math.min(1,(sb.l-k)/8)*al,sc=k<6?.7+.3*SSd(k/6):1;
-    OV.push(()=>{ctx.save();ctx.globalAlpha=a;ctx.font='bold '+Math.round(13*sc)+'px ui-monospace,Menlo,Consolas,monospace';const text=GRm(sb.w);
-      const w=ctx.measureText(text).width+12,bx=Math.round(sb.x*2-w/2),by=Math.round(sb.y*2-26-(sb.person?0:k*.2));
-      ctx.fillStyle='#181018';ctx.fillRect(bx-2,by-2,w+4,24);ctx.fillStyle=sb.person?'#fff6d8':'#fffaf0';ctx.fillRect(bx,by,w,20);
-      ctx.fillStyle='#181018';ctx.fillRect(sb.x*2-3,by+20,6,4);ctx.fillStyle='#2a1a3a';ctx.textAlign='center';ctx.fillText(text,sb.x*2,by+15);ctx.textAlign='left';ctx.restore()})}
+  for(const sb of A.says){const k=t-sb.t0;if(k<0||k>sb.l)continue;const a=Math.min(1,k/4)*Math.min(1,(sb.l-k)/8)*al,sc=k<5?.6+.4*SSd(k/5):1;
+    const bx0=sb.m?sb.m.x:sb.x,by0=sb.m?sb.m.y-80:sb.y,jit=!sb.person&&k<8?(k%2?(sb.big?2:1):-(sb.big?2:1)):0;
+    OV.push(()=>{ctx.save();ctx.globalAlpha=a;const fs=Math.round((sb.big?15:13)*sc);ctx.font='bold '+fs+'px ui-monospace,Menlo,Consolas,monospace';const text=GRm(sb.w);
+      const w=ctx.measureText(text).width+12,cx=Math.max(w/2+4,Math.min(LW*2-w/2-4,bx0*2+jit)),bx=Math.round(cx-w/2),by=Math.round(by0*2-26-(sb.person?0:k*.25));
+      ctx.fillStyle='#181018';ctx.fillRect(bx-2,by-2,w+4,fs+11);ctx.fillStyle=sb.person?'#fff6d8':'#fffaf0';ctx.fillRect(bx,by,w,fs+7);
+      ctx.fillStyle='#181018';ctx.fillRect(Math.round(bx0*2)-3,by+fs+7,6,4);ctx.fillStyle=sb.big?'#7a1020':'#2a1a3a';ctx.textAlign='center';ctx.fillText(text,cx,by+fs+1);ctx.textAlign='left';ctx.restore()})}
 }
