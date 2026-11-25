@@ -38,7 +38,9 @@ $('bMus').onclick=()=>toggleMute();
 $('bMus').textContent=AU.muted?'♪ Música: no':'♪ Música: sí';$('pN').textContent=AU.muted?'♪×':'♪';
 const HEROBTN=[['hM','millaray'],['hA','ayelen'],['hL','llanka'],['hK','kallfurungi']];
 for(const [id,lk] of HEROBTN){const cvs=$(id).querySelector('canvas'),c=cvs.getContext('2d');c.imageSmoothingEnabled=false;
-  let t=0;setInterval(()=>{t++;c.clearRect(0,0,32,48);c.drawImage(charSprite(lk,'down',HERO===lk?Math.floor(t)%4:0),0,0,32,48)},180);
+  let t=0;setInterval(()=>{t++;c.clearRect(0,0,32,48);const fr=HERO===lk?Math.floor(t)%4:0;
+    if(GEM_ON&&GEM_READY&&GEMI.ttl[lk]){const s=GEMI.ttl[lk][fr];c.drawImage(s,Math.round((32-s.width)/2),48-s.height-1)}   /* drawn 1:1 at title size, so every pixel stays square */
+    else c.drawImage(charSprite(lk,'down',fr),0,0,32,48)},180);
   $(id).onclick=()=>{HERO=lk;for(const [i2,l2] of HEROBTN)$(i2).classList.toggle('on',l2===lk);sfx('ok')}}
 $('title').addEventListener('pointerdown',()=>{auInit();if(!AU.name)playSong('intro')});
 playSong('intro');
