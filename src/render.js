@@ -855,13 +855,13 @@ function renderBattle(){
       if(epu){const ec=enemyCanvas('epunamun',ET.epunamun.bs,Math.floor(frame/16)%2);ell(c,0,4,ec.width*.38,4,'rgba(255,60,40,.25)');c.drawImage(ec,-Math.round(ec.width/2),-ec.height+6)}
       else drawNgen(c,0,0,1,frame,vr);c.restore();c.globalAlpha=1;
       {const eh=epu?enemyCanvas('epunamun',ET.epunamun.bs,0).height:0;
-       const eyY=epu?ny+rise+(6-eh*.80)*s2:ny+rise-80*s2,mY=epu?ny+rise+(6-eh*.70)*s2:ny+rise-71*s2,ex1=nx-3*s2,ex2=nx+3*s2;
+       const NF=ngenFace(vr),eyY=epu?ny+rise+(6-eh*.80)*s2:ny+rise-NF.ey*s2,mY=epu?ny+rise+(6-eh*.70)*s2:ny+rise-NF.my*s2,ex1=epu?nx-3*s2:nx+(NF.cx-NF.ex)*s2,ex2=epu?nx+3*s2:nx+(NF.cx+NF.ex)*s2;
        if(st>=18&&st<26){const gl=(st-18)/8;  // the eyes kindle before the blast
          ell(c,ex1,eyY,1.5+gl*1.5,1.5+gl*1.5,'rgba('+col+','+(.9*gl).toFixed(2)+')');
          ell(c,ex2,eyY,1.5+gl*1.5,1.5+gl*1.5,'rgba('+col+','+(.9*gl).toFixed(2)+')')}
        if(strike){const t2=Math.min(1,(st-26)/20);
         c.save();c.globalCompositeOperation='lighter';
-        for(const [gx,gy,lw] of [[ex1,eyY,5],[ex2,eyY,5],[nx,mY,9]]){
+        for(const [gx,gy,lw] of [[ex1,eyY,5],[ex2,eyY,5],[(ex1+ex2)/2,mY,9]]){
           const grad=c.createLinearGradient(gx,gy,bx,by);
           grad.addColorStop(0,'rgba('+col+',.95)');grad.addColorStop(1,'rgba('+col+',.25)');
           const wob=1+Math.sin(frame/2+gx)*.18;c.strokeStyle=grad;c.lineWidth=Math.max(2.5,lw*(1-t2*.45))*wob;c.beginPath();c.moveTo(gx,gy);c.lineTo(bx,by);c.stroke()}
@@ -921,7 +921,7 @@ function renderBattle(){
     const e=A.e,Tt=ET[e.t],cvs=enemyCanvas(e.t,Tt.bs,Math.floor(frame/12)%2);
     const bx=e.px||72,by=e.py||100;
     // eyes kindle, then the ngen strikes with beams from eyes and mouth
-    const eyY=ny+rise-80*sc,mY=ny+rise-71*sc,ex1=nx-3*sc,ex2=nx+3*sc;
+    const NF=ngenFace(A.v),eyY=ny+rise-NF.ey*sc,mY=ny+rise-NF.my*sc,ex1=nx+(NF.cx-NF.ex)*sc,ex2=nx+(NF.cx+NF.ex)*sc;
     if(A.t===52)sfx('charge');
     if(A.t===62){B.shake=12;e.hit=26;sfx('beam')}
     if(A.t===78)B.shake=8;
@@ -930,7 +930,7 @@ function renderBattle(){
       ell(c,ex2,eyY,1.5+gl*1.5,1.5+gl*1.5,'rgba('+col+','+(.9*gl).toFixed(2)+')')}
     if(strike){const t2=Math.min(1,(A.t-62)/20);
       c.save();c.globalCompositeOperation='lighter';
-      for(const [gx,gy,lw] of [[ex1,eyY,5],[ex2,eyY,5],[nx,mY,9]]){
+      for(const [gx,gy,lw] of [[ex1,eyY,5],[ex2,eyY,5],[(ex1+ex2)/2,mY,9]]){
         const grad=c.createLinearGradient(gx,gy,bx,by);
         grad.addColorStop(0,'rgba('+col+',.95)');grad.addColorStop(1,'rgba('+col+',.25)');
         const wob=1+Math.sin(frame/2+gx)*.18;c.strokeStyle=grad;c.lineWidth=Math.max(2.5,lw*(1-t2*.45))*wob;c.beginPath();c.moveTo(gx,gy);c.lineTo(bx,by);c.stroke()}

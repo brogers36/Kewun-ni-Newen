@@ -188,6 +188,8 @@ function drawPortal(c,x,y){
   for(let k=0;k<8;k++){const a=t/14+k*.785;R(c,Math.round(x+Math.cos(a)*13),Math.round(y-6+Math.sin(a)*15),2,2,k%2?'#e8d0ff':'#9ad0ff')}
   if(t%50<4)ell(c,x,y-6,15,18,'rgba(255,255,255,.18)');
 }
+/* where a ngen's eyes and mouth sit, measured up from its feet at size 1 (the eye beams at the end of a battle start there) */
+function ngenFace(v){return {cx:0,ex:3,ey:80,my:71}}
 function drawNgen(c,x,y,s,t,v){
   const name=v==='mawida'?'ngen_mawida':v==='pewen'?'ngen_pewen':v==='kuruf'?'ngen_kuruf':v==='lelfun'?'ngen_lelfun':'ngen_lafken',au={ngen_lafken:'160,220,255',ngen_mawida:'200,240,140',ngen_pewen:'255,220,140',ngen_kuruf:'200,250,255',ngen_lelfun:'255,236,150'}[name];
   const k0=Math.max(1,Math.round(s)),fr=Math.floor(t/20)%2,hb=typeof SPR2!=='undefined'&&SPR2[name+'@b'];
