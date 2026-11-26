@@ -304,7 +304,7 @@ function drawYew(c,A,D){const Q=A.Q,t=A.t,al=t<A.T-40?1:Math.max(0,(A.T-t)/40);
   const gone=A.pcs.filter(p=>p.t0>=0).length,tot=A.pcs.length;
   // the crowd: back row first (behind the Yewen), then the Yewen, then the front row
   const drawM=m=>{const sh=m.shout!=null&&t-m.shout<26?(t-m.shout<6?3:4):null;
-    const fr=sh!=null?sh:m.walk?(Math.floor(t/8)%2?1:2):0,cv=yPerson(m.n,fr,m.face==='r'),bob=m.walk?(Math.floor(t/8)%2):0;
+    const fr=sh!=null?sh:m.walk?(Math.floor(t/8)%2?1:2):0,cv=yPerson(m.n,fr,m.face==='r'),bob=m.walk&&!(typeof GEM_ON!=='undefined'&&GEM_ON)?(Math.floor(t/8)%2):0;
     const hop=t>A.endT+50&&t<A.endT+100?Math.round(Math.abs(Math.sin((t-A.endT)/7+m.tx))*3):0,lean=sh!=null&&t-m.shout<10?(m.face==='r'?2:-2):0;
     ell(c,m.x,m.y,cv.width*.32,3,'rgba(0,0,14,'+(.32*al).toFixed(2)+')');c.globalAlpha=al;c.drawImage(cv,Math.round(m.x-cv.width/2+lean),Math.round(m.y-cv.height+2-bob-hop));c.globalAlpha=1};
   const back=A.crowd.filter(m=>m.y<136).sort((a,b)=>a.y-b.y),front=A.crowd.filter(m=>m.y>=136).sort((a,b)=>a.y-b.y);
