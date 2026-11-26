@@ -1001,7 +1001,7 @@ function loopBody(ts){
   else if(mode==='battle'&&B){renderBattle();if(B.lanScene){OV=[];drawLanScene(lx,B.lanScene)}}
   else if(mode==='palin'&&PG)renderPalin(lx);
   else if(mode==='cut')renderCut();
-  else if(mode==='title'){paintLand(lx,frame,false);if(typeof titleKimche==='function')titleKimche(lx,frame)}
+  else if(mode==='title'){if(typeof titleLand==='function')titleLand(lx,frame);else paintLand(lx,frame,false);if(typeof titleKimche==='function')titleKimche(lx,frame)}
   if(mode==='map'&&M){dayTint(lx);if(M.urban&&typeof urbanNight==='function')urbanNight(lx,CAM.x,CAM.y)}
   if(fade>0&&mode==='map'){lx.fillStyle='rgba(0,0,0,'+(fade/16)+')';lx.fillRect(0,0,LW,LH);fade=Math.max(0,fade-steps)}
   present();
