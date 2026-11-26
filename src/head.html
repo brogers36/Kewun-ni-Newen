@@ -73,7 +73,9 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #banner b{display:block;font-size:1.3em;color:#ffe9b0;text-shadow:0 2px 0 #000,0 0 .5em #e2c27a66}
 #banner span{color:#d4f0e2;font-style:italic;font-size:1.1em}
 #title{position:absolute;inset:0;background:linear-gradient(#0d0b1000,#0d0b1077 85%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.55em;text-align:center;padding:1em}
-#title h1{margin:0;font-size:2.5em;color:#ffe9b0;text-shadow:0 3px 0 #7a3a1a,0 0 14px #000,0 0 3px #000;letter-spacing:.04em}
+#title h1 .logo{display:block;width:min(82%,515px);margin:0 auto;image-rendering:pixelated;image-rendering:crisp-edges}
+@media (max-width:520px){#title h1 .logo{width:64%}}
+#title h1{margin:0;width:100%;font-size:2.5em;color:#ffe9b0;text-shadow:0 3px 0 #7a3a1a,0 0 14px #000,0 0 3px #000;letter-spacing:.04em}
 #title .sub{color:#cfe6ff;font-size:1.05em;text-shadow:0 0 4px #000}
 #title .row{display:flex;gap:.6em;flex-wrap:wrap;justify-content:center;align-items:center;text-shadow:0 0 4px #000}
 #title.inst .help:not(#ioshint):not(#andhint){display:none}
