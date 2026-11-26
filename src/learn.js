@@ -178,16 +178,17 @@ const PALIN_OPTS=['Pikun püle!','Willi püle!','Puel püle!','Lafken püle!','L
 function palinTalk(){
   const en=S.gloss==='en';
   say([L('Palife','Mari mari! Palituaiñ?','¡Hola! ¿Jugamos palin? Nos falta una persona en el equipo.','Hello! Shall we play palin? Our team is one player short.')],()=>
-    choose({m:'Palituaiñ?',es:'¿Juegas palin?',en:'Play palin?'},[{m:'May',g:en?'Play a match':'Jugar un partido',v:1},{m:'Wüla müten',g:en?'Later':'Después',v:0}],v=>{if(!v)return;
+    choose({m:'Palituaiñ?',es:'¿Juegas palin?',en:'Play palin?'},[{m:'May',g:en?'Play a match':'Jugar un partido',v:1}].concat(S.flags.palin_won?[{m:'Füta palin',g:en?'The tournament between the lofs':'El torneo entre los lof',v:2}]:[]).concat([{m:'Wüla müten',g:en?'Later':'Después',v:0}]),v=>{if(!v)return;if(v===2)return palinTourTalk();
       say([N('El palin se juega con el wiño (el palo curvo) y la pali (la bola). Tu equipo empuja la pali hacia el puel, el este; el otro equipo, hacia el lafken, el oeste. Si la pali cruza la raya del fondo, es tripal o raya. Tres ganan.','Palin is played with the wiño (the curved stick) and the pali (the ball). Your team drives the pali toward the puel, the east; the other team toward the lafken, the west. When the pali crosses the end line it is a tripal, or raya. Three win.'),
         N('Muévete con las flechas. Cuando alcanzas la pali, la golpeas sola (o con Z o Espacio). De vez en cuando el juego se detiene: grita la jugada a tu equipo en mapudungun. Si aciertas, te ayudan.','Move with the arrows. When you reach the pali you strike it automatically (or press Z or Space). Every so often play stops: shout the call to your team in Mapudungun. Call it right and they help you.')],palinStart)},true,true));
 }
-function palinStart(){
+function palinStart(tour){
   const mk=(team,look,x,y,me)=>({team,look,x,y,hx:x,hy:y,me:!!me,dir:team?'left':'right',fr:0,an:0,sw:0,cd:0,boost:0,stun:0,conf:0});
   const cx=PF.w/2,cy=PF.h/2,hm=S.hm?1.12:1;
   PG={t:0,us:0,them:0,ball:{x:cx,y:cy,vx:0,vy:0},cam:cx-LW/2,intro:48,next:420,zone:0,fx:[],hm,
     pl:[mk(0,heroLook(),cx-26,cy,1),mk(0,'walker',cx-70,cy-42),mk(0,'child',cx-70,cy+42),
         mk(1,'kona',cx+26,cy),mk(1,'fisher',cx+70,cy-42),mk(1,'lonko2',cx+70,cy+42)]};
+  if(typeof tour==='number'&&PALT[tour]){PG.tour=tour;PG.hm=hm*PALT[tour].hm;PALT[tour].look.forEach((l,i)=>PG.pl[3+i].look=l)}
   held.up=held.down=held.left=held.right=0;banner.style.display='none';
   mode='palin';sfx('enc');playSong('palin');
 }
@@ -255,9 +256,10 @@ function palinCall(){
     if(ok){sfx('ok');act();palinFx(me.x,me.y-30,v,'#ffe8a0');palinFx(me.x,me.y-44,en?'They heard you!':'¡Te escucharon!','#b8ffb0')}
     else{sfx('bad');mates.forEach(m=>m.conf=100);palinFx(me.x,me.y-30,v,'#ffb0a0');palinFx(me.x,me.y-44,(en?'It was: ':'Era: ')+a,'#ffd0c0')}},false,true)}
 function palinEnd(quit){
-  const won=PG&&!quit&&PG.us>PG.them,first=!S.flags.palin_won,ls=[];
+  const won=PG&&!quit&&PG.us>PG.them,tour=PG?PG.tour:undefined,first=!S.flags.palin_won&&tour===undefined,ls=[];
   if(!quit){if(won){ls.push(L('Palife','Iñchiñ wewiñ!','¡Ganamos!','We won!'));if(first){S.flags.palin_won=1;S.gold+=30;S.xp+=8;ls.push(N('+30 ngülliw · +8 kimün. Desde hoy te llaman palife, jugadora o jugador de palin.','+30 ngülliw · +8 kimün. From today they call you palife, a palin player.'))}}
     else ls.push(L('Palife','Ka antü!','¡Otro día será! El palin se aprende jugando.','Another day! You learn palin by playing.'))}
+  if(tour!==undefined)palinTourEnd(tour,won,quit,ls);
   PG=null;mode='map';grace=30;held.up=held.down=held.left=held.right=0;AU.name=null;playSong(mapSong());
   if(typeof playAmb==='function')playAmb(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg));
   persist();if(ls.length)say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}

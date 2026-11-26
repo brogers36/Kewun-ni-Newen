@@ -24,8 +24,8 @@ function startBattle(party,o){o=o||{};const bwx=(typeof wxNow==='function'&&M)?w
   if(typeof stopAmb==='function')stopAmb();
   if(typeof playAmb==='function'&&(M.urban||M.bg==='metro')){playAmb(typeof wxAmbKey==='function'&&wxKey()?wxAmbKey():ambFor(M.bg));ambVol(.2)}   // the city keeps going, quieter, under the fight
   mode='battle';banner.style.display='none';held.up=held.down=held.left=held.right=0;
-  const vph={day:'day',dusk:'dusk',night:'night',dawn:'dusk'}[typeof dayPhase==='function'?dayPhase().name:'day'],bgv=(typeof PAINTBG!=='undefined'&&PAINTBG[M.bg+'@'+vph])?M.bg+'@'+vph:M.bg;   // the city backdrops are painted for each time of day
-  B={wx:bwx,snap,wipe:snap?22:0,en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(M.fog&&M.bg!=='fjord'?'fog:':'')+bgv,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
+  const vph={day:'day',dusk:'dusk',night:'night',dawn:'dusk'}[typeof dayPhase==='function'?dayPhase().name:'day'],mbg=o.bg||M.bg,mfog=o.bg?o.fog:M.fog,bgv=(typeof PAINTBG!=='undefined'&&PAINTBG[mbg+'@'+vph])?mbg+'@'+vph:mbg;   // the city backdrops are painted for each time of day
+  B={wx:bwx,snap,wipe:snap?22:0,en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(mfog&&mbg!=='fjord'?'fog:':'')+bgv,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
   if(o.tut){B.en[0].hp=B.en[0].max=20}
   relabel();sfx('enc');if(snap)sfx('swirl');playSong(o.song||(o.final?'ngoyFinal':rsong(o.boss?'boss':'battle')));
   const alive=B.en.length,bt=party.find(t=>ET[t].boss);
@@ -66,6 +66,7 @@ function battleMenu(){
       return say(ls,enemyPhase)}
     else if(v==='i')choose({es:'Chemkün',en:'Items'},itemOpts().concat([{m:en?'Back':'Volver',v:'x'}]),k=>{if(!k||k==='x')return battleMenu();const l=useItem(k);say([l],enemyPhase)},true);
     else if(v==='r'&&B.o.tut){return say([L('Kuku','Petu, '+nm()+'!','¡Todavía no, '+nm()+'! Primero aprende a hablarles. (En las peleas normales, «Lef» sirve para huir; de los jefes no se puede huir.)','Not yet, '+nm()+'! First learn to speak to them. (In ordinary fights «Lef» lets you run away; you cannot run from bosses.)')],battleMenu)}
+    else if(v==='r'&&B.o.arena){return say([L('','Lef!','Sales del Weichawe.','You leave the Weichawe.')],()=>endBattle('flee'))}
     else if(v==='r'){if(B.o.boss||B.o.mini){sfx('bad');return say([N('¡No puedes huir de esta pelea!','You cannot run from this fight!')],battleMenu)}
       if(Math.random()<.65)return say([L('','Lef!','Huyes corriendo.','You run away.')],()=>endBattle('flee'));
       sfx('bad');say([N('¡No pudiste escapar!','You could not get away!')],enemyPhase)}
@@ -571,7 +572,7 @@ function victory(){
    if(vb&&!B.ngenA&&B.o.chain!=='llufu'&&vb.t!=='epunamun'){
      if(vb.t==='ngoyman5'){vb.stag=1;B.ngenA={t:0,e:vb,kind:'final'};document.getElementById('dlg').style.display='none';active=null;sfx('cast');return}
      if(!/^ngoyman/.test(vb.t)){
-       const v={lafkenche:'lafken',nagche:'mawida',pewenche:'pewen',williche:'kuruf',puelmapu:'lelfun',ngoyman:'lelfun'}[M.region];
+       const v=(B.o.arena&&'av' in B.o)?B.o.av:{lafkenche:'lafken',nagche:'mawida',pewenche:'pewen',williche:'kuruf',puelmapu:'lelfun',ngoyman:'lelfun'}[M.region];
        if(v){vb.stag=1;B.ngenA={t:0,e:vb,v};document.getElementById('dlg').style.display='none';active=null;sfx('cast');return}}}
    if(vb&&vb.hp<=0&&!vb.dead){vb.dead=true;vb.fadeT=20}}
   if(B.ngenA&&!B.ngenA.done)return;
@@ -588,6 +589,7 @@ function victory(){
   say(ls,()=>endBattle('win'));
 }
 function defeat(){
+  if(B&&B.o&&B.o.arena)return arenaLose();
   const lost=Math.floor(S.gold/4);S.gold-=lost;playSong('intro');
   const gm=MAPS[CUR].region==='nagche'?'chuchu':MAPS[CUR].region==='pewenche'?'laku':MAPS[CUR].region==='williche'?'cheche':'kuku';
   say([N('Te quedas sin fuerzas... Tu '+gm+' te encuentra y te lleva junto al kütral.'+(lost?' Pierdes '+numP(lost)+' ngülliw.':''),'You collapse... Your '+gm+' finds you and carries you back to the fire.'+(lost?' You lose '+numP(lost)+' ngülliw.':''))],()=>{
@@ -597,6 +599,9 @@ function endBattle(how){
   const o=B.o;mode='map';grace=how==='flee'?90:30;
   if(how==='win'&&o.ent){ents=ents.filter(e=>e!==o.ent);if(o.ent.flag)S.flags[o.ent.flag]=1}
   B=null;persist();
+  if(o.arena){if(how!=='win'||!AU.song||(AU.name!=='win'&&AU.name!=='winS'))playSong(mapSong());
+    if(typeof playAmb==='function'){playAmb(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg));ambVol(.5)}
+    return arenaEnd(how)}
   const entPost=how==='win'&&o.ent&&o.ent.post;
   if(how!=='win'||!AU.song||(AU.name!=='win'&&AU.name!=='winS'))playSong(mapSong());
   if(typeof playAmb==='function'){playAmb(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg));ambVol(.5)}

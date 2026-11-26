@@ -276,6 +276,7 @@ function loadMap(id,x,y,quiet){TALKER=null;
   S.map=id;fade=16;grace=40;
   if(!quiet)showBanner(typeof placeName==='function'?placeName(id):M.name,G(typeof placeGloss==='function'?placeGloss(id):M.g));
   setTimeout(()=>{if(!active&&mode==='map'&&typeof lofWarpIntro==='function')lofWarpIntro()},600);
+  setTimeout(()=>{if(!active&&mode==='map'&&typeof arenaIntro==='function')arenaIntro()},1500);
   playSong(mapSong());
   if(typeof wxSpawn==='function')wxSpawn();
   if(typeof playAmb==='function')playAmb(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg));

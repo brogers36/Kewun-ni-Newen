@@ -588,3 +588,10 @@ Brandon: «estoy triste» es **weñankülen** (con n, no ng). Corregido en la le
 ## «Después» = wüla feman (24 nov.)
 
 Brandon: en el texto de Nico, la opción «Ka mew» (después) es **Wüla feman**. Cambiado en todas las opciones «después»: Nico, Seba, Nacho, Carmen (src/kompa.js), las lecciones de las piedras y la invitación al nütramkan (src/scripts.js).
+
+## Weichawe y füta palin (25 nov.)
+- ⚠ **Weichawe** («lugar de pelea», weicha- + -we). Nombre del círculo rojo donde se vuelve a pelear con los jefes ya vencidos.
+- ⚠ **Chem wekufü?** («¿Qué wekufü?»). Título del menú del Weichawe.
+- ⚠ **Füta palin** («gran palin»), el torneo entre los lof. ¿Hay un término tradicional para un palin entre comunidades?
+- ⚠ **Füta palin müley!** («¡Hay un gran palin!»).
+- ⚠ **Newen wiño** («wiño de fuerza»), el premio del torneo.

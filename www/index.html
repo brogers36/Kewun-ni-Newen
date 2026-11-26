@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='4ca0f93-202611252200';
+window.KEWUN_BUILD='d15d82e-202611252212';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -953,7 +953,7 @@ function showBanner(m,g){if(S&&S.nogloss&&m)g='';banner.querySelector('b').textC
    ============================================================ */
 const HPQ=4,SPMAX=3;
 function maxHP(){return S.baseMax+4*(+S.gear.trariwe||0)+Math.floor(S.piwke/4)*4+(S.flags.ngen?4:0)+(S.flags.ngen2?4:0)+(S.flags.ngen3?4:0)+(S.flags.ngen4?4:0)+(S.flags.ngen5?4:0)}
-function atk(){return Math.max(1,S.baseAtk+3*(+S.gear.futrawino||0)+(S.gear.waiki?2:0)-(S.curse?2:0)-(S.kutran?3:0)-(S.chill>0?2:0))}
+function atk(){return Math.max(1,S.baseAtk+(S.gear.newenwino?6:3*(+S.gear.futrawino||0))+(S.gear.waiki?2:0)-(S.curse?2:0)-(S.kutran?3:0)-(S.chill>0?2:0))}
 function def(){return Math.max(0,S.baseDef+2*(+S.gear.makun||0)+(S.gear.trarilongko?3:0)-(S.kutran?2:0))}
 function xpNeed(){return 10+S.lvl*10}
 /* the four heroes you can play: two women and two men, each with their own skin, clothes and battle sprite */
@@ -1094,6 +1094,7 @@ const GEAR={
   makun:{m:'makuñ',es:'poncho: defensa +2',en:'poncho: defense +2',p:30},
   trariwe:{m:'trariwe',es:'faja tejida: +1 piwke máximo',en:'woven sash: +1 max heart',p:40},
   futrawino:{m:'fütra wiño',es:'wiño grande: fuerza +3',en:'big palin stick: strength +3',p:50},
+  newenwino:{m:'newen wiño',es:'el wiño de los campeones del füta palin: fuerza +6 (reemplaza al fütra wiño)',en:'the füta palin champions\' stick: strength +6 (replaces the fütra wiño)',p:0,hide:1},
   waiki:{m:'Epunamun ñi waiki',es:'la lanza del Epunamun: fuerza +2',en:"Epunamun's spear: strength +2",p:0,hide:1},
   trarilongko:{m:'trarilongko',es:'el trarilongko de las kuyfi chillka: defensa +3',en:'the trarilongko of the kuyfi chillka: defense +3',p:0,hide:1},
   lafkenkura:{m:'lafkenkura',es:'la piedra del mar de los chumpall: recuperas 2 de newen cada turno de pelea',en:'the chumpall sea stone: you recover 2 newen every battle turn',p:0,hide:1}};
@@ -2759,6 +2760,7 @@ function loadMap(id,x,y,quiet){TALKER=null;
   S.map=id;fade=16;grace=40;
   if(!quiet)showBanner(typeof placeName==='function'?placeName(id):M.name,G(typeof placeGloss==='function'?placeGloss(id):M.g));
   setTimeout(()=>{if(!active&&mode==='map'&&typeof lofWarpIntro==='function')lofWarpIntro()},600);
+  setTimeout(()=>{if(!active&&mode==='map'&&typeof arenaIntro==='function')arenaIntro()},1500);
   playSong(mapSong());
   if(typeof wxSpawn==='function')wxSpawn();
   if(typeof playAmb==='function')playAmb(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg));
@@ -2912,6 +2914,7 @@ function edge(d){
 function setTileFlag(x,y){S.flags['t:'+CUR+':'+x+','+y]=1;grid[y][x]=M.floor}
 function onStep(){
   const sb=M.sbt;
+  if(typeof arenaHere==='function'&&arenaHere()&&P.x===ARX&&P.y===ARY)return arenaMenu();
   if(sb&&!S.flags[sb.flag]&&!(sb.req&&!S.flags[sb.req])&&sb.t.indexOf(P.x+','+P.y)>=0)return sbossWake(sb);
   const c=grid[P.y][P.x];P.bump=0;
   if(c==='A'){if(LOFIDS.includes(CUR))lofWarpMenu();else warpMenu();return}
@@ -5561,16 +5564,17 @@ const PALIN_OPTS=['Pikun püle!','Willi püle!','Puel püle!','Lafken püle!','L
 function palinTalk(){
   const en=S.gloss==='en';
   say([L('Palife','Mari mari! Palituaiñ?','¡Hola! ¿Jugamos palin? Nos falta una persona en el equipo.','Hello! Shall we play palin? Our team is one player short.')],()=>
-    choose({m:'Palituaiñ?',es:'¿Juegas palin?',en:'Play palin?'},[{m:'May',g:en?'Play a match':'Jugar un partido',v:1},{m:'Wüla müten',g:en?'Later':'Después',v:0}],v=>{if(!v)return;
+    choose({m:'Palituaiñ?',es:'¿Juegas palin?',en:'Play palin?'},[{m:'May',g:en?'Play a match':'Jugar un partido',v:1}].concat(S.flags.palin_won?[{m:'Füta palin',g:en?'The tournament between the lofs':'El torneo entre los lof',v:2}]:[]).concat([{m:'Wüla müten',g:en?'Later':'Después',v:0}]),v=>{if(!v)return;if(v===2)return palinTourTalk();
       say([N('El palin se juega con el wiño (el palo curvo) y la pali (la bola). Tu equipo empuja la pali hacia el puel, el este; el otro equipo, hacia el lafken, el oeste. Si la pali cruza la raya del fondo, es tripal o raya. Tres ganan.','Palin is played with the wiño (the curved stick) and the pali (the ball). Your team drives the pali toward the puel, the east; the other team toward the lafken, the west. When the pali crosses the end line it is a tripal, or raya. Three win.'),
         N('Muévete con las flechas. Cuando alcanzas la pali, la golpeas sola (o con Z o Espacio). De vez en cuando el juego se detiene: grita la jugada a tu equipo en mapudungun. Si aciertas, te ayudan.','Move with the arrows. When you reach the pali you strike it automatically (or press Z or Space). Every so often play stops: shout the call to your team in Mapudungun. Call it right and they help you.')],palinStart)},true,true));
 }
-function palinStart(){
+function palinStart(tour){
   const mk=(team,look,x,y,me)=>({team,look,x,y,hx:x,hy:y,me:!!me,dir:team?'left':'right',fr:0,an:0,sw:0,cd:0,boost:0,stun:0,conf:0});
   const cx=PF.w/2,cy=PF.h/2,hm=S.hm?1.12:1;
   PG={t:0,us:0,them:0,ball:{x:cx,y:cy,vx:0,vy:0},cam:cx-LW/2,intro:48,next:420,zone:0,fx:[],hm,
     pl:[mk(0,heroLook(),cx-26,cy,1),mk(0,'walker',cx-70,cy-42),mk(0,'child',cx-70,cy+42),
         mk(1,'kona',cx+26,cy),mk(1,'fisher',cx+70,cy-42),mk(1,'lonko2',cx+70,cy+42)]};
+  if(typeof tour==='number'&&PALT[tour]){PG.tour=tour;PG.hm=hm*PALT[tour].hm;PALT[tour].look.forEach((l,i)=>PG.pl[3+i].look=l)}
   held.up=held.down=held.left=held.right=0;banner.style.display='none';
   mode='palin';sfx('enc');playSong('palin');
 }
@@ -5638,9 +5642,10 @@ function palinCall(){
     if(ok){sfx('ok');act();palinFx(me.x,me.y-30,v,'#ffe8a0');palinFx(me.x,me.y-44,en?'They heard you!':'¡Te escucharon!','#b8ffb0')}
     else{sfx('bad');mates.forEach(m=>m.conf=100);palinFx(me.x,me.y-30,v,'#ffb0a0');palinFx(me.x,me.y-44,(en?'It was: ':'Era: ')+a,'#ffd0c0')}},false,true)}
 function palinEnd(quit){
-  const won=PG&&!quit&&PG.us>PG.them,first=!S.flags.palin_won,ls=[];
+  const won=PG&&!quit&&PG.us>PG.them,tour=PG?PG.tour:undefined,first=!S.flags.palin_won&&tour===undefined,ls=[];
   if(!quit){if(won){ls.push(L('Palife','Iñchiñ wewiñ!','¡Ganamos!','We won!'));if(first){S.flags.palin_won=1;S.gold+=30;S.xp+=8;ls.push(N('+30 ngülliw · +8 kimün. Desde hoy te llaman palife, jugadora o jugador de palin.','+30 ngülliw · +8 kimün. From today they call you palife, a palin player.'))}}
     else ls.push(L('Palife','Ka antü!','¡Otro día será! El palin se aprende jugando.','Another day! You learn palin by playing.'))}
+  if(tour!==undefined)palinTourEnd(tour,won,quit,ls);
   PG=null;mode='map';grace=30;held.up=held.down=held.left=held.right=0;AU.name=null;playSong(mapSong());
   if(typeof playAmb==='function')playAmb(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg));
   persist();if(ls.length)say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
@@ -6073,8 +6078,8 @@ function startBattle(party,o){o=o||{};const bwx=(typeof wxNow==='function'&&M)?w
   if(typeof stopAmb==='function')stopAmb();
   if(typeof playAmb==='function'&&(M.urban||M.bg==='metro')){playAmb(typeof wxAmbKey==='function'&&wxKey()?wxAmbKey():ambFor(M.bg));ambVol(.2)}   // the city keeps going, quieter, under the fight
   mode='battle';banner.style.display='none';held.up=held.down=held.left=held.right=0;
-  const vph={day:'day',dusk:'dusk',night:'night',dawn:'dusk'}[typeof dayPhase==='function'?dayPhase().name:'day'],bgv=(typeof PAINTBG!=='undefined'&&PAINTBG[M.bg+'@'+vph])?M.bg+'@'+vph:M.bg;   // the city backdrops are painted for each time of day
-  B={wx:bwx,snap,wipe:snap?22:0,en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(M.fog&&M.bg!=='fjord'?'fog:':'')+bgv,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
+  const vph={day:'day',dusk:'dusk',night:'night',dawn:'dusk'}[typeof dayPhase==='function'?dayPhase().name:'day'],mbg=o.bg||M.bg,mfog=o.bg?o.fog:M.fog,bgv=(typeof PAINTBG!=='undefined'&&PAINTBG[mbg+'@'+vph])?mbg+'@'+vph:mbg;   // the city backdrops are painted for each time of day
+  B={wx:bwx,snap,wipe:snap?22:0,en:party.map(mkEnemy),o,tele:false,teleHint:false,shake:0,area:(mfog&&mbg!=='fjord'?'fog:':'')+bgv,turn:0,cursor:null,pops:[],parts:[],flash:0,red:0,intro:24,blocked:null,rush:null,shownHP:S.hp};
   if(o.tut){B.en[0].hp=B.en[0].max=20}
   relabel();sfx('enc');if(snap)sfx('swirl');playSong(o.song||(o.final?'ngoyFinal':rsong(o.boss?'boss':'battle')));
   const alive=B.en.length,bt=party.find(t=>ET[t].boss);
@@ -6115,6 +6120,7 @@ function battleMenu(){
       return say(ls,enemyPhase)}
     else if(v==='i')choose({es:'Chemkün',en:'Items'},itemOpts().concat([{m:en?'Back':'Volver',v:'x'}]),k=>{if(!k||k==='x')return battleMenu();const l=useItem(k);say([l],enemyPhase)},true);
     else if(v==='r'&&B.o.tut){return say([L('Kuku','Petu, '+nm()+'!','¡Todavía no, '+nm()+'! Primero aprende a hablarles. (En las peleas normales, «Lef» sirve para huir; de los jefes no se puede huir.)','Not yet, '+nm()+'! First learn to speak to them. (In ordinary fights «Lef» lets you run away; you cannot run from bosses.)')],battleMenu)}
+    else if(v==='r'&&B.o.arena){return say([L('','Lef!','Sales del Weichawe.','You leave the Weichawe.')],()=>endBattle('flee'))}
     else if(v==='r'){if(B.o.boss||B.o.mini){sfx('bad');return say([N('¡No puedes huir de esta pelea!','You cannot run from this fight!')],battleMenu)}
       if(Math.random()<.65)return say([L('','Lef!','Huyes corriendo.','You run away.')],()=>endBattle('flee'));
       sfx('bad');say([N('¡No pudiste escapar!','You could not get away!')],enemyPhase)}
@@ -6620,7 +6626,7 @@ function victory(){
    if(vb&&!B.ngenA&&B.o.chain!=='llufu'&&vb.t!=='epunamun'){
      if(vb.t==='ngoyman5'){vb.stag=1;B.ngenA={t:0,e:vb,kind:'final'};document.getElementById('dlg').style.display='none';active=null;sfx('cast');return}
      if(!/^ngoyman/.test(vb.t)){
-       const v={lafkenche:'lafken',nagche:'mawida',pewenche:'pewen',williche:'kuruf',puelmapu:'lelfun',ngoyman:'lelfun'}[M.region];
+       const v=(B.o.arena&&'av' in B.o)?B.o.av:{lafkenche:'lafken',nagche:'mawida',pewenche:'pewen',williche:'kuruf',puelmapu:'lelfun',ngoyman:'lelfun'}[M.region];
        if(v){vb.stag=1;B.ngenA={t:0,e:vb,v};document.getElementById('dlg').style.display='none';active=null;sfx('cast');return}}}
    if(vb&&vb.hp<=0&&!vb.dead){vb.dead=true;vb.fadeT=20}}
   if(B.ngenA&&!B.ngenA.done)return;
@@ -6637,6 +6643,7 @@ function victory(){
   say(ls,()=>endBattle('win'));
 }
 function defeat(){
+  if(B&&B.o&&B.o.arena)return arenaLose();
   const lost=Math.floor(S.gold/4);S.gold-=lost;playSong('intro');
   const gm=MAPS[CUR].region==='nagche'?'chuchu':MAPS[CUR].region==='pewenche'?'laku':MAPS[CUR].region==='williche'?'cheche':'kuku';
   say([N('Te quedas sin fuerzas... Tu '+gm+' te encuentra y te lleva junto al kütral.'+(lost?' Pierdes '+numP(lost)+' ngülliw.':''),'You collapse... Your '+gm+' finds you and carries you back to the fire.'+(lost?' You lose '+numP(lost)+' ngülliw.':''))],()=>{
@@ -6646,6 +6653,9 @@ function endBattle(how){
   const o=B.o;mode='map';grace=how==='flee'?90:30;
   if(how==='win'&&o.ent){ents=ents.filter(e=>e!==o.ent);if(o.ent.flag)S.flags[o.ent.flag]=1}
   B=null;persist();
+  if(o.arena){if(how!=='win'||!AU.song||(AU.name!=='win'&&AU.name!=='winS'))playSong(mapSong());
+    if(typeof playAmb==='function'){playAmb(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg));ambVol(.5)}
+    return arenaEnd(how)}
   const entPost=how==='win'&&o.ent&&o.ent.post;
   if(how!=='win'||!AU.song||(AU.name!=='win'&&AU.name!=='winS'))playSong(mapSong());
   if(typeof playAmb==='function'){playAmb(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg));ambVol(.5)}
@@ -7234,6 +7244,113 @@ function carmenTalk(){const en=S.gloss==='en',have=S.items.kulon||0;
       S.flags.carmen_q=1;persist();
       say([L('Carmen Lienkura','Chaltu may!','«Gracias. Hay külon en los arbustos del monte, y en las tiendas los venden.»','"Thank you. There are külon on the bushes in the forest, and the shops sell them."')])},true,true))}
 
+/* ---------- Weichawe: the red circle in every lof, to fight again any wekufü already beaten ---------- */
+const ARX=23,ARY=10;   // three steps east of the lof's blue circle
+const ARENA=[
+  {g:0,t:'trelke',f:'boss',bg:'lagoon',av:'lafken'},
+  {g:0,t:'witranalwe',f:'boss2',bg:'forest',av:'mawida'},
+  {g:0,t:'cherrufe',f:'boss3',bg:'crater',av:'pewen'},
+  {g:0,t:'kaleuche',f:'boss4',bg:'fjord',av:'kuruf'},
+  {g:0,t:'walichu',f:'boss5',bg:'pampa',av:'lelfun'},
+  {g:0,t:'ngoyman1',f:'bossF',bg:'fjord',fog:1,o:{final:1}},
+  {g:1,t:'chinifilu',f:'sb1',bg:'coast',av:'lafken'},
+  {g:1,t:'piwuchen',f:'sb2',bg:'field',av:'mawida'},
+  {g:1,t:'wallipen',f:'sb3',bg:'mount',av:'pewen'},
+  {g:1,t:'trawko',f:'sb4',bg:'rainforest',av:'kuruf'},
+  {g:1,t:'chadikura',f:'sb5',bg:'pampa',av:'lelfun'},
+  {g:1,t:'kalku',f:'sb6',bg:'pampa',av:'lelfun'},
+  {g:1,t:'epunamun',f:'epu_won',bg:'fjord',fog:1,o:{sflag:'epu_won'}},
+  {g:1,t:'llufu1',f:'chboss',bg:'deep',o:{chain:'llufu'}},
+  {g:1,t:'llawfen',f:'llaw_won',bg:'coast',fog:1,av:null,o:{sflag:'llaw_won',song:'ngoyFinal'},setup:()=>{ET.llawfen.name=llawName();llawSetup()}},
+  {g:2,t:'ngoyngoyun',f:'sw1',bg:'feria'},
+  {g:2,t:'ngamlef',f:'sw2',bg:'metro'},
+  {g:2,t:'fillantu',f:'sw3',bg:'blocks'},
+  {g:2,t:'yewen',f:'yewen_won',bg:'waria',o:{sflag:'yewen_won',song:'yewenBoss'}}];
+function arenaOpen(){return !!(S&&S.flags&&(S.flags.boss||S.flags.ngen))}
+function arenaHere(){return typeof LOFIDS!=='undefined'&&LOFIDS.includes(CUR)&&arenaOpen()}
+function arenaName(a){return a.t==='llawfen'?llawName():(ET[a.t]&&ET[a.t].name)||a.t}
+function arenaIntro(){if(S.flags.arena_hint||!arenaHere())return;S.flags.arena_hint=1;persist();
+  say([N('Junto al anillo de los ngen ahora late otro círculo, rojo y oscuro. Huele a wekufü. Pisa el círculo rojo cuando quieras volver a pelear con los wekufü que ya venciste.','Beside the ngen ring another circle now throbs, dark and red. It smells of wekufü. Step on the red circle whenever you want to fight the wekufü you have already defeated again.')])}
+function arenaMenu(){const en=S.gloss==='en';
+  const have=ARENA.filter(a=>S.flags[a.f]);
+  const GRP=[['Jefes de los ngen','The ngen bosses'],['Wekufü secretos','Secret wekufü'],['Santiago','Santiago']];
+  const first=!S.flags.arena_seen;S.flags.arena_seen=1;
+  const intro=first?[N('El círculo rojo late bajo tus pies como un piwke enfermo. No lleva a ningún lugar del mapu: lleva al Weichawe, donde los wekufü que ya venciste siguen esperando.','The red circle throbs under your feet like a sick piwke. It leads nowhere in the mapu: it leads to the Weichawe, where the wekufü you already defeated are still waiting.'),
+      N('Aquí puedes volver a pelear con ellos para repasar tus palabras. Si pierdes, despiertas junto al círculo sin perder nada.','Here you can fight them again to review your words. If you lose, you wake by the circle without losing anything.')]
+    :[N('El círculo rojo late bajo tus pies. Desde el Weichawe te llaman los wekufü que ya venciste.','The red circle throbs under your feet. From the Weichawe, the wekufü you already defeated are calling you.')];
+  const pickGrp=()=>{const gs=[0,1,2].filter(g=>have.some(a=>a.g===g));
+    if(gs.length===1)return pickBoss(gs[0]);
+    choose({m:'Chem wekufü?',es:'¿Con qué wekufü quieres volver a pelear?',en:'Which wekufü do you want to fight again?'},
+      gs.map(g=>({m:GRP[g][0],g:GRP[g][1],v:g})).concat([{m:en?'Leave':'Salir',v:-1}]),g=>{if(g<0||g===undefined)return;pickBoss(g)},true)};
+  const pickBoss=g=>{const L2=have.filter(a=>a.g===g);
+    choose({m:'Chem wekufü?',es:'¿Con qué wekufü quieres volver a pelear?',en:'Which wekufü do you want to fight again?'},
+      L2.map(a=>({m:arenaName(a),v:ARENA.indexOf(a)})).concat([{m:en?'Back':'Volver',v:-1}]),k=>{if(k<0||k===undefined)return pickGrp();arenaFight(ARENA[k])},true)};
+  say(intro,pickGrp);
+}
+function arenaFight(a){
+  const o=Object.assign({boss:1,arena:{from:CUR,x:P.x,y:P.y},bg:a.bg,fog:a.fog||0},a.o||{});
+  o.av=('av' in a)?a.av:null;
+  S.hp=maxHP();S.sp=SPMAX;
+  say([N('El círculo rojo se cierra sobre ti. Cuando se abre de nuevo, '+arenaName(a)+' ya está esperando.','The red circle closes over you. When it opens again, '+arenaName(a)+' is already waiting.')],()=>{
+    startBattle([a.t],o);if(a.setup)a.setup()});
+}
+/* back from the Weichawe: no story, no reward beyond the fight itself */
+function arenaEnd(how){
+  S.hp=Math.max(S.hp,1);persist();
+  if(how==='win')return say([N('El círculo rojo te devuelve al lof. La pelea se queda en tu memoria; las palabras, en tu boca.','The red circle sets you back in the lof. The fight stays in your memory; the words, in your mouth.')]);
+  if(how==='flee')return say([N('Sales del círculo rojo y vuelves al lof.','You step out of the red circle and return to the lof.')]);
+}
+function arenaLose(){
+  S.curse=0;S.hp=maxHP();S.sp=SPMAX;mode='map';B=null;AU.name=null;playSong(mapSong());grace=30;
+  if(typeof playAmb==='function'){playAmb(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg));ambVol(.5)}
+  persist();
+  say([N('Te quedas sin fuerzas... y despiertas junto al círculo rojo, en el lof. En el Weichawe no se pierde nada: solo se aprende.','You collapse... and wake beside the red circle, in the lof. In the Weichawe nothing is lost: you only learn.')]);
+}
+function drawArenaRing(c,cx,cy){
+  const t=frame/16,pu=.82+.18*Math.sin(frame/11);
+  for(const [r,al] of [[30,.14],[22,.17],[14,.22]])ell(c,cx,cy+3,r*pu+4,(r*pu+4)*.42,'rgba(150,10,20,'+al+')');
+  const bw=10+Math.round(Math.sin(frame/8)*2);
+  for(let i=0;i<5;i++){const w=bw-i*2;if(w<=0)continue;R(c,cx-(w>>1),cy-70+i*5,w,70-i*5,'rgba('+(120+i*22)+','+(10+i*6)+','+(20+i*4)+','+(0.07+i*.025)+')')}
+  R(c,cx-1,cy-70,3,70,'rgba(255,120,110,.22)');
+  c.save();c.translate(cx,cy+3);
+  for(const [rx,ry,lw,col,dash,sp] of [[24,10,3,'rgba(190,20,30,.9)',[9,6],-1],[18,7.6,2,'rgba(255,80,60,.85)',[5,6],1.4],[11,4.6,2,'rgba(40,0,6,.9)',[3,3],-2]]){
+    c.strokeStyle=col;c.lineWidth=lw;c.setLineDash(dash);c.lineDashOffset=frame*sp*.6;
+    c.beginPath();c.ellipse(0,0,rx*pu,ry*pu,0,0,6.283);c.stroke()}
+  c.setLineDash([]);c.restore();
+  ell(c,cx,cy+3,6,2.8,'rgba(20,0,4,.95)');ell(c,cx,cy+3,3,1.3,'rgba(255,40,30,.9)');
+  for(let k=0;k<12;k++){const ph=((frame*.8+k*47)%140)/140,an=k*1.9+t*.4;
+    const px2=cx+Math.cos(an)*(15-ph*6),py2=cy+2-ph*50;
+    R(c,px2,py2,k%3?1:2,k%3?2:2,'rgba(255,'+(60+k*8)+',40,'+((1-ph)*.85)+')')}
+  for(let k=0;k<3;k++){const an=-t*1.3+k*2.094,px2=cx+Math.cos(an)*21*pu,py2=cy+3+Math.sin(an)*8.6*pu;
+    ell(c,px2,py2,3,3,'rgba(200,20,20,.4)');R(c,px2-1,py2-1,3,3,'rgba(255,90,70,.8)');R(c,px2,py2,1,1,'#ffd0c0')}
+}
+
+/* ---------- Füta palin: the tournament between the lofs ---------- */
+const PALT=[
+  {lof:'Lafkenche',hm:1.06,look:['fisher','walker','kona']},
+  {lof:'Pewenche',hm:1.14,look:['lonko2','kona','elder']},
+  {lof:'Williche',hm:1.22,look:['weaver','fisher','lonko']},
+  {lof:'Puelche',hm:1.32,look:['lonko','kona','lonko2']}];
+function palinTourTalk(){const en=S.gloss==='en',k=Math.min(PALT.length-1,+S.flags.palT||0),done=!!S.gear.newenwino;
+  const ls=(!S.flags.palT_seen?[L('Palife','Füta palin müley!','¡Hay un füta palin, un gran torneo! Juegan los equipos de todos los lof. Cada partido es más difícil que el anterior.','There is a füta palin, a great tournament! The teams of every lof play. Each match is harder than the last.'),
+      L('Palife','','Quien gana los cuatro partidos se lleva el newen wiño, el wiño de los campeones. Pega mucho más fuerte que un fütra wiño.','Whoever wins all four matches takes the newen wiño, the champions\' stick. It hits much harder than a fütra wiño.')]:[])
+    .concat([done?L('Palife','','Tú ya eres campeona o campeón del füta palin. ¿Juegas otra vuelta, por el gusto?','You are already a füta palin champion. Play another round, just for the fun of it?')
+      :L('Palife','','Te toca jugar contra el equipo '+PALT[k].lof+' (partido '+(k+1)+' de '+PALT.length+').','Your next match is against the '+PALT[k].lof+' team (match '+(k+1)+' of '+PALT.length+').')]);
+  S.flags.palT_seen=1;
+  say(ls,()=>choose({m:'Palituaiñ?',es:'¿Juegas?',en:'Play?'},[{m:'May',g:en?'Play the match':'Jugar el partido',v:1},{m:'Wüla müten',g:en?'Later':'Después',v:0}],v=>{
+    if(!v)return;say([N('Los jugadores del lof '+PALT[done?0:k].lof+' entran a la cancha con sus wiño al hombro.','The players of the '+PALT[done?0:k].lof+' lof walk onto the field, sticks on their shoulders.')],()=>palinStart(done?0:k))},true,true));
+}
+function palinTourEnd(k,won,quit,ls){const en=S.gloss==='en';
+  if(quit)return ls;
+  if(!won){ls.push(L('Palife','','El equipo '+PALT[k].lof+' nos ganó esta vez. Cuando quieras, volvemos a desafiarlo.','The '+PALT[k].lof+' team beat us this time. Whenever you like, we will challenge them again.'));return ls}
+  if(S.gear.newenwino){S.flags.palT=0;return ls}
+  S.gold+=15;S.flags.palT=k+1;
+  if(k+1<PALT.length){ls.push(N('+15 ngülliw. Próximo partido: el equipo '+PALT[k+1].lof+'.','+15 ngülliw. Next match: the '+PALT[k+1].lof+' team.'));return ls}
+  S.flags.palT=0;S.gear.newenwino=1;S.xp+=20;sfx('lvl');
+  const l=L('Palife','Newen wiño!','¡Ganamos el füta palin! Los cuatro lof te entregan el newen wiño: fuerza +6 (reemplaza al fütra wiño).','We won the füta palin! The four lofs hand you the newen wiño: strength +6 (it replaces the fütra wiño).');l.fx=()=>sfx('lvl');
+  ls.push(l,N('+15 ngülliw · +20 kimün.','+15 ngülliw · +20 kimün.'));return ls;
+}
+
 /* ============================================================
    RENDER (everything drawn at 256x224 into LO, then blitted at 2x; text drawn crisp on top)
    ============================================================ */
@@ -7377,6 +7494,7 @@ function renderMap(){
     if(X>-T&&X<LW&&Y>VY-T&&Y<VY+VH)c.drawImage(sbtCanvas(Math.floor(frame/14)%2),X,Y)}
   if(M.marks)for(const k of M.marks){const [tx,ty]=k.split(',');const X=tx*T-cx,Y=ty*T-cy+VY;
     if(X>-T&&X<LW&&Y>VY-T&&Y<VY+VH)c.drawImage(sbtCanvas(Math.floor(frame/14)%2),X,Y)}
+  if(typeof arenaHere==='function'&&arenaHere()){const X=ARX*T-cx,Y=ARY*T-cy+VY;if(X>-40&&X<LW+40&&Y>VY-T&&Y<VY+VH+T)drawArenaRing(c,X+8,Y+9)}
   for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const ch=grid[y][x];if(!DYN.has(ch))continue;
     const X=x*T-cx,Y=y*T-cy+VY,anim=ch==='F'||ch==='X'||ch==='v'||ch==='A';
     if((ch==='N'||ch==='J')&&M.pz){const kk=x+','+y,t=M.pz.tiles[kk];if(t){const lit=PZ.lit.has(kk);ell(c,X+8,Y+15,6,2,'rgba(0,0,0,.28)');
