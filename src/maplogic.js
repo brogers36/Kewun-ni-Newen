@@ -84,7 +84,7 @@ function edge(d){
 function setTileFlag(x,y){S.flags['t:'+CUR+':'+x+','+y]=1;grid[y][x]=M.floor}
 function onStep(){
   const sb=M.sbt;
-  if(typeof arenaHere==='function'&&arenaHere()&&P.x===ARX&&P.y===ARY)return arenaMenu();
+  if(typeof arenaHere==='function'&&arenaHere()&&onArena(P.x,P.y))return arenaMenu();
   if(sb&&!S.flags[sb.flag]&&!(sb.req&&!S.flags[sb.req])&&sb.t.indexOf(P.x+','+P.y)>=0)return sbossWake(sb);
   const c=grid[P.y][P.x];P.bump=0;
   if(c==='A'){if(LOFIDS.includes(CUR))lofWarpMenu();else warpMenu();return}

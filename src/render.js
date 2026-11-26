@@ -141,7 +141,7 @@ function renderMap(){
     if(X>-T&&X<LW&&Y>VY-T&&Y<VY+VH)c.drawImage(sbtCanvas(Math.floor(frame/14)%2),X,Y)}
   if(M.marks)for(const k of M.marks){const [tx,ty]=k.split(',');const X=tx*T-cx,Y=ty*T-cy+VY;
     if(X>-T&&X<LW&&Y>VY-T&&Y<VY+VH)c.drawImage(sbtCanvas(Math.floor(frame/14)%2),X,Y)}
-  if(typeof arenaHere==='function'&&arenaHere()){const X=ARX*T-cx,Y=ARY*T-cy+VY;if(X>-40&&X<LW+40&&Y>VY-T&&Y<VY+VH+T)drawArenaRing(c,X+8,Y+9)}
+  if(M.arena){R(c,T-cx,VY+T-cy,(M.w-2)*T,(M.h-2)*T,'rgba(46,0,8,.3)');if(arenaOpen())drawArenaRing(c,M.arena.x*T-cx+8*(M.arena.w||1),M.arena.y*T-cy+VY+9)}
   for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const ch=grid[y][x];if(!DYN.has(ch))continue;
     const X=x*T-cx,Y=y*T-cy+VY,anim=ch==='F'||ch==='X'||ch==='v'||ch==='A';
     if((ch==='N'||ch==='J')&&M.pz){const kk=x+','+y,t=M.pz.tiles[kk];if(t){const lit=PZ.lit.has(kk);ell(c,X+8,Y+15,6,2,'rgba(0,0,0,.28)');
@@ -260,6 +260,12 @@ function renderMap(){
     R(c,X-13,Y-1,26,9,'#2a1a10');R(c,X-12,Y,24,7,'#c8402a');for(let j=0;j<12;j++)R(c,X-12+j*2,Y+(j%2?1:5),1,1,'#f4e8c8');R(c,X-12,Y+3,24,1,'#2a1a10');
     R(c,X-12+Math.round(sw),Y+7,1,3,'#c8402a');R(c,X+11+Math.round(sw),Y+7,1,3,'#c8402a');
     OV.push(()=>txt('trawün',X,Y-3,'#ffe8a0',11,'center'))}
+  // the Weichawe ruka: a dark board with red letters over the door
+  if(M.doors)for(const k in M.doors){if(!/_weichawe$/.test(M.doors[k].to))continue;const [qx,qy]=k.split(',').map(Number),X=qx*T-cx+8,Y=(qy-1)*T-cy+VY-8;
+    if(X<-40||X>LW+40||Y<-20||Y>LH)continue;const gl=.55+.25*Math.sin(frame/18);
+    R(c,X-18,Y-3,36,12,'#140808');R(c,X-17,Y-2,34,10,'#3a1a12');R(c,X-17,Y-2,34,1,'#5a2a1a');R(c,X-17,Y+7,34,1,'#1e0c08');
+    R(c,X-14,Y-7,1,5,'#2a1208');R(c,X+13,Y-7,1,5,'#2a1208');
+    OV.push(()=>{txt('weichawe',X,Y+6,'rgba(255,'+Math.round(60+gl*60)+',50,'+(.75+gl*.25)+')',11,'center')})}
   // city doors you can go into: a warm lit doorway, and a bobbing arrow while someone inside still needs you
   if(M.urban&&M.doors)for(const k in M.doors){const D=M.doors[k],[qx,qy]=k.split(',').map(Number),X=qx*T-cx+8,Y=qy*T-cy+VY;
     if(X<-30||X>LW+30||Y<-40||Y>LH+20)continue;

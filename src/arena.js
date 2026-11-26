@@ -1,5 +1,13 @@
-/* ---------- Weichawe: the red circle in every lof, to fight again any wekufü already beaten ---------- */
-const ARX=23,ARY=10;   // three steps east of the lof's blue circle
+/* ---------- Weichawe: a ruka in every lof with a red circle inside, to fight again any wekufü already beaten ---------- */
+// the door-less ruka on the east side of each lof's road becomes the Weichawe; inside it, the red circle
+const ARDOOR={lof:[29,8,'l'],n_lof:[28,8,'n'],p_lof:[28,8,'p'],w_lof:[28,8,'w'],e_lof:[28,8,'e']};
+for(const lid in ARDOOR){const [dx,dy,pre]=ARDOOR[lid],id=pre+'_weichawe',L0=MAPS[lid];
+  MAPROWS[id]=['%%%%%%%%%%%%%%','%____________%','%____________%','%____________%','%____________%','%____________%','%____________%','%____________%','%%%%%%__%%%%%%'];
+  MAPS[id]={name:'Weichawe',g:{es:'La ruka del círculo rojo: aquí se vuelve a pelear con los wekufü ya vencidos',en:'The ruka of the red circle: here you fight again the wekufü you have already defeated'},
+    region:L0.region,floor:'_',bg:L0.bg,song:'cave',pal:'rukain',wall:'ruka',interior:1,arena:{x:6,y:3,w:2},
+    edges:{down:{to:lid,x:dx,y:dy+1}},ents:[],rows:MAPROWS[id],w:14,h:9};
+  L0.doors=L0.doors||{};L0.doors[dx+','+dy]={to:id,x:6,y:7,req:'boss',
+    reqMsg:[N('La puerta está amarrada con boqui negro. Desde adentro se oye un zumbido sordo, como de algo que espera.','The door is lashed shut with black vine. From inside comes a dull hum, like something waiting.')]}}
 const ARENA=[
   {g:0,t:'trelke',f:'boss',bg:'lagoon',av:'lafken'},
   {g:0,t:'witranalwe',f:'boss2',bg:'forest',av:'mawida'},
@@ -21,10 +29,11 @@ const ARENA=[
   {g:2,t:'fillantu',f:'sw3',bg:'blocks'},
   {g:2,t:'yewen',f:'yewen_won',bg:'waria',o:{sflag:'yewen_won',song:'yewenBoss'}}];
 function arenaOpen(){return !!(S&&S.flags&&(S.flags.boss||S.flags.ngen))}
-function arenaHere(){return typeof LOFIDS!=='undefined'&&LOFIDS.includes(CUR)&&arenaOpen()}
+function arenaHere(){return !!(M&&M.arena)&&arenaOpen()}
+function onArena(x,y){const a=M&&M.arena;return !!a&&y===a.y&&x>=a.x&&x<a.x+(a.w||1)}
 function arenaName(a){return a.t==='llawfen'?llawName():(ET[a.t]&&ET[a.t].name)||a.t}
-function arenaIntro(){if(S.flags.arena_hint||!arenaHere())return;S.flags.arena_hint=1;persist();
-  say([N('Junto al anillo de los ngen ahora late otro círculo, rojo y oscuro. Huele a wekufü. Pisa el círculo rojo cuando quieras volver a pelear con los wekufü que ya venciste.','Beside the ngen ring another circle now throbs, dark and red. It smells of wekufü. Step on the red circle whenever you want to fight the wekufü you have already defeated again.')])}
+function arenaIntro(){if(S.flags.arena_hint||!LOFIDS.includes(CUR)||!arenaOpen()||!ARDOOR[CUR])return;S.flags.arena_hint=1;persist();
+  say([N('Junto al camino, sobre la puerta de una ruka, ahora cuelga un letrero: WEICHAWE. Adentro late un círculo rojo. Entra cuando quieras volver a pelear con los wekufü que ya venciste.','By the road, over the door of a ruka, a sign now hangs: WEICHAWE. Inside, a red circle throbs. Go in whenever you want to fight the wekufü you have already defeated again.')])}
 function arenaMenu(){const en=S.gloss==='en';
   const have=ARENA.filter(a=>S.flags[a.f]);
   const GRP=[['Jefes de los ngen','The ngen bosses'],['Wekufü secretos','Secret wekufü'],['Santiago','Santiago']];
@@ -51,14 +60,14 @@ function arenaFight(a){
 /* back from the Weichawe: no story, no reward beyond the fight itself */
 function arenaEnd(how){
   S.hp=Math.max(S.hp,1);persist();
-  if(how==='win')return say([N('El círculo rojo te devuelve al lof. La pelea se queda en tu memoria; las palabras, en tu boca.','The red circle sets you back in the lof. The fight stays in your memory; the words, in your mouth.')]);
-  if(how==='flee')return say([N('Sales del círculo rojo y vuelves al lof.','You step out of the red circle and return to the lof.')]);
+  if(how==='win')return say([N('El círculo rojo te devuelve a la ruka. La pelea se queda en tu memoria; las palabras, en tu boca.','The red circle sets you back in the ruka. The fight stays in your memory; the words, in your mouth.')]);
+  if(how==='flee')return say([N('Sales del círculo rojo y vuelves a la ruka.','You step out of the red circle and return to the ruka.')]);
 }
 function arenaLose(){
   S.curse=0;S.hp=maxHP();S.sp=SPMAX;mode='map';B=null;AU.name=null;playSong(mapSong());grace=30;
   if(typeof playAmb==='function'){playAmb(typeof wxAmbKey==='function'?wxAmbKey():ambFor(M.bg));ambVol(.5)}
   persist();
-  say([N('Te quedas sin fuerzas... y despiertas junto al círculo rojo, en el lof. En el Weichawe no se pierde nada: solo se aprende.','You collapse... and wake beside the red circle, in the lof. In the Weichawe nothing is lost: you only learn.')]);
+  say([N('Te quedas sin fuerzas... y despiertas junto al círculo rojo, en la ruka. En el Weichawe no se pierde nada: solo se aprende.','You collapse... and wake beside the red circle, in the ruka. In the Weichawe nothing is lost: you only learn.')]);
 }
 function drawArenaRing(c,cx,cy){
   const t=frame/16,pu=.82+.18*Math.sin(frame/11);
