@@ -28,7 +28,7 @@ function palAmbient(sc){
     if(dd>stop){const s2=Math.min(sp,dd);p.x+=dx/dd*s2;p.y+=dy/dd*s2;p.mv=true;p.dir=Math.abs(dx)>=Math.abs(dy)*.8?(dx>0?'right':'left'):(dy>0?'down':'up')}
     else{p.mv=false;p.dir=a.bx>p.x?'right':'left'}
     if(a.hold<0&&!a.cool&&Math.hypot(p.x-a.bx,p.y+5-a.by)<8&&Math.hypot(a.vx,a.vy)<1.7){a.hold=i;a.t=0;a.kick=50+Math.random()*70}
-    else if(a.hold>=0&&team(a.hold)!==tm&&!a.cool&&Math.hypot(p.x-carrier.x,p.y-carrier.y)<11&&Math.random()<.008){a.hold=i;a.t=0;a.kick=50+Math.random()*70;a.cool=45}});
+    else if(a.hold>=0&&team(a.hold)!==tm&&!a.cool&&Math.hypot(p.x-sc.pl[a.hold].x,p.y-sc.pl[a.hold].y)<11&&Math.random()<.008){a.hold=i;a.t=0;a.kick=50+Math.random()*70;a.cool=45}});
   // keep everyone apart: a player is about 14 px wide
   for(let i=0;i<4;i++)for(let j=i+1;j<4;j++){const p=sc.pl[i],q=sc.pl[j],dx=q.x-p.x,dy=q.y-p.y,dd=Math.hypot(dx,dy)||.01;
     if(dd<18){const k=(18-dd)/2,ux=dx/dd,uy=dy/dd;const vy=Math.abs(uy)<.35?(dy>=0?1:-1)*.5:uy;p.x-=ux*k*.5;p.y-=vy*k;q.x+=ux*k*.5;q.y+=vy*k}}

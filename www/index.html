@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='1dc6304-202611252122';
+window.KEWUN_BUILD='3cded5f-202611252137';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -3197,7 +3197,7 @@ function playCredits(done){gcEvent('creditos','Créditos finales');
   let fin=false;const end=()=>{if(fin)return;fin=true;try{v.pause()}catch(e){}ov.remove();done()};
   const ov=document.createElement('div');ov.id='credits';ov.style.cssText='position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center';
   const v=document.createElement('video');v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
-  for(const u of ['ending.mp4','../www/ending.mp4']){const so=document.createElement('source');so.src=u;so.type='video/mp4';v.appendChild(so)}
+  for(const u of ['ending.mp4?v=2','../www/ending.mp4?v=2']){const so=document.createElement('source');so.src=u;so.type='video/mp4';v.appendChild(so)}
   v.lastElementChild.addEventListener('error',end);v.addEventListener('ended',end);
   const sk=document.createElement('button');sk.textContent=((S&&S.gloss==='en')||LANG==='en')?'Skip ▶':'Saltar ▶';
   sk.style.cssText='position:absolute;right:14px;bottom:14px;padding:8px 14px;font:600 14px sans-serif;color:#f3ead2;background:rgba(0,0,0,.55);border:1px solid rgba(243,234,210,.5);border-radius:6px;opacity:.75';
@@ -8993,7 +8993,7 @@ function palAmbient(sc){
     if(dd>stop){const s2=Math.min(sp,dd);p.x+=dx/dd*s2;p.y+=dy/dd*s2;p.mv=true;p.dir=Math.abs(dx)>=Math.abs(dy)*.8?(dx>0?'right':'left'):(dy>0?'down':'up')}
     else{p.mv=false;p.dir=a.bx>p.x?'right':'left'}
     if(a.hold<0&&!a.cool&&Math.hypot(p.x-a.bx,p.y+5-a.by)<8&&Math.hypot(a.vx,a.vy)<1.7){a.hold=i;a.t=0;a.kick=50+Math.random()*70}
-    else if(a.hold>=0&&team(a.hold)!==tm&&!a.cool&&Math.hypot(p.x-carrier.x,p.y-carrier.y)<11&&Math.random()<.008){a.hold=i;a.t=0;a.kick=50+Math.random()*70;a.cool=45}});
+    else if(a.hold>=0&&team(a.hold)!==tm&&!a.cool&&Math.hypot(p.x-sc.pl[a.hold].x,p.y-sc.pl[a.hold].y)<11&&Math.random()<.008){a.hold=i;a.t=0;a.kick=50+Math.random()*70;a.cool=45}});
   // keep everyone apart: a player is about 14 px wide
   for(let i=0;i<4;i++)for(let j=i+1;j<4;j++){const p=sc.pl[i],q=sc.pl[j],dx=q.x-p.x,dy=q.y-p.y,dd=Math.hypot(dx,dy)||.01;
     if(dd<18){const k=(18-dd)/2,ux=dx/dd,uy=dy/dd;const vy=Math.abs(uy)<.35?(dy>=0?1:-1)*.5:uy;p.x-=ux*k*.5;p.y-=vy*k;q.x+=ux*k*.5;q.y+=vy*k}}
