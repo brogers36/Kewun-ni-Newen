@@ -119,10 +119,10 @@ body.boot::after{content:'Kewün Newen';position:fixed;inset:0;display:flex;alig
       <div id="menu" class="box"><div class="p"></div><div class="list"></div></div>
       <button id="skip">Saltar ▶▶</button>
       <button id="mbtn">☰</button>
-      <button id="fsbtn" title="Pantalla completa / Fullscreen (F)">⛶</button>
+      <button id="fsbtn" title="Pantalla completa (F)" data-tes="Pantalla completa (F)" data-ten="Fullscreen (F)">⛶</button>
       <div id="title">
         <h1>Kewün Newen</h1>
-        <div class="sub">Prototipo · Lafkenche, Nagche, Pewenche y Williche</div>
+        <div class="sub" data-es="Prototipo · Lafkenche, Nagche, Pewenche y Williche" data-en="Prototype · Lafkenche, Nagche, Pewenche and Williche">Prototipo · Lafkenche, Nagche, Pewenche y Williche</div>
         <div class="row">
           <button class="hero on" id="hM"><canvas width="32" height="48"></canvas><span>Millaray</span></button>
           <button class="hero" id="hA"><canvas width="32" height="48"></canvas><span>Ayelen</span></button>
@@ -130,14 +130,14 @@ body.boot::after{content:'Kewün Newen';position:fixed;inset:0;display:flex;alig
           <button class="hero" id="hK"><canvas width="32" height="48"></canvas><span>Kallfürüngi</span></button>
         </div>
         <div class="row">
-          <button id="bNew">Llitun · Nuevo juego</button>
-          <button id="bCont" style="display:none">Continuar · Continue</button>
+          <button id="bNew" data-es="Llitun · Nuevo juego" data-en="Llitun · New game">Llitun · Nuevo juego</button>
+          <button id="bCont" style="display:none" data-es="Continuar" data-en="Continue">Continuar</button>
         </div>
         <div class="row"><button id="bLang">Glosa: Español</button><button id="bMus">♪ Música: sí</button><button id="bGfx">Gráficos: nuevos</button></div>
-        <div class="row" id="instRow" style="display:none"><span style="font-size:.85em;color:#e8d49a">📲 Instalar · Install:</span><button id="bAnd">Android</button><button id="bIOS">iPhone / iPad</button></div>
-        <div class="help" id="andhint" style="display:none;border:2px solid #e8d49a"><div class="row" style="margin-bottom:.4em"><a id="bAPK" class="ib" href="https://github.com/brogers36/Kewun-ni-Newen/releases/download/android/KewunNiNewen.apk" download>⬇ APK</a><button id="bPWA">App web · Web app</button></div><span id="andtxt">APK: ábrelo y acepta instalar · se actualiza sola.<br>APK: open it and allow the install · it updates itself.</span></div>
-        <div class="help" id="ioshint" style="display:none;border:2px solid #e8d49a">📲 Instala el juego en tu iPhone: toca <b>Compartir</b> y luego <b>«Añadir a pantalla de inicio»</b>. Se abre a pantalla completa y funciona sin internet.<br>Install on iPhone: tap <b>Share</b>, then <b>"Add to Home Screen"</b>. It opens fullscreen and works offline.</div>
-<div class="help"><span class="kb">Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música.</span><span class="tc">Un toque: hablar / avanzar · mantén el dedo y arrastra: caminar (suéltalo para parar) · desliza: recorrer el menú · dos dedos: volver · mantener pulsado o ☰: menú.<br>Tap: talk / advance · hold and drag: walk (lift to stop) · swipe: scroll a menu · two fingers: back · long press or ☰: menu.</span></div>
+        <div class="row" id="instRow" style="display:none"><span style="font-size:.85em;color:#e8d49a" data-es="📲 Instalar:" data-en="📲 Install:">📲 Instalar:</span><button id="bAnd">Android</button><button id="bIOS">iPhone / iPad</button></div>
+        <div class="help" id="andhint" style="display:none;border:2px solid #e8d49a"><div class="row" style="margin-bottom:.4em"><a id="bAPK" class="ib" href="https://github.com/brogers36/Kewun-ni-Newen/releases/download/android/KewunNiNewen.apk" download>⬇ APK</a><button id="bPWA" data-es="App web" data-en="Web app">App web</button></div><span id="andtxt" data-es="APK: ábrelo y acepta instalar · se actualiza sola." data-en="APK: open it and allow the install · it updates itself.">APK: ábrelo y acepta instalar · se actualiza sola.</span></div>
+        <div class="help" id="ioshint" style="display:none;border:2px solid #e8d49a"><span data-es="📲 Instala el juego en tu iPhone: toca &lt;b&gt;Compartir&lt;/b&gt; y luego &lt;b&gt;«Añadir a pantalla de inicio»&lt;/b&gt;. Se abre a pantalla completa y funciona sin internet." data-en="📲 Install on iPhone: tap &lt;b&gt;Share&lt;/b&gt;, then &lt;b&gt;&quot;Add to Home Screen&quot;&lt;/b&gt;. It opens fullscreen and works offline.">📲 Instala el juego en tu iPhone: toca <b>Compartir</b> y luego <b>«Añadir a pantalla de inicio»</b>. Se abre a pantalla completa y funciona sin internet.</span></div>
+<div class="help"><span class="kb" data-es="Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música." data-en="Arrows / WASD: move · Z, Enter or Space: talk / accept (A) · X or Esc: back / menu (B) · M: menu · N: music.">Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música.</span><span class="tc" data-es="Un toque: hablar / avanzar · mantén el dedo y arrastra: caminar (suéltalo para parar) · desliza: recorrer el menú · dos dedos: volver · mantener pulsado o ☰: menú." data-en="Tap: talk / advance · hold and drag: walk (lift to stop) · swipe: scroll a menu · two fingers: back · long press or ☰: menu.">Un toque: hablar / avanzar · mantén el dedo y arrastra: caminar (suéltalo para parar) · desliza: recorrer el menú · dos dedos: volver · mantener pulsado o ☰: menú.</span></div>
         <div class="copy" id="copy">© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.</div>
       </div>
     </div>
@@ -150,7 +150,7 @@ body.boot::after{content:'Kewün Newen';position:fixed;inset:0;display:flex;alig
     </div>
     <div id="ab">
       <button class="sm" id="pN">♪</button>
-      <button class="sm" id="pM">MENÚ</button>
+      <button class="sm" id="pM" data-es="MENÚ" data-en="MENU">MENÚ</button>
       <button id="pB">B</button>
       <button id="pA">A</button>
     </div>

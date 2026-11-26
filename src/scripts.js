@@ -1632,7 +1632,7 @@ function tabletTalk(id){
       return say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=T.qs[i],opts=q.o.map(o=>({m:o,v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
     choose(q.q,opts,v=>{if(trk('kuyfi chillka',v,q)){sfx('ok');ask(i+1)}
-      else{sfx('bad');const hd=S.hm?heroHurt():0;say([N((hd?'(−'+hd+') ':'')+'Los signos tiemblan y se apagan. La respuesta era: '+q.a+'. Lee la piedra otra vez.',(hd?'(−'+hd+') ':'')+'The signs tremble and go dark. The answer was: '+q.a+'. Read the stone again.')].concat(T.lines),()=>ask(0))}},false,true)}
+      else{sfx('bad');const hd=S.hm?heroHurt():0;say([N((hd?'(−'+hd+') ':'')+'Los signos tiemblan y se apagan. La respuesta era: '+q.a+'. Lee la piedra otra vez.',(hd?'(−'+hd+') ':'')+'The signs tremble and go dark. The answer was: '+(OPT_EN[q.a]||q.a)+'. Read the stone again.')].concat(T.lines),()=>ask(0))}},false,true)}
 }
 
 /* ---------- Nütramkan: a young visitor in every lof who wants to practise talking ---------- */

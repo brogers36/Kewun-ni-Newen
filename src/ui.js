@@ -63,6 +63,9 @@ function desgOpen(list){let pn=$('desgp');if(!pn){pn=document.createElement('div
   const prev=active,close=()=>{pn.style.display='none';active=prev};
   active={kind:'desg',a:close,b:close};pn.onclick=e=>{e.stopPropagation();close()}}
 dlg.addEventListener('click',()=>{if(active&&active.kind==='say'&&performance.now()-SAYT>180)active.a()});
+/* answer options written in Spanish (meaning quizzes): shown in English when the gloss is English; the value stays the same */
+const OPT_EN={"Estoy en la casa.": "I am at home.", "Voy a la casa.": "I am going home.", "Mi casa es grande.": "My house is big.", "el pie": "the foot", "la mano": "the hand", "la oreja": "the ear", "ayer": "yesterday", "mañana": "tomorrow", "ahora": "now", "antiguo": "long ago", "Ayer fui.": "I went yesterday.", "Mañana iré.": "I will go tomorrow.", "Ahora voy.": "I am going now.", "el puma": "the puma", "el ñandú": "the rhea", "el cóndor": "the condor", "Estoy triste.": "I am sad.", "Estoy feliz.": "I am happy.", "Estoy cansado.": "I am tired.", "Yo canto.": "I sing.", "Tú cantas.": "You sing.", "Él o ella canta.": "He or she sings.", "Mi mamá y yo trabajamos.": "My mom and I work.", "Mi mamá trabaja.": "My mom works.", "Ellas dos trabajan.": "The two of them work.", "¿Cuántos años tienes?": "How old are you?", "¿Dónde vives?": "Where do you live?", "¿Cómo te llamas?": "What is your name?", "¿Dónde?": "Where?", "¿Cuándo?": "When?", "¿Quién?": "Who?", "De noche suelo dormir.": "I usually sleep at night.", "Anoche dormí.": "I slept last night.", "Esta noche dormiré.": "I will sleep tonight.", "Solía hablar mapudungun.": "He or she used to speak Mapudungun.", "Habla mapudungun ahora.": "He or she speaks Mapudungun now.", "Hablará mapudungun.": "He or she will speak Mapudungun.", "Nuestro lof.": "Our lof.", "Tu lof.": "Your lof.", "Su lof.": "His or her lof.", "Está durmiendo.": "He or she is sleeping.", "Va a dormir.": "He or she is going to sleep.", "Duerme siempre.": "He or she always sleeps.", "Ayer vi un ñandú.": "I saw a rhea yesterday.", "Mañana veré un ñandú.": "I will see a rhea tomorrow.", "Hoy veo dos ñandúes.": "Today I see two rheas."};
+const optTxt=m=>{const en=(typeof S!=='undefined'&&S&&S.gloss)?S.gloss==='en':(typeof LANG!=='undefined'&&LANG==='en');return en&&OPT_EN[m]?OPT_EN[m]:GRm(m)};
 function choose(prompt,opts,cb,cancel,one,onSel){
   const pe=menu.querySelector('.p'),le=menu.querySelector('.list');
   pe.innerHTML='';le.innerHTML='';le.classList.toggle('one',!!one);
@@ -73,7 +76,7 @@ function choose(prompt,opts,cb,cancel,one,onSel){
   let idx=opts.findIndex(o=>!o.dis);if(idx<0)idx=0;const t0=performance.now();
   const pick=k=>{menu.style.display='none';active=null;sfx('ok');cb(opts[k].v!==undefined?opts[k].v:k)};
   const btns=opts.map((o,k)=>{const b=document.createElement('button');b.className='opt';
-    const mp=o.m&&!_isEsp(o.m);b.innerHTML='<span class="om">'+esc(GRm(o.m||''))+'</span>'+(o.g?'<span class="og'+(ng&&mp?' hid':'')+'">'+esc(o.g)+'</span>':'');
+    const mp=o.m&&!_isEsp(o.m);b.innerHTML='<span class="om">'+esc(optTxt(o.m||''))+'</span>'+(o.g?'<span class="og'+(ng&&mp?' hid':'')+'">'+esc(o.g)+'</span>':'');
     if(o.dis)b.disabled=true;b.onclick=()=>{if(!o.dis&&performance.now()-t0>250)pick(k)};
     b.onmouseenter=()=>{if(!o.dis&&idx!==k){idx=k;hl()}};le.appendChild(b);return b});
   if(ng){const hide=[...pe.querySelectorAll('.g')].filter(()=>prompt&&prompt.m);hide.forEach(d=>d.classList.add('hid'));

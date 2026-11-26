@@ -29,15 +29,17 @@ let PWAQ=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();PWAQ
   if(inApp)return;$('instRow').style.display='';
   const APK='https://github.com/brogers36/Kewun-ni-Newen/releases/download/android/KewunNiNewen.apk';
   $('bAnd').onclick=()=>{const h=$('andhint');h.style.display=h.style.display==='none'?'block':'none';$('ioshint').style.display='none';$('title').classList.toggle('inst',h.style.display==='block')};
-  $('bPWA').onclick=()=>{if(PWAQ){PWAQ.prompt();PWAQ=null}else $('andtxt').innerHTML='En Chrome: menú ⋮ → «Instalar app».<br>In Chrome: ⋮ menu → "Install app".'};
+  $('bPWA').onclick=()=>{if(PWAQ){PWAQ.prompt();PWAQ=null}else $('andtxt').innerHTML=LANG==='es'?'En Chrome: menú ⋮ → «Instalar app».':'In Chrome: ⋮ menu → "Install app".'};
   $('bIOS').onclick=()=>{const h=$('ioshint');h.style.display=h.style.display==='block'?'none':'block';$('andhint').style.display='none';$('title').classList.toggle('inst',h.style.display==='block')};
 })();
-function updLang(){$('copy').textContent=LANG==='es'?'© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.':'© 2026 Brandon M. A. Rogers · All rights reserved. No use of this site to train artificial intelligence.';$('bLang').textContent=LANG==='es'?'Glosa: Español':'Gloss: English';$('skip').textContent=LANG==='es'?'Saltar ▶▶':'Skip ▶▶';gfxLabel()}
+function updLang(){$('copy').textContent=LANG==='es'?'© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.':'© 2026 Brandon M. A. Rogers · All rights reserved. No use of this site to train artificial intelligence.';$('bLang').textContent=LANG==='es'?'Glosa: Español':'Gloss: English';$('skip').textContent=LANG==='es'?'Saltar ▶▶':'Skip ▶▶';gfxLabel();musLabel();
+  document.querySelectorAll('[data-en]').forEach(e=>{e.innerHTML=e.getAttribute(LANG==='es'?'data-es':'data-en')});document.querySelectorAll('[data-ten]').forEach(e=>{e.title=e.getAttribute(LANG==='es'?'data-tes':'data-ten')})}
+function musLabel(){$('bMus').textContent=AU.muted?(LANG==='es'?'♪ Música: no':'♪ Music: off'):(LANG==='es'?'♪ Música: sí':'♪ Music: on');$('pN').textContent=AU.muted?'♪×':'♪'}
 function gfxLabel(){const b=$('bGfx');if(b)b.textContent=LANG==='es'?(GEM_ON?'Gráficos: nuevos':'Gráficos: clásicos (beta)'):(GEM_ON?'Graphics: new':'Graphics: classic (beta)')}
 $('bLang').onclick=()=>{LANG=LANG==='es'?'en':'es';updLang()};
 $('bMus').onclick=()=>toggleMute();
 $('bGfx').onclick=()=>{gemSet(!GEM_ON);gfxLabel();sfx('ok')};gfxLabel();
-$('bMus').textContent=AU.muted?'♪ Música: no':'♪ Música: sí';$('pN').textContent=AU.muted?'♪×':'♪';
+musLabel();
 const HEROBTN=[['hM','millaray'],['hA','ayelen'],['hL','llanka'],['hK','kallfurungi']];
 for(const [id,lk] of HEROBTN){const cvs=$(id).querySelector('canvas'),c=cvs.getContext('2d');c.imageSmoothingEnabled=false;
   let t=0;setInterval(()=>{t++;c.clearRect(0,0,32,48);const fr=HERO===lk?Math.floor(t)%4:0;

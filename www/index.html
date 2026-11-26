@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='29ed0ff-202611260828';
+window.KEWUN_BUILD='6882a54-202611261027';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -119,10 +119,10 @@ body.boot::after{content:'Kewün Newen';position:fixed;inset:0;display:flex;alig
       <div id="menu" class="box"><div class="p"></div><div class="list"></div></div>
       <button id="skip">Saltar ▶▶</button>
       <button id="mbtn">☰</button>
-      <button id="fsbtn" title="Pantalla completa / Fullscreen (F)">⛶</button>
+      <button id="fsbtn" title="Pantalla completa (F)" data-tes="Pantalla completa (F)" data-ten="Fullscreen (F)">⛶</button>
       <div id="title">
         <h1>Kewün Newen</h1>
-        <div class="sub">Prototipo · Lafkenche, Nagche, Pewenche y Williche</div>
+        <div class="sub" data-es="Prototipo · Lafkenche, Nagche, Pewenche y Williche" data-en="Prototype · Lafkenche, Nagche, Pewenche and Williche">Prototipo · Lafkenche, Nagche, Pewenche y Williche</div>
         <div class="row">
           <button class="hero on" id="hM"><canvas width="32" height="48"></canvas><span>Millaray</span></button>
           <button class="hero" id="hA"><canvas width="32" height="48"></canvas><span>Ayelen</span></button>
@@ -130,14 +130,14 @@ body.boot::after{content:'Kewün Newen';position:fixed;inset:0;display:flex;alig
           <button class="hero" id="hK"><canvas width="32" height="48"></canvas><span>Kallfürüngi</span></button>
         </div>
         <div class="row">
-          <button id="bNew">Llitun · Nuevo juego</button>
-          <button id="bCont" style="display:none">Continuar · Continue</button>
+          <button id="bNew" data-es="Llitun · Nuevo juego" data-en="Llitun · New game">Llitun · Nuevo juego</button>
+          <button id="bCont" style="display:none" data-es="Continuar" data-en="Continue">Continuar</button>
         </div>
         <div class="row"><button id="bLang">Glosa: Español</button><button id="bMus">♪ Música: sí</button><button id="bGfx">Gráficos: nuevos</button></div>
-        <div class="row" id="instRow" style="display:none"><span style="font-size:.85em;color:#e8d49a">📲 Instalar · Install:</span><button id="bAnd">Android</button><button id="bIOS">iPhone / iPad</button></div>
-        <div class="help" id="andhint" style="display:none;border:2px solid #e8d49a"><div class="row" style="margin-bottom:.4em"><a id="bAPK" class="ib" href="https://github.com/brogers36/Kewun-ni-Newen/releases/download/android/KewunNiNewen.apk" download>⬇ APK</a><button id="bPWA">App web · Web app</button></div><span id="andtxt">APK: ábrelo y acepta instalar · se actualiza sola.<br>APK: open it and allow the install · it updates itself.</span></div>
-        <div class="help" id="ioshint" style="display:none;border:2px solid #e8d49a">📲 Instala el juego en tu iPhone: toca <b>Compartir</b> y luego <b>«Añadir a pantalla de inicio»</b>. Se abre a pantalla completa y funciona sin internet.<br>Install on iPhone: tap <b>Share</b>, then <b>"Add to Home Screen"</b>. It opens fullscreen and works offline.</div>
-<div class="help"><span class="kb">Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música.</span><span class="tc">Un toque: hablar / avanzar · mantén el dedo y arrastra: caminar (suéltalo para parar) · desliza: recorrer el menú · dos dedos: volver · mantener pulsado o ☰: menú.<br>Tap: talk / advance · hold and drag: walk (lift to stop) · swipe: scroll a menu · two fingers: back · long press or ☰: menu.</span></div>
+        <div class="row" id="instRow" style="display:none"><span style="font-size:.85em;color:#e8d49a" data-es="📲 Instalar:" data-en="📲 Install:">📲 Instalar:</span><button id="bAnd">Android</button><button id="bIOS">iPhone / iPad</button></div>
+        <div class="help" id="andhint" style="display:none;border:2px solid #e8d49a"><div class="row" style="margin-bottom:.4em"><a id="bAPK" class="ib" href="https://github.com/brogers36/Kewun-ni-Newen/releases/download/android/KewunNiNewen.apk" download>⬇ APK</a><button id="bPWA" data-es="App web" data-en="Web app">App web</button></div><span id="andtxt" data-es="APK: ábrelo y acepta instalar · se actualiza sola." data-en="APK: open it and allow the install · it updates itself.">APK: ábrelo y acepta instalar · se actualiza sola.</span></div>
+        <div class="help" id="ioshint" style="display:none;border:2px solid #e8d49a"><span data-es="📲 Instala el juego en tu iPhone: toca &lt;b&gt;Compartir&lt;/b&gt; y luego &lt;b&gt;«Añadir a pantalla de inicio»&lt;/b&gt;. Se abre a pantalla completa y funciona sin internet." data-en="📲 Install on iPhone: tap &lt;b&gt;Share&lt;/b&gt;, then &lt;b&gt;&quot;Add to Home Screen&quot;&lt;/b&gt;. It opens fullscreen and works offline.">📲 Instala el juego en tu iPhone: toca <b>Compartir</b> y luego <b>«Añadir a pantalla de inicio»</b>. Se abre a pantalla completa y funciona sin internet.</span></div>
+<div class="help"><span class="kb" data-es="Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música." data-en="Arrows / WASD: move · Z, Enter or Space: talk / accept (A) · X or Esc: back / menu (B) · M: menu · N: music.">Flechas / WASD: moverse · Z, Enter o Espacio: hablar / aceptar (A) · X o Esc: volver / menú (B) · M: menú · N: música.</span><span class="tc" data-es="Un toque: hablar / avanzar · mantén el dedo y arrastra: caminar (suéltalo para parar) · desliza: recorrer el menú · dos dedos: volver · mantener pulsado o ☰: menú." data-en="Tap: talk / advance · hold and drag: walk (lift to stop) · swipe: scroll a menu · two fingers: back · long press or ☰: menu.">Un toque: hablar / avanzar · mantén el dedo y arrastra: caminar (suéltalo para parar) · desliza: recorrer el menú · dos dedos: volver · mantener pulsado o ☰: menú.</span></div>
         <div class="copy" id="copy">© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.</div>
       </div>
     </div>
@@ -150,7 +150,7 @@ body.boot::after{content:'Kewün Newen';position:fixed;inset:0;display:flex;alig
     </div>
     <div id="ab">
       <button class="sm" id="pN">♪</button>
-      <button class="sm" id="pM">MENÚ</button>
+      <button class="sm" id="pM" data-es="MENÚ" data-en="MENU">MENÚ</button>
       <button id="pB">B</button>
       <button id="pA">A</button>
     </div>
@@ -290,7 +290,7 @@ function mkDist2(c){
   pS.connect(wS);wS.connect(hp);AU.dist2s=pS;
   const d1=c.createWaveShaper();{const n=1024,cv=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;cv[i]=Math.tanh(x*4.2)*.8}d1.curve=cv}
   const d1g=c.createGain();d1g.gain.value=.6;d1.connect(d1g);d1g.connect(AU.mus);AU.dists=d1}
-function toggleMute(){AU.muted=!AU.muted;try{localStorage.setItem(MUTE_KEY,AU.muted?'1':'0')}catch(e){}auInit();if(AU.m)AU.m.gain.value=AU.muted?0:1;$('bMus').textContent=AU.muted?'♪ Música: no':'♪ Música: sí';$('pN').textContent=AU.muted?'♪×':'♪'}
+function toggleMute(){AU.muted=!AU.muted;try{localStorage.setItem(MUTE_KEY,AU.muted?'1':'0')}catch(e){}auInit();if(AU.m)AU.m.gain.value=AU.muted?0:1;if(typeof musLabel==='function')musLabel()}
 const NOTE={C:0,'C#':1,Db:1,D:2,'D#':3,Eb:3,E:4,F:5,'F#':6,Gb:6,G:7,'G#':8,Ab:8,A:9,'A#':10,Bb:10,B:11};
 function nf(s){const m=/^([A-G][#b]?)(\d)$/.exec(s);if(!m)return 0;return 440*Math.pow(2,(NOTE[m[1]]+(+m[2]+1)*12-69)/12)}
 function parseTrack(str){const toks=str.replace(/\|/g,' ').trim().split(/\s+/);const at={};let cur=null;
@@ -930,6 +930,9 @@ function desgOpen(list){let pn=$('desgp');if(!pn){pn=document.createElement('div
   const prev=active,close=()=>{pn.style.display='none';active=prev};
   active={kind:'desg',a:close,b:close};pn.onclick=e=>{e.stopPropagation();close()}}
 dlg.addEventListener('click',()=>{if(active&&active.kind==='say'&&performance.now()-SAYT>180)active.a()});
+/* answer options written in Spanish (meaning quizzes): shown in English when the gloss is English; the value stays the same */
+const OPT_EN={"Estoy en la casa.": "I am at home.", "Voy a la casa.": "I am going home.", "Mi casa es grande.": "My house is big.", "el pie": "the foot", "la mano": "the hand", "la oreja": "the ear", "ayer": "yesterday", "mañana": "tomorrow", "ahora": "now", "antiguo": "long ago", "Ayer fui.": "I went yesterday.", "Mañana iré.": "I will go tomorrow.", "Ahora voy.": "I am going now.", "el puma": "the puma", "el ñandú": "the rhea", "el cóndor": "the condor", "Estoy triste.": "I am sad.", "Estoy feliz.": "I am happy.", "Estoy cansado.": "I am tired.", "Yo canto.": "I sing.", "Tú cantas.": "You sing.", "Él o ella canta.": "He or she sings.", "Mi mamá y yo trabajamos.": "My mom and I work.", "Mi mamá trabaja.": "My mom works.", "Ellas dos trabajan.": "The two of them work.", "¿Cuántos años tienes?": "How old are you?", "¿Dónde vives?": "Where do you live?", "¿Cómo te llamas?": "What is your name?", "¿Dónde?": "Where?", "¿Cuándo?": "When?", "¿Quién?": "Who?", "De noche suelo dormir.": "I usually sleep at night.", "Anoche dormí.": "I slept last night.", "Esta noche dormiré.": "I will sleep tonight.", "Solía hablar mapudungun.": "He or she used to speak Mapudungun.", "Habla mapudungun ahora.": "He or she speaks Mapudungun now.", "Hablará mapudungun.": "He or she will speak Mapudungun.", "Nuestro lof.": "Our lof.", "Tu lof.": "Your lof.", "Su lof.": "His or her lof.", "Está durmiendo.": "He or she is sleeping.", "Va a dormir.": "He or she is going to sleep.", "Duerme siempre.": "He or she always sleeps.", "Ayer vi un ñandú.": "I saw a rhea yesterday.", "Mañana veré un ñandú.": "I will see a rhea tomorrow.", "Hoy veo dos ñandúes.": "Today I see two rheas."};
+const optTxt=m=>{const en=(typeof S!=='undefined'&&S&&S.gloss)?S.gloss==='en':(typeof LANG!=='undefined'&&LANG==='en');return en&&OPT_EN[m]?OPT_EN[m]:GRm(m)};
 function choose(prompt,opts,cb,cancel,one,onSel){
   const pe=menu.querySelector('.p'),le=menu.querySelector('.list');
   pe.innerHTML='';le.innerHTML='';le.classList.toggle('one',!!one);
@@ -940,7 +943,7 @@ function choose(prompt,opts,cb,cancel,one,onSel){
   let idx=opts.findIndex(o=>!o.dis);if(idx<0)idx=0;const t0=performance.now();
   const pick=k=>{menu.style.display='none';active=null;sfx('ok');cb(opts[k].v!==undefined?opts[k].v:k)};
   const btns=opts.map((o,k)=>{const b=document.createElement('button');b.className='opt';
-    const mp=o.m&&!_isEsp(o.m);b.innerHTML='<span class="om">'+esc(GRm(o.m||''))+'</span>'+(o.g?'<span class="og'+(ng&&mp?' hid':'')+'">'+esc(o.g)+'</span>':'');
+    const mp=o.m&&!_isEsp(o.m);b.innerHTML='<span class="om">'+esc(optTxt(o.m||''))+'</span>'+(o.g?'<span class="og'+(ng&&mp?' hid':'')+'">'+esc(o.g)+'</span>':'');
     if(o.dis)b.disabled=true;b.onclick=()=>{if(!o.dis&&performance.now()-t0>250)pick(k)};
     b.onmouseenter=()=>{if(!o.dis&&idx!==k){idx=k;hl()}};le.appendChild(b);return b});
   if(ng){const hide=[...pe.querySelectorAll('.g')].filter(()=>prompt&&prompt.m);hide.forEach(d=>d.classList.add('hid'));
@@ -4857,7 +4860,7 @@ function tabletTalk(id){
       return say(ls,()=>{if(S.xp>=xpNeed())levelUpCheck()})}
     const q=T.qs[i],opts=q.o.map(o=>({m:o,v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
     choose(q.q,opts,v=>{if(trk('kuyfi chillka',v,q)){sfx('ok');ask(i+1)}
-      else{sfx('bad');const hd=S.hm?heroHurt():0;say([N((hd?'(−'+hd+') ':'')+'Los signos tiemblan y se apagan. La respuesta era: '+q.a+'. Lee la piedra otra vez.',(hd?'(−'+hd+') ':'')+'The signs tremble and go dark. The answer was: '+q.a+'. Read the stone again.')].concat(T.lines),()=>ask(0))}},false,true)}
+      else{sfx('bad');const hd=S.hm?heroHurt():0;say([N((hd?'(−'+hd+') ':'')+'Los signos tiemblan y se apagan. La respuesta era: '+q.a+'. Lee la piedra otra vez.',(hd?'(−'+hd+') ':'')+'The signs tremble and go dark. The answer was: '+(OPT_EN[q.a]||q.a)+'. Read the stone again.')].concat(T.lines),()=>ask(0))}},false,true)}
 }
 
 /* ---------- Nütramkan: a young visitor in every lof who wants to practise talking ---------- */
@@ -5460,7 +5463,7 @@ function practice(back){
     const opts=Q.o.map(o=>({m:o,v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
     choose(Object.assign({},Q.q,{es:'('+(i+1)+'/'+qs.length+') '+(Q.q.es||''),en:'('+(i+1)+'/'+qs.length+') '+(Q.q.en||'')}),opts,v=>{
       const good=v===Q.a;track('wiñochillkatun',good,Q.q,Q.o,Q.a);
-      if(good){ok++;sfx('ok');ask(i+1)}else{sfx('bad');say([N('Era: '+Q.a+'.','It was: '+Q.a+'.')],()=>ask(i+1))}},false,true)}
+      if(good){ok++;sfx('ok');ask(i+1)}else{sfx('bad');say([N('Era: '+Q.a+'.','It was: '+(OPT_EN[Q.a]||Q.a)+'.')],()=>ask(i+1))}},false,true)}
 }
 
 /* ---------- 5. wekufü chillka: a page for every creature you have beaten ---------- */
@@ -7030,7 +7033,7 @@ function llawKewun(e){
       if(ok){const d=Math.round(e.max*.07);e.hp=Math.max(1,e.hp-d);
         return say([Object.assign(N('La palabra te sale clara: tu sombra se encoge (−'+d+').','The word comes out clear: your shadow shrinks (−'+d+').'),{fx:()=>{sfx('ok');e.hit=12;const p=epos(e);pop(p.x,p.y-10,'-'+d,'#ffffff');spark(p.x,p.y,'#e8e0ff',12)}})],()=>ask(i+1))}
       const d=2*HPQ,hl=Math.round(e.max*.04);S.hp=Math.max(1,S.hp-d);e.hp=Math.min(e.max,e.hp+hl);
-      say([Object.assign(N('Se te escapa otra vez. La respuesta era: '+q.a+'. Tu sombra la guarda y crece (+'+hl+'); tú pierdes 2 piwke (−'+d+').','It slips away again. The answer was: '+q.a+'. Your shadow keeps it and grows (+'+hl+'); you lose 2 hearts (−'+d+').'),
+      say([Object.assign(N('Se te escapa otra vez. La respuesta era: '+q.a+'. Tu sombra la guarda y crece (+'+hl+'); tú pierdes 2 piwke (−'+d+').','It slips away again. The answer was: '+(OPT_EN[q.a]||q.a)+'. Your shadow keeps it and grows (+'+hl+'); you lose 2 hearts (−'+d+').'),
         {fx:()=>{sfx('bad');B.red=10;pop(60,30,'-'+d,'#ff6050');const p=epos(e);pop(p.x,p.y-10,'+'+hl,'#80ff90')}})],()=>ask(i+1))},false,true)}}
 function llawLast(qb){const en=S.gloss==='en';
   const q=llawPool(1)[0]||{q:{m:'«Amun.»',es:'¿Quién fue?',en:'Who went?'},o:['iñche','eymi','fey'],a:'iñche'};
@@ -7040,7 +7043,7 @@ function llawLast(qb){const en=S.gloss==='en';
       if(ok){sfx('lvl');B.flash=16;B.shake=10;qb.hp=0;B.qok=1;
         return say([N('Esta vez no se te olvida. Tu sombra cierra los ojos y sonríe.','This time you do not forget. Your shadow closes its eyes and smiles.')],victory)}
       sfx('bad');qb.stag=0;const rg=Math.round(qb.max*.2);qb.hp=Math.min(qb.max,qb.hp+rg);
-      say([N('Otra vez se te escapa. La respuesta era: '+q.a+'. Tu sombra se levanta, más fuerte (+'+rg+').','It slips away again. The answer was: '+q.a+'. Your shadow gets up, stronger (+'+rg+').')],battleMenu)},false,true))}
+      say([N('Otra vez se te escapa. La respuesta era: '+q.a+'. Tu sombra se levanta, más fuerte (+'+rg+').','It slips away again. The answer was: '+(OPT_EN[q.a]||q.a)+'. Your shadow gets up, stronger (+'+rg+').')],battleMenu)},false,true))}
 let LLAWFX=null;   // the shadow fading and coming back to you, after the fight: {t0, sx, sy} (frame it began, the shadow's tile)
 function llawWon(){const lw=llawName();
   S.flags.llaw_won=1;S.flags.kimche=1;persist();sfx('lvl');KIMCHE=undefined;
@@ -9294,15 +9297,17 @@ let PWAQ=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();PWAQ
   if(inApp)return;$('instRow').style.display='';
   const APK='https://github.com/brogers36/Kewun-ni-Newen/releases/download/android/KewunNiNewen.apk';
   $('bAnd').onclick=()=>{const h=$('andhint');h.style.display=h.style.display==='none'?'block':'none';$('ioshint').style.display='none';$('title').classList.toggle('inst',h.style.display==='block')};
-  $('bPWA').onclick=()=>{if(PWAQ){PWAQ.prompt();PWAQ=null}else $('andtxt').innerHTML='En Chrome: menú ⋮ → «Instalar app».<br>In Chrome: ⋮ menu → "Install app".'};
+  $('bPWA').onclick=()=>{if(PWAQ){PWAQ.prompt();PWAQ=null}else $('andtxt').innerHTML=LANG==='es'?'En Chrome: menú ⋮ → «Instalar app».':'In Chrome: ⋮ menu → "Install app".'};
   $('bIOS').onclick=()=>{const h=$('ioshint');h.style.display=h.style.display==='block'?'none':'block';$('andhint').style.display='none';$('title').classList.toggle('inst',h.style.display==='block')};
 })();
-function updLang(){$('copy').textContent=LANG==='es'?'© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.':'© 2026 Brandon M. A. Rogers · All rights reserved. No use of this site to train artificial intelligence.';$('bLang').textContent=LANG==='es'?'Glosa: Español':'Gloss: English';$('skip').textContent=LANG==='es'?'Saltar ▶▶':'Skip ▶▶';gfxLabel()}
+function updLang(){$('copy').textContent=LANG==='es'?'© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.':'© 2026 Brandon M. A. Rogers · All rights reserved. No use of this site to train artificial intelligence.';$('bLang').textContent=LANG==='es'?'Glosa: Español':'Gloss: English';$('skip').textContent=LANG==='es'?'Saltar ▶▶':'Skip ▶▶';gfxLabel();musLabel();
+  document.querySelectorAll('[data-en]').forEach(e=>{e.innerHTML=e.getAttribute(LANG==='es'?'data-es':'data-en')});document.querySelectorAll('[data-ten]').forEach(e=>{e.title=e.getAttribute(LANG==='es'?'data-tes':'data-ten')})}
+function musLabel(){$('bMus').textContent=AU.muted?(LANG==='es'?'♪ Música: no':'♪ Music: off'):(LANG==='es'?'♪ Música: sí':'♪ Music: on');$('pN').textContent=AU.muted?'♪×':'♪'}
 function gfxLabel(){const b=$('bGfx');if(b)b.textContent=LANG==='es'?(GEM_ON?'Gráficos: nuevos':'Gráficos: clásicos (beta)'):(GEM_ON?'Graphics: new':'Graphics: classic (beta)')}
 $('bLang').onclick=()=>{LANG=LANG==='es'?'en':'es';updLang()};
 $('bMus').onclick=()=>toggleMute();
 $('bGfx').onclick=()=>{gemSet(!GEM_ON);gfxLabel();sfx('ok')};gfxLabel();
-$('bMus').textContent=AU.muted?'♪ Música: no':'♪ Música: sí';$('pN').textContent=AU.muted?'♪×':'♪';
+musLabel();
 const HEROBTN=[['hM','millaray'],['hA','ayelen'],['hL','llanka'],['hK','kallfurungi']];
 for(const [id,lk] of HEROBTN){const cvs=$(id).querySelector('canvas'),c=cvs.getContext('2d');c.imageSmoothingEnabled=false;
   let t=0;setInterval(()=>{t++;c.clearRect(0,0,32,48);const fr=HERO===lk?Math.floor(t)%4:0;

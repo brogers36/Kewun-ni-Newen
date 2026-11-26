@@ -69,7 +69,7 @@ function practice(back){
     const opts=Q.o.map(o=>({m:o,v:o}));for(let a=opts.length-1;a>0;a--){const b=rnd(a+1);[opts[a],opts[b]]=[opts[b],opts[a]]}
     choose(Object.assign({},Q.q,{es:'('+(i+1)+'/'+qs.length+') '+(Q.q.es||''),en:'('+(i+1)+'/'+qs.length+') '+(Q.q.en||'')}),opts,v=>{
       const good=v===Q.a;track('wiñochillkatun',good,Q.q,Q.o,Q.a);
-      if(good){ok++;sfx('ok');ask(i+1)}else{sfx('bad');say([N('Era: '+Q.a+'.','It was: '+Q.a+'.')],()=>ask(i+1))}},false,true)}
+      if(good){ok++;sfx('ok');ask(i+1)}else{sfx('bad');say([N('Era: '+Q.a+'.','It was: '+(OPT_EN[Q.a]||Q.a)+'.')],()=>ask(i+1))}},false,true)}
 }
 
 /* ---------- 5. wekufü chillka: a page for every creature you have beaten ---------- */
