@@ -830,7 +830,7 @@ function renderBattle(){
   const pw=100,ph=Math.max(32,hrows*8+18),px=LW-pw-4,py=4; // compact, top-right above the hero; grows with the heart rows
   R(c,px-1,py-1,pw+2,ph+2,'#000');ctWin(c,px,py,pw,ph);
   {const sp=S.sp||0;R(c,px+pw-10,py+4,6,ph-8,'#f8f8f8');R(c,px+pw-9,py+5,4,ph-10,'#000');const fh=Math.round((ph-10)*sp/SPMAX);if(fh)R(c,px+pw-9,py+ph-5-fh,4,fh,'#30c030');}
-  R(c,px+3,py+3,21,21,'#e8ecf8');{const gh=typeof gemHead==='function'&&gemHead(),pt=gh?null:typeof portraitFor==='function'&&S.name?portraitFor({who:S.name}):null;if(gh)c.drawImage(gh,px+4,py+4);else if(pt)c.drawImage(pt,0,0,44,40,px+4,py+4,19,19);else c.drawImage(ctCharSprite(heroLook(),'down',0),0,1,18,18,px+4,py+4,19,19)}if(0){}else c.drawImage(charSprite(heroLook(),'down',0),0,0,16,14,px+3,py+3,20,17.5);
+  R(c,px+3,py+3,21,21,'#e8ecf8');{const gh=typeof gemHead==='function'&&gemHead(),pt=gh?null:typeof portraitFor==='function'&&S.name?portraitFor({who:S.name}):null;if(gh)c.drawImage(gh,px+4,py+4);else if(pt)c.drawImage(pt,0,0,44,40,px+4,py+4,19,19);else c.drawImage(ctCharSprite(heroLook(),'down',0),0,1,18,18,px+4,py+4,19,19)}if(!(typeof gemHead==='function'&&gemHead()))c.drawImage(charSprite(heroLook(),'down',0),0,0,16,14,px+3,py+3,20,17.5);
   const mx=maxHP(),hearts=Math.min(40,Math.ceil(mx/HPQ));let hp=Math.max(0,S.hp);
   for(let i=0;i<hearts;i++){const q=Math.max(0,Math.min(4,hp-i*HPQ)),col=i%8,row=Math.floor(i/8);drawHeart(c,px+26+col*8,py+13+row*8,q)}
   OV.push(()=>{txt(S.name,px+26,py+10,'#ffffff',11);txt(Math.max(0,S.hp)+'/'+mx,px+pw-13,py+10,'#c8d0ff',10,'right')});
