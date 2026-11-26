@@ -115,6 +115,9 @@ function gemCC(look,dir){const q=GEM_ON&&GEM_READY&&GEMI.cc[look];if(!q)return n
   const key='GEMCC'+look+dir;if(CCACHE[key])return CCACHE[key];return CCACHE[key]=gemCv(im,dir==='right',im.width,im.height)}
 const _gCC=cutChar,_gLB=lanBig,LOFLOOK={lof_kuku:'kuku',lof_lonko:'lonko',lof_weaver:'weaver',lof_cook:'cook',lof_wentru:'fisher',lof_ulcha:'fisherw'};
 cutChar=function(look,dir,fr){return gemCC(look,dir)||_gCC.apply(this,arguments)};
+/* the lof cheer: the new villagers, no raised arms; they bounce on their toes instead, each to their own beat */
+lanBig=function(lk,d,fr){const base=gemCC(LOFLOOK[lk]||lk,d);if(!base)return _gLB.apply(this,arguments);if(!fr)return base;
+  const up=fr===1?3:1,key='GEMHOP'+lk+d+fr;if(CCACHE[key])return CCACHE[key];const [cv,c]=mk(base.width,base.height+up);c.drawImage(base,0,0);return CCACHE[key]=cv};
 function gemHead(){const h=GEM_ON&&GEM_READY&&GEMI.head[heroLook()];return h||null}
 /* the Santiago bosses' defeat animations break apart the new art, with their parts measured on it */
 const DEFEAT_G={
