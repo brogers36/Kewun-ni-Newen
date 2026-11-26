@@ -94,7 +94,7 @@ function konaTalk(){
   if(CUR==='lof')return choose(L('Kona','Palintuayu?','¿Jugamos un palin?','Shall we play palin?'),
     [{m:'May!',g:S.gloss==='en'?'Yes, let us play':'Sí, juguemos',v:1},
      {m:'Ka antü.',g:S.gloss==='en'?'Another day':'Otro día',v:0}],v=>{
-      if(v)return say([N('Vamos a la cancha. Muévete con las flechas y golpea la pali con A/Z; llévala hasta la raya del puel, a la derecha. De vez en cuando, grita la jugada a tu equipo en mapudungun. El primero a 3 gana.','Off to the field. Move with the arrows and strike the pali with A/Z; take it to the puel line, on the right. Every so often, shout the call to your team in Mapudungun. First to 3 wins.')],()=>palinStart());
+      if(v)return say([N('Vamos a la cancha. Muévete con las flechas y al alcanzar la pali la golpeas sola (o con Z o Espacio); llévala hasta la raya del puel, a la derecha. De vez en cuando, grita la jugada a tu equipo en mapudungun. El primero a 3 gana.','Off to the field. Move with the arrows and reach the pali to strike it (or press Z or Space); take it to the puel line, on the right. Every so often, shout the call to your team in Mapudungun. First to 3 wins.')],()=>palinStart());
       konaIdle()},true);
   konaIdle()}
 function konaIdle(){say([
@@ -149,7 +149,7 @@ function shop(where){
   function list(){
     const opts=[];
     for(const k in ITEMS)opts.push({m:ITEMS[k].m+'  ·  '+ITEMS[k].p,g:numW(ITEMS[k].p)+' ngülliw · '+G(ITEMS[k]),v:'i:'+k});
-    for(const k in GEAR){if(GEAR[k].hide)continue;opts.push({m:GEAR[k].m+'  ·  '+GEAR[k].p,g:S.gear[k]&&!(window.KEWUN_MASTER||S.hm)?(S.gloss==='en'?'(already yours)':'(ya lo tienes)'):numW(GEAR[k].p)+' ngülliw · '+G(GEAR[k])+(S.gear[k]?(S.gloss==='en'?' · you have ':' · tienes ')+numP(+S.gear[k]):''),v:'g:'+k,dis:!!S.gear[k]&&!(window.KEWUN_MASTER||S.hm)})}   // master and weichafe mode: these can be bought again and stack
+    for(const k in GEAR){if(GEAR[k].hide)continue;opts.push({m:GEAR[k].m+'  ·  '+GEAR[k].p,g:S.gear[k]&&!S.hm?(S.gloss==='en'?'(already yours)':'(ya lo tienes)'):numW(GEAR[k].p)+' ngülliw · '+G(GEAR[k])+(S.gear[k]?(S.gloss==='en'?' · you have ':' · tienes ')+numP(+S.gear[k]):''),v:'g:'+k,dis:!!S.gear[k]&&!S.hm})}   // master and weichafe mode: these can be bought again and stack
     opts.push({m:'Pewkayal',g:S.gloss==='en'?'See you later (leave)':'Hasta luego (salir)',v:'x'});
     choose({es:'Tienes '+numP(S.gold)+' ngülliw.',en:'You have '+numP(S.gold)+' ngülliw.'},opts,v=>{
       if(v===null||v==='x')return say([L('Ngillakafe','Pewkayal!','¡Hasta luego!','See you later!')]);

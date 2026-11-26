@@ -180,7 +180,7 @@ function palinTalk(){
   say([L('Palife','Mari mari! Palituaiñ?','¡Hola! ¿Jugamos palin? Nos falta una persona en el equipo.','Hello! Shall we play palin? Our team is one player short.')],()=>
     choose({m:'Palituaiñ?',es:'¿Juegas palin?',en:'Play palin?'},[{m:'May',g:en?'Play a match':'Jugar un partido',v:1},{m:'Wüla müten',g:en?'Later':'Después',v:0}],v=>{if(!v)return;
       say([N('El palin se juega con el wiño (el palo curvo) y la pali (la bola). Tu equipo empuja la pali hacia el puel, el este; el otro equipo, hacia el lafken, el oeste. Si la pali cruza la raya del fondo, es tripal o raya. Tres ganan.','Palin is played with the wiño (the curved stick) and the pali (the ball). Your team drives the pali toward the puel, the east; the other team toward the lafken, the west. When the pali crosses the end line it is a tripal, or raya. Three win.'),
-        N('Muévete con las flechas. Golpea la pali con A cuando esté a tu lado. De vez en cuando el juego se detiene: grita la jugada a tu equipo en mapudungun. Si aciertas, te ayudan.','Move with the arrows. Strike the pali with A when it is beside you. Every so often play stops: shout the call to your team in Mapudungun. Call it right and they help you.')],palinStart)},true,true));
+        N('Muévete con las flechas. Cuando alcanzas la pali, la golpeas sola (o con Z o Espacio). De vez en cuando el juego se detiene: grita la jugada a tu equipo en mapudungun. Si aciertas, te ayudan.','Move with the arrows. When you reach the pali you strike it automatically (or press Z or Space). Every so often play stops: shout the call to your team in Mapudungun. Call it right and they help you.')],palinStart)},true,true));
 }
 function palinStart(){
   const mk=(team,look,x,y,me)=>({team,look,x,y,hx:x,hy:y,me:!!me,dir:team?'left':'right',fr:0,an:0,sw:0,cd:0,boost:0,stun:0,conf:0});
@@ -206,9 +206,9 @@ function updatePalin(){
   if(PG.intro>0){PG.intro--;if(PG.intro===1)palinFx(b.x,b.y-30,'Palin!','#ffffff');return}
   // the player
   let dx=(held.right?1:0)-(held.left?1:0),dy=(held.down?1:0)-(held.up?1:0);
-  if(dx||dy){const l=Math.hypot(dx,dy),sp=1.45;me.x+=dx/l*sp;me.y+=dy/l*sp;me.an++;me.dir=Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up')}
-  if(PG.touch===undefined)PG.touch=matchMedia('(pointer:coarse)').matches;
-  if(PG.touch&&!me.sw&&me.cd===0&&b.x>me.x-3&&Math.hypot(b.x-me.x,b.y-me.y+2)<12)me.sw=14;
+  if(dx||dy){const l=Math.hypot(dx,dy),sp=1.9;me.x+=dx/l*sp;me.y+=dy/l*sp;me.an++;me.dir=Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up')}
+  /* the player swings by themself on reaching the pali, on every device (Z, Space or Enter also swing) */
+  if(!me.sw&&me.cd===0&&b.x>me.x-3&&Math.hypot(b.x-me.x,b.y-me.y+2)<12)me.sw=14;
   if(me.sw>0){me.sw--;if(me.sw>6&&me.cd===0&&Math.hypot(b.x-me.x,b.y-me.y+2)<15){palinHit(me,3,(held.up?-1.4:0)+(held.down?1.4:0)+(b.y-me.y)*.06,4.6);palinFx(me.x,me.y-26,'Tak!','#fff6c8')}}
   // the others: one chaser per team goes for the pali, the rest keep their lanes
   for(let tm=0;tm<2;tm++){const mates=PG.pl.filter(p=>p.team===tm&&!p.me),dirX=tm?-1:1;

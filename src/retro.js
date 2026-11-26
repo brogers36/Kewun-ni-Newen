@@ -188,6 +188,13 @@ function drawPortal(c,x,y){
   for(let k=0;k<8;k++){const a=t/14+k*.785;R(c,Math.round(x+Math.cos(a)*13),Math.round(y-6+Math.sin(a)*15),2,2,k%2?'#e8d0ff':'#9ad0ff')}
   if(t%50<4)ell(c,x,y-6,15,18,'rgba(255,255,255,.18)');
 }
+/* a talking stone, a little bigger than a tile: a mossy boulder with a carved face whose eyes glow (blink=1 closes them) */
+const _TS={};function talkStone(blink){const key=blink?1:0;if(_TS[key])return _TS[key];const [cv,c]=mk(24,24);
+  ell(c,12,21,10,3,'rgba(0,0,0,.3)');ell(c,12,13,10.5,9.5,'#2c2c38');ell(c,12,13,9.5,8.5,'#6e6e80');ell(c,11,12,8,7,'#8a8a9c');ell(c,9,9,4,3,'#a8a8ba');
+  R(c,4,17,5,2,'#3e8a3a');R(c,15,5,4,2,'#3e8a3a');R(c,16,4,2,1,'#5cb04e');R(c,5,16,2,1,'#5cb04e');
+  if(blink){R(c,7,11,3,1,'#2a2a3a');R(c,14,11,3,1,'#2a2a3a')}else{R(c,7,10,3,3,'#1a1a2a');R(c,14,10,3,3,'#1a1a2a');R(c,8,11,1,1,'#9fe8ff');R(c,15,11,1,1,'#9fe8ff');R(c,7,10,1,1,'#d8f6ff');R(c,14,10,1,1,'#d8f6ff')}
+  R(c,7,8,3,1,'#4a4a5a');R(c,14,8,3,1,'#4a4a5a');R(c,9,16,6,1,'#2a2a3a');R(c,10,17,4,1,'#3a3a4a');
+  return _TS[key]=cv}
 /* a person drawn large in a cutscene, filling the box x,y,w,h */
 function cutPerson(c,look,dir,x,y,w,h){c.drawImage(ctCharSprite(look,dir,0),x,y,w,h)}
 /* where a ngen's eyes and mouth sit, measured up from its feet at size 1 (the eye beams at the end of a battle start there) */

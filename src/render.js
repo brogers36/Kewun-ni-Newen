@@ -219,6 +219,14 @@ function renderMap(){
       const fly=ET[t].fly?6+Math.round(Math.sin(frame/8)*1.5):0;
       c.globalAlpha=.5;c.drawImage(cvs,Math.round(sx+8-cvs.width/2),Math.round(sy+16-cvs.height-fly+2));c.globalAlpha=1;
     }}
+  // the talking stones stand out in front of trees and boulders, glow softly and show a speech mark until their quiz is solved
+  if(M.stones)for(const k in M.stones){const [tx,ty]=k.split(',').map(Number),X=tx*T-cx,Y=ty*T-cy+VY;if(X<-24||X>LW+8||Y<VY-30||Y>VY+VH+8)continue;
+    const done=S.flags[M.pz?'pz:'+CUR+':st':'pz:'+CUR],pul=.5+.5*Math.sin(frame/18);
+    for(const [r,a] of [[16,.06],[11,.09],[7,.12]])ell(c,X+8,Y+7,r,r*.8,'rgba(150,220,255,'+(a*(done?.4:.7+.3*pul)).toFixed(3)+')');
+    c.drawImage(talkStone(Math.floor(frame/90)%9===0&&frame%90<8),X-4,Y-8);
+    if(!done&&Math.abs(tx-P.x)+Math.abs(ty-P.y)<10){const by=Y-14-Math.round(Math.sin(frame/12)*1.5);
+      OV.push(()=>{ctx.save();ctx.fillStyle='#fffaf0';ctx.strokeStyle='#2a1a3a';ctx.lineWidth=2;const bx=(X+8)*2-14,yy=by*2-12;ctx.beginPath();ctx.roundRect(bx,yy,28,18,5);ctx.fill();ctx.stroke();
+        ctx.fillStyle='#2a1a3a';for(let i=0;i<3;i++)ctx.fillRect(bx+7+i*6,yy+8,3,3);ctx.restore()})}}
   for(const [rx,ry] of RUKAS)for(let k=0;k<5;k++){const ph=((frame+k*28)%140)/140;ell(c,rx-cx+Math.sin(ph*6+k)*3*ph,ry-cy+VY-ph*28,2+ph*5,(2+ph*5)*.8,'rgba(225,225,235,'+(.4*(1-ph))+')')}
   for(let k=0;k<26;k++){const wx=Math.floor(h2(k,frame>>3,91)*LW),wy=Math.floor(h2(k,frame>>3,92)*LH),mx=Math.floor((wx+cx)/T),my=Math.floor((wy-VY+cy)/T);
     if(inB(mx,my)&&grid[my][mx]==='~'&&WD[my][mx]>1){const a=(frame%8)<4;R(c,wx,wy,1,1,M.lava?'#fff0a0':'#f4faff');if(a){R(c,wx-1,wy,1,1,'rgba(220,240,255,.7)');R(c,wx+1,wy,1,1,'rgba(220,240,255,.7)')}}}
