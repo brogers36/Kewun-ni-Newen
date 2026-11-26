@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='cbad6d3-202611260823';
+window.KEWUN_BUILD='bcc1c40-202611260828';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -133,7 +133,7 @@ body.boot::after{content:'Kewün Newen';position:fixed;inset:0;display:flex;alig
           <button id="bNew">Llitun · Nuevo juego</button>
           <button id="bCont" style="display:none">Continuar · Continue</button>
         </div>
-        <div class="row"><button id="bLang">Glosa: Español</button><button id="bMus">♪ Música: sí</button></div>
+        <div class="row"><button id="bLang">Glosa: Español</button><button id="bMus">♪ Música: sí</button><button id="bGfx">Gráficos: nuevos</button></div>
         <div class="row" id="instRow" style="display:none"><span style="font-size:.85em;color:#e8d49a">📲 Instalar · Install:</span><button id="bAnd">Android</button><button id="bIOS">iPhone / iPad</button></div>
         <div class="help" id="andhint" style="display:none;border:2px solid #e8d49a"><div class="row" style="margin-bottom:.4em"><a id="bAPK" class="ib" href="https://github.com/brogers36/Kewun-ni-Newen/releases/download/android/KewunNiNewen.apk" download>⬇ APK</a><button id="bPWA">App web · Web app</button></div><span id="andtxt">APK: ábrelo y acepta instalar · se actualiza sola.<br>APK: open it and allow the install · it updates itself.</span></div>
         <div class="help" id="ioshint" style="display:none;border:2px solid #e8d49a">📲 Instala el juego en tu iPhone: toca <b>Compartir</b> y luego <b>«Añadir a pantalla de inicio»</b>. Se abre a pantalla completa y funciona sin internet.<br>Install on iPhone: tap <b>Share</b>, then <b>"Add to Home Screen"</b>. It opens fullscreen and works offline.</div>
@@ -5200,10 +5200,8 @@ function openCfg(){const en=S.gloss==='en';
     {m:'Re mapudungun: '+(S.nogloss?(en?'yes':'sí'):'no'),g:en?'Hide the translation of Mapudungun lines':'Ocultar la traducción de las líneas en mapudungun',v:'nogloss'},
     {m:'Grafemario: '+GRAF_NAME[GRAF],g:en?'Unificado → Azümchefe → Ragileo':'Unificado → Azümchefe → Ragileo',v:'graf'},
     {m:AU.muted?(en?'Music: off':'Música: no'):(en?'Music: on':'Música: sí'),g:en?'Turn the music on or off':'Encender o apagar la música',v:'mus'},
-    {m:(en?'Graphics: ':'Gráficos: ')+(GEM_ON?(en?'new':'nuevos'):(en?'classic (beta)':'clásicos (beta)')),g:en?'Switch to the classic character and wekufü art, or back':'Cambiar al dibujo clásico de personajes y wekufü, o volver al nuevo',v:'gfx'},
     {m:en?'Back':'Volver',v:'x'}],v=>{
-    if(v==='gfx'){gemSet(!GEM_ON);openCfg()}
-    else if(v==='hints'){S.hints=!S.hints;persist();openCfg()}
+    if(v==='hints'){S.hints=!S.hints;persist();openCfg()}
     else if(v==='lang'){S.gloss=S.gloss==='en'?'es':'en';LANG=S.gloss;persist();openCfg()}
     else if(v==='nogloss'){S.nogloss=S.nogloss?0:1;persist();openCfg()}
     else if(v==='graf'){setGraf({u:'a',a:'r',r:'u'}[GRAF]);openCfg()}
@@ -9299,9 +9297,11 @@ let PWAQ=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();PWAQ
   $('bPWA').onclick=()=>{if(PWAQ){PWAQ.prompt();PWAQ=null}else $('andtxt').innerHTML='En Chrome: menú ⋮ → «Instalar app».<br>In Chrome: ⋮ menu → "Install app".'};
   $('bIOS').onclick=()=>{const h=$('ioshint');h.style.display=h.style.display==='block'?'none':'block';$('andhint').style.display='none';$('title').classList.toggle('inst',h.style.display==='block')};
 })();
-function updLang(){$('copy').textContent=LANG==='es'?'© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.':'© 2026 Brandon M. A. Rogers · All rights reserved. No use of this site to train artificial intelligence.';$('bLang').textContent=LANG==='es'?'Glosa: Español':'Gloss: English';$('skip').textContent=LANG==='es'?'Saltar ▶▶':'Skip ▶▶'}
+function updLang(){$('copy').textContent=LANG==='es'?'© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.':'© 2026 Brandon M. A. Rogers · All rights reserved. No use of this site to train artificial intelligence.';$('bLang').textContent=LANG==='es'?'Glosa: Español':'Gloss: English';$('skip').textContent=LANG==='es'?'Saltar ▶▶':'Skip ▶▶';gfxLabel()}
+function gfxLabel(){const b=$('bGfx');if(b)b.textContent=LANG==='es'?(GEM_ON?'Gráficos: nuevos':'Gráficos: clásicos (beta)'):(GEM_ON?'Graphics: new':'Graphics: classic (beta)')}
 $('bLang').onclick=()=>{LANG=LANG==='es'?'en':'es';updLang()};
 $('bMus').onclick=()=>toggleMute();
+$('bGfx').onclick=()=>{gemSet(!GEM_ON);gfxLabel();sfx('ok')};gfxLabel();
 $('bMus').textContent=AU.muted?'♪ Música: no':'♪ Música: sí';$('pN').textContent=AU.muted?'♪×':'♪';
 const HEROBTN=[['hM','millaray'],['hA','ayelen'],['hL','llanka'],['hK','kallfurungi']];
 for(const [id,lk] of HEROBTN){const cvs=$(id).querySelector('canvas'),c=cvs.getContext('2d');c.imageSmoothingEnabled=false;

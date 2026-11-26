@@ -32,9 +32,11 @@ let PWAQ=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();PWAQ
   $('bPWA').onclick=()=>{if(PWAQ){PWAQ.prompt();PWAQ=null}else $('andtxt').innerHTML='En Chrome: menú ⋮ → «Instalar app».<br>In Chrome: ⋮ menu → "Install app".'};
   $('bIOS').onclick=()=>{const h=$('ioshint');h.style.display=h.style.display==='block'?'none':'block';$('andhint').style.display='none';$('title').classList.toggle('inst',h.style.display==='block')};
 })();
-function updLang(){$('copy').textContent=LANG==='es'?'© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.':'© 2026 Brandon M. A. Rogers · All rights reserved. No use of this site to train artificial intelligence.';$('bLang').textContent=LANG==='es'?'Glosa: Español':'Gloss: English';$('skip').textContent=LANG==='es'?'Saltar ▶▶':'Skip ▶▶'}
+function updLang(){$('copy').textContent=LANG==='es'?'© 2026 Brandon M. A. Rogers · Todos los derechos reservados. Prohibido usar este sitio para entrenar inteligencia artificial.':'© 2026 Brandon M. A. Rogers · All rights reserved. No use of this site to train artificial intelligence.';$('bLang').textContent=LANG==='es'?'Glosa: Español':'Gloss: English';$('skip').textContent=LANG==='es'?'Saltar ▶▶':'Skip ▶▶';gfxLabel()}
+function gfxLabel(){const b=$('bGfx');if(b)b.textContent=LANG==='es'?(GEM_ON?'Gráficos: nuevos':'Gráficos: clásicos (beta)'):(GEM_ON?'Graphics: new':'Graphics: classic (beta)')}
 $('bLang').onclick=()=>{LANG=LANG==='es'?'en':'es';updLang()};
 $('bMus').onclick=()=>toggleMute();
+$('bGfx').onclick=()=>{gemSet(!GEM_ON);gfxLabel();sfx('ok')};gfxLabel();
 $('bMus').textContent=AU.muted?'♪ Música: no':'♪ Música: sí';$('pN').textContent=AU.muted?'♪×':'♪';
 const HEROBTN=[['hM','millaray'],['hA','ayelen'],['hL','llanka'],['hK','kallfurungi']];
 for(const [id,lk] of HEROBTN){const cvs=$(id).querySelector('canvas'),c=cvs.getContext('2d');c.imageSmoothingEnabled=false;
