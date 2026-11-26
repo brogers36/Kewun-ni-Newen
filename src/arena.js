@@ -44,7 +44,7 @@ function arenaMenu(){const en=S.gloss==='en';
   const pickGrp=()=>{const gs=[0,1,2].filter(g=>have.some(a=>a.g===g));
     if(gs.length===1)return pickBoss(gs[0]);
     choose({m:'Chem wekufü?',es:'¿Con qué wekufü quieres volver a pelear?',en:'Which wekufü do you want to fight again?'},
-      gs.map(g=>({m:GRP[g][0],g:GRP[g][1],v:g})).concat([{m:en?'Leave':'Salir',v:-1}]),g=>{if(g<0||g===undefined)return;pickBoss(g)},true)};
+      gs.map(g=>({m:GRP[g][en?1:0],v:g})).concat([{m:en?'Leave':'Salir',v:-1}]),g=>{if(g<0||g===undefined)return;pickBoss(g)},true)};
   const pickBoss=g=>{const L2=have.filter(a=>a.g===g);
     choose({m:'Chem wekufü?',es:'¿Con qué wekufü quieres volver a pelear?',en:'Which wekufü do you want to fight again?'},
       L2.map(a=>({m:arenaName(a),v:ARENA.indexOf(a)})).concat([{m:en?'Back':'Volver',v:-1}]),k=>{if(k<0||k===undefined)return pickGrp();arenaFight(ARENA[k])},true)};
