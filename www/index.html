@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='bbe240c-202611252312';
+window.KEWUN_BUILD='41e13d2-202611260823';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -37,6 +37,11 @@ addEventListener('load',()=>{const iOS=/iPad|iPhone|iPod/.test(navigator.userAge
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-monospace,Menlo,Consolas,"DejaVu Sans Mono",monospace;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
 #wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px}
+/* while the game is still loading, show only a soft pulsing name; the menu fades in once it is laid out at its real size */
+body>*{transition:opacity .45s ease}
+body.boot>*{opacity:0!important}
+body.boot::after{content:'Kewün Newen';position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#e8b860;font:bold 18px ui-monospace,Menlo,monospace;letter-spacing:3px;animation:bootp 1.1s ease-in-out infinite alternate;pointer-events:none}
+@keyframes bootp{from{opacity:.2}to{opacity:.85}}
 #screen{position:relative;--s:3;--lw:256;width:calc(var(--lw)*1px*var(--s));height:calc(224px*var(--s));box-shadow:0 0 0 3px #2b2433,0 8px 30px #000;overflow:hidden}
 #cv{width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000}
 #ui{position:absolute;inset:0;font-size:calc(6.2px*var(--s));pointer-events:none}
@@ -73,7 +78,7 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #banner b{display:block;font-size:1.3em;color:#ffe9b0;text-shadow:0 2px 0 #000,0 0 .5em #e2c27a66}
 #banner span{color:#d4f0e2;font-style:italic;font-size:1.1em}
 #title{position:absolute;inset:0;background:linear-gradient(#0d0b1000,#0d0b1077 85%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.55em;text-align:center;padding:1em}
-#title h1 .logo{display:block;width:min(82%,515px);margin:0 auto;image-rendering:pixelated;image-rendering:crisp-edges}
+#title h1 .logo{display:block;width:min(82%,515px,57vh);margin:0 auto;image-rendering:pixelated;image-rendering:crisp-edges}
 @media (max-width:520px){#title h1 .logo{width:64%}}
 #title h1{margin:0;width:100%;font-size:2.5em;color:#ffe9b0;text-shadow:0 3px 0 #7a3a1a,0 0 14px #000,0 0 3px #000;letter-spacing:.04em}
 #title .sub{color:#cfe6ff;font-size:1.05em;text-shadow:0 0 4px #000}
@@ -104,7 +109,7 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #ui.cutm #dlg{background:transparent!important;border:0!important;box-shadow:none!important;left:6%;right:6%;bottom:1.2%;min-height:0;padding:.2em .4em}#ui.cutm #dlg::before,#ui.cutm #dlg::after{display:none}#ui.cutm #dlg .g{color:#e8e4f4;text-shadow:0 1px 0 #000}#ui.cutm #dlg .who{top:-1.4em}
 </style>
 </head>
-<body>
+<body class="boot">
 <div id="wrap">
   <div id="screen">
     <canvas id="cv" width="512" height="448"></canvas>
@@ -9354,6 +9359,11 @@ requestAnimationFrame(loop);
       g.fillStyle=gr;g.fillRect(0,0,cv.width,cv.height);g.restore()}
     const tw=.5+.5*Math.sin(t/22);g.save();g.globalCompositeOperation='source-atop';g.fillStyle='rgba(255,240,200,'+(tw*.35)+')';g.fillRect(0,0,16,cv.height);g.fillRect(cv.width-16,0,16,cv.height);g.restore();
     requestAnimationFrame(draw)};draw()};im.src='data:image/png;base64,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'})();
+
+/* reveal: wait until the screen has its real size and the title art is ready (at most 3 s), then fade the menu in */
+(function(){const t0=Date.now();const go=()=>{fit();requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.remove('boot')))};
+  const wait=()=>{const ok=(typeof GEM_READY==='undefined'||GEM_READY)&&(typeof paintedBG!=='function'||paintedBG('cut_dusk'));
+    if(ok||Date.now()-t0>3000)go();else setTimeout(wait,60)};wait()})();
 
 </script>
 </body>

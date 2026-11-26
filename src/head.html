@@ -37,6 +37,11 @@ addEventListener('load',()=>{const iOS=/iPad|iPhone|iPod/.test(navigator.userAge
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-monospace,Menlo,Consolas,"DejaVu Sans Mono",monospace;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
 #wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px}
+/* while the game is still loading, show only a soft pulsing name; the menu fades in once it is laid out at its real size */
+body>*{transition:opacity .45s ease}
+body.boot>*{opacity:0!important}
+body.boot::after{content:'Kewün Newen';position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#e8b860;font:bold 18px ui-monospace,Menlo,monospace;letter-spacing:3px;animation:bootp 1.1s ease-in-out infinite alternate;pointer-events:none}
+@keyframes bootp{from{opacity:.2}to{opacity:.85}}
 #screen{position:relative;--s:3;--lw:256;width:calc(var(--lw)*1px*var(--s));height:calc(224px*var(--s));box-shadow:0 0 0 3px #2b2433,0 8px 30px #000;overflow:hidden}
 #cv{width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000}
 #ui{position:absolute;inset:0;font-size:calc(6.2px*var(--s));pointer-events:none}
@@ -73,7 +78,7 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #banner b{display:block;font-size:1.3em;color:#ffe9b0;text-shadow:0 2px 0 #000,0 0 .5em #e2c27a66}
 #banner span{color:#d4f0e2;font-style:italic;font-size:1.1em}
 #title{position:absolute;inset:0;background:linear-gradient(#0d0b1000,#0d0b1077 85%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.55em;text-align:center;padding:1em}
-#title h1 .logo{display:block;width:min(82%,515px);margin:0 auto;image-rendering:pixelated;image-rendering:crisp-edges}
+#title h1 .logo{display:block;width:min(82%,515px,57vh);margin:0 auto;image-rendering:pixelated;image-rendering:crisp-edges}
 @media (max-width:520px){#title h1 .logo{width:64%}}
 #title h1{margin:0;width:100%;font-size:2.5em;color:#ffe9b0;text-shadow:0 3px 0 #7a3a1a,0 0 14px #000,0 0 3px #000;letter-spacing:.04em}
 #title .sub{color:#cfe6ff;font-size:1.05em;text-shadow:0 0 4px #000}
@@ -104,7 +109,7 @@ html,body{margin:0;height:100%;background:#0d0b10;color:#f4ecd8;font-family:ui-m
 #ui.cutm #dlg{background:transparent!important;border:0!important;box-shadow:none!important;left:6%;right:6%;bottom:1.2%;min-height:0;padding:.2em .4em}#ui.cutm #dlg::before,#ui.cutm #dlg::after{display:none}#ui.cutm #dlg .g{color:#e8e4f4;text-shadow:0 1px 0 #000}#ui.cutm #dlg .who{top:-1.4em}
 </style>
 </head>
-<body>
+<body class="boot">
 <div id="wrap">
   <div id="screen">
     <canvas id="cv" width="512" height="448"></canvas>
