@@ -241,7 +241,8 @@ function drawLanScene(c,L){
 /* the title screen: the painted Lafkenche dusk (volcano, lake, beach) with a little life in it */
 function titleLand(c,F){
   if(!(typeof paintedBG==='function'&&paintedBG('cut_dusk')))return paintLand(c,F,false);
-  c.drawImage(landLayer('dusk'),0,0);const ox=Math.round((LW-400)/2);
+  const im=PBGI.cut_dusk,ox=Math.round(Math.max(LW-400,Math.min(0,LW/2-255)));c.drawImage(im,ox,0);   // the volcano in the middle of the screen
+  c.save();c.globalCompositeOperation='screen';c.fillStyle='rgba(70,52,70,.22)';c.fillRect(0,0,LW,LH);c.restore();   // a little more light
   for(let k=0;k<22;k++)if((F+k*23)%70<9)R(c,(k*89+13)%LW,(k*37)%44+2,1,1,'#fff8e8');                 // stars blinking
   for(let k=0;k<9;k++){const a=((F*.5+k*26)%230)/230,x=255+ox+a*34+Math.sin(a*5+k)*3,y=44-a*44;          // the volcano breathes a thin plume
     ell(c,x,y,2+a*7,1.5+a*4,'rgba(150,120,150,'+(.38-a*.34)+')')}
