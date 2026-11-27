@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='8e3638a-202611262306';
+window.KEWUN_BUILD='c0597ad-202611262316';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -8276,19 +8276,21 @@ function renderBattle(){
     ell(c,cx,bse+1,sz/1.95,4,'rgba(0,0,14,.22)');ell(c,cx,bse+1,sz/2.6,2.6,'rgba(0,0,14,.3)');
     if(e.dead){e.fadeT--;c.globalAlpha=Math.max(0,e.fadeT/20)}
     if(e.hit>0&&e.hit--%4<2)c.globalAlpha=.25;
-    let ly=0,ls=1,adx=0,asx=1,asy=1;
+    let ly=0,ls=1,adx=0;if(!(e.lunge>0))e.crouchK=0;
     if(e.lunge>0){e.lunge--;const L=e.lunge;
       if(gnd&&e.lunge0===22){   // walkers attack on foot: crouch, spring at the hero, step back
-        if(L>15){const k=(22-L)/7;asy=1-.13*k;asx=1+.07*k}
-        else if(L>8){const k=(15-L)/7;adx=Math.round(k*22);asy=.95+.08*k;asx=1.05-.06*k;if(L===15)battleDust(cx-4,y+cvs.height-3,4,-1)}
+        e.crouchK=0;
+        if(L>15)e.crouchK=(22-L)/7;
+        else if(L>8){adx=Math.round((15-L)/7*22);if(L===15)battleDust(cx-4,y+cvs.height-3,4,-1)}
         else adx=Math.round(22*L/8)}
       else ly=Math.round(Math.sin(Math.min(16,L)/16*Math.PI)*10)}
     if(e.hit>0&&!e._dh){e._dh=1;if(gnd)battleDust(cx,y+cvs.height-3,4,0)}else if(!(e.hit>0))e._dh=0;
     e._cx=cx;e._y=y;e._bse=bse;const inDef=B.defA&&B.defA.e===e;
     if(!inDef){c.save();c.scale(-1,1);
-      if(gnd&&!e.dead){   // alive but grounded: they breathe (stretch from the feet up) and sway a little; the feet never move
-        const ph=frame/26+i*1.7,b=Math.sin(ph),sw=Math.sin(frame/47+i*2.3),W=cvs.width,H=cvs.height,dh=Math.round(H*(1+.035*b)*asy),dw=Math.round(W*(1-.015*b)*asx),fx=-(cx+adx),fy=y+H+ly;
-        c.translate(fx,fy);c.transform(1,0,sw*.035,1,0,0);c.drawImage(cvs,-Math.ceil(dw/2),-dh,dw,dh)}
+      if(gnd&&!e.dead){   // alive but grounded: the upper body settles a pixel and rises again (breathing) in whole pixels, so the art never warps; the feet never move
+        const W=cvs.width,H=cvs.height,sR=Math.round(H*.55),x0=-(cx+adx)-Math.ceil(W/2),yt=y+ly,
+          bo=e.crouchK>0?Math.round(e.crouchK*4):(Math.sin(frame/32+i*1.7)>.2?1:0);
+        c.drawImage(cvs,0,sR,W,H-sR,x0,yt+sR,W,H-sR);c.drawImage(cvs,0,0,W,sR,x0,yt+bo,W,sR)}
       else c.drawImage(cvs,-(cx+Math.ceil(cvs.width/2)),y+ly);c.restore()}c.globalAlpha=1;
     if(e.sl>0){c.fillStyle='rgba(40,40,120,.25)';c.fillRect(cx-sz/2,y,sz,cvs.height)}
     if(!B.ngenA&&e.hit===13)B.heroA=16;
