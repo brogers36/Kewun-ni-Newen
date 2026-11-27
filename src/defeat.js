@@ -311,11 +311,15 @@ function drawYew(c,A,D){const Q=A.Q,t=A.t,al=t<A.T-40?1:Math.max(0,(A.T-t)/40);
   const back=A.crowd.filter(m=>m.y<136).sort((a,b)=>a.y-b.y),front=A.crowd.filter(m=>m.y>=136).sort((a,b)=>a.y-b.y);
   back.forEach(drawM);
   // the person who was under the shame all along, showing through as it is blasted away
-  const pa=SSd((gone-tot*.4)/(tot*.5))*al;const pcv=yPerson('persona',0,true),pw=pcv.width,ph=pcv.height,ppx=Math.round(A.x0+Q.W/2-pw/2),ppy=A.gy-2-ph;
+  const SQ=typeof dseqOK==='function'&&dseqOK('yewen')&&gone>0;   // painted frames: the calls move the Yewen through them, and frame four is the boy
+  const pa=SQ?0:SSd((gone-tot*.4)/(tot*.5))*al;const pcv=yPerson('persona',0,true),pw=pcv.width,ph=pcv.height,ppx=Math.round(A.x0+Q.W/2-pw/2),ppy=A.gy-2-ph;
   if(pa>0){ell(c,ppx+pw/2,A.gy-3,pw*.32,3,'rgba(0,0,14,'+(.35*pa).toFixed(2)+')');c.globalAlpha=pa;c.drawImage(pcv,ppx,ppy);c.globalAlpha=1}
   if(t>=A.endT){const p=SSd((t-A.endT)/30)*al*(1-SSd((t-A.endT-60)/90)),cx=ppx+pw/2,cy=ppy+ph*.45;const g=c.createRadialGradient(cx,cy,2,cx,cy,56);g.addColorStop(0,'rgba(255,240,190,'+(.55*p).toFixed(2)+')');g.addColorStop(1,'rgba(255,220,150,0)');c.fillStyle=g;c.fillRect(cx-58,cy-58,116,116)}
   // what is left of the Yewen, and the pieces blasted off it, burning away
-  for(const p of A.pcs){if(p.t0<0){c.globalAlpha=al;c.drawImage(p.cv,Math.round(X),Math.round(Y));continue}
+  if(SQ){const fr=gone/tot,k=fr<.34?0:fr<.75?1:t<A.endT?2:3,F=DSEQ.yewen[k],cv=enemyCanvas('yewen',ET.yewen.bs,0),lf=(A.e._cx||72)+Math.ceil(cv.width/2)-cv.width;
+    const fx=Math.round(lf+F.dx+X-A.x0),fy=Math.round(Y+F.dy);c.globalAlpha=al;c.drawImage(F.im,fx,fy);
+    if(A.hitT&&t-A.hitT<6){c.save();c.globalCompositeOperation='lighter';c.globalAlpha=(1-(t-A.hitT)/6)*.7*al;c.drawImage(F.im,fx,fy);c.restore()}c.globalAlpha=1}
+  for(const p of A.pcs){if(p.t0<0){if(SQ)continue;c.globalAlpha=al;c.drawImage(p.cv,Math.round(X),Math.round(Y));continue}
     const k=t-p.t0;if(k>34)continue;const a=1-SSd(k/30);if(a<=0)continue;
     c.save();c.globalAlpha=a*al;c.imageSmoothingEnabled=true;c.translate(X+p.cx+p.ox,Y+p.cy+p.oy);c.rotate(p.rot*SSd(k/30));c.drawImage(p.cv,-p.cx,-p.cy);
     if(k<12){c.globalCompositeOperation='lighter';c.globalAlpha=(1-k/12)*al;c.drawImage(p.cv,-p.cx,-p.cy);c.drawImage(p.cv,-p.cx,-p.cy)}c.restore()}
