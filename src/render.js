@@ -748,10 +748,12 @@ function renderBattle(){
     else if(tall){cx=Math.round(104+(oi+1)*(LW-184)/(others.length+1));bse=138}
     else if(fi>=0){cx=150+fi*Math.max(30,sz+8);bse=98}
     else{const gm=grd.length,m=Math.max(1,gm-1),sp=Math.min(14,Math.round(14/m));cx=148+gi*20;bse=(gm===1?136:126)+gi*sp}
-    let y=bse-cvs.height+4+Math.round(Math.sin(frame/16+i));if(y<4)y=4+Math.round(Math.sin(frame/16+i));
+    const gnd=!Tt.fly&&!Tt.boss;   // walkers stay planted on the ground (no bob) with a contact shadow
+    let y=bse-cvs.height+4+(gnd?0:Math.round(Math.sin(frame/16+i)));if(y<4)y=4+(gnd?0:Math.round(Math.sin(frame/16+i)));
     if(Tt.fly&&e.gr<=0)y-=(Tt.boss?10:26)+Math.round(Math.sin(frame/9+i)*3);
     if(B.intro>0)y+=Math.round(B.intro*1.5);
     e.px=cx;e.py=y+cvs.height/3;
+    if(gnd&&!e.dead){const fy=y+cvs.height-3;ell(c,cx,fy,Math.round(cvs.width*.34),3,'rgba(0,0,0,.32)');ell(c,cx,fy,Math.round(cvs.width*.22),2,'rgba(0,0,0,.22)')}
     if(/^ngoyman/.test(e.t)&&!e.dead){
       ell(c,cx,bse,sz/2.1,5,'rgba(16,26,12,.5)');ell(c,cx,bse,sz/2.8,3,'rgba(32,48,20,.45)');
       for(let k=0;k<7;k++){const ph=((frame*.7+k*53)%200)/200;
