@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='3a3d96e-202611270929';
+window.KEWUN_BUILD='15f7c1a-202611271002';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -9418,6 +9418,10 @@ ctCharSpriteBig=function(look,dir,fr){
   if(!(GEM_ON&&GEM_READY)||!GEMI.pc[look])return _gCB.apply(this,arguments);
   const k=(typeof B!=='undefined'&&B&&(B.red>0||B.hurtT>0))?3:fr>0?(fr>=2?1:2):0,key='GEMB'+look+dir+k;if(CCACHE[key])return CCACHE[key];
   return CCACHE[key]=gemCv(GEMI.pc[look].battle[k],dir!=='left',48,74)};
+/* wekufü wandering the map: scaled by how tall the drawing really is (not by its battle size), so every one stands about as tall as the hero, the strong late ones taller */
+const OWH={};function owScale(t,im){let h=OWH[t];if(!h){const[cv,c]=mk(im.width,im.height);c.drawImage(im,0,0);const d=c.getImageData(0,0,im.width,im.height).data;let top=-1,bot=-1;
+  for(let y=0;y<im.height;y++)for(let x=0;x<im.width;x++)if(d[(y*im.width+x)*4+3]>40){if(top<0)top=y;bot=y}h=OWH[t]=Math.max(8,bot-top+1)}
+  const bs=(ET[t]&&ET[t].bs)||44;return (bs>=60?39:31)/h}
 enemyCanvas=function(t,size,fr){const im=GEM_ON&&GEM_READY&&GEMI.en[t];if(!im)return _gEC.apply(this,arguments);
   // bosses waiting on the overworld (drawn at size 30, the final one at 72) stand several tiles tall, as befits them
   const big=(size===30||size===72||(size===34&&t==='yewen'))?GEMI.mp[t]:size===22?GEMI.mm[t]:null;   /* Yewen waiting in the cancha (drawn at 34) stands about five tiles tall */   // minibosses (drawn at 22) grow too, about half as much
@@ -9425,7 +9429,7 @@ enemyCanvas=function(t,size,fr){const im=GEM_ON&&GEM_READY&&GEMI.en[t];if(!im)re
     c.imageSmoothingEnabled=false;c.drawImage(m,2,(fr?1:2));return ECACHE[key]=cv}
   if(fr>=10){const fa=GEMI.idl[t]&&GEMI.idl[t][fr-10];if(!fa)fr=0;else{const key='GEMI'+t+'_'+fr;if(ECACHE[key])return ECACHE[key];const s=GEMD.sz[t]||{cw:im.width+6},w=fa.width,h=fa.height,cw=Math.max(s.cw,w+4),ch=h+6,[cv,c]=mk(cw,ch);c.imageSmoothingEnabled=false;c.drawImage(fa,Math.round((cw-w)/2),ch-h-3);return ECACHE[key]=cv}}
   const key='GEM'+t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];const bs=(ET[t]&&ET[t].bs)||44,s=GEMD.sz[t]||{cw:im.width+6,ch:im.height+6};
-  const big13=!(ET[t]&&ET[t].boss),sz2=size===16?26:size,sc=sz2<bs*.7?sz2/bs/(big13?1.3:1):1,   /* wekufü wandering the map (drawn at 16) stand about a tile and a half tall */
+  const big13=!(ET[t]&&ET[t].boss),sz2=size===16?26:size,sc=size===16?owScale(t,im):sz2<bs*.7?sz2/bs/(big13?1.3:1):1,   /* wekufü wandering the map (drawn at 16) stand about a tile and a half tall */
     w=Math.round(im.width*sc),h=Math.round(im.height*sc),cw=Math.max(Math.round(s.cw*sc),w+4),ch=h+3+Math.round(3*sc),[cv,c]=mk(cw,ch);c.imageSmoothingEnabled=false;   /* the canvas grows to fit art wider than the classic sprite, so nothing is cut off */
   c.drawImage(im,Math.round((cw-w)/2),ch-h-(fr?1:0)-Math.round(3*sc),w,h);return ECACHE[key]=cv};
 updateMap=function(){_gUM.apply(this,arguments);if(!GEM_ON||!GEM_READY||typeof active!=='undefined'&&active)return;
