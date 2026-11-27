@@ -875,7 +875,7 @@ function renderBattle(){
     B.dust=B.dust.filter(d=>d.t<d.life)}
   if(B.pendHurt>0&&--B.pendHurt===0){B.shake=12;B.red=10;sfx('hurt')}   // the blow lands when the lunge reaches the hero
   if(B.red>0){c.fillStyle='rgba(255,0,0,'+(B.red/30)+')';c.fillRect(0,0,LW,LH);B.red--}
-  if(B.defA&&!B.defA.done)drawDefeat(c);
+  if(B.defA&&(!B.defA.done||B.defA.D&&B.defA.D.keep))drawDefeat(c);
   if(B.ngenA&&!B.ngenA.done&&B.ngenA.kind==='final'){const A=B.ngenA;A.t++;
     const NG=[[undefined,'120,220,255'],['mawida','120,255,150'],['pewen','255,200,110'],['kuruf','225,240,255'],['lelfun','255,230,120']];
     if(S.flags.epu_won)NG.push(['epunamun','255,48,40']);   // the Epunamun joins the five ngen, with red fire

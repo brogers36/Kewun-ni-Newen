@@ -567,6 +567,8 @@ function victory(){
     if(nx)return llufuStage(nx);}
   {const qb=B.en.find(e=>ET[e.t].boss);
    if(qb&&!B.qok){qb.dead=false;qb.fadeT=0;qb.hit=0;qb.hp=1;qb.stag=1;return qb.t==='llawfen'?llawLast(qb):ngenQuiz(qb)}}
+  {const yb=B.en.find(e=>ET[e.t].boss);   // not wekufü: Epunamun and the Millalobo yield in their painted frames instead of breaking
+   if(yb&&!B.defA&&(yb.t==='epunamun'||(yb.t==='llufu5'&&B.o.chain==='llufu'))&&typeof dseqOK==='function'&&dseqOK(yb.t)){yb.stag=1;dseqStart(yb,null,{yld:1,keep:yb.t==='epunamun'});return}}
   {const vb=B.en.find(e=>ET[e.t].boss);
    if(vb&&!B.defA&&typeof DEFEAT!=='undefined'&&DEFEAT[vb.t]){defStart(vb);return}   // the Santiago wardens and the Yewen come apart on screen
    if(vb&&!B.ngenA&&!B.defA&&B.o.chain!=='llufu'&&vb.t!=='epunamun'){
