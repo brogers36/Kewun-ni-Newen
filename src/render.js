@@ -775,7 +775,10 @@ function renderBattle(){
       else ly=Math.round(Math.sin(Math.min(16,L)/16*Math.PI)*10)}
     if(e.hit>0&&!e._dh){e._dh=1;if(gnd)battleDust(cx,y+cvs.height-3,4,0)}else if(!(e.hit>0))e._dh=0;
     e._cx=cx;e._y=y;e._bse=bse;const inDef=B.defA&&B.defA.e===e;
-    if(!inDef){c.save();c.scale(-1,1);
+    const lfx=B.lanFx&&B.lanFx.e===e?B.lanFx:null;
+    if(lfx&&!inDef)drawLanPortal(c,lfx,cx,y,cvs);
+    if(lfx&&!inDef&&e.t==='ngoyman4'){c.save();c.scale(-1,1);drawArmsUp(c,cvs,-(cx+Math.ceil(cvs.width/2)),y+ly,lanRaise(lfx));c.restore()}
+    else if(!inDef){c.save();c.scale(-1,1);
       if(gnd&&!e.dead){   // alive but grounded: the upper body settles a pixel and rises again (breathing) in whole pixels, so the art never warps; the feet never move
         const W=cvs.width,H=cvs.height,sR=Math.round(H*.55),x0=-(cx+adx)-Math.ceil(W/2),yt=y+ly,
           bo=e.crouchK>0?Math.round(e.crouchK*4):(Math.sin(frame/32+i*1.7)>.2?1:0);
@@ -1181,3 +1184,35 @@ function animPainted(c,a){const G2=PAINTBG[a].geo||{},ox=Math.round((LW-400)/2),
 
 /* little puffs of dust kicked up in battle */
 function battleDust(x,y,n,dir){if(!B)return;B.dust=B.dust||[];for(let k=0;k<n;k++){const sp=(Math.random()*.6+.3)*(dir||(k%2?1:-1));B.dust.push({x:x+(Math.random()-.5)*10,y:y-Math.random()*2,vx:sp,r:1.5+Math.random()*1.5,t:0,life:22+Math.floor(Math.random()*10)})}}
+
+/* lan kewün: Fütra Ngoymatulfe raises its arms, a portal opens above it and the words of the land are cast into it */
+const LANW=['mari mari','chaltu may','kimün','newen','mapu','lof','kewün','piwke','küme','ngen','lafken','kütral','ruka','wiño'];
+function lanRaise(f){return Math.min(1,f.t/40)*(f.cast>0&&f.cast>150?Math.max(0,1-(f.cast-150)/30):1)}
+function drawLanPortal(c,f,cx,y,cvs){
+  f.t++;if(f.cast>0)f.cast++;if(f.cast>190){B.lanFx=null;return}
+  const r=lanRaise(f),px=Math.min(LW-150,cx+Math.round(cvs.width*.55)+14),py=40,pr=(10+30*Math.min(1,f.t/60))*(f.cast>150?Math.max(0,1-(f.cast-150)/40):1);
+  if(pr>1){c.save();
+    const g=c.createRadialGradient(px,py,0,px,py,pr*1.8);g.addColorStop(0,'rgba(170,60,255,.45)');g.addColorStop(1,'rgba(170,60,255,0)');c.fillStyle=g;c.fillRect(px-pr*2,py-pr*2,pr*4,pr*4);
+    c.fillStyle='rgba(12,0,24,.92)';c.beginPath();c.ellipse(px,py,pr*.55,pr*.3,0,0,6.283);c.fill();
+    for(let k=0;k<7;k++){const a0=frame*.12+k*.9,rr=pr*(1-k/11);c.strokeStyle='rgba('+(170+k*10)+',70,255,'+(.85-k*.08)+')';c.lineWidth=1.5;
+      c.beginPath();c.ellipse(px,py,rr,rr*.55,0,a0,a0+3.6);c.stroke()}
+    c.restore()}
+  const g2=c.createRadialGradient(cx,y+cvs.height*.5,0,cx,y+cvs.height*.5,cvs.width*.8);g2.addColorStop(0,'rgba(140,40,220,'+(.28*r)+')');g2.addColorStop(1,'rgba(140,40,220,0)');c.fillStyle=g2;c.fillRect(cx-cvs.width,y-10,cvs.width*2,cvs.height+20);
+  if(f.cast>0){const hands=[[cx-cvs.width*.42,y+cvs.height*.25],[cx+cvs.width*.42,y+cvs.height*.25]];
+    for(let k=0;k<LANW.length;k++){const p=(f.cast-k*8)/70;if(p<=0||p>=1)continue;const [hx,hy]=hands[k%2],e2=p*p*(3-2*p),an=p*3+k;
+      const x=hx+(px-hx)*e2+Math.cos(an)*14*(1-p),yy=hy+(py-hy)*e2+Math.sin(an)*8*(1-p),al=1-p*p*p,col='rgba('+Math.round(255-170*p)+','+Math.round(236-200*p)+','+Math.round(160-80*p)+','+al.toFixed(2)+')',sz=Math.max(8,Math.round(15-7*p));
+      OV.push(()=>txt(LANW[k],x,yy,col,sz,'center'));
+      c.fillStyle='rgba(220,140,255,'+(.5*al)+')';c.fillRect(Math.round(x),Math.round(yy)+2,1,1)}
+    if(f.cast>=64&&f.cast<=72){c.fillStyle='rgba(200,120,255,'+((1-Math.abs(f.cast-68)/4)*.35)+')';c.fillRect(0,0,LW,LH)}}
+}
+const ARMC={};
+function drawArmsUp(c,cvs,x,y,a){   // the cloak-arms swing up around the shoulders (cut from the art itself)
+  const W=cvs.width,H=cvs.height,key=W+'x'+H;let A=ARMC[key];
+  if(!A){const mk2=(pts)=>{const m=document.createElement('canvas');m.width=W;m.height=H;const g=m.getContext('2d');g.drawImage(cvs,0,0);g.globalCompositeOperation='destination-in';g.beginPath();pts.forEach(([u,v],i)=>i?g.lineTo(u*W,v*H):g.moveTo(u*W,v*H));g.closePath();g.fill();return m};
+    const Lp=[[0,.34],[.30,.34],[.33,.42],[.29,.82],[0,.82]],Rp=[[1,.34],[.70,.34],[.67,.42],[.71,.82],[1,.82]];
+    const core=document.createElement('canvas');core.width=W;core.height=H;const cg=core.getContext('2d');cg.drawImage(cvs,0,0);cg.globalCompositeOperation='destination-out';
+    for(const P of [Lp,Rp]){cg.beginPath();P.forEach(([u,v],i)=>i?cg.lineTo(u*W,v*H):cg.moveTo(u*W,v*H));cg.closePath();cg.fill()}
+    A=ARMC[key]={L:mk2(Lp),R:mk2(Rp),core}}
+  const ang=a*1.75;c.imageSmoothingEnabled=false;
+  for(const [img,px,sgn] of [[A.L,.31,-1],[A.R,.69,1]]){c.save();c.translate(x+W*px,y+H*.38);c.rotate(sgn*-ang);c.drawImage(img,-W*px,-H*.38);c.restore()}
+  c.drawImage(A.core,x,y)}

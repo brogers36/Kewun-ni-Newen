@@ -284,7 +284,7 @@ function enemyPhase(){
     if(e.hp<=0)continue; // staggered by the ngen's question: it does not act
     if(B.o.final&&/^ngoyman[1-5]$/.test(e.t)){e.ft=(e.ft||0)+1;const ln=e.lanN||0,lim=e.t==='ngoyman5'?2:1;
       if(ln<lim&&!B.lanPending&&((ln===0&&e.ft===2)||(ln===1&&e.ft>=4&&e.hp<e.max*.6))){e.lanN=ln+1;e.hidden=0;B.lanPending=e;
-        fx.push(e.label+' alza los brazos y la niebla se vuelve palabras muertas...');fxe.push(e.label+' raises its arms and the fog turns into dead words...');hitsFx.push(()=>{sfx('cast');B.flash=14;B.shake=10});continue}}
+        fx.push(e.label+' alza los brazos y la niebla se vuelve palabras muertas...');fxe.push(e.label+' raises its arms and the fog turns into dead words...');hitsFx.push(()=>{sfx('cast');B.flash=14;B.shake=10;B.lanFx={e,t:0,cast:0}});continue}}
     if(e.sl>0){e.sl--;fx.push(e.label+' duerme.');fxe.push(e.label+' is asleep.');continue}
     if(e.stun>0){e.stun--;fx.push(e.label+' todavía retrocede.');fxe.push(e.label+' is still backing away.');continue}
     if(e.t==='ngoyam'&&Math.random()<.3&&(S.sp||0)>0){S.sp--;fx.push(e.label+' te susurra el olvido: pierdes un punto de newen (✦).');fxe.push(e.label+' whispers forgetting to you: you lose one newen point (✦).');hitsFx.push(()=>{pop(60,30,'−✦','#c0b8ff');sfx('bad')});continue}
@@ -738,7 +738,7 @@ function lanKewun(e){
   B.lanUsed=B.lanUsed||[];const left=LAN_LOFS.filter(l=>!B.lanUsed.includes(l[0])),lofP=(left.length?left:LAN_LOFS)[rnd((left.length?left:LAN_LOFS).length)];
   const pool=lanPool(),qs=[];for(const m of missList()){if(qs.length>=Math.ceil(n/2))break;if(m.q.m&&m.q.m[0]!=='⧉'&&m.t!=='palin'&&m.t!=='trafkintu (números)')qs.push({q:m.q,o:m.o.slice().sort(()=>Math.random()-.5),a:m.a})}
   while(qs.length<n&&pool.length){const p=pool.splice(rnd(pool.length),1)[0];if(!qs.some(x=>x.q.m===p.q.m&&x.q.es===p.q.es))qs.push(p)}
-  say([Object.assign(L(e.label,'Lan kewün!','¡Muerte de la lengua!','Death of the language!'),{fx:()=>{sfx('bad');B.flash=18;B.shake=14}}),
+  say([Object.assign(L(e.label,'Lan kewün!','¡Muerte de la lengua!','Death of the language!'),{fx:()=>{sfx('bad');B.flash=18;B.shake=14;if(!B.lanFx||B.lanFx.e!==e)B.lanFx={e,t:40,cast:0};B.lanFx.cast=1}}),
     N(e.label+' lanza el lan kewün sobre '+lanName({lof:lofP},false)+'. Si fallas una sola de sus '+n+' preguntas, ese lof olvidará todo su mapudungun: perderás 6 piwke y tu newen (la barra verde) no se cargará más contra esta forma.',
       e.label+' casts lan kewün on '+lanName({lof:lofP},true)+'. Miss even one of its '+n+' questions and that lof will forget all its Mapudungun: you will lose 6 hearts, and your newen (the green bar) will not charge again against this form.'),
     N('Responde con lo que has aprendido en tu viaje.','Answer with what you have learned on your journey.')],()=>ask(0));
