@@ -751,6 +751,7 @@ function renderBattle(){
     const gnd=!Tt.fly&&!Tt.boss;   // walkers stay planted on the ground (no bob) with a contact shadow
     let y=bse-cvs.height+4+(gnd?0:Math.round(Math.sin(frame/16+i)));if(y<4)y=4+(gnd?0:Math.round(Math.sin(frame/16+i)));
     if(Tt.fly&&e.gr<=0)y-=(Tt.boss?10:26)+Math.round(Math.sin(frame/9+i)*3);
+    if(Tt.fly&&!Tt.boss&&y<2)y=2+Math.round(Math.sin(frame/9+i)*2);   // flyers hover high but never leave the top of the screen
     if(B.intro>0)y+=Math.round(B.intro*1.5);
     e.px=cx;e.py=y+cvs.height/3;
     if(gnd&&!e.dead){const fy=y+cvs.height-3;ell(c,cx,fy,Math.round(cvs.width*.34),3,'rgba(0,0,0,.32)');ell(c,cx,fy,Math.round(cvs.width*.22),2,'rgba(0,0,0,.22)')}
@@ -766,7 +767,11 @@ function renderBattle(){
     if(e.hit>0&&e.hit--%4<2)c.globalAlpha=.25;
     let ly=0,ls=1;if(e.lunge>0){e.lunge--;ly=Math.round(Math.sin(e.lunge/16*Math.PI)*10);}
     e._cx=cx;e._y=y;e._bse=bse;const inDef=B.defA&&B.defA.e===e;
-    if(!inDef){c.save();c.scale(-1,1);c.drawImage(cvs,-(cx+Math.ceil(cvs.width/2)),y+ly);c.restore()}c.globalAlpha=1;
+    if(!inDef){c.save();c.scale(-1,1);
+      if(gnd&&!e.dead){   // alive but grounded: they breathe (stretch from the feet up) and sway a little; the feet never move
+        const ph=frame/26+i*1.7,b=Math.sin(ph),sw=Math.sin(frame/47+i*2.3),W=cvs.width,H=cvs.height,dh=Math.round(H*(1+.035*b)),dw=Math.round(W*(1-.015*b)),fx=-cx,fy=y+H+ly;
+        c.translate(fx,fy);c.transform(1,0,sw*.035,1,0,0);c.drawImage(cvs,-Math.ceil(dw/2),-dh,dw,dh)}
+      else c.drawImage(cvs,-(cx+Math.ceil(cvs.width/2)),y+ly);c.restore()}c.globalAlpha=1;
     if(e.sl>0){c.fillStyle='rgba(40,40,120,.25)';c.fillRect(cx-sz/2,y,sz,cvs.height)}
     if(!B.ngenA&&e.hit===13)B.heroA=16;
     if(!B.ngenA&&e.hit>6&&e.hit<=14){const sp=(14-e.hit)/8,cyS=y+cvs.height/2;
