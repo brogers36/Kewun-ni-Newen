@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='380bf89-202611271002';
+window.KEWUN_BUILD='3e00e74-202611271011';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -8259,10 +8259,11 @@ function renderBattle(){
     else if(tall){cx=Math.round(104+(oi+1)*(LW-184)/(others.length+1));bse=138}
     else if(fi>=0){cx=150+fi*Math.max(30,sz+8);bse=98}
     else{const gm=grd.length,m=Math.max(1,gm-1),sp=Math.min(14,Math.round(14/m));cx=148+gi*20;bse=(gm===1?136:126)+gi*sp}
-    const gnd=!Tt.fly&&!Tt.boss;   // walkers stay planted on the ground (no bob) with a contact shadow
+    const gnd=!Tt.fly&&(!Tt.boss||e.t==='ngoyngoyun');   // walkers (and the walking machine Ngoyngoyün) stay planted on the ground (no bob) with a contact shadow
     let y=bse-cvs.height+4+(gnd?0:Math.round(Math.sin(frame/16+i)));if(y<4)y=4+(gnd?0:Math.round(Math.sin(frame/16+i)));
     if(Tt.fly&&e.gr<=0)y-=(Tt.boss?10:26)+Math.round(Math.sin(frame/9+i)*3);
     if(Tt.fly&&!Tt.boss&&y<2)y=2+Math.round(Math.sin(frame/9+i)*2);   // flyers hover high but never leave the top of the screen
+    if(e.t==='ngamlef'&&!e.dead){y-=14+Math.round(Math.sin(frame/30)*2);if(!e.dying)ell(c,cx,bse+3,Math.round(cvs.width*.3),3,'rgba(0,0,0,.28)')}   // it hangs from its barbed strand, legs clear of the floor
     if(B.intro>0)y+=Math.round(B.intro*1.5);
     e.px=cx;e.py=y+cvs.height/3;
     if(gnd&&!e.dead){const fy=y+cvs.height-3;ell(c,cx,fy,Math.round(cvs.width*.34),3,'rgba(0,0,0,.32)');ell(c,cx,fy,Math.round(cvs.width*.22),2,'rgba(0,0,0,.22)')}
@@ -8286,6 +8287,7 @@ function renderBattle(){
       else ly=Math.round(Math.sin(Math.min(16,L)/16*Math.PI)*10)}
     if(e.hit>0&&!e._dh){e._dh=1;if(gnd)battleDust(cx,y+cvs.height-3,4,0)}else if(!(e.hit>0))e._dh=0;
     e._cx=cx;e._y=y;e._bse=bse;const inDef=B.defA&&B.defA.e===e;
+    if(e.t==='ngamlef'&&!e.dead&&!inDef)ngamThread(c,cx,y+ly,cvs);
     const lfx=B.lanFx&&B.lanFx.e===e?B.lanFx:null;
     if(lfx&&!inDef)drawLanPortal(c,lfx,cx,y,cvs);
     const rzf=lfx&&GEM_ON&&GEMI.rz&&GEMI.rz[e.t];
@@ -8733,6 +8735,26 @@ function drawArmsUp(c,cvs,x,y,a){   // the cloak-arms swing up around the should
 /* idle loop for enemies with Gemini's idle frames: rest, breathe in, rest, the small movement (blink, tail, wings), each enemy on its own beat */
 function idleFr(i){const p=(frame+i*53)%150;return p<50?0:p<84?1:p<128?0:2}
 
+/* Ngamleftripael hangs from above on a strand of barbed web that comes out of its abdomen */
+const NGT={};
+function ngamThread(c,cx,y,cvs){let q=NGT[cvs.width+'x'+cvs.height];
+  if(!q){const g=cvs.getContext('2d'),d=g.getImageData(0,0,cvs.width,cvs.height).data;let top=-1;
+    for(let yy=0;yy<cvs.height&&top<0;yy++)for(let x=0;x<cvs.width;x++)if(d[(yy*cvs.width+x)*4+3]>80){top=yy;break}
+    let sx=0,n=0;for(let yy=top;yy<top+5;yy++)for(let x=0;x<cvs.width;x++)if(d[(yy*cvs.width+x)*4+3]>80){sx+=x;n++}
+    q=NGT[cvs.width+'x'+cvs.height]={ax:n?sx/n:cvs.width/2,ay:top+3}}
+  const sx=Math.round(cx+Math.ceil(cvs.width/2)-q.ax),sy=y+q.ay,top=-4,sw=Math.sin(frame/40)*3;   // the sprite is drawn mirrored to face the hero
+  const pt=t=>[sx+sw*t*t,sy+(top-sy)*t];
+  c.save();c.lineCap='round';
+  for(const [off,col,lw] of [[0,'rgba(20,18,22,.95)',3.2],[0,'rgba(130,126,134,.9)',1.3],[1,'rgba(80,76,84,.95)',1.2]]){c.strokeStyle=col;c.lineWidth=lw;c.beginPath();
+    for(let k=0;k<=24;k++){const t=k/24,[x,yy]=pt(t);const tw=off?Math.sin(t*40)*1.2:0;k?c.lineTo(x+tw,yy):c.moveTo(x+tw,yy)}c.stroke()}
+  // barbs every few pixels: little twisted crosses of wire
+  const n=Math.max(2,Math.floor((sy-top)/7));
+  for(let k=1;k<n;k++){const [x,yy]=pt(k/n);c.strokeStyle='rgba(28,26,30,.95)';c.lineWidth=1.8;c.beginPath();c.moveTo(x-4,yy-3);c.lineTo(x+4,yy+3);c.moveTo(x+4,yy-3);c.lineTo(x-4,yy+3);c.stroke();
+    c.strokeStyle='rgba(170,166,176,.8)';c.lineWidth=.7;c.beginPath();c.moveTo(x-2.5,yy-1.7);c.lineTo(x+.5,yy+.3);c.moveTo(x+2.5,yy-1.7);c.lineTo(x-.5,yy+.3);c.stroke()}
+  // where it leaves the body: a knot of silk
+  ell(c,sx,sy+1,3,2,'rgba(40,36,44,.9)');ell(c,sx-1,sy,1.4,1,'rgba(160,156,170,.7)');
+  c.restore()}
+
 /* ============================================================
    DEFEAT ANIMATIONS of the Santiago wardens and the Yewen
    After the boss falls and before the victory text, its own painted sprite breaks apart with physics:
@@ -8862,6 +8884,7 @@ function drawDefeat(c){
   // advance on the game's 60 Hz clock, not on screen refreshes, so a slow phone sees the same timing
   const n=Math.max(0,Math.min(6,frame-A.f));A.f=frame;
   for(let i=0;i<n&&A.t<A.T;i++){A.t++;S2[1](A,D);dStep(A)}
+  if(A.k==='ngamlef'&&A.t<148&&typeof ngamThread==='function')ngamThread(c,(e._cx||72)+A.ox,A.y0+A.oy,enemyCanvas('ngamlef',ET.ngamlef.bs,0));   // still hanging from its strand until the strand snaps
   S2[2](c,A,D);
   if(A.t>=A.T){A.done=1;A.e.dead=true;A.e.fadeT=0;victory()}
 }
@@ -9422,7 +9445,10 @@ ctCharSpriteBig=function(look,dir,fr){
 const OWH={};function owScale(t,im){let h=OWH[t];if(!h){const[cv,c]=mk(im.width,im.height);c.drawImage(im,0,0);const d=c.getImageData(0,0,im.width,im.height).data;let top=-1,bot=-1;
   for(let y=0;y<im.height;y++)for(let x=0;x<im.width;x++)if(d[(y*im.width+x)*4+3]>40){if(top<0)top=y;bot=y}h=OWH[t]=Math.max(8,bot-top+1)}
   const bs=(ET[t]&&ET[t].bs)||44;return (bs>=60?39:31)/h}
-enemyCanvas=function(t,size,fr){const im=GEM_ON&&GEM_READY&&GEMI.en[t];if(!im)return _gEC.apply(this,arguments);
+enemyCanvas=function(t,size,fr){if(t==='ngamlef'&&size===((ET[t]&&ET[t].bs)||0)&&GEM_ON&&GEM_READY&&GEMI.en[t]){   /* Ngamleftripael in battle is drawn at four fifths so there is room above it for the strand it hangs from */
+    const key='GEMNG'+fr;if(ECACHE[key])return ECACHE[key];const full=_gEC2(t,size,fr),k=NGK,[cv,c]=mk(Math.round(full.width*k),Math.round(full.height*k));c.imageSmoothingEnabled=false;c.drawImage(full,0,0,cv.width,cv.height);return ECACHE[key]=cv}
+  return _gEC2.apply(this,arguments)};
+const NGK=.8;const _gEC2=function(t,size,fr){const im=GEM_ON&&GEM_READY&&GEMI.en[t];if(!im)return _gEC.apply(this,arguments);
   // bosses waiting on the overworld (drawn at size 30, the final one at 72) stand several tiles tall, as befits them
   const big=(size===30||size===72||(size===34&&t==='yewen'))?GEMI.mp[t]:size===22?GEMI.mm[t]:null;   /* Yewen waiting in the cancha (drawn at 34) stands about five tiles tall */   // minibosses (drawn at 22) grow too, about half as much
   if(big){const key='GEMM'+t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];const m=big,[cv,c]=mk(m.width+4,m.height+3);
@@ -9463,7 +9489,9 @@ const DEFEAT_G={
   ngoyngoyun:{T:380,eye:[83,51],stacks:[[33,34],[133,34]],legY:84},
   ngamlef:{T:360,head:[76,68,15,15],abd:[93,28,31,25],eyes:[[70,65],[83,65]],c:[84,45],bot:83},
   yewen:{T:690,y:{mid:65,core:[31,91],staff:[6,27,45,13,22],bot:99,top:15,side:[38,88],chest:49}}};
-function defAlt(t){if(!(GEM_ON&&GEM_READY&&GEMI.en[t]&&DEFEAT_G[t]))return null;return Object.assign({base:()=>enemyCanvas(t,ET[t].bs,0)},DEFEAT_G[t])}
+function defAlt(t){if(!(GEM_ON&&GEM_READY&&GEMI.en[t]&&DEFEAT_G[t]))return null;let D=DEFEAT_G[t];
+  if(t==='ngamlef'){const sc=v=>Array.isArray(v)?v.map(sc):typeof v==='number'?Math.round(v*NGK):v;D=Object.assign({},D);for(const k of ['head','abd','eyes','c','bot'])if(D[k]!=null)D[k]=sc(D[k])}   // its measurements follow the four-fifths size
+  return Object.assign({base:()=>enemyCanvas(t,ET[t].bs,0)},D)}
 /* conversation portraits: a bust from the full art instead of the classic head */
 const _gPF=portraitFor;portraitFor=function(l){
   /* a wekufü or boss speaking (the Epunamun in the last battle) shows its own face, never the last villager you talked to */
