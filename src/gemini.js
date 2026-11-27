@@ -85,7 +85,7 @@ ctCharSprite=function(look,dir,fr,seated,tn,ey,hr){
   return CCACHE[key]=gemCv(g[d][(((fr|0)%4)+4)%4],flip,18,32)};
 ctCharSpriteBig=function(look,dir,fr){
   if(!(GEM_ON&&GEM_READY)||!GEMI.pc[look])return _gCB.apply(this,arguments);
-  const k=(typeof B!=='undefined'&&B&&B.red>0)?3:fr>0?(fr>=2?1:2):0,key='GEMB'+look+dir+k;if(CCACHE[key])return CCACHE[key];
+  const k=(typeof B!=='undefined'&&B&&(B.red>0||B.hurtT>0))?3:fr>0?(fr>=2?1:2):0,key='GEMB'+look+dir+k;if(CCACHE[key])return CCACHE[key];
   return CCACHE[key]=gemCv(GEMI.pc[look].battle[k],dir!=='left',48,74)};
 enemyCanvas=function(t,size,fr){const im=GEM_ON&&GEM_READY&&GEMI.en[t];if(!im)return _gEC.apply(this,arguments);
   // bosses waiting on the overworld (drawn at size 30, the final one at 72) stand several tiles tall, as befits them

@@ -279,7 +279,7 @@ function enemyPhase(){
     let d=Math.max(1,Math.round((T.atk+Math.floor(progK()*(T.boss?.3:.6))+rnd(3)-1)*(mult||1)*(rush?1.5:1)*(e.fear>0?.5:1))-(S.hm?heroExp().def:def()));if(S.hm){const X=heroExp();if(S.hmDef0==null)S.hmDef0=def();d=Math.max(1,Math.round(Math.max(1.5,d)*heroMul()*maxHP()/X.hp*Math.min(1,Math.max(.4,1-.04*(def()-S.hmDef0)))))}/* weichafe: each defense point gained since the mode began takes 4% off (up to 60%) */if(B.o.tut)d=Math.min(3,Math.max(1,Math.round(d*.4)));S.hp-=d;dmgTotal+=d;
     fx.push(e.label+(tag?tag.es:' te golpea')+' (−'+d+').');fxe.push(e.label+(tag?tag.en:' hits you')+' (−'+d+').');
     if(T.drain){const hl=Math.ceil(d/2);e.hp=Math.min(e.max,e.hp+hl);fx.push(e.label+' bebe tu fuerza (+'+hl+').');fxe.push(e.label+' drinks your strength (+'+hl+').');hitsFx.push(()=>{const p=epos(e);pop(p.x,p.y-10,'+'+hl,'#80ff90')})}
-    hitsFx.push(()=>{e.lunge=16;pop(60,30,'-'+d,'#ff6050')})};
+    hitsFx.push(()=>{const g=!ET[e.t].fly&&!ET[e.t].boss&&GEM_ON;e.lunge=g?22:16;e.lunge0=e.lunge;pop(60,30,'-'+d,'#ff6050')})};
   for(const e of aliveE()){const T=ET[e.t];
     if(e.hp<=0)continue; // staggered by the ngen's question: it does not act
     if(B.o.final&&/^ngoyman[1-5]$/.test(e.t)){e.ft=(e.ft||0)+1;const ln=e.lanN||0,lim=e.t==='ngoyman5'?2:1;
@@ -457,7 +457,7 @@ function enemyPhase(){
   if(S.gear.lafkenkura&&S.hp>0&&S.hp<maxHP()){S.hp=Math.min(maxHP(),S.hp+2)}
   B.blocked=null;B.rush=null;B.turn++;
   const lines=[];
-  if(fx.length){const l=N(fx.join(' '),fxe.join(' '));l.fx=()=>{hitsFx.forEach(f=>f());if(dmgTotal){B.shake=12;B.red=10;sfx('hurt')}};lines.push(l)}
+  if(fx.length){const l=N(fx.join(' '),fxe.join(' '));l.fx=()=>{hitsFx.forEach(f=>f());if(dmgTotal){B.pendHurt=aliveE().some(e=>e.lunge0===22&&e.lunge>0)?10:1}};lines.push(l)}
   const bossE=aliveE().find(x=>ET[x.t].boss),bn=bossE?ET[bossE.t].name:'';
   if(B.tele&&bossE)lines.push(L(bn,'Küpaley '+bn+'!','¡'+bn+' viene!',bn+' is coming!'));
   if(bossE&&bossE.hidden&&!B.hideHint&&B.turn>=1&&S.roots.includes('tripa')){B.hideHint=1;lines.push(N('Pista: escondido en la niebla, nada lo alcanza. Quizás si le dices que salga...','Hint: hidden in the fog, nothing reaches it. Maybe if you tell it to come out...'))}

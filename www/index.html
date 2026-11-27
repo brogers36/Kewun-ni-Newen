@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='a8c06b3-202611262301';
+window.KEWUN_BUILD='56b6e17-202611262306';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -6352,7 +6352,7 @@ function enemyPhase(){
     let d=Math.max(1,Math.round((T.atk+Math.floor(progK()*(T.boss?.3:.6))+rnd(3)-1)*(mult||1)*(rush?1.5:1)*(e.fear>0?.5:1))-(S.hm?heroExp().def:def()));if(S.hm){const X=heroExp();if(S.hmDef0==null)S.hmDef0=def();d=Math.max(1,Math.round(Math.max(1.5,d)*heroMul()*maxHP()/X.hp*Math.min(1,Math.max(.4,1-.04*(def()-S.hmDef0)))))}/* weichafe: each defense point gained since the mode began takes 4% off (up to 60%) */if(B.o.tut)d=Math.min(3,Math.max(1,Math.round(d*.4)));S.hp-=d;dmgTotal+=d;
     fx.push(e.label+(tag?tag.es:' te golpea')+' (−'+d+').');fxe.push(e.label+(tag?tag.en:' hits you')+' (−'+d+').');
     if(T.drain){const hl=Math.ceil(d/2);e.hp=Math.min(e.max,e.hp+hl);fx.push(e.label+' bebe tu fuerza (+'+hl+').');fxe.push(e.label+' drinks your strength (+'+hl+').');hitsFx.push(()=>{const p=epos(e);pop(p.x,p.y-10,'+'+hl,'#80ff90')})}
-    hitsFx.push(()=>{e.lunge=16;pop(60,30,'-'+d,'#ff6050')})};
+    hitsFx.push(()=>{const g=!ET[e.t].fly&&!ET[e.t].boss&&GEM_ON;e.lunge=g?22:16;e.lunge0=e.lunge;pop(60,30,'-'+d,'#ff6050')})};
   for(const e of aliveE()){const T=ET[e.t];
     if(e.hp<=0)continue; // staggered by the ngen's question: it does not act
     if(B.o.final&&/^ngoyman[1-5]$/.test(e.t)){e.ft=(e.ft||0)+1;const ln=e.lanN||0,lim=e.t==='ngoyman5'?2:1;
@@ -6530,7 +6530,7 @@ function enemyPhase(){
   if(S.gear.lafkenkura&&S.hp>0&&S.hp<maxHP()){S.hp=Math.min(maxHP(),S.hp+2)}
   B.blocked=null;B.rush=null;B.turn++;
   const lines=[];
-  if(fx.length){const l=N(fx.join(' '),fxe.join(' '));l.fx=()=>{hitsFx.forEach(f=>f());if(dmgTotal){B.shake=12;B.red=10;sfx('hurt')}};lines.push(l)}
+  if(fx.length){const l=N(fx.join(' '),fxe.join(' '));l.fx=()=>{hitsFx.forEach(f=>f());if(dmgTotal){B.pendHurt=aliveE().some(e=>e.lunge0===22&&e.lunge>0)?10:1}};lines.push(l)}
   const bossE=aliveE().find(x=>ET[x.t].boss),bn=bossE?ET[bossE.t].name:'';
   if(B.tele&&bossE)lines.push(L(bn,'Küpaley '+bn+'!','¡'+bn+' viene!',bn+' is coming!'));
   if(bossE&&bossE.hidden&&!B.hideHint&&B.turn>=1&&S.roots.includes('tripa')){B.hideHint=1;lines.push(N('Pista: escondido en la niebla, nada lo alcanza. Quizás si le dices que salga...','Hint: hidden in the fog, nothing reaches it. Maybe if you tell it to come out...'))}
@@ -8276,11 +8276,18 @@ function renderBattle(){
     ell(c,cx,bse+1,sz/1.95,4,'rgba(0,0,14,.22)');ell(c,cx,bse+1,sz/2.6,2.6,'rgba(0,0,14,.3)');
     if(e.dead){e.fadeT--;c.globalAlpha=Math.max(0,e.fadeT/20)}
     if(e.hit>0&&e.hit--%4<2)c.globalAlpha=.25;
-    let ly=0,ls=1;if(e.lunge>0){e.lunge--;ly=Math.round(Math.sin(e.lunge/16*Math.PI)*10);}
+    let ly=0,ls=1,adx=0,asx=1,asy=1;
+    if(e.lunge>0){e.lunge--;const L=e.lunge;
+      if(gnd&&e.lunge0===22){   // walkers attack on foot: crouch, spring at the hero, step back
+        if(L>15){const k=(22-L)/7;asy=1-.13*k;asx=1+.07*k}
+        else if(L>8){const k=(15-L)/7;adx=Math.round(k*22);asy=.95+.08*k;asx=1.05-.06*k;if(L===15)battleDust(cx-4,y+cvs.height-3,4,-1)}
+        else adx=Math.round(22*L/8)}
+      else ly=Math.round(Math.sin(Math.min(16,L)/16*Math.PI)*10)}
+    if(e.hit>0&&!e._dh){e._dh=1;if(gnd)battleDust(cx,y+cvs.height-3,4,0)}else if(!(e.hit>0))e._dh=0;
     e._cx=cx;e._y=y;e._bse=bse;const inDef=B.defA&&B.defA.e===e;
     if(!inDef){c.save();c.scale(-1,1);
       if(gnd&&!e.dead){   // alive but grounded: they breathe (stretch from the feet up) and sway a little; the feet never move
-        const ph=frame/26+i*1.7,b=Math.sin(ph),sw=Math.sin(frame/47+i*2.3),W=cvs.width,H=cvs.height,dh=Math.round(H*(1+.035*b)),dw=Math.round(W*(1-.015*b)),fx=-cx,fy=y+H+ly;
+        const ph=frame/26+i*1.7,b=Math.sin(ph),sw=Math.sin(frame/47+i*2.3),W=cvs.width,H=cvs.height,dh=Math.round(H*(1+.035*b)*asy),dw=Math.round(W*(1-.015*b)*asx),fx=-(cx+adx),fy=y+H+ly;
         c.translate(fx,fy);c.transform(1,0,sw*.035,1,0,0);c.drawImage(cvs,-Math.ceil(dw/2),-dh,dw,dh)}
       else c.drawImage(cvs,-(cx+Math.ceil(cvs.width/2)),y+ly);c.restore()}c.globalAlpha=1;
     if(e.sl>0){c.fillStyle='rgba(40,40,120,.25)';c.fillRect(cx-sz/2,y,sz,cvs.height)}
@@ -8321,11 +8328,13 @@ function renderBattle(){
     if(B.heroA>0){B.heroA--;const ph=Math.sin((16-B.heroA)/16*Math.PI);hx-=Math.round(ph*16);hfr=Math.floor(frame/5)%4}
     if(B.intro>0)hx+=Math.round(B.intro*1.2);
     const hurt=B.red>0;
-    if(!(hurt&&frame%6<3)){
+    if(B.red===10){B.hurtT=26;battleDust(hx+22,138,7,1)}
+    if(B.hurtT>0){B.hurtT--;const k=(26-B.hurtT)/26;hx+=Math.round((k<.2?k/.2:1-(k-.2)/.8)*7)}   // knocked back a step, then recovers; feet stay on the ground
+    {
       const hcv=ctCharSpriteBig(heroLook(),'left',hfr);
       const hw=hcv.width*hsc/2,hh=hcv.height*hsc/2;
       ell(c,hx+hw/2,138,hw*.46,3.2,'rgba(0,0,14,.38)');ell(c,hx+hw/2,138,hw*.3,2,'rgba(0,0,14,.25)');
-      c.save();if(hurt){c.translate(hx+2,0)}
+      c.save();
       c.drawImage(hcv,0,0,hcv.width,hcv.height,hx,Math.round(138+hb-hh),hw,hh);
       c.restore();
       if(B.heroA>10){c.save();c.globalCompositeOperation='lighter';
@@ -8363,6 +8372,10 @@ function renderBattle(){
   }
   B.pops=B.pops.filter(p=>p.t>0);for(const p of B.pops){p.t--;const pp=p;OV.push(()=>txt(pp.txt,pp.x,pp.y-(50-pp.t)*.45,pp.col,20,'center'))}
   if(B.flash>0){c.fillStyle='rgba(255,255,255,'+(B.flash/16)+')';c.fillRect(0,0,LW,LH);B.flash--}
+  if(B.dust&&B.dust.length){for(const d of B.dust){d.t++;d.x+=d.vx;d.y-=.18;const a=Math.max(0,1-d.t/d.life);if(a<=0)continue;
+      const r=d.r+d.t*.22;ell(c,d.x,d.y,r,r*.6,'rgba(214,198,168,'+(a*.55).toFixed(2)+')');ell(c,d.x-1,d.y-1,r*.6,r*.35,'rgba(240,228,204,'+(a*.45).toFixed(2)+')')}
+    B.dust=B.dust.filter(d=>d.t<d.life)}
+  if(B.pendHurt>0&&--B.pendHurt===0){B.shake=12;B.red=10;sfx('hurt')}   // the blow lands when the lunge reaches the hero
   if(B.red>0){c.fillStyle='rgba(255,0,0,'+(B.red/30)+')';c.fillRect(0,0,LW,LH);B.red--}
   if(B.defA&&!B.defA.done)drawDefeat(c);
   if(B.ngenA&&!B.ngenA.done&&B.ngenA.kind==='final'){const A=B.ngenA;A.t++;
@@ -8674,6 +8687,9 @@ function animPainted(c,a){const G2=PAINTBG[a].geo||{},ox=Math.round((LW-400)/2),
   else if(a==='waria'){for(let k=0;k<26;k++){const x=((k*37+Math.floor(F*.5))%LW),y=Math.floor((k*53+F*2.6)%LH);R(c,x,y,1,2,'rgba(190,200,220,.4)')}
     const hx2=((F*2)%(LW+80))-40;R(c,Math.round(hx2),152,4,2,'#fff4c0');R(c,Math.round(hx2)+18,152,4,2,'#fff4c0');R(c,Math.round(LW-hx2*.8),158,4,2,'#ff4030')}
 }
+
+/* little puffs of dust kicked up in battle */
+function battleDust(x,y,n,dir){if(!B)return;B.dust=B.dust||[];for(let k=0;k<n;k++){const sp=(Math.random()*.6+.3)*(dir||(k%2?1:-1));B.dust.push({x:x+(Math.random()-.5)*10,y:y-Math.random()*2,vx:sp,r:1.5+Math.random()*1.5,t:0,life:22+Math.floor(Math.random()*10)})}}
 
 /* ============================================================
    DEFEAT ANIMATIONS of the Santiago wardens and the Yewen
@@ -9354,7 +9370,7 @@ ctCharSprite=function(look,dir,fr,seated,tn,ey,hr){
   return CCACHE[key]=gemCv(g[d][(((fr|0)%4)+4)%4],flip,18,32)};
 ctCharSpriteBig=function(look,dir,fr){
   if(!(GEM_ON&&GEM_READY)||!GEMI.pc[look])return _gCB.apply(this,arguments);
-  const k=(typeof B!=='undefined'&&B&&B.red>0)?3:fr>0?(fr>=2?1:2):0,key='GEMB'+look+dir+k;if(CCACHE[key])return CCACHE[key];
+  const k=(typeof B!=='undefined'&&B&&(B.red>0||B.hurtT>0))?3:fr>0?(fr>=2?1:2):0,key='GEMB'+look+dir+k;if(CCACHE[key])return CCACHE[key];
   return CCACHE[key]=gemCv(GEMI.pc[look].battle[k],dir!=='left',48,74)};
 enemyCanvas=function(t,size,fr){const im=GEM_ON&&GEM_READY&&GEMI.en[t];if(!im)return _gEC.apply(this,arguments);
   // bosses waiting on the overworld (drawn at size 30, the final one at 72) stand several tiles tall, as befits them

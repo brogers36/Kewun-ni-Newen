@@ -765,11 +765,18 @@ function renderBattle(){
     ell(c,cx,bse+1,sz/1.95,4,'rgba(0,0,14,.22)');ell(c,cx,bse+1,sz/2.6,2.6,'rgba(0,0,14,.3)');
     if(e.dead){e.fadeT--;c.globalAlpha=Math.max(0,e.fadeT/20)}
     if(e.hit>0&&e.hit--%4<2)c.globalAlpha=.25;
-    let ly=0,ls=1;if(e.lunge>0){e.lunge--;ly=Math.round(Math.sin(e.lunge/16*Math.PI)*10);}
+    let ly=0,ls=1,adx=0,asx=1,asy=1;
+    if(e.lunge>0){e.lunge--;const L=e.lunge;
+      if(gnd&&e.lunge0===22){   // walkers attack on foot: crouch, spring at the hero, step back
+        if(L>15){const k=(22-L)/7;asy=1-.13*k;asx=1+.07*k}
+        else if(L>8){const k=(15-L)/7;adx=Math.round(k*22);asy=.95+.08*k;asx=1.05-.06*k;if(L===15)battleDust(cx-4,y+cvs.height-3,4,-1)}
+        else adx=Math.round(22*L/8)}
+      else ly=Math.round(Math.sin(Math.min(16,L)/16*Math.PI)*10)}
+    if(e.hit>0&&!e._dh){e._dh=1;if(gnd)battleDust(cx,y+cvs.height-3,4,0)}else if(!(e.hit>0))e._dh=0;
     e._cx=cx;e._y=y;e._bse=bse;const inDef=B.defA&&B.defA.e===e;
     if(!inDef){c.save();c.scale(-1,1);
       if(gnd&&!e.dead){   // alive but grounded: they breathe (stretch from the feet up) and sway a little; the feet never move
-        const ph=frame/26+i*1.7,b=Math.sin(ph),sw=Math.sin(frame/47+i*2.3),W=cvs.width,H=cvs.height,dh=Math.round(H*(1+.035*b)),dw=Math.round(W*(1-.015*b)),fx=-cx,fy=y+H+ly;
+        const ph=frame/26+i*1.7,b=Math.sin(ph),sw=Math.sin(frame/47+i*2.3),W=cvs.width,H=cvs.height,dh=Math.round(H*(1+.035*b)*asy),dw=Math.round(W*(1-.015*b)*asx),fx=-(cx+adx),fy=y+H+ly;
         c.translate(fx,fy);c.transform(1,0,sw*.035,1,0,0);c.drawImage(cvs,-Math.ceil(dw/2),-dh,dw,dh)}
       else c.drawImage(cvs,-(cx+Math.ceil(cvs.width/2)),y+ly);c.restore()}c.globalAlpha=1;
     if(e.sl>0){c.fillStyle='rgba(40,40,120,.25)';c.fillRect(cx-sz/2,y,sz,cvs.height)}
@@ -810,11 +817,13 @@ function renderBattle(){
     if(B.heroA>0){B.heroA--;const ph=Math.sin((16-B.heroA)/16*Math.PI);hx-=Math.round(ph*16);hfr=Math.floor(frame/5)%4}
     if(B.intro>0)hx+=Math.round(B.intro*1.2);
     const hurt=B.red>0;
-    if(!(hurt&&frame%6<3)){
+    if(B.red===10){B.hurtT=26;battleDust(hx+22,138,7,1)}
+    if(B.hurtT>0){B.hurtT--;const k=(26-B.hurtT)/26;hx+=Math.round((k<.2?k/.2:1-(k-.2)/.8)*7)}   // knocked back a step, then recovers; feet stay on the ground
+    {
       const hcv=ctCharSpriteBig(heroLook(),'left',hfr);
       const hw=hcv.width*hsc/2,hh=hcv.height*hsc/2;
       ell(c,hx+hw/2,138,hw*.46,3.2,'rgba(0,0,14,.38)');ell(c,hx+hw/2,138,hw*.3,2,'rgba(0,0,14,.25)');
-      c.save();if(hurt){c.translate(hx+2,0)}
+      c.save();
       c.drawImage(hcv,0,0,hcv.width,hcv.height,hx,Math.round(138+hb-hh),hw,hh);
       c.restore();
       if(B.heroA>10){c.save();c.globalCompositeOperation='lighter';
@@ -852,6 +861,10 @@ function renderBattle(){
   }
   B.pops=B.pops.filter(p=>p.t>0);for(const p of B.pops){p.t--;const pp=p;OV.push(()=>txt(pp.txt,pp.x,pp.y-(50-pp.t)*.45,pp.col,20,'center'))}
   if(B.flash>0){c.fillStyle='rgba(255,255,255,'+(B.flash/16)+')';c.fillRect(0,0,LW,LH);B.flash--}
+  if(B.dust&&B.dust.length){for(const d of B.dust){d.t++;d.x+=d.vx;d.y-=.18;const a=Math.max(0,1-d.t/d.life);if(a<=0)continue;
+      const r=d.r+d.t*.22;ell(c,d.x,d.y,r,r*.6,'rgba(214,198,168,'+(a*.55).toFixed(2)+')');ell(c,d.x-1,d.y-1,r*.6,r*.35,'rgba(240,228,204,'+(a*.45).toFixed(2)+')')}
+    B.dust=B.dust.filter(d=>d.t<d.life)}
+  if(B.pendHurt>0&&--B.pendHurt===0){B.shake=12;B.red=10;sfx('hurt')}   // the blow lands when the lunge reaches the hero
   if(B.red>0){c.fillStyle='rgba(255,0,0,'+(B.red/30)+')';c.fillRect(0,0,LW,LH);B.red--}
   if(B.defA&&!B.defA.done)drawDefeat(c);
   if(B.ngenA&&!B.ngenA.done&&B.ngenA.kind==='final'){const A=B.ngenA;A.t++;
@@ -1163,3 +1176,6 @@ function animPainted(c,a){const G2=PAINTBG[a].geo||{},ox=Math.round((LW-400)/2),
   else if(a==='waria'){for(let k=0;k<26;k++){const x=((k*37+Math.floor(F*.5))%LW),y=Math.floor((k*53+F*2.6)%LH);R(c,x,y,1,2,'rgba(190,200,220,.4)')}
     const hx2=((F*2)%(LW+80))-40;R(c,Math.round(hx2),152,4,2,'#fff4c0');R(c,Math.round(hx2)+18,152,4,2,'#fff4c0');R(c,Math.round(LW-hx2*.8),158,4,2,'#ff4030')}
 }
+
+/* little puffs of dust kicked up in battle */
+function battleDust(x,y,n,dir){if(!B)return;B.dust=B.dust||[];for(let k=0;k<n;k++){const sp=(Math.random()*.6+.3)*(dir||(k%2?1:-1));B.dust.push({x:x+(Math.random()-.5)*10,y:y-Math.random()*2,vx:sp,r:1.5+Math.random()*1.5,t:0,life:22+Math.floor(Math.random()*10)})}}
