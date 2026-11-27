@@ -731,7 +731,7 @@ function renderBattle(){
     vg.fill(c,0,0,LW,LH)}
   if(B.intro>0)B.intro--;
   const al=B.en.filter(e=>!e.dead||e.fadeT>0),n=al.length,base=138;
-  al.forEach((e,i)=>{const Tt=ET[e.t],sz=Tt.bs,cvs=enemyCanvas(e.t,sz,Math.floor(frame/12)%2);
+  al.forEach((e,i)=>{const Tt=ET[e.t],sz=Tt.bs,cvs=enemyCanvas(e.t,sz,(GEM_ON&&!Tt.fly&&!Tt.boss)?0:Math.floor(frame/12)%2);   // the new art's second frame only lifts the sprite a pixel: walkers keep their feet down
     const bossI=al.findIndex(x=>ET[x.t].boss),others=al.filter(x=>!ET[x.t].boss),oi=others.indexOf(e);
     // enemies line up in a diagonal column on the left, all facing the hero
     let cx,bse;

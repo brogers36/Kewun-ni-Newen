@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='5a57019-202611262247';
+window.KEWUN_BUILD='153c24b-202611262256';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -8242,7 +8242,7 @@ function renderBattle(){
     vg.fill(c,0,0,LW,LH)}
   if(B.intro>0)B.intro--;
   const al=B.en.filter(e=>!e.dead||e.fadeT>0),n=al.length,base=138;
-  al.forEach((e,i)=>{const Tt=ET[e.t],sz=Tt.bs,cvs=enemyCanvas(e.t,sz,Math.floor(frame/12)%2);
+  al.forEach((e,i)=>{const Tt=ET[e.t],sz=Tt.bs,cvs=enemyCanvas(e.t,sz,(GEM_ON&&!Tt.fly&&!Tt.boss)?0:Math.floor(frame/12)%2);   // the new art's second frame only lifts the sprite a pixel: walkers keep their feet down
     const bossI=al.findIndex(x=>ET[x.t].boss),others=al.filter(x=>!ET[x.t].boss),oi=others.indexOf(e);
     // enemies line up in a diagonal column on the left, all facing the hero
     let cx,bse;
