@@ -234,7 +234,7 @@ function mapSong(){const m=MAPS[CUR];
   if(m.region==='santiago'&&!(S&&S.flags&&S.flags.yewen_won)&&(m.song==='waria'||m.song==='cave'))return 'wariaG';   // Santiago stays tense until every silence and Yewen have fallen
   if(m.ngenmap)return rsong(awake(m.region)?'ngen':'cave');const s=m.song;if(!awake(m.region)&&(s==='coast'||s==='lof'||s==='nag'||s==='pew'||s==='wil'||s==='puel'))return rsong(s+'G');return rsong(s)}
 function loadMap(id,x,y,quiet){TALKER=null;
-  CUR=id;M=MAPS[id];if(id==='s_metro'&&S&&S.flags)S.flags.metro_seen=1;
+  CUR=id;M=MAPS[id];if(S&&M.region){S.seenR=S.seenR||{};S.seenR[M.region]=1}if(id==='s_metro'&&S&&S.flags)S.flags.metro_seen=1;
   if(S&&S.flags&&M&&M.region&&!S.flags['gc_'+M.region]){S.flags['gc_'+M.region]=1;gcEvent('region-'+M.region,'Región: '+M.region)}
   grid=M.rows.map(r=>r.split(''));
   for(let yy=0;yy<M.h;yy++)for(let xx=0;xx<M.w;xx++){const c=grid[yy][xx];
