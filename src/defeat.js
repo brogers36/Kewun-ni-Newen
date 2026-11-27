@@ -273,7 +273,9 @@ function setYew(A,D){const Q=A.Q,U=Q.MX;
   A.motes=[];A.rings=[];A.says=[];A.kick=[0,0];
   // one call per piece, the speakers taking turns; the last call is everyone together
   A.calls=A.pcs.map((p,i)=>({t:230+i*34,who:i===A.pcs.length-1?-1:i%A.crowd.length,w:i===A.pcs.length-1?YEW_SAY[0]:YEW_SAY[i%2],p}));
-  A.endT=A.calls[A.calls.length-1].t+40}
+  A.endT=A.calls[A.calls.length-1].t+40;
+  // afterwards the freed boy and the people of Santiago walk off together to the left
+  A.bx=A.x0+Q.W/2;A.exitD=Math.max(A.bx,...A.crowd.map(m=>m.tx))+40;A.T=A.endT+150+Math.ceil(A.exitD/1.7)+4}
 function stepYew(A,D){const Q=A.Q,t=A.t;
   // walk in round the Yewen
   for(const m of A.crowd){if(t<m.start)continue;const d=m.tx-m.x;if(Math.abs(d)>.6){m.x+=Math.sign(d)*Math.min(1.7,Math.abs(d));m.walk=1;m.face=d<0?'l':'r'}else{m.x=m.tx;m.walk=0;m.face=m.side==='L'?'r':'l'}}
@@ -298,9 +300,17 @@ function stepYew(A,D){const Q=A.Q,t=A.t;
       A.motes.push({x:A.x0+s2[0]+p.ox,y:A.y0+s2[1]+p.oy,vx:p.dx*v*(.5+Math.random())+(Math.random()-.5)*.8,vy:p.dy*v*(.5+Math.random())-.3-Math.random()*.5,l:30+Math.random()*30,col:'rgb('+r+','+g+','+b+')',ph:Math.random()*6})}}
   for(const m of A.motes){m.l--;m.x+=m.vx;m.y+=m.vy;m.vx*=.95;m.vy=m.vy*.95-.02}A.motes=A.motes.filter(m=>m.l>0);
   if(t===A.endT){B.flash=12;sfx('heal')}
-  if(t===A.endT+40){tone('triangle',523,523,.5,.06);A.says.push({person:1,x:A.x0+Q.W/2+2,y:A.gy-76,w:'Mañumwiyiñ.',t0:t,l:100})}
+  if(t===A.endT+40){tone('triangle',523,523,.5,.06);A.says.push({person:1,x:A.bx+2,y:A.gy-yBoy(0,true).height-8,w:'Mañumwiyiñ.',t0:t,l:100})}
+  if(t===A.endT+150){A.exit=1;for(const m of A.crowd)m.tx=m.x-A.exitD;A.btx=A.bx-A.exitD}
+  if(A.exit&&A.bx>A.btx)A.bx=Math.max(A.btx,A.bx-1.7)
 }
-function drawYew(c,A,D){const Q=A.Q,t=A.t,al=t<A.T-40?1:Math.max(0,(A.T-t)/40);
+/* the freed boy, drawn in the same style as the Santiago people and stretched to their height
+   (a few torso and leg rows doubled, never the face) so he stands as one of them */
+let _yBoy={};
+function yBoy(fr,faceRight){const key=fr+(faceRight?'r':'l');if(_yBoy[key])return _yBoy[key];const s=yPerson('persona',fr,faceRight),H=s.height,T=yPerson('joven',0,true).height,add=Math.max(0,T-H);
+  const [k,g]=mk(s.width,H+add),r0=Math.round(H*.42),r1=Math.round(H*.95),dup=new Set();for(let i=0;i<add;i++)dup.add(Math.round(r0+(i+.5)*(r1-r0)/add));
+  let y=0;for(let r=0;r<H;r++){g.drawImage(s,0,r,s.width,1,0,y,s.width,1);y++;if(dup.has(r)){g.drawImage(s,0,r,s.width,1,0,y,s.width,1);y++}}return _yBoy[key]=k}
+function drawYew(c,A,D){const Q=A.Q,t=A.t,al=1;   // nobody fades: at the end they all walk off together
   const X=A.x0+A.kick[0]+(A.hitT&&t-A.hitT<10?(t%2?1:-1):0),Y=A.y0+A.kick[1];
   const gone=A.pcs.filter(p=>p.t0>=0).length,tot=A.pcs.length;
   // the crowd: back row first (behind the Yewen), then the Yewen, then the front row
@@ -312,13 +322,16 @@ function drawYew(c,A,D){const Q=A.Q,t=A.t,al=t<A.T-40?1:Math.max(0,(A.T-t)/40);
   back.forEach(drawM);
   // the person who was under the shame all along, showing through as it is blasted away
   const SQ=typeof dseqOK==='function'&&dseqOK('yewen')&&gone>0;   // painted frames: the calls move the Yewen through them, and frame four is the boy
-  const pa=SQ?0:SSd((gone-tot*.4)/(tot*.5))*al;const pcv=yPerson('persona',0,true),pw=pcv.width,ph=pcv.height,ppx=Math.round(A.x0+Q.W/2-pw/2),ppy=A.gy-2-ph;
+  const bwk=A.exit&&A.bx>A.btx,pcv=yBoy(bwk?(Math.floor(t/8)%2?1:2):0,!A.exit),pw=pcv.width,ph=pcv.height,ppx=Math.round(A.bx-pw/2),ppy=A.gy-2-ph-(bwk&&!(typeof GEM_ON!=='undefined'&&GEM_ON)?Math.floor(t/8)%2:0);
+  const pa=SQ?(t>=A.endT?1:0):SSd((gone-tot*.4)/(tot*.5))*al;
   if(pa>0){ell(c,ppx+pw/2,A.gy-3,pw*.32,3,'rgba(0,0,14,'+(.35*pa).toFixed(2)+')');c.globalAlpha=pa;c.drawImage(pcv,ppx,ppy);c.globalAlpha=1}
   if(t>=A.endT){const p=SSd((t-A.endT)/30)*al*(1-SSd((t-A.endT-60)/90)),cx=ppx+pw/2,cy=ppy+ph*.45;const g=c.createRadialGradient(cx,cy,2,cx,cy,56);g.addColorStop(0,'rgba(255,240,190,'+(.55*p).toFixed(2)+')');g.addColorStop(1,'rgba(255,220,150,0)');c.fillStyle=g;c.fillRect(cx-58,cy-58,116,116)}
   // what is left of the Yewen, and the pieces blasted off it, burning away
-  if(SQ){const fr=gone/tot,k=fr<.34?0:fr<.75?1:t<A.endT?2:3,F=DSEQ.yewen[k],cv=enemyCanvas('yewen',ET.yewen.bs,0),lf=(A.e._cx||72)+Math.ceil(cv.width/2)-cv.width;
-    const fx=Math.round(lf+F.dx+X-A.x0),fy=Math.round(Y+F.dy);c.globalAlpha=al;c.drawImage(F.im,fx,fy);
-    if(A.hitT&&t-A.hitT<6){c.save();c.globalCompositeOperation='lighter';c.globalAlpha=(1-(t-A.hitT)/6)*.7*al;c.drawImage(F.im,fx,fy);c.restore()}c.globalAlpha=1}
+  if(SQ&&t<A.endT){const fr=gone/tot,k=fr<.34?0:fr<.75?1:2,F=DSEQ.yewen[k],cv=enemyCanvas('yewen',ET.yewen.bs,0),lf=(A.e._cx||72)+Math.ceil(cv.width/2)-cv.width;
+    let fx=Math.round(lf+F.dx+X-A.x0),fy=Math.round(Y+F.dy),fw=F.im.width,fh=F.im.height;
+    if(k===2){const sc=ph*1.22/fh;fw=Math.round(fw*sc);fh=Math.round(fh*sc);fx=Math.round(A.bx-fw/2+X-A.x0);fy=A.gy-2-fh}   // the boy breaking free is already his own size
+    c.globalAlpha=al;c.drawImage(F.im,fx,fy,fw,fh);
+    if(A.hitT&&t-A.hitT<6){c.save();c.globalCompositeOperation='lighter';c.globalAlpha=(1-(t-A.hitT)/6)*.7*al;c.drawImage(F.im,fx,fy,fw,fh);c.restore()}c.globalAlpha=1}
   for(const p of A.pcs){if(p.t0<0){if(SQ)continue;c.globalAlpha=al;c.drawImage(p.cv,Math.round(X),Math.round(Y));continue}
     const k=t-p.t0;if(k>34)continue;const a=1-SSd(k/30);if(a<=0)continue;
     c.save();c.globalAlpha=a*al;c.imageSmoothingEnabled=true;c.translate(X+p.cx+p.ox,Y+p.cy+p.oy);c.rotate(p.rot*SSd(k/30));c.drawImage(p.cv,-p.cx,-p.cy);
