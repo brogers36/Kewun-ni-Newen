@@ -91,17 +91,17 @@ function atRegionNow(){const r=M&&M.region;return r==='lafkenche'||r==='nagche'|
 function openAtlas(back){const en=S.gloss==='en';
   let ov=document.getElementById('atlas');
   if(!ov){ov=document.createElement('div');ov.id='atlas';document.body.appendChild(ov)}
-  ov.innerHTML='<div class="ab"><div class="aw"><canvas width="'+ATW+'" height="'+ATH+'"></canvas><div class="al"></div></div><div class="ai"></div><button class="ax">✕</button></div>';
+  ov.innerHTML='<div class="ab"><div class="aw"><canvas width="'+ATW+'" height="'+ATH+'"></canvas><div class="al"></div></div><div class="af"><div class="ai"></div><button class="ax">✕ '+(en?'Close':'Cerrar')+'</button></div></div>';
   const cv=ov.querySelector('canvas'),g=cv.getContext('2d'),lab=ov.querySelector('.al'),info=ov.querySelector('.ai');
   const R=atRegions(),vis=R.filter(r=>r.seen),here=atRegionNow();
   let sel=Math.max(0,vis.findIndex(r=>r.id===here));
   for(const r of R){if(!r.seen&&['santiago','chumpall','ngoyun','ngoyman'].includes(r.id))continue;
     const s=document.createElement('span');s.textContent=r.seen?GR(r.name):'?';s.style.left=(r.x/ATW*100)+'%';s.style.top=((r.y+(r.id==='santiago'?14:9))/ATH*100)+'%';
-    if(r.seen)s.onclick=e=>{e.stopPropagation();sel=vis.indexOf(r);show()};s.dataset.id=r.id;lab.appendChild(s)}
+    if(r.seen)s.onpointerup=e=>{e.stopPropagation();sel=vis.indexOf(r);sfx('move');show()};s.dataset.id=r.id;lab.appendChild(s)}
   const show=()=>{const r=vis[sel];if(!r)return;lab.querySelectorAll('span').forEach(s=>s.classList.toggle('on',s.dataset.id===r.id));
     info.innerHTML='<b></b><i></i><div></div>';info.querySelector('b').textContent=GR(r.name)+(r.id===here?(en?'  · you are here':'  · estás aquí'):'');
     info.querySelector('i').textContent=r.g;info.querySelector('div').textContent=r.rows.join('   ')};
-  cv.onclick=e=>{const b=cv.getBoundingClientRect(),x=(e.clientX-b.left)/b.width*ATW,y=(e.clientY-b.top)/b.height*ATH;
+  cv.onpointerup=e=>{const b=cv.getBoundingClientRect(),x=(e.clientX-b.left)/b.width*ATW,y=(e.clientY-b.top)/b.height*ATH;
     let best=-1,bd=1e9;vis.forEach((r,i)=>{const d=Math.hypot(r.x-x,r.y-y);if(d<bd){bd=d;best=i}});if(best>=0&&bd<70){sel=best;sfx('move');show()}};
   let t=0,on=true;const base=atlasBase();
   const draw=()=>{if(!on)return;t++;g.drawImage(base,0,0);
@@ -122,8 +122,8 @@ function openAtlas(back){const en=S.gloss==='en';
       g.fillStyle='#c8202a';g.beginPath();g.moveTo(x-4,y-4);g.lineTo(x+4,y-4);g.lineTo(x,y+3);g.fill();g.fillStyle='#fff0d0';g.fillRect(x-1,y-3,2,2)}
     requestAnimationFrame(draw)};
   const close=()=>{on=false;ov.style.display='none';active=null;sfx('move');back&&back()};
-  ov.querySelector('.ax').onclick=e=>{e.stopPropagation();close()};
-  ov.onclick=e=>{if(e.target===ov)close()};
+  const ax=ov.querySelector('.ax');ax.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation()});ax.addEventListener('pointerup',e=>{e.preventDefault();e.stopPropagation();close()});
+  ov.onpointerdown=e=>{if(e.target===ov){e.preventDefault();close()}};
   active={kind:'atlas',a(){},b(){close()},mv(d){if(!vis.length)return;sel=(sel+d+vis.length)%vis.length;sfx('move');show()}};
   ov.style.display='flex';show();draw();
 }

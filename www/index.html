@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='802bcd3-202611261913';
+window.KEWUN_BUILD='d634252-202611262105';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -61,14 +61,15 @@ body.boot::after{content:'Kewün Newen';position:fixed;inset:0;display:flex;alig
 .rv{position:absolute;right:6px;top:4px;z-index:4;width:1.9em;height:1.9em;border-radius:50%;border:2px solid #ffe8a0;background:#2a1a3a;color:#ffe8a0;font:bold 1em ui-monospace,monospace;cursor:pointer;padding:0}
 #menu .p .rv{top:0;right:0}
 #atlas{display:none;position:fixed;inset:0;z-index:40;background:rgba(8,6,20,.86);align-items:center;justify-content:center}
-#atlas .ab{position:relative;width:min(96vw,calc((100vh - 96px)*400/224),900px);display:flex;flex-direction:column;gap:6px}
+#atlas .ab{position:relative;width:min(96vw,calc((100vh - 118px)*400/224),900px);display:flex;flex-direction:column;gap:6px}
 #atlas .aw{position:relative;width:100%}
 #atlas canvas{display:block;width:100%;image-rendering:pixelated;border-radius:4px;box-shadow:0 0 0 3px #1a1012,0 6px 24px #000a}
 #atlas .al span{position:absolute;transform:translate(-50%,0);font:bold clamp(9px,1.6vw,14px) ui-monospace,Menlo,monospace;color:#fff6dc;text-shadow:0 1px 0 #000,1px 0 0 #000,-1px 0 0 #000,0 -1px 0 #000,0 0 6px #000;white-space:nowrap;cursor:pointer;padding:0 3px;border-radius:3px}
 #atlas .al span.on{background:#3a2a50cc;color:#ffe8a0}
-#atlas .ai{background:#f8f2e4;color:#1a1020;border:3px solid #3a2a50;border-radius:5px;padding:6px 10px;font:clamp(11px,1.7vw,14px)/1.4 ui-monospace,Menlo,monospace;min-height:3.6em}
+#atlas .af{display:flex;gap:6px;align-items:stretch}
+#atlas .ai{flex:1;background:#f8f2e4;color:#1a1020;border:3px solid #3a2a50;border-radius:5px;padding:6px 10px;font:clamp(11px,1.7vw,14px)/1.4 ui-monospace,Menlo,monospace;min-height:3.6em}
 #atlas .ai b{display:block;color:#7a1c1c}#atlas .ai i{display:block;color:#4a3a5a}#atlas .ai div{margin-top:2px;white-space:pre-wrap}
-#atlas .ax{position:absolute;top:-6px;right:-6px;width:30px;height:30px;border-radius:50%;border:2px solid #ffe8a0;background:#3a2a50;color:#ffe8a0;font:bold 14px monospace;cursor:pointer}
+#atlas .ax{flex:0 0 auto;min-width:76px;border-radius:5px;border:3px solid #ffe8a0;background:#3a2a50;color:#ffe8a0;font:bold clamp(12px,1.8vw,15px) ui-monospace,Menlo,monospace;cursor:pointer;touch-action:manipulation}
 #report{display:none;position:fixed;inset:0;z-index:40;background:rgba(8,6,20,.82);align-items:center;justify-content:center}
 #report .rb{background:#f8f2e4;color:#1a1020;max-width:min(92vw,720px);max-height:88vh;display:flex;flex-direction:column;border:4px solid #3a2a50;border-radius:6px}
 #report pre{margin:0;padding:14px;overflow:auto;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap}
@@ -7471,17 +7472,17 @@ function atRegionNow(){const r=M&&M.region;return r==='lafkenche'||r==='nagche'|
 function openAtlas(back){const en=S.gloss==='en';
   let ov=document.getElementById('atlas');
   if(!ov){ov=document.createElement('div');ov.id='atlas';document.body.appendChild(ov)}
-  ov.innerHTML='<div class="ab"><div class="aw"><canvas width="'+ATW+'" height="'+ATH+'"></canvas><div class="al"></div></div><div class="ai"></div><button class="ax">✕</button></div>';
+  ov.innerHTML='<div class="ab"><div class="aw"><canvas width="'+ATW+'" height="'+ATH+'"></canvas><div class="al"></div></div><div class="af"><div class="ai"></div><button class="ax">✕ '+(en?'Close':'Cerrar')+'</button></div></div>';
   const cv=ov.querySelector('canvas'),g=cv.getContext('2d'),lab=ov.querySelector('.al'),info=ov.querySelector('.ai');
   const R=atRegions(),vis=R.filter(r=>r.seen),here=atRegionNow();
   let sel=Math.max(0,vis.findIndex(r=>r.id===here));
   for(const r of R){if(!r.seen&&['santiago','chumpall','ngoyun','ngoyman'].includes(r.id))continue;
     const s=document.createElement('span');s.textContent=r.seen?GR(r.name):'?';s.style.left=(r.x/ATW*100)+'%';s.style.top=((r.y+(r.id==='santiago'?14:9))/ATH*100)+'%';
-    if(r.seen)s.onclick=e=>{e.stopPropagation();sel=vis.indexOf(r);show()};s.dataset.id=r.id;lab.appendChild(s)}
+    if(r.seen)s.onpointerup=e=>{e.stopPropagation();sel=vis.indexOf(r);sfx('move');show()};s.dataset.id=r.id;lab.appendChild(s)}
   const show=()=>{const r=vis[sel];if(!r)return;lab.querySelectorAll('span').forEach(s=>s.classList.toggle('on',s.dataset.id===r.id));
     info.innerHTML='<b></b><i></i><div></div>';info.querySelector('b').textContent=GR(r.name)+(r.id===here?(en?'  · you are here':'  · estás aquí'):'');
     info.querySelector('i').textContent=r.g;info.querySelector('div').textContent=r.rows.join('   ')};
-  cv.onclick=e=>{const b=cv.getBoundingClientRect(),x=(e.clientX-b.left)/b.width*ATW,y=(e.clientY-b.top)/b.height*ATH;
+  cv.onpointerup=e=>{const b=cv.getBoundingClientRect(),x=(e.clientX-b.left)/b.width*ATW,y=(e.clientY-b.top)/b.height*ATH;
     let best=-1,bd=1e9;vis.forEach((r,i)=>{const d=Math.hypot(r.x-x,r.y-y);if(d<bd){bd=d;best=i}});if(best>=0&&bd<70){sel=best;sfx('move');show()}};
   let t=0,on=true;const base=atlasBase();
   const draw=()=>{if(!on)return;t++;g.drawImage(base,0,0);
@@ -7502,8 +7503,8 @@ function openAtlas(back){const en=S.gloss==='en';
       g.fillStyle='#c8202a';g.beginPath();g.moveTo(x-4,y-4);g.lineTo(x+4,y-4);g.lineTo(x,y+3);g.fill();g.fillStyle='#fff0d0';g.fillRect(x-1,y-3,2,2)}
     requestAnimationFrame(draw)};
   const close=()=>{on=false;ov.style.display='none';active=null;sfx('move');back&&back()};
-  ov.querySelector('.ax').onclick=e=>{e.stopPropagation();close()};
-  ov.onclick=e=>{if(e.target===ov)close()};
+  const ax=ov.querySelector('.ax');ax.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation()});ax.addEventListener('pointerup',e=>{e.preventDefault();e.stopPropagation();close()});
+  ov.onpointerdown=e=>{if(e.target===ov){e.preventDefault();close()}};
   active={kind:'atlas',a(){},b(){close()},mv(d){if(!vis.length)return;sel=(sel+d+vis.length)%vis.length;sfx('move');show()}};
   ov.style.display='flex';show();draw();
 }
