@@ -92,7 +92,10 @@ ctCharSpriteBig=function(look,dir,fr){
 const OWH={};function owScale(t,im){let h=OWH[t];if(!h){const[cv,c]=mk(im.width,im.height);c.drawImage(im,0,0);const d=c.getImageData(0,0,im.width,im.height).data;let top=-1,bot=-1;
   for(let y=0;y<im.height;y++)for(let x=0;x<im.width;x++)if(d[(y*im.width+x)*4+3]>40){if(top<0)top=y;bot=y}h=OWH[t]=Math.max(8,bot-top+1)}
   const bs=(ET[t]&&ET[t].bs)||44;return (bs>=60?39:31)/h}
-enemyCanvas=function(t,size,fr){const im=GEM_ON&&GEM_READY&&GEMI.en[t];if(!im)return _gEC.apply(this,arguments);
+enemyCanvas=function(t,size,fr){if(t==='ngamlef'&&size===((ET[t]&&ET[t].bs)||0)&&GEM_ON&&GEM_READY&&GEMI.en[t]){   /* Ngamleftripael in battle is drawn at four fifths so there is room above it for the strand it hangs from */
+    const key='GEMNG'+fr;if(ECACHE[key])return ECACHE[key];const full=_gEC2(t,size,fr),k=NGK,[cv,c]=mk(Math.round(full.width*k),Math.round(full.height*k));c.imageSmoothingEnabled=false;c.drawImage(full,0,0,cv.width,cv.height);return ECACHE[key]=cv}
+  return _gEC2.apply(this,arguments)};
+const NGK=.8;const _gEC2=function(t,size,fr){const im=GEM_ON&&GEM_READY&&GEMI.en[t];if(!im)return _gEC.apply(this,arguments);
   // bosses waiting on the overworld (drawn at size 30, the final one at 72) stand several tiles tall, as befits them
   const big=(size===30||size===72||(size===34&&t==='yewen'))?GEMI.mp[t]:size===22?GEMI.mm[t]:null;   /* Yewen waiting in the cancha (drawn at 34) stands about five tiles tall */   // minibosses (drawn at 22) grow too, about half as much
   if(big){const key='GEMM'+t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];const m=big,[cv,c]=mk(m.width+4,m.height+3);
@@ -133,7 +136,9 @@ const DEFEAT_G={
   ngoyngoyun:{T:380,eye:[83,51],stacks:[[33,34],[133,34]],legY:84},
   ngamlef:{T:360,head:[76,68,15,15],abd:[93,28,31,25],eyes:[[70,65],[83,65]],c:[84,45],bot:83},
   yewen:{T:690,y:{mid:65,core:[31,91],staff:[6,27,45,13,22],bot:99,top:15,side:[38,88],chest:49}}};
-function defAlt(t){if(!(GEM_ON&&GEM_READY&&GEMI.en[t]&&DEFEAT_G[t]))return null;return Object.assign({base:()=>enemyCanvas(t,ET[t].bs,0)},DEFEAT_G[t])}
+function defAlt(t){if(!(GEM_ON&&GEM_READY&&GEMI.en[t]&&DEFEAT_G[t]))return null;let D=DEFEAT_G[t];
+  if(t==='ngamlef'){const sc=v=>Array.isArray(v)?v.map(sc):typeof v==='number'?Math.round(v*NGK):v;D=Object.assign({},D);for(const k of ['head','abd','eyes','c','bot'])if(D[k]!=null)D[k]=sc(D[k])}   // its measurements follow the four-fifths size
+  return Object.assign({base:()=>enemyCanvas(t,ET[t].bs,0)},D)}
 /* conversation portraits: a bust from the full art instead of the classic head */
 const _gPF=portraitFor;portraitFor=function(l){
   /* a wekufü or boss speaking (the Epunamun in the last battle) shows its own face, never the last villager you talked to */

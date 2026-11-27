@@ -127,6 +127,7 @@ function drawDefeat(c){
   // advance on the game's 60 Hz clock, not on screen refreshes, so a slow phone sees the same timing
   const n=Math.max(0,Math.min(6,frame-A.f));A.f=frame;
   for(let i=0;i<n&&A.t<A.T;i++){A.t++;S2[1](A,D);dStep(A)}
+  if(A.k==='ngamlef'&&A.t<148&&typeof ngamThread==='function')ngamThread(c,(e._cx||72)+A.ox,A.y0+A.oy,enemyCanvas('ngamlef',ET.ngamlef.bs,0));   // still hanging from its strand until the strand snaps
   S2[2](c,A,D);
   if(A.t>=A.T){A.done=1;A.e.dead=true;A.e.fadeT=0;victory()}
 }

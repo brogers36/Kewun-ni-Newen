@@ -748,10 +748,11 @@ function renderBattle(){
     else if(tall){cx=Math.round(104+(oi+1)*(LW-184)/(others.length+1));bse=138}
     else if(fi>=0){cx=150+fi*Math.max(30,sz+8);bse=98}
     else{const gm=grd.length,m=Math.max(1,gm-1),sp=Math.min(14,Math.round(14/m));cx=148+gi*20;bse=(gm===1?136:126)+gi*sp}
-    const gnd=!Tt.fly&&!Tt.boss;   // walkers stay planted on the ground (no bob) with a contact shadow
+    const gnd=!Tt.fly&&(!Tt.boss||e.t==='ngoyngoyun');   // walkers (and the walking machine Ngoyngoyün) stay planted on the ground (no bob) with a contact shadow
     let y=bse-cvs.height+4+(gnd?0:Math.round(Math.sin(frame/16+i)));if(y<4)y=4+(gnd?0:Math.round(Math.sin(frame/16+i)));
     if(Tt.fly&&e.gr<=0)y-=(Tt.boss?10:26)+Math.round(Math.sin(frame/9+i)*3);
     if(Tt.fly&&!Tt.boss&&y<2)y=2+Math.round(Math.sin(frame/9+i)*2);   // flyers hover high but never leave the top of the screen
+    if(e.t==='ngamlef'&&!e.dead){y-=14+Math.round(Math.sin(frame/30)*2);if(!e.dying)ell(c,cx,bse+3,Math.round(cvs.width*.3),3,'rgba(0,0,0,.28)')}   // it hangs from its barbed strand, legs clear of the floor
     if(B.intro>0)y+=Math.round(B.intro*1.5);
     e.px=cx;e.py=y+cvs.height/3;
     if(gnd&&!e.dead){const fy=y+cvs.height-3;ell(c,cx,fy,Math.round(cvs.width*.34),3,'rgba(0,0,0,.32)');ell(c,cx,fy,Math.round(cvs.width*.22),2,'rgba(0,0,0,.22)')}
@@ -775,6 +776,7 @@ function renderBattle(){
       else ly=Math.round(Math.sin(Math.min(16,L)/16*Math.PI)*10)}
     if(e.hit>0&&!e._dh){e._dh=1;if(gnd)battleDust(cx,y+cvs.height-3,4,0)}else if(!(e.hit>0))e._dh=0;
     e._cx=cx;e._y=y;e._bse=bse;const inDef=B.defA&&B.defA.e===e;
+    if(e.t==='ngamlef'&&!e.dead&&!inDef)ngamThread(c,cx,y+ly,cvs);
     const lfx=B.lanFx&&B.lanFx.e===e?B.lanFx:null;
     if(lfx&&!inDef)drawLanPortal(c,lfx,cx,y,cvs);
     const rzf=lfx&&GEM_ON&&GEMI.rz&&GEMI.rz[e.t];
@@ -1221,3 +1223,23 @@ function drawArmsUp(c,cvs,x,y,a){   // the cloak-arms swing up around the should
 
 /* idle loop for enemies with Gemini's idle frames: rest, breathe in, rest, the small movement (blink, tail, wings), each enemy on its own beat */
 function idleFr(i){const p=(frame+i*53)%150;return p<50?0:p<84?1:p<128?0:2}
+
+/* Ngamleftripael hangs from above on a strand of barbed web that comes out of its abdomen */
+const NGT={};
+function ngamThread(c,cx,y,cvs){let q=NGT[cvs.width+'x'+cvs.height];
+  if(!q){const g=cvs.getContext('2d'),d=g.getImageData(0,0,cvs.width,cvs.height).data;let top=-1;
+    for(let yy=0;yy<cvs.height&&top<0;yy++)for(let x=0;x<cvs.width;x++)if(d[(yy*cvs.width+x)*4+3]>80){top=yy;break}
+    let sx=0,n=0;for(let yy=top;yy<top+5;yy++)for(let x=0;x<cvs.width;x++)if(d[(yy*cvs.width+x)*4+3]>80){sx+=x;n++}
+    q=NGT[cvs.width+'x'+cvs.height]={ax:n?sx/n:cvs.width/2,ay:top+3}}
+  const sx=Math.round(cx+Math.ceil(cvs.width/2)-q.ax),sy=y+q.ay,top=-4,sw=Math.sin(frame/40)*3;   // the sprite is drawn mirrored to face the hero
+  const pt=t=>[sx+sw*t*t,sy+(top-sy)*t];
+  c.save();c.lineCap='round';
+  for(const [off,col,lw] of [[0,'rgba(20,18,22,.95)',3.2],[0,'rgba(130,126,134,.9)',1.3],[1,'rgba(80,76,84,.95)',1.2]]){c.strokeStyle=col;c.lineWidth=lw;c.beginPath();
+    for(let k=0;k<=24;k++){const t=k/24,[x,yy]=pt(t);const tw=off?Math.sin(t*40)*1.2:0;k?c.lineTo(x+tw,yy):c.moveTo(x+tw,yy)}c.stroke()}
+  // barbs every few pixels: little twisted crosses of wire
+  const n=Math.max(2,Math.floor((sy-top)/7));
+  for(let k=1;k<n;k++){const [x,yy]=pt(k/n);c.strokeStyle='rgba(28,26,30,.95)';c.lineWidth=1.8;c.beginPath();c.moveTo(x-4,yy-3);c.lineTo(x+4,yy+3);c.moveTo(x+4,yy-3);c.lineTo(x-4,yy+3);c.stroke();
+    c.strokeStyle='rgba(170,166,176,.8)';c.lineWidth=.7;c.beginPath();c.moveTo(x-2.5,yy-1.7);c.lineTo(x+.5,yy+.3);c.moveTo(x+2.5,yy-1.7);c.lineTo(x-.5,yy+.3);c.stroke()}
+  // where it leaves the body: a knot of silk
+  ell(c,sx,sy+1,3,2,'rgba(40,36,44,.9)');ell(c,sx-1,sy,1.4,1,'rgba(160,156,170,.7)');
+  c.restore()}
