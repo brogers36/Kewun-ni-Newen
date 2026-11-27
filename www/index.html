@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='1d5e1da-202611271107';
+window.KEWUN_BUILD='aca6e0d-202611271127';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -3221,7 +3221,7 @@ function playCredits(done){gcEvent('creditos','Créditos finales');
   let fin=false;const end=()=>{if(fin)return;fin=true;try{v.pause()}catch(e){}ov.remove();done()};
   const ov=document.createElement('div');ov.id='credits';ov.style.cssText='position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center';
   const v=document.createElement('video');v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
-  for(const u of ['ending.mp4?v=3','../www/ending.mp4?v=3']){const so=document.createElement('source');so.src=u;so.type='video/mp4';v.appendChild(so)}
+  for(const u of ['ending.mp4?v=4','../www/ending.mp4?v=4']){const so=document.createElement('source');so.src=u;so.type='video/mp4';v.appendChild(so)}
   v.lastElementChild.addEventListener('error',end);v.addEventListener('ended',end);
   const sk=document.createElement('button');sk.textContent=((S&&S.gloss==='en')||LANG==='en')?'Skip ▶':'Saltar ▶';
   sk.style.cssText='position:absolute;right:14px;bottom:14px;padding:8px 14px;font:600 14px sans-serif;color:#f3ead2;background:rgba(0,0,0,.55);border:1px solid rgba(243,234,210,.5);border-radius:6px;opacity:.75';
