@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='f046348-202611261812';
+window.KEWUN_BUILD='fa12380-202611261912';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -104,6 +104,7 @@ body.boot::after{content:'Kewün Newen';position:fixed;inset:0;display:flex;alig
 #skip{position:absolute;right:.6em;top:.6em;font:inherit;font-size:.85em;padding:.25em .7em;border-radius:4px;border:2px solid #e8d49a;background:#2a2238cc;color:#fff;cursor:pointer;display:none}
 #mbtn{position:absolute;left:.6em;bottom:.6em;z-index:6;font:inherit;font-size:1.9em;line-height:1;padding:.3em .55em;border-radius:4px;border:2px solid #4a3d5c;background:#2a223880;color:#f4ecd8cc;cursor:pointer;display:none}
 @media (hover:none),(pointer:coarse){#mbtn{display:block}}
+#fsbtn.low{top:auto;bottom:.6em;font-size:1.9em;line-height:1;padding:.3em .5em}
 #fsbtn{position:absolute;right:.6em;top:.6em;z-index:9;font:inherit;font-size:1em;padding:.15em .5em;border-radius:4px;border:2px solid #4a3d5c;background:#2a223880;color:#f4ecd8cc;cursor:pointer;display:none}
 #pad{display:flex;gap:28px;align-items:center;justify-content:center}
 #dpad{display:grid;grid-template-columns:repeat(3,48px);grid-template-rows:repeat(3,48px);gap:3px}
@@ -7874,7 +7875,7 @@ function drawHUD(c){
   // compact overlay: newen meter and counters top-left; a thin heart strip tucked into the top-right corner.
   // Either panel fades when the player walks underneath it, so nothing on the map stays hidden.
   const mx=maxHP(),hearts=Math.min(40,Math.ceil(mx/HPQ)),hp=Math.max(0,S.hp),PER=14,rows=Math.ceil(hearts/PER),hw=Math.min(hearts,PER)*6+3;
-  const tw=5*12,pw=Math.max(hw,tw+4)+4,ph=rows*6+3+8,px=LW-pw-19,py=1,LX=3;   // clear of the ⛶ button (the ☰ now sits bottom-left)
+  const tw=5*12,pw=Math.max(hw,tw+4)+4,ph=rows*6+3+8,px=LW-pw-3,py=1,LX=3;   // the ☰ and ⛶ buttons sit at the bottom corners
   const pxs=P.fx*T-CAM.x+8,pys=P.fy*T-CAM.y+VY+8,under=(x,y,w,h)=>pxs>x-10&&pxs<x+w+10&&pys>y-6&&pys<y+h+16;
   const lw=M&&M.dungeon?118:108,lh=30,lfade=under(LX+2,1,lw,lh),rfade=under(px,py,pw,ph);
   const plate=(x,y,w,h)=>{c.fillStyle='rgba(12,10,30,.5)';c.fillRect(x+1,y,w-2,h);c.fillRect(x,y+1,w,h-2);
@@ -8501,7 +8502,8 @@ function loopBody(ts){
   let steps=0;
   while(_acc>=1000/60&&steps<4){_acc-=1000/60;steps++;
     frame++;
-    if(frame%6===0){const mb=$('mbtn');if(mb){const v=(mode==='map'&&!active)?'':'hidden';if(mb.style.visibility!==v)mb.style.visibility=v}}
+    if(frame%6===0){const mb=$('mbtn');if(mb){const v=(mode==='map'&&!active)?'':'hidden';if(mb.style.visibility!==v)mb.style.visibility=v}
+      const fb=$('fsbtn');if(fb){const t=mode==='title',v=(t||!active)?'':'hidden';if(fb.style.visibility!==v)fb.style.visibility=v;if(fb.classList.contains('low')===t)fb.classList.toggle('low',!t)}}
     if(mode==='map'&&M)updateMap();
     else if(mode==='palin'&&PG)updatePalin();
   }
