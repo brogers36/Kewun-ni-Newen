@@ -741,13 +741,13 @@ function renderBattle(){
     if(bossI<0&&tall){cx=Math.round(8+(LW-78)*(i+1)/(n+1));bse=138}
     else if(bossI<0&&fls.length&&grd.length){ // triangle: ground stack low-left, flyers up and to the right
       if(fi>=0){cx=112+fi*Math.max(34,sz+10);bse=100}
-      else{const m=Math.max(1,grd.length-1),sp=Math.min(28,Math.round(44/m));cx=40+gi*12;bse=(grd.length===1?138:112)+gi*sp}}
+      else{const m=Math.max(1,grd.length-1),sp=Math.min(14,Math.round(14/m));cx=36+gi*22;bse=(grd.length===1?138:126)+gi*sp}}   // feet stay on the ground
     else if(bossI<0&&fls.length){cx=36+fi*Math.max(34,sz+10);bse=122+(fi%2)*22} // all airborne: a V across the sky
-    else if(bossI<0){const m=Math.max(1,n-1),sp=Math.min(30,Math.round(52/m));cx=(n===1?60:40)+i*14;bse=(n===1?138:104)+i*sp}
+    else if(bossI<0){const m=Math.max(1,n-1),sp=Math.min(14,Math.round(14/m));cx=(n===1?60:34)+i*Math.min(30,Math.round(96/m));bse=(n===1?138:126)+i*sp}   // a staggered line on the ground, back to front
     else if(ET[e.t].boss){cx=Math.max(72,Math.round(cvs.width/2)-(e.t==='llufu3'?18:/^llufu/.test(e.t)&&cvs.width>150?4:cvs.width>160?-2:12));bse=138}   // very wide bosses step in so their far edge stays on screen
     else if(tall){cx=Math.round(104+(oi+1)*(LW-184)/(others.length+1));bse=138}
     else if(fi>=0){cx=150+fi*Math.max(30,sz+8);bse=98}
-    else{const gm=grd.length,m=Math.max(1,gm-1),sp=Math.min(26,Math.round(46/m));cx=152+gi*12;bse=(gm===1?136:108)+gi*sp}
+    else{const gm=grd.length,m=Math.max(1,gm-1),sp=Math.min(14,Math.round(14/m));cx=148+gi*20;bse=(gm===1?136:126)+gi*sp}
     let y=bse-cvs.height+4+Math.round(Math.sin(frame/16+i));if(y<4)y=4+Math.round(Math.sin(frame/16+i));
     if(Tt.fly&&e.gr<=0)y-=(Tt.boss?10:26)+Math.round(Math.sin(frame/9+i)*3);
     if(B.intro>0)y+=Math.round(B.intro*1.5);
