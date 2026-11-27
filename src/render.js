@@ -365,7 +365,7 @@ function drawHUD(c){
   // compact overlay: newen meter and counters top-left; a thin heart strip tucked into the top-right corner.
   // Either panel fades when the player walks underneath it, so nothing on the map stays hidden.
   const mx=maxHP(),hearts=Math.min(40,Math.ceil(mx/HPQ)),hp=Math.max(0,S.hp),PER=14,rows=Math.ceil(hearts/PER),hw=Math.min(hearts,PER)*6+3;
-  const tw=5*12,pw=Math.max(hw,tw+4)+4,ph=rows*6+3+8,px=LW-pw-19,py=1,LX=19;   // clear of the ☰ and ⛶ buttons
+  const tw=5*12,pw=Math.max(hw,tw+4)+4,ph=rows*6+3+8,px=LW-pw-19,py=1,LX=3;   // clear of the ⛶ button (the ☰ now sits bottom-left)
   const pxs=P.fx*T-CAM.x+8,pys=P.fy*T-CAM.y+VY+8,under=(x,y,w,h)=>pxs>x-10&&pxs<x+w+10&&pys>y-6&&pys<y+h+16;
   const lw=M&&M.dungeon?118:108,lh=30,lfade=under(LX+2,1,lw,lh),rfade=under(px,py,pw,ph);
   const plate=(x,y,w,h)=>{c.fillStyle='rgba(12,10,30,.5)';c.fillRect(x+1,y,w-2,h);c.fillRect(x,y+1,w,h-2);
@@ -992,6 +992,7 @@ function loopBody(ts){
   let steps=0;
   while(_acc>=1000/60&&steps<4){_acc-=1000/60;steps++;
     frame++;
+    if(frame%6===0){const mb=$('mbtn');if(mb){const v=(mode==='map'&&!active)?'':'hidden';if(mb.style.visibility!==v)mb.style.visibility=v}}
     if(mode==='map'&&M)updateMap();
     else if(mode==='palin'&&PG)updatePalin();
   }
