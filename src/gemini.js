@@ -56,7 +56,7 @@ function npcFace(){for(const e of ents)if(e.amb&&e.wait>0&&Math.abs(e.x-P.x)+Mat
    Gemini-drawn heroes, people and wekufü: the main look of the game. The classic sprites stay untouched underneath
    and can be chosen in Settings (Gráficos: clásicos, beta), so switching is instant. With the new graphics the lof also comes
    alive: villagers stroll around their spots and the palin players run the length of the cancha. */
-const GEM_KEY='kewun_gfx';let GEM_ON=true,GEM_READY=false;/* the new graphics are the main version; the classic ones stay selectable in Settings */const GEMI={pc:{},npc:{},seat:{},en:{},mp:{},mm:{},ttl:{},ng:{},cut:{},cc:{},bust:{},stg:{},head:{},pump:{}};
+const GEM_KEY='kewun_gfx';let GEM_ON=true,GEM_READY=false;/* the new graphics are the main version; the classic ones stay selectable in Settings */const GEMI={pc:{},npc:{},seat:{},en:{},mp:{},mm:{},ttl:{},ng:{},cut:{},cc:{},bust:{},stg:{},head:{},pump:{},idl:{},rz:{},ch:{}};
 try{GEM_ON=localStorage.getItem(GEM_KEY)!=='classic'}catch(e){}
 function gemLoad(){if(GEM_READY||gemLoad.busy)return;gemLoad.busy=1;let n=0,done=0;
   const ld=(u,set)=>{n++;const i=new Image();i.onload=()=>{set(i);if(++done===n){GEM_READY=true;gemFlush()}};i.src=u};
@@ -68,6 +68,7 @@ function gemLoad(){if(GEM_READY||gemLoad.busy)return;gemLoad.busy=1;let n=0,done
   for(const k in GEMD.head)ld(GEMD.head[k],i=>GEMI.head[k]=i);
   for(const k in GEMD.bust)ld(GEMD.bust[k],i=>GEMI.bust[k]=i);
   for(const k in GEMD.cc){GEMI.cc[k]={};for(const d in GEMD.cc[k])ld(GEMD.cc[k][d],i=>GEMI.cc[k][d]=i)}
+  if(typeof GEMA!=='undefined')for(const [g,o] of [['idle','idl'],['raise','rz'],['cheer','ch']])for(const k in GEMA[g]){GEMI[o][k]=[];GEMA[g][k].forEach((u,j)=>ld(u,i=>GEMI[o][k][j]=i))}
   for(const k in GEMD.ng){GEMI.ng[k]={f:[],F:[]};GEMD.ng[k].f.forEach((u,j)=>ld(u,i=>GEMI.ng[k].f[j]=i));GEMD.ng[k].F.forEach((u,j)=>ld(u,i=>GEMI.ng[k].F[j]=i))}}
 function gemFlush(){for(const k in CCACHE)delete CCACHE[k];for(const k in ECACHE)delete ECACHE[k];if(typeof PORT!=='undefined')for(const k in PORT)delete PORT[k];if(typeof _yMir!=='undefined')_yMir={}}
 function gemSet(on){GEM_ON=!!on;try{localStorage.setItem(GEM_KEY,on?'new':'classic')}catch(e){}gemFlush();
@@ -92,6 +93,7 @@ enemyCanvas=function(t,size,fr){const im=GEM_ON&&GEM_READY&&GEMI.en[t];if(!im)re
   const big=(size===30||size===72||(size===34&&t==='yewen'))?GEMI.mp[t]:size===22?GEMI.mm[t]:null;   /* Yewen waiting in the cancha (drawn at 34) stands about five tiles tall */   // minibosses (drawn at 22) grow too, about half as much
   if(big){const key='GEMM'+t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];const m=big,[cv,c]=mk(m.width+4,m.height+3);
     c.imageSmoothingEnabled=false;c.drawImage(m,2,(fr?1:2));return ECACHE[key]=cv}
+  if(fr>=10){const fa=GEMI.idl[t]&&GEMI.idl[t][fr-10];if(!fa)fr=0;else{const key='GEMI'+t+'_'+fr;if(ECACHE[key])return ECACHE[key];const s=GEMD.sz[t]||{cw:im.width+6},w=fa.width,h=fa.height,cw=Math.max(s.cw,w+4),ch=h+6,[cv,c]=mk(cw,ch);c.imageSmoothingEnabled=false;c.drawImage(fa,Math.round((cw-w)/2),ch-h-3);return ECACHE[key]=cv}}
   const key='GEM'+t+size+'_'+fr;if(ECACHE[key])return ECACHE[key];const bs=(ET[t]&&ET[t].bs)||44,s=GEMD.sz[t]||{cw:im.width+6,ch:im.height+6};
   const big13=!(ET[t]&&ET[t].boss),sz2=size===16?26:size,sc=sz2<bs*.7?sz2/bs/(big13?1.3:1):1,   /* wekufü wandering the map (drawn at 16) stand about a tile and a half tall */
     w=Math.round(im.width*sc),h=Math.round(im.height*sc),cw=Math.max(Math.round(s.cw*sc),w+4),ch=h+3+Math.round(3*sc),[cv,c]=mk(cw,ch);c.imageSmoothingEnabled=false;   /* the canvas grows to fit art wider than the classic sprite, so nothing is cut off */
@@ -117,7 +119,8 @@ function gemCC(look,dir){const q=GEM_ON&&GEM_READY&&GEMI.cc[look];if(!q)return n
 const _gCC=cutChar,_gLB=lanBig,LOFLOOK={lof_kuku:'kuku',lof_lonko:'lonko',lof_weaver:'weaver',lof_cook:'cook',lof_wentru:'fisher',lof_ulcha:'fisherw'};
 cutChar=function(look,dir,fr){return gemCC(look,dir)||_gCC.apply(this,arguments)};
 /* the lof cheer: the new villagers, no raised arms; they bounce on their toes instead, each to their own beat */
-lanBig=function(lk,d,fr){const base=gemCC(LOFLOOK[lk]||lk,d);if(!base)return _gLB.apply(this,arguments);if(!fr)return base;
+lanBig=function(lk,d,fr){const look=LOFLOOK[lk]||lk,base=gemCC(look,d);if(!base)return _gLB.apply(this,arguments);if(!fr)return base;
+  const chf=GEMI.ch[look]&&GEMI.ch[look][fr===1?1:2];if(chf){const key='GEMCH'+look+d+fr;if(CCACHE[key])return CCACHE[key];return CCACHE[key]=gemCv(chf,d==='right',chf.width,chf.height)}
   const up=fr===1?3:1,key='GEMHOP'+lk+d+fr;if(CCACHE[key])return CCACHE[key];const [cv,c]=mk(base.width,base.height+up);c.drawImage(base,0,0);return CCACHE[key]=cv};
 function gemHead(){const h=GEM_ON&&GEM_READY&&GEMI.head[heroLook()];return h||null}
 /* the Santiago bosses' defeat animations break apart the new art, with their parts measured on it */

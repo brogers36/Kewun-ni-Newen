@@ -731,7 +731,7 @@ function renderBattle(){
     vg.fill(c,0,0,LW,LH)}
   if(B.intro>0)B.intro--;
   const al=B.en.filter(e=>!e.dead||e.fadeT>0),n=al.length,base=138;
-  al.forEach((e,i)=>{const Tt=ET[e.t],sz=Tt.bs,cvs=enemyCanvas(e.t,sz,(GEM_ON&&!Tt.fly&&!Tt.boss)?0:Math.floor(frame/12)%2);   // the new art's second frame only lifts the sprite a pixel: walkers keep their feet down
+  al.forEach((e,i)=>{const Tt=ET[e.t],sz=Tt.bs,cvs=enemyCanvas(e.t,sz,(GEM_ON&&GEMI.idl&&GEMI.idl[e.t])?10+idleFr(i):(GEM_ON&&!Tt.fly&&!Tt.boss)?0:Math.floor(frame/12)%2);   // the new art's second frame only lifts the sprite a pixel: walkers keep their feet down
     const bossI=al.findIndex(x=>ET[x.t].boss),others=al.filter(x=>!ET[x.t].boss),oi=others.indexOf(e);
     // enemies line up in a diagonal column on the left, all facing the hero
     let cx,bse;
@@ -777,11 +777,13 @@ function renderBattle(){
     e._cx=cx;e._y=y;e._bse=bse;const inDef=B.defA&&B.defA.e===e;
     const lfx=B.lanFx&&B.lanFx.e===e?B.lanFx:null;
     if(lfx&&!inDef)drawLanPortal(c,lfx,cx,y,cvs);
-    if(lfx&&!inDef&&e.t==='ngoyman4'){c.save();c.scale(-1,1);drawArmsUp(c,cvs,-(cx+Math.ceil(cvs.width/2)),y+ly,lanRaise(lfx));c.restore()}
+    const rzf=lfx&&GEM_ON&&GEMI.rz&&GEMI.rz[e.t];
+    if(lfx&&!inDef&&rzf&&rzf[2]){const r=lanRaise(lfx),im=rzf[r<.15?0:r<.6?1:2],bot=y+ly+cvs.height-3,k=Math.min(1,(bot-2)/im.height),w=Math.round(im.width*k),h=Math.round(im.height*k);c.save();c.scale(-1,1);c.imageSmoothingEnabled=false;c.drawImage(im,-(cx+Math.ceil(w/2)),bot-h,w,h);c.restore()}   /* a giant whose raised arms would leave the screen is drawn a little smaller for the moment */   // Gemini's frames: the arms really rise
+    else if(lfx&&!inDef&&e.t==='ngoyman4'){c.save();c.scale(-1,1);drawArmsUp(c,cvs,-(cx+Math.ceil(cvs.width/2)),y+ly,lanRaise(lfx));c.restore()}
     else if(!inDef){c.save();c.scale(-1,1);
       if(gnd&&!e.dead){   // alive but grounded: the upper body settles a pixel and rises again (breathing) in whole pixels, so the art never warps; the feet never move
         const W=cvs.width,H=cvs.height,sR=Math.round(H*.55),x0=-(cx+adx)-Math.ceil(W/2),yt=y+ly,
-          bo=e.crouchK>0?Math.round(e.crouchK*4):(Math.sin(frame/32+i*1.7)>.2?1:0);
+          bo=e.crouchK>0?Math.round(e.crouchK*4):(GEMI.idl&&GEMI.idl[e.t])?0:(Math.sin(frame/32+i*1.7)>.2?1:0);
         c.drawImage(cvs,0,sR,W,H-sR,x0,yt+sR,W,H-sR);c.drawImage(cvs,0,0,W,sR,x0,yt+bo,W,sR)}
       else c.drawImage(cvs,-(cx+Math.ceil(cvs.width/2)),y+ly);c.restore()}c.globalAlpha=1;
     if(e.sl>0){c.fillStyle='rgba(40,40,120,.25)';c.fillRect(cx-sz/2,y,sz,cvs.height)}
@@ -1216,3 +1218,6 @@ function drawArmsUp(c,cvs,x,y,a){   // the cloak-arms swing up around the should
   const ang=a*1.75;c.imageSmoothingEnabled=false;
   for(const [img,px,sgn] of [[A.L,.31,-1],[A.R,.69,1]]){c.save();c.translate(x+W*px,y+H*.38);c.rotate(sgn*-ang);c.drawImage(img,-W*px,-H*.38);c.restore()}
   c.drawImage(A.core,x,y)}
+
+/* idle loop for enemies with Gemini's idle frames: rest, breathe in, rest, the small movement (blink, tail, wings), each enemy on its own beat */
+function idleFr(i){const p=(frame+i*53)%150;return p<50?0:p<84?1:p<128?0:2}
