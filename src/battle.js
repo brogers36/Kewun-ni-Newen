@@ -159,7 +159,23 @@ function trafoFx(e){const p=epos(e),brk=!!e.trB,cv=enemyCanvas(e.t,ET[e.t].bs,0)
   B.flash=brk?16:10;B.shake=brk?20:10;e.hit=brk?26:16;sfx('shatter');if(brk)setTimeout(()=>sfx('hit'),90);
   const n=brk?46:18;for(let i=0;i<n;i++){const a=Math.random()*6.28,v=(brk?1.6:1)+Math.random()*(brk?3.4:2);
     B.parts.push({x:p.x+(Math.random()-.5)*w*.4,y:p.y+(Math.random()-.5)*h*.4,vx:Math.cos(a)*v,vy:Math.sin(a)*v-1.8,t:38+rnd(22),col:['#5a5560','#7a7480','#3e3a44','#a29aa8','#ff9a3c','#ffd27a'][i%6],big:i%3===0})}
-  B.pops.push({x:p.x,y:p.y-h*.5-6,txt:'TRAFO!',col:'#ffcf6a',t:50,sz:brk?38:28})}
+  B.pops.push({x:p.x,y:p.y-h*.5-6,txt:'TRAFO!',col:'#ffcf6a',t:50,sz:brk?40:30,metal:1})}
+/* heavy-metal lettering: slanted, chrome from bright to a dark horizon line and back, a hard black outline with sharp corners,
+   a red-orange fire glow behind it, and a glint that sweeps across the letters */
+function metalTxt(s,x,y,size,t){const c=ctx,px=size*2,X=x*2,Y=Math.max(y*2,px*.9+8),al=Math.min(1,t/10);c.save();c.globalAlpha=al;
+  c.translate(X,Y);c.transform(1,0,-.22,1,0,0);   // slant forward
+  c.font='italic 900 '+px+'px Impact,"Arial Black","Franklin Gothic Heavy",sans-serif';c.textAlign='center';c.textBaseline='alphabetic';
+  try{c.letterSpacing=Math.round(px*.06)+'px'}catch(e){}
+  const top=-px*.78,bot=px*.05;
+  c.lineJoin='miter';c.miterLimit=2;
+  c.shadowColor='rgba(255,70,20,.95)';c.shadowBlur=px*.45;c.lineWidth=px*.2;c.strokeStyle='#1a0604';c.strokeText(s,0,0);   // fire glow + thick outline
+  c.shadowBlur=0;c.lineWidth=px*.12;c.strokeStyle='#000';c.strokeText(s,0,0);
+  const g=c.createLinearGradient(0,top,0,bot);g.addColorStop(0,'#ffffff');g.addColorStop(.28,'#d6dae2');g.addColorStop(.48,'#7c828e');g.addColorStop(.5,'#2a2d34');
+  g.addColorStop(.62,'#8d939f');g.addColorStop(.85,'#e9ecf1');g.addColorStop(1,'#ffffff');c.fillStyle=g;c.fillText(s,0,0);
+  c.lineWidth=Math.max(1,px*.025);c.strokeStyle='rgba(255,255,255,.7)';c.strokeText(s,0,0);   // bright bevel edge
+  const w=c.measureText(s).width,sx=-w/2-px+((50-t)/50)*(w+px*2);   // glint sweeping across
+  const gl=c.createLinearGradient(sx-px*.4,0,sx+px*.4,0);gl.addColorStop(0,'rgba(255,255,255,0)');gl.addColorStop(.5,'rgba(255,255,255,.9)');gl.addColorStop(1,'rgba(255,255,255,0)');
+  c.fillStyle=gl;c.fillText(s,0,0);c.restore()}
 function drawTrafoFx(c){if(!B.trf||!B.trf.length)return;
   for(const f of B.trf){f.t++;const t=f.t,R0=Math.max(f.w,f.h);
     if(t<26){const q=t/26;c.save();c.globalCompositeOperation='lighter';   // the shockwave ring
