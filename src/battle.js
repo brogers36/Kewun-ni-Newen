@@ -150,6 +150,25 @@ function doSpecial(k,tgt){
 }
 function epos(e){return{x:e.px||128,y:e.py||100}}
 function pop(x,y,txt,col){B.pops.push({x,y,txt,col,t:50})}
+/* trafo- ("break"): a shockwave, glowing cracks running across the wekufü, its stone crust bursting into shards and dust,
+   and a big «TRAFO!»; bigger still when it really had a crust to break */
+function trafoFx(e){const p=epos(e),brk=!!e.trB,cv=enemyCanvas(e.t,ET[e.t].bs,0),w=cv.width,h=cv.height;e.trB=0;
+  B.trf=B.trf||[];const cr=[];for(let k=0;k<(brk?9:5);k++){const a=k/(brk?9:5)*6.28+Math.random()*.5,pts=[[0,0]];let x=0,y=0,len=(brk?.55:.35)*Math.max(w,h);
+    for(let j=1;j<=5;j++){const r=len*j/5;x=Math.cos(a)*r+(Math.random()-.5)*6;y=Math.sin(a)*r*.8+(Math.random()-.5)*6;pts.push([x,y])}cr.push(pts)}
+  B.trf.push({x:p.x,y:p.y,t:0,brk,w,h,cr});
+  B.flash=brk?16:10;B.shake=brk?20:10;e.hit=brk?26:16;sfx('shatter');if(brk)setTimeout(()=>sfx('hit'),90);
+  const n=brk?46:18;for(let i=0;i<n;i++){const a=Math.random()*6.28,v=(brk?1.6:1)+Math.random()*(brk?3.4:2);
+    B.parts.push({x:p.x+(Math.random()-.5)*w*.4,y:p.y+(Math.random()-.5)*h*.4,vx:Math.cos(a)*v,vy:Math.sin(a)*v-1.8,t:38+rnd(22),col:['#5a5560','#7a7480','#3e3a44','#a29aa8','#ff9a3c','#ffd27a'][i%6],big:i%3===0})}
+  B.pops.push({x:p.x,y:p.y-h*.5-6,txt:'TRAFO!',col:'#ffcf6a',t:50,sz:brk?38:28})}
+function drawTrafoFx(c){if(!B.trf||!B.trf.length)return;
+  for(const f of B.trf){f.t++;const t=f.t,R0=Math.max(f.w,f.h);
+    if(t<26){const q=t/26;c.save();c.globalCompositeOperation='lighter';   // the shockwave ring
+      c.strokeStyle='rgba(255,214,140,'+(1-q).toFixed(2)+')';c.lineWidth=(f.brk?5:3)*(1-q)+1;c.beginPath();c.ellipse(f.x,f.y,R0*(.2+q*(f.brk?1.1:.7)),R0*(.14+q*(f.brk?.6:.4)),0,0,6.28);c.stroke();
+      const g=c.createRadialGradient(f.x,f.y,1,f.x,f.y,R0*.7);g.addColorStop(0,'rgba(255,240,200,'+(.7*(1-q)).toFixed(2)+')');g.addColorStop(1,'rgba(255,150,60,0)');c.fillStyle=g;c.fillRect(f.x-R0,f.y-R0,R0*2,R0*2);c.restore()}
+    if(t<56){const grow=Math.min(1,t/10),al=t<34?1:(56-t)/22;c.save();c.globalCompositeOperation='lighter';   // glowing cracks spreading across the body
+      for(const pts of f.cr){const m=Math.max(1,Math.round(grow*(pts.length-1)));c.beginPath();c.moveTo(f.x+pts[0][0],f.y+pts[0][1]);for(let j=1;j<=m;j++)c.lineTo(f.x+pts[j][0],f.y+pts[j][1]);
+        c.strokeStyle='rgba(255,120,40,'+(.85*al).toFixed(2)+')';c.lineWidth=3;c.stroke();c.strokeStyle='rgba(255,246,210,'+al.toFixed(2)+')';c.lineWidth=1;c.stroke()}c.restore()}}
+  B.trf=B.trf.filter(f=>f.t<56)}
 function sealGloss(code,lg){
   const kil=code.endsWith('kil'),r=kil?code.slice(0,-3):code,vg=VG[r],g2=(kil?(lg==='en'?vg.nen:vg.nes):(lg==='en'?vg.en:vg.es))[0];
   return lg==='en'?'The next seal whispers: «'+g2+'»':'El siguiente sello susurra: «'+g2+'»';
@@ -218,7 +237,7 @@ function resolve(r,kil,tg,ei){
   else if(r==='ñam'){fx.push('Les dijiste que no se perdieran. Ahí siguen.');fxe.push('You told them not to get lost. There they stay.')}
   else if(r==='tripa'&&!kil){for(const e of targets){if(e.hidden){e.hidden=0;e.hideT=3;fx.push(e.label+' sale de la niebla: ¡ahora sí lo ves!');fxe.push(e.label+' comes out of the fog: now you can see it!')}else{fx.push(e.label+' ya está a la vista.');fxe.push(e.label+' is already in sight.')}}}
   else if(r==='tripa'){fx.push('Les dijiste que no salieran. Nada cambia.');fxe.push('You told them not to come out. Nothing changes.')}
-  else if(r==='trafo'&&!kil){for(const e of targets){if(e.armor){e.armor=0;e.armorT=ET[e.t].boss?4:0;fx.push(e.label+': ¡se le quiebra la coraza de piedra!');fxe.push(e.label+': its stone crust cracks apart!')}else{fx.push(e.label+' no tiene coraza que quebrar.');fxe.push(e.label+' has no crust to break.')}}}
+  else if(r==='trafo'&&!kil){for(const e of targets){if(e.armor){e.armor=0;e.armorT=ET[e.t].boss?4:0;e.trB=1;fx.push(e.label+': ¡se le quiebra la coraza de piedra!');fxe.push(e.label+': its stone crust cracks apart!')}else{fx.push(e.label+' no tiene coraza que quebrar.');fxe.push(e.label+' has no crust to break.')}}}
   else if(r==='trafo'){fx.push('Les dijiste que no se quebraran. Nada cambia.');fxe.push('You told them not to break. Nothing changes.')}
   else if(r==='wütre'&&!kil){for(const e of targets){const T=ET[e.t];
       if(T.snow){e.hp=Math.min(e.max,e.hp+4);fx.push(e.label+' es de nieve: ¡le encanta el frío! (+4)');fxe.push(e.label+' is made of snow: it loves the cold! (+4)')}
@@ -261,7 +280,7 @@ function resolve(r,kil,tg,ei){
   else if(r==='wüñotreka'){fx.push('Les dijiste que no retrocedieran. Se quedan firmes.');fxe.push('You told them not to go back. They hold their ground.')}
   if(burnT){S.hp=Math.max(1,S.hp-burnT);fx.push('¡Te quemas con su fuego! (−'+burnT+')');fxe.push('You get burned by its fire! (−'+burnT+')')}
   const eff=L('',pr.m+(S.sp>=2?'  ✦'+S.sp:''),fx.join(' '),fxe.join(' '));
-  eff.fx=()=>{for(const e of targets){const p=epos(e);spark(p.x,p.y,r==='amutu'?'#fff6a0':r==='umawtu'?'#a0c8ff':r==='nagtu'?'#ffe080':'#ffffff',10);
+  eff.fx=()=>{if(r==='trafo')for(const e of targets)trafoFx(e);for(const e of targets){const p=epos(e);spark(p.x,p.y,r==='amutu'?'#fff6a0':r==='umawtu'?'#a0c8ff':r==='nagtu'?'#ffe080':'#ffffff',10);
       if(e.pend){e.hit=12;pop(p.x,p.y-10,'-'+e.pend,'#ffffff');sfx('hit');if(e.hp<=0&&!quizPend(e)){e.dead=true;e.fadeT=20}e.pend=0}
       else if(e.miss){pop(p.x,p.y-10,'MISS','#a0c0ff');e.miss=0}
       else if(r==='umawtu'&&e.sl){pop(p.x,p.y-10,'zZ','#c0e0ff');sfx('sleep')}

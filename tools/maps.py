@@ -1367,6 +1367,24 @@ for _mk,((_x0,_x1,_y0,_y1),_ch,_fl) in SECRING.items():
     for (_x,_y) in _pick:_rows[_y][_x]=_ch
     M[_mk]=[''.join(r) for r in _rows]
     print('SECRING',_mk,_pick)
+# ---- no shortcuts: every way to the stairs passes the floor's miniboss, and the floor's puzzle cannot be skipped ----
+# (the miniboss itself stands on the one tile in front of the stairs; see the mini x,y in maps.js)
+def put(mid,pts):
+    g=[list(r) for r in M[mid]]
+    for (x,y,ch) in pts:g[y][x]=ch
+    M[mid]=[''.join(r) for r in g]
+put('nd1',[(6,9,'%'),(13,1,'_')])                       # the key + locked door route around the stone puzzle is closed
+put('nd2',[(2,7,'%')])                                   # the stairs open only from the corridor, where the miniboss stands
+put('nd3',[(1,7,'%'),(2,6,'%'),(3,6,'%')])               # one stone door left, reached only past the miniboss
+put('wd3',[(1,7,'%'),(2,6,'%'),(3,6,'%')])
+put('pd1',[(22,6,'%')])                                  # the konew gate no longer leads around the miniboss
+put('pd2',[(22,8,'%'),(22,10,'%')])
+put('pd3',[(22,7,'%'),(21,6,'%'),(21,8,'%'),(20,6,'%'),(20,8,'%')])
+put('wd1',[(13,5,'_'),(4,7,'k'),(20,9,'%'),(21,10,'%')])  # the key now lies behind the brazier door
+put('wd2',[(14,8,'%'),(13,7,'%')])
+put('ed1',[(2,10,'%'),(3,10,'%'),(4,10,'E'),(4,11,'S')]) # the stairs move behind the stone door, past the miniboss
+put('ed2',[(22,6,'%')])
+put('ed3',[(19,6,'%'),(18,7,'%'),(20,7,'%'),(20,8,'%')])
 open(OUT,'w',encoding='utf-8').write('const MAPROWS='+json.dumps(M,ensure_ascii=False)+';\n')
 for k in ['nd1','nd2','nd3']:
     print(k);[print(i,r) for i,r in enumerate(N[k])]

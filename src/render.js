@@ -844,7 +844,8 @@ function renderBattle(){
   }
   if(!(PBGI[B.area.replace('fog:','')]&&paintedBG(B.area.replace('fog:','')))){if(!FG[B.area])FG[B.area]=buildFG(B.area);c.drawImage(FG[B.area],0,0)}
   c.restore();
-  for(const p of B.parts){p.t--;p.x+=p.vx;p.y+=p.vy;p.vy+=.06;R(c,p.x,p.y,p.t>15?2:1,p.t>15?2:1,p.col)}B.parts=B.parts.filter(p=>p.t>0);
+  if(typeof drawTrafoFx==='function')drawTrafoFx(c);
+  for(const p of B.parts){p.t--;p.x+=p.vx;p.y+=p.vy;p.vy+=.06;const z=p.big?(p.t>20?4:p.t>10?3:2):(p.t>15?2:1);R(c,p.x,p.y,z,z,p.col)}B.parts=B.parts.filter(p=>p.t>0);
   if(!B.en.some(e=>/^ngoyman/.test(e.t)&&!e.dead)&&!/^(waria|feria|blocks)/.test(B.area))dayTint(c);   // the city backdrops already carry their hour
   else if(/@night$/.test(B.area)){c.fillStyle='rgba(14,18,48,.16)';c.fillRect(0,0,LW,LH)}   // ...but the fighters still stand in the dark
   if(B.wipe>0&&B.snap){B.wipe--;
@@ -870,7 +871,7 @@ function renderBattle(){
   OV.push(()=>{txt(S.name,px+26,py+10,'#ffffff',11);txt(Math.max(0,S.hp)+'/'+mx,px+pw-13,py+10,'#c8d0ff',10,'right')});
   if(S.hp/mx<=.25&&frame%30<15){R(c,px,py,pw,1,'#ff4040');R(c,px,py+ph-1,pw,1,'#ff4040')}
   }
-  B.pops=B.pops.filter(p=>p.t>0);for(const p of B.pops){p.t--;const pp=p;OV.push(()=>txt(pp.txt,pp.x,pp.y-(50-pp.t)*.45,pp.col,20,'center'))}
+  B.pops=B.pops.filter(p=>p.t>0);for(const p of B.pops){p.t--;const pp=p;OV.push(()=>txt(pp.txt,pp.x,pp.y-(50-pp.t)*.45,pp.col,pp.sz?Math.round(pp.sz*(pp.t>44?1+(pp.t-44)*.08:1)):20,'center'))}
   if(B.flash>0){c.fillStyle='rgba(255,255,255,'+(B.flash/16)+')';c.fillRect(0,0,LW,LH);B.flash--}
   if(B.dust&&B.dust.length){for(const d of B.dust){d.t++;d.x+=d.vx;d.y-=.18;const a=Math.max(0,1-d.t/d.life);if(a<=0)continue;
       const r=d.r+d.t*.22;ell(c,d.x,d.y,r,r*.6,'rgba(214,198,168,'+(a*.55).toFixed(2)+')');ell(c,d.x-1,d.y-1,r*.6,r*.35,'rgba(240,228,204,'+(a*.45).toFixed(2)+')')}
