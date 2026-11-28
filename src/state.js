@@ -140,7 +140,7 @@ const ITEMS={
   lawen:{m:'lawen',es:'remedio: quita la maldición, +4 newen',en:'medicine: lifts the curse, +4 newen',p:20},
   mate:{m:'mate',es:'mate caliente: recuperas la mitad de tu newen',en:'hot mate: restores half your newen',p:25}};
 const GEAR={
-  trutruka:{m:'trutruka',es:'corneta de coligüe: su sonido aturde a todos los wekufü (1 vez por pelea)',en:'colihue horn: its blast stuns all the wekufü (once per battle)',p:0,hide:1},
+  trutruka:{m:'trutruka',es:'trompeta de coligüe: su sonido aturde a todos los wekufü (1 vez por pelea)',en:'colihue horn: its blast stuns all the wekufü (once per battle)',p:0,hide:1},
   makun:{m:'makuñ',es:'poncho: defensa +2',en:'poncho: defense +2',p:30},
   trariwe:{m:'trariwe',es:'faja tejida: +1 piwke máximo',en:'woven sash: +1 max heart',p:40},
   futrawino:{m:'fütra wiño',es:'wiño grande: fuerza +3',en:'big palin stick: strength +3',p:50},

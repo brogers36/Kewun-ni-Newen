@@ -139,7 +139,7 @@ function mapaLines(){
 function vocabLines(){
   const F=S.flags,ls=[];
   const V=[[()=>F.lawW,'Lawentuwün','palabra de sanación: te cura en batalla','healing word: heals you in battle'],
-    [()=>S.gear.trutruka,'trutruka','corneta larga de colihue con cuerno','long colihue horn'],
+    [()=>S.gear.trutruka,'trutruka','trompeta larga de colihue con cuerno','long colihue horn'],
     [()=>S.gear.trarilongko,'trarilongko','cinta tejida que se amarra en la frente','woven band tied around the forehead'],
     [()=>F.mq_done_laf||F.mq_laf,'foye · tapül','canelo, árbol sagrado de la machi · hoja','canelo, the machi\'s sacred tree · leaf'],
     [()=>F.mq_done_nag||F.mq_nag,'metawe · menoko','cántaro de greda · ojo de agua','clay jug · spring pool'],

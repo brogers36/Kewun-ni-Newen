@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='8c56398-202611271127';
+window.KEWUN_BUILD='bc41b7e-202611272117';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -1111,7 +1111,7 @@ const ITEMS={
   lawen:{m:'lawen',es:'remedio: quita la maldición, +4 newen',en:'medicine: lifts the curse, +4 newen',p:20},
   mate:{m:'mate',es:'mate caliente: recuperas la mitad de tu newen',en:'hot mate: restores half your newen',p:25}};
 const GEAR={
-  trutruka:{m:'trutruka',es:'corneta de coligüe: su sonido aturde a todos los wekufü (1 vez por pelea)',en:'colihue horn: its blast stuns all the wekufü (once per battle)',p:0,hide:1},
+  trutruka:{m:'trutruka',es:'trompeta de coligüe: su sonido aturde a todos los wekufü (1 vez por pelea)',en:'colihue horn: its blast stuns all the wekufü (once per battle)',p:0,hide:1},
   makun:{m:'makuñ',es:'poncho: defensa +2',en:'poncho: defense +2',p:30},
   trariwe:{m:'trariwe',es:'faja tejida: +1 piwke máximo',en:'woven sash: +1 max heart',p:40},
   futrawino:{m:'fütra wiño',es:'wiño grande: fuerza +3',en:'big palin stick: strength +3',p:50},
@@ -3931,7 +3931,7 @@ function trutfeTalk(){
   S.flags.n_trut_q=1;persist();
   say([L('Trutrukatufe','Mari mari... Iñche trutrukatufe, welu...','Hola... Yo soy trutruquero, pero...','Hello... I am a trutruka player, but...'),
     L('Trutrukatufe','Ñami ñi trutruka!','¡Se me perdió la trutruka!','I lost my trutruka!'),
-    N('La trutruka es una corneta larga de coligüe con un cuerno en la punta. «El viento la botó entre los juncos, al lado del agua del medio. ¿Me la buscas?»','The trutruka is a long colihue horn with a cow horn at the tip. "The wind knocked it into the reeds, beside the middle pool. Will you look for it?"')]);
+    N('La trutruka es una trompeta larga de coligüe con un cuerno en la punta. «El viento la botó entre los juncos, al lado del agua del medio. ¿Me la buscas?»','The trutruka is a long colihue horn with a cow horn at the tip. "The wind knocked it into the reeds, beside the middle pool. Will you look for it?"')]);
 }
 function kurantuTalk(){
   const en=S.gloss==='en';
@@ -4116,7 +4116,7 @@ function digFind(dk,dv){
     return say([N('Escarbas en la arena del fondo... y una luz blanca y redonda te mira desde abajo: ¡la lüq kura, la perla del pequeño chumpall!','You dig in the sand of the deep... and a round white light looks up at you: the lüq kura, the little chumpall\'s pearl!'),
       L('','Lüq kura!','La perla canta bajito en tu mano. Llévasela a su dueño, en los jardines.','The pearl sings softly in your hand. Take it back to its owner, in the gardens.')]);}
   if(dv&&dv.what==='trutruka'){S.gear.trutruka=1;persist();sfx('lvl');
-    return say([N('Entre los juncos mojados aparece una larga corneta de coligüe con un cuerno en la punta...','Among the wet reeds appears a long colihue horn with a cow horn at its tip...'),
+    return say([N('Entre los juncos mojados aparece una larga trompeta de coligüe con un cuerno en la punta...','Among the wet reeds appears a long colihue horn with a cow horn at its tip...'),
       L('','Trutruka!','¡Encontraste la trutruka! En las peleas podrás tocarla: su sonido aturde a todos los wekufü (una vez por pelea). Cuéntale al trutrukatufe.','You found the trutruka! In battle you can blow it: its blast stuns all the wekufü (once per fight). Tell the trutrukatufe.')]);}
   if(dv&&dv.what==='foye'){S.flags.mqd_laf=1;persist();sfx('lvl');
     return say([N('Un árbol de hojas verdes claras y corteza clara. Al quebrar una hoja, el aire se llena de un olor picante y limpio: es el foye. Pides permiso, como te enseñaron, y sacas unas pocas hojas.','A tree with light green leaves and pale bark. When you snap a leaf, the air fills with a clean, peppery scent: it is the foye. You ask its leave, as you were taught, and take a few leaves.'),
@@ -5310,7 +5310,7 @@ function mapaLines(){
 function vocabLines(){
   const F=S.flags,ls=[];
   const V=[[()=>F.lawW,'Lawentuwün','palabra de sanación: te cura en batalla','healing word: heals you in battle'],
-    [()=>S.gear.trutruka,'trutruka','corneta larga de colihue con cuerno','long colihue horn'],
+    [()=>S.gear.trutruka,'trutruka','trompeta larga de colihue con cuerno','long colihue horn'],
     [()=>S.gear.trarilongko,'trarilongko','cinta tejida que se amarra en la frente','woven band tied around the forehead'],
     [()=>F.mq_done_laf||F.mq_laf,'foye · tapül','canelo, árbol sagrado de la machi · hoja','canelo, the machi\'s sacred tree · leaf'],
     [()=>F.mq_done_nag||F.mq_nag,'metawe · menoko','cántaro de greda · ojo de agua','clay jug · spring pool'],

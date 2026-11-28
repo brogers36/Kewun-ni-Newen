@@ -692,7 +692,7 @@ function trutfeTalk(){
   S.flags.n_trut_q=1;persist();
   say([L('Trutrukatufe','Mari mari... Iñche trutrukatufe, welu...','Hola... Yo soy trutruquero, pero...','Hello... I am a trutruka player, but...'),
     L('Trutrukatufe','Ñami ñi trutruka!','¡Se me perdió la trutruka!','I lost my trutruka!'),
-    N('La trutruka es una corneta larga de coligüe con un cuerno en la punta. «El viento la botó entre los juncos, al lado del agua del medio. ¿Me la buscas?»','The trutruka is a long colihue horn with a cow horn at the tip. "The wind knocked it into the reeds, beside the middle pool. Will you look for it?"')]);
+    N('La trutruka es una trompeta larga de coligüe con un cuerno en la punta. «El viento la botó entre los juncos, al lado del agua del medio. ¿Me la buscas?»','The trutruka is a long colihue horn with a cow horn at the tip. "The wind knocked it into the reeds, beside the middle pool. Will you look for it?"')]);
 }
 function kurantuTalk(){
   const en=S.gloss==='en';
@@ -877,7 +877,7 @@ function digFind(dk,dv){
     return say([N('Escarbas en la arena del fondo... y una luz blanca y redonda te mira desde abajo: ¡la lüq kura, la perla del pequeño chumpall!','You dig in the sand of the deep... and a round white light looks up at you: the lüq kura, the little chumpall\'s pearl!'),
       L('','Lüq kura!','La perla canta bajito en tu mano. Llévasela a su dueño, en los jardines.','The pearl sings softly in your hand. Take it back to its owner, in the gardens.')]);}
   if(dv&&dv.what==='trutruka'){S.gear.trutruka=1;persist();sfx('lvl');
-    return say([N('Entre los juncos mojados aparece una larga corneta de coligüe con un cuerno en la punta...','Among the wet reeds appears a long colihue horn with a cow horn at its tip...'),
+    return say([N('Entre los juncos mojados aparece una larga trompeta de coligüe con un cuerno en la punta...','Among the wet reeds appears a long colihue horn with a cow horn at its tip...'),
       L('','Trutruka!','¡Encontraste la trutruka! En las peleas podrás tocarla: su sonido aturde a todos los wekufü (una vez por pelea). Cuéntale al trutrukatufe.','You found the trutruka! In battle you can blow it: its blast stuns all the wekufü (once per fight). Tell the trutrukatufe.')]);}
   if(dv&&dv.what==='foye'){S.flags.mqd_laf=1;persist();sfx('lvl');
     return say([N('Un árbol de hojas verdes claras y corteza clara. Al quebrar una hoja, el aire se llena de un olor picante y limpio: es el foye. Pides permiso, como te enseñaron, y sacas unas pocas hojas.','A tree with light green leaves and pale bark. When you snap a leaf, the air fills with a clean, peppery scent: it is the foye. You ask its leave, as you were taught, and take a few leaves.'),
