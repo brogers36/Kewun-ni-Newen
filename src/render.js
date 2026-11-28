@@ -187,6 +187,8 @@ function renderMap(){
       else if(e.look==='rewe'){ell(c,sx+8,sy+14,6,2,'rgba(0,0,0,.3)');const rc=reweCanvas();c.drawImage(rc,sx-1,sy+16-rc.height)}
       else if(e.look==='llawfen'||e.look==='llawcrack')drawLlawMap(c,e,sx,sy);
       else if(e.obj)drawObj(c,e.obj,sx,sy,e);
+      else if(e.look==='dog'&&typeof dogGem==='function'&&dogGem(e)){const g=dogGem(e),w=g.im.naturalWidth,h=g.im.naturalHeight,x=Math.round(sx+8-w/2),y=sy+15-h;ell(c,sx+8,sy+14,w*.42,2.5,'rgba(0,0,0,.3)');c.imageSmoothingEnabled=false;
+        if(g.flip){c.save();c.scale(-1,1);c.drawImage(g.im,-x-w,y);c.restore()}else c.drawImage(g.im,x,y)}
       else if(e.look==='dog'){ell(c,sx+8,sy+14,11,3,'rgba(0,0,0,.3)');c.imageSmoothingEnabled=false;c.drawImage(dogSprite(e.mv?Math.floor(frame/6)%2:0,e.dir),sx-8,sy-6,32,20)}   // drawn at double size, about half as tall as a person
       else{let fr=e.mv?Math.floor(frame/7)%4:0;if(e.act==='weave'||e.act==='teach')fr=Math.floor(frame/24)%2?1:0;
         drawChar(c,e.look,sx,sy,e.dir||'down',fr,e.seated,e.tn,e.ey2,e.hr2);
