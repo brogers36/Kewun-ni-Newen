@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)reg.update().catch(()=>{})})}).catch(()=>{})})}
-window.KEWUN_BUILD='8df9f60-202611272117';
+window.KEWUN_BUILD='48f476a-202611272120';
 (function(){
   let shown=0;
   const go=v=>{try{sessionStorage.setItem('kv:'+v,'1')}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(v))};
@@ -7204,12 +7204,12 @@ function sebaTalk(){const en=S.gloss==='en';
     return say([N('El perro corre derecho a Seba y casi lo bota de un salto.','The dog runs straight to Seba and nearly knocks him over with a jump.'),
       L('Seba','Chaltu may, '+addr(false)+'!','«¡Kiltro! ¿Viste? Mi laku tenía razón: entiende mapudungun mejor que yo. Toma, es el lawen que me dio mi laku para el camino; a ti te va a servir más.»','"Kiltro! See? My laku was right: he understands Mapudungun better than I do. Here, it\'s the lawen my laku gave me for the road; you\'ll need it more than me."'),
       L('','+'+numW(40)+' ngülliw · lawen','Ganas '+numP(40)+' ngülliw y un lawen.','You get '+numP(40)+' ngülliw and a lawen.')])}
-  if(S.flags.seba_q)return say([L('Seba','','«Se fue hacia los campos de los animales, al sur del lof. Llámalo en mapudungun: en castellano no me hace caso.»','"He ran off toward the animal fields, south of the lof. Call him in Mapudungun: in Spanish he ignores me."')]);
+  if(S.flags.seba_q)return say([L('Seba','','«Se fue hacia los campos de los animales, al este del lof. Llámalo en mapudungun: en castellano no me hace caso.»','"He ran off toward the animal fields, east of the lof. Call him in Mapudungun: in Spanish he ignores me."')]);
   say([L('Seba','Mari mari!','«Soy Seba, de Temuko. Vine a ayudar a mi laku en el campo y me traje a mi perro, el Kiltro.»','"I\'m Seba, from Temuko. I came to help my laku on the farm and brought my dog, Kiltro."'),
     N('«Se me arrancó hacia los campos de los animales, y no viene cuando lo llamo. Mi laku dice que el Kiltro entiende mapudungun mejor que yo... y que por eso no me hace caso.»','"He ran off toward the animal fields, and he won\'t come when I call him. My laku says Kiltro understands Mapudungun better than I do... and that\'s why he ignores me."')],()=>
     choose(L('Seba','','¿Lo buscas?','Will you look for him?'),[{m:'May',g:en?'Yes, I will find him':'Sí, lo busco',v:1},{m:'Wüla feman',g:en?'Later':'Después',v:0}],v=>{
       if(!v)return say([L('Seba','','«Ya. ¡Kiltro! ¡Kiltroooo!»','"OK. Kiltro! Kiltrooooo!"')]);
-      S.flags.seba_q=1;persist();say([L('Seba','','«¡Gracias! Está en los campos, al sur. Llámalo en mapudungun, que en castellano se hace el sordo.»','"Thanks! He\'s in the fields, to the south. Call him in Mapudungun; in Spanish he plays deaf."')])},true,true))}
+      S.flags.seba_q=1;persist();say([L('Seba','','«¡Gracias! Está en los campos, al este. Llámalo en mapudungun, que en castellano se hace el sordo.»','"Thanks! He\'s in the fields, to the east. Call him in Mapudungun; in Spanish he plays deaf."')])},true,true))}
 function sebaDog(){
   const q={m:'',es:'El perro de Seba te mira moviendo la cola, pero no se acerca. Llámalo.',en:'Seba\'s dog looks at you, wagging its tail, but does not come closer. Call him.'};
   const {o,a}={o:['Küpange!','Küpamu!','Küpamün!','Amutunge!'],a:'Küpange!'};
